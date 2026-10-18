@@ -1,0 +1,4 @@
+interface:
+  display_name: "Godot 团队协作"
+  short_description: "引导六人 Godot 团队安全使用分支、工作树、资产锁与 PR 协作"
+  default_prompt: "使用 $godot-team-collab 检查当前项目和工作区，为我的任务选择安全的分支、Worktree 与 PR 交付流程。"
