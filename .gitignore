@@ -1,0 +1,20 @@
+# OS / editor local files
+.DS_Store
+**/.DS_Store
+.vscode/
+.idea/
+# Godot generated cache and exported builds
+**/.godot/
+/game/build/
+/game/archive/
+# Distribution artifacts are hosted in GitHub Releases
+/deliverables/
+*.zip
+# Local secrets and runtime files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+__pycache__/
+*.pyc

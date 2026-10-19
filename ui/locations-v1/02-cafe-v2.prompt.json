@@ -1,0 +1,23 @@
+{
+  "tool": "image_gen.imagegen",
+  "mode": "built-in targeted edit",
+  "edit_target": "ui/locations-v1/02-cafe.png",
+  "intended_output": "ui/locations-v1/02-cafe-v2.png",
+  "status": "Static concept daylight and date/location HUD consistency correction only; first draft preserved.",
+  "arguments": {
+    "prompt": "Use case: lighting-weather plus precise text-localization.\nAsset type: a targeted edit of an existing static PC game UI screenshot.\n\nInput roles:\nImage 1, 02-cafe.png, is the ONLY edit target. Preserve this exact cafe image and UI.\nImage 2, 03-prop-room.png, is ONLY a reference for clear daytime blue daylight outside the window. Do not borrow its room, objects, characters, dialogue, or UI.\nImage 3, 01-dock.png, is ONLY a reference for the top-left two-line small date/location HUD typography, size, position and hierarchy. Do not borrow its scene or characters.\n\nMake exactly two changes to Image 1:\n1. Change only the outdoor lighting visible through the cafe windows and open railing from pink-purple sunset to bright, lightly overcast afternoon blue-violet daylight, close to Image 2. Use a softly lit pale blue sky with cool gray-white clouds, clear blue-violet sea and daylight-readable cliffs. Remove the sunset pink/magenta sky glow. The distant lighthouse remains in exactly the same position but is unlit in daytime: no yellow lamp glow and no visible lighthouse beam. Preserve the interior warm amber pendant lights and warm room illumination, and retain the cafe's layered hand-painted visual style.\n2. Replace the current oversized top-left location headline and date with the small consistent two-line HUD from Image 3. At the same top-left margin as Image 3, the first line must read exactly \"第 5 日 · 准备时段\" and the second line exactly \"海边咖啡馆\". Match Image 3's modest crisp ivory Chinese font size and line spacing. The location must not be an oversized title. Do not retain a duplicate old title or duplicate date.\n\nStrict invariants:\nKeep every other part of Image 1 unchanged: exact canvas and framing, interior structure and counter, props and decorations, character identities, poses, proportions and clothing, player rust-orange jacket and badge, adult female proprietor and apron, character absence of Z, perspective and art style, full right-side panel position and size, line separators, all merchandise icons, all right-side typography and colors, selected coral flashlight, all buttons, and bottom-left Esc return hint.\nThe entire right-side UI must remain exactly as in Image 1, including:\n\"零钱 48\"\n\"临时帮工\"\n\"完成一班 +30\"\n\"耗时 1 个时段\"\n\"结束后进入休息时段\"\n\"开始帮工\"\n\"柜台小物\"\n\"手电筒\" and \"18\"\n\"胶带\" and \"12\"\n\"电池\" and \"8\"\n\"照亮昏暗角落\"\n\"购买 · 18\"\nDo not recalculate values, change item names, change icons, rearrange sections, add UI, enlarge characters, repaint the whole scene, change the lighting of the right panel, or expand gameplay. This is a narrow daytime and HUD-format correction only.",
+    "referenced_image_paths": [
+      "/Users/bytedance/Documents/ChatGPT/来自月亮的Z/ui/locations-v1/02-cafe.png",
+      "/Users/bytedance/Documents/ChatGPT/来自月亮的Z/ui/locations-v1/03-prop-room.png",
+      "/Users/bytedance/Documents/ChatGPT/来自月亮的Z/ui/locations-v1/01-dock.png"
+    ],
+    "transparent_background": false
+  },
+  "generated_source": "/Users/bytedance/.codex/generated_images/01a1162e-5535-76c2-abc6-221710ddefa6/exec-409766f7-9f6c-4094-a62e-2e2e33345449.png",
+  "saved_output": "/Users/bytedance/Documents/ChatGPT/来自月亮的Z/ui/locations-v1/02-cafe-v2.png",
+  "actual_dimensions": {
+    "width": 1672,
+    "height": 941
+  },
+  "visual_self_check": "Daylight exterior matches the prop room reference; sunset colors and lighthouse beam removed. Top-left date first, location second in small HUD text. Original panel text, numbers, merchandise icons, characters, framing and amber interior lights visually preserved. Original 02-cafe.png remains unchanged."
+}

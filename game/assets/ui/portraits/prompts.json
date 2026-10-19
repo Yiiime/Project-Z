@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "tool": "built-in image_gen__imagegen",
+  "intent": "generate separate transparent NPC dialogue portraits using Chen style and sprite identities",
+  "transparent_background": true,
+  "reference_image_paths": [
+    "/Users/bytedance/Documents/ChatGPT/来自月亮的Z/game/assets/chen.png",
+    "/Users/bytedance/Documents/ChatGPT/来自月亮的Z/game/assets/npc-sheet.png"
+  ],
+  "assets": [
+    {
+      "id": "xu",
+      "name": "许舟",
+      "file": "xu.png",
+      "prompt": "Use case: stylized-concept.\nAsset type: a single transparent waist-up NPC dialogue portrait for a Chinese narrative RPG.\nReference image 1 (/Users/bytedance/Documents/ChatGPT/来自月亮的Z/game/assets/chen.png): match its mature hand-painted illustrated character rendering, fine pixel-like edge texture, natural human anatomy, warm soft daylight, quiet expressive face, subdued working-clothes palette and clean silhouette. This is the ART STYLE and PORTRAIT CROP reference, not the identity to copy.\nReference image 2 (/Users/bytedance/Documents/ChatGPT/来自月亮的Z/game/assets/npc-sheet.png): use only the specified character's identity, hair, clothing and age. Do not reproduce the sheet or other characters.\nComposition: one human character, waist up, shoulders and torso turned in a right-facing three-quarter view with face slightly turned toward the viewer, similar to Chen. Keep the entire head and hair with generous top margin. Square transparent canvas, character centered, both arms/hands fully included, waist ends on a level baseline at approximately 94% image height, no legs, no fading or dissolve at the waist. Portrait should occupy approximately 80% width and 90% height, consistent scale across this portrait set.\nLighting: warm natural daylight from upper left, soft shadows, restrained highlights.\nBackground: genuinely transparent alpha with no scenery, no backing color, no checkerboard painted into the image, no floating ground shadow.\nConstraints: no text, no letters, no logo, no UI, no frame, no extra person, no animals or anthropomorphic features, no collage, no atlas; preserve a crisp clean outer silhouette.\nSubject: XU ZHOU, the TOP LEFT man in reference image 2. Adult human man about 35–40, short dark hair mostly concealed by a plain deep navy baseball cap, subtle short beard and stubble, practical calm expression, blue/navy work jacket over an ivory white collared shirt. Hold a simple registration clipboard naturally against the lower chest with the visible hand. Friendly but businesslike harbor registration worker. No writing visible on the clipboard.",
+      "source_path": "/Users/bytedance/.codex/generated_images/01a1165b-375e-7cd2-9ccc-963b898d2230/exec-9f582557-5d8b-4950-8814-03e57f644f97.png",
+      "actual_dimensions": {
+        "width": 1254,
+        "height": 1254
+      },
+      "validation": {
+        "width": 1254,
+        "height": 1254,
+        "format": "RGBA8",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "fully_transparent_pixels": 737932,
+        "fully_opaque_pixels": 447,
+        "corner_alpha": [
+          0,
+          0,
+          1,
+          0
+        ],
+        "alpha_ge_128_bounds_xyxy": [
+          89,
+          40,
+          1165,
+          1253
+        ]
+      },
+      "status": "saved-and-visually-inspected"
+    },
+    {
+      "id": "lin",
+      "name": "林乔",
+      "file": "lin.png",
+      "prompt": "Use case: stylized-concept.\nAsset type: a single transparent waist-up NPC dialogue portrait for a Chinese narrative RPG.\nReference image 1 (/Users/bytedance/Documents/ChatGPT/来自月亮的Z/game/assets/chen.png): match its mature hand-painted illustrated character rendering, fine pixel-like edge texture, natural human anatomy, warm soft daylight, quiet expressive face, subdued working-clothes palette and clean silhouette. This is the ART STYLE and PORTRAIT CROP reference, not the identity to copy.\nReference image 2 (/Users/bytedance/Documents/ChatGPT/来自月亮的Z/game/assets/npc-sheet.png): use only the specified character's identity, hair, clothing and age. Do not reproduce the sheet or other characters.\nComposition: one human character, waist up, shoulders and torso turned in a right-facing three-quarter view with face slightly turned toward the viewer, similar to Chen. Keep the entire head and hair with generous top margin. Square transparent canvas, character centered, both arms/hands fully included, waist ends on a level baseline at approximately 94% image height, no legs, no fading or dissolve at the waist. Portrait should occupy approximately 80% width and 90% height, consistent scale across this portrait set.\nLighting: warm natural daylight from upper left, soft shadows, restrained highlights.\nBackground: genuinely transparent alpha with no scenery, no backing color, no checkerboard painted into the image, no floating ground shadow.\nConstraints: no text, no letters, no logo, no UI, no frame, no extra person, no animals or anthropomorphic features, no collage, no atlas; preserve a crisp clean outer silhouette.\nSubject: LIN QIAO, the TOP RIGHT woman in reference image 2. Young adult human woman, neat short black bob haircut, soft confident expression and slight welcoming smile. Ivory cream collared blouse with sleeves rolled to the forearms, dark forest-green café apron tied at the waist. Both hands rest naturally together in front of the waist, relaxed. Keep her face and clothing identity recognizable from the sprite, using Chen's mature portrait illustration style. No cup or additional prop.",
+      "source_path": "/Users/bytedance/.codex/generated_images/01a1165b-375e-7cd2-9ccc-963b898d2230/exec-bf929a55-bb21-4941-bbb4-8db27a0fb18c.png",
+      "actual_dimensions": {
+        "width": 1254,
+        "height": 1254
+      },
+      "validation": {
+        "width": 1254,
+        "height": 1254,
+        "format": "RGBA8",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "fully_transparent_pixels": 898743,
+        "fully_opaque_pixels": 266,
+        "corner_alpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alpha_ge_128_bounds_xyxy": [
+          255,
+          31,
+          1039,
+          1242
+        ]
+      },
+      "status": "saved-and-visually-inspected"
+    },
+    {
+      "id": "lu",
+      "name": "陆岑",
+      "file": "lu.png",
+      "prompt": "Use case: stylized-concept.\nAsset type: a single transparent waist-up NPC dialogue portrait for a Chinese narrative RPG.\nReference image 1 (/Users/bytedance/Documents/ChatGPT/来自月亮的Z/game/assets/chen.png): match its mature hand-painted illustrated character rendering, fine pixel-like edge texture, natural human anatomy, warm soft daylight, quiet expressive face, subdued working-clothes palette and clean silhouette. This is the ART STYLE and PORTRAIT CROP reference, not the identity to copy.\nReference image 2 (/Users/bytedance/Documents/ChatGPT/来自月亮的Z/game/assets/npc-sheet.png): use only the specified character's identity, hair, clothing and age. Do not reproduce the sheet or other characters.\nComposition: one human character, waist up, shoulders and torso turned in a right-facing three-quarter view with face slightly turned toward the viewer, similar to Chen. Keep the entire head and hair with generous top margin. Square transparent canvas, character centered, both arms/hands fully included, waist ends on a level baseline at approximately 94% image height, no legs, no fading or dissolve at the waist. Portrait should occupy approximately 80% width and 90% height, consistent scale across this portrait set.\nLighting: warm natural daylight from upper left, soft shadows, restrained highlights.\nBackground: genuinely transparent alpha with no scenery, no backing color, no checkerboard painted into the image, no floating ground shadow.\nConstraints: no text, no letters, no logo, no UI, no frame, no extra person, no animals or anthropomorphic features, no collage, no atlas; preserve a crisp clean outer silhouette.\nSubject: LU CEN, the BOTTOM RIGHT young man in reference image 2. Young adult human man, short slightly tousled black hair, attentive curious expression with a subtle relaxed smile. Charcoal gray practical work jacket/shirt over a dark undershirt, brown leather tool belt visible at the waist with a modest small wrench and tool pouch. Hold a small brass plate in one hand and a small repair tool in the other at the lower torso. Keep the metal object small and plausible, not a weapon. Keep his face and clothing identity recognizable from the sprite, using Chen's mature portrait illustration style.",
+      "source_path": "/Users/bytedance/.codex/generated_images/01a1165b-375e-7cd2-9ccc-963b898d2230/exec-8265b614-8882-420d-89de-8d5824ee5825.png",
+      "actual_dimensions": {
+        "width": 1254,
+        "height": 1254
+      },
+      "validation": {
+        "width": 1254,
+        "height": 1254,
+        "format": "RGBA8",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "fully_transparent_pixels": 759779,
+        "fully_opaque_pixels": 253,
+        "corner_alpha": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "alpha_ge_128_bounds_xyxy": [
+          107,
+          15,
+          1159,
+          1252
+        ]
+      },
+      "status": "saved-and-visually-inspected"
+    }
+  ],
+  "notes": [
+    "Original generated files retained. Files copied byte-for-byte; no pixel edits, resizing, cropping, or PIL were used.",
+    "All three outputs have real transparent alpha and complete heads. Waist/body baselines are near the bottom edge, with up to 11 px difference between alpha>=128 extents; use a common bottom-aligned UI container.",
+    "The generated images share Chen's mature illustrated style and the NPC sheet identities. They are still portraits, not animation rigs."
+  ]
+}

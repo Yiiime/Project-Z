@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-12",
+  "method": "image_gen",
+  "expression_atlas": "Use case: identity-preserve. Asset type: ORIGINAL GAME CHARACTER EXPRESSION ATLAS for Godot. Edit/reference is the approved illustration of Z: adult ethereal human woman, silver-white flowing hair, moon clip, gray-blue eyes, ivory cardigan over periwinkle lace dress, midnight ribbon. Create a square transparent PNG containing EXACTLY FOUR aligned half-body cutouts in a uniform TWO BY TWO GRID. Each quadrant exactly same size, subject scale, head position, shoulders and hand pose as source. Top left calm attentive with mouth closed, top right smiling gently with mouth slightly open speaking, bottom left eyes closed soft warm smile (blink), bottom right thoughtful subtly surprised listening. Keep hands beside cheek and tabletop-independent seated torso down to waist; include the whole flowing hair within each cell, no cutoff of hair at edges. Fine pixel-illustration texture exactly like source, not photorealistic. No background, no table, no chair, no microphone, no UI, no letters, no borders, no grid lines. Actual transparent alpha. Important each character stays inside its quadrant with 8% margin; feet not needed. The only changes between cutouts are eye, brow and mouth expression; same pose and identity.",
+  "background": "Use case: precise-object-edit. Edit target: approved Z moonlight streaming illustration. Remove ONLY the entire silver-white-haired woman Z from the chair, including her hair, face, arms, body and clothing; reconstruct the room, empty chair, window view and tabletop behind her naturally. Preserve every other object's position, the night seascape, moon, lighthouse outside, bookshelves, table lamp on right, microphone and blue mug, material lighting and pixel-illustration texture. This is an empty BACKGROUND PLATE to place an independently animated character over later. Absolutely no people or human silhouettes, no text, no UI, no new objects. Keep identical wide 16:9 composition and camera. No transparency.",
+  "assets": [
+    "z-expressions.png",
+    "z-background.png"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "title": "来自月亮的 Z · 手机直播美术候选",
+  "version": "v1",
+  "screens": [
+    {
+      "id": "A",
+      "title": "A 暖金横屏｜分栏直播",
+      "file": "images/A-amber-landscape.png",
+      "purpose": "将角色、弹幕和操作分区，优先验证 PC 横屏的信息可读性与成熟直播界面的秩序。",
+      "alt": "A 暖金横屏分栏直播静态候选，白发 Z 与弹幕、操作区域分开呈现",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "B",
+      "title": "B 海盐竖屏｜贴近手机",
+      "file": "images/B-seaglass-portrait.png",
+      "purpose": "采用接近手机的竖屏比例，优先验证贴近 Z 的观看距离，同时接受横屏 PC 上的两侧留白。",
+      "alt": "B 海盐竖屏手机直播静态候选，完整竖幅展示白发 Z 与直播界面",
+      "width": 941,
+      "height": 1672
+    },
+    {
+      "id": "C",
+      "title": "C 月光全屏｜角色优先",
+      "file": "images/C-moonlight-fullscreen.png",
+      "purpose": "让角色与表演占据主要画面，优先验证沉浸感，并检查弹幕、文字与操作浮层的遮挡。",
+      "alt": "C 月光全屏直播静态候选，以白发 Z 的近景表演为主，叠加弹幕与操作信息",
+      "width": 1671,
+      "height": 941
+    }
+  ]
+}

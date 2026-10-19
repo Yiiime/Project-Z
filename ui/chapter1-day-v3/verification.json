@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-11",
+  "artifact": "Chapter1 daytime visual studies / C.02 DAY V3",
+  "scope": "Static visual artifact and review gallery; no game runtime verification",
+  "exportCount": 11,
+  "exportDimensions": [1600, 900],
+  "overviewDimensions": [1600, 1209],
+  "newDaytimeScreens": 9,
+  "reusedNighttimeScreens": 1,
+  "englishExamples": ["08-dialogue-en.jpg"],
+  "checks": {
+    "manifestEqualsEmbeddedManifest": true,
+    "allExportsAndOverviewExist": true,
+    "allTenGalleryImagesLoadedInBrowser": true,
+    "galleryLinksAndArrowNavigation": true,
+    "mapAndInventoryReviewShortcuts": true,
+    "guideLanguageSwitch": true,
+    "browserWarningsOrErrors": [],
+    "externalRuntimeDependencies": [],
+    "rendererJavaScriptSyntax": "passed",
+    "visualReview": "All nine day screens, English dialogue and overview inspected; independent day/night comparison completed",
+    "correctedIssues": ["Map image obscured its legend", "Action panel compressed confirmation buttons", "Shop copy needed explicit line separation"],
+    "directFileProtocolBrowserTest": "Not performed: browser URL policy blocks file: navigation. Local HTTP gallery and static dependency references verified."
+  },
+  "notVerified": ["Engine movement and collision", "Pathfinding and map transitions", "Inventory and action settlement", "Quest state and saves", "AI or Live2D runtime", "Complete multilingual localization"]
+}

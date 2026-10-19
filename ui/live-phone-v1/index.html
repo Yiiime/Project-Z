@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>来自月亮的 Z · 手机直播美术候选</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #101416; color: #e9eeeb; line-height: 1.6; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    .wrap { width: min(1440px, calc(100% - 40px)); margin: 0 auto; }
+    header { padding: 28px 0 20px; }
+    .status { display: inline-block; margin: 0 0 10px; padding: 3px 10px; border: 1px solid #6e705d; border-radius: 3px; color: #d6d4b5; background: #24271f; font-size: 12px; }
+    h1 { margin: 0; font-size: clamp(25px, 4vw, 35px); line-height: 1.3; }
+    .intro { margin: 10px 0 14px; color: #aab7b1; font-size: 14px; }
+    .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; font-size: 13px; color: #b9c4bc; }
+    a { color: #d6c291; text-underline-offset: 4px; }
+    a:hover { color: #fff0c8; }
+    a:focus-visible, button:focus-visible { outline: 2px solid #ead5a2; outline-offset: 4px; }
+    button { font: inherit; cursor: pointer; }
+    button:disabled { opacity: .35; cursor: default; }
+    [hidden] { display: none !important; }
+    .candidates { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
+    .candidate { display: flex; gap: 12px; align-items: center; padding: 9px; background: #192123; border: 1px solid #34413d; border-radius: 4px; color: #c0cdc6; text-align: left; }
+    .candidate:hover { background: #222d2c; }
+    .candidate[aria-pressed="true"] { border-color: #d4bc86; background: #2b2c24; color: #f0e3c4; }
+    .thumbnail { position: relative; flex: 0 0 104px; height: 66px; display: grid; place-items: center; overflow: hidden; background: #090d0e; border-radius: 2px; }
+    .thumbnail img { width: 100%; height: 100%; object-fit: contain; position: absolute; inset: 0; }
+    .thumbnail-letter { color: #899a91; font-size: 22px; }
+    .candidate-name { display: block; font-size: 14px; font-weight: 650; }
+    .candidate-hint { display: block; color: #93a49a; font-size: 12px; margin-top: 3px; }
+    .gallery { overflow: hidden; border: 1px solid #33403b; border-radius: 4px; background: #151e1f; }
+    .toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px 18px; padding: 10px 14px; border-bottom: 1px solid #33403b; }
+    .controls, .downloads { display: flex; align-items: center; gap: 12px; }
+    .controls button { padding: 4px 10px; border: 1px solid #46534b; border-radius: 3px; background: #27312d; color: #e3ece5; font-size: 13px; }
+    .preview-label { color: #b8c7bb; font-size: 13px; min-width: 76px; text-align: center; }
+    .downloads { font-size: 13px; }
+    .viewer { width: 100%; max-height: 73vh; display: flex; align-items: center; justify-content: center; background: #080d0e; }
+    .viewer img { display: block; width: auto; height: auto; max-width: 100%; max-height: 73vh; object-fit: contain; }
+    .error { padding: 24px; color: #b9c7be; text-align: center; }
+    .error strong { display: block; margin-bottom: 8px; color: #e2dec6; }
+    .error span { font-size: 13px; overflow-wrap: anywhere; }
+    .caption { padding: 15px 18px; border-top: 1px solid #33403b; }
+    .caption-head { display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: space-between; align-items: baseline; }
+    h2 { margin: 0; font-size: 20px; line-height: 1.4; }
+    .dimensions { color: #91a296; font-size: 12px; font-variant-numeric: tabular-nums; }
+    .purpose { margin: 7px 0 0; color: #b0c0b5; font-size: 14px; }
+    .comparison { padding: 22px 0 26px; }
+    .comparison h2 { font-size: 17px; margin-bottom: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid #2e3a34; vertical-align: top; }
+    th { font-size: 12px; color: #9aae9e; font-weight: 600; }
+    td:first-child { width: 25%; color: #e1dec8; }
+    td { color: #b8c6bb; }
+    .footnote { margin: 12px 0 0; color: #819487; font-size: 12px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    @media (max-width: 760px) {
+      .wrap { width: calc(100% - 24px); }
+      .candidate { flex-direction: column; align-items: stretch; gap: 6px; }
+      .thumbnail { flex: none; width: 100%; height: 58px; }
+      .candidate-name { font-size: 12px; }
+      .candidate-hint { font-size: 11px; }
+      .candidates { gap: 7px; }
+      th, td { padding: 9px 7px; font-size: 12px; }
+      .caption { padding: 13px; }
+      h2 { font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="wrap">
+    <p class="status">静态美术候选 · 尚未选定</p>
+    <h1>手机中的 Z，三种直播画面</h1>
+    <p class="intro">同一位白发 Z、同一条弹幕与同一时刻，对比三种界面方向。图中的直播与回复仅为画面，不运行真实 AI；默认展示 A 只是预览。</p>
+    <div class="meta">
+      <span>共同状态：20:10 · 金币 74</span>
+      <a href="live-phone-v1-options.zip" download>下载全部候选 ZIP</a>
+      <a href="设计说明.md">手机直播交互与美术方案</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <nav id="candidates" class="candidates" aria-label="预览 A、B、C 三种候选"></nav>
+    <section class="gallery" aria-labelledby="image-title">
+      <div class="toolbar">
+        <div class="controls">
+          <button type="button" id="previous" aria-label="预览上一种候选">←</button>
+          <span class="preview-label" id="preview-label"></span>
+          <button type="button" id="next" aria-label="预览下一种候选">→</button>
+        </div>
+        <div class="downloads">
+          <a id="original" target="_blank" rel="noopener">打开原图</a>
+          <a id="download" download>下载 PNG</a>
+        </div>
+      </div>
+      <div class="viewer">
+        <img id="current-image" alt="" decoding="async" hidden>
+        <p id="image-error" class="error" hidden><strong>候选图尚未载入</strong><span id="error-detail"></span></p>
+      </div>
+      <div class="caption">
+        <div class="caption-head"><h2 id="image-title"></h2><span id="dimensions" class="dimensions"></span></div>
+        <p id="purpose" class="purpose"></p>
+      </div>
+    </section>
+
+    <section class="comparison" aria-labelledby="comparison-title">
+      <h2 id="comparison-title">比较重点</h2>
+      <table>
+        <thead><tr><th scope="col">候选</th><th scope="col">主要优势</th><th scope="col">需要取舍</th></tr></thead>
+        <tbody>
+          <tr><td>A · 暖金横屏</td><td>分栏成熟易读，适配 PC 横屏。</td><td>信息更清楚，角色的沉浸感相对克制。</td></tr>
+          <tr><td>B · 海盐竖屏</td><td>最接近手机直播的观看比例。</td><td>放在横屏 PC 上会留下较多两侧空白。</td></tr>
+          <tr><td>C · 月光全屏</td><td>角色与表演优先，沉浸感更强。</td><td>弹幕及操作浮层容易遮住角色画面。</td></tr>
+        </tbody>
+      </table>
+      <p class="footnote">点击缩略图或使用键盘 ← → 切换。所有图片均按原比例完整显示，B 的竖图不裁切；“正在预览”不代表方案已经获选。</p>
+    </section>
+    <p id="announcement" class="sr-only" aria-live="polite" aria-atomic="true"></p>
+    <noscript>请启用浏览器 JavaScript 使用候选切换；三张原图位于同目录 images 文件夹。本页不使用网络服务。</noscript>
+  </main>
+
+  <script type="application/json" id="embedded-manifest">
+  {
+  "title": "来自月亮的 Z · 手机直播美术候选",
+  "version": "v1",
+  "screens": [
+    {
+      "id": "A",
+      "title": "A 暖金横屏｜分栏直播",
+      "file": "images/A-amber-landscape.png",
+      "purpose": "将角色、弹幕和操作分区，优先验证 PC 横屏的信息可读性与成熟直播界面的秩序。",
+      "alt": "A 暖金横屏分栏直播静态候选，白发 Z 与弹幕、操作区域分开呈现",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "B",
+      "title": "B 海盐竖屏｜贴近手机",
+      "file": "images/B-seaglass-portrait.png",
+      "purpose": "采用接近手机的竖屏比例，优先验证贴近 Z 的观看距离，同时接受横屏 PC 上的两侧留白。",
+      "alt": "B 海盐竖屏手机直播静态候选，完整竖幅展示白发 Z 与直播界面",
+      "width": 941,
+      "height": 1672
+    },
+    {
+      "id": "C",
+      "title": "C 月光全屏｜角色优先",
+      "file": "images/C-moonlight-fullscreen.png",
+      "purpose": "让角色与表演占据主要画面，优先验证沉浸感，并检查弹幕、文字与操作浮层的遮挡。",
+      "alt": "C 月光全屏直播静态候选，以白发 Z 的近景表演为主，叠加弹幕与操作信息",
+      "width": 1671,
+      "height": 941
+    }
+  ]
+}
+  </script>
+  <script>
+    (() => {
+      'use strict';
+      const manifest = JSON.parse(document.getElementById('embedded-manifest').textContent);
+      const screens = manifest.screens;
+      const candidates = document.getElementById('candidates');
+      const image = document.getElementById('current-image');
+      const title = document.getElementById('image-title');
+      const purpose = document.getElementById('purpose');
+      const dimensions = document.getElementById('dimensions');
+      const previewLabel = document.getElementById('preview-label');
+      const previous = document.getElementById('previous');
+      const next = document.getElementById('next');
+      const original = document.getElementById('original');
+      const download = document.getElementById('download');
+      const imageError = document.getElementById('image-error');
+      const errorDetail = document.getElementById('error-detail');
+      const announcement = document.getElementById('announcement');
+      let current = 0;
+      let requestNumber = 0;
+      const buttons = screens.map((screen, index) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'candidate';
+        button.setAttribute('aria-label', '预览：' + screen.title);
+        button.setAttribute('aria-pressed', 'false');
+        const thumbnail = document.createElement('span');
+        thumbnail.className = 'thumbnail';
+        const letter = document.createElement('span');
+        letter.className = 'thumbnail-letter';
+        letter.textContent = screen.id;
+        const thumb = document.createElement('img');
+        thumb.alt = '';
+        thumb.setAttribute('aria-hidden', 'true');
+        thumb.onload = () => { thumb.hidden = false; };
+        thumb.onerror = () => { thumb.hidden = true; };
+        thumb.src = screen.file;
+        thumbnail.append(letter, thumb);
+        const text = document.createElement('span');
+        const name = document.createElement('span');
+        name.className = 'candidate-name';
+        name.textContent = screen.title.split('｜')[0];
+        const hint = document.createElement('span');
+        hint.className = 'candidate-hint';
+        hint.textContent = screen.title.split('｜')[1];
+        text.append(name, hint);
+        button.append(thumbnail, text);
+        button.addEventListener('click', () => show(index));
+        candidates.append(button);
+        return button;
+      });
+
+      function show(index, updateHash = true) {
+        current = Math.max(0, Math.min(screens.length - 1, index));
+        const screen = screens[current];
+        const request = ++requestNumber;
+        buttons.forEach((button, position) => button.setAttribute('aria-pressed', String(position === current)));
+        title.textContent = screen.title;
+        purpose.textContent = screen.purpose;
+        previewLabel.textContent = '正在预览 ' + screen.id;
+        previous.disabled = current === 0;
+        next.disabled = current === screens.length - 1;
+        original.href = screen.file;
+        download.href = screen.file;
+        download.download = screen.file.split('/').pop();
+        original.setAttribute('aria-label', '打开原图：' + screen.title);
+        download.setAttribute('aria-label', '下载 PNG：' + screen.title);
+        image.hidden = true;
+        imageError.hidden = true;
+        dimensions.textContent = '正在载入原图';
+        image.alt = screen.alt;
+        image.onload = () => {
+          if (request !== requestNumber) return;
+          image.hidden = false;
+          dimensions.textContent = image.naturalWidth + ' × ' + image.naturalHeight + ' · PNG';
+        };
+        image.onerror = () => {
+          if (request !== requestNumber) return;
+          image.hidden = true;
+          imageError.hidden = false;
+          dimensions.textContent = '原图未就绪';
+          errorDetail.textContent = screen.file + '。文件补齐后可重新预览本候选，或刷新页面。';
+        };
+        image.src = screen.file;
+        announcement.textContent = '正在预览 ' + screen.title + '，尚未选定。';
+        if (updateHash && location.hash !== '#' + screen.id) {
+          try { history.replaceState(null, '', '#' + screen.id); }
+          catch (_) { location.hash = screen.id; }
+        }
+      }
+
+      function readHash() {
+        const index = screens.findIndex(screen => '#' + screen.id === location.hash);
+        show(index < 0 ? 0 : index, false);
+      }
+
+      previous.addEventListener('click', () => show(current - 1));
+      next.addEventListener('click', () => show(current + 1));
+      window.addEventListener('hashchange', readHash);
+      document.addEventListener('keydown', event => {
+        if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+        const target = event.target;
+        if (target instanceof Element && (target.matches('input, textarea, select') || target.isContentEditable)) return;
+        if (event.key === 'ArrowLeft') { event.preventDefault(); show(current - 1); }
+        else if (event.key === 'ArrowRight') { event.preventDefault(); show(current + 1); }
+      });
+      readHash();
+    })();
+  </script>
+</body>
+</html>

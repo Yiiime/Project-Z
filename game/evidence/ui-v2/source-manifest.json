@@ -1,0 +1,10 @@
+{
+  "game/scripts/main.gd": "18d38d74214d42ce39bb0f7e30e636b0129da7dfa817db0e1a2b41752b3ec154",
+  "game/scripts/day_ui.gd": "8983f80aedb65a18f90aa1616d479a330af0cb910032e83337bda219e5dee719",
+  "game/scripts/ui_kit.gd": "2636970858757f726801771a0ce2b36f0afd0ffdecc9f1721dc7eb8158baa1bc",
+  "game/scripts/night_view.gd": "8a5d097b2fad72c70196aa8dff312b3c4da942976105d6e93f04dc17efb5c588",
+  "game/scripts/web_input_bridge.gd": "488c4916c711e93532946e9ba6aed26968f8c3cf8b4ffb4eada1e0f0669e1ddd",
+  "game/core/day_state.gd": "f761d5e0c1ea1b652b14f4bbc5155c06e7e745c54c53c1dc6a3b35de187c5cd3",
+  "game/project.godot": "132bad5dd7a066927d2f9c1b33aa8ef6d3dfa0b78c873fe61f3c0421772bc6e7",
+  "game/export_presets.cfg": "59e5f9e0e5b46f0563004ccbd5ec9c572389bb546ae1d07bd995a6bc39c58cee"
+}

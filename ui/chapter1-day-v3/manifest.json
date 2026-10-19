@@ -1,0 +1,115 @@
+{
+  "title": "来自月亮的 Z · 第一章白天设定",
+  "titleEn": "Z, from the Moon · Chapter 1 daytime studies",
+  "version": "chapter1-day-v3",
+  "artifactType": "static-ui-studies",
+  "artworkLanguage": "zh-CN",
+  "englishExample": {
+    "id": "08-dialogue-en",
+    "file": "exports/08-dialogue-en.jpg",
+    "title": "对话界面 · 英文示例",
+    "titleEn": "Dialogue · English example"
+  },
+  "screens": [
+    {
+      "id": "01-explore",
+      "title": "白天自由探索",
+      "titleEn": "Daytime exploration",
+      "file": "exports/01-explore.jpg",
+      "purpose": "查看白天探索的角色比例、路径与行动入口；普通行走不扣游戏时间，具体活动另行预告耗时。",
+      "purposeEn": "Review character scale, paths and action entry points. Walking does not advance game time; activities show their own time cost.",
+      "alt": "第一章白天自由探索的静态游戏界面设定",
+      "altEn": "Static UI study of daytime exploration in Chapter 1"
+    },
+    {
+      "id": "02-map",
+      "title": "小岛地图",
+      "titleEn": "Island map",
+      "file": "exports/02-map.jpg",
+      "purpose": "对照当前位置、地点与通路信息；本页 M 键仅切到地图设定图，不执行游戏导航或移动。",
+      "purposeEn": "Review location markers and routes. Here, M only opens this map study; it does not navigate or move a game character.",
+      "alt": "标注地点与通路的小岛地图静态界面设定",
+      "altEn": "Static island map UI study with locations and routes"
+    },
+    {
+      "id": "03-dock",
+      "title": "码头问询",
+      "titleEn": "Dock enquiries",
+      "file": "exports/03-dock.jpg",
+      "purpose": "查看公开信息与人物问询的呈现；读到公告与完成来源核验分别成立，图中记录不代表已执行任务。",
+      "purposeEn": "Review public information and enquiries. Reading a notice is separate from verifying a source; pictured records do not mean a task was executed.",
+      "alt": "码头人物问询与信息入口的静态界面设定",
+      "altEn": "Static UI study of enquiries and information at the dock"
+    },
+    {
+      "id": "04-cafe-work",
+      "title": "咖啡馆工作",
+      "titleEn": "Café work",
+      "file": "exports/04-cafe-work.jpg",
+      "purpose": "对照班次窗口、行动结束时间与金币报酬；工作确认前应看清代价，预览工资不等于已经到账。",
+      "purposeEn": "Review shift windows, finish times and gold rewards. Costs should be clear before confirmation; a reward preview is not a completed payment.",
+      "alt": "咖啡馆班次与工作确认的静态界面设定",
+      "altEn": "Static UI study of café shifts and work confirmation"
+    },
+    {
+      "id": "05-cafe-shop",
+      "title": "咖啡馆购买",
+      "titleEn": "Café shop",
+      "file": "exports/05-cafe-shop.jpg",
+      "purpose": "查看商品、金币价格与持有数量；白天购买进入库存，夜间送出已有礼物时不再重复扣金币。",
+      "purposeEn": "Review items, gold prices and owned quantities. Daytime purchases enter inventory; sending an owned gift at night does not charge gold again.",
+      "alt": "咖啡馆商品与金币购买信息的静态界面设定",
+      "altEn": "Static UI study of café items and gold purchase information"
+    },
+    {
+      "id": "06-props",
+      "title": "道具间场务",
+      "titleEn": "Props room duties",
+      "file": "exports/06-props.jpg",
+      "purpose": "查看正常场务、物品交接与公开工作范围；工作许可不自动开放私人后台，也不表示已与 Z 私下见面。",
+      "purposeEn": "Review regular stage duties, item handovers and permitted work areas. Work access does not grant private backstage access or a private meeting with Z.",
+      "alt": "道具间正常场务与物品交接的静态界面设定",
+      "altEn": "Static UI study of props room duties and item handovers"
+    },
+    {
+      "id": "07-lighthouse",
+      "title": "灯塔权限边界",
+      "titleEn": "Lighthouse access",
+      "file": "exports/07-lighthouse.jpg",
+      "purpose": "对照灯塔外围、门禁与受限区域提示；发现入口不等于取得进入许可，首章不提前解锁内部路径。",
+      "purposeEn": "Review the lighthouse exterior, access gate and restricted-area cues. Finding the entrance does not grant permission or unlock its interior in Chapter 1.",
+      "alt": "灯塔外围门禁与权限提示的静态界面设定",
+      "altEn": "Static UI study of the lighthouse exterior and access restrictions"
+    },
+    {
+      "id": "08-dialogue",
+      "title": "人物对话",
+      "titleEn": "Character dialogue",
+      "file": "exports/08-dialogue.jpg",
+      "purpose": "查看说话对象、已知信息与行动选项的排版；选择、耗时和结果须分别呈现。右上另有本屏英文示例。",
+      "purposeEn": "Review speakers, known information and action choices. Choices, time costs and outcomes are distinct. An English example of this screen is linked above.",
+      "alt": "人物对话内容与可选行动的静态界面设定",
+      "altEn": "Static UI study of character dialogue and available actions"
+    },
+    {
+      "id": "09-backpack",
+      "title": "背包与物品",
+      "titleEn": "Backpack and items",
+      "file": "exports/09-backpack.jpg",
+      "purpose": "对照持有物、数量与用途信息；持有、借用、交付分别成立。本页 I 键只切换设定图，不操作库存。",
+      "purposeEn": "Review owned items, quantities and uses. Ownership, borrowing and delivery are distinct. Here, I changes the study image without modifying inventory.",
+      "alt": "背包物品、持有数量与用途说明的静态界面设定",
+      "altEn": "Static backpack UI study with items, quantities and descriptions"
+    },
+    {
+      "id": "10-night",
+      "title": "夜间手机直播",
+      "titleEn": "Nighttime phone stream",
+      "file": "exports/10-night.jpg",
+      "purpose": "对照白天与夜间共用的字号层级、面板样式与礼物资产，检查 C.02 风格在昼夜界面中的一致性。",
+      "purposeEn": "Compare shared typography, panel styling and gift assets across daytime and nighttime screens, checking consistency with the C.02 direction.",
+      "alt": "白发 Z 的夜间手机直播静态界面设定",
+      "altEn": "Static UI study of white-haired Z’s nighttime phone stream"
+    }
+  ]
+}

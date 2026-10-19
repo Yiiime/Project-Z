@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#07111e" />
+    <title>来自月亮的 Z · 界面导览</title>
+    <link rel="stylesheet" href="viewer.css" />
+    <script type="application/json" id="embedded-manifest">
+{
+  "title": "来自月亮的 Z",
+  "version": "UI 设计集 v1",
+  "scope": "18 个关键界面 · PC 横屏 · 静态 UI 设计与流程导览，非实机游戏",
+  "screens": [
+    {
+      "id": "01-title",
+      "title": "主菜单",
+      "day": "序章",
+      "phase": "入口",
+      "group": "开始与日常",
+      "summary": "灯塔与小岛先于界面出现。继续进度、新局和存档设置保持清楚。",
+      "goal": "开始 Demo，或回到已有节点。",
+      "image": "assets/01-title.png",
+      "actions": [
+        {
+          "label": "开始 Demo",
+          "target": "02-identity"
+        },
+        {
+          "label": "继续",
+          "target": "03-exploration"
+        },
+        {
+          "label": "存档与设置",
+          "target": "18-pause"
+        }
+      ],
+      "notes": [
+        "设计稿中的继续进度为示例。",
+        "Demo 展示第 5—7 日；不暗示已制作完整七天。"
+      ],
+      "status": "静态设计稿"
+    },
+    {
+      "id": "02-identity",
+      "title": "身份与会话",
+      "day": "第 5 日",
+      "phase": "清晨",
+      "group": "开始与日常",
+      "summary": "以临时场务身份进入第 5 日，清楚区分岛内职责与岛外接收端。",
+      "goal": "理解自己的掩护身份，以及接收端准备的边界。",
+      "image": "assets/02-identity.png",
+      "actions": [
+        {
+          "label": "进入第 5 日",
+          "target": "03-exploration"
+        },
+        {
+          "label": "查看存档",
+          "target": "18-pause"
+        }
+      ],
+      "notes": [
+        "前四日只建立工作熟悉度，不替玩家完成信任或真相调查。",
+        "公司知道报名身份；保密的是营救意图。",
+        "接收端已准备不等于已有迁移权限。"
+      ],
+      "status": "静态设计稿"
+    },
+    {
+      "id": "03-exploration",
+      "title": "自由探索",
+      "day": "第 5 日",
+      "phase": "准备时段",
+      "group": "开始与日常",
+      "summary": "四个区域由可行走的路径连接；观察人物、工作和物件，再决定行动。",
+      "goal": "寻找演出单与接近 Z 的机会。",
+      "image": "assets/03-exploration.png",
+      "actions": [
+        {
+          "label": "检查道具箱上的演出单",
+          "target": "05-evidence"
+        },
+        {
+          "label": "接受场务工作",
+          "target": "04-schedule"
+        },
+        {
+          "label": "前往咖啡馆",
+          "target": "06-private-dialogue"
+        }
+      ],
+      "notes": [
+        "移动、阅读、普通询问不消耗时段。",
+        "只标注已观察的位置，未知巡查路线不显示。"
+      ],
+      "status": "静态设计稿"
+    },
+    {
+      "id": "04-schedule",
+      "title": "日程取舍",
+      "day": "第 5 日",
+      "phase": "准备时段",
+      "group": "开始与日常",
+      "summary": "行动确认把已知收益、耗时与错过的机会放在一起。",
+      "goal": "比较基本递送与完整联调，明确选择的代价。",
+      "image": "assets/04-schedule.png",
+      "actions": [
+        {
+          "label": "选择基本递送",
+          "target": "06-private-dialogue"
+        },
+        {
+          "label": "选择完整联调",
+          "target": "07-livestream"
+        },
+        {
+          "label": "暂不决定",
+          "target": "03-exploration"
+        }
+      ],
+      "notes": [
+        "完整联调消耗两个时段，错过咖啡馆休息。",
+        "图中仅展示已知的工作收益。",
+        "导览只展示对应界面模板；完整联调路线需在公开彩排中建立正常核对约定，不会免费获得私下休息窗口。"
+      ],
+      "status": "静态设计稿"
+    },
+    {
+      "id": "05-evidence",
+      "title": "证据与共同记录",
+      "day": "第 5 日",
+      "phase": "开播前",
+      "group": "调查与交流",
+      "summary": "原文、来源、玩家推测与 Z 的已知信息分开记录。",
+      "goal": "读懂演出单实际证明了什么。",
+      "image": "assets/05-evidence.png",
+      "actions": [
+        {
+          "label": "与 Z 谈演出单",
+          "target": "06-private-dialogue"
+        },
+        {
+          "label": "返回探索",
+          "target": "03-exploration"
+        },
+        {
+          "label": "后续本人核验",
+          "target": "10-verification"
+        }
+      ],
+      "notes": [
+        "演出单证明停电被预先安排，不能单独证明 Z 的全部身份。",
+        "玩家看过不等于 Z 已理解。"
+      ],
+      "status": "静态设计稿"
+    },
+    {
+      "id": "06-private-dialogue",
+      "title": "私下交流",
+      "day": "第 5 日",
+      "phase": "开播前",
+      "group": "调查与交流",
+      "summary": "在同一空间中观察巡查，用预设表达或自己的语言邀请 Z 核对。",
+      "goal": "形成一个能在今晚亲自验证的约定。",
+      "image": "assets/06-private-dialogue.png",
+      "actions": [
+        {
+          "label": "回看演出单",
+          "target": "05-evidence"
+        },
+        {
+          "label": "按约参加夜间直播",
+          "target": "07-livestream"
+        },
+        {
+          "label": "结束交谈",
+          "target": "03-exploration"
+        }
+      ],
+      "notes": [
+        "这是你选定的第 2 套原始基准画面。",
+        "咖啡馆不被标为永久安全区。",
+        "等待回复、连接异常不消耗额外行动时间；未得到回复不写入新约定。",
+        "后续可执行原型需扩大自由输入的焦点范围，并提供显式发送与重试状态。"
+      ],
+      "status": "已选基准"
+    },
+    {
+      "id": "07-livestream",
+      "title": "夜间直播",
+      "day": "第 5 日",
+      "phase": "直播中",
+      "group": "调查与交流",
+      "summary": "玩家在岛内使用观众终端，公开评论唤起当局约定，Z 在现场行动。",
+      "goal": "让 Z 在第四声钟时亲自观察灯塔。",
+      "image": "assets/07-livestream.png",
+      "actions": [
+        {
+          "label": "观察第四声钟之后",
+          "target": "08-consequences"
+        },
+        {
+          "label": "回看共同约定",
+          "target": "05-evidence"
+        }
+      ],
+      "notes": [
+        "玩家仍在岛内；终端只切换观众交流模式。",
+        "连麦需要当局取得资格，未开放时不可点击。",
+        "不能靠无限刷屏或随意新暗号直接说服。"
+      ],
+      "status": "静态设计稿"
+    },
+    {
+      "id": "08-consequences",
+      "title": "次日可见后果",
+      "day": "第 6 日",
+      "phase": "清晨",
+      "group": "调查与交流",
+      "summary": "昨日的约定留下可观察的变化，游戏不展示全知结算。",
+      "goal": "理解 Z 看见了什么，并接上她的新请求。",
+      "image": "assets/08-consequences.png",
+      "actions": [
+        {
+          "label": "去赴 Z 的约",
+          "target": "09-z-initiative"
+        },
+        {
+          "label": "回看共同记录",
+          "target": "05-evidence"
+        },
+        {
+          "label": "继续探索",
+          "target": "03-exploration"
+        }
+      ],
+      "notes": [
+        "Z 亲眼见到被安排的事故，不等于瞬间接受全部身份真相。",
+        "门和跟岗安排的变化须有可见来源。"
+      ],
+      "status": "静态设计稿"
+    },
+    {
+      "id": "09-z-initiative",
+      "title": "Z 主动提出调查",
+      "day": "第 6 日",
+      "phase": "准备时段",
+      "group": "理解与合作",
+      "summary": "她提出自己的问题，并实际争取回放校对时段。",
+      "goal": "接受她的行动提议，或先问清楚边界。",
+      "image": "assets/09-z-initiative.png",
+      "actions": [
+        {
+          "label": "陪她去回放室",
+          "target": "10-verification"
+        },
+        {
+          "label": "先说明顾虑",
+          "target": "11-cooperation"
+        },
+        {
+          "label": "暂缓并探索",
+          "target": "03-exploration"
+        }
+      ],
+      "notes": [
+        "主动性表现为 Z 改变日程和提出核验要求。",
+        "暂缓不自动等于背叛，也不代表她停止思考。"
+      ],
+      "status": "静态设计稿"
+    },
+    {
+      "id": "10-verification",
+      "title": "本人核验",
+      "day": "第 6 日",
+      "phase": "休息时段",
+      "group": "理解与合作",
+      "summary": "在有限只读诊断会话中，比较内容来源，再由 Z 决定感知自检。",
+      "goal": "将证据来源与她的切身经历相互核对。",
+      "image": "assets/10-verification.png",
+      "actions": [
+        {
+          "label": "完成核验后交谈",
+          "target": "11-cooperation"
+        },
+        {
+          "label": "存入共同记录",
+          "target": "05-evidence"
+        },
+        {
+          "label": "退出本次诊断",
+          "target": "03-exploration"
+        }
+      ],
+      "notes": [
+        "诊断权限来自维护员，不能改写记忆，也不能用于直接迁移。",
+        "技术视图的切换会留下记录。",
+        "自检仅暂停 Z 的听觉两秒；玩家仍能听见声音。"
+      ],
+      "status": "静态设计稿"
+    },
+    {
+      "id": "11-cooperation",
+      "title": "知情后的合作决定",
+      "day": "第 6 日",
+      "phase": "开播前",
+      "group": "理解与合作",
+      "summary": "理解真相之后，Z 仍有自己的顾虑和中止权。",
+      "goal": "回答外部去处和记忆保留的问题，形成双方接受的约定。",
+      "image": "assets/11-cooperation.png",
+      "actions": [
+        {
+          "label": "确认共同约定",
+          "target": "12-escape-plan"
+        },
+        {
+          "label": "接受她选择留下",
+          "target": "16-stay"
+        },
+        {
+          "label": "回看核验依据",
+          "target": "10-verification"
+        }
+      ],
+      "notes": [
+        "接受真相、愿意走、走得了，是独立条件。",
+        "关系以具体承诺表达，不以好感值或恋爱倾向替代。"
+      ],
+      "status": "静态设计稿"
+    },
+    {
+      "id": "12-escape-plan",
+      "title": "路线与分工",
+      "day": "第 7 日",
+      "phase": "行动前",
+      "group": "协作与逃离",
+      "summary": "两条作者预设路线共享登记权限；玩家与 Z 的职责各自明确。",
+      "goal": "核对路线、窗口、信号和出口条件，再开始实时行动。",
+      "image": "assets/12-escape-plan.png",
+      "actions": [
+        {
+          "label": "按后台路线出发",
+          "target": "13-stealth"
+        },
+        {
+          "label": "回去补准备",
+          "target": "03-exploration"
+        },
+        {
+          "label": "再次向 Z 说明",
+          "target": "11-cooperation"
+        }
+      ],
+      "notes": [
+        "备用路只在确证前可用，且必须事先调查并告知。",
+        "这里尚未开始目的地复核倒计时。",
+        "门卡不是迁移授权，维护员令牌仅开放一次登记。"
+      ],
+      "status": "静态设计稿"
+    },
+    {
+      "id": "13-stealth",
+      "title": "实时潜行与信号",
+      "day": "第 7 日",
+      "phase": "实时行动",
+      "group": "协作与逃离",
+      "summary": "依靠可见光束、门和约定短信号协作；紧张时不要求长篇打字。",
+      "goal": "通过后台走廊，到接线柜与登记台就位。",
+      "image": "assets/13-stealth.png",
+      "actions": [
+        {
+          "label": "就位后登记",
+          "target": "14-transfer"
+        },
+        {
+          "label": "查看暴露后的重试",
+          "target": "17-failure"
+        },
+        {
+          "label": "暂停",
+          "target": "18-pause"
+        }
+      ],
+      "notes": [
+        "尚未登记时不显示目的地复核倒计时。",
+        "Z 状态来自可见位置或真实信号。",
+        "巡查确认未经许可迁移后立即隔离。"
+      ],
+      "status": "静态设计稿"
+    },
+    {
+      "id": "14-transfer",
+      "title": "迁移与现场守候",
+      "day": "第 7 日",
+      "phase": "登记之后",
+      "group": "协作与逃离",
+      "summary": "登记后复核开始，Z 暂停，玩家仍需阻挡现场巡查并检查接收结果。",
+      "goal": "在复核或现场确证前，完成外部验证与源端退出。",
+      "image": "assets/14-transfer.png",
+      "actions": [
+        {
+          "label": "外部核验通过",
+          "target": "15-outside"
+        },
+        {
+          "label": "现场确证隔离",
+          "target": "17-failure"
+        },
+        {
+          "label": "暂停查看节点",
+          "target": "18-pause"
+        }
+      ],
+      "notes": [
+        "计时数值和百分比是 UI 排版示例，未做可玩性调参。",
+        "Z 暂停期间不能继续交谈或采取行动。",
+        "门闩只能延迟现场巡查，不能冻结目的地复核。",
+        "传输满格不等于完成，还需要外部恢复检查和本次源端退出。"
+      ],
+      "status": "静态设计稿"
+    },
+    {
+      "id": "15-outside",
+      "title": "抵达公司之外",
+      "day": "第 7 日之后",
+      "phase": "外部接收环境",
+      "group": "结果与重试",
+      "summary": "外部运行验证通过，当前源端退出；她记得这一次共同经历。",
+      "goal": "见证 Z 恢复并自主选择下一步。",
+      "image": "assets/15-outside.png",
+      "actions": [
+        {
+          "label": "尝试另一条路线",
+          "target": "02-identity"
+        },
+        {
+          "label": "返回主菜单",
+          "target": "01-title"
+        }
+      ],
+      "notes": [
+        "只确认这次运行的迁移结果，不宣称所有历史备份已删除。",
+        "外部接收空间仍为虚拟环境，不暗示她获得现实肉身。"
+      ],
+      "status": "静态设计稿"
+    },
+    {
+      "id": "16-stay",
+      "title": "知情留下",
+      "day": "第 7 日",
+      "phase": "会话将结束",
+      "group": "结果与重试",
+      "summary": "她理解了部分真相，仍选择留下；游戏承认她的理由，也保留遗憾。",
+      "goal": "理解这个结局的原因，并选择回看或重试。",
+      "image": "assets/16-stay.png",
+      "actions": [
+        {
+          "label": "回到合作决定前",
+          "target": "11-cooperation"
+        },
+        {
+          "label": "重新开始 Demo",
+          "target": "02-identity"
+        },
+        {
+          "label": "返回主菜单",
+          "target": "01-title"
+        }
+      ],
+      "notes": [
+        "本张是知情留下，不能与理解不足混成同一失败原因。",
+        "期限内未充分理解的变体需改为明确的不同文案，见玩法矩阵。"
+      ],
+      "status": "静态设计稿"
+    },
+    {
+      "id": "17-failure",
+      "title": "暴露归因与局部重试",
+      "day": "第 7 日",
+      "phase": "维护站隔离",
+      "group": "结果与重试",
+      "summary": "明确发生了什么、为何被隔离，以及重试会回到哪个节点。",
+      "goal": "修正具体行动失误，避免猜测隐藏系统规则。",
+      "image": "assets/17-failure.png",
+      "actions": [
+        {
+          "label": "重试逃离阶段",
+          "target": "13-stealth"
+        },
+        {
+          "label": "回到行动准备",
+          "target": "12-escape-plan"
+        },
+        {
+          "label": "主菜单",
+          "target": "01-title"
+        }
+      ],
+      "notes": [
+        "这不是继续世界内逃跑，而是载入此前存档。",
+        "回滚周目的 Z 不继承已回滚的记忆。",
+        "不同暴露原因需各自显示可观察依据。"
+      ],
+      "status": "静态设计稿"
+    },
+    {
+      "id": "18-pause",
+      "title": "暂停、存档与设置",
+      "day": "游戏外",
+      "phase": "暂停",
+      "group": "结果与重试",
+      "summary": "节点读取说明回退位置，基本呈现设置支持长时间阅读。",
+      "goal": "调整文字与声音，或读取关键节点。",
+      "image": "assets/18-pause.png",
+      "actions": [
+        {
+          "label": "继续行动",
+          "target": "13-stealth"
+        },
+        {
+          "label": "读取合作决定前",
+          "target": "11-cooperation"
+        },
+        {
+          "label": "读取逃离开始前",
+          "target": "12-escape-plan"
+        },
+        {
+          "label": "主菜单",
+          "target": "01-title"
+        }
+      ],
+      "notes": [
+        "展示的设置和存档均为 UI 设计，不是已实现功能。",
+        "实际原型需兑现暂停实时行动、读取确认、键盘焦点和文字缩放。",
+        "没有把模型、Token 或提示词参数放入游戏流程。"
+      ],
+      "status": "静态设计稿"
+    }
+  ]
+}
+    </script>
+    <script src="viewer.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#image-stage">跳到界面示意图</a>
+    <div class="viewer" id="viewer" data-navigation="open" data-details="closed">
+      <header class="topbar">
+        <button class="icon-button" id="navigation-toggle" type="button" aria-label="收起章节导航" aria-expanded="true" aria-controls="chapter-sidebar" title="章节导航">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M10 5v14M6.5 9h1M6.5 12h1M6.5 15h1"/></svg>
+        </button>
+        <div class="project-heading">
+          <p class="eyebrow">界面导览 <span id="version-label"></span></p>
+          <h1 id="project-title">来自月亮的 Z</h1>
+        </div>
+        <p class="artifact-label"><span class="artifact-dot" aria-hidden="true"></span>UI 示意<span class="artifact-label-detail"> · 非实机运行</span></p>
+      </header>
+
+      <button class="sidebar-scrim" id="sidebar-scrim" type="button" aria-label="关闭侧栏" tabindex="-1" hidden></button>
+
+      <aside class="chapter-sidebar" id="chapter-sidebar" aria-label="章节导航">
+        <div class="sidebar-heading"><span>界面目录</span><span class="utility" id="screen-total">—</span></div>
+        <nav class="chapter-navigation" id="chapter-navigation" aria-label="按章节浏览界面"></nav>
+        <div class="sidebar-footnote">
+          <p id="project-scope">完整游戏 UI 示意集</p>
+          <p>以 PC 画幅为主 · 移动端可浏览</p>
+        </div>
+      </aside>
+
+      <main class="main-view" id="main-view">
+        <div class="screen-heading">
+          <div><p class="screen-context" id="screen-context">等待载入</p><h2 id="screen-title">界面示意图</h2></div>
+          <span class="screen-status" id="screen-status" hidden></span>
+        </div>
+
+        <section class="image-stage" id="image-stage" aria-label="界面示意图" tabindex="-1" aria-busy="true">
+          <button class="image-button" id="image-button" type="button" aria-label="放大当前界面示意图" hidden>
+            <img id="screen-image" alt="" draggable="false" />
+            <span class="image-hint">点击放大 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4H4v4M16 4h4v4M4 16v4h4M20 16v4h-4"/></svg></span>
+          </button>
+          <div class="stage-message" id="stage-message" role="status">
+            <span class="message-mark" aria-hidden="true">Z</span>
+            <h3 id="stage-message-title">正在载入界面目录</h3>
+            <p id="stage-message-text">读取同目录的 manifest.json。</p>
+            <div class="message-actions">
+              <button class="text-button" id="retry-button" type="button" hidden>重新载入</button>
+              <button class="primary-button" id="manifest-button" type="button" hidden>选择 manifest.json</button>
+            </div>
+            <input type="file" id="manifest-input" accept=".json,application/json" hidden />
+          </div>
+        </section>
+
+        <section class="action-strip" id="action-strip" aria-labelledby="action-label" hidden>
+          <span class="action-label" id="action-label">界面导览<span>页面跳转</span></span>
+          <div class="screen-actions" id="screen-actions"></div>
+        </section>
+
+        <footer class="viewer-controls" aria-label="界面浏览控制">
+          <div class="paging-controls">
+            <button class="control-button" id="previous-button" type="button" aria-label="上一张界面" title="上一张 · ←" disabled><span aria-hidden="true">←</span><span class="control-label">上一张</span></button>
+            <span class="page-count utility" id="page-count" aria-live="off">— / —</span>
+            <button class="control-button" id="next-button" type="button" aria-label="下一张界面" title="下一张 · → 或空格" disabled><span class="control-label">下一张</span><span aria-hidden="true">→</span></button>
+          </div>
+          <span class="keyboard-hint">← → 浏览 <span>·</span> 空格下一张</span>
+          <div class="display-controls">
+            <button class="control-button" id="fullscreen-button" type="button" aria-label="进入全屏" aria-pressed="false" title="进入全屏"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4H4v4M16 4h4v4M4 16v4h4M20 16v4h-4"/></svg><span id="fullscreen-label">全屏</span></button>
+            <button class="control-button" id="details-toggle" type="button" aria-expanded="false" aria-controls="details-sidebar"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 11v6M12 7v1"/></svg><span id="details-toggle-label">显示说明</span></button>
+          </div>
+        </footer>
+      </main>
+
+      <aside class="details-sidebar" id="details-sidebar" aria-labelledby="details-heading" hidden>
+        <div class="sidebar-heading"><h2 id="details-heading">当前界面说明</h2><button class="icon-button small-button" id="details-close" type="button" aria-label="关闭说明">×</button></div>
+        <div class="details-content" id="details-content">
+          <section class="detail-section"><h3>玩家目标</h3><p id="screen-goal">载入目录后显示。</p></section>
+          <section class="detail-section"><h3>画面内容</h3><p id="screen-summary">载入目录后显示。</p></section>
+          <section class="detail-section" id="notes-section" hidden><h3>设计说明</h3><ul id="screen-notes"></ul></section>
+        </div>
+        <p class="detail-disclaimer">这里展示静态 UI 示意图。导览按钮用于查看页面关系，图中操作、数值与对话未接入游戏逻辑。</p>
+      </aside>
+    </div>
+
+    <dialog class="image-dialog" id="image-dialog" aria-label="放大查看界面示意图">
+      <div class="zoom-heading"><p id="zoom-title">界面示意图</p><button class="control-button" id="zoom-close" type="button"><span>退出放大</span><kbd>Esc</kbd></button></div>
+      <div class="zoom-image-area"><img id="zoom-image" alt="" draggable="false" /></div>
+      <p class="zoom-caption">完整画面 · UI 示意，非实机运行</p>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+    <div class="sr-only" id="screen-announcement" aria-live="polite" aria-atomic="true"></div>
+    <noscript><div class="noscript-message">界面导览需要 JavaScript。请启用 JavaScript 后重新打开；原始示意图仍可在 assets 文件夹中查看。</div></noscript>
+  </body>
+</html>

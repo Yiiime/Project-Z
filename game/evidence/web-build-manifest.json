@@ -1,0 +1,21 @@
+{
+  "archive": "/Users/bytedance/Documents/ChatGPT/来自月亮的Z/deliverables/来自月亮的Z-Chapter1一天Demo-Web-v1.zip",
+  "bytes": 44922178,
+  "sha256": "01587c8d2605b60166018ebc206bfa76b943b4603e6ded028b34824d75d45e29",
+  "files": {
+    "build/index.apple-touch-icon.png": "01d4f63e525941e06ce74f5187dad030d20a8d52a07ce365ae4e94af97a3b1f5",
+    "build/index.wasm": "fc74679e3b97f76878947fcd4fbe1268cbfa6188182a2e33bbc3f5dc9bfa57d0",
+    "build/index.icon.png": "ad3c35ad0facf487c618204bd98db543034fc95224eadc7f08c7a9ff38d5b3b5",
+    "build/index.html": "0ef5691bf0e3e0f0d4f05ca2b0c909bbb60d789d741a928a0f331b0b36ba5bbe",
+    "build/index.png": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e",
+    "build/index.audio.worklet.js": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3",
+    "build/index.js": "33c94cb3175f3333b82e2a3be5e8e86f77986f0aa2042b1631f6367a4e5bb6ba",
+    "build/index.audio.position.worklet.js": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8",
+    "build/index.pck": "bad1b6e99f7d15d752654f2f1666f89b5323bf438d3859fba716e95aeed4fdad",
+    "serve_demo.py": "84b9212837d4c60ebb2092880255b831afe1315d04cce72bbcddbda3e80e00c7",
+    "启动试玩.command": "de6e1ae58dbfc47e61a37d580cfb964c75f47762134c58bd7820319d9ebf3dae",
+    "PLAYTEST.md": "39a85ac110392ca496472a43456db4112e2c7e37fb0fd501012a8092c08f6a71",
+    "LICENSES/ENGINE-THIRD-PARTY.json": "bf8c70b87a07aa6714f3bab87387e14006db61bcadc6c9cb0602f234db958142",
+    "LICENSES/GODOT.txt": "b0435e3b3e4e55238f05f4b306f30524a1b2e20147810d436eaa554fa6855c80"
+  }
+}

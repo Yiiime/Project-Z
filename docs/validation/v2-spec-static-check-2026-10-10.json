@@ -1,0 +1,136 @@
+{
+  "checked_at": "2026-10-10",
+  "kind": "static_document_and_fixture_arithmetic_only",
+  "runtime_tests_executed": false,
+  "scope_files": 12,
+  "local_links_checked": 178,
+  "fenced_blocks_checked": 15,
+  "json_examples_parsed": 5,
+  "ledger_rows": [
+    {
+      "day": 1,
+      "route": "A",
+      "active_minutes": 95,
+      "routine_minutes": 330,
+      "wait_minutes": 535,
+      "total_minutes": 960,
+      "stamina": 98,
+      "credits": 44
+    },
+    {
+      "day": 1,
+      "route": "B",
+      "active_minutes": 155,
+      "routine_minutes": 330,
+      "wait_minutes": 475,
+      "total_minutes": 960,
+      "stamina": 96,
+      "credits": 48
+    },
+    {
+      "day": 2,
+      "route": "A",
+      "active_minutes": 120,
+      "routine_minutes": 330,
+      "wait_minutes": 510,
+      "total_minutes": 960,
+      "stamina": 96,
+      "credits": 74
+    },
+    {
+      "day": 2,
+      "route": "B",
+      "active_minutes": 120,
+      "routine_minutes": 330,
+      "wait_minutes": 510,
+      "total_minutes": 960,
+      "stamina": 94,
+      "credits": 78
+    },
+    {
+      "day": 3,
+      "route": "A",
+      "active_minutes": 65,
+      "routine_minutes": 330,
+      "wait_minutes": 565,
+      "total_minutes": 960,
+      "stamina": 96,
+      "credits": 74
+    },
+    {
+      "day": 3,
+      "route": "B",
+      "active_minutes": 70,
+      "routine_minutes": 330,
+      "wait_minutes": 560,
+      "total_minutes": 960,
+      "stamina": 96,
+      "credits": 70
+    }
+  ],
+  "boundary_minutes": {
+    "sound_normal_delivery": 905,
+    "prop_normal_delivery": 910,
+    "sound_failed_then_repaired": 935,
+    "prop_failed_then_repaired": 940,
+    "last_repair_start_held_item": 1045,
+    "last_repair_start_already_delivered": 1050,
+    "z_invitation_then_receive": 15,
+    "A_prepare_finish": 515,
+    "B_prepare_finish": 575,
+    "coffee_start": 520,
+    "coffee_finish": 610,
+    "D1_workbench_close": 580
+  },
+  "errors": [],
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "58bc9145eaa0f115b80b1f929b156683b1a2665280fb5c2bff8c05fec35ceaaa"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "af8874e9caedf69dcd125c155f6ba4a0715d433c7e62ddab3eb705cb7db77c48"
+    },
+    {
+      "path": "docs/AI与状态规格-v2.md",
+      "sha256": "0c8db184ea8cd99fafc13b1b33bd0bad79622023f5a42a716d6ae03c737c5c24"
+    },
+    {
+      "path": "docs/D1-D3-Demo开发与验收规格-v2.md",
+      "sha256": "3b48702c2a8b620619fffbc78b945c10c1c9e4434616c83861a6d4184344666d"
+    },
+    {
+      "path": "docs/剧情路线与角色视角-v2.md",
+      "sha256": "7adf2b5e5278cbff085d89e97d321c64a2473c5df031fc5e0d515034c98d7c17"
+    },
+    {
+      "path": "docs/开发准备与技术方案-v2.md",
+      "sha256": "99d8a02e78da24b50c0a99244443e45ef9f23f2a78a389489171bcba3ae813c8"
+    },
+    {
+      "path": "docs/核心系统与数值草案-v2.md",
+      "sha256": "902c56d3ae449b8ced25a04804fd2d540ae5187d88648834772d3d25dc721ff2"
+    },
+    {
+      "path": "docs/游戏设计总案-v2.md",
+      "sha256": "c6f3f2ad009635a18da0c24e39956d8961387d9c35d9b819fb638e2c111f1400"
+    },
+    {
+      "path": "docs/开发参考导航.md",
+      "sha256": "70da2d22d74b8fce5aab40dcd055c8f9d6c546fb1e783371b9f48af05e6193d6"
+    },
+    {
+      "path": "docs/机制采用记录.md",
+      "sha256": "b63264f7527aa34e7eb30ed0026e205ca6c40e3d4f27dfc3105c17a59e78630d"
+    },
+    {
+      "path": "docs/v2-方案审查记录.md",
+      "sha256": "81c38e6132a73796ca18eaeb6dbb5eb99966c4cbba7506b645f6add640703dc0"
+    },
+    {
+      "path": "research/动物迷城/README.md",
+      "sha256": "d382040b175b9d5258b49b18a1fd4d561b042d11b70cf9bbc900662bf8e7e6ec"
+    }
+  ]
+}
