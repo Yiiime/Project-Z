@@ -1,0 +1,80 @@
+{
+  "title": "《来自月亮的 Z》第一章像素美术设定",
+  "version": "chapter1-pixel-v1",
+  "status": "静态设定 · 待审图",
+  "date": "2026-10-10",
+  "assets": [
+    {
+      "id": "01",
+      "slug": "island",
+      "title": "小岛可活动地图",
+      "path": "images/01-island.png",
+      "width": 1672,
+      "height": 941,
+      "bytes": 2833316
+    },
+    {
+      "id": "02",
+      "slug": "characters",
+      "title": "玩家与 Z 人物设定",
+      "path": "images/02-characters.png",
+      "width": 1672,
+      "height": 941,
+      "bytes": 1745061
+    },
+    {
+      "id": "03",
+      "slug": "dock",
+      "title": "码头报到与问询",
+      "path": "images/03-dock.png",
+      "width": 1672,
+      "height": 941,
+      "bytes": 2677613
+    },
+    {
+      "id": "04",
+      "slug": "cafe",
+      "title": "咖啡馆工作与购买",
+      "path": "images/04-cafe.png",
+      "width": 1672,
+      "height": 941,
+      "bytes": 2023659
+    },
+    {
+      "id": "05",
+      "slug": "props",
+      "title": "道具间场务工作",
+      "path": "images/05-props.png",
+      "width": 1672,
+      "height": 941,
+      "bytes": 1867648
+    },
+    {
+      "id": "06",
+      "slug": "lighthouse",
+      "title": "灯塔外围与门禁",
+      "path": "images/06-lighthouse.png",
+      "width": 1672,
+      "height": 941,
+      "bytes": 3108434
+    },
+    {
+      "id": "07",
+      "slug": "live-input",
+      "title": "直播：观看与输入弹幕",
+      "path": "images/07-live-input.png",
+      "width": 1672,
+      "height": 941,
+      "bytes": 2143499
+    },
+    {
+      "id": "08",
+      "slug": "live-response",
+      "title": "直播：Z 点名回应",
+      "path": "images/08-live-response.png",
+      "width": 1672,
+      "height": 941,
+      "bytes": 2086229
+    }
+  ]
+}

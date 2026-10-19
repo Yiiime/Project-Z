@@ -1,0 +1,6 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PIXEL SCENE island: reachable samples=14776, interactions=6, footprints=37
+PIXEL SCENE cafe: reachable samples=2186, interactions=2, footprints=9
+PIXEL SCENE props: reachable samples=2276, interactions=3, footprints=6
+PIXEL WORLD RESULT checks=166 failures=0

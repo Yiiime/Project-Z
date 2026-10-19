@@ -1,0 +1,12 @@
+{
+  "asset": "island-map-v2.png",
+  "status": "selected final",
+  "mode": "built-in image_gen",
+  "intent": "edit — targeted painterly refinement",
+  "references": [
+    "island-map-v1.png",
+    "../v1/assets/06-private-dialogue.png"
+  ],
+  "base_prompt_file": "island-map-v1.prompt.json",
+  "prompt": "Use case: style-transfer / precise refinement of a finished game UI.\nEdit reference image 1, the finished Chinese island map. Reference image 2, the private-dialogue scene, is the art-direction reference only.\nMake ONE targeted improvement: reduce excessive photoreal/miniature-3D material detail in the MAP TERRAIN and bring it closer to the richly painted graphic environment art of reference 2. Retain sophisticated depth and emotional dusk lighting, but use confident painterly masses, grouped pine silhouettes, designed rock planes, softer selective edges, fewer tiny white water highlights and simpler roof textures. The current island rocks, tree needles and sparkling sea have too much high-frequency detail. Make the coast calmer and the navigation more immediately readable. Do NOT flatten into a cheap vector illustration, a childish cartoon, cel-shaded low-poly, a generic fantasy parchment, or a rough concept sketch. High-end finished hand-painted game map with subtly visible brush textures and beautiful shapes. Slightly clearer midtones on walkways while maintaining deep indigo and warm amber.\n\nPRESERVE EXACTLY the existing camera, island silhouette, four landmark locations, four label positions and leader lines, all UI text without any spelling changes, all sidebar content, header and footer, all button geometry and line weights, the single coral route from player to café, all physical connected paths, and the single lighthouse. The right sidebar and all typography must remain visually identical and crisp. Do not add or remove any text. Keep the pale player triangle at the dock, the café selected, the amber lock on the lighthouse INTERNAL entrance only. No new landmarks, no additional islands or towers, no additional icons.\nIt remains the same Day 5 rest-time map in 16:9, only its environment painting finish becomes less noisy, less miniature-rendered and more cohesive with the established hand-painted game art."
+}

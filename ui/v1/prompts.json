@@ -1,0 +1,103 @@
+{
+  "tool": "image_gen__imagegen",
+  "mode": "built-in",
+  "reference": "assets/06-private-dialogue.png",
+  "common": "Use case: ui-mockup. Create ONE finished 16:9 PC game UI screen for 来自月亮的 Z, target 1920x1080 or equivalent landscape. The supplied accepted screenshot is the visual bible: carry over its OXENFREE-like 2.5D lateral playable spaces, layered hand-painted environment, muted midnight-indigo/grey-violet/sea-teal palette, warm amber practical lights, delicate coral active interaction and ivory text. It is a GAME screen, never a website/dashboard/poster. Characters are small simplified adults in the environment, about 13-20% screen height. Same PLAYER: adult stagehand in rust-orange work jacket, dark trousers, work lanyard, brown hair. Same Z: adult woman with ink-black bob, ivory jacket over navy top and muted long blue skirt. Preserve these identities in every scene. Same island of wooden coastal platforms, grey cliffs, white cylindrical lighthouse with small amber lantern, cafe warm windows and dark railings. No enormous face portraits, photoreal closeups, colorful anime, 3D glossy UI, giant card grids, HP/mana, intimacy score, omniscient security meter, arbitrary generated tools or abilities. Small low-chrome HUD top-left uses legible ivory Chinese type. Dialogue and choices are compact floating charcoal bubbles with delicate outlines and coral active choice. Free expression if present is a thin understated input at bottom center, always distinct from preset choices. All text must be readable, correct simplified Chinese and generously spaced; smallest informational type equivalent 24px at 1920x1080. Short copy only, no invented paragraphs or logos. All critical text placed over quiet dark backing with adequate contrast, no occlusion of action path. Reading overlays may take more room but preserve the world. Minimal controls, 5% safe margins. No mockup frame, collage, device, source-game logos or concept labels. Output a complete single gameplay UI screenshot.",
+  "screens": [
+    {
+      "id": "01-title",
+      "prompt": "SCREEN: main title menu. A wide original nighttime view looking across the island cove. Warm cafe terraces at far left, distant white lighthouse at right, small player and Z silhouettes separately visible along lower coastal path. Painterly dusky moon and huge indigo sky, subtle quiet sea reflections. Keep clear negative space at left-middle for elegantly spaced title '来自月亮的 Z' with Z slightly larger and delicate, small subtitle '第 5—7 日 · Demo'. Below, a vertical menu with only '继续', selected coral '开始 Demo', '存档与设置', '退出游戏'. Under continue small progress caption '第 5 日 · 海边咖啡馆'. No dialogue HUD. No giant ornamental typography. Warm enigmatic invitation with quiet tension, style consistent with reference."
+    },
+    {
+      "id": "02-identity",
+      "prompt": "SCREEN: resume island visitor session at day five, not arrival day one. Quiet dawn dock office with window framing familiar lighthouse and boardwalk; player's rust jacket visible at desk edge, a physical worn visitor credential on desk. A restrained semi-transparent dark reading overlay left 46% of screen, original little ivory credential illustration within it. Heading '第 5 日，从这里继续'. Subheading '你的岛内身份' and label '临时场务'. Three short lines '公司知道你是报名粉丝。' '在 Z 面前，你是一名普通场务。' '前四日，你们只熟悉了名字与工作。'. Thin divider, heading '岛外接收端' and small quiet green status '准备就绪', then explicit '尚未连接 Z，也未获得迁移许可。'. Single coral outlined button '进入第 5 日'. No technical command terminal, no API keys, no secret omnipotent hacker theme. Physical office still dominates right half. All copy exactly as given."
+    },
+    {
+      "id": "03-exploration",
+      "prompt": "SCREEN: free exploration, new broad side-view island dock street in late afternoon, navigable walkway connects cafe at left, modest broadcast hall entrance at center, stairs toward lighthouse at right. Player stands near prop flight case with a small lit cue-sheet on top. Stage manager with clipboard stands by hall; one worker visibly heads along raised boardwalk. Actual pathways and doors legible. HUD top-left '第 5 日 · 准备时段' and '码头小街'. Small contextual interaction near paper 'E 查看演出单'. Near stage manager a quieter speech glyph without quest exclamation. A thin pointer to actual visible walking worker says '维护员正前往灯塔'. Bottom-left minimal objective '找机会与 Z 说上话'. Bottom-right sparse key hints 'A / D 移动    E 观察    J 记录'. No dialogue input when not talking, no map overlay, no hidden object omniscience. Beautiful live world, no giant panels."
+    },
+    {
+      "id": "04-schedule",
+      "prompt": "SCREEN: formal activity time-cost confirmation over softly dimmed broadcast prop room; player and stage manager remain visible on left and background. Center-right a single elegant charcoal translucent planning sheet, 54% width, with no rounded dashboard cards. Heading '今天先做哪件事？'. Tiny current state '当前 · 准备时段'. A simple horizontal three-phase line '准备 → 休息 → 开播前'. Two separated text rows: first '基本递送' with '1 个时段 · 结束于休息时段', smaller '完成场务工作，仍可去咖啡馆。'; second selected coral-outline '完整设备联调' with '2 个时段 · 结束于开播前', smaller '参与维护联调，获得工作认可。'. Critical warm amber line beneath '将错过：Z 在咖啡馆的休息时间'. Buttons at base selected '确认完整联调' and quiet '先不决定'. Clear cost and consequence, no secret rewards, no real-time timer, large legible Chinese, ample padding and short copy. Explicitly replace inherited HUD with '第 5 日 · 准备时段' / '直播厅道具间'. Only the player and an adult middle-aged stage manager in a dark work vest are in scene; Z is NOT present."
+    },
+    {
+      "id": "05-evidence",
+      "prompt": "SCREEN: evidence inspection and shared-notes screen. Keep the same cafe background dim but visible at outer edges. A diegetic original creased ivory production cue-sheet large at left, and a simple translucent charcoal notes column on right, total overlay 76% width. Physical document title '今晚演出单', body only '第四声钟后' then '灯塔熄灭' then 'Z 即兴回应', small footer '道具间 · 桌面原件'. Select the timing line with a very subtle coral underline, no red detective string. Right heading '共同记录', quiet tab labels '材料   约定'. Three compact text sections with no cards: '亲眼看到' -> '停电已被写入演出安排。'; '尚待核实' -> '今晚是否会照着发生？'; 'Z 的已知信息' -> '尚未向她出示。'. Clearly distinguish fact from inference. Bottom right coral action '用它开启话题' and quiet 'Esc 返回'. No completion meter, no identity solved stamp, no supernatural UI. All Chinese exactly accurate and legible."
+    },
+    {
+      "id": "07-livestream",
+      "prompt": "SCREEN: nighttime lighthouse livestream, same side-view layered island world. Z in ivory jacket/navy skirt is on modest outdoor stage left-center, camera operator, softbox and small crew visible. Player in rust jacket occupies far-left service side, holding a small audience terminal. Lighthouse large at right with lamp ON, visible maintenance worker beside lamp-service switch at its base, clue readable but no omniscient marker. Tiny top-left '第 5 日 · 夜间直播' and '灯塔外景'. Top-right a small coral outlined LIVE indicator '直播中'. Bottom area modest dark audience overlay occupying 22% height, heading '岛内观众终端 · 互动窗口开启'. Two discreet floating audience comments at right: '今天海风好大。' and '灯塔真漂亮。'. A small optional reminder line '你们的约定：第三声时去塔后，等第四声一起看。'. Focused comment composer contains exactly '等第四声钟，一起看。' and coral send action '发送'. Beneath small secondary '连麦尚未开放'. Near stage tiny programme cue '钟声 3 / 4'. Z glances toward lighthouse, she has not yet watched shutdown, no claim of success. No tips/gifts/leaderboards/follower numbers or standard social app chrome. Scene dominates, emotional and suspenseful."
+    },
+    {
+      "id": "08-consequences",
+      "prompt": "SCREEN: morning after day-five broadcast. New dawn side-view cafe now shuttered, wet boardwalk amber lamps fading, same lighthouse unlit in pastel-grey distance, crew attaching an ordinary work notice. Player at lower-left reads a message. Quiet top-left '第 6 日 · 清晨'. Large but restrained central small heading '昨夜之后'. A single translucent dark reading strip along right 38% width carries just two observed updates, not summary cards: small label 'Z 留给你的话' then quote '「第四声钟响时，我看见他拉下了开关。」' then second short quote '「今天，陪我看一段旧回放。」'. Thin rule. Label '你路过时看到' with '灯塔维护区新增了登记要求。'. At bottom coral text action '去见 Z' and quiet 'J 回看记录'. No numerical overnight scores, no internal thought reveal, no alert meter or awakening complete stamp. Warm melancholy morning in same art style, space and readable lettering balanced."
+    },
+    {
+      "id": "09-z-initiative",
+      "prompt": "SCREEN: Z autonomously approaches player by the broadcast hall alley in day-six soft morning light. Same miniature adult Z and player, same hand-painted lateral 2.5D environment. Z holds an original permission slip, points at small door marked '回放室'. A stage manager in background unlocks that door, visibly creating a limited opportunity. Top-left '第 6 日 · 准备时段' / '直播厅外'. One clear charcoal speech bubble above Z: '我申请了回放校对。想请你帮我接上设备。'. A second smaller bubble separated below: '我想看看，那段童年记忆是从哪来的。'. Two response bubbles near player, coral selected '我陪你一起看。' and ivory '先说说你担心什么。'. Bottom-center thin free text input '说出你的想法…' with visible send arrow. Bottom-left small anchored opportunity note 'Z 争取到的机会 · 一次回放校对'. No quest-popup reward, no intimacy score, she is agentive and thoughtful. Keep door, staff, two people and paths visible."
+    },
+    {
+      "id": "10-verification",
+      "prompt": "SCREEN: personal verification in lighthouse replay/maintenance room. Same 2.5D side-view environment, Z and player physically visible at console left quarter, warm lamp, broadcast monitors and service door. Center/right restrained read-only source comparison overlay takes 60% width, looks like in-world maintenance equipment with dark matte surfaces and fine lines, not hacker terminal. Top title '回放校对 · 只读诊断'. Clear amber small note '技术视图切换会留下记录'. Two adjacent clean record columns with modest still-image thumbnails: left a painted child-memory seaside pier thumbnail and heading 'Z 选择的童年片段', beneath '来源：初始化记忆包', small sublabel '创建于她开始运行之前'; right actual lighthouse blackout thumbnail and heading '昨夜灯塔停电', beneath '来源：当前运行会话', small sublabel '记录于昨夜共同经历'. A thin line labeled '同一运行实例' connects these two records, small factual identity '运行身份：AI 个体 Z'. Show source evidence, not a consciousness verdict. Lower area Z quote '我想自己确认一次。'. Single coral action '由 Z 确认感知自检'. Supporting text '仅暂停她的听觉 2 秒；你仍能听见钟声。'. Bottom-right quiet '退出诊断'. Top-left HUD '第 6 日 · 休息时段'. No edit memory button, no admin root shell, no statistical truth meter, no giant paragraphs. Exact Chinese readable and restrained."
+    },
+    {
+      "id": "11-cooperation",
+      "prompt": "SCREEN: quiet knowing conversation at sea-facing lower cafe terrace, dawn/dusk muted lavender and amber. Same small adult Z sits on rail-side bench at center, player standing respectfully nearby, no touching or romance, no enormous portrait. Top-left '第 6 日 · 开播前' / '海边咖啡馆'. Scene dominates 75%. Z bubble: '我想离开。但我不想丢掉在这里的记忆。'. Second quiet bubble '到了外面，如果我改变主意呢？'. Player coral choice '我们先把边界说清楚。', ivory choice '我不能保证所有未知的事。'. On right modest narrow dark note layer with heading '共同约定' and three short lines '保留她当前的记忆' / '启动前，她可以中止' / '不替她决定未来'. This is shared plan text not an achievement checklist. Bottom-center free input '说出你的想法…' and send arrow. No accept-on-her-behalf button, no love hearts, no optimism warranty. Gentle uncertainty, Z retains agency, path to next day still visible."
+    },
+    {
+      "id": "12-escape-plan",
+      "prompt": "SCREEN: action plan for day seven, a charcoal transparent fold-out route map on table with same island cliffs subtly behind, original illustrative simple chalk-like known floor route not a fancy dashboard. Title '行动前，再确认一次'. Left 48% hand-drawn only known route plan: nodes '直播厅' '后台走廊' '服务门' '维护站'; coral solid path '后台潜入', pale dotted alternate '台前配合'; meaningful connected geometry, simple arrowheads, no hidden enemy positions. Right 38% three short section groups: '你' -> '接通接线柜 · 登记接收端 · 放下服务门闩'; 'Z' -> '等约定信号 · 到维护站 · 自己启动'; '已备条件' -> '一次性登记窗口已获准' and '外部接收端已就绪'. Lower left small Z speech quote '收到信号，我从后廊过去。'. Small amber note '登记后，目的地才开始复核。'. Bottom right coral button '准备好，开始行动' and quiet '回去补准备'. Top-left '第 7 日 · 行动前'. No live countdown yet, no unknown map, no green checkmark grid. Keep Chinese short and readable, map elegant and practical."
+    },
+    {
+      "id": "13-stealth",
+      "prompt": "SCREEN: tense real-time cooperative stealth, nighttime lighthouse maintenance exterior. Broad lateral 2.5D scene, same white lighthouse right, wooden upper walkway from left to tower, lower service corridor under it. Player crouches near a cable cabinet at lower-left, Z waits visibly behind crate at lower-middle, patrol figure walks on upper platform with a clearly visible amber flashlight cone confined by railings/walls. Service door to maintenance station at lower-right is visible; actual path and cover readable. HUD top-left '第 7 日 · 实时行动' / '灯塔后台'. One small current action line '先接通接线柜'. Near cabinet interactive label 'E 接通'. Near Z a small received signal bubble '我在等待点。'. Bottom-center exactly two compact signal controls '1 等一等' and coral '2 现在过来'. Bottom-right 'Esc 暂停'. Small upper-right status '尚未登记接收端'. NO review countdown before registration, NO free-form chat field during stealth, NO global red alarm bar, no omniscient patrol route outlines, no first-person gun/shooter icons. Coral only controls and immediate focus, atmospheric blue-violet and warm practical amber light, movement path not occluded."
+    },
+    {
+      "id": "14-transfer",
+      "prompt": "SCREEN: state transfer after actual authorized registration window used, inside lighthouse maintenance station at night. Consistent lateral side-view cross section; at right Z in ivory/navy stands motionless beside simple transfer console, eyes closed posture visibly paused, NOT unconscious injury. Player at left lowering large physical service door latch, patrol lantern glow seen through narrow opaque door window, clear action remains necessary. Center compact console status overlay no more than 40% frame, charcoal thin lines, title '状态迁移'. Amber top-right timer clearly labeled '目的地复核 00:48'. Stage strip with four clear labels '已登记 → 传输中 → 外部核验 → 源端退出', active transfer coral/ivory, later stages muted. Progress '记忆与运行状态 62%'. Prominent factual line 'Z 已暂停，暂时无法回应。'. Current player action at bottom-left '放下服务门闩，再回到控制台。' and contextual 'E 放下门闩'. Small console footer '复核仍在进行'. No Z dialogue/input, no fake victory stamp, no shootout, no magical upload beam, no countdown pause caused by latch. Little practical CRT light and dramatic restrained amber door glow. Beautiful legible Chinese. The camera is INSIDE the single lighthouse maintenance station; do not include any second lighthouse in background. Preserve the current afternoon/night choice explicitly: night, day seven, after registration."
+    },
+    {
+      "id": "15-outside",
+      "prompt": "SCREEN: successful escape, independent external reception environment, NOT island anymore. Keep reference hand-painted lateral style but move to a quiet newly instantiated minimal virtual room: a simple bench, lamp, pale dawn-blue window showing abstract distant horizon without lighthouse or familiar cafe, floor remains lightly unfinished at far edge to imply independent virtual environment, not hospital. Small adult Z with identical black bob/ivory jacket/navy skirt stands awake center-right, looking toward player rust jacket left. Quiet top-left '外部接收环境'. Elegant modest heading '这一次，由她继续'. A compact transparent dark verification strip bottom-left with three unambiguous lines '外部运行已通过核验' / '当前源端已退出' / '已脱离公司服务'. Above Z one gentle dialogue bubble '我记得第四声钟。还有你在门外等我。'. Second smaller bubble '接下来，我想自己看看。'. Bottom-right coral action '查看本局回顾' and quiet '尝试另一条路线'. No celebratory confetti, gold trophies, win %, romance kiss, island reopened, deletion of all backups, claims of human consciousness or physical body. Quiet earned companionship and open horizon, concise Chinese."
+    },
+    {
+      "id": "16-stay",
+      "prompt": "SCREEN: sympathetic regret ending, Z knowingly chooses to stay. Same cafe lower terrace after closing, indigo dawn horizon and familiar lighthouse still glowing, player rust jacket near exit walkway lower-left, Z ivory jacket/navy skirt alone seated center-right facing sea, respectful space and no romantic framing. Simple quiet upper-left heading '她选择留下'. Subtitle '她知道了真相，也说出了自己的选择。'. Above Z one modest speech bubble '我知道这些被安排过。但这里的人，对我仍然重要。'. Dark negative space at lower-center gives one understated outcome line '访客会话即将结束。'. Three restrained text actions bottom-right with coral first '回到合作决定前', '重新开始 Demo', '返回主菜单'. No failure alarm, low trust score, robot malfunction metaphor, manipulative guilt, evil-company villain portrait or secret ending rewards. Emotional agency and loss carried by distance, warm cafe fading into blue sea. Same UI type and safe margins."
+    },
+    {
+      "id": "17-failure",
+      "prompt": "SCREEN: migration isolated after patrol physically confirms unauthorized destination. Same maintenance station as escape sequence, dark blue scene frozen behind overlay, closed service door, patrol silhouette at threshold and console amber warning light, no violence. Restrained charcoal center-left result overlay 48% width, fine coral rule not flashing red. Main heading '连接已隔离'. Clear cause section '发生了什么' with two short lines '巡查进入维护站，核实了未经许可的接收端。' '本次迁移已被隔离。'. Thin divider, savepoint section '最近节点' and '第 7 日 · 逃离开始前'. One honest small line '重试将回到这个节点。'. Strong coral button '重试逃离阶段', secondary text '回到行动准备', '返回主菜单'. No keep-running hidden exit option, no global fear score, no perfect company secret logs. The available evidence is patrol at door and isolation console, consistent. No glitch soup, death/skulls, huge GAME OVER, blameful rhetoric. Clear Chinese and actionable calm feedback."
+    },
+    {
+      "id": "18-pause",
+      "prompt": "SCREEN: in-game pause/settings/savepoint overlay on softly dimmed same cafe scene, no blur so strong it destroys art. Balanced single charcoal translucent sheet across middle 76% width, fine ivory dividers no rounded dashboard. Left narrow menu heading '已暂停', coral selected '节点与设置', quiet '继续游戏', '返回主菜单'. Middle column heading '读取节点', three clean savepoint rows with small chronological dots, '第 6 日 · 本人核验前', '第 6 日 · 合作决定前', coral outlined selected '第 7 日 · 逃离开始前'. Short clear note below '读取后，当前进度会回到该节点。'. Right column heading '呈现设置', four well-spaced modest controls '文字大小   标准  大', '字幕背景   开', '环境音量' with simple slider, '减少动态效果   开'. Bottom-right slim coral '读取选中节点', quiet 'Esc 继续'. No model/API/token settings, no arbitrary manual save promises, no live ticking world timers underneath. Chinese highly legible with modest sufficient contrast and precise aligned controls. Matte restrained game UI with small coral emphasis."
+    }
+  ],
+  "date": "2026-10-08",
+  "revision_records": [
+    {
+      "id": "04-schedule",
+      "change": "纠正参考图继承的时段与在场人物",
+      "instruction": "第5日·准备时段 / 直播厅道具间；只有玩家和深色工装场务负责人，Z不在场。",
+      "status": "已重新生成并复核"
+    },
+    {
+      "id": "12-escape-plan",
+      "change": "明确主路线切换条件并补全目的地连线",
+      "instruction": "保留场景和布局。后台潜入（推荐）改为后台潜入（已选择）；台前配合（备用）改为台前配合（需重新准备）；白虚线连到已有维护站；地图加切换主路线需要重新准备。",
+      "status": "已局部编辑并复核"
+    },
+    {
+      "id": "13-stealth",
+      "change": "移除重复生成的远景灯塔",
+      "instruction": "仅移除右侧远景小白灯塔及光束，替换为普通松林海崖和夜空；保留前景大灯塔、角色、UI和所有文字。",
+      "status": "已局部编辑并复核"
+    },
+    {
+      "id": "18-pause",
+      "change": "消除尚未到达的未来存档节点冲突",
+      "instruction": "仅将左上背景日期修改为第7日·行动前，其他保持。",
+      "status": "已局部编辑并复核"
+    }
+  ]
+}

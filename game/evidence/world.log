@@ -1,0 +1,32 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+WORLD island reachable samples=3903 step=8
+PASS island/xu nearest=(944.0, 578.0) distance=10.0
+PASS island/cafe nearest=(432.0, 370.0) distance=3.6
+PASS island/props nearest=(1448.0, 546.0) distance=4.5
+PASS island/dorm nearest=(1048.0, 178.0) distance=3.6
+PASS island/bell nearest=(992.0, 682.0) distance=2.8
+PASS island/gate nearest=(1568.0, 250.0) distance=2.2
+PASS island/cafe_return nearest=(456.0, 386.0) distance=3.2
+PASS island/props_return nearest=(1448.0, 554.0) distance=2.2
+SOLID island/harbor_hut_front (875.0, 535.0)
+SOLID island/bench_in_front_of_center_tree (700.0, 365.0)
+SOLID island/retaining_wall (1200.0, 510.0)
+SOLID island/props_wall_and_barrels (1470.0, 435.0)
+SOLID island/eastern_water (1600.0, 800.0)
+SOLID island/western_water (400.0, 650.0)
+WORLD cafe reachable samples=5369 step=8
+PASS cafe/lin nearest=(790.0, 588.0) distance=36.1
+PASS cafe/exit nearest=(374.0, 836.0) distance=4.5
+SOLID cafe/right_dining_table (1480.0, 655.0)
+SOLID cafe/left_edge_of_occupied_table (225.0, 650.0)
+SOLID cafe/counter_front_panel (840.0, 552.0)
+WORLD props reachable samples=4064 step=8
+PASS props/chen nearest=(639.0, 537.0) distance=3.2
+PASS props/lu nearest=(991.0, 497.0) distance=2.0
+PASS props/exit nearest=(775.0, 849.0) distance=3.6
+PASS props/crate nearest=(711.0, 657.0) distance=5.0
+PASS props/target nearest=(887.0, 721.0) distance=4.5
+PASS props/checklist nearest=(639.0, 537.0) distance=3.2
+SOLID props/stool (550.0, 578.0)
+WORLD RESULT unreachable=0 art-collision failures=0

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>来自月亮的 Z · 月光直播 C.02</title>
+  <link rel="preload" href="fonts/Manrope-Variable.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <svg class="sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.3 14.2A8.6 8.6 0 0 1 9.8 3.7 8.6 8.6 0 1 0 20.3 14.2Z"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/></symbol>
+    <symbol id="i-gift" viewBox="0 0 24 24"><path d="M4 10h16v10H4zM3 6.5h18V10H3zM12 7v13"/><path d="M12 6.5H7.5a2.5 2.5 0 1 1 2.4-3.2L12 6.5Zm0 0h4.5a2.5 2.5 0 1 0-2.4-3.2L12 6.5Z"/></symbol>
+    <symbol id="i-call" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11v1a7 7 0 0 0 14 0v-1M12 19v3M9 22h6"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-5-5 5 5-5 5"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></symbol>
+    <symbol id="i-cross" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M4 9V4h5m6 0h5v5M4 15v5h5m6 0h5v-5"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M20 14a3 3 0 0 1-3 3H9l-5 4v-5a3 3 0 0 1-1-2V6a3 3 0 0 1 3-3h11a3 3 0 0 1 3 3Z"/><path d="M7 8h9M7 12h6"/></symbol>
+    <symbol id="i-gold" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="m12 7 4 5-4 5-4-5Z"/></symbol>
+    <symbol id="i-bottle" viewBox="0 0 40 48"><path d="M15 7h10v7l5 5v21H10V19l5-5V7Z"/><path d="M14 7V3h12v4M11 32c6-4 12 4 18 0"/><path d="m20 19 2 5 5 .4-4 3 1.3 5-4.3-2.8-4.3 2.8 1.3-5-4-3 5-.4Z"/></symbol>
+  </svg>
+
+  <header class="review-bar">
+    <a class="project" href="index.html"><svg class="icon"><use href="#i-moon"/></svg><span data-i18n="projectName">来自月亮的 Z</span><span class="revision">C.02</span></a>
+    <span class="review-caption" data-i18n="review">月光直播 · 界面设计预览</span>
+    <nav class="review-tools" aria-label="Design preview controls">
+      <button class="review-control" id="reset" data-i18n="reset">重置</button>
+      <div class="language-switch" role="group" aria-label="Language"><button data-locale="zh" aria-pressed="true">中文</button><button data-locale="en" aria-pressed="false">EN</button></div>
+      <button class="review-icon" id="immersive" aria-label="沉浸预览" title="沉浸预览"><svg class="icon"><use href="#i-expand"/></svg></button>
+    </nav>
+  </header>
+
+  <main class="stage-wrap">
+    <section class="stage" id="stage" aria-label="Z 的手机直播">
+      <img class="stream-art" src="art/z-moonlight-clean.png" alt="银白长发的 Z 坐在海边窗前，倾听屏幕另一端的观众。">
+      <div class="shade-top"></div><div class="shade-left"></div><div class="shade-bottom"></div>
+
+      <header class="stream-header">
+        <div class="channel"><div class="channel-mark" aria-hidden="true"><svg class="icon"><use href="#i-moon"/></svg></div><div class="channel-copy"><div class="channel-line"><h1>Z</h1><span class="live-mark"><i></i>LIVE</span></div><p data-i18n="topic">今晚，听见小岛</p></div></div>
+        <div class="stream-status"><span class="viewers" title="示例观众数"><svg class="icon"><use href="#i-eye"/></svg>1,286</span><span class="status-divider"></span><span class="wallet"><svg class="icon gold-icon"><use href="#i-gold"/></svg><span>74</span><span class="sr-only" data-i18n="gold">金币</span></span><time id="clock">20:10</time></div>
+      </header>
+
+      <section class="chat" aria-label="观众弹幕">
+        <div class="chat-heading"><span data-i18n="chat">直播间</span><span class="chat-rule"></span><button id="chat-toggle" aria-label="收起弹幕" aria-expanded="true"><svg class="icon"><use href="#i-chat"/></svg></button></div>
+        <div id="chat-list" class="chat-list" role="log" aria-live="polite" aria-relevant="additions"></div>
+        <div class="gift-notice" id="gift-notice"><svg class="bottle-icon"><use href="#i-bottle"/></svg><div><span class="gift-author" data-i18n="giftAuthor">阿树</span><span class="gift-verb" data-i18n="giftVerb">送出</span><strong data-i18n="starBottle">星星瓶</strong><span class="gift-count">× 1</span></div></div>
+      </section>
+
+      <div class="z-caption" id="z-caption"><span class="caption-speaker">Z</span><div><p data-i18n="reply">听潮，这个点子不错。</p><p data-i18n="replySecond">下一次，想听你亲手录下来的海。</p></div></div>
+
+      <div class="overlay-panel gift-panel" id="gift-panel" role="dialog" aria-labelledby="gift-title" hidden>
+        <div class="panel-top"><div><span class="eyebrow" data-i18n="toZ">送给 Z</span><h2 id="gift-title" data-i18n="giftTitle">一点心意</h2></div><button class="icon-button close-panel" aria-label="关闭"><svg class="icon"><use href="#i-cross"/></svg></button></div>
+        <div class="gift-art" aria-hidden="true">
+          <img src="art/small-gift.png" alt="">
+        </div>
+        <div class="gift-description"><h3 data-i18n="smallGift">小礼物</h3><span class="owned"><span data-i18n="owned">已拥有</span><b id="owned-count">1</b></span></div>
+        <p class="panel-description" data-i18n="giftDescription">把白天挑好的心意，送到她面前。</p>
+        <button class="panel-primary" id="send-gift"><span data-i18n="sendGift">赠送给 Z</span><svg class="icon"><use href="#i-arrow"/></svg></button>
+        <p class="panel-footnote" id="gift-footnote" data-i18n="giftNote">使用 1 份库存 · 金币不变</p>
+      </div>
+
+      <div class="overlay-panel call-panel" id="call-panel" role="dialog" aria-labelledby="call-title" hidden>
+        <div class="panel-top"><div><span class="eyebrow" data-i18n="onAir">一起聊聊</span><h2 id="call-title" data-i18n="callTitle">随机连麦</h2></div><button class="icon-button close-panel" aria-label="关闭"><svg class="icon"><use href="#i-cross"/></svg></button></div>
+        <div class="call-orbit" aria-hidden="true"><svg class="icon"><use href="#i-call"/></svg><i></i><i></i><i></i><i></i></div>
+        <p class="call-question" data-i18n="callQuestion">小岛上，什么声音让你停下脚步？</p>
+        <p class="panel-description" id="call-description" data-i18n="callDescription">报名后随机抽选。抽中时，再由你决定是否接通。</p>
+        <button class="panel-primary" id="join-call"><span data-i18n="joinCall">报名连麦</span><svg class="icon"><use href="#i-arrow"/></svg></button>
+        <p class="panel-footnote" data-i18n="callNote">自愿参与 · 不会自动开启麦克风</p>
+      </div>
+
+      <div class="overlay-panel advance-panel" id="advance-panel" role="dialog" aria-labelledby="advance-title" hidden>
+        <div class="panel-top"><div><span class="eyebrow" data-i18n="nextSegment">下一段节目</span><h2 id="advance-title" data-i18n="advanceTitle">继续听她说</h2></div><button class="icon-button close-panel" aria-label="关闭"><svg class="icon"><use href="#i-cross"/></svg></button></div>
+        <p class="panel-description" data-i18n="advanceDescription">结束当前片段，进入主节目。</p><p class="advance-time"><span>20:10</span><svg class="icon"><use href="#i-arrow"/></svg><strong>20:40</strong></p>
+        <button class="panel-primary" id="advance-confirm"><span data-i18n="continue">继续观看</span><svg class="icon"><use href="#i-arrow"/></svg></button><p class="panel-footnote" data-i18n="advanceNote">发送弹幕、赠礼和报名不推进时间</p>
+      </div>
+
+      <div class="toast" id="toast" role="status" hidden></div>
+      <footer class="stream-footer">
+        <form class="composer" id="composer"><label class="sr-only" for="message" data-i18n="inputLabel">发送弹幕</label><input id="message" type="text" maxlength="120" autocomplete="off" placeholder="说点什么，让她认识你…"><button type="submit" class="send-button" aria-label="发送弹幕" disabled><svg class="icon"><use href="#i-up"/></svg></button></form>
+        <div class="interactions"><button class="action-button" id="gift-button" aria-expanded="false" aria-controls="gift-panel"><svg class="icon"><use href="#i-gift"/></svg><span data-i18n="gifts">礼物</span></button><button class="action-button" id="call-button" aria-expanded="false" aria-controls="call-panel"><svg class="icon"><use href="#i-call"/></svg><span id="call-button-label" data-i18n="call">连麦</span><i class="queue-dot" hidden></i></button></div>
+        <button class="continue-button" id="advance-button" aria-expanded="false" aria-controls="advance-panel"><span data-i18n="continue">继续观看</span><svg class="icon"><use href="#i-arrow"/></svg></button>
+      </footer>
+      <button class="exit-immersive" id="exit-immersive" aria-label="退出沉浸预览"><svg class="icon"><use href="#i-expand"/></svg></button>
+    </section>
+  </main>
+
+  <footer class="review-footer"><p data-i18n="previewNote">可体验弹幕、礼物与报名状态。当前为本地界面预览，Z 暂为静态设定图。</p><span>MOONLIGHT / C.02</span></footer>
+</body>
+</html>

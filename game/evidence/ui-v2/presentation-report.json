@@ -1,0 +1,153 @@
+{
+  "captures": [
+    {
+      "file": "1600x900-01-title.png",
+      "fixture": true,
+      "size": [
+        1600,
+        900
+      ],
+      "state": "01-title"
+    },
+    {
+      "file": "1600x900-02-empty-bag.png",
+      "fixture": true,
+      "size": [
+        1600,
+        900
+      ],
+      "state": "02-empty-bag"
+    },
+    {
+      "file": "1600x900-03-inventory-gift.png",
+      "fixture": true,
+      "size": [
+        1600,
+        900
+      ],
+      "state": "03-inventory-gift"
+    },
+    {
+      "file": "1600x900-04-material-shop.png",
+      "fixture": true,
+      "size": [
+        1600,
+        900
+      ],
+      "state": "04-material-shop"
+    },
+    {
+      "file": "1600x900-05-lin-dialogue.png",
+      "fixture": true,
+      "size": [
+        1600,
+        900
+      ],
+      "state": "05-lin-dialogue"
+    },
+    {
+      "file": "1600x900-06-schedule.png",
+      "fixture": true,
+      "size": [
+        1600,
+        900
+      ],
+      "state": "06-schedule"
+    },
+    {
+      "file": "1600x900-07-journal.png",
+      "fixture": true,
+      "size": [
+        1600,
+        900
+      ],
+      "state": "07-journal"
+    },
+    {
+      "file": "1600x900-08-action-preview.png",
+      "fixture": true,
+      "size": [
+        1600,
+        900
+      ],
+      "state": "08-action-preview"
+    },
+    {
+      "file": "1280x720-01-title.png",
+      "fixture": true,
+      "size": [
+        1280,
+        720
+      ],
+      "state": "01-title"
+    },
+    {
+      "file": "1280x720-02-empty-bag.png",
+      "fixture": true,
+      "size": [
+        1280,
+        720
+      ],
+      "state": "02-empty-bag"
+    },
+    {
+      "file": "1280x720-03-inventory-gift.png",
+      "fixture": true,
+      "size": [
+        1280,
+        720
+      ],
+      "state": "03-inventory-gift"
+    },
+    {
+      "file": "1280x720-04-material-shop.png",
+      "fixture": true,
+      "size": [
+        1280,
+        720
+      ],
+      "state": "04-material-shop"
+    },
+    {
+      "file": "1280x720-05-lin-dialogue.png",
+      "fixture": true,
+      "size": [
+        1280,
+        720
+      ],
+      "state": "05-lin-dialogue"
+    },
+    {
+      "file": "1280x720-06-schedule.png",
+      "fixture": true,
+      "size": [
+        1280,
+        720
+      ],
+      "state": "06-schedule"
+    },
+    {
+      "file": "1280x720-07-journal.png",
+      "fixture": true,
+      "size": [
+        1280,
+        720
+      ],
+      "state": "07-journal"
+    },
+    {
+      "file": "1280x720-08-action-preview.png",
+      "fixture": true,
+      "size": [
+        1280,
+        720
+      ],
+      "state": "08-action-preview"
+    }
+  ],
+  "checks": 165,
+  "failures": [],
+  "scope": "Native layout/capture confirmation only; explicit state fixtures. No purchase or input regression rerun.",
+  "mode": "captures_only",
+  "full_run_log": "presentation-native.log"
+}

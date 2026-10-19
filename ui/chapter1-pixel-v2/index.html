@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>来自月亮的 Z · 第一章美术设定 v2</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #eae8e1; background: #111415; line-height: 1.6; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { font: inherit; cursor: pointer; }
+    a { color: #e2bf82; text-underline-offset: 4px; }
+    a:hover { color: #ffe3b3; }
+    button:focus-visible, a:focus-visible { outline: 2px solid #f3ca86; outline-offset: 4px; }
+    button:disabled { cursor: default; opacity: .35; }
+    [hidden] { display: none !important; }
+    .shell { width: min(1860px, calc(100% - 48px)); margin: 0 auto; }
+    .page-header { padding: 28px 0 22px; border-bottom: 1px solid #303739; }
+    .notice { display: inline-block; margin: 0 0 11px; padding: 4px 10px; border: 1px solid #8c7048; color: #edcf9d; background: #28241c; font-size: 13px; font-weight: 650; }
+    h1 { margin: 0; font-size: clamp(24px, 3vw, 34px); line-height: 1.3; }
+    .intro { color: #abb2b0; margin: 10px 0 13px; max-width: 1060px; font-size: 14px; }
+    .resources { display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 14px; }
+    .layout { display: grid; grid-template-columns: 208px minmax(0, 1fr); gap: 24px; align-items: start; padding: 24px 0; }
+    .navigation { display: flex; flex-direction: column; gap: 5px; }
+    .navigation a { display: flex; align-items: baseline; gap: 10px; padding: 10px 12px; border: 1px solid transparent; border-radius: 4px; color: #bfc6c2; text-decoration: none; font-size: 14px; }
+    .navigation a:hover { background: #1e2526; color: #eeeae1; }
+    .navigation a[aria-current="page"] { background: #29271f; border-color: #766140; color: #f0d39d; }
+    .nav-number { color: #8b968f; font-variant-numeric: tabular-nums; font-size: 12px; }
+    .navigation a[aria-current="page"] .nav-number { color: #d5b67e; }
+    .nav-note { margin: 18px 12px 0; color: #84918c; font-size: 12px; }
+    .viewer { min-width: 0; background: #14191b; border: 1px solid #303739; border-radius: 5px; overflow: hidden; }
+    .toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 12px 16px; background: #1a2022; border-bottom: 1px solid #303739; }
+    .controls, .file-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+    .controls button, .file-controls button { padding: 5px 10px; border: 1px solid #48504d; border-radius: 3px; color: #e1e5df; background: #242c2d; font-size: 13px; }
+    .controls button:not(:disabled):hover, .file-controls button:hover { border-color: #b29768; background: #30352e; }
+    .counter { min-width: 48px; text-align: center; font-size: 13px; color: #aeb6b1; font-variant-numeric: tabular-nums; }
+    .file-controls a { font-size: 13px; }
+    .image-stage { display: flex; align-items: center; justify-content: center; min-height: 230px; background: #090c0d; }
+    .image-stage img { display: block; width: 100%; max-height: 72vh; object-fit: contain; }
+    .image-error { padding: 44px 24px; max-width: 660px; color: #d4c7b3; text-align: center; }
+    .image-error strong { display: block; color: #eddfc5; margin-bottom: 8px; }
+    .caption { padding: 18px 20px 20px; border-top: 1px solid #303739; }
+    .caption-line { display: flex; flex-wrap: wrap; gap: 8px 18px; justify-content: space-between; align-items: baseline; }
+    h2 { margin: 0; font-size: 20px; line-height: 1.4; }
+    .dimensions { font-size: 12px; color: #84928b; font-variant-numeric: tabular-nums; }
+    .purpose { margin: 8px 0 0; color: #b2bcb6; font-size: 14px; }
+    .fullscreen-notice { margin: 10px 0 0; color: #9f8e73; font-size: 12px; }
+    footer { padding: 0 0 28px; font-size: 12px; color: #8c9892; }
+    footer p { margin: 0; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    .viewer:fullscreen, .viewer.expanded { display: flex; flex-direction: column; width: 100%; height: 100%; border: 0; border-radius: 0; background: #090c0d; }
+    .viewer.expanded { position: fixed; inset: 0; z-index: 100; }
+    .viewer:fullscreen .image-stage, .viewer.expanded .image-stage { flex: 1; min-height: 0; overflow: hidden; }
+    .viewer:fullscreen .image-stage img, .viewer.expanded .image-stage img { width: 100%; height: 100%; max-height: 100%; object-fit: contain; }
+    .viewer:fullscreen .caption, .viewer.expanded .caption { padding: 10px 18px; flex-shrink: 0; }
+    .viewer:fullscreen .toolbar, .viewer.expanded .toolbar { flex-shrink: 0; }
+    html.expanded-view { overflow: hidden; }
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; gap: 16px; }
+      .navigation { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .navigation a { padding: 8px; }
+      .nav-note { display: none; }
+    }
+    @media (max-width: 580px) {
+      .shell { width: calc(100% - 24px); }
+      .page-header { padding-top: 20px; }
+      .navigation { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3px; }
+      .navigation a { font-size: 12px; gap: 6px; }
+      .toolbar { padding: 10px; }
+      .caption { padding: 14px; }
+      h2 { font-size: 18px; }
+      .image-stage { min-height: 160px; }
+      .file-controls { gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <div class="shell">
+      <p class="notice">静态美术设定 · 非可玩版本</p>
+      <h1>《来自月亮的 Z》第一章美术设定 <span style="color:#929f96;font-weight:400">v2</span></h1>
+      <p class="intro">九张图对照扩大后的小岛、M 地图、白发 Z 与昼夜界面。图内角色、菜单和输入框均为设定内容；本页只用于审图，不运行游戏或 AI 对话。</p>
+      <div class="resources">
+        <a href="chapter1-pixel-v2-art-kit.zip" download>下载整套 ZIP</a>
+        <a href="开发落地指南.md">从美术设定到 Godot 开发</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell layout">
+    <aside>
+      <nav id="navigation" class="navigation" aria-label="九张设定图导航"></nav>
+      <p class="nav-note">← → 切换图片<br>Home / End 首张与末张<br>Esc 退出展开查看</p>
+    </aside>
+    <section class="viewer" id="viewer" aria-labelledby="image-title">
+      <div class="toolbar">
+        <div class="controls">
+          <button type="button" id="previous" aria-label="查看上一张设定图">← 上一张</button>
+          <span class="counter" id="counter"></span>
+          <button type="button" id="next" aria-label="查看下一张设定图">下一张 →</button>
+        </div>
+        <div class="file-controls">
+          <button type="button" id="fullscreen" aria-pressed="false">全屏看图</button>
+          <a id="original" target="_blank" rel="noopener">打开原图</a>
+          <a id="download" download>下载 PNG</a>
+        </div>
+      </div>
+      <div class="image-stage">
+        <img id="current-image" alt="" decoding="async" hidden>
+        <p class="image-error" id="image-error" hidden><strong>图片暂时无法载入</strong><span id="error-detail"></span></p>
+      </div>
+      <div class="caption">
+        <div class="caption-line">
+          <h2 id="image-title"></h2>
+          <span class="dimensions" id="dimensions"></span>
+        </div>
+        <p class="purpose" id="purpose"></p>
+        <p class="fullscreen-notice">静态美术设定 · 图中游戏功能尚不代表运行实现</p>
+      </div>
+    </section>
+    <p class="sr-only" id="announcement" aria-live="polite" aria-atomic="true"></p>
+    <noscript>此审图页需要启用浏览器 JavaScript 才能切换图片。原图位于同目录 images 文件夹；页面不访问网络服务。</noscript>
+  </main>
+  <footer class="shell"><p>离线审图工具 · 图片按原比例完整显示 · 角色设定不等于可直接导入的动画图集，场景仍需拆分碰撞、遮挡与交互层。</p></footer>
+
+  <script type="application/json" id="embedded-manifest">
+  {
+  "title": "来自月亮的 Z · 第一章美术设定",
+  "version": "v2",
+  "artifactType": "static-art-concepts",
+  "screens": [
+    {
+      "id": "island-overview",
+      "title": "扩大后的小岛",
+      "file": "images/01-island-overview.png",
+      "purpose": "对照岛屿分区、建筑间距与道路连接；扩大空间的设定图不代表地图导航、碰撞或开放范围已经实现。",
+      "alt": "扩大后的小岛像素美术设定，展示岛屿地形、公共道路与主要建筑关系",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "map-menu",
+      "title": "M 地图概览",
+      "file": "images/02-map-menu.png",
+      "purpose": "对照 M 地图中的地点、当前位置与权限提示；图内地图菜单为静态示意，不执行快移或实时人物追踪。",
+      "alt": "M 地图界面设定，展示小岛地点标识和地图信息层级",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "z-character",
+      "title": "白发 Z 角色设定",
+      "file": "images/03-z-character.png",
+      "purpose": "统一白发 Z 的轮廓、服装、比例与动作语言；方向和姿势仍须重制为帧间一致的游戏精灵与动画。",
+      "alt": "白发 Z 的像素人物设定板，展示角色造型、方向和动作参考",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "dock",
+      "title": "码头问询与报到",
+      "file": "images/04-dock.png",
+      "purpose": "明确码头公告、人物问询和报到入口；画中的消息与选项仅用于对照，具体时间和任务条件由 Demo 规格约束。",
+      "alt": "码头像素场景与问询界面设定，展示玩家、联络人和公开工作信息",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "cafe",
+      "title": "咖啡馆工作与购买",
+      "file": "images/05-cafe.png",
+      "purpose": "对照当班成本、预期报酬和商店信息；静态工资预览不表示已经结算，购买也不等于向 Z 赠送礼物。",
+      "alt": "咖啡馆像素室内与工作购买面板，展示班次、成本、报酬和商品",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "props",
+      "title": "道具间正常场务",
+      "file": "images/06-props.png",
+      "purpose": "展示搬运、清单交接与公开工作范围；这是第一章的正常场务，不预先表示玩家已经与 Z 私下相处。",
+      "alt": "道具间场务工作设定，展示道具、搬运空间与工作交接信息",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "lighthouse",
+      "title": "灯塔权限边界",
+      "file": "images/07-lighthouse.png",
+      "purpose": "以门禁和作业范围表达灯塔的访问限制；看见入口不等于已获许可，设定图也不证明内部路径已经可玩。",
+      "alt": "灯塔外围与门禁的像素设定，展示公共空间和受限工作区的界限",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "live-input",
+      "title": "直播观看与输入",
+      "file": "images/08-live-input.png",
+      "purpose": "对照同一节目话题中的观看、表达和参与入口；输入框只是图像，不能在画廊中发送弹幕或调用 AI。",
+      "alt": "白发 Z 的夜间直播输入界面设定，展示节目画面、观众消息与玩家表达区域",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "live-response",
+      "title": "直播回应与反馈",
+      "file": "images/09-live-response.png",
+      "purpose": "与上一张核对昵称、原文、话题和参与结果；点名回应只表示这次互动得到反馈，不代表 D1 已获私人邀请。",
+      "alt": "同一夜间节目中 Z 回应玩家的界面设定，展示直播反馈与节目阶段状态",
+      "width": 1672,
+      "height": 941
+    }
+  ]
+}
+  </script>
+  <script>
+    (() => {
+      'use strict';
+      const manifest = JSON.parse(document.getElementById('embedded-manifest').textContent);
+      const screens = manifest.screens;
+      const navigation = document.getElementById('navigation');
+      const viewer = document.getElementById('viewer');
+      const image = document.getElementById('current-image');
+      const title = document.getElementById('image-title');
+      const purpose = document.getElementById('purpose');
+      const dimensions = document.getElementById('dimensions');
+      const counter = document.getElementById('counter');
+      const original = document.getElementById('original');
+      const download = document.getElementById('download');
+      const previous = document.getElementById('previous');
+      const next = document.getElementById('next');
+      const fullscreen = document.getElementById('fullscreen');
+      const imageError = document.getElementById('image-error');
+      const errorDetail = document.getElementById('error-detail');
+      const announcement = document.getElementById('announcement');
+      let current = -1;
+      let requestNumber = 0;
+      const navLinks = screens.map((screen, index) => {
+        const link = document.createElement('a');
+        link.href = '#' + screen.id;
+        const number = document.createElement('span');
+        number.className = 'nav-number';
+        number.textContent = String(index + 1).padStart(2, '0');
+        const label = document.createElement('span');
+        label.textContent = screen.title;
+        link.append(number, label);
+        link.addEventListener('click', event => {
+          event.preventDefault();
+          show(index);
+        });
+        navigation.append(link);
+        return link;
+      });
+
+      function show(index, updateHash = true) {
+        current = Math.max(0, Math.min(screens.length - 1, index));
+        const screen = screens[current];
+        const request = ++requestNumber;
+        title.textContent = String(current + 1).padStart(2, '0') + ' · ' + screen.title;
+        purpose.textContent = screen.purpose;
+        counter.textContent = (current + 1) + ' / ' + screens.length;
+        previous.disabled = current === 0;
+        next.disabled = current === screens.length - 1;
+        original.href = screen.file;
+        download.href = screen.file;
+        download.download = screen.file.split('/').pop();
+        original.setAttribute('aria-label', '打开原图：' + screen.title);
+        download.setAttribute('aria-label', '下载 PNG：' + screen.title);
+        navLinks.forEach((link, position) => {
+          if (position === current) link.setAttribute('aria-current', 'page');
+          else link.removeAttribute('aria-current');
+        });
+        image.hidden = true;
+        imageError.hidden = true;
+        dimensions.textContent = '正在载入原图';
+        image.alt = screen.alt;
+        image.onload = () => {
+          if (request !== requestNumber) return;
+          image.hidden = false;
+          dimensions.textContent = image.naturalWidth + ' × ' + image.naturalHeight + ' · PNG';
+        };
+        image.onerror = () => {
+          if (request !== requestNumber) return;
+          image.hidden = true;
+          imageError.hidden = false;
+          errorDetail.textContent = screen.file + ' 尚未就绪或无法读取。文件补齐后可重新选择本图。';
+          dimensions.textContent = '原图未载入';
+        };
+        image.src = screen.file;
+        announcement.textContent = '第 ' + (current + 1) + ' 张，共 ' + screens.length + ' 张。' + screen.title;
+        document.title = screen.title + ' · 来自月亮的 Z 美术设定 v2';
+        if (updateHash && location.hash !== '#' + screen.id) {
+          try { history.replaceState(null, '', '#' + screen.id); }
+          catch (_) { location.hash = screen.id; }
+        }
+      }
+
+      function readHash() {
+        let id;
+        try { id = decodeURIComponent(location.hash.slice(1)); }
+        catch (_) { id = ''; }
+        const index = screens.findIndex(screen => screen.id === id);
+        show(index < 0 ? 0 : index, false);
+      }
+
+      function updateFullscreenControl() {
+        const expanded = document.fullscreenElement === viewer || viewer.classList.contains('expanded');
+        fullscreen.textContent = expanded ? '退出全屏' : '全屏看图';
+        fullscreen.setAttribute('aria-pressed', String(expanded));
+      }
+
+      function setExpanded(expanded) {
+        viewer.classList.toggle('expanded', expanded);
+        document.documentElement.classList.toggle('expanded-view', expanded);
+        updateFullscreenControl();
+      }
+
+      fullscreen.addEventListener('click', async () => {
+        if (document.fullscreenElement === viewer) {
+          await document.exitFullscreen();
+          return;
+        }
+        if (viewer.classList.contains('expanded')) {
+          setExpanded(false);
+          return;
+        }
+        if (viewer.requestFullscreen) {
+          try { await viewer.requestFullscreen(); return; }
+          catch (_) { /* 浏览器不允许全屏时使用页内展开。 */ }
+        }
+        setExpanded(true);
+      });
+
+      previous.addEventListener('click', () => show(current - 1));
+      next.addEventListener('click', () => show(current + 1));
+      document.addEventListener('fullscreenchange', updateFullscreenControl);
+      window.addEventListener('hashchange', readHash);
+      document.addEventListener('keydown', event => {
+        if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+        const target = event.target;
+        if (target instanceof Element && (target.matches('input, textarea, select') || target.isContentEditable)) return;
+        if (event.key === 'ArrowLeft') { event.preventDefault(); show(current - 1); }
+        else if (event.key === 'ArrowRight') { event.preventDefault(); show(current + 1); }
+        else if (event.key === 'Home') { event.preventDefault(); show(0); }
+        else if (event.key === 'End') { event.preventDefault(); show(screens.length - 1); }
+        else if (event.key === 'Escape' && viewer.classList.contains('expanded')) {
+          event.preventDefault(); setExpanded(false); fullscreen.focus();
+        }
+      });
+      readHash();
+    })();
+  </script>
+</body>
+</html>

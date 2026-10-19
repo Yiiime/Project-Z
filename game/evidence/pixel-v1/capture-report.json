@@ -1,0 +1,27 @@
+{
+  "captures": [
+    "01-harbor",
+    "02-map",
+    "03-cafe-exterior",
+    "04-tree-behind",
+    "05-tree-front",
+    "06-workshop-exterior",
+    "07-cafe",
+    "08-cafe-footprints",
+    "09-workshop",
+    "10-workshop-crate",
+    "11-counter-interaction",
+    "12-lu-interaction",
+    "13-harbor-interaction"
+  ],
+  "kind": "native viewport / positioning fixtures",
+  "not_validated": [
+    "manual continuous traversal",
+    "exact reference-game timing",
+    "user art approval"
+  ],
+  "viewport": [
+    1600,
+    900
+  ]
+}

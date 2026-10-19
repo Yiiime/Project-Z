@@ -1,0 +1,88 @@
+{
+  "title": "来自月亮的 Z · 第一章美术设定",
+  "version": "v2",
+  "artifactType": "static-art-concepts",
+  "screens": [
+    {
+      "id": "island-overview",
+      "title": "扩大后的小岛",
+      "file": "images/01-island-overview.png",
+      "purpose": "对照岛屿分区、建筑间距与道路连接；扩大空间的设定图不代表地图导航、碰撞或开放范围已经实现。",
+      "alt": "扩大后的小岛像素美术设定，展示岛屿地形、公共道路与主要建筑关系",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "map-menu",
+      "title": "M 地图概览",
+      "file": "images/02-map-menu.png",
+      "purpose": "对照 M 地图中的地点、当前位置与权限提示；图内地图菜单为静态示意，不执行快移或实时人物追踪。",
+      "alt": "M 地图界面设定，展示小岛地点标识和地图信息层级",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "z-character",
+      "title": "白发 Z 角色设定",
+      "file": "images/03-z-character.png",
+      "purpose": "统一白发 Z 的轮廓、服装、比例与动作语言；方向和姿势仍须重制为帧间一致的游戏精灵与动画。",
+      "alt": "白发 Z 的像素人物设定板，展示角色造型、方向和动作参考",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "dock",
+      "title": "码头问询与报到",
+      "file": "images/04-dock.png",
+      "purpose": "明确码头公告、人物问询和报到入口；画中的消息与选项仅用于对照，具体时间和任务条件由 Demo 规格约束。",
+      "alt": "码头像素场景与问询界面设定，展示玩家、联络人和公开工作信息",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "cafe",
+      "title": "咖啡馆工作与购买",
+      "file": "images/05-cafe.png",
+      "purpose": "对照当班成本、预期报酬和商店信息；静态工资预览不表示已经结算，购买也不等于向 Z 赠送礼物。",
+      "alt": "咖啡馆像素室内与工作购买面板，展示班次、成本、报酬和商品",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "props",
+      "title": "道具间正常场务",
+      "file": "images/06-props.png",
+      "purpose": "展示搬运、清单交接与公开工作范围；这是第一章的正常场务，不预先表示玩家已经与 Z 私下相处。",
+      "alt": "道具间场务工作设定，展示道具、搬运空间与工作交接信息",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "lighthouse",
+      "title": "灯塔权限边界",
+      "file": "images/07-lighthouse.png",
+      "purpose": "以门禁和作业范围表达灯塔的访问限制；看见入口不等于已获许可，设定图也不证明内部路径已经可玩。",
+      "alt": "灯塔外围与门禁的像素设定，展示公共空间和受限工作区的界限",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "live-input",
+      "title": "直播观看与输入",
+      "file": "images/08-live-input.png",
+      "purpose": "对照同一节目话题中的观看、表达和参与入口；输入框只是图像，不能在画廊中发送弹幕或调用 AI。",
+      "alt": "白发 Z 的夜间直播输入界面设定，展示节目画面、观众消息与玩家表达区域",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "live-response",
+      "title": "直播回应与反馈",
+      "file": "images/09-live-response.png",
+      "purpose": "与上一张核对昵称、原文、话题和参与结果；点名回应只表示这次互动得到反馈，不代表 D1 已获私人邀请。",
+      "alt": "同一夜间节目中 Z 回应玩家的界面设定，展示直播反馈与节目阶段状态",
+      "width": 1672,
+      "height": 941
+    }
+  ]
+}

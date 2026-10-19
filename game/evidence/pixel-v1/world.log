@@ -1,0 +1,33 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+WORLD island reachable samples=14776 step=8
+PASS island/xu legal contact=(968.0, 602.0)
+PASS island/cafe legal contact=(448.0, 402.0)
+PASS island/props legal contact=(1456.0, 474.0)
+PASS island/dorm legal contact=(1016.0, 210.0)
+PASS island/bell legal contact=(1248.0, 666.0)
+PASS island/gate legal contact=(1552.0, 282.0)
+PASS island/cafe_return nearest=(456.0, 386.0) distance=3.2
+PASS island/props_return nearest=(1472.0, 482.0) distance=2.8
+SOLID island/harbor_kiosk (888.0, 530.0)
+SOLID island/bench_695 (695.0, 381.5)
+SOLID island/bench_1200 (1200.0, 511.5)
+SOLID island/props_building (1470.0, 368.0)
+SOLID island/eastern_water (1600.0, 800.0)
+SOLID island/western_water (400.0, 650.0)
+WORLD cafe reachable samples=2186 step=8
+PASS cafe/lin legal contact=(760.0, 579.0)
+PASS cafe/exit legal contact=(720.0, 691.0)
+SOLID cafe/cafe_table_1 (972.0, 614.5)
+SOLID cafe/cafe_table_2 (1080.0, 679.5)
+SOLID cafe/cafe_counter (792.0, 513.5)
+WORLD props reachable samples=2256 step=8
+PASS props/chen legal contact=(663.0, 581.0)
+PASS props/lu legal contact=(975.0, 589.0)
+PASS props/exit legal contact=(775.0, 733.0)
+PASS props/crate legal contact=(735.0, 685.0)
+PASS props/target legal contact=(847.0, 733.0)
+PASS props/checklist legal contact=(663.0, 581.0)
+SOLID props/props_stool (560.0, 590.5)
+SOLID props/active_stage_crate (708.0, 653.0)
+WORLD RESULT unreachable=0 art-collision failures=0

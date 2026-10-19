@@ -1,0 +1,726 @@
+{
+  "date": "2026-10-10",
+  "purpose": "Source text provenance for cited community implementation and historical Demo data. Not a game source package or runtime verification.",
+  "scope": "Only files referenced by the four deep-reading notes and synthesis are listed; cached files not cited are not counted as reviewed. Ranges are citation scopes, not a claim that uncited lines were never read.",
+  "runtime_tests_executed": false,
+  "files": [
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "src/BackToTheDawn.ModAPI/Relationship.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/src/BackToTheDawn.ModAPI/Relationship.cs",
+      "sha256": "8ffc698b2e74831b64e60da89dc9f10826dcb31b6cf54b3ae2ddbdbf74715492",
+      "bytes": 2129,
+      "line_count": 74,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-人物关系.md",
+          "range": "L1-L74"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "src/BackToTheDawn.ModAPI/GameContext.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/src/BackToTheDawn.ModAPI/GameContext.cs",
+      "sha256": "4dd2e7cb36ee661c12c78d7ee8fc1e80a1283dcd84f392f837744e2bc428d32b",
+      "bytes": 5284,
+      "line_count": 190,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-人物关系.md",
+          "range": "L1-L160"
+        },
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "L1-L40"
+        },
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "L149-L190"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "src/BackToTheDawn.Loader/Plugin.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/src/BackToTheDawn.Loader/Plugin.cs",
+      "sha256": "56f1f75b474ac46d53b548fde52aee5cc6858b3c24518fcb89687853c47c6f58",
+      "bytes": 15665,
+      "line_count": 461,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-人物关系.md",
+          "range": "L50-L64"
+        },
+        {
+          "document": "notes/代码深读-人物关系.md",
+          "range": "L126-L158"
+        },
+        {
+          "document": "notes/代码深读-人物关系.md",
+          "range": "L193-L281"
+        },
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L50-L74"
+        },
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L126-L149"
+        },
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L172-L187"
+        },
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L251-L267"
+        },
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "L50-L67"
+        },
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "L136-L179"
+        },
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "L193-L307"
+        },
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "L310-L372"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "src/BackToTheDawn.Loader/GameContextAdapter.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/src/BackToTheDawn.Loader/GameContextAdapter.cs",
+      "sha256": "54d8cbafc0b92bbfc282b0bf82aa587aa6991b7dcbe35b8e65e1c193030ed242",
+      "bytes": 46121,
+      "line_count": 1534,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-人物关系.md",
+          "range": "L1347-L1453"
+        },
+        {
+          "document": "notes/代码深读-人物关系.md",
+          "range": "L1243-L1259"
+        },
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L60-L209"
+        },
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "L1-L45"
+        },
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "L580-L589"
+        },
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "L591-L633"
+        },
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "L1243-L1259"
+        },
+        {
+          "document": "notes/代码深读-道具交互.md",
+          "range": "L707-L903"
+        },
+        {
+          "document": "notes/代码深读-道具交互.md",
+          "range": "L853-L903"
+        },
+        {
+          "document": "notes/代码深读-道具交互.md",
+          "range": "L987-L1123"
+        },
+        {
+          "document": "notes/代码深读-道具交互.md",
+          "range": "L237-L368"
+        },
+        {
+          "document": "notes/代码深读-道具交互.md",
+          "range": "L779-L843"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "src/BackToTheDawn.Loader/GameLifecyclePatches.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/src/BackToTheDawn.Loader/GameLifecyclePatches.cs",
+      "sha256": "08137aa4d16917e66149e551480dab7f359dca43ae0da149db67fc70b45cc9c0",
+      "bytes": 21138,
+      "line_count": 634,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-人物关系.md",
+          "range": "L1-L142"
+        },
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L1-L95"
+        },
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "L82-L102"
+        },
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "L1-L80"
+        },
+        {
+          "document": "notes/代码深读-道具交互.md",
+          "range": "L193-L297"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "src/BackToTheDawn.Loader/TradeSignals.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/src/BackToTheDawn.Loader/TradeSignals.cs",
+      "sha256": "c0e070fd544a24a285df22ed384e5968be2779ec7819cbda039512343a4688e8",
+      "bytes": 45904,
+      "line_count": 1492,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-人物关系.md",
+          "range": "L213-L255"
+        },
+        {
+          "document": "notes/代码深读-人物关系.md",
+          "range": "L346-L461"
+        },
+        {
+          "document": "notes/代码深读-人物关系.md",
+          "range": "L539-L614"
+        },
+        {
+          "document": "notes/代码深读-人物关系.md",
+          "range": "L1083-L1132"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "src/BackToTheDawn.Loader/TradePatches.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/src/BackToTheDawn.Loader/TradePatches.cs",
+      "sha256": "d39870368bf397376076b174399cecb8befbfbb28236d51e65262e207f6d1736",
+      "bytes": 30102,
+      "line_count": 947,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-人物关系.md",
+          "range": "L701-L826"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "src/BackToTheDawn.ModAPI/Trade.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/src/BackToTheDawn.ModAPI/Trade.cs",
+      "sha256": "c89d9b49405fd562d44bb634e29afe70197fcb6fe92d49e03604cc2abcb73b98",
+      "bytes": 6508,
+      "line_count": 237,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-人物关系.md",
+          "range": "L174-L237"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "src/BackToTheDawn.Loader/JsonPhoneMod.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/src/BackToTheDawn.Loader/JsonPhoneMod.cs",
+      "sha256": "086f8652fd2fbf183144e5b9cf215da9ba82234c5eb30dc6d51ee2ca9ea90b11",
+      "bytes": 26929,
+      "line_count": 603,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-人物关系.md",
+          "range": "L367-L383"
+        },
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "L296-L353"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "src/BackToTheDawn.ModAPI/GameEvents.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/src/BackToTheDawn.ModAPI/GameEvents.cs",
+      "sha256": "e34eab31bd030a4b671f316686b44688c5660300fbb9ccc26311e5a9f41f5663",
+      "bytes": 25328,
+      "line_count": 691,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-人物关系.md",
+          "range": "L8-L39"
+        },
+        {
+          "document": "notes/代码深读-人物关系.md",
+          "range": "L518-L545"
+        },
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L348-L358"
+        },
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L555-L607"
+        },
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L626-L643"
+        },
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "L322-L364"
+        },
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "L555-L608"
+        },
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "L615-L638"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "docs/API_REFERENCE.md",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/docs/API_REFERENCE.md",
+      "sha256": "9c51d2bbd5a1facadf5e65ba0aadc33f2845a70f4b1f6b033e09ef37c1cdfbe4",
+      "bytes": 120830,
+      "line_count": 2511,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-人物关系.md",
+          "range": "L902-L921"
+        },
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "L571-L648"
+        },
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "L1029-L1064"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "docs/GAME_SYSTEMS.md",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/docs/GAME_SYSTEMS.md",
+      "sha256": "e84948c71e688c3176d2271525f3941863564def600b77f9770940307a081d65",
+      "bytes": 37123,
+      "line_count": 700,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-人物关系.md",
+          "range": "L254-L268"
+        },
+        {
+          "document": "notes/代码深读-人物关系.md",
+          "range": "L332-L340"
+        },
+        {
+          "document": "notes/代码深读-人物关系.md",
+          "range": "L533-L549"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "src/BackToTheDawn.ModAPI/TaskApi.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/src/BackToTheDawn.ModAPI/TaskApi.cs",
+      "sha256": "e01e25b7bd08376948b705a717d12bf86776b49954131d01285bfb6819499d39",
+      "bytes": 8746,
+      "line_count": 252,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L1-L252"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "src/BackToTheDawn.ModAPI/TaskRegistration.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/src/BackToTheDawn.ModAPI/TaskRegistration.cs",
+      "sha256": "4689cb65b6c6968bcaf436de85fb103359f47d6abd44cc83715b048f3a816dac",
+      "bytes": 2782,
+      "line_count": 102,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L1-L102"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "src/BackToTheDawn.Loader/TaskRuntime.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/src/BackToTheDawn.Loader/TaskRuntime.cs",
+      "sha256": "9cc4c1f8b4c68f951bfffc0c193ff0214b7de189a6763ff02ea9391e36c53ab4",
+      "bytes": 27872,
+      "line_count": 741,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L20-L211"
+        },
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L287-L312"
+        },
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L11-L18"
+        },
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L314-L522"
+        },
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L213-L284"
+        },
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L524-L741"
+        },
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "L1-L106"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "src/BackToTheDawn.Loader/JsonTaskMod.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/src/BackToTheDawn.Loader/JsonTaskMod.cs",
+      "sha256": "a1a81940022bdd9f90713e484fd98e6c585415a7ebf0c6e42fe0f267e257af6f",
+      "bytes": 9220,
+      "line_count": 247,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L1-L247"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "src/BackToTheDawn.Loader/JsonDataMod.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/src/BackToTheDawn.Loader/JsonDataMod.cs",
+      "sha256": "e5f32323e368fb4e644aa2edf96e3fb1202c90077eac59f918e1290a3fed73b5",
+      "bytes": 1088,
+      "line_count": 41,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L1-L41"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "src/BackToTheDawn.Loader/TaskEventMonitor.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/src/BackToTheDawn.Loader/TaskEventMonitor.cs",
+      "sha256": "34256ae9dba83a75f6968795a95bb2f99cbfee0c4cefc32757442fd3a9b26fd6",
+      "bytes": 4930,
+      "line_count": 176,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L1-L176"
+        },
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "L1-L176"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "src/BackToTheDawn.Loader/ModHost.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/src/BackToTheDawn.Loader/ModHost.cs",
+      "sha256": "abde41dd54900ebe309177a130dade1a6c2a3972cffae17abac1ca6731f30f07",
+      "bytes": 9392,
+      "line_count": 254,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L1-L104"
+        },
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L148-L203"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "examples/BackToTheDawn.TaskApiExample/src/main/TaskApiExampleMod.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/examples/BackToTheDawn.TaskApiExample/src/main/TaskApiExampleMod.cs",
+      "sha256": "e320b07c0cc5308347b04ea8e84222e371c82e544f0af559bcf6b8ed22c4cd81",
+      "bytes": 12386,
+      "line_count": 228,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L1-L18"
+        },
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L150-L228"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "examples/BackToTheDawn.TaskApiExample/tasks/json-find-apple.json",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/examples/BackToTheDawn.TaskApiExample/tasks/json-find-apple.json",
+      "sha256": "adaf3a08d59d73f156cb0e2791b60cc32cc127f68f21ad061c5197e471d0e275",
+      "bytes": 688,
+      "line_count": 17,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L1-L17"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "examples/BackToTheDawn.TaskEventExample/src/main/TaskEventExampleMod.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/examples/BackToTheDawn.TaskEventExample/src/main/TaskEventExampleMod.cs",
+      "sha256": "ae699a2e6b988b3e1cefeb9ae55da7b52384b77594daf9acef82e3b864c52e73",
+      "bytes": 2546,
+      "line_count": 72,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L1-L72"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "src/BackToTheDawn.ModAPI/Shop.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/src/BackToTheDawn.ModAPI/Shop.cs",
+      "sha256": "396120998e9277a21a4f6e5844362ad7fb9ad498cb540bb8679507ef5e7eff0c",
+      "bytes": 8329,
+      "line_count": 249,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-任务状态.md",
+          "range": "L1-L69"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "src/BackToTheDawn.Loader/BackToTheDawn.Loader.csproj",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/src/BackToTheDawn.Loader/BackToTheDawn.Loader.csproj",
+      "sha256": "0f35e72bcee37f80431af48aa471098865573e28d34abbe7cd7a92bc66ad8d96",
+      "bytes": 4002,
+      "line_count": 93,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "L1-L93"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "docs/TECHNICAL.md",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/docs/TECHNICAL.md",
+      "sha256": "a87f317cd28fd6846da8d7b4b7535ee2ef2a4cce2a185b1bb66d9d6e151fc27b",
+      "bytes": 3760,
+      "line_count": 85,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "L1-L83"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "src/BackToTheDawn.Loader/PhoneRuntime.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/src/BackToTheDawn.Loader/PhoneRuntime.cs",
+      "sha256": "7d7cecf489846ae0eac698ceb4e7ef0dbcffc2e5b250422cdfb7f40f9c2a6e38",
+      "bytes": 72872,
+      "line_count": 2018,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "L283-L312"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "examples/BackToTheDawn.JsonPhoneMod/dialogues/shop/repair.json",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/examples/BackToTheDawn.JsonPhoneMod/dialogues/shop/repair.json",
+      "sha256": "c2b6f8c397ac2c0fd4c629264bdd47dd1d287a797c54510a8667effceac363d3",
+      "bytes": 1726,
+      "line_count": 65,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "L1-L23"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "examples/BackToTheDawn.ExampleMod/src/main/ExampleModEntry.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/examples/BackToTheDawn.ExampleMod/src/main/ExampleModEntry.cs",
+      "sha256": "ada4b21ce30ea1c470ec33039d1d3eb185435910ef4b92c6844adf0d8e88831f",
+      "bytes": 20215,
+      "line_count": 448,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "L267-L271"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "tests/README.md",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/tests/README.md",
+      "sha256": "bbf1c87c62ac8c335c6e69031a37f72f34471632d3a777c2d018d13d262570ab",
+      "bytes": 1936,
+      "line_count": 46,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-时间推进.md",
+          "range": "file-level link; detailed read scope is documented in the note"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "src/BackToTheDawn.ModAPI/ItemUse.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/src/BackToTheDawn.ModAPI/ItemUse.cs",
+      "sha256": "065e1038e1fd02439b894eb8f0cd0a5af0efe8c9e9e10feac9b88cc10abad646",
+      "bytes": 5713,
+      "line_count": 212,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-道具交互.md",
+          "range": "L63-L114"
+        },
+        {
+          "document": "notes/代码深读-道具交互.md",
+          "range": "L13-L60"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "src/BackToTheDawn.ModAPI/InventoryService.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/src/BackToTheDawn.ModAPI/InventoryService.cs",
+      "sha256": "f61942ef8368edab854219080f9662fe0a23217a3536f4ebf095adb0e2297a06",
+      "bytes": 1746,
+      "line_count": 60,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-道具交互.md",
+          "range": "L3-L59"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "src/BackToTheDawn.ModAPI/ItemCatalog.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/src/BackToTheDawn.ModAPI/ItemCatalog.cs",
+      "sha256": "a36b9704b7a92b49dfee3275a5672073c5c6dd3e6edfb267cb7eb3314cf82719",
+      "bytes": 16526,
+      "line_count": 556,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-道具交互.md",
+          "range": "L7-L113"
+        }
+      ]
+    },
+    {
+      "repository": "LittleCAT8449/BackToTheDawn-ModLoader",
+      "commit": "c766a431fe1d959e4418b07fe1980b60397b6b33",
+      "path": "src/BackToTheDawn.ModAPI/InventorySnapshot.cs",
+      "url": "https://github.com/LittleCAT8449/BackToTheDawn-ModLoader/blob/c766a431fe1d959e4418b07fe1980b60397b6b33/src/BackToTheDawn.ModAPI/InventorySnapshot.cs",
+      "sha256": "dd4f5ecc338c90a866189839bb4a768cc632fe51329c6460870236a995142b1b",
+      "bytes": 1778,
+      "line_count": 59,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-道具交互.md",
+          "range": "L8-L59"
+        }
+      ]
+    },
+    {
+      "repository": "catchtest/BackToTheDawn-Data",
+      "commit": "86d65435780fef72e136cd4c52d038b314f4ac16",
+      "path": "137-簡易螺絲刀.md",
+      "url": "https://github.com/catchtest/BackToTheDawn-Data/blob/86d65435780fef72e136cd4c52d038b314f4ac16/137-%E7%B0%A1%E6%98%93%E8%9E%BA%E7%B5%B2%E5%88%80.md",
+      "sha256": "a178c30fc0e8dcfc708ff99eb5ee24f3d5637c8615509fb1dc3d46e2e8295f64",
+      "bytes": 667,
+      "line_count": 19,
+      "cited_in": [
+        {
+          "document": "notes/代码深读-道具交互.md",
+          "range": "file-level link; detailed read scope is documented in the note"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "id": "04-lighthouse",
+  "title": "灯塔工作区：需要权限进入的危险地带，可获取关键道具",
+  "mode": "built-in",
+  "tool": "image_gen__imagegen",
+  "asset_type": "ui-mockup",
+  "generation_request": {
+    "prompt": "Use case: ui-mockup. Create ONE finished 16:9 PC GAME UI screenshot for 来自月亮的 Z. Use reference image 1 as the visual bible for the lateral 2.5D game camera, hand-painted layered scenery, small adult character design, matte charcoal translucent panels with fine ivory lines and coral interactions. Reference image 2 supplies ONLY the same island colors, pine-covered blue-violet sea cliffs and the SINGLE white cylindrical lighthouse landmark; do NOT borrow its overhead map camera, map labels or navigation panel. Create a NEW sideways playable location view, not a map, website, poster or dashboard.\n\nScene: the permission-restricted maintenance workroom and wooden service platform built against the base of the island's one white lighthouse. Day 6, before broadcast, dusky indigo and muted lavender atmosphere, pines and rough sea cliff visible beyond, amber practical work lamps. Lateral 2.5D cross-section composition with physically connected walkways. The large lighthouse base is on the upper/right background; there must be NO second lighthouse in the distance. A controlled entry door and ordinary card reader stand on the LEFT, clearly showing the player is already INSIDE the permitted workroom. On an upper walkway, one adult patrol worker is directly visible walking; ordinary sight lines and architecture create danger. One physical security camera with a tiny red indicator is mounted nearby. Do not show a giant scanning cone, red full-screen danger effects, a radar or omniscient security data.\n\nSame PLAYER as reference 1: a small adult brown-haired stagehand in a rust-orange work jacket, dark trousers, boots and work lanyard, about 16-20% of image height. The player stands in the center-left workroom beside a half-open supplies cabinet. NO Z character in this screen. In the cabinet, a focused amber work light reveals a tangible hand-sized maintenance connector adapter: black-and-brass cable coupler with a short cable, practical and non-magical. It is the interactable KEY ITEM, not a keycard or master key. Keep the actual player, cabinet, entry reader, upper patrol and paths unobscured. The world fills at least 75% of the image.\n\nUI exact simplified Chinese, short and fully readable at generous size. Replace any inherited reference HUD: top-left '第 6 日 · 开播前', second line '灯塔工作区', small third line '作业范围：维护室'. Next to the left entry reader a small quiet label says '维护许可 · 已核验'; this is limited entry permission, not unrestricted system access. A small anchored object-detail overlay occupies only about 25% width at the RIGHT, using matte dark translucent backing, fine ivory dividers and subtle coral active accents. Text inside exactly: small heading '关键道具'; larger item name '维护转接器'; description '用于连接维护接线柜'; warm amber caution '取用会留下领用记录'; one outlined coral primary action 'E 取出道具'. A modest connector drawing within this same small detail area may echo the physical item. No extra text, no large card grid. Preserve 5% safe margins and clear contrast; no text over noisy scenery.\n\nThe scene must communicate permission-gated danger and a useful obtainable item simultaneously: the entry is authorized only for this room, the patrol and camera remain active, taking the item creates a specific issue record. Possessing this adapter does NOT grant entry permission or start an escape. NO migration UI, countdown, progress bar, intimacy/HP/security meter, inventory grid, magical beam, combat, firearms, hidden routes or developer/AI implementation text. Output one complete game screenshot, no device frame, collage, source-game logo or concept-art label.",
+    "referenced_image_paths": [
+      "/Users/bytedance/Documents/ChatGPT/来自月亮的Z/ui/v1/assets/06-private-dialogue.png",
+      "/Users/bytedance/Documents/ChatGPT/来自月亮的Z/ui/maps/island-map-v2.png"
+    ],
+    "transparent_background": false
+  },
+  "result": {
+    "workspace_path": "/Users/bytedance/Documents/ChatGPT/来自月亮的Z/ui/locations-v1/04-lighthouse.png",
+    "generated_source_path": "/Users/bytedance/.codex/generated_images/01a1165b-375e-7cd2-9ccc-963b898d2230/exec-2572bb64-7047-4472-a72b-663ad426a594.png",
+    "width": 1672,
+    "height": 941
+  },
+  "inspection": {
+    "status": "passed",
+    "checked": [
+      "顶部为第 6 日·开播前，地点与作业范围准确",
+      "左侧维护许可已核验，与可见巡查、摄像头风险并存",
+      "维护转接器实体与右侧道具详情一致",
+      "取用会留下领用记录，物品不授予新权限",
+      "仅有一座灯塔，没有迁移、倒计时或全知警戒值"
+    ],
+    "limitations": [
+      "静态 UI 概念图；权限检测、道具取用与领用记录尚未实现",
+      "道具的具体关卡位置、使用反馈与数值需后续设计验证"
+    ]
+  }
+}

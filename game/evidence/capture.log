@@ -1,0 +1,12 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 4.1 Metal - 90.5 - Compatibility - Using Device: Apple - Apple M4 Pro
+
+CAPTURE: /Users/bytedance/Documents/ChatGPT/来自月亮的Z/game/evidence/screens-explore.png | phase=day time=420 gold=40
+CAPTURE: /Users/bytedance/Documents/ChatGPT/来自月亮的Z/game/evidence/screens-map.png | phase=day time=420 gold=40
+CAPTURE: /Users/bytedance/Documents/ChatGPT/来自月亮的Z/game/evidence/screens-dialogue.png | phase=day time=450 gold=40
+CAPTURE: /Users/bytedance/Documents/ChatGPT/来自月亮的Z/game/evidence/screens-cafe.png | phase=day time=510 gold=56
+CAPTURE: /Users/bytedance/Documents/ChatGPT/来自月亮的Z/game/evidence/screens-work.png | phase=day time=520 gold=44
+CAPTURE: /Users/bytedance/Documents/ChatGPT/来自月亮的Z/game/evidence/screens-inventory.png | phase=day time=610 gold=74
+CAPTURE: /Users/bytedance/Documents/ChatGPT/来自月亮的Z/game/evidence/screens-night.png | phase=live time=1200 gold=74
+CAPTURE: /Users/bytedance/Documents/ChatGPT/来自月亮的Z/game/evidence/screens-summary.png | phase=done time=1380 gold=74
+PASS: 8 real main.tscn native screenshots, 168 flow checks; isolated saves cleaned. Not manual keyboard play testing.
