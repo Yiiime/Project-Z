@@ -58,9 +58,13 @@ function client({github, context, core, sleep = pause}) {
     },
     async notify(pr, kind, body) {
       const marker = `<!-- project-z-bot:${kind}:${pr.head.sha} -->`;
-      const comments = await github.paginate(github.rest.issues.listComments, {...repo, issue_number: pr.number, per_page: 100});
-      if (comments.some(comment => comment.body?.includes(marker))) return;
-      await github.rest.issues.createComment({...repo, issue_number: pr.number, body: `${marker}\n${body}`});
+      try {
+        const comments = await github.paginate(github.rest.issues.listComments, {...repo, issue_number: pr.number, per_page: 100});
+        if (comments.some(comment => comment.body?.includes(marker))) return;
+        await github.rest.issues.createComment({...repo, issue_number: pr.number, body: `${marker}\n${body}`});
+      } catch (error) {
+        core.warning(`#${pr.number}: could not post ${kind} comment (${error.status || error.message})`);
+      }
     },
     async waitMergeable(pr) {
       for (let attempt = 0; pr.mergeable === null && attempt < 5; attempt++) {

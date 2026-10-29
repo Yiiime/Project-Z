@@ -28,7 +28,7 @@ flowchart LR
 ```text
 这是 Z 项目的仓库。请读取 AGENTS.md 和 docs/team/START-HERE.md，帮我完成首次接入。
 先检查 Git、Node.js、.NET 8、GitHub CLI 和 Unity；缺少的告诉我怎么装，不要静默安装。
-需要 GitHub 登录时运行 gh auth login --hostname github.com --git-protocol https --web，让我在浏览器确认。
+需要 GitHub 登录时运行 gh auth login --hostname github.com --git-protocol https --web，让我在浏览器确认；然后运行 gh auth setup-git。
 Git 署名使用我的 GitHub 用户名和 GitHub noreply 邮箱。最后运行 tools/team/z doctor 并告诉我结果。
 ```
 
