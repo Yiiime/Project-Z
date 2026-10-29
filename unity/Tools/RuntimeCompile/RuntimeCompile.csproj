@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <NuGetAudit>false</NuGetAudit>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <DefineConstants Condition="'$(UnityTemplateAssemblies)' != ''">UNITY_EDITOR;UNITY_6000_3_OR_NEWER</DefineConstants>
+  </PropertyGroup>
+  <Target Name="CheckUnityReferences" BeforeTargets="ResolveReferences">
+    <Error Condition="!Exists('$(UnityManaged)/UnityEngine/UnityEngine.CoreModule.dll')" Text="Pass -p:UnityManaged=/path/to/Unity.app/Contents/Resources/Scripting/Managed. This check requires genuine editor assemblies." />
+  </Target>
+  <ItemGroup>
+    <Compile Include="../../Assets/ProjectZ/Core/*.cs" />
+    <Compile Include="../../Assets/ProjectZ/Runtime/*.cs" />
+    <Reference Include="$(UnityManaged)/UnityEngine/*.dll" />
+    <Compile Include="../../Assets/ProjectZ/Editor/*.cs" Condition="'$(UnityTemplateAssemblies)' != ''" />
+    <Reference Include="$(UnityTemplateAssemblies)/Unity.RenderPipelines.Core.Runtime.dll" Condition="'$(UnityTemplateAssemblies)' != ''" />
+    <Reference Include="$(UnityTemplateAssemblies)/Unity.RenderPipelines.Universal.Runtime.dll" Condition="'$(UnityTemplateAssemblies)' != ''" />
+  </ItemGroup>
+</Project>

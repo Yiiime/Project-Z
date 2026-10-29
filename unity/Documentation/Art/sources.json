@@ -1,0 +1,124 @@
+{
+  "checked": "2026-10-22",
+  "nature": {
+    "author": "Quaternius",
+    "edition": "Stylized Nature MegaKit Standard (free subset)",
+    "license": "CC0-1.0",
+    "source": "https://opengameart.org/content/stylized-nature-megakit",
+    "files": [
+      {
+        "file": "Assets/ProjectZ/Art/Nature/License_Standard.txt",
+        "sha256": "120710e542c3ebaf83856c4eb55b4a1e680593b39302eba7fdc5d942dfe78c58"
+      },
+      {
+        "file": "Assets/ProjectZ/Art/Nature/Models/Bush_Common.fbx",
+        "sha256": "f4c057dc7118ab76b946cfa9d01908aa151cc2585bc8799e5a97833bccfec022"
+      },
+      {
+        "file": "Assets/ProjectZ/Art/Nature/Models/Bush_Common_Flowers.fbx",
+        "sha256": "3187c4e37f3be09da9d212e1c3ae04ae24814b7fc7074c19c56f633e95d10943"
+      },
+      {
+        "file": "Assets/ProjectZ/Art/Nature/Models/CommonTree_1.fbx",
+        "sha256": "270b8be7dbde95980a308212319d99580a433821ca8daa7d115f3d289ede9608"
+      },
+      {
+        "file": "Assets/ProjectZ/Art/Nature/Models/CommonTree_3.fbx",
+        "sha256": "9246334082d5abe40ff4307f138163aa88bbe40bc6ec1124038458ffe8353506"
+      },
+      {
+        "file": "Assets/ProjectZ/Art/Nature/Models/CommonTree_4.fbx",
+        "sha256": "2e7526829fd7adbb3383f927f0e692f16cf4c5cd6063e48c7497ccd231a3488f"
+      },
+      {
+        "file": "Assets/ProjectZ/Art/Nature/Models/Fern_1.fbx",
+        "sha256": "520f1bce3d292885b6d85d5f7b541a1f0c236697ca99eb69e57817eed47eab31"
+      },
+      {
+        "file": "Assets/ProjectZ/Art/Nature/Models/Flower_3_Group.fbx",
+        "sha256": "c2a4d9369513e1c3cb1b992d5ae036dd86bd39c402a782ce3fe97f9b1a34d8e1"
+      },
+      {
+        "file": "Assets/ProjectZ/Art/Nature/Models/Flower_4_Group.fbx",
+        "sha256": "1edd78307fcd9618c226c48bd09594462fd21339d7d2b08f732bac649874f623"
+      },
+      {
+        "file": "Assets/ProjectZ/Art/Nature/Models/Grass_Common_Short.fbx",
+        "sha256": "9bdb821b226ec62e485e648f35ea227c21d0245f3aefe1633d560e457476cd09"
+      },
+      {
+        "file": "Assets/ProjectZ/Art/Nature/Models/Grass_Wispy_Short.fbx",
+        "sha256": "123e9d77c073e8a22a8a5d49349d0110731f419778185b458f31f5796249f213"
+      },
+      {
+        "file": "Assets/ProjectZ/Art/Nature/Models/Pebble_Round_1.fbx",
+        "sha256": "113ac73ebda2ef729f84fc7d7d1a9713912c4a65dc18ffa829a4674af40da28f"
+      },
+      {
+        "file": "Assets/ProjectZ/Art/Nature/Models/Pebble_Round_2.fbx",
+        "sha256": "6e49f088d01572be66ae2deeaed1d2306ea0c704e0ee44990dcc45b2e21464ab"
+      },
+      {
+        "file": "Assets/ProjectZ/Art/Nature/Models/Plant_1.fbx",
+        "sha256": "0d1c10451cd028689ae358c0e2415bc42815dec10eee0f0b724ab0951b7a0679"
+      },
+      {
+        "file": "Assets/ProjectZ/Art/Nature/Models/Rock_Medium_1.fbx",
+        "sha256": "e75986c05c1071ca99b8810005aa6d69d575a529e38c7e77c519c592e16f264e"
+      },
+      {
+        "file": "Assets/ProjectZ/Art/Nature/Models/Rock_Medium_2.fbx",
+        "sha256": "6ffd1e9d4b2898e881e612a01faf7cd8120061aec9f1b7c8abe71d63b205341c"
+      },
+      {
+        "file": "Assets/ProjectZ/Art/Nature/Models/Rock_Medium_3.fbx",
+        "sha256": "4d1ae93a255821b04f8a2f48c2f65d374617b36b2ad933e8b941a22194a3c3c7"
+      },
+      {
+        "file": "Assets/ProjectZ/Art/Nature/Textures/Bark_NormalTree.png",
+        "sha256": "f36e94fdd73255347325b998e02a0b2575fdf714b0315bfe5e8ff34bc8e13603"
+      },
+      {
+        "file": "Assets/ProjectZ/Art/Nature/Textures/Flowers.png",
+        "sha256": "5c531f2329c241c625aafd6cb769de29f33b480ef2a16491c2489f3c68e62a6a"
+      },
+      {
+        "file": "Assets/ProjectZ/Art/Nature/Textures/Grass.png",
+        "sha256": "5d69048193b246a73c996b892607fb36c75d0c60afcb2dab8aa12de3c0b2d9bd"
+      },
+      {
+        "file": "Assets/ProjectZ/Art/Nature/Textures/Leaves.png",
+        "sha256": "23248cebe28a24e78add32db3c2ee2f4d7b9219e9d2467279722f0197a7b6bd5"
+      },
+      {
+        "file": "Assets/ProjectZ/Art/Nature/Textures/Leaves_NormalTree.png",
+        "sha256": "171ad1c8fa6ddde351a3b3c9e2b1457d5c7a4a43ba4fd55a83801029db797151"
+      },
+      {
+        "file": "Assets/ProjectZ/Art/Nature/Textures/Leaves_NormalTree_C.png",
+        "sha256": "998612bdf0b76a22f5f54d65cd7a457815d2842d89653fa4348a4ebb42933ad3"
+      },
+      {
+        "file": "Assets/ProjectZ/Art/Nature/Textures/Leaves_TwistedTree_C.png",
+        "sha256": "0e459b56b14c0e81b1b7cf3d1e8c6f0bb71790eb6c46bb02a76a922d8df646ea"
+      },
+      {
+        "file": "Assets/ProjectZ/Art/Nature/Textures/PathRocks_Diffuse.png",
+        "sha256": "85a04abb2c136fee53b376daf3b7d7f96fdf3966de0258dff6fe2b24da792b23"
+      },
+      {
+        "file": "Assets/ProjectZ/Art/Nature/Textures/Rocks_Diffuse.png",
+        "sha256": "b813696df6081f469a127092eb0ce45cc39d56f3ccc0699152bfcd3804810b48"
+      }
+    ]
+  },
+  "avatarBase": {
+    "author": "pixiv / VRoid",
+    "name": "VRoidPreset A / AvatarSample_A",
+    "license": "VRoidPreset A-Z usage conditions (not CC0)",
+    "terms": "https://vroid.pixiv.help/hc/en-us/articles/4402394424089-VRoidPreset-A-Z",
+    "source": "https://hub.vroid.com/en/characters/2843975675147313744/models/5644550979324015604",
+    "download": "https://raw.githubusercontent.com/madjin/vrm-samples/master/vroid/stable/AvatarSample_A.vrm",
+    "sha256": "b86b0b8a66d48911431d6f920a5211a974226f83aa672eca3f3dfade58ac346e"
+  }
+}

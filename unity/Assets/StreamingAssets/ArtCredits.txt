@@ -1,0 +1,18 @@
+Project Z — coastal art slice
+
+Nature models and textures: Quaternius, Stylized Nature MegaKit Standard.
+License: CC0 1.0 Universal.
+https://opengameart.org/content/stylized-nature-megakit
+https://creativecommons.org/publicdomain/zero/1.0/
+Only the free Standard subset is used; no paid Source project or shaders.
+
+Z character base: VRoidPreset A by pixiv / VRoid.
+Modified hair; cardigan adapted from the base garment topology;
+new skirt, socks and crescent accessories.
+Original face, skeleton, facial shapes and some textures retained.
+This base is subject to VRoidPreset A-Z usage conditions, not CC0:
+https://vroid.pixiv.help/hc/en-us/articles/4402394424089-VRoidPreset-A-Z
+https://hub.vroid.com/en/characters/2843975675147313744/models/5644550979324015604
+
+Custom coastal props, wardrobe meshes and Unity shaders: Project Z.
+Second-iteration floral and knit albedo textures: generated using the built-in image_gen tool.

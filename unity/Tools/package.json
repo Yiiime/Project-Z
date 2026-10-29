@@ -1,0 +1,8 @@
+{
+  "name": "project-z-tools",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20.19" },
+  "scripts": { "start": "node character-bridge.mjs", "test": "node --test ../Tests/bridge.test.mjs" }
+}

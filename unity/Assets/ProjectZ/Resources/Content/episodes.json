@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "episodes": [
+    {
+      "id": "tide_watch",
+      "title": "潮水留下的东西",
+      "locationId": "cove",
+      "invitation": "退潮了。我想看看石头底下有没有留下小鱼。你要一起吗？",
+      "choices": [
+        {
+          "id": "wait_together",
+          "label": "陪她等一会儿，一起观察",
+          "fact": "玩家与 Z 在海湾等待退潮，一起观察了石头间的积水。",
+          "reply": "这里！先别动……好吧，是一片叶子。再看看旁边？",
+          "followup": "昨天我们把叶子看成了小鱼。今天我想换个地方看，你愿意一起找吗？",
+          "emotion": "warm",
+          "action": "wave",
+          "followupAction": "wave",
+          "respectDelta": 1
+        },
+        {
+          "id": "set_pace",
+          "label": "告诉她今天累了，约好下次再看",
+          "fact": "玩家告诉 Z 今天疲惫，双方约好下次再一起观察潮水。",
+          "reply": "好，你先坐会儿。我看一眼就回来，不拉着你跑。",
+          "followup": "今天休息好了吗？上次没一起看成潮水。我们也可以只走到前面那块石头。",
+          "emotion": "thoughtful",
+          "action": "nod",
+          "followupAction": "look",
+          "respectDelta": 0
+        }
+      ]
+    },
+    {
+      "id": "map_check",
+      "title": "地图上的一条小路",
+      "locationId": "map_table",
+      "invitation": "我记得这条小路能到码头。但今天有人说在修路……去看告示，还是先走过去？",
+      "choices": [
+        {
+          "id": "verify_notice",
+          "label": "一起核对告示，再修改地图",
+          "fact": "玩家与 Z 核对了修路告示，并一起修改了小岛地图。",
+          "reply": "真在修。是我记着以前的路了。你帮我按着地图，我把这段划掉。",
+          "followup": "昨天改过的地图我带着了。今天去码头走另一边，我想再确认一下路口。",
+          "emotion": "warm",
+          "action": "nod",
+          "followupAction": "wave",
+          "respectDelta": 1
+        },
+        {
+          "id": "decide_for_z",
+          "label": "直接替她决定路线，不解释原因",
+          "fact": "玩家直接替 Z 决定路线，Z 提出希望先听到理由；双方尚未核对修路告示。",
+          "reply": "等一下。你告诉我为什么，我会听。别直接替我选。",
+          "followup": "昨天那条路我们还没核对。我今天想自己去看告示，你愿意一起的话，我们先把情况问清楚。",
+          "emotion": "firm",
+          "action": "pause",
+          "followupAction": "look",
+          "respectDelta": -1
+        }
+      ]
+    }
+  ]
+}

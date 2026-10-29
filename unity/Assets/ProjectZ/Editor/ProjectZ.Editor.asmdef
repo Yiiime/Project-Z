@@ -1,0 +1,7 @@
+{
+  "name": "ProjectZ.Editor",
+  "rootNamespace": "ProjectZ.Editor",
+  "references": ["ProjectZ.Core", "ProjectZ.Runtime", "Unity.RenderPipelines.Core.Runtime", "Unity.RenderPipelines.Universal.Runtime"],
+  "includePlatforms": ["Editor"],
+  "autoReferenced": true
+}

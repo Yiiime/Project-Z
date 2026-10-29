@@ -1,0 +1,17 @@
+* text=auto
+*.cs text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.mjs text eol=lf
+*.sh text eol=lf
+*.command text eol=lf
+*.meta text eol=lf
+*.unity text eol=lf
+*.asset text eol=lf
+*.blend binary
+*.fbx binary
+*.png binary
+*.jpg binary
+*.otf binary
+*.mp4 binary
+Assets/ProjectZ/Art/Nature/License_Standard.txt -text

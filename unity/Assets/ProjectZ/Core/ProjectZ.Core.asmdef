@@ -1,0 +1,7 @@
+{
+  "name": "ProjectZ.Core",
+  "rootNamespace": "ProjectZ.Core",
+  "references": [],
+  "autoReferenced": true,
+  "noEngineReferences": true
+}

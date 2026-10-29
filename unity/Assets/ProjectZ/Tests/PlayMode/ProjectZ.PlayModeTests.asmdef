@@ -1,0 +1,7 @@
+{
+  "name": "ProjectZ.PlayModeTests",
+  "references": ["ProjectZ.Core", "ProjectZ.Runtime"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false,
+  "defineConstraints": ["UNITY_INCLUDE_TESTS"]
+}

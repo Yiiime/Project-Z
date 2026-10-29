@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d543dc4e30a41476c84dce841e0819d9, type: 3}
+  m_Name: CoastalArtCatalog
+  m_EditorClassIdentifier: ProjectZ.Runtime::ProjectZ.Runtime.CoastalArtCatalog
+  Z: {fileID: 2066394532675488435, guid: d0f38451a044c406c98cdd2616cc2522, type: 3}
+  Bench: {fileID: 4159132768816537233, guid: f3cfe5a4df421478a838a67fcfc93388, type: 3}
+  Cottage: {fileID: 9134272821496545893, guid: 435c6d702c1d94640a5fa76bed5d8408, type: 3}
+  MapTable: {fileID: 1037734506928687754, guid: 36050cde12c67485e9e598e1ae58e16c, type: 3}
+  Trees:
+  - {fileID: 7741126508701274599, guid: 8a0b0dd23d0f54250b000f15fc31e453, type: 3}
+  - {fileID: 7225099813143031601, guid: b8ead518b39484fca82136f64d22f289, type: 3}
+  - {fileID: 5923025106799879873, guid: 69e3439b66b464056936d6862cec2f1e, type: 3}
+  Bushes:
+  - {fileID: 644687531679399384, guid: f8f1745a159f746398b1628258fc0d8e, type: 3}
+  - {fileID: 4933798664056298693, guid: 7b265981ef9de4aa080dc3ece267741d, type: 3}
+  - {fileID: 3405249330293598357, guid: 15d69b24ec1824912bb807318fbea7c7, type: 3}
+  - {fileID: 4096096971827998283, guid: 60680b28319a54949af2f18a4a74ff2c, type: 3}
+  Grasses:
+  - {fileID: 3611839339214054841, guid: 52a36ebbd8c744358a5c6f8a34ea2a7a, type: 3}
+  - {fileID: 7222256845693684229, guid: 8655225a1b4e64599a0fbc3e0f979e80, type: 3}
+  Flowers:
+  - {fileID: 6103017829681997889, guid: b2e6a745cd347497f936c779c9f5f01f, type: 3}
+  - {fileID: 7485061025632097256, guid: 69b095bbb1ded4ceb8879fb98551b095, type: 3}
+  Rocks:
+  - {fileID: 4857037191769347880, guid: 128800c29f7b14b22adc9d1102993849, type: 3}
+  - {fileID: 3717207011903865331, guid: 28c1b221c46844c87960355f6d21907a, type: 3}
+  - {fileID: 7014722267860352967, guid: df9eb7807710f4cc795950fa20bded1c, type: 3}
+  - {fileID: 6638413063886942720, guid: 46a47f4a491574c9196502f4b1c275f2, type: 3}
+  - {fileID: 7015762868650672776, guid: 9d1f63c58e6c84fc4a5b700989f3ccb6, type: 3}
+  Ground: {fileID: 2100000, guid: fab01240090474e8783cc282942c9450, type: 2}
+  Path: {fileID: 2100000, guid: 2eb47a46e16f241e1b078b3caabd80d6, type: 2}
+  Water: {fileID: 2100000, guid: c08a7dae153cd4ce59e60c169e215df8, type: 2}
+  Sky: {fileID: 2100000, guid: f7ffa4268cfe04cd088502f5ff5dd52c, type: 2}
+  PostProcessing: {fileID: 11400000, guid: 2253fc0e15b704d919bcc3cf8aca6278, type: 2}
