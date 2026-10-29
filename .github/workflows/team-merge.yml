@@ -1,0 +1,50 @@
+name: Team merge
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review, labeled, unlabeled, closed]
+  push:
+    branches: [main]
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+    inputs:
+      attempt:
+        description: Internal retry count
+        required: false
+        default: '0'
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: team-merge
+  cancel-in-progress: false
+
+jobs:
+  integrate:
+    name: Sync and merge ready PRs
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      actions: write
+      contents: write
+      issues: write
+      pull-requests: write
+      statuses: write
+    steps:
+      - name: Check out trusted automation from main
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          persist-credentials: false
+          sparse-checkout: tools/team
+      - uses: actions/github-script@v8
+        env:
+          ATTEMPT: ${{ inputs.attempt || '0' }}
+        with:
+          script: |
+            const {integrate} = await import(`${process.env.GITHUB_WORKSPACE}/tools/team/automation.mjs`);
+            const attempt = Number.parseInt(process.env.ATTEMPT, 10) || 0;
+            await integrate({github, context, core, attempt});

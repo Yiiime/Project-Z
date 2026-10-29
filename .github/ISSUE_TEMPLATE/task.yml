@@ -1,0 +1,38 @@
+name: 开发任务
+description: 写给自己的本地 agent 的一张任务卡
+title: "[任务] "
+body:
+  - type: textarea
+    id: outcome
+    attributes:
+      label: 玩家能看到的变化
+      description: 用一个具体场景说明完成前后的不同。
+      placeholder: 例如：玩家和 Z 一起看潮水后，第二天 Z 会主动提起那片叶子。
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: 修改范围
+      description: 预计修改的系统、文件或资源。共享热点必须写明，例如 Boot.unity、角色 Prefab、Animator、ProjectSettings、Packages。
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 验收步骤
+      description: 怎样操作、预期看到什么；包括失败、重开和存档情况。
+    validations:
+      required: true
+  - type: input
+    id: dependencies
+    attributes:
+      label: 依赖
+      description: 依赖的任务编号；没有写“无”。
+    validations:
+      required: true
+  - type: textarea
+    id: handoff
+    attributes:
+      label: 进度与交接
+      description: 暂停时写分支、已完成内容、待处理问题和下一步。

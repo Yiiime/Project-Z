@@ -1,0 +1,166 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+z_root="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+if [[ -z "$z_root" || ! -f "$z_root/tools/team/z" ]]; then
+  printf '请在 Z-from-Moon 仓库里运行这个命令。\n' >&2
+  exit 2
+fi
+cd "$z_root"
+z_repo="${Z_REPO:-seanlee111/Z-from-Moon}"
+z_gh="${Z_GH:-$(command -v gh || true)}"
+
+say() { printf '%s\n' "$*"; }
+fail() { printf '✗ %s\n' "$*" >&2; exit 1; }
+need_gh() {
+  [[ -n "$z_gh" && -x "$z_gh" ]] || fail '没有找到 GitHub CLI（gh）。请让 agent 按 docs/team/START-HERE.md 安装并登录。'
+  "$z_gh" auth status >/dev/null 2>&1 || fail 'GitHub CLI 尚未登录。请运行：gh auth login --hostname github.com --git-protocol https --web'
+}
+branch() { git branch --show-current; }
+login() { "$z_gh" api user --jq .login; }
+clean_tree() { [[ -z "$(git status --porcelain)" ]]; }
+on_task_branch() { [[ "$(branch)" == task/* ]] || fail "当前分支是 $(branch)。请先运行：tools/team/z start <英文短名>"; }
+slugify() {
+  printf '%s' "$1" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+//; s/-+$//' | cut -c1-40
+}
+current_pr() { "$z_gh" pr view --repo "$z_repo" --json number,url,state,isDraft,mergeStateStatus,statusCheckRollup 2>/dev/null || true; }
+
+has_dotnet() { [[ -n "${Z_DOTNET:-}" ]] || command -v dotnet >/dev/null 2>&1 || [[ -x "$z_root/.tooling/project-z/dotnet/dotnet" ]]; }
+
+run_checks() {
+  command -v node >/dev/null 2>&1 || fail '需要 Node.js 22（至少 20.19）。'
+  say '→ 检查仓库规则'
+  node tools/team/project-check.mjs
+  say '→ 检查团队自动化'
+  node --test tools/team/test/*.test.mjs >/dev/null
+  if has_dotnet; then
+    say '→ 运行 Unity 快速检查'
+    (cd unity && bash Tools/check.sh)
+    say '✓ 本地快速检查通过。涉及画面、手感或运行流程时，还要在 Unity 里实际试玩。'
+  else
+    say '△ 没有 .NET 8，跳过本地 Unity 快速检查；GitHub 会在合并前完整检查。'
+  fi
+}
+
+sync_main() {
+  on_task_branch
+  clean_tree || fail '还有未提交的修改。请先让 agent 用一句中文说明提交，再同步。'
+  say '→ 获取最新 main'
+  git fetch origin main
+  if git merge-base --is-ancestor origin/main HEAD; then
+    say '✓ 已包含最新 main。'
+    return
+  fi
+  if ! git merge --no-edit origin/main; then
+    say '✗ 同步时出现冲突。冲突文件：'
+    git diff --name-only --diff-filter=U
+    say '处理方式：让 agent 理解双方意图后解决冲突，运行 tools/team/z check，再提交合并结果。'
+    exit 3
+  fi
+  say '✓ 已把最新 main 合进当前任务分支。'
+}
+
+case "${1:-help}" in
+  doctor)
+    say "仓库：$z_repo"
+    git --version
+    [[ -n "$(git config user.name)" && -n "$(git config user.email)" ]] || fail 'Git 还没有署名。请让 agent 设置 git config --global user.name 和 user.email（用 GitHub 显示的 noreply 邮箱即可）。'
+    node --version || fail '需要 Node.js 22（至少 20.19）。'
+    if has_dotnet; then say '✓ 找到 .NET'; else say '△ 没有 .NET 8；本地会跳过 Unity 快速检查，GitHub 仍会检查。'; fi
+    need_gh
+    say "✓ GitHub 账号：$(login)"
+    permission="$("$z_gh" api "repos/$z_repo" --jq '.permissions.push')"
+    [[ "$permission" == true ]] || fail '这个账号还没有仓库写权限。请联系维护者邀请你，并在邮件或 GitHub 通知中接受邀请。'
+    say '✓ 有仓库写权限'
+    if [[ -x "/Applications/Unity/Hub/Editor/6000.3.27f1/Unity.app/Contents/MacOS/Unity" ]]; then say '✓ 找到 Unity 6000.3.27f1'; else say '△ 没找到 Unity 6000.3.27f1；改 Unity 场景或试玩前需要安装。'; fi
+    ;;
+  start)
+    [[ $# -ge 2 ]] || fail '用法：tools/team/z start <英文短名>，例如 tools/team/z start z-memory-card'
+    need_gh
+    clean_tree || fail '当前目录还有未提交的修改。请先提交、完成或交给维护者处理，再开始新任务。'
+    slug="$(slugify "$2")"
+    [[ -n "$slug" ]] || fail '任务短名需要包含英文字母或数字。'
+    user="$(slugify "$(login)")"
+    name="task/$user/$slug"
+    git fetch origin main
+    if git show-ref --verify --quiet "refs/heads/$name"; then fail "本地已经有 $name。继续它：git switch $name"; fi
+    git switch -c "$name" origin/main
+    say "✓ 已从最新 main 创建任务分支：$name"
+    ;;
+  sync)
+    sync_main
+    ;;
+  check)
+    run_checks
+    ;;
+  ship)
+    shift
+    title=''
+    body_file=''
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --title) title="${2:-}"; shift 2 ;;
+        --body-file) body_file="${2:-}"; shift 2 ;;
+        *) fail "未知参数：$1" ;;
+      esac
+    done
+    need_gh
+    on_task_branch
+    clean_tree || fail '还有未提交的修改。请先让 agent 检查改动并提交。'
+    [[ "$(git rev-list --count origin/main..HEAD 2>/dev/null || printf 1)" != 0 ]] || fail '这个分支还没有新的提交。'
+    sync_main
+    run_checks
+    git push -u origin HEAD
+    if "$z_gh" pr view --repo "$z_repo" --json number >/dev/null 2>&1; then
+      "$z_gh" pr ready --repo "$z_repo" >/dev/null 2>&1 || true
+      say "✓ 已更新 PR：$("$z_gh" pr view --repo "$z_repo" --json url --jq .url)"
+    else
+      [[ -n "$title" ]] || title="$(git log -1 --format=%s)"
+      args=(pr create --repo "$z_repo" --base main --head "$(branch)" --title "$title")
+      if [[ -n "$body_file" ]]; then args+=(--body-file "$body_file"); else args+=(--body "自动检查通过后会合并。验证结果见本地 tools/team/z check 和 GitHub 检查。"); fi
+      url="$("$z_gh" "${args[@]}")"
+      say "✓ 已创建 PR：$url"
+    fi
+    say 'GitHub 会排队检查；通过后自动合并。运行 tools/team/z status 查看进度。'
+    ;;
+  status)
+    need_gh
+    say "当前分支：$(branch)"
+    pr="$(current_pr)"
+    if [[ -z "$pr" ]]; then say '当前分支还没有 PR。'; exit 0; fi
+    printf '%s\n' "$pr" | node -e '
+      const pr = JSON.parse(require("fs").readFileSync(0, "utf8"));
+      const ready = (pr.statusCheckRollup || []).find(item => item.context === "Project Z / Ready");
+      console.log(`PR #${pr.number}：${pr.state}${pr.isDraft ? "（草稿）" : ""}`);
+      console.log(pr.url);
+      console.log(`团队检查：${ready ? `${ready.state} · ${ready.description || ""}` : "等待机器人开始"}`);
+    '
+    ;;
+  done)
+    need_gh
+    clean_tree || fail '还有未提交的修改，先处理后再回到 main。'
+    old="$(branch)"
+    git fetch --prune origin
+    git switch main
+    git merge --ff-only origin/main
+    if [[ "$old" == task/* ]]; then
+      state="$("$z_gh" pr view "$old" --repo "$z_repo" --json state --jq .state 2>/dev/null || true)"
+      if [[ "$state" == MERGED ]]; then git branch -D "$old"; else say "保留本地分支 $old：它的 PR 还没合并。"; fi
+    fi
+    say '✓ 已回到最新 main。'
+    ;;
+  help|-h|--help)
+    cat <<'HELP'
+Z 项目团队命令
+  tools/team/z doctor             检查电脑、GitHub 登录和仓库权限
+  tools/team/z start <英文短名>    从最新 main 开一个任务分支
+  tools/team/z sync               把最新 main 合进当前任务分支
+  tools/team/z check              运行本地快速检查
+  tools/team/z ship [--title 标题] [--body-file 文件]
+                                  同步、检查、推送并创建/更新 PR
+  tools/team/z status             查看当前 PR 和自动合并状态
+  tools/team/z done               合并后回到最新 main
+HELP
+    ;;
+  *) fail "未知命令：$1。运行 tools/team/z help 查看用法。" ;;
+esac

@@ -1,0 +1,93 @@
+name: Project checks
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Pull request number
+        required: true
+        type: string
+      head_sha:
+        description: Pull request head commit
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: project-checks-${{ inputs.pr_number }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Unity quick checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - name: Validate inputs
+        env:
+          PR_NUMBER: ${{ inputs.pr_number }}
+          HEAD_SHA: ${{ inputs.head_sha }}
+        run: |
+          [[ "$PR_NUMBER" =~ ^[1-9][0-9]*$ ]]
+          [[ "$HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
+      - name: Check out the pull request
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.head_sha }}
+          persist-credentials: false
+      - name: Confirm the checked commit
+        env:
+          HEAD_SHA: ${{ inputs.head_sha }}
+        run: test "$(git rev-parse HEAD)" = "$HEAD_SHA"
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 8.0.x
+      - name: Check repository rules
+        run: node tools/team/project-check.mjs
+      - name: Test team automation
+        run: node --test tools/team/test/*.test.mjs
+      - name: Run Unity quick checks
+        working-directory: unity
+        env:
+          Z_DOTNET: dotnet
+          DOTNET_CLI_HOME: ${{ runner.temp }}/dotnet-home
+        run: bash Tools/check.sh
+
+  report:
+    name: Report result
+    if: always()
+    needs: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: write
+      contents: read
+      issues: write
+      pull-requests: read
+      statuses: write
+    steps:
+      - name: Check out trusted automation from main
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          persist-credentials: false
+          sparse-checkout: tools/team
+      - uses: actions/github-script@v8
+        env:
+          PR_NUMBER: ${{ inputs.pr_number }}
+          HEAD_SHA: ${{ inputs.head_sha }}
+          CHECK_RESULT: ${{ needs.checks.result }}
+        with:
+          script: |
+            const {report} = await import(`${process.env.GITHUB_WORKSPACE}/tools/team/automation.mjs`);
+            await report({github, context, core,
+              number: Number(process.env.PR_NUMBER),
+              head: process.env.HEAD_SHA,
+              result: process.env.CHECK_RESULT});

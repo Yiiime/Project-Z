@@ -18,3 +18,5 @@
 *.key
 __pycache__/
 *.pyc
+.tooling/
+node_modules/

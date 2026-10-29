@@ -1,5 +1,7 @@
 # 来自月亮的 Z
 
+**团队开发主工程：[unity/](unity/README.md)（Unity 6000.3.27f1）。新同学先看 [协作上手](docs/team/START-HERE.md)。** 每个人用自己的本地 agent 开发，GitHub 检查通过后自动合并。下方 Godot 内容是旧 Demo 与历史资料。
+
 Godot 4.7.2 · Chapter1 一天可玩 Demo · UI v2。
 
 **[下载可直接运行的浏览器试玩包](https://github.com/seanlee111/Z-from-Moon/releases/tag/demo-v0.2.0-d1-ui)**。解压后双击 `启动试玩.command`（需 Python 3）；开发者可克隆仓库后用 Godot 打开 `game/project.godot`。
