@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {CONTEXT, TEXT, integrate, report, touchesMaintainerPaths} from '../automation.mjs';
 
 const sha = n => String(n).repeat(40).slice(0, 40);
-const repoName = 'seanlee111/Z-from-Moon';
+const repoName = 'Yiiime/Project-Z';
 function pull(number, overrides = {}) {
   return {
     number, state: 'open', draft: false, title: `Task ${number}`, mergeable: true,
@@ -64,7 +64,7 @@ function fakeGitHub({pulls, statuses = {}, behind = {}, files = {}, permissions 
   };
   return {github, calls};
 }
-const context = {repo: {owner: 'seanlee111', repo: 'Z-from-Moon'}, runId: 7, serverUrl: 'https://github.com'};
+const context = {repo: {owner: 'Yiiime', repo: 'Project-Z'}, runId: 7, serverUrl: 'https://github.com'};
 const core = {info() {}, warning() {}, setFailed(message) { throw new Error(message); }};
 const noWait = async () => {};
 

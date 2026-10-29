@@ -1,6 +1,6 @@
 # 来自月亮的 Z
 
-**团队开发主工程：[unity/](unity/README.md)（Unity 6000.3.27f1）。新同学先看 [协作上手](docs/team/START-HERE.md)。** 每个人用自己的本地 agent 开发，GitHub 检查通过后自动合并。下方 Godot 内容是旧 Demo 与历史资料。
+**团队开发主工程：[unity/](unity/README.md)（Unity 6000.3.27f1）。新同学先看 [协作上手](docs/team/START-HERE.md)。** 团队仓库：[Yiiime/Project-Z](https://github.com/Yiiime/Project-Z)。每个人用自己的本地 agent 开发，GitHub 检查通过后自动合并。下方 Godot 内容是旧 Demo 与历史资料，原始发布页仍在 [seanlee111/Z-from-Moon](https://github.com/seanlee111/Z-from-Moon)。
 
 Godot 4.7.2 · Chapter1 一天可玩 Demo · UI v2。
 

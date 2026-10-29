@@ -20,7 +20,7 @@ flowchart LR
 | --- | --- | --- |
 | 1. 接受邀请 | 把 GitHub 用户名发给维护者，接受仓库邀请 | 能打开仓库的 **Issues** 和 **Pull requests** |
 | 2. 安装工具 | 安装 [GitHub Desktop](https://desktop.github.com/)、[Node.js 22 LTS](https://nodejs.org/)、[.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) 和 [GitHub CLI](https://cli.github.com/)；需要改场景或试玩时，再用 Unity Hub 安装 **6000.3.27f1 Apple Silicon** | 安装完成 |
-| 3. 下载仓库 | GitHub Desktop → **File → Clone repository → URL**，填 `https://github.com/seanlee111/Z-from-Moon.git` | 电脑里有 `Z-from-Moon` 文件夹 |
+| 3. 下载仓库 | GitHub Desktop → **File → Clone repository → URL**，填 `https://github.com/Yiiime/Project-Z.git` | 电脑里有 `Z-from-Moon` 文件夹 |
 | 4. 登录 GitHub | 在 Codex 打开该文件夹，发送下方“首次接入”提示词；浏览器出现 GitHub 授权页时自己登录确认 | `tools/team/z doctor` 显示有写权限 |
 
 首次接入提示词：
@@ -61,12 +61,12 @@ PR 页面出现 `Project Z / Ready` 的进度：
 
 ## 维护者
 
-一次性设置由仓库 owner 在协作 PR 合并后运行：
+仓库 owner 是 `Yiiime`。新增同学时运行：
 
 ```bash
 tools/team/setup-github.sh <同学1> <同学2> <同学3> <同学4> <同学5>
 ```
 
-脚本会只开放 squash 合并、启用自动删除分支、创建 `hold` / `recheck` 标签、保护 `main`，并邀请协作者。`.github/`、`tools/team/` 和 `unity/Tools/check.sh` 的修改需要维护者手动确认合并。
+脚本会保持 squash 合并、自动删除分支、`hold` / `recheck` 标签和 `main` 保护，并邀请协作者。`.github/`、`tools/team/` 和 `unity/Tools/check.sh` 的修改需要维护者手动确认合并。
 
 云端检查覆盖 C# 核心规则、桥接服务、Unity C# 语法和资源引用。Unity 编辑器编译、实际运行、画面和手感仍需在 Unity 里试玩确认。

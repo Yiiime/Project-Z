@@ -7,12 +7,14 @@ if [[ -z "$z_root" || ! -f "$z_root/tools/team/z" ]]; then
   exit 2
 fi
 cd "$z_root"
-z_repo="${Z_REPO:-seanlee111/Z-from-Moon}"
+z_origin="$(git remote get-url origin 2>/dev/null || true)"
+z_repo="${Z_REPO:-$(printf '%s' "$z_origin" | sed -E 's#^https://github\.com/##; s#^git@github\.com:##; s#^ssh://git@github\.com/##; s#\.git$##; s#/$##')}"
 z_gh="${Z_GH:-$(command -v gh || true)}"
 
 say() { printf '%s\n' "$*"; }
 fail() { printf '✗ %s\n' "$*" >&2; exit 1; }
 need_gh() {
+  [[ "$z_repo" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]] || fail '无法从 origin 识别 GitHub 仓库；可设置 Z_REPO=owner/name。'
   [[ -n "$z_gh" && -x "$z_gh" ]] || fail '没有找到 GitHub CLI（gh）。请让 agent 按 docs/team/START-HERE.md 安装并登录。'
   "$z_gh" auth status >/dev/null 2>&1 || fail 'GitHub CLI 尚未登录。请运行：gh auth login --hostname github.com --git-protocol https --web'
 }
@@ -23,7 +25,7 @@ on_task_branch() { [[ "$(branch)" == task/* ]] || fail "当前分支是 $(branch
 slugify() {
   printf '%s' "$1" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+//; s/-+$//' | cut -c1-40
 }
-current_pr() { "$z_gh" pr view --repo "$z_repo" --json number,url,state,isDraft,mergeStateStatus,statusCheckRollup 2>/dev/null || true; }
+current_pr() { "$z_gh" pr view "$(branch)" --repo "$z_repo" --json number,url,state,isDraft,mergeStateStatus,statusCheckRollup 2>/dev/null || true; }
 
 has_dotnet() { [[ -n "${Z_DOTNET:-}" ]] || command -v dotnet >/dev/null 2>&1 || [[ -x "$z_root/.tooling/project-z/dotnet/dotnet" ]]; }
 
@@ -32,7 +34,10 @@ run_checks() {
   say '→ 检查仓库规则'
   node tools/team/project-check.mjs
   say '→ 检查团队自动化'
-  node --test tools/team/test/*.test.mjs >/dev/null
+  if ! z_test_output="$(node --test tools/team/test/*.test.mjs 2>&1)"; then
+    printf '%s\n' "$z_test_output"
+    fail '团队自动化测试未通过。'
+  fi
   if has_dotnet; then
     say '→ 运行 Unity 快速检查'
     (cd unity && bash Tools/check.sh)
@@ -111,9 +116,12 @@ case "${1:-help}" in
     sync_main
     run_checks
     git push -u origin HEAD
-    if "$z_gh" pr view --repo "$z_repo" --json number >/dev/null 2>&1; then
-      "$z_gh" pr ready --repo "$z_repo" >/dev/null 2>&1 || true
-      say "✓ 已更新 PR：$("$z_gh" pr view --repo "$z_repo" --json url --jq .url)"
+    pr_state="$("$z_gh" pr view "$(branch)" --repo "$z_repo" --json state --jq .state 2>/dev/null || true)"
+    if [[ "$pr_state" == OPEN ]]; then
+      "$z_gh" pr ready "$(branch)" --repo "$z_repo" >/dev/null 2>&1 || true
+      say "✓ 已更新 PR：$("$z_gh" pr view "$(branch)" --repo "$z_repo" --json url --jq .url)"
+    elif [[ -n "$pr_state" ]]; then
+      fail "这个分支的 PR 已经是 $pr_state。请用 tools/team/z start 开一个新任务分支。"
     else
       [[ -n "$title" ]] || title="$(git log -1 --format=%s)"
       args=(pr create --repo "$z_repo" --base main --head "$(branch)" --title "$title")

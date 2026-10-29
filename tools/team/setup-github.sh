@@ -2,7 +2,9 @@
 # One-time repository setup. Run as the repository owner after the team workflow is on main.
 set -euo pipefail
 
-z_repo="${Z_REPO:-seanlee111/Z-from-Moon}"
+z_origin="$(git -C "$(dirname "${BASH_SOURCE[0]}")" remote get-url origin 2>/dev/null || true)"
+z_repo="${Z_REPO:-$(printf '%s' "$z_origin" | sed -E 's#^https://github\.com/##; s#^git@github\.com:##; s#^ssh://git@github\.com/##; s#\.git$##; s#/$##')}"
+[[ "$z_repo" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]] || { printf '无法识别 GitHub 仓库；可设置 Z_REPO=owner/name。\n' >&2; exit 2; }
 z_gh="${Z_GH:-$(command -v gh || true)}"
 z_context='Project Z / Ready'
 [[ -n "$z_gh" && -x "$z_gh" ]] || { printf '需要 GitHub CLI（gh）。\n' >&2; exit 2; }
