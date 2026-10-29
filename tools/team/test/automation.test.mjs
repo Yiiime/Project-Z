@@ -152,3 +152,12 @@ test('stale pending checks are restarted', async () => {
   assert.equal(result.result, 'checks-restarted');
   assert.equal(calls.dispatches[0].workflow_id, 'project-checks.yml');
 });
+
+test('a comment permission error does not block status or the merge queue', async () => {
+  const pr = pull(14);
+  const {github, calls} = fakeGitHub({pulls: [pr]});
+  github.rest.issues.createComment = async () => { throw Object.assign(new Error('forbidden'), {status: 403}); };
+  await report({github, context, core, number: 14, head: pr.head.sha, result: 'failure'});
+  assert.equal(calls.statuses.at(-1).state, 'failure');
+  assert.equal(calls.dispatches.at(-1).workflow_id, 'team-merge.yml');
+});
