@@ -1,0 +1,43 @@
+name: Team collaboration
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review, converted_to_draft, edited, closed]
+  issue_comment:
+    types: [created]
+  schedule:
+    - cron: '17 1 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: team-collaboration
+  cancel-in-progress: false
+
+jobs:
+  status:
+    name: Update status and overlap reminders
+    if: github.event_name != 'issue_comment' || (github.event.issue.pull_request && contains(github.event.comment.body, 'project-z:still-working'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Check out trusted automation from main
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          persist-credentials: false
+          sparse-checkout: tools/team
+      - uses: actions/github-script@v8
+        env:
+          CLOSED_PR: ${{ github.event.action == 'closed' && github.event.pull_request.number || '' }}
+        with:
+          script: |
+            const automation = await import(`${process.env.GITHUB_WORKSPACE}/tools/team/collab-github.mjs`);
+            if (process.env.CLOSED_PR) await automation.clearClosed({github, context, core, number: Number(process.env.CLOSED_PR)});
+            await automation.collaborate({github, context, core});

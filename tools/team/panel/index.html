@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Z 协作面板</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Project Z</p>
+      <h1>Z 协作面板</h1>
+    </div>
+    <div class="top-actions">
+      <span id="whoami" class="who"></span>
+      <button id="refresh" class="ghost" type="button">刷新</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="checks-view" class="panel" hidden>
+      <div class="section-head">
+        <div>
+          <h2>电脑检查</h2>
+          <p>必需项都通过后，就能开始用面板。</p>
+        </div>
+        <button id="recheck" type="button">重新检查</button>
+      </div>
+      <div id="checks" class="checks"></div>
+      <div id="login-box" class="callout" hidden></div>
+      <button id="enter-board" class="primary" type="button" hidden>进入协作面板</button>
+    </section>
+
+    <section id="board-view" hidden>
+      <section class="steps" aria-label="使用步骤">
+        <div class="step"><b>1</b><span>选区域</span></div>
+        <div class="step"><b>2</b><span>开工</span></div>
+        <div class="step"><b>3</b><span>交给 Codex</span></div>
+        <div class="step"><b>4</b><span>保存进度</span></div>
+        <div class="step"><b>5</b><span>交付</span></div>
+      </section>
+
+      <section id="current" class="panel current"></section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <h2>区域看板</h2>
+            <p>选择 1～2 个区域开工。有人在做时会提醒，但不会锁住。</p>
+          </div>
+          <div class="legend" aria-label="状态说明">
+            <span class="pill free">空闲</span><span class="pill active">开发中</span><span class="pill paused">可能暂停</span><span class="pill stale">已搁置·可接手</span>
+          </div>
+        </div>
+        <div id="areas" class="area-grid"></div>
+      </section>
+
+      <section id="start" class="panel start">
+        <div class="section-head">
+          <div>
+            <h2>开工</h2>
+            <p>系统会从最新 main 开分支，推送开工提交，并创建草稿 PR。</p>
+          </div>
+        </div>
+        <label class="field">
+          <span>这次想让玩家看到什么变化？</span>
+          <textarea id="goal" maxlength="200" rows="3" placeholder="例如：Z 第二天会主动提起一起看潮水时发现的叶子"></textarea>
+        </label>
+        <div id="selected-areas" class="selected"></div>
+        <div id="start-warnings"></div>
+        <details class="advanced">
+          <summary>英文短名（可选）</summary>
+          <input id="slug" maxlength="40" placeholder="例如 tide-leaf；不填会自动生成">
+        </details>
+        <div class="prompt-row">
+          <button id="start-button" class="primary" type="button" disabled>开工</button>
+          <button id="copy-start-preview" class="ghost" type="button" disabled>复制开工提示词</button>
+        </div>
+      </section>
+
+      <section id="tasks" class="panel"></section>
+    </section>
+  </main>
+
+  <dialog id="dialog">
+    <form method="dialog" class="dialog-body">
+      <h2 id="dialog-title"></h2>
+      <div id="dialog-content"></div>
+      <div class="dialog-actions" id="dialog-actions"></div>
+    </form>
+  </dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
