@@ -78,3 +78,5 @@ tools/team/setup-github.sh 用户名1 用户名2 用户名3 用户名4 用户名
 脚本邀请协作者，并保持 squash 合并、自动删除分支和 `main` 保护。区域路径由 PM 编辑 `tools/team/areas.json`；`.github/` 和 `tools/team/` 的修改需要维护者手动合并。
 
 云端检查覆盖 C# 核心规则、桥接服务、Unity C# 语法和资源引用；Unity 编辑器运行、画面和手感仍需试玩确认。
+
+<!-- 协作演练 A：普通文件重叠，演练后删除 -->
