@@ -11,13 +11,13 @@ function pull(number, owner, areaIds, created, labels = []) {
   return {number, state: 'open', draft: true, created_at: created, user: {login: owner}, labels: labels.map(name => ({name})),
     head: {repo: {full_name: 'Yiiime/Project-Z'}}, body: taskBody({goal: `任务 ${number}`, areas: selectedAreas(config, areaIds), owner, startedAt: created})};
 }
-function fake({pulls, files, commits = {}, comments = {}}) {
+function fake({pulls, files, commits = {}, comments = {}, closed = []}) {
   const calls = {labels: [], removed: [], comments: [], created: []};
   const github = {
     paginate: async (method, params) => (await method(params)).data,
     rest: {
       pulls: {
-        list: async () => ({data: pulls}),
+        list: async ({state}) => ({data: state === 'closed' ? closed : pulls}),
         listFiles: async ({pull_number}) => ({data: files[pull_number].map(filename => ({filename}))}),
         listCommits: async ({pull_number}) => ({data: commits[pull_number] || []}),
       },
@@ -66,4 +66,12 @@ test('yellow overlap labels without comments; out-of-scope files add an area lab
   assert.ok(calls.labels.some(item => item.labels.includes(OVERLAP_LABELS.yellow)));
   assert.equal(calls.comments.filter(item => item.body.includes(MARKERS.conflict)).length, 0);
   assert.equal(calls.comments.filter(item => item.body.includes(MARKERS.scope)).length, 1);
+});
+
+test('recently merged PRs lose status and overlap labels', async () => {
+  const closed = [{number: 9, labels: [{name: STATUS_LABELS.active}, {name: OVERLAP_LABELS.red}, {name: 'area:design-docs'}]}];
+  const {github, calls} = fake({pulls: [], files: {}, closed});
+  const result = await collaborate({github, context, core, now, config});
+  assert.deepEqual(result.cleaned, [9]);
+  assert.deepEqual(calls.removed.map(item => item.name).sort(), [OVERLAP_LABELS.red, STATUS_LABELS.active].sort());
 });

@@ -92,6 +92,7 @@ test('merges the exact checked head after success', async () => {
   const [result] = await integrate({github, context, core, sleep: noWait});
   assert.equal(result.result, 'merged');
   assert.deepEqual(calls.merges, [{number: 4, sha: pr.head.sha}]);
+  assert.ok(calls.dispatches.some(item => item.workflow_id === 'team-collab.yml' && item.inputs.closed_pr === '4'));
 });
 
 test('conflicts are marked and explained once', async () => {

@@ -8,6 +8,12 @@ on:
   schedule:
     - cron: '17 1 * * *'
   workflow_dispatch:
+    inputs:
+      closed_pr:
+        description: Pull request just merged by the team bot
+        required: false
+        default: ''
+        type: string
 
 permissions:
   contents: read
@@ -35,7 +41,7 @@ jobs:
           sparse-checkout: tools/team
       - uses: actions/github-script@v8
         env:
-          CLOSED_PR: ${{ github.event.action == 'closed' && github.event.pull_request.number || '' }}
+          CLOSED_PR: ${{ github.event.action == 'closed' && github.event.pull_request.number || inputs.closed_pr || '' }}
         with:
           script: |
             const automation = await import(`${process.env.GITHUB_WORKSPACE}/tools/team/collab-github.mjs`);

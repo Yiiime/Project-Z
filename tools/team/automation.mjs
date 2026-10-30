@@ -2,6 +2,7 @@
 export const CONTEXT = 'Project Z / Ready';
 export const CHECK_WORKFLOW = 'project-checks.yml';
 export const MERGE_WORKFLOW = 'team-merge.yml';
+export const COLLAB_WORKFLOW = 'team-collab.yml';
 export const LABELS = Object.freeze({hold: 'hold', recheck: 'recheck'});
 export const MAINTAINER_PATHS = Object.freeze([/^\.github\//, /^tools\/team\//, /^unity\/Tools\/check\.sh$/]);
 export const TEXT = Object.freeze({
@@ -117,6 +118,12 @@ function client({github, context, core, sleep = pause}) {
       }
       try { await github.rest.git.deleteRef({...repo, ref: `heads/${pr.head.ref}`}); }
       catch (error) { core.info(`#${pr.number}: branch kept (${error.status || error.message})`); }
+      try {
+        // Merges made with GITHUB_TOKEN do not emit a new pull_request event, so refresh collaboration labels explicitly.
+        await github.rest.actions.createWorkflowDispatch({...repo, workflow_id: COLLAB_WORKFLOW, ref: 'main', inputs: {closed_pr: String(pr.number)}});
+      } catch (error) {
+        core.warning(`#${pr.number}: collaboration refresh was not started (${error.status || error.message})`);
+      }
       return true;
     },
   };
