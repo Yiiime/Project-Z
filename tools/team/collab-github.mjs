@@ -18,6 +18,7 @@ function api({github, context, core}) {
   return {
     repo,
     openPulls: () => github.paginate(github.rest.pulls.list, {...repo, state: 'open', base: 'main', per_page: 100}),
+    recentClosedPulls: async () => (await data(github.rest.pulls.list({...repo, state: 'closed', base: 'main', sort: 'updated', direction: 'desc', per_page: 30}))),
     files: number => github.paginate(github.rest.pulls.listFiles, {...repo, pull_number: number, per_page: 100}),
     commits: number => github.paginate(github.rest.pulls.listCommits, {...repo, pull_number: number, per_page: 100}),
     comments: number => github.paginate(github.rest.issues.listComments, {...repo, issue_number: number, per_page: 100}),
@@ -153,8 +154,19 @@ export async function collaborate({github, context, core, now = new Date().toISO
     try { await remindHardOverlap(client, items, overlap); }
     catch (error) { client.warn(`overlap ${overlap.pulls.join('/')}: reminder failed (${error.status || error.message})`); }
   }
-  core.info(JSON.stringify({results, overlaps}, null, 2));
-  return {results, overlaps};
+  const cleaned = [];
+  const managed = new Set([...Object.values(STATUS_LABELS), ...Object.values(OVERLAP_LABELS)]);
+  try {
+    for (const pr of await client.recentClosedPulls()) {
+      const labels = pr.labels.map(label => label.name).filter(name => managed.has(name));
+      for (const label of labels) await client.removeLabel(pr.number, label);
+      if (labels.length) cleaned.push(pr.number);
+    }
+  } catch (error) {
+    client.warn(`closed PR label cleanup failed (${error.status || error.message})`);
+  }
+  core.info(JSON.stringify({results, overlaps, cleaned}, null, 2));
+  return {results, overlaps, cleaned};
 }
 
 // Closed pull requests leave the board immediately. Labels are removed for a tidy closed PR list.

@@ -208,8 +208,8 @@ function renderCurrent() {
   const task = data.current;
   const node = $('#current');
   if (!task) {
-    node.replaceChildren(el('div', {class: 'section-head'}, el('div', {}, el('h2', {}, '我的当前任务'), el('p', {}, data.local.branch.startsWith('task/') ? `当前分支 ${data.local.branch} 没有打开的 PR。` : `当前在 ${data.local.branch}。选择区域并开工后，这里会显示任务按钮。`))),
-      data.local.dirty.length ? el('div', {class: 'warning yellow'}, el('p', {}, `本机有 ${data.local.dirty.length} 个未保存修改。开新任务前先处理。`)) : null);
+    node.replaceChildren(...[el('div', {class: 'section-head'}, el('div', {}, el('h2', {}, '我的当前任务'), el('p', {}, data.local.branch.startsWith('task/') ? `当前分支 ${data.local.branch} 没有打开的 PR。` : `当前在 ${data.local.branch}。选择区域并开工后，这里会显示任务按钮。`))),
+      data.local.dirty.length ? el('div', {class: 'warning yellow'}, el('p', {}, `本机有 ${data.local.dirty.length} 个未保存修改。开新任务前先处理。`)) : null].filter(Boolean));
     return;
   }
   const areas = task.areas.map(id => areaById(id)?.name || id).join('、');
