@@ -2,7 +2,7 @@ name: Team merge
 
 on:
   pull_request_target:
-    types: [opened, reopened, synchronize, ready_for_review, labeled, unlabeled, closed]
+    types: [opened, reopened, synchronize, ready_for_review, converted_to_draft, labeled, unlabeled, closed]
   push:
     branches: [main]
   schedule:

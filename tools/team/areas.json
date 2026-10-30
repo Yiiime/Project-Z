@@ -1,0 +1,187 @@
+{
+  "version": 1,
+  "thresholds": {
+    "pausedAfterDays": 3,
+    "staleAfterDays": 7
+  },
+  "hardToMergePatterns": [
+    "**/*.unity",
+    "**/*.prefab",
+    "**/*.controller",
+    "**/*.anim",
+    "**/*.blend",
+    "**/*.fbx",
+    "**/*.png",
+    "**/*.jpg",
+    "**/*.jpeg",
+    "**/*.psd",
+    "**/*.tga",
+    "**/*.mp4",
+    "**/*.otf",
+    "**/*.ttf",
+    "unity/ProjectSettings/**",
+    "unity/Packages/packages-lock.json"
+  ],
+  "areas": [
+    {
+      "id": "z-character-art",
+      "name": "Z 角色美术",
+      "description": "Z 的模型、贴图、材质和角色 Prefab，以及角色 Blender 源文件。",
+      "paths": [
+        "unity/Assets/ProjectZ/Art/Characters/Z/**",
+        "unity/Assets/ProjectZ/Art/Materials/F00_*",
+        "unity/Assets/ProjectZ/Art/Materials/Z_*",
+        "unity/Assets/ProjectZ/Art/Prefabs/Z.prefab*",
+        "unity/Assets/ProjectZ/Art/Prefabs/Z_ArtSlice.prefab*",
+        "unity/ArtSources/Models/Z_ArtSlice.blend",
+        "unity/ArtSources/build_z.py",
+        "unity/ArtSources/inspect_*.py",
+        "unity/ArtSources/preview_*.py",
+        "unity/Documentation/Art/character-v3.md",
+        "unity/Documentation/Art/generated-textures.md",
+        "unity/Assets/ProjectZ/Art/Characters/Z.meta"
+      ]
+    },
+    {
+      "id": "z-motion-expression",
+      "name": "Z 动作表情",
+      "description": "Z 的动画片段、Animator、表情和动作驱动脚本。",
+      "paths": [
+        "unity/Assets/ProjectZ/Art/Animation/**",
+        "unity/Assets/ProjectZ/Runtime/ZPerformance.cs*",
+        "unity/Assets/ProjectZ/Editor/ZMotionAuthoring.cs*"
+      ]
+    },
+    {
+      "id": "scene-art",
+      "name": "场景美术",
+      "description": "海岛植被、道具、场景材质、着色器、后期和场景美术目录。",
+      "paths": [
+        "unity/Assets/ProjectZ/Art/Nature/**",
+        "unity/Assets/ProjectZ/Art/Props/**",
+        "unity/Assets/ProjectZ/Art/Shaders/**",
+        "unity/Assets/ProjectZ/Art/Materials/Coast_*",
+        "unity/Assets/ProjectZ/Art/Materials/Nature_*",
+        "unity/Assets/ProjectZ/Art/Prefabs/Bush_*",
+        "unity/Assets/ProjectZ/Art/Prefabs/CommonTree_*",
+        "unity/Assets/ProjectZ/Art/Prefabs/CoveBench.prefab*",
+        "unity/Assets/ProjectZ/Art/Prefabs/Fern_*",
+        "unity/Assets/ProjectZ/Art/Prefabs/Flower_*",
+        "unity/Assets/ProjectZ/Art/Prefabs/Grass_*",
+        "unity/Assets/ProjectZ/Art/Prefabs/IslandCottage.prefab*",
+        "unity/Assets/ProjectZ/Art/Prefabs/MapTable.prefab*",
+        "unity/Assets/ProjectZ/Art/Prefabs/Pebble_*",
+        "unity/Assets/ProjectZ/Art/Prefabs/Plant_*",
+        "unity/Assets/ProjectZ/Art/Prefabs/Rock_*",
+        "unity/Assets/ProjectZ/Resources/Art/**",
+        "unity/Assets/ProjectZ/Runtime/CoastalArtCatalog.cs*",
+        "unity/Assets/ProjectZ/Editor/CoastalArtSetup.cs*",
+        "unity/Assets/ProjectZ/Settings/Coastal-Post.asset*",
+        "unity/ArtSources/Models/CoveBench.blend",
+        "unity/ArtSources/Models/IslandCottage.blend",
+        "unity/ArtSources/Models/MapTable.blend",
+        "unity/ArtSources/build_coastal_props.py",
+        "unity/Assets/StreamingAssets/ArtCredits.txt*",
+        "unity/Documentation/Art/README.md",
+        "unity/Documentation/Art/sources.json",
+        "unity/Documentation/Art/Screenshots/**"
+      ]
+    },
+    {
+      "id": "story-events",
+      "name": "剧情事件",
+      "description": "共同经历事件、选项、次日接续台词和剧情设计文档。",
+      "paths": [
+        "unity/Assets/ProjectZ/Resources/Content/**",
+        "docs/剧情路线与角色视角-v2.md"
+      ]
+    },
+    {
+      "id": "memory-ai",
+      "name": "记忆与 AI",
+      "description": "Z 的回应规则、在线角色服务、记忆接入协议和 AI 设计文档。",
+      "paths": [
+        "unity/Assets/ProjectZ/Core/ResponseRules.cs*",
+        "unity/Assets/ProjectZ/Runtime/CharacterGateway.cs*",
+        "unity/Tools/character-bridge.mjs",
+        "unity/Tools/start-bridge.sh",
+        "unity/Tests/bridge.test.mjs",
+        "unity/Documentation/integration.md",
+        "docs/AI与状态规格-v2.md"
+      ]
+    },
+    {
+      "id": "rules-save",
+      "name": "游戏规则与存档",
+      "description": "时间、事件记录、关系状态、存档格式与核心规则测试。",
+      "paths": [
+        "unity/Assets/ProjectZ/Core/GameSession.cs*",
+        "unity/Assets/ProjectZ/Core/Models.cs*",
+        "unity/Assets/ProjectZ/Core/SaveStore.cs*",
+        "unity/Assets/ProjectZ/Core/ProjectZ.Core.asmdef*",
+        "unity/Tests/CoreSpecs/**",
+        "docs/核心系统与数值草案-v2.md"
+      ]
+    },
+    {
+      "id": "map-gameplay",
+      "name": "地图与玩法",
+      "description": "主场景、玩家移动、镜头、交互流程、界面和运行态测试。",
+      "paths": [
+        "unity/Assets/ProjectZ/Scenes/**",
+        "unity/Assets/ProjectZ/Runtime/IslandScene.cs*",
+        "unity/Assets/ProjectZ/Runtime/PlayerMovement.cs*",
+        "unity/Assets/ProjectZ/Runtime/ProjectZGame.cs*",
+        "unity/Assets/ProjectZ/Runtime/ArtReviewCapture.cs*",
+        "unity/Assets/ProjectZ/Runtime/ProjectZ.Runtime.asmdef*",
+        "unity/Assets/ProjectZ/Tests/**",
+        "unity/Documentation/verification.md"
+      ]
+    },
+    {
+      "id": "engineering",
+      "name": "工程设置",
+      "description": "Unity 包、项目设置、渲染管线、编辑器准备、构建与检查工具。",
+      "paths": [
+        "unity/Packages/**",
+        "unity/ProjectSettings/**",
+        "unity/Assets/ProjectZ/Settings/Z-*.asset*",
+        "unity/Assets/UniversalRenderPipelineGlobalSettings.asset*",
+        "unity/Assets/DefaultVolumeProfile.asset*",
+        "unity/Assets/ProjectZ/Editor/ProjectSetup.cs*",
+        "unity/Assets/ProjectZ/Editor/ProjectZ.Editor.asmdef*",
+        "unity/Assets/ProjectZ/Resources/Fonts/**",
+        "unity/Tools/check*",
+        "unity/global.json",
+        "unity/.gitattributes",
+        "unity/.gitignore",
+        "unity/*.command",
+        "unity/README.md",
+        "unity/AGENTS.md",
+        "unity/Tools/RuntimeCompile/**",
+        "unity/Tools/SyntaxCheck/**",
+        "unity/Tools/sync-meta.mjs",
+        "unity/Tools/unity.sh",
+        "unity/Tools/verify-test-results.py",
+        "unity/Tools/package.json",
+        "unity/Assets/StreamingAssets/NotoSansCJK-OFL.txt*",
+        "unity/Assets/ProjectZ.meta",
+        "unity/Assets/ProjectZ/*.meta",
+        "unity/Assets/ProjectZ/Art/*.meta",
+        "unity/Assets/ProjectZ/Resources/*.meta",
+        "unity/Assets/StreamingAssets.meta"
+      ]
+    },
+    {
+      "id": "design-docs",
+      "name": "设计文档",
+      "description": "游戏设计、研究资料、团队说明和 UI 设计稿；同一文档也可能属于剧情、AI 或规则区域。",
+      "paths": [
+        "docs/**",
+        "research/**",
+        "ui/**",
+        "README.md"
+      ]
+    }
+  ]
+}

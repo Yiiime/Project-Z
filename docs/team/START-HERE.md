@@ -1,72 +1,78 @@
-# Z 项目协作上手
+# Z 协作面板上手
 
-每个人在自己的电脑上让 agent 开发；GitHub 机器人按顺序合并通过检查的 PR。你只需要会说“开工”和“交付”。
+双击 `打开协作面板.command`，按面板上的按钮完成：选区域 → 开工 → 交给 Codex → 保存进度 → 交付。检查通过后 GitHub 自动合并。
 
 ```mermaid
 flowchart LR
-  A["任务卡<br/>写清变化和验收"] --> B["start<br/>从最新 main 开分支"]
-  B --> C["本地 agent 开发<br/>可分多次完成"]
-  C --> D["ship<br/>同步 · 检查 · 推送 · PR"]
-  D --> E{"GitHub 检查<br/>最新 main + 你的改动"}
-  E -->|通过| F["自动合并到 main"]
-  E -->|冲突/失败| G["PR 留言原因<br/>agent 修复后再 ship"]
-  G --> D
-  F --> H["done<br/>回到最新 main"]
+  A["选 1～2 个区域"] --> B["开工<br/>自动建分支和草稿 PR"]
+  B --> C["复制提示词<br/>交给 Codex"]
+  C --> D["保存进度<br/>推送，仍是草稿"]
+  D --> C
+  D --> E["交付<br/>同步 · 检查 · 转为可合并"]
+  E --> F{"GitHub 检查"}
+  F -->|通过| G["自动合并<br/>看板状态消失"]
+  F -->|失败或冲突| H["复制修复提示词"]
+  H --> D
 ```
 
-## 首次接入（约 30 分钟）
+## 1. 首次接入
 
-| 步骤 | 你要做什么 | 完成标志 |
+| 步骤 | 做什么 | 完成标志 |
 | --- | --- | --- |
-| 1. 接受邀请 | 把 GitHub 用户名发给维护者，接受仓库邀请 | 能打开仓库的 **Issues** 和 **Pull requests** |
-| 2. 安装工具 | 安装 [GitHub Desktop](https://desktop.github.com/)、[Node.js 22 LTS](https://nodejs.org/)、[.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) 和 [GitHub CLI](https://cli.github.com/)；需要改场景或试玩时，再用 Unity Hub 安装 **6000.3.27f1 Apple Silicon** | 安装完成 |
-| 3. 下载仓库 | GitHub Desktop → **File → Clone repository → URL**，填 `https://github.com/Yiiime/Project-Z.git` | 电脑里有 `Z-from-Moon` 文件夹 |
-| 4. 登录 GitHub | 在 Codex 打开该文件夹，发送下方“首次接入”提示词；浏览器出现 GitHub 授权页时自己登录确认 | `tools/team/z doctor` 显示有写权限 |
+| 接受邀请 | 把 GitHub 用户名发给维护者，在邮件或 GitHub 通知里接受邀请 | 能打开 [Yiiime/Project-Z](https://github.com/Yiiime/Project-Z) |
+| 安装 | [GitHub Desktop](https://desktop.github.com/)、[Node.js 22 LTS](https://nodejs.org/)、[GitHub CLI](https://cli.github.com/)；建议装 [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)；改场景或试玩时再装 Unity 6000.3.27f1 | 安装完成 |
+| 下载仓库 | GitHub Desktop → **File → Clone repository → URL**，填 `https://github.com/Yiiime/Project-Z.git` | 电脑里有 `Project-Z` 文件夹 |
+| 打开面板 | 双击仓库根目录的 `打开协作面板.command` | 浏览器出现“电脑检查” |
+| 完成检查 | 按每一项右侧按钮处理；GitHub 登录时在浏览器输入面板显示的一次性代码 | 必需项全部打勾，出现“进入协作面板” |
 
-首次接入提示词：
+macOS 第一次运行 `.command` 时如果提示无法打开：在访达中右键文件 → **打开** → 再点 **打开**。
 
-```text
-这是 Z 项目的仓库。请读取 AGENTS.md 和 docs/team/START-HERE.md，帮我完成首次接入。
-先检查 Git、Node.js、.NET 8、GitHub CLI 和 Unity；缺少的告诉我怎么装，不要静默安装。
-需要 GitHub 登录时运行 gh auth login --hostname github.com --git-protocol https --web，让我在浏览器确认；然后运行 gh auth setup-git。
-Git 署名使用我的 GitHub 用户名和 GitHub noreply 邮箱。最后运行 tools/team/z doctor 并告诉我结果。
-```
+## 2. 打开面板
 
-## 每次开发：复制这三句话
-
-| 时机 | 发给自己的 agent |
+| 面板区域 | 用途 |
 | --- | --- |
-| 开工 | `做 Z 项目任务 #<编号>。先读 AGENTS.md 和任务卡，复述目标、修改范围和验收；我确认后运行 tools/team/z start <英文短名> 再开发。` |
-| 中途暂停 | `先保存进度：检查改动，写中文提交，并在任务卡“进度与交接”写清已完成、未完成和下一步。不要创建 PR。` |
-| 交付 | `完成并交付：检查 diff，必要时在 Unity 试玩；用 PR 模板写说明，然后运行 tools/team/z ship。告诉我 PR 链接和未验证部分。` |
+| 我的当前任务 | 当前分支对应的 PR，以及“保存进度”“还在做”“交付”和提示词按钮 |
+| 区域看板 | 每个区域的状态、负责人、开始时间、最近更新和 PR |
+| 开工 | 写一句目标，选 1～2 个区域，然后开工 |
+| 所有未合并任务 | 全队任务、交接说明、继续或接手 |
 
-PR 页面出现 `Project Z / Ready` 的进度：
-
-| 状态 | 意思 | 你要做什么 |
+| 状态 | 怎么算 | 你能做什么 |
 | --- | --- | --- |
-| 排队中 / 检查中 | 机器人正在按顺序处理 | 等待，可以先做别的 |
-| 通过 | 已检查最新 main 和你的改动 | 机器人会自动合并 |
-| 冲突 | 你和别人改了同一处 | 对 agent 说：`运行 tools/team/z sync，解决冲突后重新 ship` |
-| 未通过 | 检查发现问题 | 对 agent 说：`修复 PR 的自动检查失败，然后重新 ship` |
+| 开发中 | 3 天内有新提交，或负责人点过“还在做” | 仍可开工，面板会提醒 |
+| 可能暂停 | 3～7 天没有活动；机器人在 PR 下 @负责人一次 | 仍可开工，建议先问负责人 |
+| 已搁置·可接手 | 超过 7 天没有活动；看板按空闲显示 | 接手原分支，或从最新 main 重新开始 |
+| 空闲 | 没有未合并任务，或 PR 已合并或关闭 | 直接开工 |
 
-合并后对 agent 说：`运行 tools/team/z done`。
+阈值在 `tools/team/areas.json` 的 `thresholds` 中修改。
 
-## 少冲突的三条约定
+## 3. 每天怎么用
 
-| 约定 | 原因 |
-| --- | --- |
-| 一个任务一张卡，一次只改一件事 | 小 PR 更容易检查和撤回 |
-| 改 `Boot.unity`、角色 Prefab、`Z_Standing.controller`、`ProjectSettings/`、`Packages/` 前先在任务卡写明 | Unity 场景和二进制资源很难自动合并 |
-| 同一个文件要多人改时，拆成“先后两张卡” | 后一个任务从合并后的 main 开始 |
+| 时机 | 点哪里 | 结果 |
+| --- | --- | --- |
+| 开始新任务 | 区域卡片“选择这个区域”→ 写目标 → **开工** | 从最新 main 开分支，推送开工提交，创建带区域标签的草稿 PR |
+| 让 Codex 开发 | **复制开工提示词**，粘贴给 Codex | Codex 只改所选区域；超出范围先问你 |
+| 中途离开 | **保存进度**，写交接说明 | 修改推送到任务分支，PR 保持草稿 |
+| 想保留任务但今天不改 | **还在做** | 只刷新最近活动时间 |
+| 做完 | **交付** | 同步 main、运行检查、推送，草稿转为可合并；检查通过后自动合并 |
+| 出现冲突或检查失败 | **复制修复冲突提示词** / **复制修复检查提示词** | 交给 Codex 在任务分支修复，再保存或交付 |
+| 接手搁置任务 | 任务旁 **接手** | 看原分支、交接说明和最近修改；选择继续原分支或重新开始，原 PR 和分支保留 |
+
+### 冲突提醒
+
+| 提醒 | 触发条件 | 要做什么 |
+| --- | --- | --- |
+| 🟡 普通文件重叠 | 两个未合并 PR 改了同一个普通文件 | 可以继续，交付前留意同步结果 |
+| 🔴 难合并文件重叠 | 同时改了 `.unity`、`.prefab`、`.controller`、`.anim`、`.blend`、`.fbx`、图片、字体、视频或 `ProjectSettings` 等 | 先和对方沟通；面板要求勾选“我已和 XX 确认”后才能开工或交付 |
+| 区域外修改 | PR 改了开工时没选的区域 | 机器人补标签并留言，检查不会失败 |
+
+所有提醒都不锁定文件。机器人在红色重叠时会在双方 PR 下各留言一次，建议先合并已交付或更早开工的那个。
 
 ## 维护者
 
-仓库 owner 是 `Yiiime`。新增同学时运行：
-
 ```bash
-tools/team/setup-github.sh <同学1> <同学2> <同学3> <同学4> <同学5>
+tools/team/setup-github.sh 用户名1 用户名2 用户名3 用户名4 用户名5
 ```
 
-脚本会保持 squash 合并、自动删除分支、`hold` / `recheck` 标签和 `main` 保护，并邀请协作者。`.github/`、`tools/team/` 和 `unity/Tools/check.sh` 的修改需要维护者手动确认合并。
+脚本邀请协作者，并保持 squash 合并、自动删除分支和 `main` 保护。区域路径由 PM 编辑 `tools/team/areas.json`；`.github/` 和 `tools/team/` 的修改需要维护者手动合并。
 
-云端检查覆盖 C# 核心规则、桥接服务、Unity C# 语法和资源引用。Unity 编辑器编译、实际运行、画面和手感仍需在 Unity 里试玩确认。
+云端检查覆盖 C# 核心规则、桥接服务、Unity C# 语法和资源引用；Unity 编辑器运行、画面和手感仍需试玩确认。

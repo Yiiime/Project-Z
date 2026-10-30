@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {readFileSync, statSync} from 'node:fs';
+import {assertConfig} from './collab-core.mjs';
 
 const files = execFileSync('git', ['ls-files', '-z'], {encoding: 'utf8'}).split('\0').filter(Boolean);
 const localOnly = /(^|\/)(Library|Temp|Logs|UserSettings|TestResults|Builds|\.tooling|node_modules)\//i;
@@ -17,4 +18,5 @@ for (const path of files) {
 assert.deepEqual(tooLarge, [], `Files above 50 MB need Git LFS or a release asset:\n${tooLarge.join('\n')}`);
 assert.match(readFileSync('unity/ProjectSettings/ProjectVersion.txt', 'utf8'), /^m_EditorVersion: 6000\.3\.27f1$/m);
 assert.match(readFileSync('AGENTS.md', 'utf8'), /unity\//);
-console.log(`Team project checks passed for ${files.length} tracked files.`);
+const areas = assertConfig(JSON.parse(readFileSync('tools/team/areas.json', 'utf8')));
+console.log(`Team project checks passed for ${files.length} tracked files and ${areas.areas.length} collaboration areas.`);

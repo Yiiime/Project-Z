@@ -21,7 +21,7 @@ need_gh() {
 branch() { git branch --show-current; }
 login() { "$z_gh" api user --jq .login; }
 clean_tree() { [[ -z "$(git status --porcelain)" ]]; }
-on_task_branch() { [[ "$(branch)" == task/* ]] || fail "当前分支是 $(branch)。请先运行：tools/team/z start <英文短名>"; }
+on_task_branch() { [[ "$(branch)" == task/* ]] || fail "当前分支是 $(branch)。请先在协作面板开工，或运行 tools/team/z start。"; }
 slugify() {
   printf '%s' "$1" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+//; s/-+$//' | cut -c1-40
 }
@@ -55,7 +55,7 @@ run_checks() {
 
 sync_main() {
   on_task_branch
-  clean_tree || fail '还有未提交的修改。请先让 agent 用一句中文说明提交，再同步。'
+  clean_tree || fail '还有未提交的修改。请先运行 tools/team/z save。'
   say '→ 获取最新 main'
   git fetch origin main
   if git merge-base --is-ancestor origin/main HEAD; then
@@ -86,17 +86,30 @@ case "${1:-help}" in
     if [[ -x "/Applications/Unity/Hub/Editor/6000.3.27f1/Unity.app/Contents/MacOS/Unity" ]]; then say '✓ 找到 Unity 6000.3.27f1'; else say '△ 没找到 Unity 6000.3.27f1；改 Unity 场景或试玩前需要安装。'; fi
     ;;
   start)
-    [[ $# -ge 2 ]] || fail '用法：tools/team/z start <英文短名>，例如 tools/team/z start z-memory-card'
+    shift
     need_gh
-    clean_tree || fail '当前目录还有未提交的修改。请先提交、完成或交给维护者处理，再开始新任务。'
-    slug="$(slugify "$2")"
-    [[ -n "$slug" ]] || fail '任务短名需要包含英文字母或数字。'
-    user="$(slugify "$(login)")"
-    name="task/$user/$slug"
-    git fetch origin main
-    if git show-ref --verify --quiet "refs/heads/$name"; then fail "本地已经有 $name。继续它：git switch $name"; fi
-    git switch --no-track -c "$name" origin/main
-    say "✓ 已从最新 main 创建任务分支：$name"
+    if [[ " $* " != *" --goal "* || " $* " != *" --area "* ]]; then
+      fail '用法：tools/team/z start <英文短名> --goal "一句目标" --area <区域ID> [--area <区域ID>]。也可以双击“打开协作面板.command”开工。'
+    fi
+    Z_GH="$z_gh" node tools/team/task.mjs start "$@"
+    ;;
+  save)
+    shift
+    need_gh
+    Z_GH="$z_gh" node tools/team/task.mjs save "$@"
+    ;;
+  still)
+    shift
+    need_gh
+    Z_GH="$z_gh" node tools/team/task.mjs still "$@"
+    ;;
+  takeover)
+    shift
+    need_gh
+    Z_GH="$z_gh" node tools/team/task.mjs takeover "$@"
+    ;;
+  panel)
+    exec node tools/team/panel/server.mjs
     ;;
   sync)
     sync_main
@@ -108,24 +121,30 @@ case "${1:-help}" in
     shift
     title=''
     body_file=''
+    confirmed=()
     while [[ $# -gt 0 ]]; do
       case "$1" in
         --title) title="${2:-}"; shift 2 ;;
         --body-file) body_file="${2:-}"; shift 2 ;;
+        --confirmed) confirmed+=(--confirmed "${2:-}"); shift 2 ;;
         *) fail "未知参数：$1" ;;
       esac
     done
     need_gh
     on_task_branch
-    clean_tree || fail '还有未提交的修改。请先让 agent 检查改动并提交。'
-    [[ "$(git rev-list --count origin/main..HEAD 2>/dev/null || printf 1)" != 0 ]] || fail '这个分支还没有新的提交。'
+    clean_tree || fail '还有未提交的修改。请先运行 tools/team/z save，或在协作面板点“保存进度”。'
+    git fetch origin main
+    [[ -n "$(git diff --name-only origin/main...HEAD)" ]] || fail '这个分支和 main 相比还没有文件修改，暂时不能交付。'
+    Z_GH="$z_gh" node tools/team/task.mjs ship-check ${confirmed[@]+"${confirmed[@]}"}
     sync_main
     run_checks
+    Z_GH="$z_gh" node tools/team/task.mjs ship-check --post ${confirmed[@]+"${confirmed[@]}"}
     git push -u origin HEAD
     pr_state="$("$z_gh" pr view "$(branch)" --repo "$z_repo" --json state --jq .state 2>/dev/null || true)"
     if [[ "$pr_state" == OPEN ]]; then
       "$z_gh" pr ready "$(branch)" --repo "$z_repo" >/dev/null 2>&1 || true
-      say "✓ 已更新 PR：$("$z_gh" pr view "$(branch)" --repo "$z_repo" --json url --jq .url)"
+      [[ "$("$z_gh" pr view "$(branch)" --repo "$z_repo" --json isDraft --jq .isDraft)" == false ]] || fail '无法把草稿 PR 转为可合并。请在 PR 页面点 Ready for review。'
+      say "✓ 已转为可合并 PR：$("$z_gh" pr view "$(branch)" --repo "$z_repo" --json url --jq .url)"
     elif [[ -n "$pr_state" ]]; then
       fail "这个分支的 PR 已经是 $pr_state。请用 tools/team/z start 开一个新任务分支。"
     else
@@ -167,11 +186,18 @@ case "${1:-help}" in
     cat <<'HELP'
 Z 项目团队命令
   tools/team/z doctor             检查电脑、GitHub 登录和仓库权限
-  tools/team/z start <英文短名>    从最新 main 开一个任务分支
+  tools/team/z panel              打开本机协作面板
+  tools/team/z start <短名> --goal "目标" --area <区域ID> [--area <区域ID>]
+                                  从最新 main 开分支，推送开工提交并创建草稿 PR
+  tools/team/z save [--message 说明] [--handoff 交接]
+                                  提交并推送当前进度，PR 保持草稿
+  tools/team/z still              告诉团队“还在做”，不需要提交代码
+  tools/team/z takeover --pr <编号> [--mode continue|fresh] [--note 说明]
+                                  接手已搁置任务
   tools/team/z sync               把最新 main 合进当前任务分支
   tools/team/z check              运行本地快速检查
-  tools/team/z ship [--title 标题] [--body-file 文件]
-                                  同步、检查、推送并创建/更新 PR
+  tools/team/z ship [--confirmed 对方GitHub名]
+                                  同步、检查、推送，并把草稿 PR 转为可合并
   tools/team/z status             查看当前 PR 和自动合并状态
   tools/team/z done               合并后回到最新 main
 HELP
