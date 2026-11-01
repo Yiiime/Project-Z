@@ -17,4 +17,5 @@ printf '%s\n' "$z_version" > "$z_stage/$z_name/VERSION"
 rm -f "$z_out/$z_name.zip"
 COPYFILE_DISABLE=1 xattr -cr "$z_stage/$z_name"
 (cd "$z_stage" && ditto -c -k --norsrc --noextattr --noqtn --noacl --keepParent "$z_name" "$z_out/$z_name.zip")
-shasum -a 256 "$z_out/$z_name.zip"
+cp "$z_out/$z_name.zip" "$z_out/Project-Z-member-kit-${z_version}.zip"
+shasum -a 256 "$z_out/$z_name.zip" "$z_out/Project-Z-member-kit-${z_version}.zip"

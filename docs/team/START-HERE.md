@@ -17,7 +17,7 @@ flowchart LR
 
 ## 1. 首次接入
 
-最简单的方式：从 [Releases](https://github.com/Yiiime/Project-Z/releases/latest) 下载 `Z协作安装包-*.zip`，解压后按里面的 `README.md` 操作。安装器会下载 Node.js、GitHub CLI、.NET 8 和项目，带你登录 GitHub，并在桌面生成 `打开 Z 协作面板.command`。
+最简单的方式：从 [Releases](https://github.com/Yiiime/Project-Z/releases/latest) 下载 `Project-Z-member-kit-*.zip`，解压后按里面的 `README.md` 操作。安装器会下载 Node.js、GitHub CLI、.NET 8 和项目，带你登录 GitHub，并在桌面生成 `打开 Z 协作面板.command`。
 
 | 步骤 | 做什么 | 完成标志 |
 | --- | --- | --- |
@@ -28,7 +28,7 @@ flowchart LR
 
 安装器只写入用户目录：工具在 `~/.project-z`，项目在 `~/Project-Z`，不需要管理员密码。重复运行是安全的。
 
-维护者更新安装包：运行 `tools/team/member-kit/build.sh <版本号>`，把 `dist/` 中的 zip 上传到 GitHub Release。
+维护者更新安装包：运行 `tools/team/member-kit/build.sh <版本号>`，把 `dist/Project-Z-member-kit-<版本号>.zip` 上传到 GitHub Release（GitHub 会改写中文附件名）。
 
 ## 2. 打开面板
 
