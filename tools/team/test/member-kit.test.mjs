@@ -17,7 +17,7 @@ test('installer scripts are valid bash and pin verified downloads', () => {
   assert.doesNotMatch(script, /auth token/);
 });
 
-test('check mode reports missing tools without writing a project', () => {
+test('check mode reports missing tools without writing a project', {skip: process.platform !== 'darwin' && 'installer runs only on macOS'}, () => {
   const home = mkdtempSync(join(tmpdir(), 'z-kit-home-'));
   try {
     mkdirSync(join(home, 'Desktop'));
