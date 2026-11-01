@@ -31,7 +31,7 @@ const executable = async path => {
 export async function findGh(env = process.env) {
   if (env.Z_GH && await executable(env.Z_GH)) return env.Z_GH;
   const dirs = (env.PATH || '').split(delimiter).filter(Boolean);
-  for (const dir of [...dirs, '/opt/homebrew/bin', '/usr/local/bin', join(homedir(), '.local/bin')]) {
+  for (const dir of [...dirs, join(homedir(), '.project-z/bin'), '/opt/homebrew/bin', '/usr/local/bin', join(homedir(), '.local/bin')]) {
     if (await executable(join(dir, 'gh'))) return join(dir, 'gh');
   }
   return '';

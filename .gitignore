@@ -20,3 +20,6 @@ __pycache__/
 *.pyc
 .tooling/
 node_modules/
+
+# Built member install kits
+/dist/

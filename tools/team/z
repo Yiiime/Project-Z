@@ -10,6 +10,7 @@ cd "$z_root"
 z_origin="$(git remote get-url origin 2>/dev/null || true)"
 z_repo="${Z_REPO:-$(printf '%s' "$z_origin" | sed -E 's#^https://github\.com/##; s#^git@github\.com:##; s#^ssh://git@github\.com/##; s#\.git$##; s#/$##')}"
 z_gh="${Z_GH:-$(command -v gh || true)}"
+[[ -n "$z_gh" || ! -x "$HOME/.project-z/bin/gh" ]] || z_gh="$HOME/.project-z/bin/gh"
 
 say() { printf '%s\n' "$*"; }
 fail() { printf '✗ %s\n' "$*" >&2; exit 1; }
@@ -29,6 +30,7 @@ current_pr() { "$z_gh" pr view "$(branch)" --repo "$z_repo" --json number,url,st
 
 dotnet_path() {
   if [[ -n "${Z_DOTNET:-}" ]]; then printf '%s' "$Z_DOTNET"
+  elif [[ -x "$HOME/.project-z/dotnet/dotnet" ]]; then printf '%s' "$HOME/.project-z/dotnet/dotnet"
   elif [[ -x "$z_root/.tooling/project-z/dotnet/dotnet" ]]; then printf '%s' "$z_root/.tooling/project-z/dotnet/dotnet"
   else command -v dotnet || true
   fi
@@ -146,7 +148,7 @@ case "${1:-help}" in
       [[ "$("$z_gh" pr view "$(branch)" --repo "$z_repo" --json isDraft --jq .isDraft)" == false ]] || fail '无法把草稿 PR 转为可合并。请在 PR 页面点 Ready for review。'
       say "✓ 已转为可合并 PR：$("$z_gh" pr view "$(branch)" --repo "$z_repo" --json url --jq .url)"
     elif [[ -n "$pr_state" ]]; then
-      fail "这个分支的 PR 已经是 $pr_state。请用 tools/team/z start 开一个新任务分支。"
+      fail "这个分支的 PR 已经是 ${pr_state}。请用 tools/team/z start 开一个新任务分支。"
     else
       [[ -n "$title" ]] || title="$(git log -1 --format=%s)"
       args=(pr create --repo "$z_repo" --base main --head "$(branch)" --title "$title")
@@ -178,7 +180,7 @@ case "${1:-help}" in
     git merge --ff-only origin/main
     if [[ "$old" == task/* ]]; then
       state="$("$z_gh" pr view "$old" --repo "$z_repo" --json state --jq .state 2>/dev/null || true)"
-      if [[ "$state" == MERGED ]]; then git branch -D "$old"; else say "保留本地分支 $old：它的 PR 还没合并。"; fi
+      if [[ "$state" == MERGED ]]; then git branch -D "$old"; else say "保留本地分支 ${old}：它的 PR 还没合并。"; fi
     fi
     say '✓ 已回到最新 main。'
     ;;
