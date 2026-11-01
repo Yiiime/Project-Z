@@ -5,7 +5,7 @@
 ## 团队协作（每个任务都遵守）
 
 - 后续主工程是 `unity/`（Unity 6000.3.27f1，URP 17.3.0）。`game/` 是旧 Godot Demo，只作参考和历史记录，除非任务明确要求，不要修改。
-- 新手入口：[docs/team/START-HERE.md](docs/team/START-HERE.md)。成员优先双击 `打开协作面板.command`；命令行使用 `tools/team/z`。不要直接在 `main` 修改、提交或推送。
+- 新手入口：[docs/team/START-HERE.md](docs/team/START-HERE.md)。新成员用 `tools/team/member-kit/` 生成的安装包接入；日常双击桌面 `打开 Z 协作面板.command`。命令行使用 `tools/team/z`，安装包也会生成 `~/.project-z/bin/z`。不要直接在 `main` 修改、提交或推送。
 - 开工：在协作面板选择 1～2 个区域并开工，或运行 `tools/team/z start <英文短名> --goal "<一句目标>" --area <区域ID>`。系统会从最新 `main` 开分支、推送空的开工提交，并自动创建带区域标签的草稿 PR。
 - 范围：区域与路径以 `tools/team/areas.json` 为准。只修改用户所选区域的路径；需要改其他路径时，先停下来问用户，说明原因和文件。机器人发现区域外修改时会补标签提醒，不会让检查失败。
 - 暂停：离开、换任务或结束本轮前，必须运行 `tools/team/z save --message "<这次做了什么>" --handoff "<已完成、未完成、下一步>"` 并确认已推送。PR 保持草稿；草稿不会自动合并。

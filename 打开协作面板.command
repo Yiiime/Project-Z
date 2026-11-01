@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 cd "$(dirname "$0")"
-export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/local/share/dotnet:$PATH"
+export PATH="$HOME/.project-z/bin:/opt/homebrew/bin:/usr/local/bin:/usr/local/share/dotnet:$PATH"
+[[ -f "$HOME/.project-z/bin/z-env" ]] && source "$HOME/.project-z/bin/z-env"
 if ! command -v node >/dev/null 2>&1; then
   printf '需要先安装 Node.js 22 LTS：https://nodejs.org/\n'
   open 'https://nodejs.org/' >/dev/null 2>&1 || true

@@ -62,7 +62,7 @@ async function unityPath() {
 }
 
 async function dotnetOk() {
-  const candidates = [process.env.Z_DOTNET, join(ROOT, '.tooling/project-z/dotnet/dotnet'), join(ROOT, '../../.tooling/project-z/dotnet/dotnet'), '/usr/local/share/dotnet/dotnet', 'dotnet'].filter(Boolean);
+  const candidates = [process.env.Z_DOTNET, join(homedir(), '.project-z/dotnet/dotnet'), join(ROOT, '.tooling/project-z/dotnet/dotnet'), join(ROOT, '../../.tooling/project-z/dotnet/dotnet'), '/usr/local/share/dotnet/dotnet', 'dotnet'].filter(Boolean);
   for (const command of candidates) {
     const result = await exec(command, ['--list-sdks'], {allowFail: true}).catch(() => null);
     if (result?.code === 0 && /^8\./m.test(result.stdout)) return command;
@@ -77,7 +77,7 @@ async function checks() {
   add('git', 'Git', gitVersion.code === 0, gitVersion.code === 0 ? gitVersion.stdout.trim() : '安装 Xcode Command Line Tools 后重开面板。', gitVersion.code ? {type: 'link', label: '安装说明', url: 'https://developer.apple.com/xcode/resources/'} : null);
   const major = Number(process.versions.node.split('.')[0]);
   const minor = Number(process.versions.node.split('.')[1]);
-  add('node', 'Node.js', major > 20 || (major === 20 && minor >= 19), `当前 ${process.version}；需要 22 LTS（至少 20.19）。`, {type: 'link', label: '下载 Node.js 22', url: 'https://nodejs.org/'});
+  add('node', 'Node.js', major > 20 || (major === 20 && minor >= 19), `当前 ${process.version}；需要 22 LTS（至少 20.19）。重新运行组员安装包可自动安装。`, {type: 'link', label: '下载 Node.js 22', url: 'https://nodejs.org/'});
   const dotnet = await dotnetOk();
   add('dotnet', '.NET 8 SDK', Boolean(dotnet), dotnet ? '可以在本机运行 Unity 快速检查。' : '没有也能开发，GitHub 会检查；装上后本机交付更快发现问题。', dotnet ? null : {type: 'link', label: '下载 .NET 8 SDK', url: 'https://dotnet.microsoft.com/download/dotnet/8.0'}, true);
   const ghPath = await findGh();

@@ -1,6 +1,6 @@
 # Z 协作面板上手
 
-双击 `打开协作面板.command`，按面板上的按钮完成：选区域 → 开工 → 交给 Codex → 保存进度 → 交付。检查通过后 GitHub 自动合并。
+用安装包装好后，双击桌面 `打开 Z 协作面板.command`，按面板上的按钮完成：选区域 → 开工 → 交给 Codex → 保存进度 → 交付。检查通过后 GitHub 自动合并。
 
 ```mermaid
 flowchart LR
@@ -17,15 +17,18 @@ flowchart LR
 
 ## 1. 首次接入
 
+最简单的方式：从 [Releases](https://github.com/Yiiime/Project-Z/releases/latest) 下载 `Z协作安装包-*.zip`，解压后按里面的 `README.md` 操作。安装器会下载 Node.js、GitHub CLI、.NET 8 和项目，带你登录 GitHub，并在桌面生成 `打开 Z 协作面板.command`。
+
 | 步骤 | 做什么 | 完成标志 |
 | --- | --- | --- |
 | 接受邀请 | 把 GitHub 用户名发给维护者，在邮件或 GitHub 通知里接受邀请 | 能打开 [Yiiime/Project-Z](https://github.com/Yiiime/Project-Z) |
-| 安装 | [GitHub Desktop](https://desktop.github.com/)、[Node.js 22 LTS](https://nodejs.org/)、[GitHub CLI](https://cli.github.com/)；建议装 [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)；改场景或试玩时再装 Unity 6000.3.27f1 | 安装完成 |
-| 下载仓库 | GitHub Desktop → **File → Clone repository → URL**，填 `https://github.com/Yiiime/Project-Z.git` | 电脑里有 `Project-Z` 文件夹 |
-| 打开面板 | 双击仓库根目录的 `打开协作面板.command` | 浏览器出现“电脑检查” |
-| 完成检查 | 按每一项右侧按钮处理；GitHub 登录时在浏览器输入面板显示的一次性代码 | 必需项全部打勾，出现“进入协作面板” |
+| 运行安装包 | 让 Codex 读取安装包里的 `AGENT.md`；或右键 `安装.command` → 打开 | 终端显示“安装完成” |
+| 安装 Codex | [ChatGPT 桌面版](https://chatgpt.com/download/)，登录后打开 Codex | 能新建对话 |
+| 按需安装 Unity | 改场景或试玩时，用 Unity Hub 安装 6000.3.27f1 | 面板“Unity”检查打勾 |
 
-macOS 第一次运行 `.command` 时如果提示无法打开：在访达中右键文件 → **打开** → 再点 **打开**。
+安装器只写入用户目录：工具在 `~/.project-z`，项目在 `~/Project-Z`，不需要管理员密码。重复运行是安全的。
+
+维护者更新安装包：运行 `tools/team/member-kit/build.sh <版本号>`，把 `dist/` 中的 zip 上传到 GitHub Release。
 
 ## 2. 打开面板
 
