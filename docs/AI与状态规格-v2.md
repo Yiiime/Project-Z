@@ -381,7 +381,7 @@ Z不获得第二套可长期刷的金币和成长资源。节点只声明该角�
 
 ## 14. 横版 NPC 目的地执行 V1（2026-11-03）
 
-本节对应 `unity-sideview/` 的局部实现，不改变前文完整游戏的未实现状态。输入协议参考团队提供的 `moon-laozhou/references/interface.md`、`moon-z-life/references/interface.md` 与对应输出 Schema；运行方式以现有 Unity 2D 工程为基底。Unity 6000.6.7f1 的 10 组运行验收已通过。
+本节对应 `unity-sideview/` 的局部实现，不改变前文完整游戏的未实现状态。输入协议参考团队提供的 `moon-laozhou/references/interface.md`、`moon-z-life/references/interface.md` 与对应输出 Schema；运行方式以现有 Unity 2D 工程为基底。Unity 6000.6.7f1 的 12 组运行验收已通过。
 
 | 环节 | 输入或调用 | 游戏负责的结果 |
 | --- | --- | --- |
@@ -428,6 +428,6 @@ Z不获得第二套可长期刷的金币和成长资源。节点只声明该角�
 
 验证入口：Unity 菜单 `Z From Moon / Verify NPC Movement`，或批处理 `-executeMethod ZFromMoon.EditorTools.NpcMovementVerification.Run -npcReport <报告路径>`；添加 `-npcCaptureDir <截图目录>` 可输出原生运行截图。测试覆盖实际场景、物理移动、动画、改道、受阻、旧请求、多 NPC、暂停和卸载；运行报告以实际输出为准。项目快速检查仍不能替代 Unity 运行验收。
 
-2026-11-03 验证结果：上述批处理退出码 0，10 组检查通过，记录 378 个物理运动样本，最大速度 1.8 Unity 单位/秒，目标误差不超过 0.05 单位；已查看移动前、行走、到达及对话时的相机渲染图。相机图不含屏幕叠加 UI，不能替代完整 UI 视觉验收。Unity 编辑器自身的 SearchDatabase 首次索引异常单独保留在报告 `editorIssues`，未计作移动脚本错误。
+2026-11-03 验证结果：上述批处理退出码 0，12 组检查通过，记录 564 个物理运动样本，最大速度 1.8 Unity 单位/秒，目标误差不超过 0.05 单位。除街道完整流程外，旧码头 NPC 与 `SeasidePlaceholder` 中的共享预制体实例也实际完成了目标移动和动画切换；资产清单中的全部三个 `DialogueActor` 资产均已接线。已查看移动前、行走、到达及对话时的相机渲染图。相机图不含屏幕叠加 UI，不能替代完整 UI 视觉验收。Unity 编辑器自身的 SearchDatabase 首次索引异常单独保留在报告 `editorIssues`，未计作移动脚本错误。
 
 整合注意：[PR #20](https://github.com/Yiiime/Project-Z/pull/20) 正在将 `_Game` 替换为 `Seabreeze`，会删除本实现依赖的场景与核心类型。本次验证仅针对任务分支的现有 `_Game` 基底，尚未迁移到该新框架。

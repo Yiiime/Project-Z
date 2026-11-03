@@ -327,6 +327,36 @@ namespace ZFromMoon.EditorTools
             Require(results.Last().Outcome == NpcMoveOutcome.Interrupted, "Scene transition interrupts movement.");
             Require(npc == null, "Unloaded scene leaves no NPC behind.");
             checks.Add("Disable/re-enable and scene unload invalidate movement without leaving a ghost actor");
+
+            foreach (string scenePath in new[] {
+                "Assets/_Game/Scenes/DockLocation.unity",
+                "Assets/_Game/Scenes/SeasidePlaceholder.unity" })
+            {
+                yield return Travel(session, scenePath, "from_shore");
+                NpcMovementController[] actors = Object.FindObjectsByType<NpcMovementController>(FindObjectsSortMode.None)
+                    .Where(candidate => candidate.gameObject.scene == session.Location.gameObject.scene).ToArray();
+                Require(actors.Length > 0, "Existing NPC assets are wired in " + scenePath);
+                foreach (NpcMovementController actor in actors)
+                {
+                    actor.SimulateDecisions = false;
+                    yield return Wait(() => actor.BeginDecision() != null, 5, "Existing NPC asset ready");
+                    Rigidbody2D actorBody = actor.GetComponent<Rigidbody2D>();
+                    Vector2 origin = actorBody.position;
+                    player.Teleport(origin + Vector2.left * 2f);
+                    Issue(actor, "right");
+                    yield return Wait(() => actor.ActualSpeed > 0.3f, 4, "Existing NPC asset walking");
+                    Animator actorAnimator = actor.GetComponentInChildren<Animator>();
+                    Require(actorAnimator != null && actorAnimator.GetBool("IsMoving"), "Existing NPC asset uses its walk animation.");
+                    yield return TrackUntilDone(actor, 8);
+                    Require(actor.LastResult.Outcome == NpcMoveOutcome.Arrived
+                        && Mathf.Abs(actorBody.position.x - origin.x - 3f) <= 0.05f,
+                        "Existing NPC asset reaches the authored destination: " + scenePath);
+                    yield return Delay(0.3f);
+                    Require(!actorAnimator.GetBool("IsMoving") && actorAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle"),
+                        "Existing NPC asset settles into idle.");
+                }
+                checks.Add("Existing NPC asset movement and animation verified in " + scenePath);
+            }
         }
 
         private static IEnumerator TrackUntilDone(NpcMovementController npc, float timeout)
