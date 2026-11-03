@@ -378,3 +378,61 @@ Z不获得第二套可长期刷的金币和成长资源。节点只声明该角�
 | A29 | 金币0且时间窗口合法直接工作；载入旧资源字段测试档或不兼容档 | 无恢复门槛或替代每日预算；工资、时间、库存保持一次结算；受支持版本按显式转换保留原金币与分钟，否则明确拒绝不静默重置 |
 
 验证分层：状态规则单元/回放检查 → 任务集成流程 → 固定 AI 评估样本 → 人工试玩。模型变更先跑相同事实与错误注入样本，再决定是否投入公开构建。自动校验只能证明覆盖的条件，不替代对人物语气、节奏与情感可信度的人工判断。
+
+## 14. 横版 NPC 目的地执行 V1（2026-11-03）
+
+当前实现以 [PR #20](https://github.com/Yiiime/Project-Z/pull/20) 的 Seabreeze 基底 `63cdb5b` 为准，使用 Unity 6000.3.27f1 / URP 17.3。三位 NPC 共用目标执行器，真实 LLM 尚未接入；默认模拟决策已经通过同一接口运行。输入协议参考团队提供的 `moon-laozhou/`、`moon-z-life/` 的 `references/interface.md` 与输出 Schema，不改变前文完整游戏协议的实现边界。
+
+| 环节 | 输入或调用 | 游戏负责的结果 |
+| --- | --- | --- |
+| 配置 | `NpcPresence.npcId`、`movementDestinations` | 自动接入移动组件；目的地相对出生点只解析一次，不随角色移动 |
+| 发起决策 | `NpcMovementController.BeginDecision()` | 返回独立 `request_id`、角色、地点、当前位置、候选落点和 `available_actions` |
+| 接收动作 | `AcceptDecision(requestId, outputJson, out reason)` | 解析团队三部分输出中的 `action`，核对角色、请求、动作和目标 |
+| 执行 | `move` 与目标 ID | Unity 2D 胶囊检测、水平通路预检、加速、制动和速度驱动的 `CharacterVisual` |
+| 等待 | `wait`，`action_id = wait_here` | 停止当前移动，不推进游戏时钟 |
+| 回传 | `MovementFinished` / `LastResult` | 独立请求 ID、角色、目标、实际位置、结果和原因 |
+
+后端保留 `request_id` 并原样交回执行器，不让模型生成请求标识。动作须复制本次 `available_actions` 中的 `type`、`target`、`action_id`。以下只展示执行器消费的投影；完整角色输出仍按团队 Schema 提供其余 `info` 字段，移动执行器不会提交关系数值、记忆或台词。
+
+```json
+{
+  "dialogue": "我去那边看看。",
+  "action": {
+    "type": "move",
+    "target": "right",
+    "action_id": "move_right",
+    "description": "走到右侧目的地",
+    "parameters": {}
+  },
+  "info": { "actor_id": "npc_mio" }
+}
+```
+
+调用方在 Unity 主线程、对话关闭且可行动时发起决策，并保留返回的 `request_id`。模型完成后切回主线程调用 `AcceptDecision`。接入后端时将 `SimulateDecisions` 设为 `false`；当前模拟决策使用空台词，不访问模型服务。执行器不提交 `dialogue` 或 `info`，也不自动将移动意图记作已完成的记忆。
+
+未配置 `movementDestinations` 时，提供原位及左右各 1.5 Unity 单位的试跑点，并裁到当前场景边界内。作者可以配置本场景其他合法落点和有意义的 ID。候选经过当前地面、障碍物和其他 NPC 的预检；接收和逐步移动时仍会复核。返回给调用方的位置数据是副本，修改它不能改变真实落点。
+
+场景未就绪、对话中、暂停或角色已停用时，`BeginDecision` 返回 `null`，调用方等待下一次可决策时机。回执回调可以继续提交新目标；执行器先完成状态切换再通知，旧调用不会覆盖回调中提交的新动作。
+
+| 情况 | 可观察结果 |
+| --- | --- |
+| 实际到达，水平误差不超过 0.045 Unity 单位 | `Arrived`，一次回执，动作表现回到 `Idle` |
+| 收到 `wait` | 原移动 `Interrupted`，新动作 `Waiting` |
+| 途中收到新的合法目的地 | 原请求 `Interrupted/replaced`；从当前位置制动、转向，执行新请求 |
+| 连续受阻 2 秒，或超出按距离计算的移动时限 | `Blocked`，停止；不记录已到达 |
+| 对话、转场、时段变化、组件停用 | 立即停步并使旧请求失效；重新决策后继续 |
+| 原日程或邀请条件使 NPC 离场 | 隐藏原角色表现、停止移动、关闭物理模拟，不留下隐形阻挡 |
+| 重复回复、旧世界快照、别的角色、未知目标或动作 | 返回 `false` 和原因，不替换当前合法移动 |
+| 地图、手机、日志、暂停菜单 | 位置不推进、待返回请求失效；关闭后从零速继续未被中断的路线 |
+
+入口沿用 `Assets/Seabreeze/Scenes/Street.unity`。街道、咖啡馆、灯塔中的澪、阿遥和陈伯均从已有 `NpcPresence` 自动接入，没有重建或修改场景资产。保留玩家可穿过 NPC 的原规则，避免封死横向通路；NPC 仍受环境和其他 NPC 阻挡，并沿用单向长椅平台的通行规则。
+
+角色素材和原有日程不变。现有 NPC 为单帧素材，通过实际速度控制朝向、起停和轻微步态表现；独立走路帧不是本轮新增产物。模型不能凭输出获得跳跃、跨障碍或跨场景能力；现有日程控制在哪个地点出现，转场会取消原场景动作。NPC 的场景内坐标没有加入永久存档，跨场景自主行走的范围仍待确认。
+
+代码入口：[移动执行器](../unity-sideview/Assets/Seabreeze/Scripts/World/NpcMovementController.cs)、[动作与回执](../unity-sideview/Assets/Seabreeze/Scripts/World/NpcMoveCommand.cs)、[目的地](../unity-sideview/Assets/Seabreeze/Scripts/World/NpcDestination.cs)、[新基底接口](../unity-sideview/Docs/IntegrationContract.md)。
+
+验证入口：Unity 菜单 `Seabreeze / Verify NPC Movement`，或批处理 `-executeMethod Seabreeze.Editor.NpcMovementVerification.Run -npcReport <报告路径>`。`-npc-save-root <绝对目录>` 指定隔离存档，未指定时使用新建临时目录；`-npcCaptureDir <目录>` 输出相机图。`SaveRepository.VerificationDirectory` 仅在编辑器编译中存在，正常游戏和独立构建仍使用原存档路径。
+
+2026-11-03 新基底验证：Unity 6000.3.27f1 批处理退出码 0，17 组检查通过，记录 1651 个运动样本，最大速度 1.8 Unity 单位/秒，到达误差不超过 0.05 单位。覆盖真实 E 键对话、地图暂停、玩家通行、三位 NPC、三场景、邀请日程、模拟自主移动、动态障碍、单向平台、旧回复隔离、回调中新目标、停用与卸载，以及隔离存档读写。已查看街道、咖啡馆、灯塔相机图；图中不含屏幕叠加 UI，不扩大为完整 UI 视觉验收。编辑器 SearchDatabase 索引异常另记在 `editorIssues`。
+
+历史边界：旧 `_Game` 提交的 12 组验证只证明旧基底；上述 17 组为迁移后重新运行的结果。集成以 PR #20 先进入主线为顺序，当前分支保留原提交历史。

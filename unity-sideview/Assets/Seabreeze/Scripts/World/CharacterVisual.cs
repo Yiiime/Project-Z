@@ -24,8 +24,7 @@ namespace Seabreeze
             if (sprite == null)
                 sprite = Resources.LoadAll<Sprite>("Art/characters").FirstOrDefault(s => s.name == names[Mathf.Clamp(kind, 0, 3)]);
             idleSprite = sprite;
-            if (kind == 0)
-                walkFrames = Resources.LoadAll<Sprite>("Art/player_walk").OrderBy(s => s.name).ToArray();
+            walkFrames = Resources.LoadAll<Sprite>("Art/" + names[Mathf.Clamp(kind, 0, 3)] + "_walk").OrderBy(s => s.name).ToArray();
             if (sprite != null)
             {
                 fullSprite = Part("Character artwork", sprite, Vector2.zero, new Vector2(2.6f, 2.6f), Color.white, 25, rig);
@@ -112,7 +111,7 @@ namespace Seabreeze
             return WorldArt.Sprite(n, sprite, at, size, c, order, parent);
         }
 
-        public void Animate(float vx, bool grounded, float vy)
+        public void Animate(float vx, bool grounded, float vy, float deltaTime = -1)
         {
             if (rig == null)
                 return;
@@ -120,7 +119,8 @@ namespace Seabreeze
             Pose = !grounded ? "Jump" : walking ? "Walk" : "Idle";
             if (walking)
                 transform.localScale = new Vector3(Mathf.Sign(vx) * Mathf.Abs(transform.localScale.x), transform.localScale.y, 1);
-            phase += Time.fixedDeltaTime * (walking ? 9 : 1.6f);
+            float elapsed = deltaTime < 0 ? Time.fixedDeltaTime : deltaTime;
+            phase += elapsed * (walking ? Mathf.Abs(vx) * (9f / 4.2f) : 1.6f);
             float swing = grounded && walking ? Mathf.Sin(phase) * 22 : grounded ? 0 : 12;
             rig.localPosition = new Vector3(0, (walking ? Mathf.Abs(Mathf.Sin(phase)) * .045f : Mathf.Sin(phase) * .012f), 0);
             if (fullSprite != null)
@@ -147,8 +147,8 @@ namespace Seabreeze
 
         void Update()
         {
-            if (GetComponentInParent<PlayerController>() == null)
-                Animate(0, true, 0);
+            if (GetComponentInParent<PlayerController>() == null && GetComponentInParent<NpcMovementController>() == null)
+                Animate(0, true, 0, Time.deltaTime);
         }
     }
 }
