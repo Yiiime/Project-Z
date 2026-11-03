@@ -54,7 +54,7 @@ jobs:
       - name: Test team automation
         run: node --test tools/team/test/*.test.mjs
       - name: Run Unity quick checks
-        working-directory: unity
+        working-directory: unity-sideview
         env:
           Z_DOTNET: dotnet
           DOTNET_CLI_HOME: ${{ runner.temp }}/dotnet-home

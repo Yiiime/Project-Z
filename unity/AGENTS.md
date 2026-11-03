@@ -1,3 +1,5 @@
+> 自 2026-11-03 起，本目录为旧 3D 参考工程。团队主工程已迁至 [unity-sideview](../unity-sideview/README.md)；下文保留旧工程说明。
+
 # Unity 主项目
 
 本目录是团队后续开发主工程；仓库 `game/` 是已有 Godot Demo。先读根目录 AGENTS.md 的协作规则和 `docs/team/START-HERE.md`。

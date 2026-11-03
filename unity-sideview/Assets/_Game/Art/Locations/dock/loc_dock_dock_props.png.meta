@@ -1,0 +1,496 @@
+fileFormatVersion: 2
+guid: 5e8465efe89f84660b8d44e9370867d6
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -3301798261200572935
+    second: loc_dock_dock_props_0
+  - first:
+      213: 1540499627975290687
+    second: loc_dock_dock_props_1
+  - first:
+      213: -869793974570185990
+    second: loc_dock_dock_props_2
+  - first:
+      213: 3356141555296710513
+    second: loc_dock_dock_props_3
+  - first:
+      213: 8224073175204742047
+    second: loc_dock_dock_props_4
+  - first:
+      213: 2516512727851167214
+    second: loc_dock_dock_props_5
+  - first:
+      213: 687098830570059311
+    second: loc_dock_dock_props_6
+  - first:
+      213: -497235872932384203
+    second: loc_dock_dock_props_7
+  - first:
+      213: 7870403022308380150
+    second: loc_dock_dock_props_8
+  - first:
+      213: 1573034737806229519
+    second: loc_dock_dock_props_9
+  - first:
+      213: -4837033825959648453
+    second: loc_dock_dock_props_10
+  - first:
+      213: -6722016387156963157
+    second: loc_dock_dock_props_11
+  - first:
+      213: 1317588593177606749
+    second: loc_dock_dock_props_12
+  - first:
+      213: -6106364133414178446
+    second: loc_dock_dock_props_13
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationMethod: 0
+  spriteTessellationDetail: -1
+  spriteGeometrySubdivision: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: loc_dock_dock_props_0
+      rect:
+        serializedVersion: 2
+        x: 1345
+        y: 230
+        width: 312
+        height: 605
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9fd2321a9f7ad22d0800000000000000
+      internalID: -3301798261200572935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loc_dock_dock_props_1
+      rect:
+        serializedVersion: 2
+        x: 2666
+        y: 794
+        width: 14
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f3fa61eef34f06510800000000000000
+      internalID: 1540499627975290687
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loc_dock_dock_props_2
+      rect:
+        serializedVersion: 2
+        x: 3054
+        y: 199
+        width: 631
+        height: 651
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: afa08fd0dfedde3f0800000000000000
+      internalID: -869793974570185990
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loc_dock_dock_props_3
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 254
+        width: 975
+        height: 511
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17f236386f8639e20800000000000000
+      internalID: 3356141555296710513
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loc_dock_dock_props_4
+      rect:
+        serializedVersion: 2
+        x: 1129
+        y: 629
+        width: 16
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f93c5e6daf6c12270800000000000000
+      internalID: 8224073175204742047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loc_dock_dock_props_5
+      rect:
+        serializedVersion: 2
+        x: 2371
+        y: 268
+        width: 605
+        height: 518
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eed61503ef27ce220800000000000000
+      internalID: 2516512727851167214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loc_dock_dock_props_6
+      rect:
+        serializedVersion: 2
+        x: 1860
+        y: 259
+        width: 396
+        height: 341
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f26f6b9feb0198900800000000000000
+      internalID: 687098830570059311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loc_dock_dock_props_7
+      rect:
+        serializedVersion: 2
+        x: 2365
+        y: 588
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 532b848ab967919f0800000000000000
+      internalID: -497235872932384203
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loc_dock_dock_props_8
+      rect:
+        serializedVersion: 2
+        x: 2398
+        y: 564
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6fd0adf79d9493d60800000000000000
+      internalID: 7870403022308380150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loc_dock_dock_props_9
+      rect:
+        serializedVersion: 2
+        x: 2389
+        y: 510
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f004a4e72ca84d510800000000000000
+      internalID: 1573034737806229519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loc_dock_dock_props_10
+      rect:
+        serializedVersion: 2
+        x: 2390
+        y: 503
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b33602dec576fdcb0800000000000000
+      internalID: -4837033825959648453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loc_dock_dock_props_11
+      rect:
+        serializedVersion: 2
+        x: 2394
+        y: 461
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba0972de5b996b2a0800000000000000
+      internalID: -6722016387156963157
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loc_dock_dock_props_12
+      rect:
+        serializedVersion: 2
+        x: 2399
+        y: 455
+        width: 12
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d5a357838d3094210800000000000000
+      internalID: 1317588593177606749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loc_dock_dock_props_13
+      rect:
+        serializedVersion: 2
+        x: 2390
+        y: 420
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 27179ae6c26d14ba0800000000000000
+      internalID: -6106364133414178446
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      loc_dock_dock_props_0: -3301798261200572935
+      loc_dock_dock_props_1: 1540499627975290687
+      loc_dock_dock_props_10: -4837033825959648453
+      loc_dock_dock_props_11: -6722016387156963157
+      loc_dock_dock_props_12: 1317588593177606749
+      loc_dock_dock_props_13: -6106364133414178446
+      loc_dock_dock_props_2: -869793974570185990
+      loc_dock_dock_props_3: 3356141555296710513
+      loc_dock_dock_props_4: 8224073175204742047
+      loc_dock_dock_props_5: 2516512727851167214
+      loc_dock_dock_props_6: 687098830570059311
+      loc_dock_dock_props_7: -497235872932384203
+      loc_dock_dock_props_8: 7870403022308380150
+      loc_dock_dock_props_9: 1573034737806229519
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

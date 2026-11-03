@@ -296,7 +296,7 @@ elif ! gh_logged_in || [[ ! -d "$z_project/.git" ]]; then
   printf '下一步：再次运行安装，不要加 --skip-login。\n'
 else
   ok '安装完成。以后每天双击桌面上的“打开 Z 协作面板.command”。'
-  printf '还需要：Codex（https://chatgpt.com/download/）；改场景或试玩时安装 Unity 6000.3.27f1。\n'
+  printf '还需要：Codex（https://chatgpt.com/download/）；改场景或试玩时安装 Unity 6000.6.7f1。\n'
   if ! $z_no_open && [[ -d "$z_project/.git" ]] && gh_logged_in; then
     info '正在打开协作面板。保持这个窗口打开；关闭窗口会停止面板。'
     source "$z_bin/z-env"

@@ -15,6 +15,8 @@ flowchart LR
   H --> D
 ```
 
+团队主工程位于 `unity-sideview/`，Unity 6000.6.7f1。拉取后用 Unity Hub 添加该目录，打开 `Assets/_Game/Scenes/App.unity`。旧 `unity/` 保留参考，现有旧工程任务不会自动迁移。
+
 ## 1. 首次接入
 
 最简单的方式：从 [Releases](https://github.com/Yiiime/Project-Z/releases/latest) 下载 `Project-Z-member-kit-*.zip`，解压后按里面的 `README.md` 操作。安装器会下载 Node.js、GitHub CLI、.NET 8 和项目，带你登录 GitHub，并在桌面生成 `打开 Z 协作面板.command`。
@@ -24,7 +26,7 @@ flowchart LR
 | 接受邀请 | 把 GitHub 用户名发给维护者，在邮件或 GitHub 通知里接受邀请 | 能打开 [Yiiime/Project-Z](https://github.com/Yiiime/Project-Z) |
 | 运行安装包 | 让 Codex 读取安装包里的 `AGENT.md`；或右键 `安装.command` → 打开 | 终端显示“安装完成” |
 | 安装 Codex | [ChatGPT 桌面版](https://chatgpt.com/download/)，登录后打开 Codex | 能新建对话 |
-| 按需安装 Unity | 改场景或试玩时，用 Unity Hub 安装 6000.3.27f1 | 面板“Unity”检查打勾 |
+| 按需安装 Unity | 改场景或试玩时，用 Unity Hub 安装 6000.6.7f1 | 面板“Unity”检查打勾 |
 
 安装器只写入用户目录：工具在 `~/.project-z`，项目在 `~/Project-Z`，不需要管理员密码。重复运行是安全的。
 
