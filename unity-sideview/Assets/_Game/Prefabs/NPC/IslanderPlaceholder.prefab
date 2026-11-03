@@ -503,6 +503,8 @@ GameObject:
   - component: {fileID: 3747337782111891671}
   - component: {fileID: 4818648394914738444}
   - component: {fileID: 7070749928633105324}
+  - component: {fileID: 5320552030869936672}
+  - component: {fileID: 3322881836433512927}
   m_Layer: 10
   m_Name: IslanderPlaceholder
   m_TagString: Untagged
@@ -558,12 +560,12 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.9}
-  m_Size: {x: 0.75, y: 1.8}
+  m_Offset: {x: 0, y: 0.92999995}
+  m_Size: {x: 0.65, y: 1.8}
   m_Direction: 0
 --- !u!114 &4818648394914738444
 MonoBehaviour:
@@ -599,6 +601,72 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZFromMoon.Dialogue.DialogueActor
   definition: {fileID: 11400000, guid: 23c720ba3d9e14224a11f380284850fb, type: 2}
+--- !u!50 &5320552030869936672
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7551362044322700697}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 1
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 1
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
+--- !u!114 &3322881836433512927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7551362044322700697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 258be3405fd247689e83b22d339d5f28, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::ZFromMoon.World.NpcMovementController
+  actorId: npc_islander_01
+  visualRoot: {fileID: 8264744519417328721}
+  animator: {fileID: 4121942877050463593}
+  idleSprite: {fileID: 0}
+  destinations:
+  - id: left
+    position: {x: -5, y: 0}
+    facing: 1
+  - id: home
+    position: {x: 0, y: 0}
+    facing: 0
+  - id: right
+    position: {x: 3, y: 0}
+    facing: -1
+  relativeToSpawn: 1
+  maxSpeed: 1.8
+  acceleration: 4.5
+  deceleration: 6
+  blockedTimeout: 2
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 512
+  obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  simulateDecisions: 1
+  simulatedWait: 2.5
 --- !u!1 &7630342092915246359
 GameObject:
   m_ObjectHideFlags: 0
@@ -608,6 +676,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8264744519417328721}
+  - component: {fileID: 4121942877050463593}
   m_Layer: 10
   m_Name: Visual
   m_TagString: Untagged
@@ -636,6 +705,28 @@ Transform:
   - {fileID: 7960659724923479651}
   m_Father: {fileID: 4839586943222323625}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &4121942877050463593
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7630342092915246359}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 18d1058edf7c3483ebfbb1f807d0c239, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage:
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7739057369439562740
 GameObject:
   m_ObjectHideFlags: 0

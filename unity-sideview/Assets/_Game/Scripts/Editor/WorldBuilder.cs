@@ -358,6 +358,73 @@ namespace ZFromMoon.EditorTools
             actorSo.FindProperty("definition").objectReferenceValue =
                 AssetDatabase.LoadAssetAtPath<DialogueDefinition>("Assets/_Game/Data/Dialogue/IslanderDialogue.asset");
             actorSo.ApplyModifiedPropertiesWithoutUndo();
+            ConfigureNpcMovement(go);
+        }
+
+        [MenuItem("Z From Moon/Configure NPC Movement")]
+        public static void ConfigureNpcMovementAssets()
+        {
+            if (Application.isBatchMode) EditorSceneManager.OpenScene(AppScenePath, OpenSceneMode.Single);
+            LocationRouteRepair.RequireEditableScenes();
+            SceneSetup[] previous = EditorSceneManager.GetSceneManagerSetup();
+            try
+            {
+                foreach (string path in new[] {
+                    "Assets/_Game/Scenes/Locations/Loc_TownStreet.unity",
+                    "Assets/_Game/Scenes/DockLocation.unity" })
+                {
+                    Scene scene = EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
+                    foreach (GameObject root in scene.GetRootGameObjects())
+                        foreach (DialogueActor actor in root.GetComponentsInChildren<DialogueActor>(true))
+                            ConfigureNpcMovement(actor.gameObject);
+                    EditorSceneManager.MarkSceneDirty(scene);
+                    EditorSceneManager.SaveScene(scene);
+                }
+                const string prefabPath = "Assets/_Game/Prefabs/NPC/IslanderPlaceholder.prefab";
+                GameObject prefab = PrefabUtility.LoadPrefabContents(prefabPath);
+                try
+                {
+                    ConfigureNpcMovement(prefab);
+                    PrefabUtility.SaveAsPrefabAsset(prefab, prefabPath);
+                }
+                finally { PrefabUtility.UnloadPrefabContents(prefab); }
+            }
+            finally { EditorSceneManager.RestoreSceneManagerSetup(previous); }
+            Debug.Log("[NPC Movement] Configured the two NPC scenes and the shared NPC prefab.");
+        }
+
+        private static void ConfigureNpcMovement(GameObject actor)
+        {
+            Transform visual = actor.transform.Find("Visual");
+            if (visual == null) throw new System.InvalidOperationException("NPC requires its existing Visual child.");
+            Interactable interaction = actor.GetComponent<Interactable>();
+            NpcMovementController movement = actor.GetComponent<NpcMovementController>();
+            if (movement == null) movement = actor.AddComponent<NpcMovementController>();
+            CapsuleCollider2D capsule = actor.GetComponent<CapsuleCollider2D>();
+            BoxCollider2D trigger = actor.GetComponent<BoxCollider2D>();
+            float height = trigger != null ? trigger.size.y * 0.85f : 1.8f;
+            capsule.isTrigger = false;
+            capsule.size = new Vector2(0.65f, height);
+            capsule.offset = new Vector2(0f, height * 0.5f + 0.03f);
+            Rigidbody2D body = actor.GetComponent<Rigidbody2D>();
+            body.bodyType = RigidbodyType2D.Kinematic;
+            body.gravityScale = 0f;
+            body.constraints = RigidbodyConstraints2D.FreezeRotation;
+            body.interpolation = RigidbodyInterpolation2D.Interpolate;
+            body.useFullKinematicContacts = true;
+            Animator animator = visual.GetComponent<Animator>();
+            if (animator == null && visual.Find("LeftLeg") != null && visual.Find("RightLeg") != null)
+            {
+                animator = visual.gameObject.AddComponent<Animator>();
+                animator.runtimeAnimatorController = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(
+                    "Assets/_Game/Animations/Player/PlayerPlaceholder.controller");
+            }
+            movement.Configure(interaction.InteractionId, visual, animator, new[] {
+                new NpcDestination("left", new Vector2(-5f, 0f), 1),
+                new NpcDestination("home", Vector2.zero),
+                new NpcDestination("right", new Vector2(3f, 0f), -1)
+            });
+            EditorUtility.SetDirty(movement);
         }
 
         private static void AddShadow(Transform parent)

@@ -378,3 +378,56 @@ Z不获得第二套可长期刷的金币和成长资源。节点只声明该角�
 | A29 | 金币0且时间窗口合法直接工作；载入旧资源字段测试档或不兼容档 | 无恢复门槛或替代每日预算；工资、时间、库存保持一次结算；受支持版本按显式转换保留原金币与分钟，否则明确拒绝不静默重置 |
 
 验证分层：状态规则单元/回放检查 → 任务集成流程 → 固定 AI 评估样本 → 人工试玩。模型变更先跑相同事实与错误注入样本，再决定是否投入公开构建。自动校验只能证明覆盖的条件，不替代对人物语气、节奏与情感可信度的人工判断。
+
+## 14. 横版 NPC 目的地执行 V1（2026-11-03）
+
+本节对应 `unity-sideview/` 的局部实现，不改变前文完整游戏的未实现状态。输入协议参考团队提供的 `moon-laozhou/references/interface.md`、`moon-z-life/references/interface.md` 与对应输出 Schema；运行方式以现有 Unity 2D 工程为基底。Unity 6000.6.7f1 的 10 组运行验收已通过。
+
+| 环节 | 输入或调用 | 游戏负责的结果 |
+| --- | --- | --- |
+| 配置 | 每个 NPC 的 `actorId`、视觉子节点、目的地 ID 与位置 | 相对位置只在出生时转换一次；NPC 走动不会带走目的地 |
+| 发起决策 | `NpcMovementController.BeginDecision()` | 返回独立 `request_id`、角色、当前地点和 `available_actions` |
+| 接收动作 | `AcceptDecision(requestId, outputJson, out reason)` | 解析团队三部分输出中的 `action`，核对角色、请求、动作和目标 |
+| 执行 | `move` 与目标 ID | Unity 2D 胶囊碰撞检测、地面检查、加速、制动、朝向及现有动画 |
+| 等待 | `wait`，`action_id = wait_here` | 停止当前移动，不推进游戏时钟 |
+| 回传 | `MovementFinished` / `LastResult` | 独立请求 ID、角色、目标、实际位置、结果和原因 |
+
+后端保留 `request_id` 并原样交回执行器，不让模型生成请求标识。动作须复制本次 `available_actions` 中的 `type`、`target`、`action_id`。以下只展示执行器消费的投影；完整角色输出仍按团队 Schema 提供其余 `info` 字段，移动执行器不会提交关系数值、记忆或台词。
+
+```json
+{
+  "dialogue": "我去那边看看。",
+  "action": {
+    "type": "move",
+    "target": "right",
+    "action_id": "move_right",
+    "description": "走到右侧目的地",
+    "parameters": {}
+  },
+  "info": { "actor_id": "dock_islander" }
+}
+```
+
+调用方在台词展示结束、允许执行动作时调用 `AcceptDecision`。当前模拟决策使用空台词，同样经过此入口；没有真实模型调用。接入后端前，将该 NPC 的 `SimulateDecisions` 设为 `false`，把 `BeginDecision` 返回的合法动作附到现有角色上下文中。
+
+场景未就绪、对话中、暂停或角色已停用时，`BeginDecision` 返回 `null`，调用方等待下一次可决策时机。回执回调可以继续提交新目标；执行器先完成状态切换再通知，旧调用不会覆盖回调中提交的新动作。
+
+| 情况 | 可观察结果 |
+| --- | --- |
+| 实际到达，水平误差不超过 0.045 Unity 单位 | `Arrived`，一次回执，停止行走动画 |
+| 收到 `wait` | 原移动 `Interrupted`，新动作 `Waiting` |
+| 途中收到新的合法目的地 | 原请求 `Interrupted/replaced`；从当前位置制动、转向，执行新请求 |
+| 连续受阻 2 秒，或超出按距离计算的移动时限 | `Blocked`，停止；不记录已到达 |
+| 对话、转场、组件停用 | 立即停步并使旧请求失效；退出对话后须新决策 |
+| 重复回复、旧世界快照、别的角色、未知目标或动作 | 返回 `false` 和原因，不替换当前合法移动 |
+| 游戏暂停 | 位置不推进；恢复后继续未被中断的移动 |
+
+已配置小镇街道、旧码头场景内的现有 NPC，以及共享 `IslanderPlaceholder` 预制体；主线入口仍为原 `App.unity`。目的地为作者配置的单层通路落点，越墙、跨地面断口、跳跃和跨地点场景不由模型文本获得能力。跨场景自主移动的交付范围仍待确认；当前转场会中断并卸载原场景 NPC，不承诺其离屏日程或位置持久化。
+
+代码入口：[移动执行器](../unity-sideview/Assets/_Game/Scripts/World/NpcMovementController.cs)、[动作与回执](../unity-sideview/Assets/_Game/Scripts/World/NpcMoveCommand.cs)、[目的地](../unity-sideview/Assets/_Game/Scripts/World/NpcDestination.cs)。
+
+验证入口：Unity 菜单 `Z From Moon / Verify NPC Movement`，或批处理 `-executeMethod ZFromMoon.EditorTools.NpcMovementVerification.Run -npcReport <报告路径>`；添加 `-npcCaptureDir <截图目录>` 可输出原生运行截图。测试覆盖实际场景、物理移动、动画、改道、受阻、旧请求、多 NPC、暂停和卸载；运行报告以实际输出为准。项目快速检查仍不能替代 Unity 运行验收。
+
+2026-11-03 验证结果：上述批处理退出码 0，10 组检查通过，记录 378 个物理运动样本，最大速度 1.8 Unity 单位/秒，目标误差不超过 0.05 单位；已查看移动前、行走、到达及对话时的相机渲染图。相机图不含屏幕叠加 UI，不能替代完整 UI 视觉验收。Unity 编辑器自身的 SearchDatabase 首次索引异常单独保留在报告 `editorIssues`，未计作移动脚本错误。
+
+整合注意：[PR #20](https://github.com/Yiiime/Project-Z/pull/20) 正在将 `_Game` 替换为 `Seabreeze`，会删除本实现依赖的场景与核心类型。本次验证仅针对任务分支的现有 `_Game` 基底，尚未迁移到该新框架。
