@@ -4,7 +4,7 @@
 
 ## 团队协作（每个任务都遵守）
 
-- 后续主工程是 `unity-sideview/`（2D 横版，Unity 6000.6.7f1，URP 17.6.0）。`unity/` 是旧 3D 参考工程，除非任务明确要求，不要修改。`game/` 是旧 Godot Demo，只作参考和历史记录，除非任务明确要求，不要修改。
+- 后续主工程是 `unity-sideview/`（2D 横版，Unity 6000.3.27f1，URP 17.3.0）。`unity/` 是旧 3D 参考工程，除非任务明确要求，不要修改。`game/` 是旧 Godot Demo，只作参考和历史记录，除非任务明确要求，不要修改。
 - 新手入口：[docs/team/START-HERE.md](docs/team/START-HERE.md)。新成员用 `tools/team/member-kit/` 生成的安装包接入；日常双击桌面 `打开 Z 协作面板.command`。命令行使用 `tools/team/z`，安装包也会生成 `~/.project-z/bin/z`。不要直接在 `main` 修改、提交或推送。
 - 开工：在协作面板选择 1～2 个区域并开工，或运行 `tools/team/z start <英文短名> --goal "<一句目标>" --area <区域ID>`。系统会从最新 `main` 开分支、推送空的开工提交，并自动创建带区域标签的草稿 PR。
 - 范围：区域与路径以 `tools/team/areas.json` 为准。只修改用户所选区域的路径；需要改其他路径时，先停下来问用户，说明原因和文件。机器人发现区域外修改时会补标签提醒，不会让检查失败。
@@ -20,8 +20,8 @@
 
 ## Unity 开发入口
 
-- 用 Unity Hub 打开 `unity-sideview/`，场景 `Assets/_Game/Scenes/App.unity`，先读 `unity-sideview/README.md`。
-- 脚本在 `Assets/_Game/Scripts/`；地点场景在 `Assets/_Game/Scenes/Locations/`。当前导入自横版原型，不沿用旧 3D Core/Runtime 接口。
+- 用 Unity Hub 打开 `unity-sideview/`，场景 `Assets/Seabreeze/Scenes/Street.unity`，先读 `unity-sideview/README.md`。
+- 脚本在 `Assets/Seabreeze/Scripts/`；地点场景在 `Assets/Seabreeze/Scenes/`。当前导入自横版原型，不沿用旧 3D Core/Runtime 接口。
 - `tools/team/z check` 和云端检查面向横版工程；静态检查不等于 Unity 编译或试玩通过。
 
 ## 设计依据与《动物迷城》研究

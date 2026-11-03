@@ -1,0 +1,1 @@
+After editing CharacterVisual during Play and recompiling: isPlaying=False

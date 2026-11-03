@@ -9,7 +9,7 @@ import {fileURLToPath} from 'node:url';
 import * as core from './collab-core.mjs';
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-export const UNITY_VERSION = '6000.6.7f1';
+export const UNITY_VERSION = '6000.3.27f1';
 export const UNITY_CHANGESET = '672d562a42a7';
 const LIST_FIELDS = 'number';
 const PR_FIELDS = 'number,title,url,author,isDraft,createdAt,state,labels,body,headRefName,files,commits,comments,mergeable,statusCheckRollup';

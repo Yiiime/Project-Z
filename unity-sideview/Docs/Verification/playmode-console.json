@@ -1,0 +1,939 @@
+{
+  "success": true,
+  "command": "command",
+  "data": {
+    "command": "console get",
+    "parameters": {},
+    "result": {
+      "entries": [
+        {
+          "seq": 2409,
+          "timestampUtc": "2026-11-03T07:02:25.927292Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: E activates nearest physical interaction marker",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:187)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2410,
+          "timestampUtc": "2026-11-03T07:02:25.997326Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2411,
+          "timestampUtc": "2026-11-03T07:02:26.910131Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2412,
+          "timestampUtc": "2026-11-03T07:02:26.9107Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: postcard",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2413,
+          "timestampUtc": "2026-11-03T07:02:26.963909Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2414,
+          "timestampUtc": "2026-11-03T07:02:27.778144Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Scene transition: Cafe",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Travel>d__14:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:92)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2415,
+          "timestampUtc": "2026-11-03T07:02:27.77859Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: npc_aya",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2416,
+          "timestampUtc": "2026-11-03T07:02:27.947612Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2417,
+          "timestampUtc": "2026-11-03T07:02:28.794471Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Scene transition: Street",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Travel>d__14:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:92)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2418,
+          "timestampUtc": "2026-11-03T07:02:28.794917Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: npc_chen",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2419,
+          "timestampUtc": "2026-11-03T07:02:28.959988Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2420,
+          "timestampUtc": "2026-11-03T07:02:28.960149Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Story knowledge recorded branch 0",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:201)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2421,
+          "timestampUtc": "2026-11-03T07:02:28.960312Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Exactly one narrative approach branch 0",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:202)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2422,
+          "timestampUtc": "2026-11-03T07:02:28.96106Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: bench",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2423,
+          "timestampUtc": "2026-11-03T07:02:28.998902Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2424,
+          "timestampUtc": "2026-11-03T07:02:28.999761Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: bench",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2425,
+          "timestampUtc": "2026-11-03T07:02:29.060159Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2426,
+          "timestampUtc": "2026-11-03T07:02:29.89467Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Scene transition: Lighthouse",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Travel>d__14:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:92)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2427,
+          "timestampUtc": "2026-11-03T07:02:29.894786Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Invitation changes physical NPC schedule 0",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:209)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2428,
+          "timestampUtc": "2026-11-03T07:02:29.895013Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Invited NPC scene instances visible and interactive 0",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:210)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2429,
+          "timestampUtc": "2026-11-03T07:02:29.895386Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: npc_mio",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2430,
+          "timestampUtc": "2026-11-03T07:02:29.963753Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2431,
+          "timestampUtc": "2026-11-03T07:02:29.963872Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Evening NPC resolves approach 0",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:212)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2432,
+          "timestampUtc": "2026-11-03T07:02:29.96419Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: letterbox",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2433,
+          "timestampUtc": "2026-11-03T07:02:30.061704Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2434,
+          "timestampUtc": "2026-11-03T07:02:30.061863Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Ending reached branch 0",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:215)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2435,
+          "timestampUtc": "2026-11-03T07:02:30.061931Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Journal contains story memory branch 0",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:216)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2436,
+          "timestampUtc": "2026-11-03T07:02:30.063479Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Save roundtrip retains ending and flags 0",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:219)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2437,
+          "timestampUtc": "2026-11-03T07:02:30.976759Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2438,
+          "timestampUtc": "2026-11-03T07:02:30.977137Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: postcard",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2439,
+          "timestampUtc": "2026-11-03T07:02:31.04361Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2440,
+          "timestampUtc": "2026-11-03T07:02:31.894617Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Scene transition: Cafe",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Travel>d__14:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:92)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2441,
+          "timestampUtc": "2026-11-03T07:02:31.894998Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: npc_aya",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2442,
+          "timestampUtc": "2026-11-03T07:02:32.031518Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2443,
+          "timestampUtc": "2026-11-03T07:02:32.861824Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Scene transition: Street",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Travel>d__14:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:92)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2444,
+          "timestampUtc": "2026-11-03T07:02:32.862322Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: npc_chen",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2445,
+          "timestampUtc": "2026-11-03T07:02:32.998868Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2446,
+          "timestampUtc": "2026-11-03T07:02:32.998977Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Story knowledge recorded branch 1",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:201)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2447,
+          "timestampUtc": "2026-11-03T07:02:32.999044Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Exactly one narrative approach branch 1",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:202)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2448,
+          "timestampUtc": "2026-11-03T07:02:32.999709Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: bench",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2449,
+          "timestampUtc": "2026-11-03T07:02:33.02812Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2450,
+          "timestampUtc": "2026-11-03T07:02:33.028856Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: bench",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2451,
+          "timestampUtc": "2026-11-03T07:02:33.077195Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2452,
+          "timestampUtc": "2026-11-03T07:02:33.944933Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Scene transition: Lighthouse",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Travel>d__14:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:92)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2453,
+          "timestampUtc": "2026-11-03T07:02:33.945044Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Invitation changes physical NPC schedule 1",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:209)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2454,
+          "timestampUtc": "2026-11-03T07:02:33.945116Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Invited NPC scene instances visible and interactive 1",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:210)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2455,
+          "timestampUtc": "2026-11-03T07:02:33.945478Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: npc_mio",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2456,
+          "timestampUtc": "2026-11-03T07:02:34.014038Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2457,
+          "timestampUtc": "2026-11-03T07:02:34.014194Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Evening NPC resolves approach 1",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:212)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2458,
+          "timestampUtc": "2026-11-03T07:02:34.014558Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: letterbox",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2459,
+          "timestampUtc": "2026-11-03T07:02:34.082091Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2460,
+          "timestampUtc": "2026-11-03T07:02:34.082238Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Ending reached branch 1",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:215)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2461,
+          "timestampUtc": "2026-11-03T07:02:34.082302Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Journal contains story memory branch 1",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:216)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2462,
+          "timestampUtc": "2026-11-03T07:02:34.083553Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Save roundtrip retains ending and flags 1",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:219)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2463,
+          "timestampUtc": "2026-11-03T07:02:34.977317Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2464,
+          "timestampUtc": "2026-11-03T07:02:34.977706Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: postcard",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2465,
+          "timestampUtc": "2026-11-03T07:02:35.044433Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2466,
+          "timestampUtc": "2026-11-03T07:02:35.91177Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Scene transition: Cafe",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Travel>d__14:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:92)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2467,
+          "timestampUtc": "2026-11-03T07:02:35.912142Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: npc_aya",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2468,
+          "timestampUtc": "2026-11-03T07:02:36.060266Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2469,
+          "timestampUtc": "2026-11-03T07:02:36.895445Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Scene transition: Street",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Travel>d__14:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:92)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2470,
+          "timestampUtc": "2026-11-03T07:02:36.895929Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: npc_chen",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2471,
+          "timestampUtc": "2026-11-03T07:02:37.060878Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2472,
+          "timestampUtc": "2026-11-03T07:02:37.06103Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Story knowledge recorded branch 2",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:201)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2473,
+          "timestampUtc": "2026-11-03T07:02:37.061108Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Exactly one narrative approach branch 2",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:202)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2474,
+          "timestampUtc": "2026-11-03T07:02:37.061859Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: bench",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2475,
+          "timestampUtc": "2026-11-03T07:02:37.127225Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2476,
+          "timestampUtc": "2026-11-03T07:02:37.12801Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: bench",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2477,
+          "timestampUtc": "2026-11-03T07:02:37.160645Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2478,
+          "timestampUtc": "2026-11-03T07:02:38.028329Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Scene transition: Lighthouse",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Travel>d__14:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:92)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2479,
+          "timestampUtc": "2026-11-03T07:02:38.028431Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Invitation changes physical NPC schedule 2",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:209)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2480,
+          "timestampUtc": "2026-11-03T07:02:38.0285Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Invited NPC scene instances visible and interactive 2",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:210)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2481,
+          "timestampUtc": "2026-11-03T07:02:38.028838Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: npc_mio",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2482,
+          "timestampUtc": "2026-11-03T07:02:38.097253Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2483,
+          "timestampUtc": "2026-11-03T07:02:38.097367Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Evening NPC resolves approach 2",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:212)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2484,
+          "timestampUtc": "2026-11-03T07:02:38.311953Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: letterbox",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.GUIUtility:ProcessEvent (int,intptr,bool&) (at /Users/bokken/build/output/unity/unity/Modules/IMGUI/GUIUtility.cs:224)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2485,
+          "timestampUtc": "2026-11-03T07:02:38.461353Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2486,
+          "timestampUtc": "2026-11-03T07:02:38.461469Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Ending reached branch 2",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:215)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2487,
+          "timestampUtc": "2026-11-03T07:02:38.461536Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Journal contains story memory branch 2",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:216)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2488,
+          "timestampUtc": "2026-11-03T07:02:38.462841Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Save roundtrip retains ending and flags 2",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:219)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2489,
+          "timestampUtc": "2026-11-03T07:02:39.344079Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2490,
+          "timestampUtc": "2026-11-03T07:02:39.344466Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: postcard",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2491,
+          "timestampUtc": "2026-11-03T07:02:39.403592Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2492,
+          "timestampUtc": "2026-11-03T07:02:40.315698Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Scene transition: Cafe",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Travel>d__14:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:92)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2493,
+          "timestampUtc": "2026-11-03T07:02:40.316191Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: npc_aya",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2494,
+          "timestampUtc": "2026-11-03T07:02:40.448846Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2495,
+          "timestampUtc": "2026-11-03T07:02:40.449765Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: coffee",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2496,
+          "timestampUtc": "2026-11-03T07:02:40.498149Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2497,
+          "timestampUtc": "2026-11-03T07:02:40.49902Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: coffee",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2498,
+          "timestampUtc": "2026-11-03T07:02:40.532262Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2499,
+          "timestampUtc": "2026-11-03T07:02:40.532762Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: guestbook",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2500,
+          "timestampUtc": "2026-11-03T07:02:40.653438Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2501,
+          "timestampUtc": "2026-11-03T07:02:40.653553Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Missed daytime NPC recoverable through guestbook",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:237)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2502,
+          "timestampUtc": "2026-11-03T07:02:41.532723Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Scene transition: Lighthouse",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Travel>d__14:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:92)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2503,
+          "timestampUtc": "2026-11-03T07:02:41.533185Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: npc_mio",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2504,
+          "timestampUtc": "2026-11-03T07:02:41.583651Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2505,
+          "timestampUtc": "2026-11-03T07:02:41.58421Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Interaction opens dialogue: letterbox",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Interact>d__13:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:78)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2506,
+          "timestampUtc": "2026-11-03T07:02:41.694883Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Dialogue terminates without loop",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<FinishDialogue>d__12:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:72)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2507,
+          "timestampUtc": "2026-11-03T07:02:41.695027Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "CHECK PASS: Late exploration recovery reaches ending",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification:Check (bool,string) (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:42)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:241)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        },
+        {
+          "seq": 2508,
+          "timestampUtc": "2026-11-03T07:02:42.531114Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "SEABREEZE_VERIFICATION_COMPLETE: 118 passed, 0 failed",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nSeabreeze.Editor.RuntimeVerification/<Start>d__15:MoveNext () (at Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs:251)\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)\n",
+          "seeded": false
+        }
+      ],
+      "cursor": 2508,
+      "session": "bd011ac44c6243df839ec4e01fd6b246",
+      "returned": 100,
+      "dropped": false,
+      "reset": false,
+      "counts": {
+        "error": 1,
+        "warn": 4,
+        "log": 476
+      },
+      "groundTruth": {
+        "sampledUtc": "2026-11-03T07:02:57.078056Z",
+        "ageMs": 221,
+        "compilationFailed": false,
+        "compiling": false,
+        "consoleErrors": 0,
+        "consoleWarnings": 4,
+        "consoleLogs": 119,
+        "seeded": true
+      }
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7801,
+      "projectPath": "/Users/bytedance/Desktop/unity_z"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

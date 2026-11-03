@@ -1,0 +1,2 @@
+{ eveningNode = coffee_self, nightNode = coffee_self_night, night = Night, day2Morning = True, day3Fog = True }
+Actual Street weather mist alpha: 0.2

@@ -1,0 +1,8 @@
+Result: Succeeded
+Unity: 6000.3.27f1
+Target: macOS Universal (Intel x64 + Apple silicon)
+Output: /Users/bytedance/Desktop/unity_z/Builds/macOS/Seabreeze.app
+Duration: 00:00:33.1671430
+Bytes: 175604234
+Errors: 0
+Warnings: 0

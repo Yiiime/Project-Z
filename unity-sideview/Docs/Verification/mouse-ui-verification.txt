@@ -1,0 +1,1 @@
+Native mouse: radio Continue -> right-hand Map icon -> Street button. Result: { scene = Street, transition = False, overlay = False, timeScale = 1 }
