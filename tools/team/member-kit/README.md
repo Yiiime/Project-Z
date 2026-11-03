@@ -18,7 +18,7 @@ flowchart LR
 | GitHub 账号 | 没有就去 [github.com/signup](https://github.com/signup) 注册 |
 | 仓库邀请 | 把 GitHub 用户名发给 Yiiime，收到邮件后点 **Accept invitation** |
 | Codex | 安装 [ChatGPT 桌面版](https://chatgpt.com/download/)，登录后打开 Codex |
-| Unity（按需） | 改场景、动作或试玩时，用 Unity Hub 安装 **6000.3.27f1** |
+| Unity（按需） | 改场景、动作或试玩时，用 Unity Hub 安装 **6000.6.7f1** |
 
 电脑要求：macOS 13 或更新版本，Apple 芯片或 Intel 都可以。安装大约需要 10～20 分钟，大部分时间在下载。
 

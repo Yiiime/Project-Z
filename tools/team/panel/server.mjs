@@ -106,7 +106,7 @@ async function checks() {
   const canFix = Boolean(user?.login);
   add('identity', 'Git 署名', Boolean(name && email), name && email ? `${name} <${email}>` : '提交记录需要你的名字和 GitHub noreply 邮箱。', name && email ? null : (canFix ? {type: 'identity', label: '用 GitHub 账号设置'} : null));
   const unity = await unityPath();
-  add('unity', `Unity ${UNITY_VERSION}`, Boolean(unity), unity ? '已找到编辑器。' : '改场景、动画或试玩时需要。用 Unity Hub 安装 Apple Silicon 版本。', unity ? null : {type: 'link', label: '打开 Unity Hub 安装页', url: `unityhub://${UNITY_VERSION}/672d562a42a7`}, true);
+  add('unity', `Unity ${UNITY_VERSION}`, Boolean(unity), unity ? '已找到编辑器。' : '改场景、动画或试玩时需要。用 Unity Hub 安装 Apple Silicon 版本。', unity ? null : {type: 'link', label: '打开 Unity Hub 安装页', url: `unityhub://${UNITY_VERSION}/b22767f04f04`}, true);
   return {items, ready: items.filter(item => !item.optional).every(item => item.ok)};
 }
 

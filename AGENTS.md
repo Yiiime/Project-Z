@@ -4,7 +4,7 @@
 
 ## 团队协作（每个任务都遵守）
 
-- 后续主工程是 `unity/`（Unity 6000.3.27f1，URP 17.3.0）。`game/` 是旧 Godot Demo，只作参考和历史记录，除非任务明确要求，不要修改。
+- 后续主工程是 `unity-sideview/`（2D 横版，Unity 6000.6.7f1，URP 17.6.0）。`unity/` 是旧 3D 参考工程，除非任务明确要求，不要修改。`game/` 是旧 Godot Demo，只作参考和历史记录，除非任务明确要求，不要修改。
 - 新手入口：[docs/team/START-HERE.md](docs/team/START-HERE.md)。新成员用 `tools/team/member-kit/` 生成的安装包接入；日常双击桌面 `打开 Z 协作面板.command`。命令行使用 `tools/team/z`，安装包也会生成 `~/.project-z/bin/z`。不要直接在 `main` 修改、提交或推送。
 - 开工：在协作面板选择 1～2 个区域并开工，或运行 `tools/team/z start <英文短名> --goal "<一句目标>" --area <区域ID>`。系统会从最新 `main` 开分支、推送空的开工提交，并自动创建带区域标签的草稿 PR。
 - 范围：区域与路径以 `tools/team/areas.json` 为准。只修改用户所选区域的路径；需要改其他路径时，先停下来问用户，说明原因和文件。机器人发现区域外修改时会补标签提醒，不会让检查失败。
@@ -15,14 +15,14 @@
 - 冲突或检查失败：运行 `tools/team/z sync`，在任务分支处理；修复后运行 `tools/team/z check` 和 `tools/team/z save`，准备好再 `tools/team/z ship`。无法判断对方意图时停下并说明需要谁确认。
 - 接手：只有已搁置任务可以接手。在原分支继续时补充接手说明；从最新 `main` 重新开始时，原 PR 和分支保留。
 - 不提交 `Library/`、`Temp/`、`Logs/`、`UserSettings/`、`Builds/`、`TestResults/`、真实存档、`.env`、API Key 或个人 token。资源与 `.meta` 一起提交；单个文件超过 50 MB 时先找维护者。
-- `.github/`、`tools/team/` 和 `unity/Tools/check.sh` 是协作规则，修改后需维护者手动确认合并。
+- `.github/`、`tools/team/` 和 `unity/Tools/check.sh` 和 `unity-sideview/Tools/check.sh` 是协作规则，修改后需维护者手动确认合并。
 - 验收：报告运行过的命令和结果。云端快速检查覆盖 C# 核心规则、桥接服务、Unity C# 语法和资源引用，不等于 Unity 编辑器编译、运行、画面或手感验收；涉及这些内容时，在 Unity 中试玩并写清结果。
 
 ## Unity 开发入口
 
-- 运行：用 Unity Hub 打开 `unity/`，场景 `Assets/ProjectZ/Scenes/Boot.unity`。详细说明见 [unity/README.md](unity/README.md)。
-- 核心规则在 `unity/Assets/ProjectZ/Core/`；角色、移动、镜头和 UI 在 `Runtime/`；事件在 `Resources/Content/episodes.json`。扩展前读 [接口与扩展](unity/Documentation/integration.md)。
-- 模型只能表达游戏已确认且当前可访问的事实。AI 回复不得凭空生成权限、物品、关系或已完成事件；保留存档、角色、请求 ID 和版本隔离。
+- 用 Unity Hub 打开 `unity-sideview/`，场景 `Assets/_Game/Scenes/App.unity`，先读 `unity-sideview/README.md`。
+- 脚本在 `Assets/_Game/Scripts/`；地点场景在 `Assets/_Game/Scenes/Locations/`。当前导入自横版原型，不沿用旧 3D Core/Runtime 接口。
+- `tools/team/z check` 和云端检查面向横版工程；静态检查不等于 Unity 编译或试玩通过。
 
 ## 设计依据与《动物迷城》研究
 

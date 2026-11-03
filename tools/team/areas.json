@@ -20,13 +20,15 @@
     "**/*.otf",
     "**/*.ttf",
     "unity/ProjectSettings/**",
-    "unity/Packages/packages-lock.json"
+    "unity/Packages/packages-lock.json",
+    "unity-sideview/ProjectSettings/**",
+    "unity-sideview/Packages/packages-lock.json"
   ],
   "areas": [
     {
       "id": "z-character-art",
       "name": "Z 角色美术",
-      "description": "Z 的模型、贴图、材质和角色 Prefab，以及角色 Blender 源文件。",
+      "description": "横版主工程对应区域；兼容保留旧 3D 工程路径。Z 的模型、贴图、材质和角色 Prefab，以及角色 Blender 源文件。",
       "paths": [
         "unity/Assets/ProjectZ/Art/Characters/Z/**",
         "unity/Assets/ProjectZ/Art/Materials/F00_*",
@@ -39,23 +41,26 @@
         "unity/ArtSources/preview_*.py",
         "unity/Documentation/Art/character-v3.md",
         "unity/Documentation/Art/generated-textures.md",
-        "unity/Assets/ProjectZ/Art/Characters/Z.meta"
+        "unity/Assets/ProjectZ/Art/Characters/Z.meta",
+        "unity-sideview/Assets/_Game/Art/Characters/**",
+        "unity-sideview/Assets/_Game/Prefabs/**"
       ]
     },
     {
       "id": "z-motion-expression",
       "name": "Z 动作表情",
-      "description": "Z 的动画片段、Animator、表情和动作驱动脚本。",
+      "description": "横版主工程对应区域；兼容保留旧 3D 工程路径。Z 的动画片段、Animator、表情和动作驱动脚本。",
       "paths": [
         "unity/Assets/ProjectZ/Art/Animation/**",
         "unity/Assets/ProjectZ/Runtime/ZPerformance.cs*",
-        "unity/Assets/ProjectZ/Editor/ZMotionAuthoring.cs*"
+        "unity/Assets/ProjectZ/Editor/ZMotionAuthoring.cs*",
+        "unity-sideview/Assets/_Game/Animations/**"
       ]
     },
     {
       "id": "scene-art",
       "name": "场景美术",
-      "description": "海岛植被、道具、场景材质、着色器、后期和场景美术目录。",
+      "description": "横版主工程对应区域；兼容保留旧 3D 工程路径。海岛植被、道具、场景材质、着色器、后期和场景美术目录。",
       "paths": [
         "unity/Assets/ProjectZ/Art/Nature/**",
         "unity/Assets/ProjectZ/Art/Props/**",
@@ -84,22 +89,31 @@
         "unity/Assets/StreamingAssets/ArtCredits.txt*",
         "unity/Documentation/Art/README.md",
         "unity/Documentation/Art/sources.json",
-        "unity/Documentation/Art/Screenshots/**"
+        "unity/Documentation/Art/Screenshots/**",
+        "unity-sideview/Assets/_Game/Art/Locations/**",
+        "unity-sideview/Assets/_Game/Materials/**",
+        "unity-sideview/Assets/_Game/Shaders/**",
+        "unity-sideview/Assets/_Game/Art/*.meta",
+        "unity-sideview/Assets/_Game/Art/FX/**",
+        "unity-sideview/Assets/_Game/Art/Placeholders/**"
       ]
     },
     {
       "id": "story-events",
       "name": "剧情事件",
-      "description": "共同经历事件、选项、次日接续台词和剧情设计文档。",
+      "description": "横版主工程对应区域；兼容保留旧 3D 工程路径。共同经历事件、选项、次日接续台词和剧情设计文档。",
       "paths": [
         "unity/Assets/ProjectZ/Resources/Content/**",
-        "docs/剧情路线与角色视角-v2.md"
+        "docs/剧情路线与角色视角-v2.md",
+        "unity-sideview/Assets/_Game/Dialogue/**",
+        "unity-sideview/Assets/_Game/Scripts/Dialogue/**",
+        "unity-sideview/Assets/_Game/Data/**"
       ]
     },
     {
       "id": "memory-ai",
       "name": "记忆与 AI",
-      "description": "Z 的回应规则、在线角色服务、记忆接入协议和 AI 设计文档。",
+      "description": "横版主工程对应区域；兼容保留旧 3D 工程路径。Z 的回应规则、在线角色服务、记忆接入协议和 AI 设计文档。",
       "paths": [
         "unity/Assets/ProjectZ/Core/ResponseRules.cs*",
         "unity/Assets/ProjectZ/Runtime/CharacterGateway.cs*",
@@ -107,26 +121,28 @@
         "unity/Tools/start-bridge.sh",
         "unity/Tests/bridge.test.mjs",
         "unity/Documentation/integration.md",
-        "docs/AI与状态规格-v2.md"
+        "docs/AI与状态规格-v2.md",
+        "unity-sideview/Assets/_Game/Scripts/Dialogue/LocalDialogueResponder.cs*"
       ]
     },
     {
       "id": "rules-save",
       "name": "游戏规则与存档",
-      "description": "时间、事件记录、关系状态、存档格式与核心规则测试。",
+      "description": "横版主工程对应区域；兼容保留旧 3D 工程路径。时间、事件记录、关系状态、存档格式与核心规则测试。",
       "paths": [
         "unity/Assets/ProjectZ/Core/GameSession.cs*",
         "unity/Assets/ProjectZ/Core/Models.cs*",
         "unity/Assets/ProjectZ/Core/SaveStore.cs*",
         "unity/Assets/ProjectZ/Core/ProjectZ.Core.asmdef*",
         "unity/Tests/CoreSpecs/**",
-        "docs/核心系统与数值草案-v2.md"
+        "docs/核心系统与数值草案-v2.md",
+        "unity-sideview/Assets/_Game/Scripts/Core/**"
       ]
     },
     {
       "id": "map-gameplay",
       "name": "地图与玩法",
-      "description": "主场景、玩家移动、镜头、交互流程、界面和运行态测试。",
+      "description": "横版主工程对应区域；兼容保留旧 3D 工程路径。主场景、玩家移动、镜头、交互流程、界面和运行态测试。",
       "paths": [
         "unity/Assets/ProjectZ/Scenes/**",
         "unity/Assets/ProjectZ/Runtime/IslandScene.cs*",
@@ -135,13 +151,21 @@
         "unity/Assets/ProjectZ/Runtime/ArtReviewCapture.cs*",
         "unity/Assets/ProjectZ/Runtime/ProjectZ.Runtime.asmdef*",
         "unity/Assets/ProjectZ/Tests/**",
-        "unity/Documentation/verification.md"
+        "unity/Documentation/verification.md",
+        "unity-sideview/Assets/_Game/Scenes/**",
+        "unity-sideview/Assets/Scenes/**",
+        "unity-sideview/Assets/_Game/Scripts/Player/**",
+        "unity-sideview/Assets/_Game/Scripts/World/**",
+        "unity-sideview/Assets/_Game/Scripts/Interaction/**",
+        "unity-sideview/Assets/_Game/Scripts/UI/**",
+        "unity-sideview/Assets/_Game/Scripts/DemoCameraFollow.cs*",
+        "unity-sideview/Assets/_Game/Scripts/ParallaxPlaceholder.cs*"
       ]
     },
     {
       "id": "engineering",
       "name": "工程设置",
-      "description": "Unity 包、项目设置、渲染管线、编辑器准备、构建与检查工具。",
+      "description": "横版主工程对应区域；兼容保留旧 3D 工程路径。Unity 包、项目设置、渲染管线、编辑器准备、构建与检查工具。",
       "paths": [
         "unity/Packages/**",
         "unity/ProjectSettings/**",
@@ -169,7 +193,23 @@
         "unity/Assets/ProjectZ/*.meta",
         "unity/Assets/ProjectZ/Art/*.meta",
         "unity/Assets/ProjectZ/Resources/*.meta",
-        "unity/Assets/StreamingAssets.meta"
+        "unity/Assets/StreamingAssets.meta",
+        "unity-sideview/Packages/**",
+        "unity-sideview/ProjectSettings/**",
+        "unity-sideview/Tools/**",
+        "unity-sideview/Assets/Settings/**",
+        "unity-sideview/Assets/_Game/Scripts/Editor/**",
+        "unity-sideview/Assets/_Game/UI/**",
+        "unity-sideview/Assets/TextMesh Pro/**",
+        "unity-sideview/*.md",
+        "unity-sideview/.gitignore",
+        "unity-sideview/.gitattributes",
+        "unity-sideview/*.command",
+        "unity-sideview/Assets/*.meta",
+        "unity-sideview/Assets/_Game/*.meta",
+        "unity-sideview/Assets/_Game/Scripts/*.meta",
+        "unity-sideview/Assets/Welcome/**",
+        "unity-sideview/Assets/_Game/Physics/**"
       ]
     },
     {
@@ -180,7 +220,9 @@
         "docs/**",
         "research/**",
         "ui/**",
-        "README.md"
+        "README.md",
+        "unity-sideview/Docs/**",
+        "unity-sideview/Assets/_Game/*.md*"
       ]
     }
   ]

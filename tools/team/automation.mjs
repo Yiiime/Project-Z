@@ -4,7 +4,7 @@ export const CHECK_WORKFLOW = 'project-checks.yml';
 export const MERGE_WORKFLOW = 'team-merge.yml';
 export const COLLAB_WORKFLOW = 'team-collab.yml';
 export const LABELS = Object.freeze({hold: 'hold', recheck: 'recheck'});
-export const MAINTAINER_PATHS = Object.freeze([/^\.github\//, /^tools\/team\//, /^unity\/Tools\/check\.sh$/]);
+export const MAINTAINER_PATHS = Object.freeze([/^\.github\//, /^tools\/team\//, /^(unity|unity-sideview)\/Tools\/check\.sh$/]);
 export const TEXT = Object.freeze({
   queued: '排队中：前面的 PR 处理完后自动检查',
   checking: '检查中：正在检查与最新 main 合并后的版本',
@@ -153,7 +153,7 @@ async function advance(api, pr, labels, now) {
   const maintainerOnly = touchesMaintainerPaths(await api.files(pr.number));
   if (await api.behindBy(await api.mainSha(), pr.head.sha) > 0) {
     if (maintainerOnly) {
-      await api.notify(pr, 'maintainer-update', '这个 PR 修改了协作规则或检查脚本（`.github/`、`tools/team/`、`unity/Tools/check.sh`），机器人不会自动同步或合并。维护者确认后点 **Update branch**，检查通过再手动合并。');
+      await api.notify(pr, 'maintainer-update', '这个 PR 修改了协作规则或检查脚本（`.github/`、`tools/team/`、`unity/Tools/check.sh`、`unity-sideview/Tools/check.sh`），机器人不会自动同步或合并。维护者确认后点 **Update branch**，检查通过再手动合并。');
       return 'needs-maintainer';
     }
     const update = await api.updateBranch(pr);
@@ -179,7 +179,7 @@ async function advance(api, pr, labels, now) {
   }
   if (status.state !== 'success') return 'checks-failed';
   if (maintainerOnly) {
-    await api.notify(pr, 'maintainer', '检查已通过。这个 PR 修改了协作规则或检查脚本（`.github/`、`tools/team/`、`unity/Tools/check.sh`），需要维护者确认后手动合并。');
+    await api.notify(pr, 'maintainer', '检查已通过。这个 PR 修改了协作规则或检查脚本（`.github/`、`tools/team/`、`unity/Tools/check.sh`、`unity-sideview/Tools/check.sh`），需要维护者确认后手动合并。');
     return 'needs-maintainer';
   }
   return await api.merge(pr) ? 'merged' : 'merge-blocked';
