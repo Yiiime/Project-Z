@@ -42,8 +42,8 @@
         "unity/Documentation/Art/character-v3.md",
         "unity/Documentation/Art/generated-textures.md",
         "unity/Assets/ProjectZ/Art/Characters/Z.meta",
-        "unity-sideview/Assets/_Game/Art/Characters/**",
-        "unity-sideview/Assets/_Game/Prefabs/**"
+        "unity-sideview/Assets/Seabreeze/Art/Characters/**",
+        "unity-sideview/Assets/Seabreeze/Prefabs/**"
       ]
     },
     {
@@ -54,7 +54,7 @@
         "unity/Assets/ProjectZ/Art/Animation/**",
         "unity/Assets/ProjectZ/Runtime/ZPerformance.cs*",
         "unity/Assets/ProjectZ/Editor/ZMotionAuthoring.cs*",
-        "unity-sideview/Assets/_Game/Animations/**"
+        "unity-sideview/Assets/Seabreeze/Animations/**"
       ]
     },
     {
@@ -90,12 +90,12 @@
         "unity/Documentation/Art/README.md",
         "unity/Documentation/Art/sources.json",
         "unity/Documentation/Art/Screenshots/**",
-        "unity-sideview/Assets/_Game/Art/Locations/**",
-        "unity-sideview/Assets/_Game/Materials/**",
-        "unity-sideview/Assets/_Game/Shaders/**",
-        "unity-sideview/Assets/_Game/Art/*.meta",
-        "unity-sideview/Assets/_Game/Art/FX/**",
-        "unity-sideview/Assets/_Game/Art/Placeholders/**"
+        "unity-sideview/Assets/Seabreeze/Art/Locations/**",
+        "unity-sideview/Assets/Seabreeze/Materials/**",
+        "unity-sideview/Assets/Seabreeze/Shaders/**",
+        "unity-sideview/Assets/Seabreeze/Art/*.meta",
+        "unity-sideview/Assets/Seabreeze/Art/FX/**",
+        "unity-sideview/Assets/Seabreeze/Art/Placeholders/**"
       ]
     },
     {
@@ -105,9 +105,9 @@
       "paths": [
         "unity/Assets/ProjectZ/Resources/Content/**",
         "docs/剧情路线与角色视角-v2.md",
-        "unity-sideview/Assets/_Game/Dialogue/**",
-        "unity-sideview/Assets/_Game/Scripts/Dialogue/**",
-        "unity-sideview/Assets/_Game/Data/**"
+        "unity-sideview/Assets/Seabreeze/Dialogue/**",
+        "unity-sideview/Assets/Seabreeze/Scripts/Dialogue/**",
+        "unity-sideview/Assets/Seabreeze/Data/**"
       ]
     },
     {
@@ -122,7 +122,7 @@
         "unity/Tests/bridge.test.mjs",
         "unity/Documentation/integration.md",
         "docs/AI与状态规格-v2.md",
-        "unity-sideview/Assets/_Game/Scripts/Dialogue/LocalDialogueResponder.cs*"
+        "unity-sideview/Assets/Seabreeze/Scripts/Dialogue/LocalDialogueResponder.cs*"
       ]
     },
     {
@@ -136,7 +136,7 @@
         "unity/Assets/ProjectZ/Core/ProjectZ.Core.asmdef*",
         "unity/Tests/CoreSpecs/**",
         "docs/核心系统与数值草案-v2.md",
-        "unity-sideview/Assets/_Game/Scripts/Core/**"
+        "unity-sideview/Assets/Seabreeze/Scripts/Core/**"
       ]
     },
     {
@@ -152,14 +152,14 @@
         "unity/Assets/ProjectZ/Runtime/ProjectZ.Runtime.asmdef*",
         "unity/Assets/ProjectZ/Tests/**",
         "unity/Documentation/verification.md",
-        "unity-sideview/Assets/_Game/Scenes/**",
+        "unity-sideview/Assets/Seabreeze/Scenes/**",
         "unity-sideview/Assets/Scenes/**",
-        "unity-sideview/Assets/_Game/Scripts/Player/**",
-        "unity-sideview/Assets/_Game/Scripts/World/**",
-        "unity-sideview/Assets/_Game/Scripts/Interaction/**",
-        "unity-sideview/Assets/_Game/Scripts/UI/**",
-        "unity-sideview/Assets/_Game/Scripts/DemoCameraFollow.cs*",
-        "unity-sideview/Assets/_Game/Scripts/ParallaxPlaceholder.cs*"
+        "unity-sideview/Assets/Seabreeze/Scripts/Player/**",
+        "unity-sideview/Assets/Seabreeze/Scripts/World/**",
+        "unity-sideview/Assets/Seabreeze/Scripts/Interaction/**",
+        "unity-sideview/Assets/Seabreeze/Scripts/UI/**",
+        "unity-sideview/Assets/Seabreeze/Scripts/DemoCameraFollow.cs*",
+        "unity-sideview/Assets/Seabreeze/Scripts/ParallaxPlaceholder.cs*"
       ]
     },
     {
@@ -198,18 +198,23 @@
         "unity-sideview/ProjectSettings/**",
         "unity-sideview/Tools/**",
         "unity-sideview/Assets/Settings/**",
-        "unity-sideview/Assets/_Game/Scripts/Editor/**",
-        "unity-sideview/Assets/_Game/UI/**",
+        "unity-sideview/Assets/Seabreeze/Scripts/Editor/**",
+        "unity-sideview/Assets/Seabreeze/UI/**",
         "unity-sideview/Assets/TextMesh Pro/**",
         "unity-sideview/*.md",
         "unity-sideview/.gitignore",
         "unity-sideview/.gitattributes",
         "unity-sideview/*.command",
         "unity-sideview/Assets/*.meta",
-        "unity-sideview/Assets/_Game/*.meta",
-        "unity-sideview/Assets/_Game/Scripts/*.meta",
+        "unity-sideview/Assets/Seabreeze/*.meta",
+        "unity-sideview/Assets/Seabreeze/Scripts/*.meta",
         "unity-sideview/Assets/Welcome/**",
-        "unity-sideview/Assets/_Game/Physics/**"
+        "unity-sideview/Assets/Seabreeze/Physics/**",
+        "unity-sideview/Assets/Seabreeze/Editor/**",
+        "unity-sideview/Assets/Seabreeze/Settings/**",
+        "unity-sideview/Assets/Seabreeze/Resources/**",
+        "unity-sideview/ArtSource/**",
+        "unity-sideview/美术资产参考/**"
       ]
     },
     {
@@ -222,7 +227,7 @@
         "ui/**",
         "README.md",
         "unity-sideview/Docs/**",
-        "unity-sideview/Assets/_Game/*.md*"
+        "unity-sideview/Assets/Seabreeze/*.md*"
       ]
     }
   ]

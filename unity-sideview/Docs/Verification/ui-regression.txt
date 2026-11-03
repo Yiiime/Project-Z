@@ -1,0 +1,5 @@
+Ending recall after later exploration: True
+第 1 天 · 上午
+我把今天写进了明信片。它没有收件人的名字，却已经有了去处。澪拍下了我投卡片的样子。今天的海很好看。
+Save failure remains visible: True
+暂时无法写入存档，当前进度仍保留在本次游戏中。

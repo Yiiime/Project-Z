@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50dfae6c25a3849c6a476cbe034f5f87, type: 3}
+  m_Name: npc_chen
+  m_EditorClassIdentifier: Assembly-CSharp::Seabreeze.NpcData
+  id: npc_chen
+  displayName: "\u9648\u4F2F"
+  description: "\u9000\u4F11\u7684\u90AE\u9012\u5458\u3002\u81EA\u884C\u8F66\u4FEE\u4E86\u4E09\u5341\u5E74\uFF0C\u8FD8\u662F\u820D\u4E0D\u5F97\u6362\u3002"
+  accent: {r: 0.58, g: 0.72, b: 0.64, a: 1}
+  schedule:
+  - place: 0
+    from: 0
+    through: 1
+    requiredFlag: 
+    forbiddenFlag: 
+  - place: 2
+    from: 2
+    through: 3
+    requiredFlag: choice_invite
+    forbiddenFlag: 

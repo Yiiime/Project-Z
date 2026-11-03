@@ -1,26 +1,56 @@
-# Project Z · 横版主工程
+# 海风捎来的信 · Seabreeze
 
-自 2026-11-03 起，本目录为团队主工程。原 `unity/` 为旧 3D 参考工程。
+原创 2D 海滨小镇叙事探索游戏原型。Unity 6.3 LTS / Universal 2D。
 
-## 打开与开发
+## 打开与运行
 
-1. 安装 Git、Unity Hub 和 **Unity 6000.6.7f1**；克隆整个仓库后，在 Hub 中添加本 `unity-sideview/` 目录。
-2. 等待包恢复与资源导入完成，打开 `Assets/_Game/Scenes/App.unity`，按 Play。URP 固定 17.6.0，包版本以 Packages 为准。
-3. 团队接入见 [协作说明](../docs/team/START-HERE.md)。先开任务分支；资源及 `.meta` 必须一起提交。场景、Prefab、动画应先认领再修改。
+1. 在 Unity Hub 添加本目录，使用 **6000.3.27f1** 打开。
+2. 打开 `Assets/Seabreeze/Scenes/Street.unity`，点击 Play。
+3. 第一次导入需要解析 Packages 并生成中文字体缓存。所有游戏内容均在项目内，不需要模型 API、登录或网络服务。
 
-| 内容 | 位置 |
+本机曾构建 `Builds/macOS/Seabreeze.app`（macOS Universal）；构建产物不随源码提交。从仓库克隆后请在 Unity 中构建。
+
+进入后，沿海边街道找那张旧明信片。可以先去咖啡馆，也可以先和街上的人聊天；日志会记下已知线索。地图可以在三个地点间通行，时段通过长椅休息或喝咖啡推进。
+
+## 操作
+
+| 操作 | 键位 |
 | --- | --- |
-| 启动、输入和状态 | `Assets/_Game/Scripts/Core/` |
-| 玩家移动 | `Assets/_Game/Scripts/Player/` |
-| 地点切换、镜头与视差 | `Assets/_Game/Scripts/World/` |
-| 对话与交互 | `Assets/_Game/Scripts/Dialogue/`、`Interaction/`、`UI/` |
-| 地点场景 | `Assets/_Game/Scenes/Locations/` |
-| 美术、动画 | `Assets/_Game/Art/`、`Animations/` |
+| 左右移动 | A / D，← / → |
+| 跳跃 | 空格 / W / ↑ |
+| 就近交互 | E |
+| 对话继续 | E / 空格 / Enter；也支持鼠标 |
+| 对话选择 | 1 / 2 / 3；或鼠标点击 |
+| 地图 | M |
+| 手机 | Tab |
+| 日志 | J |
+| 暂停 / 关闭面板 | Esc |
+| 收起 / 恢复 HUD | H |
 
-## 检查边界
+## 项目结构
 
-仓库根目录运行 `tools/team/z check`：协作规则测试、横版资源与 GUID 完整性、构建场景引用、C# 语法检查。语法检查复用仓库旧工程中的 Roslyn 工具，不运行旧 3D 玩法测试。需要 Node.js 和 .NET 8。
+- `Assets/Seabreeze/Scenes`：海边小街、潮汐咖啡馆、灯塔海堤。
+- `Assets/Seabreeze/Scripts/Core`：会话、时钟、存档、剧情和对话。
+- `Assets/Seabreeze/Scripts/Data`：ScriptableObject 数据类型。
+- `Assets/Seabreeze/Scripts/World`：角色物理、交互、NPC 日程、相机、场景生命周期、氛围。
+- `Assets/Seabreeze/Scripts/UI`：HUD、对话、地图、手机、日志、暂停。
+- `Assets/Seabreeze/Resources`：背景、字体、角色 Prefab 与叙事资产。
+- `Assets/Seabreeze/Editor/ProjectBuilder.cs`：可重复生成场景/资产、构建 macOS 应用的编辑器菜单。
+- `Docs`：开发记录、验证结果与已知限制。
+- `ArtSource`：新增图像的生成提示与来源记录。
 
-本次上传保持本地已跟踪工程内容；没有迁移 Library、Temp、Logs、UserSettings、构建产物或个人编辑器配置。没有升级包，也没有替换旧工程资源。上传检查不代表其他成员的 Unity 首次导入、编译或运行验收。素材现有说明和字体许可随资源保留；其余素材的来源与团队分发权限需要制作成员继续补充记录。
+`Seabreeze > Rebuild authored scenes and assets` 会重建本项目三个场景中的预设布局，不适合在手工编辑场景后无备份执行。普通运行不需要执行此菜单。
 
-来源：本地 `z_from_moon`，提交 `63ab0c2`。当前无独立发布包。
+## 设计边界
+
+这是本次独立的一天短篇，沿用提供的侧视与 UI 美术方向；没有把过去其他项目中未完成的 AI、七天主线或联网功能标记为实现。
+
+背景为独立图像，角色、物理、交互和 UI 是实际运行的 Unity 对象。背景内部建筑与远海仍属同一绘制层，额外前景和海光具有独立微视差；后续正式制作可以用分层素材替换。基础角色动画与音效仍属于原型品质。
+
+## 存档与开发注意事项
+
+游戏自动保存地点、横坐标、日期时段、已读对话节点、剧情选择、物品和日志；暂停菜单也可手动保存。本机已观察到编辑器与macOS独立版使用各自的存档目录：编辑器在 `~/Library/Application Support/Seabreeze Studio/海风捎来的信/`，独立版在 `~/Library/Application Support/com.seabreezestudio.letter/`。恢复开场可在 Esc 菜单选择「重新开始这一天」并确认。
+
+在 Play 期间修改 C# 脚本会自动保存并退出播放，重新按 Play 即可继续；不会尝试恢复已经失效的热重载会话。
+
+更完整的操作路线见 `Docs/PlayableGuide.md`，阶段记录见 `Docs/DevelopmentLog.md`，实际检查证据见 `Docs/Verification/README.md`。

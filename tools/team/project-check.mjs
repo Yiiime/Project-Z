@@ -16,7 +16,7 @@ for (const path of files) {
   if (size > 50 * 1024 * 1024) tooLarge.push(`${path} (${Math.round(size / 1024 / 1024)} MB)`);
 }
 assert.deepEqual(tooLarge, [], `Files above 50 MB need Git LFS or a release asset:\n${tooLarge.join('\n')}`);
-assert.match(readFileSync('unity-sideview/ProjectSettings/ProjectVersion.txt', 'utf8'), /^m_EditorVersion: 6000\.6\.7f1$/m);
+assert.match(readFileSync('unity-sideview/ProjectSettings/ProjectVersion.txt', 'utf8'), /^m_EditorVersion: 6000\.3\.27f1$/m);
 assert.match(readFileSync('AGENTS.md', 'utf8'), /unity-sideview\//);
 const areas = assertConfig(JSON.parse(readFileSync('tools/team/areas.json', 'utf8')));
 console.log(`Team project checks passed for ${files.length} tracked files and ${areas.areas.length} collaboration areas.`);
