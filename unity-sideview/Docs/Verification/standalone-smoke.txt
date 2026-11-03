@@ -1,0 +1,26 @@
+macOS native application smoke check — 2026-11-03 (Asia/Shanghai)
+Target: Builds/macOS/Seabreeze.app
+Unity: 6000.3.27f1; macOS Universal (x86_64 + arm64)
+
+Observed through native application screenshots and actual keyboard/mouse input:
+- Launch with readable Chinese HUD, rendered background, separate character sprites and dialogue.
+- Reset through pause menu and confirmation; opening restored on Day 1 morning in Street.
+- E advances and finishes the opening dialogue.
+- Holding D moves the player and camera.
+- Space makes the player visibly airborne with a different pose.
+- M opens map; clicking Cafe transitions to the actual Cafe scene with its doorway and NPC.
+- Tab opens and closes the phone panel, showing weather and the landlady's message.
+- J opens the journal with the initial entry and current lead.
+- Esc closes panels, then opens pause; restart confirmation returns to opening.
+- Normal application quit; saved data readback confirms Day 1 / Morning / Street / x=-8 / intro.
+
+Existing standalone save before smoke check was backed up to pre-smoke-standalone-save.json.
+Editor and standalone use separate persistent-data directories on this machine.
+Final rebuild additionally aligns one opening sentence with the postcard placed on the bench seat.
+That wording-only change does not change story links, conditions, or runtime logic.
+
+Full three-ending flow coverage is the separate 118-pass Play Mode integration check.
+This native smoke check is not a full human playthrough or user acceptance.
+
+Final rebuilt application was relaunched and visibly restored the opening dialogue; normal quit completed.
+Final Player.log contains no Exception/Error lines.

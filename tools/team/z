@@ -85,7 +85,7 @@ case "${1:-help}" in
     permission="$("$z_gh" api "repos/$z_repo" --jq '.permissions.push')"
     [[ "$permission" == true ]] || fail '这个账号还没有仓库写权限。请联系维护者邀请你，并在邮件或 GitHub 通知中接受邀请。'
     say '✓ 有仓库写权限'
-    if [[ -x "/Applications/Unity/Hub/Editor/6000.6.7f1/Unity.app/Contents/MacOS/Unity" ]]; then say '✓ 找到 Unity 6000.6.7f1'; else say '△ 没找到 Unity 6000.6.7f1；改 Unity 场景或试玩前需要安装。'; fi
+    if [[ -x "/Applications/Unity/Hub/Editor/6000.3.27f1/Unity.app/Contents/MacOS/Unity" ]]; then say '✓ 找到 Unity 6000.3.27f1'; else say '△ 没找到 Unity 6000.3.27f1；改 Unity 场景或试玩前需要安装。'; fi
     ;;
   start)
     shift

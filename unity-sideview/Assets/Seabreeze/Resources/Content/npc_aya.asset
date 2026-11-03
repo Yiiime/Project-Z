@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50dfae6c25a3849c6a476cbe034f5f87, type: 3}
+  m_Name: npc_aya
+  m_EditorClassIdentifier: Assembly-CSharp::Seabreeze.NpcData
+  id: npc_aya
+  displayName: "\u963F\u9065"
+  description: "\u300C\u6F6E\u6C50\u300D\u5496\u5561\u9986\u7684\u5E97\u4E3B\uFF0C\u8BB0\u5F97\u6BCF\u4E00\u4E2A\u5E38\u5BA2\u559D\u5496\u5561\u7684\u4E60\u60EF\u3002"
+  accent: {r: 0.89, g: 0.67, b: 0.4, a: 1}
+  schedule:
+  - place: 1
+    from: 0
+    through: 1
+    requiredFlag: 
+    forbiddenFlag: 
+  - place: 1
+    from: 2
+    through: 3
+    requiredFlag: 
+    forbiddenFlag: choice_invite
+  - place: 2
+    from: 2
+    through: 3
+    requiredFlag: choice_invite
+    forbiddenFlag: 

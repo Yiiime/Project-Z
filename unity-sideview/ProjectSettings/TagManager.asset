@@ -13,9 +13,9 @@ TagManager:
   - UI
   - 
   - 
-  - Player
-  - WorldSolid
-  - Interactable
+  - Ground
+  - 
+  - 
   - 
   - 
   - 
@@ -43,4 +43,3 @@ TagManager:
     locked: 0
   m_RenderingLayers:
   - Default
-  m_MigratedRenderPipelines: []
