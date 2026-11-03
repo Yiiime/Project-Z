@@ -5,7 +5,9 @@
 
 ## 先看结论
 
-此前的交付 Demo 使用一个 OpenAI-compatible Chat Completions 适配器。DeepSeek 提供兼容的接口协议，因此可以沿用这条适配器路径：把服务端 provider 配成 `openai-compatible`，把 Base URL 指向 DeepSeek，模型名和 API Key 在服务端本机配置。
+这是可选的本地 LLM 接入参考，不是 Live2D 资产的运行依赖。只使用模型、纹理、表情和动作不需要 API Key；需要文字对话时，组员要在自己的后端配置 DeepSeek 或其他兼容 API 的 Key。Key 不随资产交付，也不要写进 Unity 客户端。
+
+此前的独立交付 Demo 使用一个 OpenAI-compatible Chat Completions 适配器。DeepSeek 提供兼容的接口协议，因此可以沿用这条适配器路径：把服务端 provider 配成 `openai-compatible`，把 Base URL 指向 DeepSeek，模型名和 API Key 在服务端本机配置。
 
 当前代码已经具备以下协议能力：
 
@@ -234,5 +236,5 @@ DeepSeek API
 - 此前交付包：Unity `6000.6.7f1`、Built-in Render Pipeline，包含 `server/` 对话服务。
 - 当前 `Project-Z` 主工程：Unity `6000.3.27f1`、URP。本文放在 Z 角色美术目录下，方便随 PR 交接，但没有把此前服务端代码复制进主工程。
 
-因此，组员要测试 DeepSeek，需要拿此前的独立交付包运行服务；当前 PR 没有把独立 Live2D Demo 的 DeepSeek/标签表演链路接入主工程。
+因此，组员要测试 DeepSeek，需要自行准备后端或拿此前的独立交付包运行服务；本次资产交接没有附带 server、Demo UI、数据库或 API Key。当前 PR 没有把独立 Live2D Demo 的 DeepSeek/标签表演链路接入主工程。
 
