@@ -14,7 +14,20 @@
 - 由 Prompt 要求模型输出 JSON，并在服务端再次校验结构和白名单标签。
 - 把合法的 `expression`、`gesture`、`gaze` 标签交给 Unity，Unity 再映射为表情、姿势、视线和连续动作。
 
-当前没有用真实 DeepSeek API 完成联调。`/health` 返回 `configured: true` 只表示所需环境变量非空，不代表 API Key 有效、模型可用或网络请求成功。
+`/health` 返回 `configured: true` 只表示所需环境变量非空，不代表 API Key 有效、模型可用或网络请求成功。2026-11-03 已用临时 DeepSeek 配置和新 SQLite 完成一次真实联调；原 Codex 配置没有改动，密钥和临时文件没有进入仓库。
+
+## 真实联调记录（2026-11-03）
+
+- DeepSeek `GET /models` 在认证后返回 HTTP 200，当前账户返回 `deepseek-flash`、`deepseek-v4-pro`。
+- 使用 `deepseek-flash`，没有修改现有 adapter；请求仍是 `model`、`messages`、`temperature`、`response_format: {"type":"json_object"}`、`stream: false`。
+- 通过服务内核发起的一次合成对话请求约 1326 ms。它是单次采样，不是延迟承诺或容量指标。
+- ACK 前历史条数为 0；ACK 后为 2；关闭并重新打开临时数据库后仍为 2。
+- 这次服务返回的标签为 `smile / wave / player`。
+- 使用已签名的独立 Unity App 做第二次真实请求，返回 3 段台词，标签依次为 `smile / wave / player`、`smile / explain / player`、`neutral / point / player`。
+- Unity 报告 `passed=true`、`chatPassed=true`、`chatMotion.passed=true`，触发的连续动作是 `Happy`；头部 Y 从约 `-0.616` 变化到 `-3.859`，身体 Z 从约 `-0.017` 变化到 `0.816`，都在模型参数范围内；`memoryCount=2`，`errors=[]`。
+- 报告生成时异步截图尚未写入，因此报告中的 `chatExists=false` 不能当作聊天失败；随后已确认截图生成。原始报告和截图保留在临时验收目录，没有复制进仓库。
+
+这次联调没有新增运行时代码，也没有实现 `max_tokens` 或 `thinking` 配置；公网部署仍未完成。
 
 ## 1. 这层技术架构怎么工作
 
