@@ -1,0 +1,88 @@
+{
+  "source": "Z.zip/01_直播玩法基础框架/z-live-public",
+  "files": [
+    {
+      "path": "ui/call-engine.js",
+      "sha256": "e9950ef4cd70ebf6e451634cf3ac974b82695321c51b83eeaf1cde83b323f72c"
+    },
+    {
+      "path": "ui/conversation-engine.js",
+      "sha256": "06039777cd7d868c10fc65ef4507a759b9ac123201fa0a2fc0f81e1c064a4184"
+    },
+    {
+      "path": "ui/session-continuity.js",
+      "sha256": "6c010ebfcfda4e780bff7bdf3f78b93be1771a2dec3f737681471fa45b1ef731"
+    },
+    {
+      "path": "ui/drawing-director.js",
+      "sha256": "7948d56c03ed5717d1b9a5ede055c09fac59e39658a1f9e9ce6a9374da7efdbb"
+    },
+    {
+      "path": "ui/drawing-scene.js",
+      "sha256": "79976b0d715a1ebe41f0e29a085f8d6f21743cbd637194daf8e5d2a27966b131"
+    },
+    {
+      "path": "ui/play-engine.js",
+      "sha256": "fa55cd0a54b65ecfe7a4c5b5f13d5ed4d02309deb489b122b12a80fc1c1e3584"
+    },
+    {
+      "path": "ui/live-engine.js",
+      "sha256": "25583a0add35d435efb186d4a11757d03db5c5ba2d9017a6c290252a34c98d76"
+    },
+    {
+      "path": "ui/audience-director.js",
+      "sha256": "3941e7564b2f6a7c14e0ee5ac2bd0a6aa473cc3fcdc2b858fdd7e7718d05059d"
+    },
+    {
+      "path": "ui/dialogue-review.js",
+      "sha256": "92d0be4f11ce3a9ae055ba25ab23a9ea476ee9742570bd1fa069be124935589b"
+    },
+    {
+      "path": "ui/talent-config.js",
+      "sha256": "e2825fb89324f7af3f9ce1ad7a4defbec0d488375c9202ea9c35839587a43890"
+    },
+    {
+      "path": "ui/live2d-actions.js",
+      "sha256": "edb4e81be74456aca0213c4e93f8175cd9dddd1ea94cbf0eb2e3f1ddc228ea3c"
+    },
+    {
+      "path": "ui/call-contract.js",
+      "sha256": "784431bb16fcf4f4926dfc92a73fa0c21a60565e6948fe3abf27d68e8f34df3e"
+    },
+    {
+      "path": "ui/speech-director.js",
+      "sha256": "b78fe7595ab21cf426eaee4c3acc2071fdb6d9e7d62ae963599e145a9d69e1b8"
+    },
+    {
+      "path": "ui/text-director.js",
+      "sha256": "727513cc03af81441f5191ff694ebbbc6bbd1816056f85f199d41152ad418a2a"
+    },
+    {
+      "path": "ui/live2d-config.js",
+      "sha256": "f38d9e8c6d10ff091611f237ff41fd8e6d356c7a50eda4bea43dc7f70d4a25ac"
+    },
+    {
+      "path": "worker/agent-director.js",
+      "sha256": "538272f4bb815a07e8860b55f2b1ffcb3fd35ef359ae2531076e5eca099e0085"
+    },
+    {
+      "path": "worker/drawing-planner.js",
+      "sha256": "a0d33a352fae1521baba00e86067726ad9df40187fd351c6eaa333ba4fdb4a5e"
+    },
+    {
+      "path": "worker/agent-bundle-data.js",
+      "sha256": "88b31a3325cd4a196b55d8d6eb23ee1460556b6c111db6a9f56bebc2438d7d53"
+    },
+    {
+      "path": "worker/z-persona.js",
+      "sha256": "9313700997c32a6d67def76efc6bcf546657f438d1d6d5c1cf16201e7333265d"
+    },
+    {
+      "path": "worker/volc-tts.js",
+      "sha256": "59b49d30920d229c5ce2c95baa6adf43ecb913be9046830d1266e15a6a9348c3"
+    }
+  ],
+  "adaptations": [
+    "PlayEngine private deck persistence for native sessions"
+  ]
+}

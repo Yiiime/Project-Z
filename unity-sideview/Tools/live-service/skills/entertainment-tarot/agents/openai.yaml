@@ -1,0 +1,4 @@
+interface:
+  display_name: "娱乐塔罗"
+  short_description: "主持主播或提问观众亲自选牌，固定牌面，并结合牌义与已知事实自然解读互动"
+  default_prompt: "使用 $entertainment-tarot 确认问题和牌阵：主播自己的问题由主播盲选，观众的问题等待提问者选牌，依据真实锁定与展示结果进行有依据的娱乐解读。"
