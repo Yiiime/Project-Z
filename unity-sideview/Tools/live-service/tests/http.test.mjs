@@ -7,7 +7,7 @@ import {fileURLToPath} from 'node:url';
 import {createLiveServer} from '../server/http.mjs';
 import {ArtifactStore,Providers} from '../server/providers.mjs';
 import {SingingService} from '../server/singing/service.mjs';
-import {LiveSongLibrary} from '../server/library/index.mjs';
+import {LiveSongLibrary} from '../server/song-library/index.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const plan={intent:'request',title:'晚安',artist:'颜人中',version:'',question:'',segment:{kind:'chorus',ordinal:1,description:'第一段完整副歌',lyricStart:''}};
 async function fixture(t,{transcribe}={}) {

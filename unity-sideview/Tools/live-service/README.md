@@ -44,7 +44,7 @@
 - `server/session.mjs`、`http.mjs`：原生会话、SSE 命令、执行回执、幂等和租约。
 - `server/voice/`：PCM16LE / 16 kHz / 单声道识别桥接。
 - `server/singing/`：SQLite 点歌队列、生成、审核与持久播放回执。
-- `server/library/`：按歌曲版本、片段和声音配置计算资料状态。
+- `server/song-library/`：按歌曲版本、片段和声音配置计算资料状态。
 - `.runtime/`：本机凭据、会话、音频和 SQLite 数据；备份应在停止服务后复制完整目录。
 - `tests/`：会话、网关、唱歌和 ASR 的离线回归；`npm test` 不调用付费供应商。
 

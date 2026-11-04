@@ -3,7 +3,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {randomBytes} from 'node:crypto';
 import {Providers,ArtifactStore,loadEnvironment} from './providers.mjs';
-import {LiveSongLibrary} from './library/index.mjs';
+import {LiveSongLibrary} from './song-library/index.mjs';
 import {SingingService} from './singing/service.mjs';
 import {createLiveServer} from './http.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url)),runtime=path.join(root,'.runtime');fs.mkdirSync(runtime,{recursive:true,mode:0o700});
