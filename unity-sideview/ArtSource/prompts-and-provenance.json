@@ -39,5 +39,51 @@
     "original_pngs_preserved": true,
     "processing": "Original stand and eight walk PNGs are preserved byte-for-byte. Unity import settings normalize the Figma canvas scale and opaque sole baseline; the motion manifest records frame order, pivots and SHA-256 hashes.",
     "authorization": "User authorized these supplied assets for the Project-Z player motion sample."
+  },
+  "player_motion_16": {
+    "source_type": "local-frame-interpolation",
+    "source_manifest": "Assets/Seabreeze/Resources/Art/PlayerMotion/motion.json",
+    "created_on": "2026-11-04",
+    "source_keyframes_preserved": true,
+    "cycle_timing_preserved": true,
+    "method": "RIFE 4.25 shared RGBA flow; original-pixel, joint-guided inverse affine skinning corrects crossing-leg intervals 2 and 6. No generative redrawing is used in the accepted frames.",
+    "tools": {
+      "rife_repository": "https://github.com/hzwer/Practical-RIFE",
+      "repository_commit": "bbfd2ea90910789a860ea3e2b32a240cd577b75e",
+      "model": "RIFE 4.25",
+      "model_source": "https://drive.google.com/file/d/1ZKjcbmt1hypiFprJPIKW0Tt0lr_2i7bg/view",
+      "model_sha256": "6615790efd627772917205db291f51cd392528a157ecbb2ecaeec3bff8eb6de2",
+      "license": "MIT; upstream README applies the same license to linked trained models",
+      "runtime": "PyTorch 2.9.1 / Apple MPS",
+      "geometry": "OpenCV 4.12.0.88"
+    },
+    "processing": {
+      "normalized_canvas": [
+        896,
+        1792
+      ],
+      "color_and_alpha": "Premultiplied original RGBA is warped with the same flow and occlusion mask; no separate alpha prediction in final assets.",
+      "crossing_correction": "Original-pixel leg masks, midpoint joint correspondences, inverse blended affine maps and original-pixel compositing.",
+      "mac_compatibility": "Clamp sampling grid to [-1,1] and use zero padding; CPU equivalence to align_corners=True border padding verified with maximum error 0.",
+      "generated_frames": 8
+    },
+    "rejected_methods": [
+      "Built-in generative edits returned opaque RGB JPEGs and identity drift",
+      "RIFE ncnn v4.6/anime and unmodified dense optical flow left crossing-leg ghosts"
+    ],
+    "local_recipe_files": [
+      "player_interpolation.py",
+      "torch_interpolation.py",
+      "guided_parts.py"
+    ],
+    "runtime_dependencies": "None beyond the existing Unity project; interpolation tools and models are local authoring tools and are not needed to play or import the committed PNGs.",
+    "review_status": "Accepted after native-size, game-scale and rendered frame-sequence review, including both corrected crossing intervals and the cycle boundary. Some in-between details are softer than the original keyframes when enlarged.",
+    "verification": {
+      "unity_version": "6000.3.27f1",
+      "player_motion": "Passed 5 groups: 17 registered assets, all 16 walking poses observed, zero scale span, calibrated pivots, original normalized keyframe timing and 30/60 FPS phase consistency.",
+      "eight_frame_compatibility": "Passed 4 groups using the original 8-pose manifest.",
+      "npc_regression": "Passed 17 groups across Street, Cafe and Lighthouse with isolated test saves and no editor errors.",
+      "preview": "8-pose and 16-pose Unity recordings use the same input script and capture camera, encoded at 30 FPS. Independent editor runs are not fixed-step synchronized; trajectory differences are diagnostic only."
+    }
   }
 }

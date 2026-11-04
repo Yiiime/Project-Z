@@ -40,6 +40,7 @@ namespace Seabreeze.Editor
             public float canvasHeightUnits, strideLength;
             public string idle;
             public string[] walk;
+            public string[] sourceKeyframes;
             public Asset[] assets;
         }
         [Serializable] sealed class Asset
@@ -285,6 +286,13 @@ namespace Seabreeze.Editor
                     Require(Vector2.Distance(sprite.pivot, new Vector2(asset.width * asset.pivot.x, asset.height * asset.pivot.y)) < .01f, "Calibrated body and sole pivot.");
                 }
                 checks.Add(definition.assets.Length + " registered assets, " + definition.walk.Length + "-pose cycle, constant scale and calibrated pivots");
+                if (definition.sourceKeyframes != null && definition.sourceKeyframes.Length > 0)
+                {
+                    Require(definition.walk.Length == definition.sourceKeyframes.Length * 2, "Each source interval receives one midpoint.");
+                    for (int i = 0; i < definition.sourceKeyframes.Length; i++)
+                        Require(definition.walk[i * 2] == definition.sourceKeyframes[i], "Original keyframe order and normalized cycle time remain unchanged.");
+                    checks.Add("Original keyframes retained at the same normalized times with exactly one midpoint per interval");
+                }
                 float phase30 = CheckClock(30);
                 float phase60 = CheckClock(60);
                 float error = Mathf.Abs(phase30 - phase60);
