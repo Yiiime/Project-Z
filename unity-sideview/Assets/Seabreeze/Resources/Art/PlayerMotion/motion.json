@@ -339,7 +339,8 @@
     "walk_mid_07"
   ],
   "armMotion": {
-    "status": "natural arm swing comparison sample",
+    "status": "adopted natural arm swing",
+    "approvedOn": "2026-11-05",
     "sourcePose": "walk_01",
     "method": "Two-bone shoulder/elbow rotation, baked at the existing 16 walk phases",
     "nearShoulderRangeDegrees": [
