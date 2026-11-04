@@ -17,6 +17,7 @@ namespace Seabreeze
         public bool HasOverlay => !string.IsNullOrEmpty(overlayMode);
         bool IsTransitioning => WorldDirector.Instance != null && WorldDirector.Instance.IsTransitioning;
         Canvas canvas;
+        NativeLiveHost nativeLive;
         RectTransform canvasRect, hud, bottomStrip, overlayRoot, dialogueRoot, promptRoot;
         Transform overlayContent;
         TextMeshProUGUI dateText, timeText, weatherText, placeText, ambienceText, objectiveText;
@@ -59,6 +60,7 @@ namespace Seabreeze
         }
         void OnDestroy()
         {
+            if(nativeLive!=null)nativeLive.Close();
             if(Instance==this){Instance=null;Time.timeScale=1f;}
             if(session!=null)
             {
@@ -223,6 +225,11 @@ namespace Seabreeze
         void Update()
         {
             if(!initialized||session==null)return;
+            if(overlayMode=="live")
+            {
+                if(Application.isFocused&&GameInput.Pressed(Key.Escape)&&!(nativeLive?.HandleBack()??false))CloseOverlay();
+                return;
+            }
             if(IsTransitioning)
             {
                 HideInteraction();
@@ -277,6 +284,7 @@ namespace Seabreeze
             overlayMode=mode;Time.timeScale=0f;session.SetOverlay(true);HideInteraction();dialogueRoot.gameObject.SetActive(false);
             Clear(overlayRoot);overlayRoot.gameObject.SetActive(true);
             var scrim=Stretch("Backdrop",overlayRoot,Vector2.zero,Vector2.zero).gameObject.AddComponent<Image>();scrim.color=new Color(.015f,.035f,.08f,.76f);scrim.raycastTarget=true;
+            if(mode=="live"){canvas.enabled=false;nativeLive=NativeLiveHost.Open(transform,CloseOverlay);return;}
             Vector2 size=mode=="pause"||mode=="restart"?new Vector2(760,730):mode=="ending"?new Vector2(1160,790):new Vector2(1280,790);
             var panel=Panel("Panel",overlayRoot,C,C,Vector2.zero,size,Ink,true);
             overlayContent=panel.transform;
@@ -287,6 +295,8 @@ namespace Seabreeze
         public void CloseOverlay()
         {
             if(!initialized)return;
+            if(nativeLive!=null){nativeLive.Close();nativeLive=null;}
+            canvas.enabled=true;
             overlayMode="";Time.timeScale=1f;overlayRoot.gameObject.SetActive(false);session.SetOverlay(false);
             dialogueRoot.gameObject.SetActive(session.Dialogue.IsOpen);dialogueFrame=Time.frameCount;
             RefreshHUD();
@@ -324,7 +334,8 @@ namespace Seabreeze
         void BuildPhone()
         {
             Header("PHONE  /  A LITTLE CONNECTION","海风里收到的消息","几句话，也可以把两个地方变得近一点。" );
-            var scroll=MakeScroll(new Vector2(46,-225),new Vector2(1188,455));
+            Button("Open Z Live",overlayContent,TL,TL,new Vector2(46,-220),new Vector2(1188,60),"Z 的直播 · 进入聊天小屋",()=>OpenOverlay("live"),false,24);
+            var scroll=MakeScroll(new Vector2(46,-300),new Vector2(1188,380));
             float y=0;
             foreach(string message in session.Story.PhoneMessages)
             {

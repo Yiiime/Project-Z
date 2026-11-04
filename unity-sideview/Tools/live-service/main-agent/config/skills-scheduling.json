@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 1,
+  "profile": "demo-five-skills-v1",
+  "activation": "explicit-demo-import-only",
+  "parameterBasis": "Skill constraints are normative; numerical budgets are initial tuning defaults, not measured SLAs.",
+  "host": {
+    "provider": "DeepSeek",
+    "model": "deepseek-flash",
+    "thinking": false,
+    "stream": false,
+    "providerTimeoutMs": 6500,
+    "decisionTimeoutMs": 8000,
+    "maxConcurrentDecisions": 1,
+    "playerMaxWaitMs": 12000,
+    "eventTtlMs": 45000,
+    "maxQueue": 40,
+    "repeatMs": 20000,
+    "idleMs": 12000,
+    "dailyCooldownMs": 30000,
+    "npcCooldownMs": 2000,
+    "maxNpcBurst": 2,
+    "closingTimeoutMs": 12000,
+    "maxFollowUpQuestions": 1
+  },
+  "scheduling": {
+    "priorityOrder": [
+      "authorized_stop",
+      "trusted_state_receipt",
+      "due_player",
+      "player",
+      "task_followup",
+      "checked_presentation",
+      "npc_reply",
+      "daily"
+    ],
+    "maxBackgroundTalentTasks": 2,
+    "maxActiveTasksPerRequester": 1,
+    "maxForegroundActivities": 1,
+    "maxMainVoiceOwners": 1,
+    "reservedHostModelSlots": 1,
+    "maxAudienceRequests": 1,
+    "maxTalentModelRequests": 1,
+    "pauseAudienceWhenPlayerWaiting": true,
+    "coalescePendingProgress": true,
+    "taskProgressSpeechCooldownMs": 15000,
+    "taskFollowupMaxQuestions": 1,
+    "allowNewTasksInClosing": false,
+    "cancelUnfinishedTasksOnClosing": true,
+    "ordinaryChatInterruptsPerformance": false,
+    "playerWaitDuringPerformance": "respond_at_next_safe_boundary_or_after_end",
+    "holdPlayerTtlDuringPerformance": true,
+    "performanceInputAck": "ui_only",
+    "idleTopicLease": "host_or_npc_exclusive"
+  },
+  "audience": {
+    "generationDeadlineMs": 1500,
+    "coalesceWindowMs": 200,
+    "firstPublishDelayMs": 0,
+    "publishGapMs": 700,
+    "candidateTtlMs": 6000,
+    "npcPublishCooldownMs": 15000,
+    "maxChainNpcMessages": 3,
+    "maxChainAdvances": 2,
+    "maxChars": 36,
+    "retries": 0,
+    "targetEventToFirstDisplayP95Ms": 2000,
+    "heatFromGeneratedCount": false,
+    "heatFromNpcPublishedCount": false,
+    "phases": {
+      "opening": {
+        "maxItems": 2,
+        "maxAdvances": 0
+      },
+      "chat": {
+        "maxItems": 3,
+        "maxAdvances": 1
+      },
+      "question": {
+        "maxItems": 3,
+        "maxAdvances": 0
+      },
+      "preparing": {
+        "maxItems": 2,
+        "maxAdvances": 0
+      },
+      "performing": {
+        "maxItems": 2,
+        "maxAdvances": 0
+      },
+      "displayed": {
+        "maxItems": 3,
+        "maxAdvances": 1
+      },
+      "idle": {
+        "maxItems": 1,
+        "maxAdvances": 1
+      },
+      "closing": {
+        "maxItems": 1,
+        "maxAdvances": 0
+      },
+      "ended": {
+        "maxItems": 0,
+        "maxAdvances": 0
+      }
+    }
+  },
+  "tasks": {
+    "maxGenerationRetries": 1,
+    "maxDisplayRetries": 1,
+    "queryUnknownBeforeRetry": true,
+    "retryExtendsDeadline": false,
+    "checksMustPass": true,
+    "completionNeedsReceipt": true,
+    "rejectStaleRevision": true,
+    "autoReplay": false
+  },
+  "skills": {
+    "singing": {
+      "prepareDeadlineMs": 90000,
+      "maxDurationMs": 90000,
+      "defaultSegment": "first_complete_chorus",
+      "voicePolicy": "current_identity_and_config_revision",
+      "aCappella": true,
+      "singleVoice": true,
+      "backingTrack": false,
+      "harmonyLayers": false,
+      "spokenIntroOutro": false,
+      "muteBgmDuringPlayback": true,
+      "completion": "matching_playback_completed"
+    },
+    "voice-performance": {
+      "prepareDeadlineMs": 60000,
+      "maxDurationMs": 60000,
+      "maxScriptChars": 600,
+      "defaultVoice": "current_character_voice",
+      "voiceBindingScope": "task_local",
+      "defaultRoleOverlap": false,
+      "completeBundleBeforePlayback": true,
+      "completion": "matching_playback_completed"
+    },
+    "simple-drawing": {
+      "prepareDeadlineMs": 45000,
+      "preferredMode": "vector_strokes",
+      "fallbackMode": "final_only",
+      "defaultComplexity": "low",
+      "defaultPalette": "monochrome",
+      "defaultBackground": "blank",
+      "defaultCanvas": {
+        "width": 768,
+        "height": 768
+      },
+      "maxStages": 3,
+      "detailBudgets": {
+        "low": 40,
+        "medium": 100,
+        "high": 180
+      },
+      "completion": "current_final_artifact_displayed"
+    },
+    "entertainment-tarot": {
+      "toolDeadlineMs": 5000,
+      "defaultSpread": "single_focus",
+      "supportedSpreads": [
+        "single_focus",
+        "three_reflection"
+      ],
+      "candidateCount": 3,
+      "reversalsEnabled": false,
+      "selectionWaitMs": 45000,
+      "selectionReminderAfterMs": 15000,
+      "maxSelectionRemindersPerRound": 1,
+      "selectionTimeoutAction": "pause",
+      "autoSelectViewer": false,
+      "maxActiveTarotTasks": 1,
+      "completion": "revealed_snapshot_interpretation_played"
+    }
+  }
+}
