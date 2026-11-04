@@ -8,6 +8,7 @@ public sealed class DrawingPresenter:VisualElement {
     JObject scene; int stage; public string ArtifactId{get;private set;} public int RenderedVersion{get;private set;} int version;
     public DrawingPresenter(){style.height=150;style.minHeight=150;style.flexGrow=1;style.flexShrink=1;style.backgroundColor=new Color(1,.99f,.96f);generateVisualContent+=Draw;}
     public void Present(JObject value,int nextStage,string id){Validate(value,nextStage);scene=(JObject)value.DeepClone();stage=nextStage;ArtifactId=id;version++;MarkDirtyRepaint();}
+    public void CopyTo(DrawingPresenter target){if(scene!=null)target.Present(scene,stage,ArtifactId);}
     static void Fail(){throw new Exception("invalid_drawing");}
     public static void Validate(JObject value,int stage) {
         var stages=value["stages"] as JArray;var elements=value["elements"] as JArray;
@@ -20,7 +21,7 @@ public sealed class DrawingPresenter:VisualElement {
         }
     }
     void Draw(MeshGenerationContext ctx){if(scene==null||contentRect.width<=0||contentRect.height<=0)return;var p=ctx.painter2D;float scale=Mathf.Min(contentRect.width/480,contentRect.height/360);var offset=new Vector2((contentRect.width-480*scale)/2,(contentRect.height-360*scale)/2);
-        foreach(JObject e in (JArray)scene["elements"]){if((int)e["stage"]>stage)continue;p.BeginPath();foreach(JArray c in (JArray)e["commands"]){Vector2 P(int i)=>offset+new Vector2((float)c[i],(float)c[i+1])*scale;switch((string)c[0]){case "M":p.MoveTo(P(1));break;case "L":p.LineTo(P(1));break;case "Q":p.QuadraticCurveTo(P(1),P(3));break;case "C":p.BezierCurveTo(P(1),P(3),P(5));break;case "Z":p.ClosePath();break;}}
+        foreach(JObject e in (JArray)scene["elements"]){if((int)e["stage"]>stage)continue;p.BeginPath();Vector2 first=default;foreach(JArray c in (JArray)e["commands"]){Vector2 P(int i)=>offset+new Vector2((float)c[i],(float)c[i+1])*scale;switch((string)c[0]){case "M":first=P(1);p.MoveTo(first);break;case "L":p.LineTo(P(1));break;case "Q":p.QuadraticCurveTo(P(1),P(3));break;case "C":p.BezierCurveTo(P(1),P(3),P(5));break;case "Z":p.LineTo(first);break;}}
             if((string)e["fill"]!="none"){ColorUtility.TryParseHtmlString((string)e["fill"],out var fill);p.fillColor=fill;p.Fill(FillRule.NonZero);}if((string)e["stroke"]!="none"){ColorUtility.TryParseHtmlString((string)e["stroke"],out var stroke);p.strokeColor=stroke;p.lineWidth=(float)e["strokeWidth"]*scale;p.lineCap=LineCap.Round;p.lineJoin=LineJoin.Round;p.Stroke();}
         }RenderedVersion=version;
     }

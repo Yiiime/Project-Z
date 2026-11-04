@@ -35,6 +35,8 @@ namespace Seabreeze
             return host;
         }
 
+        public bool HandleBack() => feature != null && feature.HandleBack();
+
         public async void Close()
         {
             if (closing) return;

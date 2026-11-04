@@ -8,7 +8,7 @@ using Live2D.Cubism.Framework;
 using Live2D.Cubism.Framework.Physics;
 namespace ZLive {
 public sealed class CharacterPresenter:MonoBehaviour {
-    Camera portraitCamera;
+    Camera portraitCamera;CubismModel cubismModel;
     JObject config;bool textSpeaking;public LiveCharacterPerformance Performance{get;private set;}
     public AudioSource Audio;public bool Paused;public bool Ready{get;private set;}public RenderTexture Texture{get;private set;}
     CubismPhysicsController physics;
@@ -16,7 +16,7 @@ public sealed class CharacterPresenter:MonoBehaviour {
     readonly Dictionary<string,CubismPart> parts=new Dictionary<string,CubismPart>();
     void Awake(){config=JObject.Parse(Resources.Load<TextAsset>("character").text);Performance=new LiveCharacterPerformance(config);}
     public void Initialize(){
-        var prefab=Resources.Load<GameObject>("Haru");if(prefab==null)return;var model=Instantiate(prefab,transform);model.name="Z · Haru";
+        var prefab=Resources.Load<GameObject>("Haru");if(prefab==null)return;var model=Instantiate(prefab,transform);model.name="Z · Haru";cubismModel=model.GetComponent<CubismModel>();
         foreach(var t in model.GetComponentsInChildren<Transform>(true))t.gameObject.layer=30;
         foreach(var p in model.GetComponentsInChildren<CubismParameter>(true))parameters[p.Id]=p;
         foreach(var p in model.GetComponentsInChildren<CubismPart>(true))parts[p.Id]=p;
@@ -26,12 +26,16 @@ public sealed class CharacterPresenter:MonoBehaviour {
         var bridge=model.AddComponent<CubismCharacterBridge>();bridge.Presenter=this;
         var update=model.GetComponent<CubismUpdateController>();if(update==null)update=model.AddComponent<CubismUpdateController>();update.Refresh();
         Texture=new RenderTexture(1600,1000,24,RenderTextureFormat.ARGB32);Texture.Create();var camera=new GameObject("Character Camera").AddComponent<Camera>();portraitCamera=camera;camera.transform.SetParent(transform,true);camera.GetUniversalAdditionalCameraData().SetRenderer(1);camera.orthographic=true;camera.orthographicSize=3.5f;camera.transform.position=new Vector3(0,1,-10);camera.clearFlags=CameraClearFlags.SolidColor;camera.backgroundColor=Color.clear;camera.cullingMask=1<<30;camera.targetTexture=Texture;
-        // Fit actual imported mesh bounds; camera framing remains a visual QA item.
-        var renderers=model.GetComponentsInChildren<Renderer>();if(renderers.Length>0){var bounds=renderers[0].bounds;foreach(var r in renderers)bounds.Encapsulate(r.bounds);camera.transform.position=new Vector3(bounds.center.x,bounds.max.y-bounds.size.y*.21f,-10);camera.orthographicSize=Mathf.Max(.1f,bounds.size.y*.23f);}
         Ready=parameters.Count>0;
     }
     public void SetViewport(float width,float height,float pixelsPerUnit=1){
         if(!Ready||portraitCamera==null||width<1||height<1)return;
+        var canvas=cubismModel.CanvasInformation;float ppu=canvas.PixelsPerUnit;
+        float modelWidth=canvas.CanvasWidth/ppu,modelHeight=canvas.CanvasHeight/ppu;
+        var layout=config["layout"];float fit=Mathf.Min(height*(float)layout["height"]/modelHeight,width*(float)layout["maxWidth"]/modelWidth);
+        float viewHeight=height/fit,viewWidth=width/fit;
+        portraitCamera.orthographicSize=viewHeight*.5f;
+        portraitCamera.transform.position=new Vector3((canvas.CanvasWidth*.5f-canvas.CanvasOriginX)/ppu+(.5f-(float)layout["x"])*viewWidth,(canvas.CanvasHeight-canvas.CanvasOriginY)/ppu+((float)layout["top"]-.5f)*viewHeight,-10);
         float scale=Mathf.Clamp(pixelsPerUnit,1,4);float limit=Mathf.Min(1,4096/Mathf.Max(width*scale,height*scale));int w=Mathf.Max(64,Mathf.CeilToInt(width*scale*limit)),h=Mathf.Max(64,Mathf.CeilToInt(height*scale*limit));
         if(Texture.width==w&&Texture.height==h)return;
         portraitCamera.targetTexture=null;Texture.Release();Destroy(Texture);

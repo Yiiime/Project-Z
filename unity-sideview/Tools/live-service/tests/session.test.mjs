@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import {ArtifactStore} from '../server/providers.mjs';
+import {ArtifactStore,loadEnvironment,Providers} from '../server/providers.mjs';
 import {LiveSession} from '../server/session.mjs';
 import {normalizeAgentInput} from '../server/shared/worker/agent-director.js';
 const frame=()=>new Promise(r=>setImmediate(r));
@@ -93,4 +93,42 @@ test('pause cancels a listening turn and end prevents delayed inputs',async t=>{
  s.control(envelope(s,{action:'pause'}));assert(s.snapshot().call.version>version);assert.equal(s.snapshot().call.input,'idle');
  s.control(envelope(s,{action:'end'}));assert.equal(s.snapshot().call.active,false);
  assert.throws(()=>s.input(envelope(s,{type:'viewer.message',payload:{text:'迟到语音'}})),/session_paused/);
+});
+
+test('native room exposes web message receipts and selection pause without pausing the room',async t=>{
+ const s=await fixture(t);s.engine.sendMessage('我想看看新计划');const message=s.engine._state.messages.findLast(m=>m.mine);
+ const room=s.snapshot().room;assert.equal(room.viewers,s.engine._state.viewers);assert.equal(room.messages.find(m=>m.id===message.id).replyStatus,'seen');assert.equal(room.voiceAvailable,false);
+ assert(s.engine._executeTool({name:'start_tarot',args:{origin:'viewer',requesterId:message.id,question:'新计划',spread:'three'}}));
+ const task=s.engine._state.play.tarot;receipt(s,latest(s,'tarot.present'),'displayed');
+ s.input(envelope(s,{type:'tarot.pause',payload:{taskId:task.id}}));
+ assert.equal(s.snapshot().tarot.paused,true);assert.equal(s.snapshot().tarot.spread,'three');assert.equal(s.snapshot().phase,'live');
+ assert.throws(()=>s.input(envelope(s,{type:'tarot.selection',payload:{taskId:task.id,resourceRevision:0,round:task.round,candidateId:task.candidates[0].id}})),/state_conflict/);
+ s.input(envelope(s,{type:'tarot.pause',payload:{taskId:task.id}}));assert.equal(s.snapshot().tarot.paused,false);
+ assert.throws(()=>s.input(envelope(s,{type:'activity.finish',payload:{taskId:'expired'}})),/stale_revision/);
+});
+
+test('call waits for the host turn and suspension hangs up before accepting more audio',async t=>{
+ const s=await fixture(t);s.engine.enabled=true;s.input(envelope(s,{type:'call.join',payload:{}}));
+ s.engine.callNeedsTurn=true;assert.equal(s.snapshot().call.busy,true);
+ s.engine.callNeedsTurn=false;s.engine.pending=null;s.engine._queue=[];s.engine._continuations=[];assert.equal(s.snapshot().call.busy,false);
+ const version=s.engine.callVersion;s.control(envelope(s,{action:'pause'}));assert.equal(s.snapshot().call.active,false);assert(s.engine.callVersion>version);
+ s.control(envelope(s,{action:'resume'}));assert.equal(s.snapshot().call.active,false);
+});
+
+
+test('local service reads .env and gives local overrides precedence',t=>{
+ const root=fs.mkdtempSync(path.join(os.tmpdir(),'z-env-test-'));t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
+ const keys=['DEEPSEEK_API_KEY','VOLC_TTS_API_KEY','VOLC_ASR_API_KEY'];const saved=Object.fromEntries(keys.map(k=>[k,process.env[k]]));
+ t.after(()=>{for(const k of keys)if(saved[k]===undefined)delete process.env[k];else process.env[k]=saved[k];});for(const k of keys)delete process.env[k];
+ fs.writeFileSync(path.join(root,'.env'),'DEEPSEEK_API_KEY="test-text"\nVOLC_TTS_API_KEY=test-voice\nexport VOLC_ASR_API_KEY=test-asr # local\n');
+ assert.deepEqual(loadEnvironment(root),{DEEPSEEK_API_KEY:'test-text',VOLC_TTS_API_KEY:'test-voice',VOLC_ASR_API_KEY:'test-asr'});
+ fs.writeFileSync(path.join(root,'.env.local'),'DEEPSEEK_API_KEY=test-override\n');assert.equal(loadEnvironment(root).DEEPSEEK_API_KEY,'test-override');
+ process.env.DEEPSEEK_API_KEY='test-process';assert.equal(loadEnvironment(root).DEEPSEEK_API_KEY,'test-process');
+});
+
+
+test('voice entitlement failures reach the native status without provider payloads',async()=>{
+ const providers=new Providers({VOLC_TTS_API_KEY:'test-only'},{fetch:async()=>new Response('data: '+JSON.stringify({code:45000030,message:'provider-private-details'})+'\n\n',{headers:{'Content-Type':'text/event-stream'}})});
+ await assert.rejects(providers.synthesize('test-owner','晚上好','warm'),{message:'tts_provider_resource_not_granted'});
+ assert.equal(providers.voiceError,'tts_provider_resource_not_granted');
 });

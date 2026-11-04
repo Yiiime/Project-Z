@@ -227,7 +227,7 @@ namespace Seabreeze
             if(!initialized||session==null)return;
             if(overlayMode=="live")
             {
-                if(Application.isFocused&&GameInput.Pressed(Key.Escape))CloseOverlay();
+                if(Application.isFocused&&GameInput.Pressed(Key.Escape)&&!(nativeLive?.HandleBack()??false))CloseOverlay();
                 return;
             }
             if(IsTransitioning)

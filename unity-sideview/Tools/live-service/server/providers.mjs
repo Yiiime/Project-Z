@@ -10,7 +10,7 @@ export const hash=b=>createHash('sha256').update(b).digest('hex');
 export function loadEnvironment(source){
  const env={};for(const [name,file] of [['DEEPSEEK_API_KEY','DeepSeek配置.env'],['VOLC_TTS_API_KEY','火山语音配置.env'],['VOLC_ASR_API_KEY','火山识别配置.env']]){
   env[name]=process.env[name]?.trim()||'';if(env[name])continue;
-  for(const f of [file,'.env.local']){try{const s=fs.readFileSync(path.join(source,f),'utf8');const m=s.match(new RegExp('^\\s*(?:export\\s+)?'+name+'\\s*=\\s*(.*?)\\s*$','m'));if(!m)continue;const v=m[1];const q=v.match(/^(['"])(.*?)\1\s*(?:#.*)?$/);env[name]=q?q[2]:v.replace(/\s+#.*$/,'').trim();if(env[name])break;}catch{}}
+  for(const f of ['.env.local',file,'.env']){try{const s=fs.readFileSync(path.join(source,f),'utf8');const m=s.match(new RegExp('^\\s*(?:export\\s+)?'+name+'\\s*=\\s*(.*?)\\s*$','m'));if(!m)continue;const v=m[1];const q=v.match(/^(['"])(.*?)\1\s*(?:#.*)?$/);env[name]=q?q[2]:v.replace(/\s+#.*$/,'').trim();if(env[name])break;}catch{}}
  }return env;
 }
 function request(route,identity,payload,signal){return new Request('https://z-internal.local'+route,{method:payload?'POST':'GET',headers:{Origin:'https://z-internal.local','Content-Type':'application/json','oai-authenticated-user-id':identity},...(payload?{body:JSON.stringify(payload)}:{}),signal});}
@@ -20,15 +20,16 @@ export class Providers {
  async config(identity){return (await handleAgent(request('/api/agent/config',identity),this.env,this.options)).json();}
  async generate(identity,payload,{signal}={}){const r=await handleAgent(request('/api/agent',identity,payload,signal),this.env,this.options),body=await r.json();if(!r.ok)throw Object.assign(Error(body.error),{code:body.error});return body;}
  async synthesize(identity,text,mood,signal){
+  let failure=null;const options={...this.options,diagnostics:detail=>{this.options.diagnostics?.(detail);if(detail.classification==='provider_error_code'&&detail.status===45000010)failure='tts_provider_configuration_error';if(detail.classification==='provider_error_code'&&detail.status===45000030)failure='tts_provider_resource_not_granted';}};
   const requestId=uid(),controller=new AbortController();const abort=()=>controller.abort();signal?.addEventListener('abort',abort,{once:true});const timer=setTimeout(abort,30000);
   try{if(signal?.aborted)throw Error('cancelled');
-   const r=await handleTts(request('/api/tts',identity,{requestId,text,mood:({neutral:'warm',shy:'warm',sad:'warm',surprised:'happy'})[mood]||mood},controller.signal),this.env,this.options);
-   if(!r.ok)throw Error('tts_unavailable');
+   const r=await handleTts(request('/api/tts',identity,{requestId,text,mood:({neutral:'warm',shy:'warm',sad:'warm',surprised:'happy'})[mood]||mood},controller.signal),this.env,options);
+   if(!r.ok){const error=await r.json();throw Error(error.error||'tts_unavailable');}
    const audio=await SpeechDirector.prototype.readAudio.call({},r.body,null,requestId,controller.signal);
    const clean=v=>v.normalize('NFKC').replace(/[^\p{L}\p{N}]/gu,'');
    if(clean(audio.words.map(w=>w.word||'').join(''))!==clean(text))throw Error('transcript_unverified');
-   return {bytes:Buffer.from(audio.bytes),words:audio.words,contentType:'audio/mpeg'};
-  }finally{clearTimeout(timer);signal?.removeEventListener('abort',abort);controller.abort();}
+   this.voiceError=null;return {bytes:Buffer.from(audio.bytes),words:audio.words,contentType:'audio/mpeg'};
+  }catch(error){this.voiceError=failure||(/^tts_[a-z_]+$/.test(error.message)?error.message:'tts_unavailable');throw Error(this.voiceError);}finally{clearTimeout(timer);signal?.removeEventListener('abort',abort);controller.abort();}
  }
 }
 export class ArtifactStore {
