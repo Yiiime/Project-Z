@@ -175,14 +175,17 @@ namespace Seabreeze
             PlayerMotionDefinition definition;
             try { definition = JsonUtility.FromJson<PlayerMotionDefinition>(config.text); }
             catch (System.ArgumentException) { Debug.LogError("Player motion manifest is invalid.", this); return false; }
-            if (definition == null || definition.version != 1 || definition.walk == null || definition.walk.Length != 8
+            if (definition == null || definition.version != 1 || definition.walk == null
+                || definition.walk.Length < 2 || definition.walk.Length > 64
+                || definition.walk.Any(string.IsNullOrWhiteSpace) || definition.walk.Distinct().Count() != definition.walk.Length
+                || definition.canvasHeightUnits <= 0 || float.IsNaN(definition.canvasHeightUnits) || float.IsInfinity(definition.canvasHeightUnits)
                 || definition.strideLength <= 0 || float.IsNaN(definition.strideLength) || float.IsInfinity(definition.strideLength)
                 || definition.startFrame < 0 || definition.startFrame >= definition.walk.Length
                 || definition.jumpFrame < 0 || definition.jumpFrame >= definition.walk.Length
                 || definition.stopFrames == null || definition.stopFrames.Length == 0
                 || definition.stopFrames.Any(i => i < 0 || i >= definition.walk.Length))
             {
-                Debug.LogError("Player motion requires a valid eight-pose cycle and stride.", this);
+                Debug.LogError("Player motion requires 2-64 unique walk poses, calibrated scale and a valid stride.", this);
                 return false;
             }
             var idle = Resources.Load<Sprite>(root + definition.idle);

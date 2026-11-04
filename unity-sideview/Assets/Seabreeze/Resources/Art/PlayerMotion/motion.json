@@ -6,20 +6,28 @@
   "idle": "idle",
   "walk": [
     "walk_00",
+    "walk_mid_00",
     "walk_02",
+    "walk_mid_01",
     "walk_01",
+    "walk_mid_02",
     "walk_04",
+    "walk_mid_03",
     "walk_03",
+    "walk_mid_04",
     "walk_05",
+    "walk_mid_05",
     "walk_06",
-    "walk_07"
+    "walk_mid_06",
+    "walk_07",
+    "walk_mid_07"
   ],
-  "startFrame": 2,
+  "startFrame": 4,
   "stopFrames": [
-    2,
-    6
+    4,
+    12
   ],
-  "jumpFrame": 3,
+  "jumpFrame": 6,
   "assets": [
     {
       "name": "idle",
@@ -137,7 +145,162 @@
         "y": 0.06426155580608794
       },
       "sha256": "7889e93da9d73e09b22612f23a3d18a9ebf1800a8b4382f6241ca044d02114d7"
+    },
+    {
+      "name": "walk_mid_00",
+      "file": "walk_mid_00.png",
+      "width": 896,
+      "height": 1792,
+      "pixelsPerUnit": 614.1551540913921,
+      "pivot": {
+        "x": 0.5,
+        "y": 0.060825892857142905
+      },
+      "sha256": "005210e38395480781b809e840f02eec854c0234ec51498d0d62d2da5061e550",
+      "sourcePair": [
+        "walk_00",
+        "walk_02"
+      ],
+      "method": "RIFE 4.25 shared RGBA flow"
+    },
+    {
+      "name": "walk_mid_01",
+      "file": "walk_mid_01.png",
+      "width": 896,
+      "height": 1792,
+      "pixelsPerUnit": 614.1551540913921,
+      "pivot": {
+        "x": 0.5,
+        "y": 0.060267857142857095
+      },
+      "sha256": "3916ef976fa56539075d4fb4477dbcc522bc61b6d63831283a0e00f666bf339e",
+      "sourcePair": [
+        "walk_02",
+        "walk_01"
+      ],
+      "method": "RIFE 4.25 shared RGBA flow"
+    },
+    {
+      "name": "walk_mid_02",
+      "file": "walk_mid_02.png",
+      "width": 896,
+      "height": 1792,
+      "pixelsPerUnit": 614.1551540913921,
+      "pivot": {
+        "x": 0.5,
+        "y": 0.0630580357142857
+      },
+      "sha256": "e9c2ad93aca1c76e9cd25df2c965d38e4cee52ec8a2262c3cb484a182a751bb1",
+      "sourcePair": [
+        "walk_01",
+        "walk_04"
+      ],
+      "method": "RIFE 4.25 with guided original-pixel leg warp"
+    },
+    {
+      "name": "walk_mid_03",
+      "file": "walk_mid_03.png",
+      "width": 896,
+      "height": 1792,
+      "pixelsPerUnit": 614.1551540913921,
+      "pivot": {
+        "x": 0.5,
+        "y": 0.060267857142857095
+      },
+      "sha256": "c05bb56a366e2f54c172ce4fb994d6e908eb137a2d9c179f081a8246fa440b2b",
+      "sourcePair": [
+        "walk_04",
+        "walk_03"
+      ],
+      "method": "RIFE 4.25 shared RGBA flow"
+    },
+    {
+      "name": "walk_mid_04",
+      "file": "walk_mid_04.png",
+      "width": 896,
+      "height": 1792,
+      "pixelsPerUnit": 614.1551540913921,
+      "pivot": {
+        "x": 0.5,
+        "y": 0.060825892857142905
+      },
+      "sha256": "0cf8dea37ac6ced5c5dd568d656265e244b05bd13dde884f6a272a6d91a6655e",
+      "sourcePair": [
+        "walk_03",
+        "walk_05"
+      ],
+      "method": "RIFE 4.25 shared RGBA flow"
+    },
+    {
+      "name": "walk_mid_05",
+      "file": "walk_mid_05.png",
+      "width": 896,
+      "height": 1792,
+      "pixelsPerUnit": 614.1551540913921,
+      "pivot": {
+        "x": 0.5,
+        "y": 0.0597098214285714
+      },
+      "sha256": "6fd8e818332b92c91abe93aacd594b3577d24759d7b3f687c2b78e34025d8492",
+      "sourcePair": [
+        "walk_05",
+        "walk_06"
+      ],
+      "method": "RIFE 4.25 shared RGBA flow"
+    },
+    {
+      "name": "walk_mid_06",
+      "file": "walk_mid_06.png",
+      "width": 896,
+      "height": 1792,
+      "pixelsPerUnit": 614.1551540913921,
+      "pivot": {
+        "x": 0.5,
+        "y": 0.0641741071428571
+      },
+      "sha256": "420095c4a5dc52cb0e5aecd0d4762eccf00eef81a448867bdfe83c96a36259e9",
+      "sourcePair": [
+        "walk_06",
+        "walk_07"
+      ],
+      "method": "RIFE 4.25 with guided original-pixel leg warp"
+    },
+    {
+      "name": "walk_mid_07",
+      "file": "walk_mid_07.png",
+      "width": 896,
+      "height": 1792,
+      "pixelsPerUnit": 614.1551540913921,
+      "pivot": {
+        "x": 0.5,
+        "y": 0.0597098214285714
+      },
+      "sha256": "35f441918ad413435570ecbda25fb66113e5f7f412a54ead85d94426e2c5a02c",
+      "sourcePair": [
+        "walk_07",
+        "walk_00"
+      ],
+      "method": "RIFE 4.25 shared RGBA flow"
     }
   ],
-  "alignment": "Preserve original pixels; common Figma canvas scale, canvas-center X and opaque sole baseline."
+  "alignment": "Preserve original pixels; common Figma canvas scale, canvas-center X and opaque sole baseline.",
+  "sourceKeyframes": [
+    "walk_00",
+    "walk_02",
+    "walk_01",
+    "walk_04",
+    "walk_03",
+    "walk_05",
+    "walk_06",
+    "walk_07"
+  ],
+  "interpolation": {
+    "method": "local RIFE 4.25 RGBA + guided crossing-leg correction",
+    "keyframesPreserved": true,
+    "cycleTimingPreserved": true,
+    "normalizedCanvas": [
+      896,
+      1792
+    ]
+  }
 }

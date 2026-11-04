@@ -40,6 +40,7 @@ namespace Seabreeze.Editor
             public float canvasHeightUnits, strideLength;
             public string idle;
             public string[] walk;
+            public string[] sourceKeyframes;
             public Asset[] assets;
         }
         [Serializable] sealed class Asset
@@ -77,13 +78,19 @@ namespace Seabreeze.Editor
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode) throw new InvalidOperationException("Import in Edit mode.");
             var definition = JsonUtility.FromJson<Definition>(File.ReadAllText(Folder + "/motion.json"));
-            Require(definition.assets.Length == 9 && definition.walk.Length == 8, "Nine source assets and eight walk poses are required.");
+            Require(definition.walk.Length >= 2 && definition.walk.Length <= 64
+                && definition.assets.Length == definition.walk.Length + 1
+                && definition.assets.Select(a => a.name).Distinct().Count() == definition.assets.Length
+                && definition.walk.Distinct().Count() == definition.walk.Length
+                && definition.walk.Concat(new[] { definition.idle }).All(name => definition.assets.Any(a => a.name == name)),
+                "One idle and 2-64 unique, registered walk assets are required.");
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
             foreach (Asset asset in definition.assets)
             {
                 string path = Folder + "/" + asset.file;
                 Require(Hash(path) == asset.sha256, "Original Figma bytes changed: " + asset.file);
                 var importer = (TextureImporter)AssetImporter.GetAtPath(path);
+                Require(importer.DoesSourceTextureHaveAlpha(), "Animation sprites require a real alpha channel: " + asset.file);
                 importer.textureType = TextureImporterType.Sprite;
                 importer.spriteImportMode = SpriteImportMode.Single;
                 importer.spritePixelsPerUnit = asset.pixelsPerUnit;
@@ -104,7 +111,7 @@ namespace Seabreeze.Editor
                 Require(sprite != null && sprite.texture.width == asset.width && sprite.texture.height == asset.height,
                     "Import must preserve source dimensions: " + asset.file);
             }
-            Debug.Log("[Player Motion] Imported nine original Figma images with calibrated scale and pivots.");
+            Debug.Log("[Player Motion] Imported " + definition.assets.Length + " registered images with calibrated scale and pivots.");
         }
 
         [MenuItem("Seabreeze/Verify Player Motion")]
@@ -266,19 +273,26 @@ namespace Seabreeze.Editor
             checks.Add("Real input covers walk, stop, reversal and existing jump without changing physics or story");
             if (!baseline)
             {
+                var definition = JsonUtility.FromJson<Definition>(File.ReadAllText(Folder + "/motion.json"));
                 string[] used = samples.Where(s => s.pose == "Walk").Select(s => s.sprite).Distinct().ToArray();
-                Require(used.Length == 8 && used.All(n => n.StartsWith("walk_", StringComparison.Ordinal)), "All eight Figma walk poses are used.");
+                Require(used.Length == definition.walk.Length && used.All(n => definition.walk.Contains(n)), "All registered walk poses are used.");
                 Require(samples.All(s => Mathf.Abs(s.scaleX - 1) < .0001f && Mathf.Abs(s.scaleY - 1) < .0001f), "Sprite scale stays fixed in idle, walk, turn and jump.");
                 Require(visual.Pose == "Idle" && renderer.sprite.name == "idle", "Stops settle to the matching Figma idle.");
-                var definition = JsonUtility.FromJson<Definition>(File.ReadAllText(Folder + "/motion.json"));
                 foreach (Asset asset in definition.assets)
                 {
                     Sprite sprite = Resources.Load<Sprite>("Art/PlayerMotion/" + asset.name);
-                    Require(sprite != null && Hash(Folder + "/" + asset.file) == asset.sha256, "Every original asset is present and unchanged.");
+                    Require(sprite != null && Hash(Folder + "/" + asset.file) == asset.sha256, "Every registered asset is present and unchanged.");
                     Require(Mathf.Abs(sprite.rect.height / sprite.pixelsPerUnit - definition.canvasHeightUnits) < .0001f, "Common canvas scale.");
                     Require(Vector2.Distance(sprite.pivot, new Vector2(asset.width * asset.pivot.x, asset.height * asset.pivot.y)) < .01f, "Calibrated body and sole pivot.");
                 }
-                checks.Add("Nine original Figma assets, eight-pose cycle, constant scale and calibrated pivots");
+                checks.Add(definition.assets.Length + " registered assets, " + definition.walk.Length + "-pose cycle, constant scale and calibrated pivots");
+                if (definition.sourceKeyframes != null && definition.sourceKeyframes.Length > 0)
+                {
+                    Require(definition.walk.Length == definition.sourceKeyframes.Length * 2, "Each source interval receives one midpoint.");
+                    for (int i = 0; i < definition.sourceKeyframes.Length; i++)
+                        Require(definition.walk[i * 2] == definition.sourceKeyframes[i], "Original keyframe order and normalized cycle time remain unchanged.");
+                    checks.Add("Original keyframes retained at the same normalized times with exactly one midpoint per interval");
+                }
                 float phase30 = CheckClock(30);
                 float phase60 = CheckClock(60);
                 float error = Mathf.Abs(phase30 - phase60);
