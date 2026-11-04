@@ -25,7 +25,11 @@
 
 ## 依赖与分发
 
-Unity 6000.3.27f1、URP 17.3.0、现有 uGUI 2.0.0 / Input System。SDK 使用 Vuplex Windows/macOS 试用，仅用于本机评估；试用账号、到期授权和大型原生插件不提交。正式分发须换成符合团队使用范围的授权版本。适配器当前验收目标是桌面 Mono，IL2CPP 尚未验收。
+Unity 6000.3.27f1、URP 17.3.0、现有 uGUI 2.0.0 / Input System。Vuplex 正式版支持 Windows/macOS，但 **14 天试用版仅支持 Windows，不支持 macOS**。官方说明 macOS 因代码签名要求不提供试用版：https://store.vuplex.com/free-trials/?product=Unity.WebView.Standalone 。不能用 Windows 试用包在 Mac 编辑器里完成真实页面验证。
+
+当前已下载 v4.15.2 Windows 试用包（有效期至 2026-11-18），归档内 273 个资产路径均位于 Assets/Vuplex，只有 Windows 原生运行库。未把这个包导入 Mac 主工程。已对照其中 C# 源码核对 CanvasWebViewPrefab.Instantiate / WaitUntilInitialized / AudioSourceEnabled / AudioSource / PixelDensity、消息事件与销毁接口；这只能确认 API 形状，不能代替运行验收。
+
+试用仅用于评估，试用账号、到期授权和大型原生插件不提交。SDK 的 Assets/Vuplex 目录与 .meta 已忽略。正式分发须换成符合团队使用范围的授权版本。适配器当前验收目标是桌面 Mono，IL2CPP 尚未验收。
 
 网页侧修改在独立 z-live-public 源码的 ui/app.js 中。在线版本必须部署该通信改动后才会完成握手；仅更新 Unity 不会自动发布网站。
 
@@ -52,6 +56,13 @@ Z_LIVE_WEB_SOURCE=/absolute/path/z-live-public/ui/app.js node --test unity-sidev
 
 ## 尚待验证
 
-试用包导入、真实网页握手、中文输入、鼠标跟随、高清画面、各才艺完整执行及退出后的后台清理、Mac 构建。不能把上述替代容器测试视为真实 WebView 联调通过。
+真实网页握手、中文输入、鼠标跟随、高清画面、各才艺完整执行及退出后的后台清理、桌面构建。不能把上述替代容器测试视为真实 WebView 联调通过。
+
+继续验证有两条 Vuplex 路径，待用户选择：
+
+1. Windows 免费评估：在 Windows 安装 Unity 6000.3.27f1，检出本任务分支，导入官网下载的 v4.15.2 Windows 试用 .unitypackage，打开 Street 场景。保持 `-noaudio` 启动和适配器原生 AudioSource 静音，从 Tab → 手机 → Z 的直播进入；逐项验收后关闭直播，确认原位置、移动和游戏时间恢复。试用包不能作为团队长期依赖。
+2. Mac 验证：由用户取得 Vuplex Windows/macOS 正式版后再导入本机，使用 Chromium 后端和 Metal，继续相同验收并构建。当前没有购买授权，不代用户购买。
+
+如果用户选择免费 Mac 替代插件，需要另行核查 WebGL/Live2D、中文输入、音频静音和 Unity 通信支持，再替换 ILiveWebSurface 适配器；不把浏览器预览冒充 Unity 内嵌验收。
 
 研究边界：保留 K03 / K04 的真实经历与反馈边界；本轮只接入显示和生命周期，未接白天经历、关系奖励或节目耗时，不采用旧固定节目设定。
