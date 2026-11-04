@@ -70,7 +70,8 @@
     "verification": {
       "unity": "Unity 6000.3.27f1: 6 verification groups passed, all 16 revised poses used, zero scale span, unchanged 30/60 FPS walk phase, and original source hashes plus preserved lower PNG rows verified.",
       "gameplay": "Real scene input covers left/right walking, reversal, stop and the existing jump using an isolated save directory; no editor issues were recorded.",
-      "project_checks": "tools/team/z check passed, including 37 C# files with zero syntax errors.",
+      "project_checks": "tools/team/z check passed, including C# syntax and asset reference checks.",
+      "adoption_integration": "All 6 player motion groups passed again on 2026-11-05 after integrating main 538ef07 (native live feature, PR #27). Approved PNGs remain unchanged.",
       "preview": "Continuous same-cadence sprite comparison and separate 30 FPS Unity game recordings. Independent editor recordings are not fixed-step synchronized."
     }
   },
