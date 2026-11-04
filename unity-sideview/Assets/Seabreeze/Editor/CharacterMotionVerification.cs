@@ -41,12 +41,14 @@ namespace Seabreeze.Editor
             public string idle;
             public string[] walk;
             public string[] sourceKeyframes;
+            public string[] referenceWalk;
             public Asset[] assets;
         }
         [Serializable] sealed class Asset
         {
-            public string name, file, sha256;
+            public string name, file, sha256, sourceFrame, sourceSha256;
             public int width, height;
+            public int preservedLowerFromRow;
             public float pixelsPerUnit;
             public Vector2 pivot;
         }
@@ -284,14 +286,25 @@ namespace Seabreeze.Editor
                     Require(sprite != null && Hash(Folder + "/" + asset.file) == asset.sha256, "Every registered asset is present and unchanged.");
                     Require(Mathf.Abs(sprite.rect.height / sprite.pixelsPerUnit - definition.canvasHeightUnits) < .0001f, "Common canvas scale.");
                     Require(Vector2.Distance(sprite.pivot, new Vector2(asset.width * asset.pivot.x, asset.height * asset.pivot.y)) < .01f, "Calibrated body and sole pivot.");
+                    if (!string.IsNullOrEmpty(asset.sourceFrame)) CheckPreservedLowerPixels(asset);
                 }
                 checks.Add(definition.assets.Length + " registered assets, " + definition.walk.Length + "-pose cycle, constant scale and calibrated pivots");
+                bool revisedArms = definition.referenceWalk != null && definition.referenceWalk.Length > 0;
+                if (revisedArms)
+                {
+                    Require(definition.referenceWalk.Length == definition.walk.Length, "Arm revision keeps the same number of lower-body poses.");
+                    for (int i = 0; i < definition.walk.Length; i++)
+                        Require(definition.assets.Single(a => a.name == definition.walk[i]).sourceFrame == definition.referenceWalk[i],
+                            "Each revised pose uses the corresponding original lower-body frame.");
+                    checks.Add("Arm revision preserves source PNGs, calibrated lower-body pixels and the existing 16-frame sequence");
+                }
                 if (definition.sourceKeyframes != null && definition.sourceKeyframes.Length > 0)
                 {
                     Require(definition.walk.Length == definition.sourceKeyframes.Length * 2, "Each source interval receives one midpoint.");
+                    string[] reference = revisedArms ? definition.referenceWalk : definition.walk;
                     for (int i = 0; i < definition.sourceKeyframes.Length; i++)
-                        Require(definition.walk[i * 2] == definition.sourceKeyframes[i], "Original keyframe order and normalized cycle time remain unchanged.");
-                    checks.Add("Original keyframes retained at the same normalized times with exactly one midpoint per interval");
+                        Require(reference[i * 2] == definition.sourceKeyframes[i], "Original lower-body keyframe order and normalized cycle time remain unchanged.");
+                    checks.Add("Original lower-body keyframe timing retained with exactly one midpoint per interval");
                 }
                 float phase30 = CheckClock(30);
                 float phase60 = CheckClock(60);
@@ -299,6 +312,31 @@ namespace Seabreeze.Editor
                 Require(Mathf.Min(error, 1 - error) < .0001f, "Walk distance produces the same phase at 30 and 60 FPS.");
                 checks.Add("Walk cadence is distance-driven and independent of render FPS or idle duration");
             }
+        }
+
+        static void CheckPreservedLowerPixels(Asset asset)
+        {
+            string referencePath = Folder + "/" + asset.sourceFrame + ".png";
+            Require(Hash(referencePath) == asset.sourceSha256, "The source image remains unchanged: " + asset.sourceFrame);
+            Require(asset.preservedLowerFromRow > 0 && asset.preservedLowerFromRow < asset.height,
+                "The arm sample declares a non-empty preserved lower-body region.");
+            var source = new Texture2D(2, 2, TextureFormat.RGBA32, false, true);
+            var revised = new Texture2D(2, 2, TextureFormat.RGBA32, false, true);
+            try
+            {
+                Require(ImageConversion.LoadImage(source, File.ReadAllBytes(referencePath)), "Decode source PNG.");
+                Require(ImageConversion.LoadImage(revised, File.ReadAllBytes(Folder + "/" + asset.file)), "Decode revised PNG.");
+                Require(source.width == asset.width && source.height == asset.height
+                    && revised.width == asset.width && revised.height == asset.height, "The revision keeps native source dimensions.");
+                Color32[] before = source.GetPixels32(), after = revised.GetPixels32();
+                // PNG row metadata is top-down; Unity pixel arrays begin at the bottom.
+                int preservedPixels = (asset.height - asset.preservedLowerFromRow) * asset.width;
+                for (int i = 0; i < preservedPixels; i++)
+                    if (before[i].r != after[i].r || before[i].g != after[i].g
+                        || before[i].b != after[i].b || before[i].a != after[i].a)
+                        throw new InvalidOperationException("Lower-body pixels changed in " + asset.file);
+            }
+            finally { Object.DestroyImmediate(source); Object.DestroyImmediate(revised); }
         }
 
         static float CheckClock(int rate)

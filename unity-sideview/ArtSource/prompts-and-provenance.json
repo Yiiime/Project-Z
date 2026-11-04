@@ -40,6 +40,41 @@
     "processing": "Original stand and eight walk PNGs are preserved byte-for-byte. Unity import settings normalize the Figma canvas scale and opaque sole baseline; the motion manifest records frame order, pivots and SHA-256 hashes.",
     "authorization": "User authorized these supplied assets for the Project-Z player motion sample."
   },
+  "player_arm_sample": {
+    "source_type": "local-original-pixel-animation-revision",
+    "source_manifest": "Assets/Seabreeze/Resources/Art/PlayerMotion/motion.json",
+    "created_on": "2026-11-04",
+    "review_status": "User approved the natural shoulder/elbow swing after visual comparison; adopted for the player walk cycle.",
+    "approved_on": "2026-11-05",
+    "source_pose": "The supplied walk_01 near sleeve/hand is reused for both articulated arms; a clear cloth panel from that pose fills the uncovered jacket.",
+    "method": "Separate upper/lower arm bone mappings rotate around the shoulder and elbow with fixed segment lengths, opposite arm phases and a slight elbow bend. Results are baked at the existing 16 walk phases. The far arm is composited behind the body and legs; the near arm is in front. Collar and hem alignment follow each existing frame. No generative image model is used.",
+    "scope": "16 separate walk_soft PNGs retain the corresponding source image dimensions, pixels-per-unit and sole pivots. The original idle, eight keyframes and eight midpoints remain byte-for-byte intact. Runtime stride, frame timing, camera, physics and NPC animation are unchanged.",
+    "processing": {
+      "working_canvas": [896, 1792],
+      "near_shoulder_range_degrees": [-22, 22],
+      "far_shoulder_range_degrees": [-20, 20],
+      "elbow_flex_range_degrees": [8, 12],
+      "far_arm_width_factor": 0.88,
+      "far_arm_color_factor": 0.92,
+      "preserved_lower_region": "Each derived PNG records preservedLowerFromRow. All RGBA pixels from this top-down row to the bottom are copied from its source, including the knees and soles; other unchanged regions are also restored from the native source.",
+      "local_recipe_files": ["natural_arms.py", "export_arms_sample.py --natural", "preview_natural_arms.py"]
+    },
+    "diagnostics": {
+      "basis": "Authored shoulder/elbow/wrist trajectories on the 896 x 1792 working canvas; this is a rig diagnostic, not a substitute for visual review.",
+      "near_wrist_horizontal_span_pixels": 320.23,
+      "far_wrist_horizontal_span_pixels": 290.69,
+      "bone_length_error_pixels": "Less than 0.001 across all 16 poses",
+      "opposite_shoulder_phases": true,
+      "art_limit": "The exposed shoulder/back cloth uses a stretched patch of the original jacket; its detail is simplified for this motion sample."
+    },
+    "verification": {
+      "unity": "Unity 6000.3.27f1: 6 verification groups passed, all 16 revised poses used, zero scale span, unchanged 30/60 FPS walk phase, and original source hashes plus preserved lower PNG rows verified.",
+      "gameplay": "Real scene input covers left/right walking, reversal, stop and the existing jump using an isolated save directory; no editor issues were recorded.",
+      "project_checks": "tools/team/z check passed, including C# syntax and asset reference checks.",
+      "adoption_integration": "All 6 player motion groups passed again on 2026-11-05 after integrating main 538ef07 (native live feature, PR #27). Approved PNGs remain unchanged.",
+      "preview": "Continuous same-cadence sprite comparison and separate 30 FPS Unity game recordings. Independent editor recordings are not fixed-step synchronized."
+    }
+  },
   "player_motion_16": {
     "source_type": "local-frame-interpolation",
     "source_manifest": "Assets/Seabreeze/Resources/Art/PlayerMotion/motion.json",
