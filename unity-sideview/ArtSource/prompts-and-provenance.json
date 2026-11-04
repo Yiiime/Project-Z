@@ -40,6 +40,35 @@
     "processing": "Original stand and eight walk PNGs are preserved byte-for-byte. Unity import settings normalize the Figma canvas scale and opaque sole baseline; the motion manifest records frame order, pivots and SHA-256 hashes.",
     "authorization": "User authorized these supplied assets for the Project-Z player motion sample."
   },
+  "player_arm_sample": {
+    "source_type": "local-original-pixel-animation-revision",
+    "source_manifest": "Assets/Seabreeze/Resources/Art/PlayerMotion/motion.json",
+    "created_on": "2026-11-04",
+    "review_status": "Comparison sample; awaiting user visual review before adoption.",
+    "source_pose": "The supplied walk_01 relaxed sleeve and hand pose",
+    "method": "Compact inverse pixel deformation creates one eased, small arm oscillation per existing walk cycle. Original sleeve/hand pixels retain their identities; the same supplied pose fills the jacket previously covered by moving arms. Collar and hem alignment follow each existing frame. No generative image model is used.",
+    "scope": "16 separate walk_soft PNGs retain the corresponding source image dimensions, pixels-per-unit and sole pivots. The original idle, eight keyframes and eight midpoints remain byte-for-byte intact. Runtime stride, frame timing, camera, physics and NPC animation are unchanged.",
+    "processing": {
+      "working_canvas": [896, 1792],
+      "near_hand_horizontal_amplitude_pixels": 42,
+      "far_hand_horizontal_amplitude_pixels": 33.6,
+      "preserved_lower_region": "Each derived PNG records preservedLowerFromRow. All RGBA pixels from this top-down row to the bottom are copied from its source, including the knees and soles; other unchanged regions are also restored from the native source.",
+      "local_recipe_files": ["arms_sample.py", "export_arms_sample.py", "preview_arms_sample.py"]
+    },
+    "diagnostics": {
+      "basis": "Skin-component hand centroids measured on the aligned 896 x 1792 working canvases; this is a motion diagnostic, not a substitute for visual review.",
+      "horizontal_direction_changes_per_cycle_before": [4, 6],
+      "horizontal_direction_changes_per_cycle_after": [2, 2],
+      "max_adjacent_hand_displacement_pixels_before": 49.3832,
+      "max_adjacent_hand_displacement_pixels_after": 25.4459
+    },
+    "verification": {
+      "unity": "Unity 6000.3.27f1: 6 verification groups passed, all 16 revised poses used, zero scale span, unchanged 30/60 FPS walk phase, and original source hashes plus preserved lower PNG rows verified.",
+      "gameplay": "Real scene input covers left/right walking, reversal, stop and the existing jump using an isolated save directory; no editor issues were recorded.",
+      "project_checks": "tools/team/z check passed, including 37 C# files with zero syntax errors.",
+      "preview": "Continuous same-cadence sprite comparison and separate 30 FPS Unity game recordings. Independent editor recordings are not fixed-step synchronized."
+    }
+  },
   "player_motion_16": {
     "source_type": "local-frame-interpolation",
     "source_manifest": "Assets/Seabreeze/Resources/Art/PlayerMotion/motion.json",
