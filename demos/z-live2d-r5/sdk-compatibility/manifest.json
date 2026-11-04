@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "description": "Minimal Unity 6000.6 compatibility patch for the staged Live2D Cubism editor sources.",
+  "upstream": "https://github.com/Live2D/CubismUnityComponents",
+  "entries": [
+    {
+      "relative_path": "Assets/Live2D/Cubism/Editor/CubismUnityEditorUtility.cs",
+      "patch_path": "patches/CubismUnityEditorUtility.cs.patch",
+      "original_sha256": "94e9013203bc1f28239cbd42988463195ae5f912b0840f6026fb165d26fe3dbd",
+      "patched_sha256": "604f520c1a426ac5c3ed82f2855723547ad29c7da5889323ba9dd0c9914144bc"
+    },
+    {
+      "relative_path": "Assets/Live2D/Cubism/Framework/MotionFade/Editor/CubismFadeMotionImporter.cs",
+      "patch_path": "patches/CubismFadeMotionImporter.cs.patch",
+      "original_sha256": "5ee2e596c7221c3550baa6e2bf4b13614e58df24d35ea7c053c902664350fa91",
+      "patched_sha256": "3f625bc5c6ba0cfcd545538120231d2986d79b74cdd1360b588846ef6aa47a53"
+    },
+    {
+      "relative_path": "Assets/Live2D/Cubism/Framework/Pose/Editor/CubismPoseMotionImporter.cs",
+      "patch_path": "patches/CubismPoseMotionImporter.cs.patch",
+      "original_sha256": "4f06d9b8dd24e3f5c96ab8cfc9594358e21ce5712f3363dbb494072f564ac2d5",
+      "patched_sha256": "819ad5e4ddf355be406c9f24c629c04a883b10cf992e545a0b3a9a255ee99792"
+    }
+  ]
+}

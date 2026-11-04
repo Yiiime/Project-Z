@@ -1,0 +1,12 @@
+{
+  "name": "moon-z-unity-demo-server",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=26"
+  },
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test server.test.mjs test-codex-provider.mjs"
+  }
+}

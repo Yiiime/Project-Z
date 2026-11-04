@@ -1,0 +1,14 @@
+{
+  "sdk": "5-r.5",
+  "unity": "6000.6.7f1",
+  "urp": "17.6.0",
+  "actions": 20,
+  "actions_passed": 20,
+  "parameter_samples": 1479,
+  "raw_model_files_checked": 13,
+  "raw_model_files_unchanged": true,
+  "quality_levels_checked": 6,
+  "all_quality_levels_use_r5_pipeline": true,
+  "scope": "macOS standalone Demo only; main game and other platforms not accepted",
+  "source_qa_report": "workspace verification/r5-urp-20261104/final/20261105-004048-279/emotion-preview-qa.json"
+}

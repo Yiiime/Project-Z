@@ -1,0 +1,820 @@
+{
+  "schema": 1,
+  "scope": "demos/z-live2d-r5 only",
+  "excludes": [
+    "SDK sources and binaries",
+    "Model.asset generated cache",
+    "Unity caches and build apps",
+    "credentials, databases, real chat history",
+    "unrelated assets and archives"
+  ],
+  "file_count_excluding_manifest": 161,
+  "total_bytes_excluding_manifest": 39607550,
+  "files": [
+    {
+      "path": ".gitignore",
+      "bytes": 413,
+      "sha256": "e8250749f6775c34bfa633777f67cfcab71b6060ffc23828dee89162c3088943"
+    },
+    {
+      "path": "Assets/DefaultVolumeProfile.asset",
+      "bytes": 20476,
+      "sha256": "f83a3863fc3b2aaff459b5191218cdb4a0381e3b2205157432e6c6440f86b9fb"
+    },
+    {
+      "path": "Assets/DefaultVolumeProfile.asset.meta",
+      "bytes": 189,
+      "sha256": "28c8f79da31a10db3a9cf3df340b74a2f5f48f6a07b9153457f0371f1a99b01f"
+    },
+    {
+      "path": "Assets/Model.controller",
+      "bytes": 2055,
+      "sha256": "2c11425bc51fe70cf7a6a8a9031e8d1ac1f5ed15014d309becd2506aee0b21a0"
+    },
+    {
+      "path": "Assets/Model.controller.meta",
+      "bytes": 188,
+      "sha256": "0fc2e56bcf898b43bdd09cd6668eb7d46b2a4e0736be899c231f993cf5aaf27a"
+    },
+    {
+      "path": "Assets/Reply_Nod.anim",
+      "bytes": 4794,
+      "sha256": "9c6b5c2a069264d68e9b5453a87c92f17b1e0efea5020033d453db4d72c3219c"
+    },
+    {
+      "path": "Assets/Reply_Nod.anim.meta",
+      "bytes": 188,
+      "sha256": "d88ba1c1a61bd691c6a0aea1f8ef61e6e8681323cced181acb841fe466c88542"
+    },
+    {
+      "path": "Assets/UniversalRenderPipelineGlobalSettings.asset",
+      "bytes": 28821,
+      "sha256": "6ca5c86b3e8062f2b21577b08bce692ccdd4b870d06e3fab5b576b4986cb8039"
+    },
+    {
+      "path": "Assets/UniversalRenderPipelineGlobalSettings.asset.meta",
+      "bytes": 189,
+      "sha256": "e32ed83c0d71ed966ec59009370240d42b2c0955bd033922729934aab5b33b49"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Editor/ZDialogueDemoQaRunner.cs",
+      "bytes": 6502,
+      "sha256": "d6c2d844c4bfe82456dc84e2bdb0536eed2e82126565b3cec8aef08951485cdf"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Editor/ZDialogueDemoQaRunner.cs.meta",
+      "bytes": 59,
+      "sha256": "066831cd7752b6b79eb66024c9516eb08be1f283743cffc727ec9a6ba20ab9a2"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Editor/ZDialogueDemoSceneBuilder.cs",
+      "bytes": 26501,
+      "sha256": "5362af2b9e3a47a9305bc76849665505dcadee37c7dc2959cda3276ab74ff772"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Editor/ZDialogueDemoSceneBuilder.cs.meta",
+      "bytes": 59,
+      "sha256": "a88427360729a041dec1b0d5d45a9d250d43bb43475f29c483002e8e5ebe1ce5"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Editor/ZDialogueDemoStandaloneBuilder.cs",
+      "bytes": 3961,
+      "sha256": "151f5db52958076e0ef66d873310c36adb9028c0a048d643c0aa22f3eaca5b16"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Editor/ZDialogueDemoStandaloneBuilder.cs.meta",
+      "bytes": 59,
+      "sha256": "0034afd4e198018281dd20fec577dbaa97ecf6ec53519698bed0d1beb99bea93"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Editor.meta",
+      "bytes": 172,
+      "sha256": "8fce855b5b6e6ec91debfa256f7be350b54ee4a8dc9e244a5791ab867f082168"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Models.expressionList.asset",
+      "bytes": 1083,
+      "sha256": "f4e346af803a2648a05178f1f63970e51ef1e08e90dfa386c4aca25ace5f3976"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Models.expressionList.asset.meta",
+      "bytes": 189,
+      "sha256": "bab90140617f58baece7e677fc5289f53121c3222d2743b04af5889513b25ab8"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/Model.asset.meta",
+      "bytes": 189,
+      "sha256": "b046e1ba7859ec011fa2fec14099d48a173d1e5cb74cdfa9ba8d3ac3ee3e6985"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/Model.cdi3.json",
+      "bytes": 3092,
+      "sha256": "51581258a10baafc3a0dd7f33c6b349cab7c94a9fb7df3a2a9c0ecad79aacfb5"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/Model.cdi3.json.meta",
+      "bytes": 158,
+      "sha256": "494e5c74318ca71f3f14e3caa8de9ed63082d5ff18965ffcbf0db0c666c1a9d9"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/Model.controller",
+      "bytes": 1707,
+      "sha256": "a62120a85fde21fbf873ca409a210ff1db289030f6648d7da89fb80a6f00e448"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/Model.controller.meta",
+      "bytes": 188,
+      "sha256": "e22c96041835bddbe97a21e9a65aa2f92d111f9672da42705093a11af86f543d"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/Model.moc3",
+      "bytes": 31246784,
+      "sha256": "0f86fc274da1c1e55b905979d240ef291d76d0e832c78bcee0174ba18edadd3d"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/Model.moc3.meta",
+      "bytes": 155,
+      "sha256": "110b01456ac6f18ff5be12147e73d1f9881025eb4bf2f1515c76934c396d7203"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/Model.model3.json",
+      "bytes": 938,
+      "sha256": "6c652f0e563b5f9328e6a2929b871feb03fae17e9ae79bc14ef63ecbc3689cbb"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/Model.model3.json.meta",
+      "bytes": 266,
+      "sha256": "ad5e02a47f1e206c3d719e830d28929aedc7a2dcb7545d1f10999487e1c0ee2c"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/Model.physics3.json",
+      "bytes": 9970,
+      "sha256": "3369f2dc3da3d171ee53df0e16e459d75df7a4ae5a95ef6c749fcdea251daa20"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/Model.physics3.json.meta",
+      "bytes": 158,
+      "sha256": "6a56779ce9b08547fd96c78e791ea727d202169ba96dfb1fa9413aaa09f8ccd8"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/Model.prefab",
+      "bytes": 257653,
+      "sha256": "60d45e29f5ae02c8ab9546328799a8f88f7b1af68ec3868ef311ea16577014d6"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/Model.prefab.meta",
+      "bytes": 154,
+      "sha256": "e601f5fa4a035bd69ee5889b19d8ae39d65d231e05585daa0b4fd8528ef74fed"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/ModelMaskTexture.asset",
+      "bytes": 527,
+      "sha256": "d345a9cdd3a1d23da56752b95f6015bdf0a398f3e94d9cad1cf6647576b3740a"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/ModelMaskTexture.asset.meta",
+      "bytes": 189,
+      "sha256": "1d95b30d7da7141c2d97c666c518cdaa13acce8b811e427cb17b2e50613112f8"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/Z.expressionList.asset",
+      "bytes": 505,
+      "sha256": "bf22ce16690805d59f89d4b5fc5053faa7e1efdf845d63926cb0590d0929c19c"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/Z.expressionList.asset.meta",
+      "bytes": 189,
+      "sha256": "feebbc91af3fd6b24df78809905005e9796bde865ea847d21e6c1ad1f7ea91bf"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/angry.exp3.asset",
+      "bytes": 597,
+      "sha256": "db7c3f4110895a6aebb2496484a9b9ddb9c87cb45d2f853b614a74eaa458d145"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/angry.exp3.asset.meta",
+      "bytes": 189,
+      "sha256": "764a6a6dec5e2e030aba5c6dbf826508656e6b9f25a3b2066a250627da2fcc52"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/angry.exp3.json",
+      "bytes": 170,
+      "sha256": "7e8df01289a5fc225f2d79c414f6735c84c9a6481a777a1404f2e532df0c658e"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/angry.exp3.json.meta",
+      "bytes": 158,
+      "sha256": "36296c9e064351d781a15dd586bfb1f5170d797661d8adab6ab8263cf3cc0185"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/blush.exp3.asset",
+      "bytes": 591,
+      "sha256": "9cf401e8a3b37f305f6059f7668a6510d9dea2ddc36effe2988d15e8e48eab40"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/blush.exp3.asset.meta",
+      "bytes": 189,
+      "sha256": "e9d6d60871b7406f70bd5836787e47d3024ef81f4b95266542b90ac2cec16d7f"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/blush.exp3.json",
+      "bytes": 164,
+      "sha256": "ab0e3a0fd49ed3ef2f688eea828be370ba6e6c5cb69aaafddc5df1703862f277"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/blush.exp3.json.meta",
+      "bytes": 158,
+      "sha256": "ea0bd8745f6fa0dd537792925ef4cd92bfac8dd8c8db0e275a385b41ae07e5c8"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/explain.exp3.asset",
+      "bytes": 601,
+      "sha256": "e8aeb1fa98768efc3f781f40b1aea53cd2773a973cf11a985178d48179333328"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/explain.exp3.asset.meta",
+      "bytes": 189,
+      "sha256": "e62385270bcf449c189caff154e837d25fc2398bbcbd1e7df6ee18600e3c260a"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/explain.exp3.json",
+      "bytes": 172,
+      "sha256": "eb26eefe5d9b4bf83914bcd9817b9b22c267de8c02807da4c272b661911de4d4"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/explain.exp3.json.meta",
+      "bytes": 158,
+      "sha256": "2ae04f23db2155561848fdeca4a7b7565e9bad38401f65a250499c9129944a42"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/point.exp3.asset",
+      "bytes": 597,
+      "sha256": "5790d166641c3c6329ec37e4cc06409d5b6cb458ef4c2daab9edd448fa545803"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/point.exp3.asset.meta",
+      "bytes": 189,
+      "sha256": "da01c60fae512e6fdd2b29f7890e072e246595d821ea2aefff02730105bb5227"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/point.exp3.json",
+      "bytes": 170,
+      "sha256": "a6f3eaa81c7348680022b343141beb3f93b2e0c67e10bcc049570ae4a174ff6e"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/point.exp3.json.meta",
+      "bytes": 158,
+      "sha256": "462b54f011a771528f9b3d6af08df40774b2af92ddc1e5f305bbda86f9986df6"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/smile.exp3.asset",
+      "bytes": 596,
+      "sha256": "626f63bb4a2a1dc326d921e6073648604709b5cd7b451c914f8a50ef86a65d52"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/smile.exp3.asset.meta",
+      "bytes": 189,
+      "sha256": "c494f2a6ee0bf688ba7b0e9f579d2ea583275e5da46a22a2dccee516e0c44892"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/smile.exp3.json",
+      "bytes": 169,
+      "sha256": "48200c56538b255adde8f3f82ac3d47a86c4cc622de6665f022508697e9f2b31"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/smile.exp3.json.meta",
+      "bytes": 158,
+      "sha256": "b041c2e4e289d261d3e9f5925828fb398baaf30b7d5e0742eb770406d12ee650"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/surprise.exp3.asset",
+      "bytes": 603,
+      "sha256": "ad7ee662239b58d3d34ae80521874e0c28c4f9eb0597c169bd6ba6bf9cf31bb9"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/surprise.exp3.asset.meta",
+      "bytes": 189,
+      "sha256": "685a6d040475da7cc1401fafb825e55c310d5b423d2e62834eb99f4610210851"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/surprise.exp3.json",
+      "bytes": 173,
+      "sha256": "8db219f2df7dbfbe5dac03fcfb4c2dcb87d634dd3f6c1960b5547aafb42b32f4"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/surprise.exp3.json.meta",
+      "bytes": 158,
+      "sha256": "13b8fb4ebb12fe2ff9bff70895f5e9ef1310194dbe2d7d23f15b7a5606c71be1"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/texture_00.png",
+      "bytes": 5407948,
+      "sha256": "9e09d20ccf3dbe0b5089d3f276966108e859da753006f3e88b4491fc0e011221"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/texture_00.png.meta",
+      "bytes": 2714,
+      "sha256": "d1aa7a3d19cba9e53a9c6bf828950db8ffb853f392ee124c541138c27004cfa9"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/troubled.exp3.asset",
+      "bytes": 599,
+      "sha256": "8c9e947fcea0abad429337142bf00daa69d80edacdcda23be7e146162b4ff88c"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/troubled.exp3.asset.meta",
+      "bytes": 189,
+      "sha256": "8c0a69ee035539f4e27233b1693909b3b7d4949bc6eb8e95a41add9bfc155c1f"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/troubled.exp3.json",
+      "bytes": 169,
+      "sha256": "4e1b4e4380bbf1978b7899c8d5228f3ec82c0e514beec34c0c134730dd6f2051"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/troubled.exp3.json.meta",
+      "bytes": 158,
+      "sha256": "11daeeb3cd44000029bd652f6669cfaaa3a4982423f8107e4072dc8ae3be9bd4"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/wave.exp3.asset",
+      "bytes": 595,
+      "sha256": "361fa54803065b37a72f91b0895757e7a8a4faef49e6d7faaf1bdd93765d4ed3"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/wave.exp3.asset.meta",
+      "bytes": 189,
+      "sha256": "4e7cb53a54fc98207d30c42d086e327068012ecd97df1bd08069d1b699c86751"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/wave.exp3.json",
+      "bytes": 169,
+      "sha256": "0ccc282c565b27674b409ceeb61312e560700f227e7cbe8105b0436ec7e5a371"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z/wave.exp3.json.meta",
+      "bytes": 158,
+      "sha256": "46798b7c07254dee9322fe06eebf8de62cbb090a058ec1f46f97e705ba258766"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models/Z.meta",
+      "bytes": 172,
+      "sha256": "7898004c5a7979d8d3acf81aab8a8ed45c320caee71f5a480347e00d94c56dc9"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Models.meta",
+      "bytes": 172,
+      "sha256": "7dd675568939398332a6bfc06d2d10acff09dcdf3f1d2541b5ab4f789c28a379"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Resources/ZFaceShadow.shader",
+      "bytes": 1880,
+      "sha256": "8a1889127f40f7ee9186daa70d2610927a4da1b65075af5b17e229f5842543e9"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Resources/ZFaceShadow.shader.meta",
+      "bytes": 204,
+      "sha256": "757031cde2101bc4bfe38074cacc560f6ee743a44187a2ea78ad6efe393a6d5c"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Resources/ZSighBFeatures.png",
+      "bytes": 208507,
+      "sha256": "7461bce2474d9801bb28b203b73995687a67a7ae4a6c60b082e12feac6cba593"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Resources/ZSighBFeatures.png.meta",
+      "bytes": 2714,
+      "sha256": "b41c548780f0190985f1413fc0e6632f1502051fbef7a203aee9ea8656111238"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Resources/ZSighFace.shader",
+      "bytes": 5314,
+      "sha256": "2ef7042adeb67f9c4ffa53a71fbf47f61f46a8c97c022682e93feceb63a9c353"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Resources/ZSighFace.shader.meta",
+      "bytes": 204,
+      "sha256": "03feeb79312ca85bc82ee60273009d95424c31952d3c974d309db6cfee5bbbbe"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Resources.meta",
+      "bytes": 172,
+      "sha256": "1dbe293f27262af3d1a4b2e3693c79cc5e73a03785d7581b412023acd317aa13"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Runtime/DialogueClient.cs",
+      "bytes": 26270,
+      "sha256": "0a1c199a0f50c24973681bef2649b1c775c4052caee5147b3154651f5a117719"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Runtime/DialogueClient.cs.meta",
+      "bytes": 59,
+      "sha256": "a5f8beb955d4ffadf59a951429abb57019509b92e177e90b2a98d6749637552e"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Runtime/DialoguePanel.cs",
+      "bytes": 51366,
+      "sha256": "d8a491ea23fd5a71b234bb3c5e59e70095c1594846dc1437fd5d5d671a3883b7"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Runtime/DialoguePanel.cs.meta",
+      "bytes": 59,
+      "sha256": "b65d8bac9c2781b5fa6f4fde51a4756d9b49f281057f21f2685bf76aefccb592"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Runtime/ZChatExpressionQa.cs",
+      "bytes": 70793,
+      "sha256": "fce964ef1188d555ec73c2d37de8ffc03a6c16bd8ec85f639bd3ce3757930dd7"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Runtime/ZChatExpressionQa.cs.meta",
+      "bytes": 59,
+      "sha256": "39950c18fef1cc1c443c5fe87adcb111ef0410a1c51d9465fc9cb0b97c4fb779"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Runtime/ZDemoModelLayout.cs",
+      "bytes": 4296,
+      "sha256": "d7680e178afde8808020f546064786614e8074eca5a86e64447cbf3f4214fc96"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Runtime/ZDemoModelLayout.cs.meta",
+      "bytes": 59,
+      "sha256": "3c4179bc9785dbafc3b5603cd4fbac298eec425e2bdec2ec079bec1ae556ce50"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Runtime/ZDemoVerification.cs",
+      "bytes": 35243,
+      "sha256": "894d06a25792a8458cd0afa25543bcebe77dfeb14c03060598d0763df2280e3c"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Runtime/ZDemoVerification.cs.meta",
+      "bytes": 59,
+      "sha256": "227e42e77494c8245b7ef74dc8957989b8595c8538498d4d86777f961f140168"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Runtime/ZEmotionAccents.cs",
+      "bytes": 77018,
+      "sha256": "c6a32896aed1f3bda9cc20e06a787f37be367e4e4e78353f607dd75a1008e1fa"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Runtime/ZEmotionAccents.cs.meta",
+      "bytes": 59,
+      "sha256": "b4fefadd0d1c932290c5243abfee21fd7ccd6c11f53a0888eeeeb8afaa2e5106"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Runtime/ZEmotionPreviewQa.cs",
+      "bytes": 154342,
+      "sha256": "ef9c1d22cc18c8f2e00b4cda8e6308c7c4eb0d183aedcd3e1dffb4bd87e11fc9"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Runtime/ZEmotionPreviewQa.cs.meta",
+      "bytes": 59,
+      "sha256": "9f7c4e86b40062071f6de3bd5082c94e392e1c8670cc5ed099c8c856f2f408a4"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Runtime/ZExpressionReviewRecorder.cs",
+      "bytes": 19087,
+      "sha256": "4afd83e9aa7e354f76ac11d667737617aa893a27787606fba76422e450017652"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Runtime/ZExpressionReviewRecorder.cs.meta",
+      "bytes": 59,
+      "sha256": "53635a897546e5ce32c304e0ea869a2c475d94cb29e878555a1f8ce4c33149aa"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Runtime/ZMotionTrajectoryQa.cs",
+      "bytes": 33088,
+      "sha256": "0c1ab98afee4e3ad6422957e5c942a626df12750af801fa62e04498c95b97f63"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Runtime/ZMotionTrajectoryQa.cs.meta",
+      "bytes": 59,
+      "sha256": "43d977d5172982aacbdeae8c06c0163a15675cb38315119ec3a88a250de62cc4"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Runtime/ZPerformanceController.cs",
+      "bytes": 91167,
+      "sha256": "8cc7b62efd600c0dd89c7a013ced3edf83cb439b5270ca7b74c45ee1c4a0a6fc"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Runtime/ZPerformanceController.cs.meta",
+      "bytes": 59,
+      "sha256": "7869efdd8d18fe445884a385073ce6336eeb12609070f17654e94c9da6866a97"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Runtime/ZSighFaceArt.cs",
+      "bytes": 20526,
+      "sha256": "628d33559e6eeee9cb67c8c1d84166d8a2dc182c9e7788c98e49f0c9d8620dde"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Runtime/ZSighFaceArt.cs.meta",
+      "bytes": 59,
+      "sha256": "3ae18a2cf43e60493e16eb312a1bf2571d6082cd3f2cfa65eabbb4de80004a9e"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Runtime.meta",
+      "bytes": 172,
+      "sha256": "c5a780cc1770ec790e5154bfd34a10bcef96b8a552f2f027601e84e0acb86c55"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Scenes/ZDialogueDemo.unity",
+      "bytes": 1259826,
+      "sha256": "fe000e026e19a21e24060f8d792dff191454174225f5c5a11e89629a915c781a"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Scenes/ZDialogueDemo.unity.meta",
+      "bytes": 155,
+      "sha256": "27c07e3a13ff00754d264c7f0c16cb18e38707fee6d83f7ff77f780edf28607a"
+    },
+    {
+      "path": "Assets/ZDialogueDemo/Scenes.meta",
+      "bytes": 172,
+      "sha256": "4e5f7981f3bd112fa3db5348299408c99922bdd9c0ad066cbaf7d1466a0cfbcd"
+    },
+    {
+      "path": "Assets/ZDialogueDemo.meta",
+      "bytes": 172,
+      "sha256": "f5fb02aae54311912345045ba80e553f3cb39501e78d076bac821b1d7e0970be"
+    },
+    {
+      "path": "Assets/ZR5Migration/Editor/ZR5Migration.cs",
+      "bytes": 25982,
+      "sha256": "187ab8c7305f803ae84005685b5a1dc8e5bd122da032e9647f75b81c5b809774"
+    },
+    {
+      "path": "Assets/ZR5Migration/Editor/ZR5Migration.cs.meta",
+      "bytes": 59,
+      "sha256": "39b627f79387c192e8dba9b8a091dde5e880c72dc927b4b667d61ddd0937ea12"
+    },
+    {
+      "path": "Assets/ZR5Migration/Editor.meta",
+      "bytes": 172,
+      "sha256": "f3bec8e97165cc71d19a09e8c210ec085c8ac5a09dadcee2020ea235d20f2920"
+    },
+    {
+      "path": "Assets/ZR5Migration/Settings/ZDialogueDemoURP.asset",
+      "bytes": 4977,
+      "sha256": "c25568f3fdd14ec32e176bfc998225e0b27abf18c385007f7e1012255dfb5985"
+    },
+    {
+      "path": "Assets/ZR5Migration/Settings/ZDialogueDemoURP.asset.meta",
+      "bytes": 189,
+      "sha256": "93c1b5f9a0ae93063060a828053f3ed541f586e254bfdb6c7577ee23ec13ca8a"
+    },
+    {
+      "path": "Assets/ZR5Migration/Settings.meta",
+      "bytes": 172,
+      "sha256": "7b9feda4ef69af8ac4075d1e28cf44068d7898f04ab70403d5a2cd105bfc6976"
+    },
+    {
+      "path": "Assets/ZR5Migration.meta",
+      "bytes": 172,
+      "sha256": "674c1bdd01fb78d77f40a8761871e2c967e25201d044f8998252be9ad6f83f50"
+    },
+    {
+      "path": "Packages/manifest.json",
+      "bytes": 1799,
+      "sha256": "52886617648700bcb092d16ca9f58df7e69fcde5de3ff8d17349c0f887e8fde7"
+    },
+    {
+      "path": "Packages/packages-lock.json",
+      "bytes": 11155,
+      "sha256": "854f4bce2614e22fc3bb2ace65790df47f66c57dca73c96c82b31adb921e63fa"
+    },
+    {
+      "path": "ProjectSettings/AudioManager.asset",
+      "bytes": 416,
+      "sha256": "f2ed914f70919b6434c647bd820850be731b408f0f0c31e3bf7f98c8cafb617f"
+    },
+    {
+      "path": "ProjectSettings/DynamicsManager.asset",
+      "bytes": 1190,
+      "sha256": "80ba5565beefddabba07863f19983c62409753fb36bff400fe36cf9a7db94690"
+    },
+    {
+      "path": "ProjectSettings/EditorBuildSettings.asset",
+      "bytes": 367,
+      "sha256": "8d2d1e904a6579aff071a991e81f53df6d891e112ae21ff8cf69bc27594c7292"
+    },
+    {
+      "path": "ProjectSettings/EditorSettings.asset",
+      "bytes": 1673,
+      "sha256": "6d30da3a454a31fad5d31c2e4c3d0e163ae5f4fd8e2579828bb65f77d50e9175"
+    },
+    {
+      "path": "ProjectSettings/GraphicsSettings.asset",
+      "bytes": 2938,
+      "sha256": "cb1e7e210feb8b493311140f5d5cea301631ef05f42edb9cec036da80ea920d8"
+    },
+    {
+      "path": "ProjectSettings/InputManager.asset",
+      "bytes": 5793,
+      "sha256": "1fb1c30f8a1615cf9a4220be6d18a33eccd3a09cc4cd0a3c7cd0a38a7c083134"
+    },
+    {
+      "path": "ProjectSettings/Physics2DSettings.asset",
+      "bytes": 2028,
+      "sha256": "d57a0fe55659c33879e8b70bc01c5ea9cdf082069dab649905c6c5138531e6eb"
+    },
+    {
+      "path": "ProjectSettings/PhysicsCoreProjectSettings2D.asset",
+      "bytes": 151,
+      "sha256": "bedc5339a832c60dc3f11b84abc4f4384dbfa20b0cd9ad6c444b907e751fc35e"
+    },
+    {
+      "path": "ProjectSettings/PresetManager.asset",
+      "bytes": 146,
+      "sha256": "29c125923fe6e29f90190d4fce1c82d660e7051546e2c9d02908d18c9cf2436c"
+    },
+    {
+      "path": "ProjectSettings/ProjectSettings.asset",
+      "bytes": 22749,
+      "sha256": "1d54c80c1472bfbebcbbf0e5c95ec46e4c4065b681aaec72c1ff23dde9104efe"
+    },
+    {
+      "path": "ProjectSettings/ProjectVersion.txt",
+      "bytes": 83,
+      "sha256": "2a88e6864b6f54588287bed3bc6e9260e65bd49498910cca4478770ca8a5d674"
+    },
+    {
+      "path": "ProjectSettings/QualitySettings.asset",
+      "bytes": 10076,
+      "sha256": "9c917eabc36f7f4a01ec8c096f1a9a6e75c9d6631838d0c3848d9cfeab0e81b5"
+    },
+    {
+      "path": "ProjectSettings/TagManager.asset",
+      "bytes": 378,
+      "sha256": "8e18b1c820e9c09e16bbd1f1b7842e9fb3b0158a0921b0964e0b8fa12c6e2c01"
+    },
+    {
+      "path": "ProjectSettings/TimeManager.asset",
+      "bytes": 202,
+      "sha256": "1a83e54adbbda7c9f4851103a0c6ab7f6448a3343d4ea5b7620452fa08416ecd"
+    },
+    {
+      "path": "README.md",
+      "bytes": 6345,
+      "sha256": "d5bde6936b7309780b3d391bb0d2b0fba62cd43838f4b4f0bf0941b9154e9b15"
+    },
+    {
+      "path": "sdk-compatibility/manifest.json",
+      "bytes": 1284,
+      "sha256": "48b91d2a4cd4d03431d6969c87e3ff7fd7b79d371341fd31bbcb218bd8d9c632"
+    },
+    {
+      "path": "sdk-compatibility/patches/CubismFadeMotionImporter.cs.patch",
+      "bytes": 901,
+      "sha256": "d66d3ece5620a2e51b089bbe054c1da8a27a72312554b133301570a6c3b5265f"
+    },
+    {
+      "path": "sdk-compatibility/patches/CubismPoseMotionImporter.cs.patch",
+      "bytes": 1677,
+      "sha256": "5b2d3cf57b58a64a4882811c08eb827aead9771ef16cf4eabfed6c7900b1d883"
+    },
+    {
+      "path": "sdk-compatibility/patches/CubismUnityEditorUtility.cs.patch",
+      "bytes": 2037,
+      "sha256": "677d09ee75066a726c1d2ad07139a6f39520b784caae1252c02fa297c78aa54a"
+    },
+    {
+      "path": "server/.env.example",
+      "bytes": 161,
+      "sha256": "f25259bfa84882e627a9122ec67e029b9ed38b7c9ed7cdbf2a0ea467af3cbef1"
+    },
+    {
+      "path": "server/.gitignore",
+      "bytes": 115,
+      "sha256": "959af31a6d3f94d71286aff8b36770144e97b76bc1465595a040cd1dc03fd672"
+    },
+    {
+      "path": "server/README.md",
+      "bytes": 5341,
+      "sha256": "e6908f47d1fb4bc0b2fdd40558aef208ddbcbe2011b0658e41530abc4f170b05"
+    },
+    {
+      "path": "server/Z_RUNTIME_SKILL.md",
+      "bytes": 5245,
+      "sha256": "d164d02434f8f8b27666d290db71311a0a32e5d448011b17d400b76f24b47758"
+    },
+    {
+      "path": "server/codex-provider.mjs",
+      "bytes": 15238,
+      "sha256": "1c2fc4567cef4c7884c5de7cfefffa98f3583d4e0ef5dcd82ceae0d167e661bc"
+    },
+    {
+      "path": "server/package.json",
+      "bytes": 237,
+      "sha256": "213010538476aa548a881f908d45ff465ebffd190f5085f65752db281e2e1997"
+    },
+    {
+      "path": "server/performance-contract.mjs",
+      "bytes": 2619,
+      "sha256": "1103903029fa7ca574c5330f62809b0fd84bd8f12eb651e45abffabdc102e369"
+    },
+    {
+      "path": "server/server.mjs",
+      "bytes": 35512,
+      "sha256": "a72c1702b5c65518432047bcc9005c401bbfa449a5f09294de3353ad2c6561ec"
+    },
+    {
+      "path": "server/server.test.mjs",
+      "bytes": 25247,
+      "sha256": "1db6e3a2bb6ff9ecbe5f0beb3d38f6ce3e9d1752f3a93467fe9df82d29909bb9"
+    },
+    {
+      "path": "server/start-local.mjs",
+      "bytes": 4469,
+      "sha256": "34fc8969ac66583803e78c9337a06aa6c4fd1e6fbdcf08f074448a3e274055b7"
+    },
+    {
+      "path": "server/test-codex-provider.mjs",
+      "bytes": 7811,
+      "sha256": "b7f8160dfd941be04234bf5343be248fbc4550b632c0da7c270bfab9d8b1ccc1"
+    },
+    {
+      "path": "third-party/Cubism/LICENSE.md",
+      "bytes": 3133,
+      "sha256": "3492eb78a45d33343f23b793363da4faa49a47a48c209ca3cc3721c77fa34c1b"
+    },
+    {
+      "path": "third-party/Cubism/NOTICE.ja.md",
+      "bytes": 3309,
+      "sha256": "81c6b550430937dd5cceb1ae746d832ab3ea9708136defc5d5f4218a6d55f054"
+    },
+    {
+      "path": "third-party/Cubism/NOTICE.md",
+      "bytes": 2617,
+      "sha256": "569591eada48ca7dd2fe44c2f6d034699eeca3395fb90b3e2795a977144a5e6c"
+    },
+    {
+      "path": "tools/apply_sdk_compatibility.py",
+      "bytes": 7946,
+      "sha256": "9d47c3ee21481a2990ee842313681cf88e84e4fe025e9218f5fd856bc96c3569"
+    },
+    {
+      "path": "tools/install_r5_sdk.py",
+      "bytes": 7074,
+      "sha256": "b4a2148f194eae949e862c54976e4441de7c7689f8bd3ea3f6da50812bb64661"
+    },
+    {
+      "path": "tools/repair_model_guid.py",
+      "bytes": 2541,
+      "sha256": "ff2044d906666500fa46cdd6ab52e1b159b78e70f41faa16f6c03a38e282bb8a"
+    },
+    {
+      "path": "tools/unpack_unitypackage.py",
+      "bytes": 2518,
+      "sha256": "097a7b944ddfe1f5ed4e305295ae7c50ac11b67164b21483587182995b23b52c"
+    },
+    {
+      "path": "tools/verify_delivery.py",
+      "bytes": 5131,
+      "sha256": "8b45e0eb360f49cfef3a6ddee154842e584b78b79ffe143a017855a91b0c4ae6"
+    },
+    {
+      "path": "verification/SUPPORT-MANIFEST.md",
+      "bytes": 1745,
+      "sha256": "0690edfd93d77dcba7e4416cc868f0f8ccf7a15148e5539231fd73957dfe0671"
+    },
+    {
+      "path": "verification/faces/neutral-face.png",
+      "bytes": 90774,
+      "sha256": "9bf720d62524636d16e1f3ed3ba136b5a12c77a1f387023e910526a42d23cfc1"
+    },
+    {
+      "path": "verification/faces/restored-bawl-face.png",
+      "bytes": 48185,
+      "sha256": "5f9718e5e9d8193864392e41ac54ba0445d35413858a78e2b715eb06cf26843b"
+    },
+    {
+      "path": "verification/faces/restored-sigh-face.png",
+      "bytes": 28125,
+      "sha256": "899f8219fb1b346d320401ed64686407f52d7db5e9e5006ae9cdc969eedbc43a"
+    },
+    {
+      "path": "verification/faces/sigh-face.png",
+      "bytes": 89722,
+      "sha256": "523384ab5885c0c5ac8d5bea7f6eb8607fab7dd9e1edb6bdf888be9cd95146d6"
+    },
+    {
+      "path": "verification/model-and-pipeline-integrity.json",
+      "bytes": 1423,
+      "sha256": "7d7281ea0d8c0f475754ed5fb8aa94e3be9fcf787e4e714e6a45ec078bf9ba81"
+    },
+    {
+      "path": "verification/r5-baseline.json",
+      "bytes": 481,
+      "sha256": "c0342eeebaaffbe4f57e007a19aec67fc4963fa6955dac24b043f12c0d646a99"
+    },
+    {
+      "path": "verification/r5-summary.json",
+      "bytes": 1565,
+      "sha256": "d7580503672094c0e451b2887ed9f3843ee84014dc17d086a8204c0a68016eaa"
+    },
+    {
+      "path": "verification/restore-validation.json",
+      "bytes": 2181,
+      "sha256": "a3bca7aaf6dbca2974b49288a1d2ea10278f0c3997c22d97e3aedc7e27c811db"
+    }
+  ]
+}
