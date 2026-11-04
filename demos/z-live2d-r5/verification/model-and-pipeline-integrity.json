@@ -1,0 +1,22 @@
+{
+  "raw_model_files_checked": 13,
+  "raw_model_files_unchanged": true,
+  "raw_model_sha256": {
+    "blush.exp3.json": "ab0e3a0fd49ed3ef2f688eea828be370ba6e6c5cb69aaafddc5df1703862f277",
+    "explain.exp3.json": "eb26eefe5d9b4bf83914bcd9817b9b22c267de8c02807da4c272b661911de4d4",
+    "Model.model3.json": "6c652f0e563b5f9328e6a2929b871feb03fae17e9ae79bc14ef63ecbc3689cbb",
+    "angry.exp3.json": "7e8df01289a5fc225f2d79c414f6735c84c9a6481a777a1404f2e532df0c658e",
+    "wave.exp3.json": "0ccc282c565b27674b409ceeb61312e560700f227e7cbe8105b0436ec7e5a371",
+    "texture_00.png": "9e09d20ccf3dbe0b5089d3f276966108e859da753006f3e88b4491fc0e011221",
+    "Model.physics3.json": "3369f2dc3da3d171ee53df0e16e459d75df7a4ae5a95ef6c749fcdea251daa20",
+    "surprise.exp3.json": "8db219f2df7dbfbe5dac03fcfb4c2dcb87d634dd3f6c1960b5547aafb42b32f4",
+    "troubled.exp3.json": "4e1b4e4380bbf1978b7899c8d5228f3ec82c0e514beec34c0c134730dd6f2051",
+    "Model.moc3": "0f86fc274da1c1e55b905979d240ef291d76d0e832c78bcee0174ba18edadd3d",
+    "point.exp3.json": "a6f3eaa81c7348680022b343141beb3f93b2e0c67e10bcc049570ae4a174ff6e",
+    "smile.exp3.json": "48200c56538b255adde8f3f82ac3d47a86c4cc622de6665f022508697e9f2b31",
+    "Model.cdi3.json": "51581258a10baafc3a0dd7f33c6b349cab7c94a9fb7df3a2a9c0ecad79aacfb5"
+  },
+  "pipeline_guid": "fa78a2634e0ad48eaa3526f7d75a74df",
+  "quality_levels_checked": 6,
+  "all_quality_levels_use_r5_pipeline": true
+}

@@ -1,0 +1,71 @@
+{
+  "date_beijing": "2026-11-05",
+  "status": "passed",
+  "scope": "Standalone R5 Unity client -> isolated local service -> real Codex provider -> actual reply -> unchanged performance controller -> acknowledgement",
+  "expression_labels": [
+    "neutral",
+    "smile",
+    "surprise",
+    "angry",
+    "troubled",
+    "blush",
+    "cry",
+    "bawl",
+    "sigh",
+    "gloom"
+  ],
+  "gesture_labels": [
+    "none",
+    "wave",
+    "explain",
+    "point"
+  ],
+  "visible_gesture_count": 3,
+  "gestures_are_static_pose_layers": true,
+  "unity_real_turns": [
+    {
+      "case": 1,
+      "returned_labels": [
+        {
+          "expression": "smile",
+          "gesture": "none",
+          "gaze": "player"
+        }
+      ],
+      "samples": 58,
+      "simultaneous_face_and_gesture_samples": 0,
+      "neutral_tail_verified": true,
+      "acknowledged": true
+    },
+    {
+      "case": 2,
+      "returned_labels": [
+        {
+          "expression": "smile",
+          "gesture": "wave",
+          "gaze": "player"
+        }
+      ],
+      "samples": 58,
+      "simultaneous_face_and_gesture_samples": 32,
+      "neutral_tail_verified": true,
+      "acknowledged": true
+    }
+  ],
+  "backend_checks": {
+    "real_provider_reply": "passed",
+    "ack_persistence": "passed",
+    "duplicate_ack_idempotence": "passed",
+    "restart_history_restore": "passed",
+    "cancel_no_history_write": "passed",
+    "injected_provider_error_no_history": "passed",
+    "real_provider_recovery_after_injection": "passed"
+  },
+  "privacy": "No dialogue text, frames, video, database, credentials, or local paths included in this public summary. Detailed test evidence stays local.",
+  "limits": [
+    "Only the existing local Codex provider was tested; other providers/models/environments are not accepted.",
+    "The live Unity recording covers smile+none and smile+wave, not all expression/gesture combinations.",
+    "The original R5 application code is unchanged; an opt-in recorder was added only to an isolated acceptance build.",
+    "No main-game integration, TTS, or continuous arm rig acceptance."
+  ]
+}

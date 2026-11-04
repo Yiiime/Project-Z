@@ -1,0 +1,35 @@
+--- Assets/Live2D/Cubism/Framework/Pose/Editor/CubismPoseMotionImporter.cs
++++ Assets/Live2D/Cubism/Framework/Pose/Editor/CubismPoseMotionImporter.cs
+@@ -114,7 +114,7 @@
+ 
+                 // Add animation event
+                 if (animationClip != null)
+                 {
+-                    var instanceId = animationClip.GetInstanceID();
++                    var instanceId = CubismUnityEditorUtility.GetMotionInstanceId(animationClip);
+ 
+                     var sourceAnimationEvents = AnimationUtility.GetAnimationEvents(animationClip);
+                     var index = -1;
+--- Assets/Live2D/Cubism/Framework/Pose/Editor/CubismPoseMotionImporter.cs
++++ Assets/Live2D/Cubism/Framework/Pose/Editor/CubismPoseMotionImporter.cs
+@@ -235,7 +235,7 @@
+                     }
+ 
+                     if (!isExistInstanceId)
+                     {
+-                        instanceId = animationClip.GetInstanceID();
++                        instanceId = CubismUnityEditorUtility.GetMotionInstanceId(animationClip);
+                     }
+ 
+                     fadeMotions.MotionInstanceIds[motionIndex] = instanceId;
+--- Assets/Live2D/Cubism/Framework/Pose/Editor/CubismPoseMotionImporter.cs
++++ Assets/Live2D/Cubism/Framework/Pose/Editor/CubismPoseMotionImporter.cs
+@@ -243,7 +243,7 @@
+                 }
+                 else
+                 {
+-                    var instanceId = animationClip.GetInstanceID();
++                    var instanceId = CubismUnityEditorUtility.GetMotionInstanceId(animationClip);
+                     motionIndex = fadeMotions.MotionInstanceIds.Length;
+ 
+                     Array.Resize(ref fadeMotions.MotionInstanceIds, motionIndex + 1);

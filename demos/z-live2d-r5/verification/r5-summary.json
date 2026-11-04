@@ -1,0 +1,48 @@
+{
+  "summaryVersion": 1,
+  "source": "existing local R5 acceptance evidence",
+  "verifiedAtUtc": "2026-11-04T16:43:30.956118+00:00",
+  "verificationRunFinishedUtc": "2026-11-04T16:42:55.3711910Z",
+  "sdk": "5-r.5",
+  "unity": "6000.6.7f1",
+  "urp": "17.6.0",
+  "platform": "macOS standalone Demo",
+  "qa": {
+    "actionsRequested": 20,
+    "actionsPassed": 20,
+    "screenshotsPresent": 20,
+    "faceScreenshotsPresent": 20,
+    "parameterSamples": 1479,
+    "uiButtonsFoundAndTriggered": 20,
+    "transitionsPassed": true,
+    "functionalPassed": true,
+    "partial": false,
+    "passed": true
+  },
+  "model": {
+    "rawModelFilesChecked": 13,
+    "rawModelFilesUnchanged": true,
+    "parameterCount": 32,
+    "requiredParametersReady": true,
+    "sighFaceArtFound": true,
+    "qualityLevelsChecked": 6
+  },
+  "evidence": {
+    "localFaceScreenshots": [
+      "faces/neutral-face.png",
+      "faces/sigh-face.png"
+    ],
+    "originalEvidencePath": "../verification/r5-urp-20261104/final/20261105-004048-279/",
+    "note": "The original evidence remains local to the source workspace; this staging copy intentionally omits private absolute paths, logs and full screenshot sets."
+  },
+  "scope": {
+    "included": "Independent macOS R5 Demo runtime and asset checks already performed on the source machine.",
+    "notIncluded": [
+      "Clean-clone restoration from this staging directory",
+      "Main Project-Z Unity integration",
+      "Other Unity or URP versions",
+      "Windows or mobile builds",
+      "A fresh real-LLM dialogue acceptance run"
+    ]
+  }
+}
