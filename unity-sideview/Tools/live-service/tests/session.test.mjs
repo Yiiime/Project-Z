@@ -83,7 +83,11 @@ test('call input cancels current host execution and hanging up invalidates guest
  assert.equal(s.snapshot().call.input,'listening');
  s.input(envelope(s,{type:'viewer.message',payload:{text:'刚才的故事想继续听'}}));
  assert.equal(s.snapshot().call.turns,1);assert.equal(s.snapshot().call.input,'idle');
+ assert(s.engine.inbox.some(m=>m.text==='刚才的故事想继续听'));
+ assert(!s.snapshot().room.messages.some(m=>m.text==='刚才的故事想继续听'));
+ assert(s.engine.facts.some(f=>f.type==='player.message'&&f.text==='刚才的故事想继续听'));
  s.input(envelope(s,{type:'call.end',payload:{}}));assert.equal(s.snapshot().call.active,false);assert.deepEqual(s.engine.inbox,[]);
+ assert(!s.snapshot().room.messages.some(m=>m.text==='刚才的故事想继续听'));
  assert(!s.engine.facts.some(f=>f.type==='speech.completed'));
 });
 

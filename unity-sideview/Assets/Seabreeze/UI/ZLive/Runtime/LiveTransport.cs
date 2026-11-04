@@ -59,10 +59,10 @@ public sealed class LiveTransport : IDisposable {
     public Task<JObject> Control(string action,string task=null,int revision=0){var b=Envelope();b["action"]=action;if(task!=null){b["taskId"]=task;b["resourceRevision"]=revision;}return Request(Route("/control"),b);}
     public Task<JObject> Receipt(JObject command,JObject payload){var b=Envelope();b["type"]="execution.receipt";b["executorLeaseId"]=Lease;b["commandId"]=command["commandId"]?.DeepClone();b["taskId"]=command["taskId"]?.DeepClone()??JValue.CreateNull();b["resourceRevision"]=command["resourceRevision"]?.DeepClone()??JValue.CreateNull();b["payload"]=payload;return Request(Route("/receipts"),b);}
     public async Task<byte[]> Artifact(string id,CancellationToken cancel){if(id==null||!System.Text.RegularExpressions.Regex.IsMatch(id,"^[a-f0-9]{64}$"))throw new Exception("invalid_artifact");using(var r=await http.GetAsync(BaseUrl+Route("/artifacts/"+id),cancel)){r.EnsureSuccessStatusCode();if(r.Content.Headers.ContentLength>12*1024*1024)throw new Exception("artifact_too_large");var bytes=await r.Content.ReadAsByteArrayAsync();if(bytes.Length>12*1024*1024)throw new Exception("artifact_too_large");using(var sha=System.Security.Cryptography.SHA256.Create()){var actual=BitConverter.ToString(sha.ComputeHash(bytes)).Replace("-","").ToLowerInvariant();if(actual!=id)throw new Exception("artifact_hash_mismatch");}return bytes;}}
-    public async Task<JObject> Transcribe(byte[] pcm,int version,CancellationToken cancel) {
+    public async Task<JObject> Transcribe(byte[] pcm,int version,CancellationToken cancel,bool dictation=false) {
         using(var timeout=CancellationTokenSource.CreateLinkedTokenSource(life.Token,cancel)) {
             timeout.CancelAfter(35000);
-            using(var request=new HttpRequestMessage(HttpMethod.Post,BaseUrl+Route("/asr"))) {
+            using(var request=new HttpRequestMessage(HttpMethod.Post,BaseUrl+Route(dictation?"/dictation":"/asr"))) {
                 request.Headers.Add("X-Live-Call-Version",version.ToString());
                 request.Content=new ByteArrayContent(pcm);
                 request.Content.Headers.ContentType=new MediaTypeHeaderValue("audio/pcm");

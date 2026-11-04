@@ -129,8 +129,8 @@ Button:disabled { opacity: 1; color: #687b82; }
 .scene-bottom { left: 15px; right: 15px; bottom: 13px; }
 .location { font-size: 11px; color: #35434c; padding: 4px 8px; }
 .icon-button { font-size: 13px; }
-.danmaku { color: #35434c; -unity-text-outline-color: rgba(250,251,249,.8); -unity-text-outline-width: 1px; padding: 3px 10px; }
-.danmaku-mine { background-color: rgba(250,251,249,.88); border-width: 1px; border-color: #8d9ca3; }
+.danmaku { color: #35434c; -unity-text-outline-width: 0; text-shadow: 0 1px 2px rgba(250,251,249,.85); padding: 3px 10px; }
+.danmaku-mine { color: #527e94; }
 .character-hit { position: absolute; left: 40%; right: 34%; top: 12%; bottom: 25%; border-width: 0; background-color: rgba(0,0,0,0); }
 .character-hit:hover,.character-hit:active { background-color: rgba(0,0,0,0); }
 .manga,.manga-face { position: absolute; left: 0; right: 0; top: 0; bottom: 0; -unity-background-scale-mode: stretch-to-fill; }
@@ -140,9 +140,10 @@ Button:disabled { opacity: 1; color: #687b82; }
 .chat { padding: 0 15px; }
 .chat-row { padding: 2px 0; margin-bottom: 15px; }
 .chat-content { margin-left: 9px; }
-.chat-name { font-size: 10px; margin-bottom: 0; min-height: 18px; color: #687b82; }
-.chat-text { font-size: 13px; }
-.chat-mine { background-color: rgba(0,0,0,0); }
+.chat-name { font-size: 10px; margin-bottom: 0; min-height: 18px; color: #8a8099; }
+.chat-text { font-size: 13px; color: #394953; margin-top: 2px; }
+.chat-mine { background-color: rgba(238,245,247,.5); border-radius: 4px; }
+.chat-mine .chat-name { color: #527e94; -unity-font-style: bold; }
 .message-receipt { font-size: 10px; color: #87949a; margin-top: 4px; }
 .chat-tip { height: auto; min-height: 25px; padding: 4px 0; margin: 0 15px; font-size: 10px; white-space: normal; color: #687b82; }
 .new-messages { position: absolute; bottom: 34px; align-self: center; background-color: #a5d8ee; padding: 6px 14px; font-size: 12px; }
@@ -200,3 +201,8 @@ Button:disabled { opacity: 1; color: #687b82; }
 .system-mark { width: 30px; color: #8b91a2; -unity-text-align: upper-center; }
 
 .blue-chip { -unity-text-align: middle-left; }
+
+.companion-controls { flex-shrink: 0; padding: 10px; border-bottom-width: 1px; border-bottom-color: #bdc8cd; background-color: #eef4f2; }
+.companion-button { flex-grow: 1; min-height: 32px; margin: 0 3px; font-size: 12px; }
+.companion-button.connected { background-color: #dceee3; border-color: #a7c9b7; }
+.companion-status { white-space: normal; font-size: 11px; color: #466356; margin: 7px 3px 0; }

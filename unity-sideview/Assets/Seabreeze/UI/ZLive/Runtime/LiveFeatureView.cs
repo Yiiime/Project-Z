@@ -17,7 +17,7 @@ public sealed partial class LiveFeatureController {
     static void SetIcon(Button button,string id,string title){button.text="";button.tooltip=title;var image=button.Q<Image>();if(image!=null)image.image=Resources.Load<Texture2D>("Icons/"+id);}
 
     void BuildUI(){
-        document=gameObject.AddComponent<UIDocument>();var panel=ScriptableObject.CreateInstance<PanelSettings>();panel.scaleMode=PanelScaleMode.ConstantPixelSize;panel.scale=1;panel.themeStyleSheet=Resources.Load<ThemeStyleSheet>("LiveTheme");panel.sortingOrder=200;document.panelSettings=panel;
+        document=gameObject.AddComponent<UIDocument>();var panel=ScriptableObject.CreateInstance<PanelSettings>();panel.scaleMode=PanelScaleMode.ScaleWithScreenSize;panel.referenceResolution=new Vector2Int(1280,720);panel.screenMatchMode=PanelScreenMatchMode.MatchWidthOrHeight;panel.match=.5f;panel.scale=1;panel.themeStyleSheet=Resources.Load<ThemeStyleSheet>("LiveTheme");panel.sortingOrder=200;document.panelSettings=panel;
         var root=document.rootVisualElement;root.AddToClassList("room");root.styleSheets.Add(Resources.Load<StyleSheet>("live"));root.style.unityFont=Resources.Load<Font>("Fonts/NotoSansSC-Regular");viewStarted=Time.unscaledTime;
         muted=PlayerPrefs.GetInt("ZLive.Muted",0)==1;
         audioPlayer.Source.volume=PlayerPrefs.GetFloat("ZLive.Volume",.85f);

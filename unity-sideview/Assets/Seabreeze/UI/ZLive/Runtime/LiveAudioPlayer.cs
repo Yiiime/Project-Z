@@ -42,14 +42,6 @@ public sealed class LiveAudioPlayer:MonoBehaviour {
         cancel.ThrowIfCancellationRequested();if(Paused)continue;
         if(!Source.isPlaying){if(elapsed<clip.length-.15f)throw new Exception("audio_interrupted");break;}if(elapsed>clip.length+3)throw new Exception("audio_timeout");
     }Caption?.Invoke(text);}
-    public async Task Preview(JObject meta,CancellationToken cancel) {
-        var clip=await Decode(meta,cancel);
-        await voiceGate.WaitAsync(cancel);
-        try {
-            cancel.ThrowIfCancellationRequested();Source.clip=clip;Source.Play();
-            while(Source.isPlaying){await Frame();cancel.ThrowIfCancellationRequested();}
-        }finally{Source.Stop();voiceGate.Release();}
-    }
     static string SafePrefix(string text,int count){count=Mathf.Clamp(count,0,text.Length);if(count>0&&count<text.Length&&char.IsHighSurrogate(text[count-1]))count--;return text.Substring(0,count);}
     static string PrefixAt(string text,JArray words,float seconds,float duration){int cursor=0;if(words!=null&&words.Count>0){foreach(JObject w in words){string word=(string)w["word"];if(string.IsNullOrEmpty(word)||(float?)w["endTime"]>seconds)break;int at=text.IndexOf(word,cursor,StringComparison.Ordinal);if(at<0)break;cursor=at+word.Length;}return SafePrefix(text,cursor);}return SafePrefix(text,Mathf.FloorToInt(text.Length*seconds/duration));}
     void OnDestroy(){foreach(var clip in cache.Values)if(clip!=null)Destroy(clip);cache.Clear();}

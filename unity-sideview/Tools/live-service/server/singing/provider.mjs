@@ -46,9 +46,19 @@ export async function generateSinging(plan,{root,directory,secret,signal}={}) {
     child.on('error',()=>finish(Error('generator_start_failed')));child.on('close',code=>{if(code!==0){const safe=diagnostic.split(secret).join('[REDACTED]').replace(/Bearer\s+\S+/gi,'Bearer [REDACTED]');void fs.writeFile(path.join(directory,'diagnostic.txt'),safe,{mode:0o600}).catch(()=>{});}finish(code===0?null:Error('generator_failed'));});
     signal?.addEventListener('abort',abort,{once:true});if(signal?.aborted)abort();
   });
+  return readSingingResult(directory);
+}
+export async function readSingingResult(directory) {
   const files=(await fs.readdir(directory)).filter(f=>/^vivi-wanan-.*\.json$/.test(f));
   if(files.length!==1)throw Error('generation_outcome_unknown');
   const report=JSON.parse(await fs.readFile(path.join(directory,files[0]),'utf8'));
+  let providerError;
+  try{providerError=JSON.parse(report.providerResponse||'{}').error;}catch{}
+  const errors=[providerError,...(report.events||[]).map(event=>{try{return typeof event.error==='string'?JSON.parse(event.error):event.error;}catch{return null;}})].filter(Boolean);
+  if(errors.some(error=>String(error.code)==='45000030'))throw Error('singing_provider_resource_not_granted');
+  if(report.httpStatus===401||errors.some(error=>String(error.code)==='45000010'))throw Error('singing_provider_configuration_error');
+  if(['timeout','network_error','connection_ended','upload_failed'].includes(report.outcome))throw Error('generation_outcome_unknown');
+  if(report.outcome==='handshake_rejected'||report.outcome==='provider_error')throw Error('singing_provider_unavailable');
   if(!report.audioGenerated||!report.generationDone||!/^vivi-wanan-[\w-]+\.wav$/.test(report.audioFile||''))throw Error('singing_no_complete_audio');
   const modes=report.events.filter(e=>e.type==='response.output_audio.started').map(e=>e.tts_type);
   if(!modes.length||modes.some(x=>x!=='sing'))throw Error('provider_not_singing');

@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {SingingService} from '../server/singing/service.mjs';
-import {Z_VOICE,checkWav,validatePlan} from '../server/singing/provider.mjs';
+import {Z_VOICE,checkWav,validatePlan,readSingingResult} from '../server/singing/provider.mjs';
 import {parseAgentReply,buildAgentRequest,handleAgent} from '../server/shared/worker/agent-director.js';
 const root=fileURLToPath(new URL('../',import.meta.url)),owner='local-preview-owner';
 const bytes=await fs.readFile(path.join(root,'server/assets/songs/wanan-yanrenzhong-vivi2-chorus.wav'));
@@ -42,4 +42,19 @@ test('main agent can submit exact source and play only trusted ready tasks; NPC 
 });
 test('browser cannot inject trusted singing memory into model context',async()=>{
   const response=await handleAgent(new Request('http://127.0.0.1/api/agent',{method:'POST',headers:{Origin:'http://127.0.0.1','Content-Type':'application/json','oai-authenticated-user-id':'test'},body:JSON.stringify({requestId:crypto.randomUUID(),kind:'host',eventId:'one',context:{phase:'chat',host:{inbox:[]},singing:{enabled:true,tasks:[]}}})}),{DEEPSEEK_API_KEY:'fixture'},{fetch:()=>{throw Error('must_not_call');}});assert.equal(response.status,400);
+});
+
+test('singing reports preserve actionable provider failures without exposing payloads',async t=>{
+  const directory=await fs.mkdtemp(path.join(os.tmpdir(),'z-singing-report-'));
+  t.after(()=>fs.rm(directory,{recursive:true,force:true}));
+  const reportFile=path.join(directory,'vivi-wanan-test.json');
+  const check=async(report,code)=>{await fs.writeFile(reportFile,JSON.stringify(report));await assert.rejects(()=>readSingingResult(directory),error=>error.message===code);};
+  await check({outcome:'handshake_rejected',httpStatus:403,providerResponse:JSON.stringify({error:{code:'45000030',message:'private provider payload'}})},'singing_provider_resource_not_granted');
+  await check({outcome:'provider_error',events:[{error:JSON.stringify({code:45000030,message:'private payload'})}]},'singing_provider_resource_not_granted');
+  await check({outcome:'handshake_rejected',httpStatus:401},'singing_provider_configuration_error');
+  await check({outcome:'timeout',audioGenerated:true,generationDone:false},'generation_outcome_unknown');
+  await check({outcome:'closed_without_audio_completion',audioGenerated:false},'singing_no_complete_audio');
+  const {service:s}=await fixture(t,{parse:async()=>plan('verse'),generate:async()=>{throw Error('singing_provider_resource_not_granted');}});
+  submit(s);await s.tick();const task=s.context(owner).tasks[0];
+  assert.equal(task.status,'failed');assert.match(task.reason,/volc\.speech\.dialog/);assert.doesNotMatch(task.reason,/private/);
 });

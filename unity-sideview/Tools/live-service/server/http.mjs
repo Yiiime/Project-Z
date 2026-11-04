@@ -13,22 +13,19 @@ export async function createLiveServer({root,providers,artifacts,songRoot,token,
  const server=http.createServer(async(req,res)=>{try{
   const auth=Buffer.from(req.headers.authorization||''),expected=Buffer.from('Bearer '+token);if(auth.length!==expected.length||!timingSafeEqual(auth,expected))return json(res,401,{error:'unauthorized'});
   const url=new URL(req.url,'http://localhost');if(req.method==='GET'&&url.pathname==='/health')return json(res,200,{ok:true,protocolVersion:1,agentConfigured:!!providers.env.DEEPSEEK_API_KEY,ttsConfigured:!!providers.env.VOLC_TTS_API_KEY});
-  const voiceRoute=url.pathname.match(/^\/v1\/live\/sessions\/([a-f0-9-]+)\/asr$/);
+  const voiceRoute=url.pathname.match(/^\/v1\/live\/sessions\/([a-f0-9-]+)\/(asr|dictation)$/);
   if(voiceRoute&&req.method==='POST'){
    const session=sessions.get(voiceRoute[1]);const version=Number(req.headers['x-live-call-version']);
-   if(!session||session.phase!=='live'||!session.engine._state.call.active||session.engine._state.call.input!=='listening'||version!==session.engine.callVersion)return json(res,409,{error:'stale_voice_turn'});
+   const dictation=voiceRoute[2]==='dictation',phase=session?.phase;
+   const current=()=>session&&!session.closed&&session.phase===phase&&phase!=='ended'&&version===session.engine.callVersion&&(dictation?!session.engine._state.call.active:phase==='live'&&session.engine._state.call.active&&session.engine._state.call.input==='listening');
+   if(!current())return json(res,409,{error:'stale_voice_turn'});
    if(voiceRequests.has(session.id))return json(res,409,{error:'asr_busy'});
    if(req.headers['content-type']!=='audio/pcm')return json(res,415,{error:'pcm_required'});
    const cancellation=new AbortController();voiceRequests.set(session.id,cancellation);const cancel=()=>cancellation.abort();req.once('aborted',cancel);res.once('close',cancel);
-   const expiry=setTimeout(cancel,30000);const monitor=setInterval(()=>{if(session.closed||session.phase!=='live'||version!==session.engine.callVersion||session.engine._state.call.input!=='listening')cancellation.abort();},100);
+   const expiry=setTimeout(cancel,30000);const monitor=setInterval(()=>{if(!current())cancellation.abort();},100);
    try{const chunks=[];let size=0;for await(const chunk of req){size+=chunk.length;if(size>640000)return json(res,413,{error:'body_too_large'});chunks.push(chunk);}const result=await transcribe(Buffer.concat(chunks),{apiKey:providers.env.VOLC_ASR_API_KEY,uid:session.id,signal:cancellation.signal});
-    if(cancellation.signal.aborted||version!==session.engine.callVersion||session.engine._state.call.input!=='listening')return json(res,409,{error:'stale_voice_turn'});return json(res,200,{...result,callVersion:version});
+    if(cancellation.signal.aborted||!current())return json(res,409,{error:'stale_voice_turn'});return json(res,200,{...result,callVersion:version});
    }finally{clearTimeout(expiry);clearInterval(monitor);req.off('aborted',cancel);res.off('close',cancel);voiceRequests.delete(session.id);}
-  }
-  const previewRoute=url.pathname.match(/^\/v1\/live\/sessions\/([a-f0-9-]+)\/song-preview\/([a-zA-Z0-9-]+)$/);
-  if(previewRoute&&req.method==='GET'){
-   const s=sessions.get(previewRoute[1]);if(!s||s.phase==='ended'||!providers.singing)return json(res,404,{error:'not_found'});
-   const meta=artifacts.put(await providers.singing.audio(previewRoute[2],{allowUnreviewed:true}),'audio/wav');s.artifactIds.add(meta.artifactId);s.flush();return json(res,200,meta);
   }
   let body;const write=req.method==='POST';if(write){if(!req.headers['content-type']?.startsWith('application/json'))return json(res,415,{error:'json_required'});const chunks=[];let size=0;for await(const b of req){size+=b.length;if(size>32768)return json(res,413,{error:'body_too_large'});chunks.push(b);}try{body=JSON.parse(Buffer.concat(chunks).toString());}catch{return json(res,400,{error:'invalid_json'});}}
   const key=req.headers['idempotency-key'];if(write&&(typeof key!=='string'||key.length<8||key.length>128))return json(res,400,{error:'idempotency_key_required'});
