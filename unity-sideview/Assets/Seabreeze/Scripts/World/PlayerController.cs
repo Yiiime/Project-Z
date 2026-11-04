@@ -14,6 +14,8 @@ namespace Seabreeze
         CapsuleCollider2D capsule;
         CharacterVisual visual;
         float coyote, buffer;
+        Vector3 previousVisualPosition;
+        bool hasVisualSample;
         readonly RaycastHit2D[] hits = new RaycastHit2D[4];
         void Awake()
         {
@@ -64,8 +66,22 @@ namespace Seabreeze
             }
 
             body.linearVelocity = velocity;
-            if (visual != null)
-                visual.Animate(vx, Grounded, velocity.y);
+        }
+
+        void LateUpdate()
+        {
+            if (visual == null) return;
+            Vector3 position = transform.position;
+            float dt = Time.deltaTime;
+            float dx = hasVisualSample ? position.x - previousVisualPosition.x : 0;
+            if (Mathf.Abs(dx) > Mathf.Max(1, speed * dt * 3))
+            {
+                dx = 0;
+                visual.ResetPlayerMotion();
+            }
+            previousVisualPosition = position;
+            hasVisualSample = true;
+            visual.Animate(dt > .000001f ? dx / dt : 0, Grounded, body.linearVelocity.y, dt);
         }
 
         public void Teleport(Vector2 point)
@@ -74,6 +90,9 @@ namespace Seabreeze
             body.position = point;
             transform.position = point;
             buffer = 0;
+            previousVisualPosition = transform.position;
+            hasVisualSample = false;
+            if (visual != null) visual.ResetPlayerMotion();
         }
     }
 }
