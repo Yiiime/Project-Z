@@ -26,5 +26,18 @@
   "player_walk": {
     "prompt": "Use case: illustration-story. Asset type: transparent PNG four-frame walk cycle sprite sheet. EXACTLY FOUR full-body poses of the SAME young male anime game character, one row, FOUR equal-width cells, same height, same ground baseline, same head scale, same body design. ALL characters face RIGHT strictly side-on. Character as in reference: short tousled black hair, blue-gray lightweight jacket, cream t-shirt, slim navy pants, pale gray sneakers; natural adult7.5head proportions. Pose1 neutral idle feet nearly together arms relaxed outside pockets; pose2 walk contact right leg far forward left leg behind opposite arms swing; pose3 passing pose left knee raised under torso right leg planted arms near center; pose4 walk opposite contact left leg far forward right leg behind opposite arms swing. Distinct visible leg and arm poses; no duplicate idle poses. Preserve jacket/hair colors and face identity across four. Each figure centered in its cell with wide transparent gutters, full head to soles visible, no crop. Refined hand-painted anime linework + subtle cel shadows matching reference, not pixel art not chibi not 3D. No text, labels, backdrop, shadow or panel lines. REAL alpha transparent background. Landscape2048x1024.",
     "output": "Generated images are saved to /Users/bytedance/.codex/generated_images/01a1a000-534d-7f13-b29c-113e0d96f4e0 as /Users/bytedance/.codex/generated_images/01a1a000-534d-7f13-b29c-113e0d96f4e0/exec-63c779ca-4120-4c1a-bbf1-e4316d6f8c2c.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+  },
+  "player_motion_figma": {
+    "source_type": "user-provided-figma",
+    "source_url": "https://www.figma.com/design/GQsDhP4EXFWLJYimH44zQ9/%E6%9D%A5%E8%87%AA%E6%9C%88%E4%BA%AE%E7%9A%84Z?node-id=232-94",
+    "file_key": "GQsDhP4EXFWLJYimH44zQ9",
+    "node_id": "232:94",
+    "retrieved_on": "2026-11-04",
+    "role": "player",
+    "asset_count": 9,
+    "manifest": "Assets/Seabreeze/Resources/Art/PlayerMotion/motion.json",
+    "original_pngs_preserved": true,
+    "processing": "Original stand and eight walk PNGs are preserved byte-for-byte. Unity import settings normalize the Figma canvas scale and opaque sole baseline; the motion manifest records frame order, pivots and SHA-256 hashes.",
+    "authorization": "User authorized these supplied assets for the Project-Z player motion sample."
   }
 }

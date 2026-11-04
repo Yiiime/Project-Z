@@ -13,12 +13,29 @@ namespace Seabreeze
         SpriteRenderer fullSprite;
         Sprite idleSprite;
         Sprite[] walkFrames;
+        PlayerMotionDefinition playerMotion;
+        float playerDistance, playerSettleTime;
+        int playerFrame = -1;
+        bool playerWasWalking, playerWasAirborne;
+        public bool UsesPlayerMotion => playerMotion != null;
+        public float PlayerMotionPhase => playerMotion != null ? playerDistance / playerMotion.strideLength : 0;
         public string Pose { get; private set; } = "Idle";
+
+        [System.Serializable]
+        sealed class PlayerMotionDefinition
+        {
+            public int version, startFrame, jumpFrame;
+            public float canvasHeightUnits, strideLength;
+            public string idle;
+            public string[] walk;
+            public int[] stopFrames;
+        }
         public void Build(int kind)
         {
             character = kind;
             rig = new GameObject("Painted character rig").transform;
             rig.SetParent(transform, false);
+            if (kind == 0 && BuildPlayerMotion()) return;
             string[] names = {"player", "mio", "aya", "chen"};
             var sprite = Resources.Load<Sprite>("Art/" + names[Mathf.Clamp(kind, 0, 3)]);
             if (sprite == null)
@@ -115,6 +132,11 @@ namespace Seabreeze
         {
             if (rig == null)
                 return;
+            if (playerMotion != null)
+            {
+                AnimatePlayer(vx, grounded, deltaTime < 0 ? Time.fixedDeltaTime : deltaTime);
+                return;
+            }
             walking = Mathf.Abs(vx) > .1f;
             Pose = !grounded ? "Jump" : walking ? "Walk" : "Idle";
             if (walking)
@@ -143,6 +165,117 @@ namespace Seabreeze
             rightLeg.localEulerAngles = new Vector3(0, 0, -swing);
             leftArm.localEulerAngles = new Vector3(0, 0, -swing * .6f);
             rightArm.localEulerAngles = new Vector3(0, 0, swing * .6f);
+        }
+
+        bool BuildPlayerMotion()
+        {
+            const string root = "Art/PlayerMotion/";
+            var config = Resources.Load<TextAsset>(root + "motion");
+            if (config == null) return false;
+            PlayerMotionDefinition definition;
+            try { definition = JsonUtility.FromJson<PlayerMotionDefinition>(config.text); }
+            catch (System.ArgumentException) { Debug.LogError("Player motion manifest is invalid.", this); return false; }
+            if (definition == null || definition.version != 1 || definition.walk == null || definition.walk.Length != 8
+                || definition.strideLength <= 0 || float.IsNaN(definition.strideLength) || float.IsInfinity(definition.strideLength)
+                || definition.startFrame < 0 || definition.startFrame >= definition.walk.Length
+                || definition.jumpFrame < 0 || definition.jumpFrame >= definition.walk.Length
+                || definition.stopFrames == null || definition.stopFrames.Length == 0
+                || definition.stopFrames.Any(i => i < 0 || i >= definition.walk.Length))
+            {
+                Debug.LogError("Player motion requires a valid eight-pose cycle and stride.", this);
+                return false;
+            }
+            var idle = Resources.Load<Sprite>(root + definition.idle);
+            var frames = definition.walk.Select(name => Resources.Load<Sprite>(root + name)).ToArray();
+            if (idle == null || frames.Any(sprite => sprite == null)
+                || frames.Concat(new[] { idle }).Any(sprite => Mathf.Abs(sprite.rect.height / sprite.pixelsPerUnit - definition.canvasHeightUnits) > .002f))
+            {
+                Debug.LogError("Player motion assets need their calibrated Sprite import settings.", this);
+                return false;
+            }
+            playerMotion = definition;
+            idleSprite = idle;
+            walkFrames = frames;
+            fullSprite = Part("Character artwork", idle, Vector2.zero, Vector2.one, Color.white, 25, rig);
+            fullSprite.transform.localScale = Vector3.one;
+            fullSprite.transform.localPosition = Vector3.zero;
+            ResetPlayerMotion();
+            return true;
+        }
+
+        public void ResetPlayerMotion()
+        {
+            if (playerMotion == null) return;
+            playerDistance = playerMotion.strideLength * playerMotion.startFrame / walkFrames.Length;
+            playerSettleTime = 0;
+            playerWasWalking = playerWasAirborne = walking = false;
+            Pose = "Idle";
+            rig.localPosition = Vector3.zero;
+            rig.localRotation = Quaternion.identity;
+            SetPlayerFrame(-1);
+        }
+
+        void AnimatePlayer(float vx, bool grounded, float dt)
+        {
+            if (dt <= 0) return;
+            bool moving = Mathf.Abs(vx) > (playerWasWalking ? .03f : .08f);
+            walking = moving;
+            if (moving)
+            {
+                Vector3 scale = transform.localScale;
+                scale.x = Mathf.Abs(scale.x) * Mathf.Sign(vx);
+                transform.localScale = scale;
+            }
+            if (!grounded)
+            {
+                Pose = "Jump";
+                SetPlayerFrame(playerMotion.jumpFrame);
+                playerWasAirborne = true;
+                playerWasWalking = false;
+                return;
+            }
+            if (moving)
+            {
+                if (!playerWasWalking || playerWasAirborne)
+                    playerDistance = playerMotion.strideLength * playerMotion.startFrame / walkFrames.Length;
+                // Travel is sampled from the interpolated player root, not the requested input speed.
+                float localTravel = Mathf.Abs(vx) * dt / Mathf.Max(.001f, Mathf.Abs(transform.lossyScale.x));
+                playerDistance = Mathf.Repeat(playerDistance + localTravel, playerMotion.strideLength);
+                SetPlayerFrame(Mathf.Min(walkFrames.Length - 1, Mathf.FloorToInt(PlayerMotionPhase * walkFrames.Length)));
+                playerSettleTime = 0;
+                Pose = "Walk";
+            }
+            else
+            {
+                Pose = "Idle";
+                if (playerWasWalking || playerWasAirborne)
+                {
+                    int nearest = playerMotion.stopFrames[0];
+                    int distance = walkFrames.Length;
+                    foreach (int candidate in playerMotion.stopFrames)
+                    {
+                        int gap = Mathf.Abs(candidate - Mathf.Max(0, playerFrame));
+                        gap = Mathf.Min(gap, walkFrames.Length - gap);
+                        if (gap < distance) { nearest = candidate; distance = gap; }
+                    }
+                    SetPlayerFrame(nearest);
+                    playerSettleTime = .10f;
+                }
+                else
+                {
+                    playerSettleTime = Mathf.Max(0, playerSettleTime - dt);
+                    if (playerSettleTime == 0) SetPlayerFrame(-1);
+                }
+            }
+            playerWasWalking = moving;
+            playerWasAirborne = false;
+        }
+
+        void SetPlayerFrame(int index)
+        {
+            Sprite sprite = index < 0 ? idleSprite : walkFrames[index];
+            if (fullSprite.sprite != sprite) fullSprite.sprite = sprite;
+            playerFrame = index;
         }
 
         void Update()
