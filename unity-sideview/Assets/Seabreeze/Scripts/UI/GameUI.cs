@@ -17,6 +17,8 @@ namespace Seabreeze
         public bool HasOverlay => !string.IsNullOrEmpty(overlayMode);
         bool IsTransitioning => WorldDirector.Instance != null && WorldDirector.Instance.IsTransitioning;
         Canvas canvas;
+        LiveWebViewBridge liveWeb;
+        TextMeshProUGUI liveStatus;
         RectTransform canvasRect, hud, bottomStrip, overlayRoot, dialogueRoot, promptRoot;
         Transform overlayContent;
         TextMeshProUGUI dateText, timeText, weatherText, placeText, ambienceText, objectiveText;
@@ -59,6 +61,7 @@ namespace Seabreeze
         }
         void OnDestroy()
         {
+            liveWeb?.Close();
             if(Instance==this){Instance=null;Time.timeScale=1f;}
             if(session!=null)
             {
@@ -223,6 +226,14 @@ namespace Seabreeze
         void Update()
         {
             if(!initialized||session==null)return;
+            if(overlayMode=="live")
+            {
+                if(liveStatus!=null)liveStatus.text=liveWeb.Status;
+                if(!liveWeb.IsOpen)CloseOverlay();
+                // The browser owns all keyboard input, including Escape / IME composition.
+                // The Unity close button remains usable even if web content fails to load.
+                return;
+            }
             if(IsTransitioning)
             {
                 HideInteraction();
@@ -274,9 +285,11 @@ namespace Seabreeze
         void OpenOverlay(string mode)
         {
             if(!initialized||IsTransitioning)return;
+            if(overlayMode=="live")liveWeb?.Close();
             overlayMode=mode;Time.timeScale=0f;session.SetOverlay(true);HideInteraction();dialogueRoot.gameObject.SetActive(false);
             Clear(overlayRoot);overlayRoot.gameObject.SetActive(true);
             var scrim=Stretch("Backdrop",overlayRoot,Vector2.zero,Vector2.zero).gameObject.AddComponent<Image>();scrim.color=new Color(.015f,.035f,.08f,.76f);scrim.raycastTarget=true;
+            if(mode=="live"){BuildLive();return;}
             Vector2 size=mode=="pause"||mode=="restart"?new Vector2(760,730):mode=="ending"?new Vector2(1160,790):new Vector2(1280,790);
             var panel=Panel("Panel",overlayRoot,C,C,Vector2.zero,size,Ink,true);
             overlayContent=panel.transform;
@@ -287,6 +300,7 @@ namespace Seabreeze
         public void CloseOverlay()
         {
             if(!initialized)return;
+            liveWeb?.Close();
             overlayMode="";Time.timeScale=1f;overlayRoot.gameObject.SetActive(false);session.SetOverlay(false);
             dialogueRoot.gameObject.SetActive(session.Dialogue.IsOpen);dialogueFrame=Time.frameCount;
             RefreshHUD();
@@ -324,7 +338,8 @@ namespace Seabreeze
         void BuildPhone()
         {
             Header("PHONE  /  A LITTLE CONNECTION","海风里收到的消息","几句话，也可以把两个地方变得近一点。" );
-            var scroll=MakeScroll(new Vector2(46,-225),new Vector2(1188,455));
+            Button("Open Z Live",overlayContent,TL,TL,new Vector2(46,-220),new Vector2(1188,60),"Z 的直播  ·  进入聊天小屋",()=>OpenOverlay("live"),false,24);
+            var scroll=MakeScroll(new Vector2(46,-300),new Vector2(1188,380));
             float y=0;
             foreach(string message in session.Story.PhoneMessages)
             {
@@ -333,6 +348,13 @@ namespace Seabreeze
             if(y==0)y=TextEntry(scroll,0,"暂时没有新消息。\n先去街上走走吧，故事会从遇见的人那里开始。",24,new Color(.12f,.19f,.29f,.95f));
             SetContentHeight(scroll,y);
             Label("Phone hint",overlayContent,BL,BL,new Vector2(46,28),new Vector2(1100,35),"Tab / Esc  收起手机     ·     消息随今天的经历更新",18,Muted);
+        }
+        void BuildLive()
+        {
+            liveWeb = GetComponent<LiveWebViewBridge>() ?? gameObject.AddComponent<LiveWebViewBridge>();
+            liveStatus=Label("Live connection",overlayRoot,TL,TL,new Vector2(24,-14),new Vector2(1250,40),"正在打开 Z 的直播…",23,Paper);
+            Button("Close Z Live",overlayRoot,new Vector2(1,1),new Vector2(1,1),new Vector2(-18,-8),new Vector2(200,48),"关闭直播",CloseOverlay,false,22);
+            _ = liveWeb.Open(overlayRoot);
         }
         void BuildJournal()
         {
