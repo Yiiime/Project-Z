@@ -10,7 +10,5 @@ Builds/
 *.user
 .vs/
 
-# Local verification output and evaluation-only WebView SDK
+# Local verification output
 TestResults/
-Assets/Vuplex/
-Assets/Vuplex.meta

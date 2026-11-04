@@ -17,7 +17,7 @@ namespace Seabreeze
         public bool HasOverlay => !string.IsNullOrEmpty(overlayMode);
         bool IsTransitioning => WorldDirector.Instance != null && WorldDirector.Instance.IsTransitioning;
         Canvas canvas;
-        LiveWebViewBridge liveWeb;
+        ExternalLiveLauncher liveWeb;
         TextMeshProUGUI liveStatus;
         RectTransform canvasRect, hud, bottomStrip, overlayRoot, dialogueRoot, promptRoot;
         Transform overlayContent;
@@ -230,8 +230,8 @@ namespace Seabreeze
             {
                 if(liveStatus!=null)liveStatus.text=liveWeb.Status;
                 if(!liveWeb.IsOpen)CloseOverlay();
-                // The browser owns all keyboard input, including Escape / IME composition.
-                // The Unity close button remains usable even if web content fails to load.
+                // Returning focus does not resume gameplay; the player chooses when to continue.
+                if(Application.isFocused && GameInput.Pressed(Key.Escape))CloseOverlay();
                 return;
             }
             if(IsTransitioning)
@@ -351,10 +351,17 @@ namespace Seabreeze
         }
         void BuildLive()
         {
-            liveWeb = GetComponent<LiveWebViewBridge>() ?? gameObject.AddComponent<LiveWebViewBridge>();
-            liveStatus=Label("Live connection",overlayRoot,TL,TL,new Vector2(24,-14),new Vector2(1250,40),"正在打开 Z 的直播…",23,Paper);
-            Button("Close Z Live",overlayRoot,new Vector2(1,1),new Vector2(1,1),new Vector2(-18,-8),new Vector2(200,48),"关闭直播",CloseOverlay,false,22);
-            _ = liveWeb.Open(overlayRoot);
+            liveWeb = GetComponent<ExternalLiveLauncher>() ?? gameObject.AddComponent<ExternalLiveLauncher>();
+            var panel=Panel("Live browser panel",overlayRoot,C,C,Vector2.zero,new Vector2(1000,570),Ink,true);
+            overlayContent=panel.transform;
+            Header("Z LIVE  /  BROWSER","去 Z 的聊天小屋坐坐","直播将在外部浏览器打开。游戏已暂停，游戏声音已暂停。");
+            liveStatus=Label("Live browser status",overlayContent,TL,TL,new Vector2(46,-230),new Vector2(908,60),"",23,Paper);
+            Label("Return hint",overlayContent,TL,TL,new Vector2(46,-300),new Vector2(908,90),"结束后请关闭直播网页，再切回游戏点击「继续探索」。\n继续探索不会自动关闭浏览器，也不会停止网页里的声音。",21,Muted);
+            Button("Retry Z Live",overlayContent,TL,TL,new Vector2(46,-420),new Vector2(280,60),"重新打开网页",()=>liveWeb.Retry(),false,22);
+            Button("Copy Z Live URL",overlayContent,TL,TL,new Vector2(350,-420),new Vector2(220,60),"复制网址",()=>{GUIUtility.systemCopyBuffer=ExternalLiveLauncher.LiveUrl;ShowToast("直播网址已复制");},false,22);
+            Button("Resume from Z Live",overlayContent,TL,TL,new Vector2(594,-420),new Vector2(360,60),"继续探索",CloseOverlay,true,24);
+            liveWeb.Open();
+            liveStatus.text=liveWeb.Status;
         }
         void BuildJournal()
         {
