@@ -8,8 +8,8 @@
     "credentials, databases, real chat history",
     "unrelated assets and archives"
   ],
-  "file_count_excluding_manifest": 161,
-  "total_bytes_excluding_manifest": 39607550,
+  "file_count_excluding_manifest": 162,
+  "total_bytes_excluding_manifest": 39610603,
   "files": [
     {
       "path": ".gitignore",
@@ -653,8 +653,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 6345,
-      "sha256": "d5bde6936b7309780b3d391bb0d2b0fba62cd43838f4b4f0bf0941b9154e9b15"
+      "bytes": 7302,
+      "sha256": "53732e451623029f9d77b85fca9b341a9b1efee000c8d212af7d94fe3949e6cb"
     },
     {
       "path": "sdk-compatibility/manifest.json",
@@ -810,6 +810,11 @@
       "path": "verification/r5-summary.json",
       "bytes": 1565,
       "sha256": "d7580503672094c0e451b2887ed9f3843ee84014dc17d086a8204c0a68016eaa"
+    },
+    {
+      "path": "verification/real-llm-validation.json",
+      "bytes": 2096,
+      "sha256": "e58b113f229b8361da8050d47e1defc370d45d07afd9ab82d86eff5b0b91484f"
     },
     {
       "path": "verification/restore-validation.json",
