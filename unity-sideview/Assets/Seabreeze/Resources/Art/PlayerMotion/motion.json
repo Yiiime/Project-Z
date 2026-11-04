@@ -52,11 +52,11 @@
         "x": 0.5,
         "y": 0.059751972942502785
       },
-      "sha256": "0b9dc110af2ee2829625bbc698a3cf98b44810e7fd338aa6a72019a1b06c0124",
+      "sha256": "fdaf795a89108c3a249ad34357e97cbc580fb0d2569285d00cbda5685bb95aec",
       "sourceFrame": "walk_00",
       "sourceSha256": "a0c34f15f8713d8c676ab5a3d6774c1c6e7799487255c44999c26e0a26659350",
       "preservedLowerFromRow": 1090,
-      "method": "Original-pixel compact arm deformation, with the authored relaxed sleeve/hand pose and per-frame collar/hem alignment"
+      "method": "Two-bone shoulder/elbow rotation with separated near/far arm layers; source jacket pixels fill previously occluded cloth"
     },
     {
       "name": "walk_soft_01",
@@ -68,11 +68,11 @@
         "x": 0.5,
         "y": 0.060825892857142905
       },
-      "sha256": "19536d69c67a98e717cd35726c8f2f0fa04dffba3bfebca6711db60e6b88e013",
+      "sha256": "ae7cfe4819a40756e5add8c98511c90d639fd436680a65643c382e037eb4d910",
       "sourceFrame": "walk_mid_00",
       "sourceSha256": "005210e38395480781b809e840f02eec854c0234ec51498d0d62d2da5061e550",
       "preservedLowerFromRow": 1099,
-      "method": "Original-pixel compact arm deformation, with the authored relaxed sleeve/hand pose and per-frame collar/hem alignment"
+      "method": "Two-bone shoulder/elbow rotation with separated near/far arm layers; source jacket pixels fill previously occluded cloth"
     },
     {
       "name": "walk_soft_02",
@@ -84,11 +84,11 @@
         "x": 0.5,
         "y": 0.07271702367531008
       },
-      "sha256": "c5ffcf0df967f8af35c601b5b7e7228a7ecb1b2037db3a17888bbbfc8384d18b",
+      "sha256": "c62a87a95e1feb329871264be781771a9244deb3c3532d5465e934c93359c419",
       "sourceFrame": "walk_02",
       "sourceSha256": "a4d514d697beb6e2deb2a21d98f106fe7d9faa08e43cb154bf89d366171ebaa4",
       "preservedLowerFromRow": 1067,
-      "method": "Original-pixel compact arm deformation, with the authored relaxed sleeve/hand pose and per-frame collar/hem alignment"
+      "method": "Two-bone shoulder/elbow rotation with separated near/far arm layers; source jacket pixels fill previously occluded cloth"
     },
     {
       "name": "walk_soft_03",
@@ -100,11 +100,11 @@
         "x": 0.5,
         "y": 0.060267857142857095
       },
-      "sha256": "04b826587ffbad7d8f73879520df1f81d8cda9821aee123a22201e0f63ecae98",
+      "sha256": "8158c53b8eb15a414806dacffea87638b3886d7d819637017385f22ec8f40e54",
       "sourceFrame": "walk_mid_01",
       "sourceSha256": "3916ef976fa56539075d4fb4477dbcc522bc61b6d63831283a0e00f666bf339e",
       "preservedLowerFromRow": 1100,
-      "method": "Original-pixel compact arm deformation, with the authored relaxed sleeve/hand pose and per-frame collar/hem alignment"
+      "method": "Two-bone shoulder/elbow rotation with separated near/far arm layers; source jacket pixels fill previously occluded cloth"
     },
     {
       "name": "walk_soft_04",
@@ -116,11 +116,11 @@
         "x": 0.5,
         "y": 0.06031567080045097
       },
-      "sha256": "f6d8ff0f66b771de6f480ad1b5124b5741084c9301bbe0c49eb9be7ff2085b19",
+      "sha256": "1672da30a493fb853d75fe9c79b9653db5d90aead87e410b7eae9ddc31d9873a",
       "sourceFrame": "walk_01",
       "sourceSha256": "87e1826c50b23b7aa45deaca5eda6b56dcb5e17cd79ea9a522c9d592b19f993f",
       "preservedLowerFromRow": 1089,
-      "method": "Original-pixel compact arm deformation, with the authored relaxed sleeve/hand pose and per-frame collar/hem alignment"
+      "method": "Two-bone shoulder/elbow rotation with separated near/far arm layers; source jacket pixels fill previously occluded cloth"
     },
     {
       "name": "walk_soft_05",
@@ -132,11 +132,11 @@
         "x": 0.5,
         "y": 0.0630580357142857
       },
-      "sha256": "9a9a16955dd4f04b9cabb8df1b54c0cd27a23750edc743566d421a48e8f3d6bb",
+      "sha256": "4913324aa8141734f9bc0fbb2b7dfba029fa6070f0d80c55d8962e2fd16649ac",
       "sourceFrame": "walk_mid_02",
       "sourceSha256": "e9c2ad93aca1c76e9cd25df2c965d38e4cee52ec8a2262c3cb484a182a751bb1",
       "preservedLowerFromRow": 1095,
-      "method": "Original-pixel compact arm deformation, with the authored relaxed sleeve/hand pose and per-frame collar/hem alignment"
+      "method": "Two-bone shoulder/elbow rotation with separated near/far arm layers; source jacket pixels fill previously occluded cloth"
     },
     {
       "name": "walk_soft_06",
@@ -148,11 +148,11 @@
         "x": 0.5,
         "y": 0.06292134831460672
       },
-      "sha256": "a7337f89ac8ac693bd68f1322f9ce22c8b4d2c2f20ebcbe2b2b0697fb955c761",
+      "sha256": "dc39beff10e8f9e21a0e4a5311ab8dd6f627bd9af6dd106865805ea13847d3d6",
       "sourceFrame": "walk_04",
       "sourceSha256": "a0fda035075c41b82873472bc300d19cb643596c50faf505cd09d81205f5e252",
       "preservedLowerFromRow": 1088,
-      "method": "Original-pixel compact arm deformation, with the authored relaxed sleeve/hand pose and per-frame collar/hem alignment"
+      "method": "Two-bone shoulder/elbow rotation with separated near/far arm layers; source jacket pixels fill previously occluded cloth"
     },
     {
       "name": "walk_soft_07",
@@ -164,11 +164,11 @@
         "x": 0.5,
         "y": 0.060267857142857095
       },
-      "sha256": "81318c309dc97a54afd7e87516385139cc8d5c5b98d4c70e3c692054baf2286e",
+      "sha256": "e18ed1842c508b9cc823cc5d152d787f6f05856f480fb8f249b0add231d116f5",
       "sourceFrame": "walk_mid_03",
       "sourceSha256": "c05bb56a366e2f54c172ce4fb994d6e908eb137a2d9c179f081a8246fa440b2b",
       "preservedLowerFromRow": 1100,
-      "method": "Original-pixel compact arm deformation, with the authored relaxed sleeve/hand pose and per-frame collar/hem alignment"
+      "method": "Two-bone shoulder/elbow rotation with separated near/far arm layers; source jacket pixels fill previously occluded cloth"
     },
     {
       "name": "walk_soft_08",
@@ -180,11 +180,11 @@
         "x": 0.5,
         "y": 0.07046223224351744
       },
-      "sha256": "d6a26955e62079f6ba691cab4d6804feb2a02700c6af9b85ef458c3d92b17cef",
+      "sha256": "e204c8fb95486da849be095923b18fe73f40add9a849fb93edb06fb68c85e486",
       "sourceFrame": "walk_03",
       "sourceSha256": "96799af67004f9bae3f9b3cde37ee4fafaddc85017ace42e756c5a3d305202fe",
       "preservedLowerFromRow": 1071,
-      "method": "Original-pixel compact arm deformation, with the authored relaxed sleeve/hand pose and per-frame collar/hem alignment"
+      "method": "Two-bone shoulder/elbow rotation with separated near/far arm layers; source jacket pixels fill previously occluded cloth"
     },
     {
       "name": "walk_soft_09",
@@ -196,11 +196,11 @@
         "x": 0.5,
         "y": 0.060825892857142905
       },
-      "sha256": "181498fb5c8f49e4c8e339e95dcd32e9cbfd203de2a2ed7b860e28fae51b71b1",
+      "sha256": "7447ea4acc81fdcf253bb47d77a7f9d6489e6563a0c60d3dab667035bd136f1a",
       "sourceFrame": "walk_mid_04",
       "sourceSha256": "0cf8dea37ac6ced5c5dd568d656265e244b05bd13dde884f6a272a6d91a6655e",
       "preservedLowerFromRow": 1099,
-      "method": "Original-pixel compact arm deformation, with the authored relaxed sleeve/hand pose and per-frame collar/hem alignment"
+      "method": "Two-bone shoulder/elbow rotation with separated near/far arm layers; source jacket pixels fill previously occluded cloth"
     },
     {
       "name": "walk_soft_10",
@@ -212,11 +212,11 @@
         "x": 0.5,
         "y": 0.06651634723788047
       },
-      "sha256": "512ee50401ac0b81f7faf5e16a65fc2f110344cd902fead1ce8e1aafb03bf091",
+      "sha256": "b77cc0a36c3f59e9f6c12d2fa728a18a1f475407062e2ce847e2b3625e4a1c9f",
       "sourceFrame": "walk_05",
       "sourceSha256": "f826f6713317c92b96c4dbf4d5ae5c59361876dab2c4ce5e62440a70349a7c70",
       "preservedLowerFromRow": 1078,
-      "method": "Original-pixel compact arm deformation, with the authored relaxed sleeve/hand pose and per-frame collar/hem alignment"
+      "method": "Two-bone shoulder/elbow rotation with separated near/far arm layers; source jacket pixels fill previously occluded cloth"
     },
     {
       "name": "walk_soft_11",
@@ -228,11 +228,11 @@
         "x": 0.5,
         "y": 0.0597098214285714
       },
-      "sha256": "1ba31f896f0aea8997083de1990c04f1e2a24f1892e5d86829e18bb76d315a52",
+      "sha256": "86e2e1faf47057b748cdcd976ce76f62acdd0b549ad90af5c8dab062ec9e7140",
       "sourceFrame": "walk_mid_05",
       "sourceSha256": "6fd8e818332b92c91abe93aacd594b3577d24759d7b3f687c2b78e34025d8492",
       "preservedLowerFromRow": 1101,
-      "method": "Original-pixel compact arm deformation, with the authored relaxed sleeve/hand pose and per-frame collar/hem alignment"
+      "method": "Two-bone shoulder/elbow rotation with separated near/far arm layers; source jacket pixels fill previously occluded cloth"
     },
     {
       "name": "walk_soft_12",
@@ -244,11 +244,11 @@
         "x": 0.5,
         "y": 0.06144306651634723
       },
-      "sha256": "4212ea2173a7d5d384d44c29e3e5b22f9bc3b3d9ccd592f2239768b07316b49f",
+      "sha256": "668f232a54dd9fce9cc7f62c9d7452885aed265afb6d45c12f922f20ee3da935",
       "sourceFrame": "walk_06",
       "sourceSha256": "91180fa8de8a227efe81513aae3b71600c2768ca86c2151b8b44e85a458794bc",
       "preservedLowerFromRow": 1087,
-      "method": "Original-pixel compact arm deformation, with the authored relaxed sleeve/hand pose and per-frame collar/hem alignment"
+      "method": "Two-bone shoulder/elbow rotation with separated near/far arm layers; source jacket pixels fill previously occluded cloth"
     },
     {
       "name": "walk_soft_13",
@@ -260,11 +260,11 @@
         "x": 0.5,
         "y": 0.0641741071428571
       },
-      "sha256": "cad27f066cc4d6faca70ca0834fba92a3d27fc00963d97d23fa24bb6111d1503",
+      "sha256": "176a486919b82833653e5eb242cb8ea7cd706342ecb7852d88a5f9014276f1e6",
       "sourceFrame": "walk_mid_06",
       "sourceSha256": "420095c4a5dc52cb0e5aecd0d4762eccf00eef81a448867bdfe83c96a36259e9",
       "preservedLowerFromRow": 1093,
-      "method": "Original-pixel compact arm deformation, with the authored relaxed sleeve/hand pose and per-frame collar/hem alignment"
+      "method": "Two-bone shoulder/elbow rotation with separated near/far arm layers; source jacket pixels fill previously occluded cloth"
     },
     {
       "name": "walk_soft_14",
@@ -276,11 +276,11 @@
         "x": 0.5,
         "y": 0.06426155580608794
       },
-      "sha256": "ebee027f39ee99f238b1323f3e483bda98f84d792e0e17fadd4cd5fc6f133d83",
+      "sha256": "9ece7f5b2c38ee3e0a7b979d32e586ff1da70472b1454830ff5795df6300adb7",
       "sourceFrame": "walk_07",
       "sourceSha256": "7889e93da9d73e09b22612f23a3d18a9ebf1800a8b4382f6241ca044d02114d7",
       "preservedLowerFromRow": 1082,
-      "method": "Original-pixel compact arm deformation, with the authored relaxed sleeve/hand pose and per-frame collar/hem alignment"
+      "method": "Two-bone shoulder/elbow rotation with separated near/far arm layers; source jacket pixels fill previously occluded cloth"
     },
     {
       "name": "walk_soft_15",
@@ -292,11 +292,11 @@
         "x": 0.5,
         "y": 0.0597098214285714
       },
-      "sha256": "0114ffe91c8821167a479e3fd2f668c31e35e194d48367a2108d3c4823f82381",
+      "sha256": "11a99a8c87ae195efe35b437d3ddd2a2bb6b44ed1a97a44c2ecf05160f44edd1",
       "sourceFrame": "walk_mid_07",
       "sourceSha256": "35f441918ad413435570ecbda25fb66113e5f7f412a54ead85d94426e2c5a02c",
       "preservedLowerFromRow": 1101,
-      "method": "Original-pixel compact arm deformation, with the authored relaxed sleeve/hand pose and per-frame collar/hem alignment"
+      "method": "Two-bone shoulder/elbow rotation with separated near/far arm layers; source jacket pixels fill previously occluded cloth"
     }
   ],
   "alignment": "Original PNGs remain intact; each derived arm pose retains its source dimensions, import scale and opaque sole pivot.",
@@ -311,14 +311,14 @@
     "walk_07"
   ],
   "interpolation": {
-    "appliesTo": "referenceWalk",
     "method": "local RIFE 4.25 RGBA + guided crossing-leg correction",
     "keyframesPreserved": true,
     "cycleTimingPreserved": true,
     "normalizedCanvas": [
       896,
       1792
-    ]
+    ],
+    "appliesTo": "referenceWalk"
   },
   "referenceWalk": [
     "walk_00",
@@ -339,16 +339,26 @@
     "walk_mid_07"
   ],
   "armMotion": {
-    "status": "comparison sample",
+    "status": "natural arm swing comparison sample",
     "sourcePose": "walk_01",
-    "method": "Original-pixel compact deformation; one eased arm oscillation per unchanged walk cycle",
-    "nearHandHorizontalAmplitudePixels": 42,
-    "farHandHorizontalAmplitudePixels": 33.6,
+    "method": "Two-bone shoulder/elbow rotation, baked at the existing 16 walk phases",
+    "nearShoulderRangeDegrees": [
+      -22,
+      22
+    ],
+    "farShoulderRangeDegrees": [
+      -20,
+      20
+    ],
+    "elbowFlexRangeDegrees": [
+      8,
+      12
+    ],
     "workingCanvas": [
       896,
       1792
     ],
     "strideAndFrameTimingPreserved": true,
-    "note": "Softer arms use a consistent relaxed sleeve/hand pose. Previously occluded jacket pixels come from the same supplied pose, aligned to each existing collar and hem. Source PNGs remain intact."
+    "note": "Both arms use the supplied sleeve/hand pixels, with opposite shoulder phases and fixed bone lengths. The far arm is narrower and composited behind the body and legs. Original jacket pixels reconstruct cloth uncovered by the arm. Source PNGs remain intact."
   }
 }

@@ -44,23 +44,27 @@
     "source_type": "local-original-pixel-animation-revision",
     "source_manifest": "Assets/Seabreeze/Resources/Art/PlayerMotion/motion.json",
     "created_on": "2026-11-04",
-    "review_status": "Comparison sample; awaiting user visual review before adoption.",
-    "source_pose": "The supplied walk_01 relaxed sleeve and hand pose",
-    "method": "Compact inverse pixel deformation creates one eased, small arm oscillation per existing walk cycle. Original sleeve/hand pixels retain their identities; the same supplied pose fills the jacket previously covered by moving arms. Collar and hem alignment follow each existing frame. No generative image model is used.",
+    "review_status": "Natural shoulder/elbow swing comparison sample; awaiting user visual review before adoption.",
+    "source_pose": "The supplied walk_01 near sleeve/hand is reused for both articulated arms; a clear cloth panel from that pose fills the uncovered jacket.",
+    "method": "Separate upper/lower arm bone mappings rotate around the shoulder and elbow with fixed segment lengths, opposite arm phases and a slight elbow bend. Results are baked at the existing 16 walk phases. The far arm is composited behind the body and legs; the near arm is in front. Collar and hem alignment follow each existing frame. No generative image model is used.",
     "scope": "16 separate walk_soft PNGs retain the corresponding source image dimensions, pixels-per-unit and sole pivots. The original idle, eight keyframes and eight midpoints remain byte-for-byte intact. Runtime stride, frame timing, camera, physics and NPC animation are unchanged.",
     "processing": {
       "working_canvas": [896, 1792],
-      "near_hand_horizontal_amplitude_pixels": 42,
-      "far_hand_horizontal_amplitude_pixels": 33.6,
+      "near_shoulder_range_degrees": [-22, 22],
+      "far_shoulder_range_degrees": [-20, 20],
+      "elbow_flex_range_degrees": [8, 12],
+      "far_arm_width_factor": 0.88,
+      "far_arm_color_factor": 0.92,
       "preserved_lower_region": "Each derived PNG records preservedLowerFromRow. All RGBA pixels from this top-down row to the bottom are copied from its source, including the knees and soles; other unchanged regions are also restored from the native source.",
-      "local_recipe_files": ["arms_sample.py", "export_arms_sample.py", "preview_arms_sample.py"]
+      "local_recipe_files": ["natural_arms.py", "export_arms_sample.py --natural", "preview_natural_arms.py"]
     },
     "diagnostics": {
-      "basis": "Skin-component hand centroids measured on the aligned 896 x 1792 working canvases; this is a motion diagnostic, not a substitute for visual review.",
-      "horizontal_direction_changes_per_cycle_before": [4, 6],
-      "horizontal_direction_changes_per_cycle_after": [2, 2],
-      "max_adjacent_hand_displacement_pixels_before": 49.3832,
-      "max_adjacent_hand_displacement_pixels_after": 25.4459
+      "basis": "Authored shoulder/elbow/wrist trajectories on the 896 x 1792 working canvas; this is a rig diagnostic, not a substitute for visual review.",
+      "near_wrist_horizontal_span_pixels": 320.23,
+      "far_wrist_horizontal_span_pixels": 290.69,
+      "bone_length_error_pixels": "Less than 0.001 across all 16 poses",
+      "opposite_shoulder_phases": true,
+      "art_limit": "The exposed shoulder/back cloth uses a stretched patch of the original jacket; its detail is simplified for this motion sample."
     },
     "verification": {
       "unity": "Unity 6000.3.27f1: 6 verification groups passed, all 16 revised poses used, zero scale span, unchanged 30/60 FPS walk phase, and original source hashes plus preserved lower PNG rows verified.",
