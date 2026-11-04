@@ -8,7 +8,7 @@
 - `node --test tests/session.test.mjs tests/http.test.mjs`：21 项通过。覆盖会话和 HTTP 契约、消息回执、选牌暂停与整场暂停隔离、连麦等待与暂停下麦、连麦发言与弹幕隔离、语音输入草稿及过期结果拒绝、环境配置优先级、语音授权错误安全传递、直播内试听的互斥播放/结束/取消/失败恢复及人工审核隔离。
 - `node --test tests/singing-background.test.mjs`：10 项通过，覆盖唱段生成、审核及供应商鉴权/资源授权失败的安全分类。
 - 静音中止试听的补充验证：`node --test tests/http.test.mjs`，7 项通过。
-- 最新脚本已由 Unity 编辑器编译；直播内试听的歌声与嘴型同步等待本机手工确认。
+- 最新脚本已由 Unity 编辑器编译；用户本机已实际完成 32,284 ms 的直播内试听：media.prepare 为 ready，media.play 为 completed，期间无 media.pause，随后主播音频回复也收到 completed。用户已确认歌声、嘴型变化及播完继续聊天均正常。
 - `tools/team/z check`：通过；包含服务回归、仓库规则、资源 GUID 和 C# 语法检查。
 - Unity CLI 编辑器编译及独立后台 Play Mode：通过。实际从手机按钮进入直播，验证连接、设置弹窗和返回、原画切换、文字发送及回执、塔罗展示回执、绘画完成回执、展开和恢复、退出清理与重复进入。退出后 timeScale 为 1，无直播对象残留。
 - 真实 DeepSeek 返回有效回复。真实 Vivi 合成音频在 Unity 中解码、通过 AudioSource 播放并收到 completed 回执，modality 为 audio，fallbackReason 为空。后台验收期间本机音频输出静音。
