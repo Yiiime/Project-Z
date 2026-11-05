@@ -24,6 +24,13 @@ public sealed partial class LiveFeatureController {
     CancellationTokenSource microphoneCancel;
     bool previewStarting,previewActive;
     readonly HashSet<string> songWrites=new HashSet<string>();
+    // Drafts belong to this panel and the exact task/asset being reviewed, never to another rendition.
+    sealed class SongDraft {
+        public string phase,assetId,clarification="",note="";
+        public bool acknowledgeUnknown;
+        public readonly Dictionary<string,bool> checks=new Dictionary<string,bool>();
+    }
+    readonly Dictionary<string,SongDraft> songDrafts=new Dictionary<string,SongDraft>();
 
     void BuildCompanionUI() {
         callButton=Icon("mic","语音输入",ToggleDictation);callButton.AddToClassList("call-toggle");form.Insert(form.IndexOf(sendButton),callButton);
@@ -209,12 +216,17 @@ public sealed partial class LiveFeatureController {
             var result=await transport.Transcribe(pcm,microphoneVersion,token,draft);token.ThrowIfCancellationRequested();
             if((int?)result["callVersion"]!=microphoneVersion)throw new OperationCanceledException();
             string text=(string)result["text"];
-            if(draft){input.maxLength=Math.Max(120,text?.Length??0);input.value=text;voiceNotice=text?.Length>120?"识别完成，请编辑至 120 字以内再发送":"识别完成，可编辑后发送";input.Focus();Toast(voiceNotice);return;}
+            if(draft){SetVoiceDraft(text,120);voiceNotice=text?.Length>120?"识别完成，请编辑至 120 字以内再发送":"识别完成，可编辑后发送";input.Focus();Toast(voiceNotice);return;}
             if(automaticVoice&&!string.IsNullOrWhiteSpace(text)&&text.Length<=360)await transport.Input("viewer.message",new JObject{{"text",text}});
-            else {await transport.Input("call.input",new JObject{{"state","reviewing"}});input.value=text;voiceNotice="识别内容已放进输入框，确认后发送";input.Focus();Toast(voiceNotice);}
+            else {await transport.Input("call.input",new JObject{{"state","reviewing"}});SetVoiceDraft(text,360);voiceNotice=text?.Length>360?"识别完成，请编辑至 360 字以内再发送":"识别内容已放进输入框，确认后发送";input.Focus();Toast(voiceNotice);}
             ApplyState(await transport.Request(transport.Route()));nextVoiceTurn=Time.unscaledTime+2;
         }catch(OperationCanceledException){}catch(Exception e){if(draft){voiceNotice=FriendlyError(e);Toast(voiceNotice);}else await EndFailedVoiceTurn(turn,e);}
         finally{if(clip!=null)Destroy(clip);if(microphoneCancel==turn){transcribing=dictating=false;microphoneCancel=null;turn.Dispose();UpdateCallView();}}
+    }
+
+    void SetVoiceDraft(string text,int limit) {
+        input.maxLength=Math.Max(limit,text?.Length??0);
+        input.value=text??"";
     }
 
     async Task ResetCallInput(CancellationTokenSource turn) {
@@ -259,32 +271,41 @@ public sealed partial class LiveFeatureController {
         try {
             var result=await transport.Request("/api/singing/state");if(disposed||leaving)return;
             var tasks=(JArray)result["tasks"];string fingerprint=tasks.ToString();if(fingerprint==songFingerprint)return;
-            songFingerprint=fingerprint;songList.Clear();
-            if(tasks.Count==0)songList.Add(Text("还没有点歌任务。","song-note"));
-            for(int i=tasks.Count-1;i>=0;i--)ShowSong((JObject)tasks[i]);
+            songFingerprint=fingerprint;RenderSongs(tasks);
         }catch(Exception e){if(!disposed)songStatus.text=FriendlyError(e);}
         finally{pollingSongs=false;}
     }
+    void RenderSongs(JArray tasks) {
+        var present=new HashSet<string>();
+        foreach(JObject task in tasks)present.Add((string)task["id"]);
+        foreach(string id in new List<string>(songDrafts.Keys))if(!present.Contains(id))songDrafts.Remove(id);
+        songList.Clear();
+        if(tasks.Count==0)songList.Add(Text("还没有点歌任务。","song-note"));
+        for(int i=tasks.Count-1;i>=0;i--)ShowSong((JObject)tasks[i]);
+    }
     void ShowSong(JObject task) {
         string id=(string)task["id"],phase=(string)task["status"],route="/api/singing/tasks/"+id+"/";
+        string assetId=(string)task["assetId"];
+        if(!songDrafts.TryGetValue(id,out var draft)||draft.phase!=phase||draft.assetId!=assetId)
+            songDrafts[id]=draft=new SongDraft{phase=phase,assetId=assetId};
         var card=Box("song-card");songList.Add(card);card.Add(Text((string)task["request"],"song-title"));
         var names=new Dictionary<string,string>{{"queued","排队中"},{"parsing","确认歌曲"},{"generating","生成歌声"},{"checking","检查音频"},{"awaiting_review","等待试听审核"},{"needs_input","需要补充"},{"ready","已审核，可安排演唱"},{"playing","正在直播播放"},{"completed","已播完"},{"failed","本次未完成"},{"cancelled","已取消"},{"rejected","无法生成"}};
         card.Add(Text((names.TryGetValue(phase,out var label)?label:phase)+"  "+(string)task["reason"],"song-note"));
         if(phase=="needs_input") {
-            card.Add(Text((string)task["question"],"song-note"));var clarification=new TextField{maxLength=600};card.Add(clarification);
+            card.Add(Text((string)task["question"],"song-note"));var clarification=new TextField{maxLength=600,value=draft.clarification};clarification.RegisterValueChangedCallback(e=>draft.clarification=e.newValue);card.Add(clarification);
             card.Add(Action("补充说明",()=>_=SongWrite(id,route+"clarify",new JObject{{"text",clarification.value}})));
         }
         if(task["assetId"]?.Type==JTokenType.String&&(phase=="awaiting_review"||phase=="ready"||phase=="completed"))
             card.Add(Action("听 Z 试唱",()=>_=PreviewSong((string)task["assetId"])));
         if(phase=="awaiting_review") {
             var checks=new Dictionary<string,Toggle>();string[] keys={"song","segment","voice","aCappella","ending"},labels={"歌曲正确","片段正确","音色符合 Z","无伴奏","结尾完整"};
-            for(int i=0;i<keys.Length;i++){var check=new Toggle(labels[i]);checks[keys[i]]=check;card.Add(check);}
-            var note=new TextField{maxLength=600};note.textEdition.placeholder="填写试听结论";card.Add(note);
+            for(int i=0;i<keys.Length;i++){string key=keys[i];var check=new Toggle(labels[i]){value=draft.checks.TryGetValue(key,out var selected)&&selected};check.RegisterValueChangedCallback(e=>draft.checks[key]=e.newValue);checks[key]=check;card.Add(check);}
+            var note=new TextField{maxLength=600,value=draft.note};note.RegisterValueChangedCallback(e=>draft.note=e.newValue);note.textEdition.placeholder="填写试听结论";card.Add(note);
             card.Add(Action("审核通过",()=>{var values=new JObject();foreach(var pair in checks)values[pair.Key]=pair.Value.value;_=SongWrite(id,route+"review",new JObject{{"approved",true},{"checks",values},{"note",note.value}});}));
             card.Add(Action("审核不通过",()=>_=SongWrite(id,route+"review",new JObject{{"approved",false},{"note",note.value}})));
         }
         if(phase=="failed") {
-            var acknowledgement=new Toggle("已核对上次生成结果，允许再次生成");card.Add(acknowledgement);
+            var acknowledgement=new Toggle("已核对上次生成结果，允许再次生成"){value=draft.acknowledgeUnknown};acknowledgement.RegisterValueChangedCallback(e=>draft.acknowledgeUnknown=e.newValue);card.Add(acknowledgement);
             card.Add(Action("重试",()=>_=SongWrite(id,route+"retry",new JObject{{"acknowledgeUnknown",acknowledgement.value}})));
         }
         if(phase=="ready"||phase=="completed")card.Add(Text("Z 会根据对话安排演唱，也可以点击「听 Z 试唱」。","song-note"));
