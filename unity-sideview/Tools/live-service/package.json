@@ -7,9 +7,11 @@
   },
   "scripts": {
     "start": "node server/index.mjs",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "netease:login": "node scripts/netease-login.mjs"
   },
   "dependencies": {
-    "ws": "8.22.1"
+    "ws": "8.22.1",
+    "@neteasecloudmusicapienhanced/api": "4.41.1"
   }
 }
