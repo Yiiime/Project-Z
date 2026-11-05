@@ -5,12 +5,14 @@ using UnityEngine.UI;
 
 namespace Seabreeze
 {
-    internal static class UIPrimitives
+    public static class UIPrimitives
     {
-        public static readonly Color Ink = new Color(.045f, .09f, .17f, .94f);
-        public static readonly Color Paper = new Color(.91f, .94f, .97f, 1f);
-        public static readonly Color Muted = new Color(.66f, .75f, .84f, 1f);
-        public static readonly Color Accent = new Color(.97f, .76f, .47f, 1f);
+        public static UIStyleConfig Style => UIStyleConfig.Current;
+        public static Color Ink => Style.PanelFill;
+        public static Color Paper => Style.TextPrimary;
+        public static Color Muted => Style.TextSecondary;
+        public static Color Accent => Style.AccentWarm;
+        public static Color Cool => Style.AccentCool;
         public static TMP_FontAsset Font;
         static Sprite circleSprite;
         public static Sprite CircleSprite
@@ -55,38 +57,35 @@ namespace Seabreeze
         public static Image Panel(string name, Transform parent, Vector2 anchor, Vector2 pivot, Vector2 position, Vector2 size, Color color, bool raycast = false)
         {
             var rt = Rect(name, parent, anchor, pivot, position, size);
-            var image = rt.gameObject.AddComponent<Image>();
+            var image = rt.gameObject.AddComponent<RoundedPanel>();
             image.color = color; image.raycastTarget = raycast;
+            image.CornerRadius = size.y <= 3 || size.x <= 3 ? 0 : Style.CornerRadius;
+            image.SetBorder(size.y <= 3 || size.x <= 3 ? Color.clear : Style.PanelBorder, Style.BorderWidth);
             return image;
         }
         public static TextMeshProUGUI Label(string name, Transform parent, Vector2 anchor, Vector2 pivot, Vector2 position, Vector2 size, string value, float fontSize, Color color, TextAlignmentOptions align = TextAlignmentOptions.TopLeft)
         {
             var rt = Rect(name, parent, anchor, pivot, position, size);
             var text = rt.gameObject.AddComponent<TextMeshProUGUI>();
-            text.font = Font; text.text = value; text.fontSize = fontSize; text.color = color;
+            text.font = Font != null ? Font : Style.Font; text.text = value; text.fontSize = fontSize; text.color = color;
             text.alignment = align; text.raycastTarget = false;
             text.textWrappingMode = TextWrappingModes.Normal;
             text.overflowMode = TextOverflowModes.Overflow;
-            text.lineSpacing = 10;
+            text.lineSpacing = Style.LineSpacing;
             return text;
         }
         public static Button Button(string name, Transform parent, Vector2 anchor, Vector2 pivot, Vector2 position, Vector2 size, string caption, Action action, bool accent = false, float fontSize = 23)
         {
-            var image = Panel(name, parent, anchor, pivot, position, size, accent ? new Color(.23f,.30f,.39f,.96f) : new Color(.14f,.21f,.31f,.8f), true);
+            Color fill = Style.ButtonFill;
+            if (accent) fill = Color.Lerp(fill, new Color(.24f,.26f,.29f,.58f),.35f);
+            var image = Panel(name, parent, anchor, pivot, position, size, fill, true);
             var button = image.gameObject.AddComponent<Button>();
             button.targetGraphic = image;
-            var colors = button.colors;
-            colors.normalColor = Color.white;
-            colors.highlightedColor = new Color(1.18f,1.18f,1.18f,1);
-            colors.pressedColor = new Color(.65f,.76f,.86f,1);
-            colors.selectedColor = new Color(1.09f,1.09f,1.09f,1);
-            colors.disabledColor = new Color(.5f,.5f,.5f,.6f);
-            button.colors = colors;
             button.navigation = new Navigation { mode = Navigation.Mode.None };
             if (action != null) button.onClick.AddListener(() => { if(WorldDirector.Instance == null || !WorldDirector.Instance.IsTransitioning) action(); });
-            var label = Label("Label", image.transform, new Vector2(.5f,.5f), new Vector2(.5f,.5f), Vector2.zero, size - new Vector2(32,8), caption, fontSize, accent ? Accent : Paper, TextAlignmentOptions.MidlineLeft);
+            var label = Label("Label", image.transform, new Vector2(.5f,.5f), new Vector2(.5f,.5f), Vector2.zero, size - new Vector2(36,10), caption, fontSize, accent ? Accent : Paper, TextAlignmentOptions.MidlineLeft);
             label.textWrappingMode = TextWrappingModes.Normal;
-            Line(image.transform, new Vector2(0,0), new Vector2(0,0), Vector2.zero, new Vector2(size.x,1), new Color(.65f,.76f,.88f,.20f));
+            UIHoverFeedback.Attach(button,accent);
             return button;
         }
         public static Image Line(Transform parent, Vector2 anchor, Vector2 pivot, Vector2 pos, Vector2 size, Color color)
@@ -94,7 +93,11 @@ namespace Seabreeze
 
         public static void Clear(Transform transform)
         {
-            for(int i = transform.childCount-1; i>=0; i--) UnityEngine.Object.Destroy(transform.GetChild(i).gameObject);
+            for(int i = transform.childCount-1; i>=0; i--) {
+                var child = transform.GetChild(i).gameObject;
+                child.SetActive(false);
+                UnityEngine.Object.Destroy(child);
+            }
         }
     }
 
@@ -112,7 +115,7 @@ namespace Seabreeze
             Vector2 center = r.center;
             float s = Mathf.Min(r.width,r.height) * (ring ? .27f : .43f);
             if (ring) { Circle(vh,center,Mathf.Min(r.width,r.height)*.47f,1.15f); Circle(vh,center,Mathf.Min(r.width,r.height)*.41f,.6f); }
-            Action<float,float,float,float> line = (x,y,x2,y2) => Segment(vh, center+new Vector2(x,y)*s, center+new Vector2(x2,y2)*s, 1.6f);
+            Action<float,float,float,float> line = (x,y,x2,y2) => Segment(vh, center+new Vector2(x,y)*s, center+new Vector2(x2,y2)*s, 1.25f);
             switch(symbol)
             {
                 case Symbol.Map:
@@ -128,6 +131,19 @@ namespace Seabreeze
                 case Symbol.Close: line(-.55f,-.55f,.55f,.55f);line(-.55f,.55f,.55f,-.55f);break;
                 case Symbol.Sun:
                     Circle(vh,center,s*.4f,1.5f);for(int i=0;i<8;i++){float a=i*Mathf.PI/4;line(Mathf.Cos(a)*.63f,Mathf.Sin(a)*.63f,Mathf.Cos(a)*.9f,Mathf.Sin(a)*.9f);}break;
+                case Symbol.Moon:
+                    for(int i=0;i<28;i++)
+                    {
+                        float a=(60+i*240f/28)*Mathf.Deg2Rad,b=(60+(i+1)*240f/28)*Mathf.Deg2Rad;
+                        Segment(vh,center+new Vector2(Mathf.Cos(a),Mathf.Sin(a))*s*.8f,center+new Vector2(Mathf.Cos(b),Mathf.Sin(b))*s*.8f,1.3f);
+                    }
+                    for(int i=0;i<20;i++)
+                    {
+                        float a=(110+i*140f/20)*Mathf.Deg2Rad,b=(110+(i+1)*140f/20)*Mathf.Deg2Rad;
+                        Vector2 offset=Vector2.right*s*.60f;
+                        Segment(vh,center+offset+new Vector2(Mathf.Cos(a),Mathf.Sin(a))*s*.75f,center+offset+new Vector2(Mathf.Cos(b),Mathf.Sin(b))*s*.75f,1.3f);
+                    }
+                    break;
                 case Symbol.Pin:
                     Circle(vh,center+Vector2.up*s*.2f,s*.52f,1.5f);line(-.38f,-.15f,0,-.85f);line(0,-.85f,.38f,-.15f);Circle(vh,center+Vector2.up*s*.2f,s*.14f,1.2f);break;
                 case Symbol.Sound:

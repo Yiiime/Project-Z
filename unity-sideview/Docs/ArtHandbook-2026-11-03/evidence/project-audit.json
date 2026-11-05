@@ -1,0 +1,756 @@
+{
+  "date": "2026-11-03 Asia/Shanghai",
+  "project": "/Users/bytedance/Desktop/unity_z",
+  "scope": "Saved files and read-only Editor inspection; not new gameplay acceptance",
+  "unity": "6000.3.27f1",
+  "urp": "17.3.0",
+  "maps": [
+    {
+      "file": "cafe.png",
+      "width": 1672,
+      "height": 941,
+      "bitDepth": 8,
+      "colorType": 2,
+      "bytes": 2082824,
+      "sha256": "c20a0f475078510f31ca130d21f65e03fb589cc5a9b6551223109ad01bb392e6"
+    },
+    {
+      "file": "lighthouse.png",
+      "width": 1672,
+      "height": 941,
+      "bitDepth": 8,
+      "colorType": 2,
+      "bytes": 1859361,
+      "sha256": "53f091521d8e44f5f228d42311ded2189365ddd362cd19e73070274af148ce43"
+    },
+    {
+      "file": "lighthouse_day.png",
+      "width": 1672,
+      "height": 941,
+      "bitDepth": 8,
+      "colorType": 2,
+      "bytes": 2170491,
+      "sha256": "61bbc1e4be1b0554d58f1b64fb6ea24dd0fa6d23685cab482ea8fb61274c8336"
+    },
+    {
+      "file": "street.png",
+      "width": 1672,
+      "height": 941,
+      "bitDepth": 8,
+      "colorType": 2,
+      "bytes": 1753884,
+      "sha256": "e8ea345373d2517a2eed608ece8ad4c40d3211b253e943e88a4e4475fd0c7572"
+    },
+    {
+      "file": "street_day.png",
+      "width": 1672,
+      "height": 941,
+      "bitDepth": 8,
+      "colorType": 2,
+      "bytes": 2017314,
+      "sha256": "7bdcc70942de074408c179f7c3e0201e73f50bd7657665a00e2a7580925b5b18"
+    }
+  ],
+  "scenes": [
+    {
+      "place": 0,
+      "width": 32,
+      "floorImageFraction": 0.165,
+      "streetSpawn": -8,
+      "fromCafe": -8.1,
+      "fromLighthouse": 13.5,
+      "cameraSize": 6.5,
+      "cameraY": 4.25,
+      "name": "Street",
+      "file": "Assets/Seabreeze/Scenes/Street.unity",
+      "anchors": [
+        {
+          "id": "noticeboard",
+          "label": "街角告示板",
+          "worldX": -13.2,
+          "worldY": 0.0,
+          "u": 0.08750000000000002,
+          "v": 0.835,
+          "pixelX": 146.30000000000004,
+          "pixelY": 785.735,
+          "radius": 1.45,
+          "npc": false,
+          "door": false,
+          "destination": 0,
+          "promptOffsetY": 2.2
+        },
+        {
+          "id": "cafe_door",
+          "label": "进入「潮汐」咖啡馆",
+          "worldX": -9.15,
+          "worldY": 0.0,
+          "u": 0.2140625,
+          "v": 0.835,
+          "pixelX": 357.91249999999997,
+          "pixelY": 785.735,
+          "radius": 1.45,
+          "npc": false,
+          "door": true,
+          "destination": 1,
+          "promptOffsetY": 3.2
+        },
+        {
+          "id": "bicycle",
+          "label": "旧自行车",
+          "worldX": -4.0,
+          "worldY": 0.0,
+          "u": 0.375,
+          "v": 0.835,
+          "pixelX": 627.0,
+          "pixelY": 785.735,
+          "radius": 1.45,
+          "npc": false,
+          "door": false,
+          "destination": 0,
+          "promptOffsetY": 2.2
+        },
+        {
+          "id": "npc_mio",
+          "label": "Z",
+          "worldX": -2.0,
+          "worldY": 0.0,
+          "u": 0.4375,
+          "v": 0.835,
+          "pixelX": 731.5,
+          "pixelY": 785.735,
+          "radius": 1.9,
+          "npc": true,
+          "door": false,
+          "destination": 0,
+          "promptOffsetY": 3.3
+        },
+        {
+          "id": "sea",
+          "label": "听一会儿海",
+          "worldX": 3.0,
+          "worldY": 0.0,
+          "u": 0.59375,
+          "v": 0.835,
+          "pixelX": 992.75,
+          "pixelY": 785.735,
+          "radius": 1.45,
+          "npc": false,
+          "door": false,
+          "destination": 0,
+          "promptOffsetY": 2.2
+        },
+        {
+          "id": "npc_chen",
+          "label": "陈伯",
+          "worldX": 8.0,
+          "worldY": 0.0,
+          "u": 0.75,
+          "v": 0.835,
+          "pixelX": 1254.0,
+          "pixelY": 785.735,
+          "radius": 1.9,
+          "npc": true,
+          "door": false,
+          "destination": 0,
+          "promptOffsetY": 3.3
+        },
+        {
+          "id": "postcard",
+          "label": "长椅上的明信片",
+          "worldX": 13.1,
+          "worldY": 0.0,
+          "u": 0.909375,
+          "v": 0.835,
+          "pixelX": 1520.4750000000001,
+          "pixelY": 785.735,
+          "radius": 1.45,
+          "npc": false,
+          "door": false,
+          "destination": 0,
+          "promptOffsetY": 2.2
+        },
+        {
+          "id": "bench",
+          "label": "坐一会儿",
+          "worldX": 14.0,
+          "worldY": 0.0,
+          "u": 0.9375,
+          "v": 0.835,
+          "pixelX": 1567.5,
+          "pixelY": 785.735,
+          "radius": 1.45,
+          "npc": false,
+          "door": false,
+          "destination": 0,
+          "promptOffsetY": 2.2
+        },
+        {
+          "id": "to_lighthouse",
+          "label": "沿海堤去灯塔",
+          "worldX": 15.0,
+          "worldY": 0.0,
+          "u": 0.96875,
+          "v": 0.835,
+          "pixelX": 1619.75,
+          "pixelY": 785.735,
+          "radius": 1.45,
+          "npc": false,
+          "door": true,
+          "destination": 2,
+          "promptOffsetY": 3.2
+        }
+      ],
+      "colliders": [
+        {
+          "name": "Continuous walkable pavement",
+          "position": {
+            "x": 0.0,
+            "y": -0.45,
+            "z": 0.0
+          },
+          "size": {
+            "x": 32.0,
+            "y": 0.9
+          },
+          "offset": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "usedByEffector": 0
+        },
+        {
+          "name": "Right boundary",
+          "position": {
+            "x": 16.2,
+            "y": 5.0,
+            "z": 0.0
+          },
+          "size": {
+            "x": 0.4,
+            "y": 12.0
+          },
+          "offset": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "usedByEffector": 0
+        },
+        {
+          "name": "Left boundary",
+          "position": {
+            "x": -16.2,
+            "y": 5.0,
+            "z": 0.0
+          },
+          "size": {
+            "x": 0.4,
+            "y": 12.0
+          },
+          "offset": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "usedByEffector": 0
+        },
+        {
+          "name": "Low bench platform",
+          "position": {
+            "x": 14.5,
+            "y": 0.625,
+            "z": 0.0
+          },
+          "size": {
+            "x": 3.0,
+            "y": 1.25
+          },
+          "offset": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "usedByEffector": 1
+        }
+      ],
+      "backdrop": {
+        "name": "Hand-painted environment - replaceable artwork",
+        "position": {
+          "x": 0.0,
+          "y": 6.0332055,
+          "z": 0.0
+        },
+        "scale": {
+          "x": 1.9138757,
+          "y": 1.9138757,
+          "z": 1.9138757
+        },
+        "order": -20
+      },
+      "geometry": {
+        "imageWidth": 1672,
+        "imageHeight": 941,
+        "worldHeight": 18.00956937799043,
+        "worldBottom": -2.971578947368421,
+        "worldTop": 15.03799043062201,
+        "floorPixelY": 785.735,
+        "scaleAt100PPU": 1.9138755980861246,
+        "cameraWidthAt16by9": 23.11111111111111,
+        "cameraHeight": 13.0,
+        "cameraMinX": -4.444444444444445,
+        "cameraMaxX": 4.444444444444445,
+        "cameraTopPixel": 224.0475,
+        "cameraBottomPixel": 903.2975,
+        "referenceCharacterWorldHeight": 3.042,
+        "referenceCharacterPixelHeight": 158.94449999999998,
+        "referenceCharacterScreenPixelHeight": 252.71999999999997,
+        "floorScreenPixelY": 893.076923076923
+      }
+    },
+    {
+      "place": 1,
+      "width": 20,
+      "floorImageFraction": 0.165,
+      "streetSpawn": -7,
+      "fromCafe": -8.1,
+      "fromLighthouse": 13.5,
+      "cameraSize": 5.6,
+      "cameraY": 3.75,
+      "name": "Cafe",
+      "file": "Assets/Seabreeze/Scenes/Cafe.unity",
+      "anchors": [
+        {
+          "id": "cafe_exit",
+          "label": "回到海边小街",
+          "worldX": -8.3,
+          "worldY": 0.0,
+          "u": 0.08499999999999996,
+          "v": 0.835,
+          "pixelX": 142.11999999999995,
+          "pixelY": 785.735,
+          "radius": 1.45,
+          "npc": false,
+          "door": true,
+          "destination": 0,
+          "promptOffsetY": 3.2
+        },
+        {
+          "id": "radio",
+          "label": "旧收音机",
+          "worldX": -5.5,
+          "worldY": 0.0,
+          "u": 0.22499999999999998,
+          "v": 0.835,
+          "pixelX": 376.2,
+          "pixelY": 785.735,
+          "radius": 1.45,
+          "npc": false,
+          "door": false,
+          "destination": 0,
+          "promptOffsetY": 2.2
+        },
+        {
+          "id": "coffee",
+          "label": "慢慢喝完咖啡",
+          "worldX": -3.7,
+          "worldY": 0.0,
+          "u": 0.315,
+          "v": 0.835,
+          "pixelX": 526.68,
+          "pixelY": 785.735,
+          "radius": 1.45,
+          "npc": false,
+          "door": false,
+          "destination": 0,
+          "promptOffsetY": 2.2
+        },
+        {
+          "id": "npc_aya",
+          "label": "阿遥",
+          "worldX": 2.4,
+          "worldY": 0.0,
+          "u": 0.62,
+          "v": 0.835,
+          "pixelX": 1036.64,
+          "pixelY": 785.735,
+          "radius": 1.9,
+          "npc": true,
+          "door": false,
+          "destination": 0,
+          "promptOffsetY": 3.3
+        },
+        {
+          "id": "guestbook",
+          "label": "留言本",
+          "worldX": 4.6,
+          "worldY": 0.0,
+          "u": 0.73,
+          "v": 0.835,
+          "pixelX": 1220.56,
+          "pixelY": 785.735,
+          "radius": 1.45,
+          "npc": false,
+          "door": false,
+          "destination": 0,
+          "promptOffsetY": 2.2
+        }
+      ],
+      "colliders": [
+        {
+          "name": "Left boundary",
+          "position": {
+            "x": -10.2,
+            "y": 5.0,
+            "z": 0.0
+          },
+          "size": {
+            "x": 0.4,
+            "y": 12.0
+          },
+          "offset": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "usedByEffector": 0
+        },
+        {
+          "name": "Right boundary",
+          "position": {
+            "x": 10.2,
+            "y": 5.0,
+            "z": 0.0
+          },
+          "size": {
+            "x": 0.4,
+            "y": 12.0
+          },
+          "offset": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "usedByEffector": 0
+        },
+        {
+          "name": "Continuous walkable pavement",
+          "position": {
+            "x": 0.0,
+            "y": -0.45,
+            "z": 0.0
+          },
+          "size": {
+            "x": 20.0,
+            "y": 0.9
+          },
+          "offset": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "usedByEffector": 0
+        }
+      ],
+      "backdrop": {
+        "name": "Hand-painted environment - replaceable artwork",
+        "position": {
+          "x": 0.0,
+          "y": 3.7707536,
+          "z": 0.0
+        },
+        "scale": {
+          "x": 1.1961724,
+          "y": 1.1961724,
+          "z": 1.1961724
+        },
+        "order": -20
+      },
+      "geometry": {
+        "imageWidth": 1672,
+        "imageHeight": 941,
+        "worldHeight": 11.25598086124402,
+        "worldBottom": -1.8572368421052632,
+        "worldTop": 9.398744019138755,
+        "floorPixelY": 785.735,
+        "scaleAt100PPU": 1.1961722488038278,
+        "cameraWidthAt16by9": 19.91111111111111,
+        "cameraHeight": 11.2,
+        "cameraMinX": -0.04444444444444429,
+        "cameraMaxX": 0.04444444444444429,
+        "cameraTopPixel": 4.075000000000012,
+        "cameraBottomPixel": 940.395,
+        "referenceCharacterWorldHeight": 3.042,
+        "referenceCharacterPixelHeight": 254.31119999999996,
+        "referenceCharacterScreenPixelHeight": 293.3357142857143,
+        "floorScreenPixelY": 901.6071428571429
+      }
+    },
+    {
+      "place": 2,
+      "width": 28,
+      "floorImageFraction": 0.165,
+      "streetSpawn": -11.5,
+      "fromCafe": -8.1,
+      "fromLighthouse": 13.5,
+      "cameraSize": 7.875,
+      "cameraY": 5.28,
+      "name": "Lighthouse",
+      "file": "Assets/Seabreeze/Scenes/Lighthouse.unity",
+      "anchors": [
+        {
+          "id": "lighthouse_exit",
+          "label": "回到海边小街",
+          "worldX": -13.2,
+          "worldY": 0.0,
+          "u": 0.02857142857142858,
+          "v": 0.835,
+          "pixelX": 47.77142857142859,
+          "pixelY": 785.735,
+          "radius": 1.45,
+          "npc": false,
+          "door": true,
+          "destination": 0,
+          "promptOffsetY": 3.2
+        },
+        {
+          "id": "lighthouse_bench",
+          "label": "等下一阵海风",
+          "worldX": -11.3,
+          "worldY": 0.0,
+          "u": 0.09642857142857142,
+          "v": 0.835,
+          "pixelX": 161.2285714285714,
+          "pixelY": 785.735,
+          "radius": 1.45,
+          "npc": false,
+          "door": false,
+          "destination": 0,
+          "promptOffsetY": 2.2
+        },
+        {
+          "id": "npc_chen",
+          "label": "陈伯",
+          "worldX": -3.0,
+          "worldY": 0.0,
+          "u": 0.39285714285714285,
+          "v": 0.835,
+          "pixelX": 656.8571428571429,
+          "pixelY": 785.735,
+          "radius": 1.9,
+          "npc": true,
+          "door": false,
+          "destination": 0,
+          "promptOffsetY": 3.3
+        },
+        {
+          "id": "npc_aya",
+          "label": "阿遥",
+          "worldX": -0.5,
+          "worldY": 0.0,
+          "u": 0.48214285714285715,
+          "v": 0.835,
+          "pixelX": 806.1428571428571,
+          "pixelY": 785.735,
+          "radius": 1.9,
+          "npc": true,
+          "door": false,
+          "destination": 0,
+          "promptOffsetY": 3.3
+        },
+        {
+          "id": "npc_mio",
+          "label": "Z",
+          "worldX": 2.6,
+          "worldY": 0.0,
+          "u": 0.5928571428571429,
+          "v": 0.835,
+          "pixelX": 991.2571428571429,
+          "pixelY": 785.735,
+          "radius": 1.9,
+          "npc": true,
+          "door": false,
+          "destination": 0,
+          "promptOffsetY": 3.3
+        },
+        {
+          "id": "letterbox",
+          "label": "海堤信箱",
+          "worldX": 5.2,
+          "worldY": 0.0,
+          "u": 0.6857142857142857,
+          "v": 0.835,
+          "pixelX": 1146.5142857142857,
+          "pixelY": 785.735,
+          "radius": 1.45,
+          "npc": false,
+          "door": false,
+          "destination": 0,
+          "promptOffsetY": 2.2
+        },
+        {
+          "id": "telescope",
+          "label": "望远镜",
+          "worldX": 10.5,
+          "worldY": 0.0,
+          "u": 0.875,
+          "v": 0.835,
+          "pixelX": 1463.0,
+          "pixelY": 785.735,
+          "radius": 1.45,
+          "npc": false,
+          "door": false,
+          "destination": 0,
+          "promptOffsetY": 2.2
+        }
+      ],
+      "colliders": [
+        {
+          "name": "Left boundary",
+          "position": {
+            "x": -14.2,
+            "y": 5.0,
+            "z": 0.0
+          },
+          "size": {
+            "x": 0.4,
+            "y": 12.0
+          },
+          "offset": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "usedByEffector": 0
+        },
+        {
+          "name": "Right boundary",
+          "position": {
+            "x": 14.2,
+            "y": 5.0,
+            "z": 0.0
+          },
+          "size": {
+            "x": 0.4,
+            "y": 12.0
+          },
+          "offset": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "usedByEffector": 0
+        },
+        {
+          "name": "Continuous walkable pavement",
+          "position": {
+            "x": 0.0,
+            "y": -0.45,
+            "z": 0.0
+          },
+          "size": {
+            "x": 28.0,
+            "y": 0.9
+          },
+          "offset": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "usedByEffector": 0
+        }
+      ],
+      "backdrop": {
+        "name": "Hand-painted environment - replaceable artwork",
+        "position": {
+          "x": 0.0,
+          "y": 5.279055,
+          "z": 0.0
+        },
+        "scale": {
+          "x": 1.6746413,
+          "y": 1.6746413,
+          "z": 1.6746413
+        },
+        "order": -20
+      },
+      "geometry": {
+        "imageWidth": 1672,
+        "imageHeight": 941,
+        "worldHeight": 15.758373205741627,
+        "worldBottom": -2.6001315789473685,
+        "worldTop": 13.158241626794258,
+        "floorPixelY": 785.735,
+        "scaleAt100PPU": 1.674641148325359,
+        "cameraWidthAt16by9": 28.0,
+        "cameraHeight": 15.75,
+        "cameraMinX": 0,
+        "cameraMaxX": 0,
+        "cameraTopPixel": 0.19357142857135212,
+        "cameraBottomPixel": 940.6935714285714,
+        "referenceCharacterWorldHeight": 3.042,
+        "referenceCharacterPixelHeight": 181.65085714285712,
+        "referenceCharacterScreenPixelHeight": 208.5942857142857,
+        "floorScreenPixelY": 902.0571428571429
+      }
+    }
+  ],
+  "sourceHashes": {
+    "ProjectSettings/ProjectVersion.txt": "56aead51018c992af406752e47c49e8d9458c70f00b983f4bb603b1b3afc223e",
+    "Packages/manifest.json": "bdbaebd6b6d0491bb02b7c8bf491fd117e9198d35190899f265f8f0a5056402c",
+    "ProjectSettings/EditorBuildSettings.asset": "736d87d40717dd1b3e5f6a074dd4d448a50671cd76e7faaa9c32bb65867c1e56",
+    "Assets/Seabreeze/Scenes/Cafe.unity": "704808d524502774c84efcba5c252fa30d276b8d97c4abc1c4039dbd32db8640",
+    "Assets/Seabreeze/Scenes/Lighthouse.unity": "c3d450d84a7e1f8f1b6482f9047e862f768914f6497ecdb76fee29a097defd17",
+    "Assets/Seabreeze/Scenes/Street.unity": "887519c162bd6ff7162d32c2941f79294265d34407e9327d5856f6deb0ea718a",
+    "Assets/Seabreeze/Resources/Art/SpriteLit.mat": "7b24427cde03965d4ec3fdfe9cbabe9d2025d8ad457bba10344ae6f2f58e7f74",
+    "Assets/Seabreeze/Resources/Art/SpriteLit.mat.meta": "cf60a45c86c4f57e8e90a4a24976daaa2d10c92e761e19e96110d41f2d92349b",
+    "Assets/Seabreeze/Resources/Art/cafe.png": "c20a0f475078510f31ca130d21f65e03fb589cc5a9b6551223109ad01bb392e6",
+    "Assets/Seabreeze/Resources/Art/cafe.png.meta": "a85598179d3a5729a367fe22ce67d607290870e6a417789be291d9c6e85fff05",
+    "Assets/Seabreeze/Resources/Art/characters.png": "f879aabb593bff80a94ad4c2f94000ae8f52dcd688536ae0d8712aa1c640edae",
+    "Assets/Seabreeze/Resources/Art/characters.png.meta": "61c427848ad92e4f5111f2de3c0d64d25cfad254b3bcbf774b146dd9479de1a7",
+    "Assets/Seabreeze/Resources/Art/lighthouse.png": "53f091521d8e44f5f228d42311ded2189365ddd362cd19e73070274af148ce43",
+    "Assets/Seabreeze/Resources/Art/lighthouse.png.meta": "5543b6df319b068b762109326720cf3f5b29e7111f7ebc906376dcad0685a386",
+    "Assets/Seabreeze/Resources/Art/lighthouse_day.png": "61bbc1e4be1b0554d58f1b64fb6ea24dd0fa6d23685cab482ea8fb61274c8336",
+    "Assets/Seabreeze/Resources/Art/lighthouse_day.png.meta": "5fda7244b043b857f4a5239178099af2b96d9ad68114531434e54a28142d354d",
+    "Assets/Seabreeze/Resources/Art/player_walk.png": "ae2ec1f04ec4194005e0965eaf77289d03b2f384ee233a0cf35da02e8f43c943",
+    "Assets/Seabreeze/Resources/Art/player_walk.png.meta": "88a71f4a1ff931019e78066285d0c060f7fa7f66b74fa05840f8e181468e9e76",
+    "Assets/Seabreeze/Resources/Art/street.png": "e8ea345373d2517a2eed608ece8ad4c40d3211b253e943e88a4e4475fd0c7572",
+    "Assets/Seabreeze/Resources/Art/street.png.meta": "5ebdaa7be8e5c50130f068d03c3556c031e65d56a87e217ba765f55592f8f44d",
+    "Assets/Seabreeze/Resources/Art/street_day.png": "7bdcc70942de074408c179f7c3e0201e73f50bd7657665a00e2a7580925b5b18",
+    "Assets/Seabreeze/Resources/Art/street_day.png.meta": "a35196a005a86cbb224066960a47019eafd5a121adf61c5c80a55812bae8f89e",
+    "Assets/Seabreeze/Resources/UI/DefaultUIStyle.asset": "a076f69a40bb2372972f7ba12086c0b0055bb1ced25c62078bc8392a8a812a54",
+    "Assets/Seabreeze/Resources/UI/DefaultUIStyle.asset.meta": "25ab29fe92a7b2d763cf411b71fdf8e588f0ddb217528bf1bc2aa3edcfc34d6c",
+    "Assets/Seabreeze/Resources/Prefabs/Interactable.prefab": "2d420820197361479185765d985158d441ffc329f62dbf3ff0882f520ff416c9",
+    "Assets/Seabreeze/Resources/Prefabs/Interactable.prefab.meta": "1064fb0a4af6462f57a9cc1dd158b7e71662a96bf4b234b0cbcc786337ca733f",
+    "Assets/Seabreeze/Resources/Prefabs/Player.prefab": "1b2e82200c9d494770f9d4d0dede49561d561d4ae474d4b8f617398f54b7cb7a",
+    "Assets/Seabreeze/Resources/Prefabs/Player.prefab.meta": "d7bae6145d5d384a6ce033b533875c24c0cba2776233a14f63de562c168bf08e",
+    "Assets/Seabreeze/Scripts/Core/DialogueFlowController.cs": "c4d3b4cbddbebe9d0445495d1b1e37c9a7c387f1d76ae00dbd7fc70a134f7300",
+    "Assets/Seabreeze/Scripts/Core/DialogueRunner.cs": "9c9d4790635129c6d4c28d733d2db1652e4ea4823da2114461806841e7a8154d",
+    "Assets/Seabreeze/Scripts/Core/GameBootstrap.cs": "0c3c82e753d5cbadb1475ecc4569f4abc4504d348f1e1fc139c156a6a50c9cb2",
+    "Assets/Seabreeze/Scripts/Core/GameClock.cs": "d26ca56262bfe2a7f2db5cebc3016b68a565d61cc6e9b7831205efbeb1be220c",
+    "Assets/Seabreeze/Scripts/Core/GameSession.cs": "a50e8f2e36b954676383781f295b925b0c6f544be380a5e49abe1978fa8744d1",
+    "Assets/Seabreeze/Scripts/Core/SaveData.cs": "5b55b2ce5b3eec5e998db1077c1664f83a4016e65153bce564141da860b2a98c",
+    "Assets/Seabreeze/Scripts/Core/SaveRepository.cs": "5851c595e4805d9026096c3493407b79e9730a3b77b021623228c48489faf6e8",
+    "Assets/Seabreeze/Scripts/Core/StoryDirector.cs": "e6ee84aab2c4f06e3f07a2c55872beb5f10f7e010b0fe5200bdd05915f80fe24",
+    "Assets/Seabreeze/Scripts/Data/ItemData.cs": "783f0d9aa11d9bc109a371ac79758c75034d0a8aebe8b2c1035e0eaec862b644",
+    "Assets/Seabreeze/Scripts/Data/NpcData.cs": "582372d2971716d001953cefe5b383ac5ab5305b9e956bc198804ebd98d7db15",
+    "Assets/Seabreeze/Scripts/Data/StoryDatabase.cs": "9c3a746ce3ef77535ed21652b43c33f5e02f6ac51d4efe5379dc0571594b3495",
+    "Assets/Seabreeze/Scripts/Data/StoryEventData.cs": "c360279dbdb7aa47d11739b151e1699b2d8d9c135aa8561a8ee209075337fd90",
+    "Assets/Seabreeze/Scripts/Development/RuntimeVerification.cs": "27df441084b1ab367a77d1c4a4604025fc50cb2ce9c9758d9621514752bb010a",
+    "Assets/Seabreeze/Scripts/UI/DialogueUIController.cs": "e51c03413e3a3e86079e110e50818e9cc61be9982a3d5481415f4bfeb63c101a",
+    "Assets/Seabreeze/Scripts/UI/GameUI.cs": "f30f3c5a06374a67a8879f892fe7f41cfdcdc53df787fb22009615f0d3503703",
+    "Assets/Seabreeze/Scripts/UI/InteractionPromptUI.cs": "9d7a18f0c34182bcab676dfa88f443c013b8e3485e0cd992877e6f8c2d104093",
+    "Assets/Seabreeze/Scripts/UI/RoundedPanel.cs": "f32b089a09c3cf2ced8693368d0f87ecc1dda1ef16b3094045f215dfa58371f9",
+    "Assets/Seabreeze/Scripts/UI/UIHoverFeedback.cs": "858ac8ecbf3446737734ff17ebc3f4bffcd1434a5b8a068f98680ae8cb31917a",
+    "Assets/Seabreeze/Scripts/UI/UIPrimitives.cs": "f8f19ad4257211db98281cebf9712cc68f3f696dd88ca78769f6fce8ae759368",
+    "Assets/Seabreeze/Scripts/UI/UIStyleConfig.cs": "9fc85d28fa991a25426d6c584970c62bf80714f76d157e266087c2369cab558d",
+    "Assets/Seabreeze/Scripts/World/AmbientAudio.cs": "42700d0f4d002784d1e67c83ab91cce87d2ac15a67180808e085331f6ba99677",
+    "Assets/Seabreeze/Scripts/World/CharacterVisual.cs": "947fef7692500f2aa3fd50dcbd14846f161f4a83ee44abec248d27b7ebcc7354",
+    "Assets/Seabreeze/Scripts/World/FollowCamera.cs": "3e1d5efc1c3d1b4a14321df76ba3a3504db8a4b779de28f7797e72ef9ebc6b0d",
+    "Assets/Seabreeze/Scripts/World/GameInput.cs": "1b6545f1556e213cbe0d9859a2015f2e3b66879f1e96bef5bb9ff9f9b96ba499",
+    "Assets/Seabreeze/Scripts/World/Interactable.cs": "885f741a7ff2f5c97c8b6cf37fdb572b49ee69b3bae218cb97ede8625e4180f0",
+    "Assets/Seabreeze/Scripts/World/NpcPresence.cs": "dcbfda04c5bb7e90878ba261303f77c7f6abe730b72607725e48e511cef2e949",
+    "Assets/Seabreeze/Scripts/World/PlayerController.cs": "0984ea9c9982c8470b6fab40334bf723881e0219eba5124c493dc3e97490b786",
+    "Assets/Seabreeze/Scripts/World/PlayerInteraction.cs": "0bc31f4a87a80c100f386e296aad7227a3322c682a4104b01402ccaab39e8e39",
+    "Assets/Seabreeze/Scripts/World/PlayerVisualSetup.cs": "2423d83bdfebccf70f4ff0ac03887ba40b6108787364b46f1cb544757cc11da2",
+    "Assets/Seabreeze/Scripts/World/SceneAtmosphere.cs": "c291c5f482cf026da4c6f0428cef4f37993d1e995c2433da9ec036609bba776c",
+    "Assets/Seabreeze/Scripts/World/WorldArt.cs": "1c9e3d544e4b2b0e6ce89cfb100e08e3ad12fce329fb3fd4e8983503a5dfe0ca",
+    "Assets/Seabreeze/Scripts/World/WorldDirector.cs": "a676772ab36b3df835494a110c90e9dd243e9fa2aed9303bc22e9df51c45738b",
+    "Assets/Seabreeze/Scripts/World/WorldProp.cs": "a15a419d6234a6238a05f96a87ab9fdc51e16968177e3880a87f7a1030c34b3b",
+    "Assets/Seabreeze/Scripts/World/WorldScene.cs": "994e5b60828c8df1346f27233606593627c94134c863fa6aceb097187b532f86",
+    "Assets/Seabreeze/Editor/PlayModeCompileGuard.cs": "a5c7c0307fd57b6888d848d33b9d34d2e3ba8e46d30e4c32de5ea40c94ad59d5",
+    "Assets/Seabreeze/Editor/ProjectBuilder.cs": "da12e3a8c15fcebd2bf83057e3568fe06f09326dad7e18e4b0290ebe22ca9675",
+    "Assets/Seabreeze/Editor/SpriteSheetImporter.cs": "0dcccf59403f0dd92d9b0a6526842f79c9968f95d531368a6eb6c0fba55acb9e",
+    "Assets/Seabreeze/Editor/StoryContentBuilder.cs": "d9541ee17eb44f5e566032fe3871563bb0812189b3f2d509a7e5f5443860c2b1"
+  }
+}

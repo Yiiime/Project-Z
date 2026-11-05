@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20658eea1de5e4e48acec160054bac1e, type: 3}
+  m_Name: Z
+  m_EditorClassIdentifier: Assembly-CSharp::Seabreeze.Live2DModelProfile
+  prefab: {fileID: 4263971582556020264, guid: 03a62ef9d33814bcfbda676a43d2dad9, type: 3}
+  characterId: z
+  rendererIndex: 1
+  renderLayer: 30
+  modelPosition: {x: 0, y: 0, z: 0}
+  modelScale: 1
+  cameraCenter: {x: 0, y: 0}
+  orthographicSize: 2
+  autoFrame: 1
+  visibleHeight: 0.78
+  verticalFocus: 0.62
+  uvRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  textureHeight: 1200
+  defaultEmotion: neutral
+  expressions:
+  - emotion: neutral
+    expression: {fileID: 0}
+  - emotion: shy
+    expression: {fileID: 11400000, guid: 4e85b0c28ced44dd5bf5eb0b6bb55af2, type: 2}
+  - emotion: sad
+    expression: {fileID: 11400000, guid: b55cc15934c144e179b0b485cee51901, type: 2}
+  - emotion: aggrieved
+    expression: {fileID: 11400000, guid: b55cc15934c144e179b0b485cee51901, type: 2}
+  - emotion: serious
+    expression: {fileID: 11400000, guid: 17e064bad9aad46ecbf7e11fcc19bf3a, type: 2}
+  - emotion: happy_wave
+    expression: {fileID: 11400000, guid: b1747b22f77d243e580af6e9b71926e1, type: 2}
+  - emotion: happy
+    expression: {fileID: 11400000, guid: 0c086f1d40837448bbb385b7b9725e3b, type: 2}
+  - emotion: smile
+    expression: {fileID: 11400000, guid: 0c086f1d40837448bbb385b7b9725e3b, type: 2}
+  - emotion: surprise
+    expression: {fileID: 11400000, guid: f9f036083509b481f9fd199acea53183, type: 2}
+  - emotion: angry
+    expression: {fileID: 11400000, guid: f482d04e48c25435183eacf017fabf53, type: 2}
+  - emotion: troubled
+    expression: {fileID: 11400000, guid: d1b2b6a810ea94ca9a93e4277b9e4805, type: 2}
+  - emotion: wave
+    expression: {fileID: 11400000, guid: 990420f917ab44ca69a69248142fff5b, type: 2}
+  - emotion: explain
+    expression: {fileID: 11400000, guid: 242a8fd0ae1764d7f889d2e9b49684a8, type: 2}
+  - emotion: point
+    expression: {fileID: 11400000, guid: 56b1a76fd283f429a968bcaba297fab8, type: 2}
+  - emotion: blush
+    expression: {fileID: 11400000, guid: c08587446244742e69895a5900e84edb, type: 2}
+  animatorController: {fileID: 0}
+  idleState: Idle
+  talkState: Talk
+  proceduralIdle: 1
+  proceduralTalk: 1
+  expressionFadeSeconds: 0.24
+  mouthParameter: ParamMouthOpenY
+  breathParameter: ParamBreath
+  leftEyeParameter: ParamEyeLOpen
+  rightEyeParameter: ParamEyeROpen
+  authoringNotes: User-supplied Z model. Cubism 5 SDK for Unity URP R6_1 + matching
+    official Core. No motion3 files were supplied. Idle breath/blink and text-speaking
+    mouth are explicitly procedural; optional Animator states may replace them. Neutral
+    returns expression parameters to model defaults. Only Z should reference this
+    profile.

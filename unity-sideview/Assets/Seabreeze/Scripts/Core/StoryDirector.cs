@@ -9,6 +9,7 @@ namespace Seabreeze
         GameSession session;
         readonly List<string> phone = new List<string>();
         bool evaluating;
+        string interactionSource = "";
         public event Action<string> Toast;
         public IReadOnlyList<string> PhoneMessages { get { RefreshPhone(); return phone; } }
         public string Objective
@@ -20,14 +21,22 @@ namespace Seabreeze
                 if (!Has("postcard_found")) return "海边长椅旁，有一张被风吹来的旧明信片。";
                 if (!Has("cafe_story")) return "去街道左侧的「潮汐」咖啡馆，问问阿遥。";
                 if (!Has("chen_story")) return session.Clock.Period <= TimePeriod.Afternoon ? "陈伯在海边街道。他也许认得明信片上的字。" : "陈伯已经回家；咖啡馆的留言簿里留着他的旧记录。";
-                if (!Has("evening_mio")) return session.Clock.Period < TimePeriod.Evening ? "澪约你黄昏去灯塔。坐坐长椅，或喝杯咖啡，让时间慢一点过去。" : "去灯塔观景台，和澪说说你的决定。";
+                if (!Has("evening_mio")) return session.Clock.Period < TimePeriod.Evening ? "Z约你黄昏去灯塔。坐坐长椅，或喝杯咖啡，让时间慢一点过去。" : "去灯塔观景台，和Z说说你的决定。";
                 return "灯塔下的旧邮筒，正等着今天的最后一句话。";
             }
         }
         public void Initialize(GameSession owner) { session = owner; }
         public void ResetTransientState() { evaluating = false; phone.Clear(); }
         bool Has(string flag) => session.HasFlag(flag);
-        void Talk(string id) => session.Dialogue.StartDialogue(id);
+        void Talk(string id) => session.Dialogue.StartDialogue(id, interactionSource);
+        public string ResolveCommittedDialogue(string id)
+        {
+            // Chen and his guestbook share this decision. Returning early never offers a committed branch twice.
+            if (id == "chen_choice")
+                foreach (string branch in new[] { "choice_invite", "choice_keep", "choice_deliver" })
+                    if (Has(branch)) return branch;
+            return id;
+        }
         public void Notify(string message) { if (!string.IsNullOrEmpty(message)) Toast?.Invoke(message); }
 
         public bool IsAvailable(string id)
@@ -44,7 +53,7 @@ namespace Seabreeze
         {
             switch (id)
             {
-                case "npc_mio": return "和澪交谈";
+                case "npc_mio": return "和Z交谈";
                 case "npc_aya": return "和阿遥交谈";
                 case "npc_chen": return "和陈伯交谈";
                 case "postcard": return Has("postcard_found") ? "看看长椅" : "拾起明信片";
@@ -63,6 +72,7 @@ namespace Seabreeze
         public void Interact(string id)
         {
             if (!session || session.InputBlocked || !IsAvailable(id)) return;
+            interactionSource = id;
             switch (id)
             {
                 case "npc_aya":
@@ -155,12 +165,12 @@ namespace Seabreeze
             phone.Add("汐风镇天气\n" + session.Clock.WeatherLabel + "。傍晚海堤风大，记得带件外套。");
             phone.Add("民宿房东 · 08:54\n钥匙放在门口的蓝罐子里。晚点回来也没关系，灯给你留着。今天不用赶路。");
             if (Has("mio_met") || Has("chen_story"))
-                phone.Add("澪\n我黄昏会去灯塔洗掉最后一格胶卷——开玩笑的，是拍掉。要是你也有空，就来吧。晚一点也没事。");
+                phone.Add("Z\n我黄昏会去灯塔洗掉最后一格胶卷——开玩笑的，是拍掉。要是你也有空，就来吧。晚一点也没事。");
             if (Has("cafe_story") && !Has("chen_story") && session.Clock.Period >= TimePeriod.Evening)
                 phone.Add("阿遥\n陈伯今天提前回去了。他把旧邮路的事情写在店里的留言簿上了。翻到夹着蓝色书签的那页就能找到。");
             if (Has("choice_invite")) phone.Add("阿遥\n收到。最后一壶咖啡装进保温瓶了。陈伯说，他穿上那件没有补丁的外套就出门。");
-            if (Has("evening_mio")) phone.Add("澪\n谢谢你过来。旧邮筒在灯塔旁边。你想写多久都可以，我帮你挡着风。");
-            if (!string.IsNullOrEmpty(session.State.ending)) phone.Add("澪 · 刚刚\n照片冲出来以后，我寄一张给你。这次一定写上地址。\n\n今天的记忆：「" + session.State.ending + "」");
+            if (Has("evening_mio")) phone.Add("Z\n谢谢你过来。旧邮筒在灯塔旁边。你想写多久都可以，我帮你挡着风。");
+            if (!string.IsNullOrEmpty(session.State.ending)) phone.Add("Z · 刚刚\n照片冲出来以后，我寄一张给你。这次一定写上地址。\n\n今天的记忆：「" + session.State.ending + "」");
         }
     }
 }

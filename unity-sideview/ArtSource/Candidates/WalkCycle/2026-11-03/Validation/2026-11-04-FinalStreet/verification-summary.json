@@ -1,0 +1,124 @@
+{
+  "date": "2026-11-04",
+  "project": "/Users/bytedance/Desktop/unity_z",
+  "scene": "Street",
+  "unity": "6000.3.27f1",
+  "method": "Actual Play Mode with native A/D and Up keyboard input; bounded in-memory observers; no test files or suite.",
+  "walk": {
+    "source": "native-input.csv",
+    "samples": 1819,
+    "duration_seconds": 35.0045,
+    "sprite_counts": {
+      "walk_0": 1489,
+      "player_walk_v1_02": 49,
+      "player_walk_v1_03": 44,
+      "player_walk_v1_04": 38,
+      "player_walk_v1_05": 41,
+      "player_walk_v1_06": 43,
+      "player_walk_v1_07": 40,
+      "player_walk_v1_01": 39,
+      "player_walk_v1_00": 36
+    },
+    "x_range": [
+      -12.24851,
+      8.092007
+    ],
+    "ground_y_range": [
+      -0.02000282,
+      -0.02000034
+    ],
+    "rig_xy_values": [
+      [
+        "0",
+        "0"
+      ]
+    ],
+    "root_scale_x_values": [
+      "1"
+    ],
+    "visual_scale_x_values": [
+      "1.17"
+    ],
+    "pose_transitions": [
+      {
+        "time": "0.0000",
+        "pose": "Idle",
+        "sprite": "walk_0"
+      },
+      {
+        "time": "0.0054",
+        "pose": "Walk",
+        "sprite": "player_walk_v1_02"
+      },
+      {
+        "time": "5.1704",
+        "pose": "Idle",
+        "sprite": "walk_0"
+      },
+      {
+        "time": "5.2599",
+        "pose": "Walk",
+        "sprite": "player_walk_v1_02"
+      },
+      {
+        "time": "9.9670",
+        "pose": "Idle",
+        "sprite": "walk_0"
+      }
+    ]
+  },
+  "wall": {
+    "source": "jump-wall-input.csv",
+    "samples": 2065,
+    "idle_while_axis_held_samples": 111,
+    "position_x": 15.745
+  },
+  "jump": {
+    "source": "jump-street.csv",
+    "input": "native Up (existing Jump binding)",
+    "samples": 2044,
+    "pose_counts": {
+      "Idle": 2007,
+      "Jump": 37
+    },
+    "y_range": [
+      -0.02056625,
+      1.402648
+    ],
+    "final": {
+      "time": "34.1101",
+      "x": "5.316266",
+      "y": "-0.02000261",
+      "vy": "0",
+      "grounded": "True",
+      "pose": "Idle",
+      "sprite": "walk_0"
+    },
+    "screenshot": "jump-street.png"
+  },
+  "capture": {
+    "file": "street-playthrough.gif",
+    "width": 1200,
+    "height": 675,
+    "frames": 64,
+    "duration_seconds": 5.43,
+    "note": "Uses actual capture intervals. Capture overhead lowers sampling to about 12 Hz; not a native-FPS or zero-sliding benchmark."
+  },
+  "restored": {
+    "play_mode": false,
+    "scene_dirty": false,
+    "game_view_maximized": false,
+    "save_sha256": "73cc8879efb949c36535c0fa53b79de9f2940b55a9033ab22da94f134d6acd7d"
+  },
+  "known_limits": [
+    "Support-foot trajectories are not uniformly spaced; slight sliding may remain.",
+    "Effective silhouette heights vary by up to 33px (~2.1%); up poses need clearer weight rise.",
+    "Legacy Idle/Jump differ slightly in line and clothing details from new Walk.",
+    "Current 4.2 speed / 2.05 stride produces 2.05 full cycles per second; cadence is brisk."
+  ],
+  "other_observations": [
+    "Jump at the right boundary landed on its low collider top; jump-native.csv records that separate edge case. Flat-street jump-street.csv is the completed normal-ground jump check.",
+    "Earlier jump-input.csv and jump-complete-input.csv did not capture received jump input; jump-wall-input.csv captured only a jump landing tail. They are not used as complete jump proof.",
+    "Native Input System state sampled from Editor callbacks may differ in update phase; transition checks use actual position and pose."
+  ]
+}

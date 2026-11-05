@@ -1,0 +1,469 @@
+{
+  "schemaVersion": 1,
+  "status": "Unaccepted skeletal assembly candidate; Unity rig evaluation pending",
+  "canvasWidth": 1024,
+  "canvasHeight": 2048,
+  "coordinateSystem": "absolute image pixels; origin top-left; x right, y down",
+  "pixelsPerUnit": 549.3421052631579,
+  "pivotX": 512,
+  "pivotY": 1863,
+  "pivotPixels": [
+    512,
+    1863
+  ],
+  "targetVisibleHeightWorld": 3.04,
+  "visibleHeightPixels": 1670,
+  "assembledBoundsAlpha128": [
+    353,
+    194,
+    658,
+    1864
+  ],
+  "reference": "/Users/bytedance/Desktop/unity_z/ArtSource/Candidates/PlayerReference/2026-11-03/player-side-reference-v02.png",
+  "referenceOffset": [
+    94,
+    83
+  ],
+  "layerOrder": "bottom-to-top",
+  "parts": [
+    {
+      "name": "FarArm",
+      "bones": [
+        "FarUpperArm",
+        "FarForearm",
+        "FarHand"
+      ],
+      "renderOrder": 0,
+      "png": "Layers/FarArm.png",
+      "source": "Source/player_arm_generated.png",
+      "sourceSha256": "562d8784b06e9ca45f1de30d1e3e56ee6a5a1d0e0dfaf6146c99cacc3a343934",
+      "sourceSize": [
+        724,
+        2172
+      ],
+      "uniformScale": 0.315,
+      "resizedSize": [
+        228,
+        684
+      ],
+      "offset": [
+        368,
+        495
+      ],
+      "bounds": [
+        413,
+        535,
+        542,
+        1155
+      ],
+      "nonzeroAlphaBounds": [
+        368,
+        511,
+        593,
+        1166
+      ],
+      "layerRect": [
+        368,
+        495,
+        228,
+        684
+      ],
+      "mirrored": false
+    },
+    {
+      "name": "FarLeg",
+      "bones": [
+        "FarThigh",
+        "FarShin",
+        "FarFoot"
+      ],
+      "renderOrder": 1,
+      "png": "Layers/FarLeg.png",
+      "source": "Source/player_leg_generated.png",
+      "sourceSha256": "d1b885fa510914fe8acb5e395f3277b957d7cb15ff0bfdd735735f700aec9c2e",
+      "sourceSize": [
+        724,
+        2172
+      ],
+      "uniformScale": 0.48,
+      "resizedSize": [
+        348,
+        1043
+      ],
+      "offset": [
+        375,
+        874
+      ],
+      "bounds": [
+        441,
+        901,
+        658,
+        1864
+      ],
+      "nonzeroAlphaBounds": [
+        375,
+        881,
+        707,
+        1869
+      ],
+      "layerRect": [
+        375,
+        874,
+        348,
+        1043
+      ],
+      "mirrored": false
+    },
+    {
+      "name": "NearLeg",
+      "bones": [
+        "NearThigh",
+        "NearShin",
+        "NearFoot"
+      ],
+      "renderOrder": 2,
+      "png": "Layers/NearLeg.png",
+      "source": "Source/player_leg_generated.png",
+      "sourceSha256": "d1b885fa510914fe8acb5e395f3277b957d7cb15ff0bfdd735735f700aec9c2e",
+      "sourceSize": [
+        724,
+        2172
+      ],
+      "uniformScale": 0.48,
+      "resizedSize": [
+        348,
+        1043
+      ],
+      "offset": [
+        309,
+        874
+      ],
+      "bounds": [
+        375,
+        901,
+        592,
+        1864
+      ],
+      "nonzeroAlphaBounds": [
+        309,
+        881,
+        641,
+        1869
+      ],
+      "layerRect": [
+        309,
+        874,
+        348,
+        1043
+      ],
+      "mirrored": false
+    },
+    {
+      "name": "Head",
+      "bones": [
+        "Neck",
+        "Head"
+      ],
+      "renderOrder": 3,
+      "png": "Layers/Head.png",
+      "source": "Source/player_head_generated.png",
+      "sourceSha256": "1c9e8eefed085d81703289df38adbc1ff61ca767d43734ce173b05018d42cf88",
+      "sourceSize": [
+        1262,
+        1246
+      ],
+      "uniformScale": 0.323,
+      "resizedSize": [
+        408,
+        402
+      ],
+      "offset": [
+        298,
+        171
+      ],
+      "bounds": [
+        353,
+        194,
+        656,
+        553
+      ],
+      "nonzeroAlphaBounds": [
+        340,
+        190,
+        661,
+        567
+      ],
+      "layerRect": [
+        298,
+        171,
+        408,
+        402
+      ],
+      "mirrored": false
+    },
+    {
+      "name": "Torso",
+      "bones": [
+        "Pelvis",
+        "Spine",
+        "Chest"
+      ],
+      "renderOrder": 4,
+      "png": "Layers/Torso.png",
+      "source": "Source/player_torso_jacket_only.png",
+      "sourceSha256": "724ec02b2b719f27d28728ea8e195d815768a49fa8a57e1f425ba1268c7e67a9",
+      "sourceSize": [
+        1003,
+        1568
+      ],
+      "uniformScale": 0.51,
+      "resizedSize": [
+        512,
+        800
+      ],
+      "offset": [
+        228,
+        409
+      ],
+      "bounds": [
+        353,
+        466,
+        629,
+        1018
+      ],
+      "nonzeroAlphaBounds": [
+        253,
+        464,
+        646,
+        1139
+      ],
+      "layerRect": [
+        228,
+        409,
+        512,
+        800
+      ],
+      "mirrored": false
+    },
+    {
+      "name": "NearArm",
+      "bones": [
+        "NearUpperArm",
+        "NearForearm",
+        "NearHand"
+      ],
+      "renderOrder": 5,
+      "png": "Layers/NearArm.png",
+      "source": "Source/player_arm_generated.png",
+      "sourceSha256": "562d8784b06e9ca45f1de30d1e3e56ee6a5a1d0e0dfaf6146c99cacc3a343934",
+      "sourceSize": [
+        724,
+        2172
+      ],
+      "uniformScale": 0.315,
+      "resizedSize": [
+        228,
+        684
+      ],
+      "offset": [
+        313,
+        517
+      ],
+      "bounds": [
+        358,
+        557,
+        487,
+        1177
+      ],
+      "nonzeroAlphaBounds": [
+        313,
+        533,
+        538,
+        1188
+      ],
+      "layerRect": [
+        313,
+        517,
+        228,
+        684
+      ],
+      "mirrored": false
+    }
+  ],
+  "revisionNotes": [
+    "Torso uses the newly generated jacket-only part; original torso source is preserved.",
+    "FarArm is recessed behind the torso to prevent a second visible shoulder cap.",
+    "FarLeg and all its joint coordinates moved down 26px: both sole baselines now coincide."
+  ],
+  "bones": [
+    {
+      "name": "Pelvis",
+      "parent": "",
+      "x": 505,
+      "y": 1040,
+      "endX": 488,
+      "endY": 860
+    },
+    {
+      "name": "Spine",
+      "parent": "Pelvis",
+      "x": 488,
+      "y": 860,
+      "endX": 477,
+      "endY": 650
+    },
+    {
+      "name": "Chest",
+      "parent": "Spine",
+      "x": 477,
+      "y": 650,
+      "endX": 489,
+      "endY": 510
+    },
+    {
+      "name": "Neck",
+      "parent": "Chest",
+      "x": 489,
+      "y": 510,
+      "endX": 510,
+      "endY": 425
+    },
+    {
+      "name": "Head",
+      "parent": "Neck",
+      "x": 510,
+      "y": 425,
+      "endX": 512,
+      "endY": 285
+    },
+    {
+      "name": "NearUpperArm",
+      "parent": "Chest",
+      "x": 425,
+      "y": 600,
+      "endX": 420,
+      "endY": 855
+    },
+    {
+      "name": "NearForearm",
+      "parent": "NearUpperArm",
+      "x": 420,
+      "y": 855,
+      "endX": 439,
+      "endY": 1052
+    },
+    {
+      "name": "NearHand",
+      "parent": "NearForearm",
+      "x": 439,
+      "y": 1052,
+      "endX": 446,
+      "endY": 1171
+    },
+    {
+      "name": "FarUpperArm",
+      "parent": "Chest",
+      "x": 480,
+      "y": 578,
+      "endX": 475,
+      "endY": 833
+    },
+    {
+      "name": "FarForearm",
+      "parent": "FarUpperArm",
+      "x": 475,
+      "y": 833,
+      "endX": 494,
+      "endY": 1030
+    },
+    {
+      "name": "FarHand",
+      "parent": "FarForearm",
+      "x": 494,
+      "y": 1030,
+      "endX": 501,
+      "endY": 1149
+    },
+    {
+      "name": "NearThigh",
+      "parent": "Pelvis",
+      "x": 474,
+      "y": 1010,
+      "endX": 441,
+      "endY": 1400
+    },
+    {
+      "name": "NearShin",
+      "parent": "NearThigh",
+      "x": 441,
+      "y": 1400,
+      "endX": 432,
+      "endY": 1771
+    },
+    {
+      "name": "NearFoot",
+      "parent": "NearShin",
+      "x": 432,
+      "y": 1771,
+      "endX": 582,
+      "endY": 1845
+    },
+    {
+      "name": "FarThigh",
+      "parent": "Pelvis",
+      "x": 540,
+      "y": 1010,
+      "endX": 507,
+      "endY": 1400
+    },
+    {
+      "name": "FarShin",
+      "parent": "FarThigh",
+      "x": 507,
+      "y": 1400,
+      "endX": 498,
+      "endY": 1771
+    },
+    {
+      "name": "FarFoot",
+      "parent": "FarShin",
+      "x": 498,
+      "y": 1771,
+      "endX": 648,
+      "endY": 1845
+    }
+  ],
+  "operations": [
+    "uniform whole-part scaling with Lanczos",
+    "integer translation",
+    "normal alpha compositing",
+    "lossless PNG and PSB v2 packaging"
+  ],
+  "unchangedInputs": "Generated Source PNGs and approved v02 are never overwritten.",
+  "restrictionsObserved": [
+    "no painting",
+    "no retouching",
+    "no alpha mask changes",
+    "no nonuniform scaling",
+    "no shoe mirroring",
+    "no limb cuts"
+  ],
+  "limitations": [
+    "Far limbs reuse the same generated near-limb artwork without a mirror.",
+    "Neck, shoulder and hip joins require runtime deformation inspection.",
+    "Generated source edge colors and speckles are preserved.",
+    "Initial joint positions are authoring coordinates, not acceptance of animation quality."
+  ],
+  "formatVerification": {
+    "psbVersion": 2,
+    "layerCount": 6,
+    "mergedPreviewAlphaEqual": true,
+    "mergedPreviewOpaquePixelEqual": true,
+    "mergedPreviewMaxPremultipliedRgbError255": 0.996078431372549,
+    "layerPixelsEqual": true
+  },
+  "implementationSources": [
+    "https://github.com/psd-tools/psd-tools/blob/main/src/psd_tools/api/psd_image.py",
+    "https://psd-tools.readthedocs.io/en/stable/reference/psd_tools.api.layers.html"
+  ]
+}

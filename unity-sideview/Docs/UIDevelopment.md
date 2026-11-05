@@ -31,3 +31,21 @@ After inspecting `Docs/Verification/street-integration.png`, moved conversation 
 
 - Manual save now displays success only when `GameSession.Save()` returns true. The existing failed-write notification remains visible instead of being overwritten by an unconditional success message. Other save callers may ignore the new boolean return value.
 - Ending recall resolves the completed ending's authored `StoryEffect.ending` / `journal` pair, then restores its saved journal date prefix when available. Exploring additional objects after the ending no longer replaces the recalled ending text with the newest unrelated observation. No save-schema changes were introduced.
+
+# Phase 2 · Shared UI refactor and conversation handoff
+
+The old bottom conversation implementation has been removed from GameUI. `DialogueUIController.Initialize(GameSession, RectTransform)` now exclusively owns all conversation presentation and input. GameUI reads `GameSession.Conversation` only to hide exploration HUD / prompts and reject map, phone, journal, pause and Escape handling until the conversation has fully exited. Ending presentation waits for the conversation exit transition.
+
+Shared components:
+
+- `UIStyleConfig`: public ScriptableObject tokens for translucent navy surfaces, cool blue / warm orange accents, typography, border radii and unscaled animation durations. An optional `Resources/UI/DefaultUIStyle` asset overrides the runtime defaults; the Create Asset menu can produce this asset.
+- `RoundedPanel`: UGUI Image subclass with rounded fill and a one-pixel interior border; existing Panel return signatures remain compatible.
+- `UIHoverFeedback`: restrained smooth color, border and 1.2% scale feedback, using unscaled time. No external tweening package added.
+- `InteractionPromptUI`: independently styled E badge and action caption, soft appearance and world tracking. NPC prompts always read “交谈”; environment verbs retain their own labels.
+- `UIPrimitives` is public and keeps its existing construction API so the dialogue UI can use the same system.
+
+Map, phone, journal, save, restart confirmation, sound volume and ending recall remain functional paths in the refactored source. Modal panels fade in/out; closing keeps the overlay lock until fade completion. Map travel and restart execute only after closing completes. `CloseOverlayImmediately()` is available for an external scene transition that must cancel an in-flight UI animation. The scene lock is preserved when closing while WorldDirector is transitioning.
+
+Visual direction uses the user-provided scene/UI images and the calm, scene-first presentation described on the [official Chill with You Steam page](https://store.steampowered.com/app/3548580/?l=english). No Steam assets were copied. Screenshot URLs were available from the official store API, but the image browsing tool could not open them during this pass; this document does not claim a fresh screenshot-level comparison.
+
+This pass changed UI source only, with no Core / World / Data / Live2D edits, test scripts, test-suite runs or Unity compile RPC. Integration compilation and runtime visual review are pending the root agent's coordinated pass.

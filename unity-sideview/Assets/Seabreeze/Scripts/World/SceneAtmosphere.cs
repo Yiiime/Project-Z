@@ -10,6 +10,7 @@ namespace Seabreeze
         Light2D global;
         Sprite dayArtwork, eveningArtwork;
         GameObject effects;
+        bool initialized;
         void Start()
         {
             stage = GetComponent<WorldScene>();
@@ -58,10 +59,13 @@ namespace Seabreeze
             fog = WorldArt.Sprite("Weather mist", WorldArt.Pixel, new Vector2(0, 5), new Vector2(80, 40), Color.clear, 36, effects.transform);
             Refresh();
             GameSession.Instance.Clock.Changed += Refresh;
+            GameSession.Instance.Changed += Refresh;
         }
 
         void Refresh()
         {
+            if (initialized && GameSession.Instance.Conversation && GameSession.Instance.Conversation.IsActive) return;
+            initialized = true;
             int p = (int)GameSession.Instance.Clock.Period;
             if (stage.backdrop != null)
             {
@@ -85,7 +89,10 @@ namespace Seabreeze
         void OnDestroy()
         {
             if (GameSession.Instance != null)
+            {
                 GameSession.Instance.Clock.Changed -= Refresh;
+                GameSession.Instance.Changed -= Refresh;
+            }
         }
     }
 

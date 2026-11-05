@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: "\u963F\u9065"
   description: "\u300C\u6F6E\u6C50\u300D\u5496\u5561\u9986\u7684\u5E97\u4E3B\uFF0C\u8BB0\u5F97\u6BCF\u4E00\u4E2A\u5E38\u5BA2\u559D\u5496\u5561\u7684\u4E60\u60EF\u3002"
   accent: {r: 0.89, g: 0.67, b: 0.4, a: 1}
+  live2DProfile: {fileID: 0}
   schedule:
   - place: 1
     from: 0

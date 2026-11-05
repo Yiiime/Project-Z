@@ -46,6 +46,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Seabreeze.CharacterVisual
   character: 0
   walking: 0
+  playerStrideLength: 2.05
+  playerBobHeight: 0.012
 --- !u!1 &6512496111458368014
 GameObject:
   m_ObjectHideFlags: 0
@@ -175,6 +177,7 @@ MonoBehaviour:
   acceleration: 28
   deceleration: 36
   jumpSpeed: 8.6
+  accelerationRamp: 0.06
 --- !u!114 &2088218882912660647
 MonoBehaviour:
   m_ObjectHideFlags: 0

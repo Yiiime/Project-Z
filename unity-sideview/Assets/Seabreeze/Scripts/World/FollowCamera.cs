@@ -30,6 +30,7 @@ namespace Seabreeze
 
         void LateUpdate()
         {
+            if (GameSession.Instance && GameSession.Instance.Conversation && GameSession.Instance.Conversation.IsActive) return;
             if (target == null)
                 return;
             float look = (GameSession.Instance != null && !GameSession.Instance.InputBlocked && !WorldDirector.Instance.IsTransitioning) ? GameInput.Horizontal * .7f : 0;

@@ -11,12 +11,13 @@ namespace Seabreeze
         public GameClock Clock { get; private set; }
         public DialogueRunner Dialogue { get; private set; }
         public StoryDirector Story { get; private set; }
+        public DialogueFlowController Conversation { get; private set; }
         public StoryDatabase Database { get; private set; }
         public event Action Changed;
         public event Action<PlaceId> TravelRequested;
         public bool IsReady { get; private set; }
         bool overlay;
-        public bool InputBlocked => overlay || (Dialogue && Dialogue.IsOpen);
+        public bool InputBlocked => overlay || (Dialogue && Dialogue.IsOpen) || (Conversation && Conversation.IsActive);
         public PlaceId CurrentPlace => State != null && Enum.TryParse(State.place, out PlaceId p) ? p : PlaceId.Street;
 
         void Awake()
@@ -36,6 +37,8 @@ namespace Seabreeze
             Clock.Initialize(this);
             Dialogue.Initialize(this);
             Story.Initialize(this);
+            Conversation = gameObject.AddComponent<DialogueFlowController>();
+            Conversation.Initialize(this);
             IsReady = true;
             if (!Database) Debug.LogError("Seabreeze story database missing. Run Seabreeze/Rebuild Game Content in the Editor.");
             if (!State.started)
@@ -44,7 +47,7 @@ namespace Seabreeze
                 Story.AddJournal("来到汐风镇的第一天。今天没有行程，也许先沿着海边走走。咖啡馆在街道左侧，灯塔在右侧。");
                 Dialogue.StartDialogue("intro");
             }
-            else if (!string.IsNullOrEmpty(State.resumeDialogue)) Dialogue.StartDialogue(State.resumeDialogue);
+            else if (!string.IsNullOrEmpty(State.resumeDialogue)) Dialogue.StartDialogue(State.resumeDialogue, State.resumeInteractionId);
             Story.Evaluate();
             NotifyChanged();
         }
@@ -65,6 +68,7 @@ namespace Seabreeze
         public void NewGame()
         {
             Dialogue.Cancel();
+            Conversation.ResetImmediately();
             State = new SaveData { started = true };
             overlay = false;
             Story.ResetTransientState();
@@ -77,7 +81,7 @@ namespace Seabreeze
         }
         public void Travel(PlaceId place)
         {
-            if (Dialogue && Dialogue.IsOpen) { Story.Notify("先把这段话听完吧。"); return; }
+            if (Conversation && Conversation.IsActive) { Story.Notify("先把这段话听完吧。"); return; }
             TravelRequested?.Invoke(place);
         }
         public void SetPlace(PlaceId place)

@@ -70,3 +70,56 @@
 - 角色为基础精灵动画，两个迈步姿态较近，跳跃复用抬膝姿态；没有完整骨骼、面部或口型动画。少量小物件仍是程序绘制。
 - 夜晚以已有绘景加环境染色表现；咖啡馆窗外没有单独的夜景绘画。天气实现晴天/薄雾，尚无完整天气粒子系统。
 - 这是一日短篇的可玩原型，非商业成品；没有用户试玩验收记录。
+
+
+## 第二轮开发 — 对话交互与全局 UI（2026-11-03）
+
+本节属于在首轮成品上的增量重构，与上文第一轮的 Phase 1–5 分开记录。
+
+- 检查并复用原有 GameSession、DialogueRunner、StoryDirector、WorldDirector 与 94 个对话节点；没有重建游戏或更换输入系统。
+- NPC 的 E 交谈改为独立对话体验：立即锁玩家和相机，0.36 秒进入，逐字与分支选项，0.28 秒反向退出后恢复。旧底部对话呈现已移除。物件叙述使用同一组件的居中布局。
+- DialogueFlowController 控制生命周期，DialogueUIController 管 UI，Live2DCharacterView 管模型与渲染；没有把新逻辑集中到 GameUI。
+- Esc 支持未读书签；日期时段变化后不恢复旧时段内容；退出后前往别处并保存不会自动弹出之前的 NPC 会话。已提交的明信片决定不能通过另一路径反选。
+- 按用户明确选择，将澪显示名改为 Z，保留 npc_mio 与 mio_* 内部 ID、原剧情条件和存档兼容；现有存档日志在加载时迁移姓名。Street/Lighthouse 的旧 Scene 标签也已更名。
+- 引入官方 Cubism URP 5-r.6.1 与同包 Native Core，重新导入用户真实 Z 模型；世界仍用原 2D Renderer，模型使用独立 Cubism Renderer/相机/透明 RT。
+- Z 已绑定真实 Prefab/Profile；阿遥、陈伯保留原角色与对话，没有专属模型时明确提示未绑定。未使用静态图片或共用 Z 的脸代替。
+- 用户包没有 motion3：当前 Idle/Talk 为真实模型参数驱动的呼吸、眨眼、轻摆、嘴部开合，表情使用原 exp3；没有宣称作者动作或语音口型同步。
+- HUD、E 气泡、圆形快捷入口、对话气泡/选项、地图、手机、日志、暂停、重开确认、结尾面板统一使用 UIStyleConfig、圆角细边框及轻量反馈。原地图、消息和日志内容继续复用。
+- 实际 Play 和原生键鼠检查见 Docs/Phase2/Verification.md；没有新增测试脚本，也没有运行首轮测试套件。原生检查涵盖 E 交谈、移动锁与恢复、选项写入、Esc、地图到 Cafe、日志、手机、暂停及阿遥未绑定模型流程。
+- 独立应用首次启动检查发现开场在首个物理帧前锁定会误用跳跃姿态，已在锁定前刷新地面检测；Play 回读 Grounded=True、Pose=Idle。
+- 截图时观察到 Metal memoryless 深度附件警告，未出现模型渲染错误；记录官方相似问题但未武断归因。
+- 完整源码/资源改动、备份与本轮构建报告在 Docs/Phase2。检查用进度与用户原存档分别备份，结束后恢复原存档。
+
+本轮仍未提供阿遥/陈伯的 Live2D、美术层拆分或角色行走 Sprite 重绘；场景中的 Z 小角色仍沿用原摄影者精灵，需要后续正式资源与长发 Live2D 外观统一。
+
+本轮最终 macOS Universal 构建：Succeeded，230841767 bytes，41.08秒，0 errors / 0 warnings。独立应用已原生观察 Z 的 Cubism 展示与 E 交谈，随后完成开场站立修正并重建；修正有 Play 回读与截图。编辑器停止在 Street。
+
+## 独立主角骨骼动画候选（2026-11-04）
+
+本轮按用户新方向制作 Unity 官方实时 2D 骨骼候选，**未替换正式 Player，未修改 UI、NPC、剧情或原场景系统**。
+
+- 检查 Unity 6000.3.27f1 / URP17.3.0；原项目缺少 2D Animation / PSD Importer。安装官方 13.0.6 / 12.0.2 及 UPM 依赖，复用现有 Input System。
+- 以已确认 v02 主角图为身份基准，生成并补齐头、躯干、完整手臂、完整腿鞋；PSB v2 透明画布1024×2048、六层、有效人物高度约1670px。生成源图、弃用躯干、提示和组装数据均独立保存。
+- 官方 Sprite Editor providers 持久化17根共享骨骼、6242顶点、权重与bind pose；6个SpriteSkin在Play中都有真实变形数据。
+- 同Rig的3秒Idle和1秒Walk均有51条Transform曲线、0条Sprite切换曲线；Walk使用制作阶段IK计算的连续关键姿势。两腿错开半周期，支撑期局部脚速抵消根移动，经过位骨盆抬升。实际速度驱动CycleRate；只镜像FacingRoot，不更改物理根。
+- 新Prefab、Clip、Controller、Scene、3个运行组件和3个编辑器制作工具全部位于 `Assets/Seabreeze/Candidates/SkeletalPlayer/`。正式PlayerController与动画实现没有重构。
+- 独立对比场景复用既有街道绘画、中文字体和8帧角色作为参照，不创建GameSession，不写游戏进度。候选播放菜单暂时指定预览启动场景，退出恢复Street。
+- 真实Play录制从Idle起步，包含左右步行、起停、视觉镜像；最终120帧GIF位于 `ArtSource/Candidates/SkeletalPlayer/2026-11-04/Preview/skeletal-vs-8frame.gif`。
+- 稳态718条采样中支撑脚骨点X变化<0.001、Y变化<0.0015世界单位；被记录Sprite ID不变而变形顶点持续改变。数据不等同于鞋底整个接触面验收。
+- 明确保留问题：停步混合回统一Idle时脚部会重定位（此次最大约0.46world）；膝部轮廓仍硬、肩部叠层线与近远肢体共用纹理尚需美术精修；4.2原速度对应约4.2步/秒，较舒缓目标偏快。不能仅降低动画倍率而不考虑滑步。
+- 本轮编译通过，当前Editor Console错误/警告为0；没有新测试工程/测试脚本、没有执行测试套件、没有新独立构建。旧日志的历史测试和构建结论不适用于本候选。
+- 正式Player.prefab、PlayerController、CharacterVisual、8帧图集与确认参考图SHA256不变。交付状态是**可播放的技术/美术候选，等待视觉确认，暂不建议直接迁移**。
+
+完整制作说明、路径、操作及证据边界：`ArtSource/Candidates/SkeletalPlayer/2026-11-04/README.md`；采样汇总与原资源保全核对在其 `Preview/` 子目录。
+
+## 骨骼候选第二轮 — 停步接触与关节精修（2026-11-04）
+
+- 用户授权继续优化独立候选，仍未授权迁移正式Player。本轮保持原移动参数和所有正式角色资源不变。
+- 新增候选组件 `RigFootContact`，在Animator之后、SpriteSkin变形之前约束腿部：保持非移动脚世界落点，另一脚以0.25秒、基础抬脚0.09world的轨迹收回，再交替另一脚。骨盆随双腿可达范围调整，Idle保持脚接触，重启0.12秒释放到Walk。
+- Driver增加ResetVersion供传送/复位清除旧接触；站立目标跟随物理落地高度，避免初始脚悬空。不改PlayerController，不增加第三方IK插件，不增加正式动画类型。
+- 膝/肘权重过渡半径85/64px，腕/踝18/24px；关节加密至±96px。手臂额外绑定既有Chest，使肩帽保持贴合；共享骨架仍17根，6个SpriteSkin合计14558顶点。源PSB像素完全未修改，原肩线不等于已擦除。
+- 实际运行记录最终覆盖6.602978秒、1392条采样、192张图：4次完整两步收脚及1次真实中途起步。中断发生在单脚收回0.173秒时，仍未到0.25秒结束。
+- 收脚时支撑脚X/Y峰峰变化≤0.0000010/0.0000009world，脚踝与target误差≤0.00000117；相对接触平面最低偏差−0.0000012world。打断首帧未见明显孤立位置跳变。统计剔除首个LateUpdate前的旧target；仅代表骨点，非整个鞋底面验收。
+- 保留问题：满速起步摆脚较快；鞋底滚动、裤料体积保持、肩部原始描线与近远侧共用纹理仍有限。平地约束不等于完整坡面/跳跃IK。
+- 最新片段：`ArtSource/Candidates/SkeletalPlayer/2026-11-04/Preview/skeletal-stop-refined.mp4` / `.gif`。采样及JSON在 `Preview/StopRefinement-final/`，上一轮调整前录像保留。
+- 编译与当前Console无错误/警告；6个SpriteSkin实时变形可读。正式Player.prefab、PlayerController、CharacterVisual、8帧图集、确认参考图及源PSB的SHA256保持不变。未创建测试工程或测试脚本，未运行测试套件，未制作新的独立构建。

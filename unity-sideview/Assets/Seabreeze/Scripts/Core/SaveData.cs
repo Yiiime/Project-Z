@@ -11,9 +11,17 @@ namespace Seabreeze
     }
 
     [Serializable]
+    public sealed class DialogueBookmark
+    {
+        public string source;
+        public string node;
+        public int day;
+        public int period;
+    }
+    [Serializable]
     public sealed class SaveData
     {
-        public int version = 1;
+        public int version = 2;
         public int day = 1;
         public int period;
         public string weather = "晴 · 海风轻柔";
@@ -26,10 +34,12 @@ namespace Seabreeze
         public float playerX = -8f;
         public bool started;
         public string resumeDialogue = "";
+        public string resumeInteractionId = "";
+        public List<DialogueBookmark> dialogueBookmarks = new List<DialogueBookmark>();
 
         public void Sanitize()
         {
-            version = 1;
+            version = 2;
             day = Math.Max(1, day);
             period = Math.Max(0, Math.Min(3, period));
             if (flags == null) flags = new List<string>();
@@ -40,6 +50,11 @@ namespace Seabreeze
             if (float.IsNaN(playerX) || float.IsInfinity(playerX)) playerX = -8f;
             if (ending == null) ending = "";
             if (weather == null) weather = "晴 · 海风轻柔";
+            if (resumeDialogue == null) resumeDialogue = "";
+            if (resumeInteractionId == null) resumeInteractionId = "";
+            if (dialogueBookmarks == null) dialogueBookmarks = new List<DialogueBookmark>();
+            // The visible name changed; stable flags, node ids and relationship ids remain intact.
+            for (int i = 0; i < journal.Count; i++) journal[i] = journal[i]?.Replace("澪", "Z");
         }
     }
 }

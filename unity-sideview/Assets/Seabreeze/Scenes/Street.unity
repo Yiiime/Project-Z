@@ -1236,7 +1236,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2196042879585440470, guid: bccb2691fc29d4abdb652a9cab9d3418, type: 3}
       propertyPath: m_Name
-      value: "\u6FAA [npc_mio]"
+      value: "Z [npc_mio]"
       objectReference: {fileID: 0}
     - target: {fileID: 3127841110956064626, guid: bccb2691fc29d4abdb652a9cab9d3418, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1288,7 +1288,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5549576733301818422, guid: bccb2691fc29d4abdb652a9cab9d3418, type: 3}
       propertyPath: label
-      value: "\u6FAA"
+      value: Z
       objectReference: {fileID: 0}
     - target: {fileID: 5549576733301818422, guid: bccb2691fc29d4abdb652a9cab9d3418, type: 3}
       propertyPath: radius

@@ -20,6 +20,8 @@ namespace Seabreeze
         public string displayName;
         [TextArea] public string description;
         public Color accent = Color.white;
+        [Header("Conversation presentation")]
+        public Live2DModelProfile live2DProfile;
         public NpcSchedule[] schedule = Array.Empty<NpcSchedule>();
         public bool IsPresent(PlaceId place, TimePeriod period, IEnumerable<string> flags = null)
         {

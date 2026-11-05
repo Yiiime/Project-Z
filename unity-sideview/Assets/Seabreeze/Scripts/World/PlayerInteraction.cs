@@ -34,7 +34,7 @@ namespace Seabreeze
             if (GameUI.Instance != null)
             {
                 if (Current != null)
-                    GameUI.Instance.ShowInteraction("E  " + (Current.isDoor ? Current.label : s.Story.PromptFor(Current.id)), Current.transform.position + Current.promptOffset);
+                    GameUI.Instance.ShowInteraction(Current.npc ? "交谈" : (Current.isDoor ? Current.label : s.Story.PromptFor(Current.id)), Current.transform.position + Current.promptOffset);
                 else
                     GameUI.Instance.HideInteraction();
             }
