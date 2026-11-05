@@ -1,0 +1,7 @@
+Result: Succeeded
+Unity: 6000.3.27f1
+Output: /Users/bytedance/Desktop/unity_z/Builds/macOS/Seabreeze.app
+Duration: 00:01:24.6561450
+Bytes: 230841767
+Errors: 0
+Warnings: 0

@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: npc_mio
   m_EditorClassIdentifier: Assembly-CSharp::Seabreeze.NpcData
   id: npc_mio
-  displayName: "\u6FAA"
+  displayName: Z
   description: "\u603B\u5E26\u7740\u4E00\u53F0\u65E7\u76F8\u673A\u3002\u660E\u5929\u8981\u53BB\u522B\u7684\u57CE\u5E02\u5B66\u6444\u5F71\u3002"
   accent: {r: 0.73, g: 0.64, b: 0.88, a: 1}
+  live2DProfile: {fileID: 11400000, guid: c6ec5b91a38e74331bcb030be8e0eaca, type: 2}
   schedule:
   - place: 0
     from: 0

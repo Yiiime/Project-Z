@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1672" height="941" viewBox="0 0 1672 941">
+<title>Lighthouse transparent layout guides; NOT runtime artwork</title>
+<g font-family="sans-serif" font-size="19">
+<path d="M0 785.735H1672" stroke="#21e0dc" stroke-width="3" stroke-dasharray="14 7"/>
+<rect x="0.0" y="0.19357142857135212" width="1672.0" height="940.5" fill="none" stroke="#eb9e52" stroke-width="2" stroke-dasharray="10 5"/>
+<text x="12.0" y="30.193571428571353" fill="#eb9e52" stroke="#102139" stroke-width=".5">16:9 left</text>
+<rect x="0.0" y="0.19357142857135212" width="1672.0" height="940.5" fill="none" stroke="#fff4c6" stroke-width="2" stroke-dasharray="10 5"/>
+<text x="12.0" y="30.193571428571353" fill="#fff4c6" stroke="#102139" stroke-width=".5">16:9 center</text>
+<rect x="0.0" y="0.19357142857135212" width="1672.0" height="940.5" fill="none" stroke="#70c7f3" stroke-width="2" stroke-dasharray="10 5"/>
+<text x="12.0" y="30.193571428571353" fill="#70c7f3" stroke="#102139" stroke-width=".5">16:9 right</text>
+<path d="M47.77142857142859 761.735V785.735" stroke="#dda02e" stroke-width="3"/><circle cx="47.77142857142859" cy="761.735" r="19" fill="#dda02e" stroke="white" stroke-width="2"/><text x="47.77142857142859" y="768.735" fill="white" text-anchor="middle">1</text>
+<path d="M161.2285714285714 711.735V785.735" stroke="#198fbd" stroke-width="3"/><circle cx="161.2285714285714" cy="711.735" r="19" fill="#198fbd" stroke="white" stroke-width="2"/><text x="161.2285714285714" y="718.735" fill="white" text-anchor="middle">2</text>
+<path d="M656.8571428571429 761.735V785.735" stroke="#a57ad4" stroke-width="3"/><circle cx="656.8571428571429" cy="761.735" r="19" fill="#a57ad4" stroke="white" stroke-width="2"/><text x="656.8571428571429" y="768.735" fill="white" text-anchor="middle">3</text>
+<path d="M806.1428571428571 711.735V785.735" stroke="#a57ad4" stroke-width="3"/><circle cx="806.1428571428571" cy="711.735" r="19" fill="#a57ad4" stroke="white" stroke-width="2"/><text x="806.1428571428571" y="718.735" fill="white" text-anchor="middle">4</text>
+<path d="M991.2571428571429 761.735V785.735" stroke="#a57ad4" stroke-width="3"/><circle cx="991.2571428571429" cy="761.735" r="19" fill="#a57ad4" stroke="white" stroke-width="2"/><text x="991.2571428571429" y="768.735" fill="white" text-anchor="middle">5</text>
+<path d="M1146.5142857142857 711.735V785.735" stroke="#198fbd" stroke-width="3"/><circle cx="1146.5142857142857" cy="711.735" r="19" fill="#198fbd" stroke="white" stroke-width="2"/><text x="1146.5142857142857" y="718.735" fill="white" text-anchor="middle">6</text>
+<path d="M1463.0 761.735V785.735" stroke="#198fbd" stroke-width="3"/><circle cx="1463.0" cy="761.735" r="19" fill="#198fbd" stroke="white" stroke-width="2"/><text x="1463.0" y="768.735" fill="white" text-anchor="middle">7</text>
+<rect x="820" y="604.0841428571429" width="32" height="181.65085714285712" fill="#ffc96f" fill-opacity=".15" stroke="#ffc96f" stroke-width="3"/>
+<rect x="8" y="797.735" width="670" height="36" fill="#142439" fill-opacity=".95"/><text x="20" y="822.735" fill="#c4ffff">Lighthouse · ground y=0 · pixel y=785.735 · character 181.7px</text>
+</g>
+</svg>

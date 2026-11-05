@@ -1,0 +1,11 @@
+{
+  "date": "2026-11-03 Asia/Shanghai",
+  "changes": [
+    {
+      "path": "Assets/Seabreeze/Editor/SpriteSheetImporter.cs",
+      "initialSha256": "0dcccf59403f0dd92d9b0a6526842f79c9968f95d531368a6eb6c0fba55acb9e",
+      "finalSha256": "873f8d31a953457707f992f32ad9e1ac88a452aef676d1faf935abf6f156192f",
+      "owner": "external concurrent work; not changed by this task"
+    }
+  ]
+}

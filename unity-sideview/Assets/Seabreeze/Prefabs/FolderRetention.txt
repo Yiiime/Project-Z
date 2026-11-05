@@ -1,0 +1,1 @@
+Preserves the original Unity asset folder in Git.

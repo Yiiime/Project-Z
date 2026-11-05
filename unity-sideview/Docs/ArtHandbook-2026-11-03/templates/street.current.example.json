@@ -1,0 +1,249 @@
+{
+  "schema": "seabreeze-art-handoff/1",
+  "status": "PROPOSED_HANDOFF_ONLY_NOT_IMPLEMENTED_IMPORTER",
+  "mapId": "Street",
+  "task": "replace_existing",
+  "coordinateSystem": {
+    "imageOrigin": "top_left",
+    "imageY": "down",
+    "worldY": "up"
+  },
+  "image": {
+    "width": 1672,
+    "height": 941,
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "colorSpace": "sRGB",
+    "file": "street.png"
+  },
+  "world": {
+    "width": 32,
+    "floorImageFraction": 0.165
+  },
+  "camera": {
+    "aspect": 1.7777777777777777,
+    "orthographicSize": 6.5,
+    "y": 4.25
+  },
+  "spawns": [
+    {
+      "id": "streetSpawn",
+      "worldX": -8,
+      "worldY": 0.1
+    },
+    {
+      "id": "fromCafe",
+      "worldX": -8.1,
+      "worldY": 0.1
+    },
+    {
+      "id": "fromLighthouse",
+      "worldX": 13.5,
+      "worldY": 0.1
+    }
+  ],
+  "exits": [
+    {
+      "id": "cafe_door",
+      "label": "进入「潮汐」咖啡馆",
+      "worldX": -9.15,
+      "worldY": 0.0,
+      "u": 0.2140625,
+      "v": 0.835,
+      "pixelX": 357.91249999999997,
+      "pixelY": 785.735,
+      "radius": 1.45,
+      "npc": false,
+      "door": true,
+      "destination": 1,
+      "promptOffsetY": 3.2
+    },
+    {
+      "id": "to_lighthouse",
+      "label": "沿海堤去灯塔",
+      "worldX": 15.0,
+      "worldY": 0.0,
+      "u": 0.96875,
+      "v": 0.835,
+      "pixelX": 1619.75,
+      "pixelY": 785.735,
+      "radius": 1.45,
+      "npc": false,
+      "door": true,
+      "destination": 2,
+      "promptOffsetY": 3.2
+    }
+  ],
+  "interactionAnchors": [
+    {
+      "id": "noticeboard",
+      "label": "街角告示板",
+      "worldX": -13.2,
+      "worldY": 0.0,
+      "u": 0.08750000000000002,
+      "v": 0.835,
+      "pixelX": 146.30000000000004,
+      "pixelY": 785.735,
+      "radius": 1.45,
+      "npc": false,
+      "door": false,
+      "destination": 0,
+      "promptOffsetY": 2.2
+    },
+    {
+      "id": "cafe_door",
+      "label": "进入「潮汐」咖啡馆",
+      "worldX": -9.15,
+      "worldY": 0.0,
+      "u": 0.2140625,
+      "v": 0.835,
+      "pixelX": 357.91249999999997,
+      "pixelY": 785.735,
+      "radius": 1.45,
+      "npc": false,
+      "door": true,
+      "destination": 1,
+      "promptOffsetY": 3.2
+    },
+    {
+      "id": "bicycle",
+      "label": "旧自行车",
+      "worldX": -4.0,
+      "worldY": 0.0,
+      "u": 0.375,
+      "v": 0.835,
+      "pixelX": 627.0,
+      "pixelY": 785.735,
+      "radius": 1.45,
+      "npc": false,
+      "door": false,
+      "destination": 0,
+      "promptOffsetY": 2.2
+    },
+    {
+      "id": "npc_mio",
+      "label": "Z",
+      "worldX": -2.0,
+      "worldY": 0.0,
+      "u": 0.4375,
+      "v": 0.835,
+      "pixelX": 731.5,
+      "pixelY": 785.735,
+      "radius": 1.9,
+      "npc": true,
+      "door": false,
+      "destination": 0,
+      "promptOffsetY": 3.3
+    },
+    {
+      "id": "sea",
+      "label": "听一会儿海",
+      "worldX": 3.0,
+      "worldY": 0.0,
+      "u": 0.59375,
+      "v": 0.835,
+      "pixelX": 992.75,
+      "pixelY": 785.735,
+      "radius": 1.45,
+      "npc": false,
+      "door": false,
+      "destination": 0,
+      "promptOffsetY": 2.2
+    },
+    {
+      "id": "npc_chen",
+      "label": "陈伯",
+      "worldX": 8.0,
+      "worldY": 0.0,
+      "u": 0.75,
+      "v": 0.835,
+      "pixelX": 1254.0,
+      "pixelY": 785.735,
+      "radius": 1.9,
+      "npc": true,
+      "door": false,
+      "destination": 0,
+      "promptOffsetY": 3.3
+    },
+    {
+      "id": "postcard",
+      "label": "长椅上的明信片",
+      "worldX": 13.1,
+      "worldY": 0.0,
+      "u": 0.909375,
+      "v": 0.835,
+      "pixelX": 1520.4750000000001,
+      "pixelY": 785.735,
+      "radius": 1.45,
+      "npc": false,
+      "door": false,
+      "destination": 0,
+      "promptOffsetY": 2.2
+    },
+    {
+      "id": "bench",
+      "label": "坐一会儿",
+      "worldX": 14.0,
+      "worldY": 0.0,
+      "u": 0.9375,
+      "v": 0.835,
+      "pixelX": 1567.5,
+      "pixelY": 785.735,
+      "radius": 1.45,
+      "npc": false,
+      "door": false,
+      "destination": 0,
+      "promptOffsetY": 2.2
+    },
+    {
+      "id": "to_lighthouse",
+      "label": "沿海堤去灯塔",
+      "worldX": 15.0,
+      "worldY": 0.0,
+      "u": 0.96875,
+      "v": 0.835,
+      "pixelX": 1619.75,
+      "pixelY": 785.735,
+      "radius": 1.45,
+      "npc": false,
+      "door": true,
+      "destination": 2,
+      "promptOffsetY": 3.2
+    }
+  ],
+  "layers": [
+    {
+      "file": "street.png",
+      "role": "background",
+      "sameCanvas": true,
+      "sortingIntent": "behind_characters",
+      "alpha": false,
+      "currentSortingOrder": -20
+    }
+  ],
+  "variants": [
+    {
+      "file": "street_day.png",
+      "periods": [
+        "Morning",
+        "Afternoon"
+      ]
+    },
+    {
+      "file": "street.png",
+      "periods": [
+        "Evening",
+        "Night"
+      ]
+    }
+  ],
+  "review": {
+    "art": null,
+    "unityImport": null,
+    "runtime": null
+  },
+  "notes": "Fill null fields before handoff. This JSON is not read by current Unity scripts.",
+  "source": "Saved Street.unity at audit date"
+}

@@ -38,6 +38,10 @@ namespace Seabreeze
         public string next;
         public DialogueChoice[] choices = Array.Empty<DialogueChoice>();
         public StoryEffect[] effects = Array.Empty<StoryEffect>();
+        [Tooltip("Optional stable NPC id; empty preserves existing authored speaker text.")]
+        public string speakerId;
+        public string emotion = "neutral";
+        public string motion;
     }
 
     [CreateAssetMenu(menuName = "Seabreeze/Story Database")]

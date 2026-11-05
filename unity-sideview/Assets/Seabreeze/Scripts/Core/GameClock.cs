@@ -14,8 +14,9 @@ namespace Seabreeze
         public void Initialize(GameSession owner) { session = owner; Refresh(); }
         public void Advance()
         {
-            if (!session || session.Dialogue.IsOpen) return;
+            if (!session || session.InputBlocked) return;
             AdvanceFromStory();
+            session.Save();
         }
         internal void AdvanceFromStory()
         {
@@ -26,7 +27,6 @@ namespace Seabreeze
             session.Story?.Evaluate();
             session.Story?.Notify(Period == TimePeriod.Morning ? "新的一天，海风又从窗边吹了进来。" : "不知不觉，已经是" + PeriodName(Period) + "了。");
             session.NotifyChanged();
-            session.Save();
         }
         public void Refresh()
         {

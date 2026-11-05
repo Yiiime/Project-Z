@@ -1,0 +1,194 @@
+{
+  "canvas": [
+    1024,
+    2048
+  ],
+  "sheetGrid": [
+    4,
+    2
+  ],
+  "sheetDimensions": [
+    4096,
+    4096
+  ],
+  "rootAxisX": 512,
+  "groundBaselineFromTop": 1888,
+  "normalizedPivot": [
+    0.5,
+    0.078125
+  ],
+  "pixelsPerUnit": 206.57894736842107,
+  "sourceEffectiveHeight": 1570,
+  "strideWorldUnits": 2.05,
+  "frames": [
+    {
+      "frame": 0,
+      "file": "player_walk_v1_00.png",
+      "sourceDimensions": [
+        887,
+        1774
+      ],
+      "translationPixels": [
+        70,
+        219
+      ],
+      "headAxisBefore": 442.5,
+      "effectiveHeightAlpha128": 1570,
+      "alphaBounds128": [
+        163,
+        318,
+        875,
+        1888
+      ],
+      "sha256": "35d1e301ccf82a53a26eb43322f3367363557833c09ff1eed2e718c458409baa"
+    },
+    {
+      "frame": 1,
+      "file": "player_walk_v1_01.png",
+      "sourceDimensions": [
+        887,
+        1774
+      ],
+      "translationPixels": [
+        68,
+        243
+      ],
+      "headAxisBefore": 444.5,
+      "effectiveHeightAlpha128": 1538,
+      "alphaBounds128": [
+        198,
+        350,
+        760,
+        1888
+      ],
+      "sha256": "83759df8be20eeffd18a91625f7edde0db4c3972929ef15e9547f0ab42f0952f"
+    },
+    {
+      "frame": 2,
+      "file": "player_walk_v1_02.png",
+      "sourceDimensions": [
+        887,
+        1774
+      ],
+      "translationPixels": [
+        69,
+        221
+      ],
+      "headAxisBefore": 443.0,
+      "effectiveHeightAlpha128": 1570,
+      "alphaBounds128": [
+        243,
+        318,
+        734,
+        1888
+      ],
+      "sha256": "db84030f356d31758b629407d1cb8ba28efd3ca987a54f119b0d2b34172562c7"
+    },
+    {
+      "frame": 3,
+      "file": "player_walk_v1_03.png",
+      "sourceDimensions": [
+        884,
+        1780
+      ],
+      "translationPixels": [
+        72,
+        255
+      ],
+      "headAxisBefore": 439.5,
+      "effectiveHeightAlpha128": 1537,
+      "alphaBounds128": [
+        228,
+        351,
+        825,
+        1888
+      ],
+      "sha256": "1b80fdd7e76b502d61a47fee5f57b7fad4bfd8e78159728138c3b5d86e4cdf29"
+    },
+    {
+      "frame": 4,
+      "file": "player_walk_v1_04.png",
+      "sourceDimensions": [
+        887,
+        1774
+      ],
+      "translationPixels": [
+        70,
+        239
+      ],
+      "headAxisBefore": 442.0,
+      "effectiveHeightAlpha128": 1550,
+      "alphaBounds128": [
+        145,
+        338,
+        877,
+        1888
+      ],
+      "sha256": "0d639b45c8ec1103ea1cf2824a219f92b206c0e54491c9841d9a144d84e120fe"
+    },
+    {
+      "frame": 5,
+      "file": "player_walk_v1_05.png",
+      "sourceDimensions": [
+        887,
+        1774
+      ],
+      "translationPixels": [
+        66,
+        232
+      ],
+      "headAxisBefore": 446.0,
+      "effectiveHeightAlpha128": 1548,
+      "alphaBounds128": [
+        205,
+        340,
+        775,
+        1888
+      ],
+      "sha256": "348d0bae5d5375e69089656ac1075ab58389345150b4169a742d5bb1a73ab718"
+    },
+    {
+      "frame": 6,
+      "file": "player_walk_v1_06.png",
+      "sourceDimensions": [
+        887,
+        1774
+      ],
+      "translationPixels": [
+        70,
+        222
+      ],
+      "headAxisBefore": 442.5,
+      "effectiveHeightAlpha128": 1569,
+      "alphaBounds128": [
+        275,
+        319,
+        664,
+        1888
+      ],
+      "sha256": "158e6f9c731b676a7b04540df513fed86924fa25367cbbd369261c506daa0820"
+    },
+    {
+      "frame": 7,
+      "file": "player_walk_v1_07.png",
+      "sourceDimensions": [
+        887,
+        1774
+      ],
+      "translationPixels": [
+        68,
+        247
+      ],
+      "headAxisBefore": 443.5,
+      "effectiveHeightAlpha128": 1543,
+      "alphaBounds128": [
+        217,
+        345,
+        878,
+        1888
+      ],
+      "sha256": "00ff4d4f31e6332f5022e8fa2be95f38386b53eb9bcf8a12fca20e39bf7286f7"
+    }
+  ],
+  "packing": "No per-frame resizing or alpha trimming. Original RGBA pixels translated onto fixed canvas using head silhouette horizontal axis and grounded sole baseline. GIF only is downsampled for preview."
+}

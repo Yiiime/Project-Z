@@ -6,24 +6,7 @@ namespace Seabreeze
 {
     public static class SaveRepository
     {
-#if UNITY_EDITOR
-        public static string VerificationDirectory { get; set; }
-#endif
-        public static string PathOnDisk
-        {
-            get
-            {
-#if UNITY_EDITOR
-                if (!string.IsNullOrEmpty(VerificationDirectory))
-                {
-                    if (!Path.IsPathRooted(VerificationDirectory))
-                        throw new InvalidOperationException("Verification saves require an absolute directory.");
-                    return Path.Combine(VerificationDirectory, "seabreeze-save.json");
-                }
-#endif
-                return Path.Combine(Application.persistentDataPath, "seabreeze-save.json");
-            }
-        }
+        public static string PathOnDisk => Path.Combine(Application.persistentDataPath, "seabreeze-save.json");
         public static string LastError { get; private set; }
         public static SaveData Load()
         {
@@ -55,7 +38,7 @@ namespace Seabreeze
         {
             try
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(PathOnDisk));
+                Directory.CreateDirectory(Application.persistentDataPath);
                 var temp = PathOnDisk + ".tmp";
                 File.WriteAllText(temp, JsonUtility.ToJson(data, true));
                 if (File.Exists(PathOnDisk))

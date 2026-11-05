@@ -14,7 +14,7 @@ namespace Seabreeze
         public bool Available => isDoor || (GameSession.Instance != null && GameSession.Instance.Story.IsAvailable(id));
         public void Activate()
         {
-            if (!Available)
+            if (!Available || GameSession.Instance == null || GameSession.Instance.InputBlocked)
                 return;
             if (isDoor)
                 GameSession.Instance.Travel(destination);

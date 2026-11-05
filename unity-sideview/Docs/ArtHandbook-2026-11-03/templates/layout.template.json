@@ -1,0 +1,49 @@
+{
+  "schema": "seabreeze-art-handoff/1",
+  "status": "PROPOSED_HANDOFF_ONLY_NOT_IMPLEMENTED_IMPORTER",
+  "mapId": null,
+  "task": "new_location",
+  "coordinateSystem": {
+    "imageOrigin": "top_left",
+    "imageY": "down",
+    "worldY": "up"
+  },
+  "image": {
+    "width": 1672,
+    "height": 941,
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "colorSpace": "sRGB",
+    "file": "background.png"
+  },
+  "world": {
+    "width": null,
+    "floorImageFraction": 0.165
+  },
+  "camera": {
+    "aspect": 1.7777777777777777,
+    "orthographicSize": null,
+    "y": null
+  },
+  "spawns": [],
+  "exits": [],
+  "interactionAnchors": [],
+  "layers": [
+    {
+      "file": "background.png",
+      "role": "background",
+      "sameCanvas": true,
+      "sortingIntent": "behind_characters",
+      "alpha": false
+    }
+  ],
+  "variants": [],
+  "review": {
+    "art": null,
+    "unityImport": null,
+    "runtime": null
+  },
+  "notes": "Fill null fields before handoff. This JSON is not read by current Unity scripts."
+}

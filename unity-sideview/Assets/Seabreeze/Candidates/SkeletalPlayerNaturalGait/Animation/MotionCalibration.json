@@ -1,0 +1,157 @@
+{
+    "strideLength": 1.649999976158142,
+    "stanceFraction": 0.6000000238418579,
+    "doubleSupportFraction": 0.20000004768371583,
+    "minimumPelvisOffset": -0.05400000140070915,
+    "maximumPelvisOffset": 0.0,
+    "comfortableSpeed": 1.649999976158142,
+    "maximumReachExcess": 0.0,
+    "nearUpperLeg": 0.7124771475791931,
+    "nearLowerLeg": 0.67555171251297,
+    "phaseSamples": [
+        {
+            "phase": 0.0,
+            "knee": 7.66795015335083,
+            "pelvisOffset": -0.03999999910593033,
+            "soleTilt": 14.0,
+            "heelHeight": 0.0,
+            "forefootHeight": 0.08587491512298584
+        },
+        {
+            "phase": 0.03999999910593033,
+            "knee": 20.03253746032715,
+            "pelvisOffset": -0.05400000140070915,
+            "soleTilt": 6.0,
+            "heelHeight": -1.1920928955078126e-7,
+            "forefootHeight": 0.03710448741912842
+        },
+        {
+            "phase": 0.10000000149011612,
+            "knee": 16.48256492614746,
+            "pelvisOffset": -0.03500000014901161,
+            "soleTilt": 0.5284090042114258,
+            "heelHeight": 1.1920928955078126e-7,
+            "forefootHeight": 0.003273487091064453
+        },
+        {
+            "phase": 0.20000000298023225,
+            "knee": 10.3173246383667,
+            "pelvisOffset": -0.006000000052154064,
+            "soleTilt": 0.0,
+            "heelHeight": -2.384185791015625e-7,
+            "forefootHeight": -3.5762786865234377e-7
+        },
+        {
+            "phase": 0.25,
+            "knee": 7.147785186767578,
+            "pelvisOffset": 0.0,
+            "soleTilt": 0.0,
+            "heelHeight": -1.1920928955078126e-7,
+            "forefootHeight": 2.384185791015625e-7
+        },
+        {
+            "phase": 0.3499999940395355,
+            "knee": 10.705022811889649,
+            "pelvisOffset": -0.012000000104308129,
+            "soleTilt": 0.0,
+            "heelHeight": 0.0,
+            "forefootHeight": -2.384185791015625e-7
+        },
+        {
+            "phase": 0.4000000059604645,
+            "knee": 10.28250503540039,
+            "pelvisOffset": -0.017999999225139619,
+            "soleTilt": -1.0,
+            "heelHeight": 0.006195425987243652,
+            "forefootHeight": 2.384185791015625e-7
+        },
+        {
+            "phase": 0.44999998807907107,
+            "knee": 12.815642356872559,
+            "pelvisOffset": -0.027000000700354577,
+            "soleTilt": -3.0,
+            "heelHeight": 0.0185776948928833,
+            "forefootHeight": 1.1920928955078126e-7
+        },
+        {
+            "phase": 0.5,
+            "knee": 22.583742141723634,
+            "pelvisOffset": -0.03999999910593033,
+            "soleTilt": -8.0,
+            "heelHeight": 0.049402594566345218,
+            "forefootHeight": 2.384185791015625e-7
+        },
+        {
+            "phase": 0.550000011920929,
+            "knee": 35.325504302978519,
+            "pelvisOffset": -0.05301307514309883,
+            "soleTilt": -18.0,
+            "heelHeight": 0.10969161987304688,
+            "forefootHeight": 0.0
+        },
+        {
+            "phase": 0.6000000238418579,
+            "knee": 40.26176071166992,
+            "pelvisOffset": -0.034999992698431018,
+            "soleTilt": -32.0,
+            "heelHeight": 0.18810558319091798,
+            "forefootHeight": 0.0
+        },
+        {
+            "phase": 0.6499999761581421,
+            "knee": 51.999977111816409,
+            "pelvisOffset": -0.018837619572877885,
+            "soleTilt": -26.067337036132814,
+            "heelHeight": 0.25340914726257326,
+            "forefootHeight": 0.09742593765258789
+        },
+        {
+            "phase": 0.6800000071525574,
+            "knee": 58.00001907348633,
+            "pelvisOffset": -0.010220088064670563,
+            "soleTilt": -16.772769927978517,
+            "heelHeight": 0.25113070011138918,
+            "forefootHeight": 0.14869475364685059
+        },
+        {
+            "phase": 0.7200000286102295,
+            "knee": 58.00000762939453,
+            "pelvisOffset": -0.0026657525449991228,
+            "soleTilt": -6.0,
+            "heelHeight": 0.19939160346984864,
+            "forefootHeight": 0.1622868776321411
+        },
+        {
+            "phase": 0.7799999713897705,
+            "knee": 45.99998092651367,
+            "pelvisOffset": -0.0018359973328188062,
+            "soleTilt": -0.7781434059143066,
+            "heelHeight": 0.10815203189849854,
+            "forefootHeight": 0.10333120822906494
+        },
+        {
+            "phase": 0.8600000143051148,
+            "knee": 27.000015258789064,
+            "pelvisOffset": -0.013161602430045605,
+            "soleTilt": 5.377232074737549,
+            "heelHeight": 0.04976224899291992,
+            "forefootHeight": 0.08302712440490723
+        },
+        {
+            "phase": 0.9399999976158142,
+            "knee": 10.999987602233887,
+            "pelvisOffset": -0.024932947009801866,
+            "soleTilt": 11.317306518554688,
+            "heelHeight": 0.03723478317260742,
+            "forefootHeight": 0.10689496994018555
+        },
+        {
+            "phase": 1.0,
+            "knee": 7.66795015335083,
+            "pelvisOffset": -0.03999999910593033,
+            "soleTilt": 14.0,
+            "heelHeight": 0.0,
+            "forefootHeight": 0.08587491512298584
+        }
+    ]
+}

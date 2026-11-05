@@ -177,7 +177,7 @@ namespace Seabreeze.Editor
             {
                 Door(root, "cafe_door", "进入「潮汐」咖啡馆", -9.15f, PlaceId.Cafe);
                 Door(root, "to_lighthouse", "沿海堤去灯塔", 15.0f, PlaceId.Lighthouse);
-                Npc(root, "npc_mio", "澪", -2, 1, p);
+                Npc(root, "npc_mio", "Z", -2, 1, p);
                 Npc(root, "npc_chen", "陈伯", 8, 3, p);
                 Marker(root, "postcard", "长椅上的明信片", 13.1f);
                 Marker(root, "noticeboard", "街角告示板", -13.2f);
@@ -204,7 +204,7 @@ namespace Seabreeze.Editor
             if (p == PlaceId.Lighthouse)
             {
                 Door(root, "lighthouse_exit", "回到海边小街", -13.2f, PlaceId.Street);
-                Npc(root, "npc_mio", "澪", 2.6f, 1, p);
+                Npc(root, "npc_mio", "Z", 2.6f, 1, p);
                 Npc(root, "npc_aya", "阿遥", -.5f, 2, p);
                 Npc(root, "npc_chen", "陈伯", -3, 3, p);
                 Marker(root, "letterbox", "海堤信箱", 5.2f);

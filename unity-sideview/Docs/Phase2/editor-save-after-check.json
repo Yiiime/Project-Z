@@ -1,0 +1,46 @@
+{
+    "version": 2,
+    "day": 1,
+    "period": 0,
+    "weather": "晴 · 海风轻柔",
+    "flags": [
+        "visited_Street",
+        "intro_read",
+        "seen_noticeboard",
+        "mio_met",
+        "choice_invite",
+        "visited_Cafe"
+    ],
+    "journal": [
+        "第 1 天 · 上午\n来到汐风镇的第一天。今天没有行程，也许先沿着海边走走。咖啡馆在街道左侧，灯塔在右侧。",
+        "第 1 天 · 上午\n告示板上写着：坏心情不保证修好，但有热茶。镇上的修补日是周六。",
+        "第 1 天 · 上午\n认识了Z。她的胶卷只剩最后一格，明天要出门学摄影。她傍晚会在灯塔，想把最后一张留给今天。"
+    ],
+    "items": [],
+    "relationships": [
+        {
+            "id": "npc_mio",
+            "value": 1
+        }
+    ],
+    "ending": "",
+    "place": "Cafe",
+    "playerX": 1.1751985549926758,
+    "started": true,
+    "resumeDialogue": "",
+    "resumeInteractionId": "",
+    "dialogueBookmarks": [
+        {
+            "source": "npc_chen",
+            "node": "choice_invite",
+            "day": 1,
+            "period": 0
+        },
+        {
+            "source": "npc_aya",
+            "node": "aya_greeting",
+            "day": 1,
+            "period": 0
+        }
+    ]
+}
