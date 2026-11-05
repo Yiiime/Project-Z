@@ -49,3 +49,23 @@ PR 保持草稿，等待用户手工体验验收。
 本机日志：`/private/tmp/z-live-draft-verification.log`、`/private/tmp/z-live-play-smoke.log`、`/private/tmp/z-live-play-smoke-2.log`，不随源码提交。
 
 本轮工作区没有配置真实供应商密钥，运行态检查为无供应商连接的界面与退出流程验证；未重新验证真人麦克风、真实生成歌声、口型或长时间连续对话，也未做完整手工视觉试玩。前文历史验证不等于本轮验证。PR 保持草稿，继续新增内容后按实际影响补联调和人工试听。
+
+
+## 2026-11-05 唱歌集成包接入（本地待用户验收）
+
+本节是当前实现；前文“点歌与试听/人工审核/唱歌持久播放回执”属于旧版历史。本次按用户确认保留原直播、连麦主 Agent 与 TTS，接入集成包的网易云 Top1 检索、完整原曲与歌词留存、共享曲库、固定账号登录及维护。移除独立点歌/试听/审核界面和唱歌业务回执 API；技术检查通过后由主 Agent 在合适话口唱，无五分钟、24小时或第二场等待。
+
+修复：共享待审核音频的多个任务一起迁移为可用状态；显式拒绝的参考资料即使文件缺失也不重新生成；重复请求复用缓存并合并同时待播的同一唱段，不重复付费生成。结果未知的旧付费尝试保持显式确认保护。曲库与生成器共用主工程的 Z 音色配置。
+
+本次验证：
+
+- `npm test`：69/69 通过，含主 Agent 可信消息、取消权限、共享缓存、无等待、拒绝素材、重启迁移、未知尝试防重、Top1/明确版本、登录维护及现有连麦/ASR/HTTP 测试。均使用注入供应商。
+- `tools/team/z check`：通过。清理临时入口后的 C# 语法检查为 228 个文件、0 错误，资源 GUID 与场景引用通过。
+- Unity 6000.3.27f1：实际编辑器编译通过；`Seabreeze.Editor.LiveDraftVerification.Run` 通过，日志含 `LIVE_DRAFT_VERIFICATION_PASSED`。
+- 实际后台 Play Mode：从 Street 手机按钮进入直播，保留连麦入口、不再出现点歌试听审核面板；32.284 秒《晚安》缓存通过 Unity AudioSource 播完，随后同一现有主播语音通道播放注入 MP3 并完成；退出恢复 timeScale=1、销毁直播对象，重复进入/退出通过。日志含 `SINGING_PLAY_SMOKE_PASSED`。唱歌业务回执数保持 0，内部通用媒介事件仍用于音轨衔接。隔离存档、静音输出，临时验证入口已删除。
+- FFmpeg 实际 MP3→WAV 解码成功，1 秒输入保持 1 秒时长。`npm run netease:login -- status` 能运行，当前工程返回 `anonymous`，尚未登录。
+- `git diff --check`：通过。修改保持在允许路径，未提交或推送 GitHub。
+
+验证过程的边界：第一次播放验证的注入 TTS 使用 WAV，与现有 MP3 通道不符；修正测试数据后重跑。第二次驱动漏观察瞬时 ready 状态而停在等待，产品已经播放完成；修正验证驱动后第三次完整通过。Unity 自带 `SearchDatabase` 索引异常单独记录，不视为已修复。未重新进行真人麦克风、真实模型选歌/生成、网易云扫码及线上下载的完整联调；没有本轮手工音质或视觉验收。技术检查不保证旋律、片段和音色正确，参考音频未传入 Vivi。
+
+本机日志：`/private/tmp/z-all-tests.log`、`/private/tmp/z-final-team-check.log`、`/private/tmp/z-singing-unity-compile.log`、`/private/tmp/z-singing-unity-play-3.log`、`/private/tmp/z-singing-smoke-server.log`。本地 FFmpeg 路径位于 Git 忽略的 `.env.local`，不随交付分发。用户验收后再按指示上传 GitHub。

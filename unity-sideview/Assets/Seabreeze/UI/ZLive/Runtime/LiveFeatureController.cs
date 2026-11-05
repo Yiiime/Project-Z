@@ -66,7 +66,7 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     Task NextFrame(){var tcs=new TaskCompletionSource<bool>();if(disposed){tcs.SetCanceled();return tcs.Task;}frameWaiters.Add(tcs);StartCoroutine(EndFrame(tcs));return tcs.Task;}
     IEnumerator EndFrame(TaskCompletionSource<bool> tcs){yield return null;frameWaiters.Remove(tcs);if(disposed||leaving)tcs.TrySetCanceled();else tcs.TrySetResult(true);}
     async Task PanelIntent(string kind,bool visible){try{var t=kind=="drawing"?state?["recentArtwork"]:state?["tarot"];if(t==null||t.Type==JTokenType.Null)return;if(!visible)(kind=="drawing"?drawing:tarot).style.display=DisplayStyle.None;UpdatePanelLayout();await transport.Input("panel.intent",new JObject{{"kind",kind},{"visible",visible},{"taskId",t["id"]},{"resourceRevision",t["revision"]??0}});}catch(Exception e){Error(e);}}
-    void ApplyState(JObject snapshot){state=snapshot;UpdateSongPlayback();RefreshRoomState();UpdateCallView();character.SetWaiting((bool?)snapshot["performance"]?["waiting"]??false);RestorePanels(snapshot);var art=snapshot["recentArtwork"];if(art!=null&&art.Type!=JTokenType.Null){activity.text=DrawingTitle(art);var labels=new List<string>();int i=0;foreach(var step in (JArray)(art["stages"]??new JArray())){labels.Add(((int?)art["stage"]>=i?"✓ ":"")+(++i)+" "+(string)step);}drawingSteps.text=string.Join("   ",labels);}foreach(JObject e in (JArray)(snapshot["publicEvents"]??new JArray())){string id=(string)e["id"],type=(string)e["type"];if(messageIds.Contains(id)||!(type=="player.message"||type=="npc.message"||type=="speech.completed"))continue;messageIds.Add(id);if(snapshot["room"]?["messages"]==null)AddChat(type=="speech.completed"?"Z":type=="player.message"?"你":NpcName((string)e["speakerId"]),(string)e["text"],type=="player.message");}
+    void ApplyState(JObject snapshot){state=snapshot;RefreshRoomState();UpdateCallView();character.SetWaiting((bool?)snapshot["performance"]?["waiting"]??false);RestorePanels(snapshot);var art=snapshot["recentArtwork"];if(art!=null&&art.Type!=JTokenType.Null){activity.text=DrawingTitle(art);var labels=new List<string>();int i=0;foreach(var step in (JArray)(art["stages"]??new JArray())){labels.Add(((int?)art["stage"]>=i?"✓ ":"")+(++i)+" "+(string)step);}drawingSteps.text=string.Join("   ",labels);}foreach(JObject e in (JArray)(snapshot["publicEvents"]??new JArray())){string id=(string)e["id"],type=(string)e["type"];if(messageIds.Contains(id)||!(type=="player.message"||type=="npc.message"||type=="speech.completed"))continue;messageIds.Add(id);if(snapshot["room"]?["messages"]==null)AddChat(type=="speech.completed"?"Z":type=="player.message"?"你":NpcName((string)e["speakerId"]),(string)e["text"],type=="player.message");}
         foreach(JObject message in (JArray)(snapshot["room"]?["messages"]??new JArray())){string id="message:"+(string)message["id"];if(messageIds.Add(id)&&(string)message["type"]!="z")AddChat((string)message["name"]??"小屋通知",(string)message["text"],(bool?)message["mine"]==true,(string)message["id"],(string)message["replyStatus"],(string)message["type"]=="system");}
         UpdatePanelLayout();if((string)snapshot["phase"]=="paused"){locallyPaused=true;audioPlayer.Pause(true);pause.text="继续";}RefreshRoomState();
     }
@@ -92,8 +92,8 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
             case "retry_not_allowed":return "当前任务无法重试，可重新提交点歌";
             case "task_limit":return "点歌任务已满，请先处理现有任务";
             case "talent_busy":return "Z 正在表演，请先结束当前表演";
-            case "asset_unavailable":return "当前唱段无法试听，请刷新点歌列表";
-            case "audio_disabled":return "请开启声音后再试听";
+            case "asset_unavailable":return "当前唱段暂时无法播放";
+            case "audio_disabled":return "请开启声音后再唱歌";
             case "session_paused":return "请先继续直播";
             case "state_conflict":case "stale_review":return "状态已更新，请稍后重试";
             case "unauthorized":return "直播连接已失效，请重新启动直播服务";

@@ -1,0 +1,34 @@
+[
+  {
+    "title": "晴天",
+    "artist": "周杰伦",
+    "version": "Z 演唱缓存（Vivi 文本指令；参考音频未传入）",
+    "segment": {
+      "kind": "chorus",
+      "ordinal": 1
+    },
+    "voice": {
+      "identity": "z-vivi",
+      "mode": "single_voice_a_cappella",
+      "revision": "1",
+      "singingModel": "1.2.6.1",
+      "speaker": "zh_female_vv_uranus_bigtts"
+    },
+    "sha256": "43eb85e3cd5eab4e6dcbd2c295452075c68d98cf7f5e0f09f896ac9fafc9a469",
+    "file": "qingtian-43eb85e3cd5e.wav",
+    "review": {
+      "approved": true,
+      "reviewer": "local-evaluator",
+      "note": "用户在本轮对话试听28.263秒候选后明确确认：五项均符合，通过。",
+      "checks": {
+        "song": true,
+        "segment": true,
+        "voice": true,
+        "aCappella": true,
+        "ending": true
+      },
+      "at": "2026-11-05T09:32:49.533Z"
+    },
+    "provenance": "Evaluation 0879cbf1-82d9-4572-a431-182e5ed43a1e; Vivi text instruction; reference audio NOT supplied; scope and voice require human review."
+  }
+]

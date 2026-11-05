@@ -3,106 +3,149 @@ import path from 'node:path';
 import {DatabaseSync} from 'node:sqlite';
 import {randomUUID} from 'node:crypto';
 import {Z_VOICE,sha256,parseSongRequest,generateSinging,checkWav} from './provider.mjs';
+import {SongLibrary} from '../song-library/library.mjs';
+import {NeteaseSource} from '../song-library/netease.mjs';
+import {OfficialRetrieval} from '../song-library/official-retrieval.mjs';
+import {decide} from '../song-library/decision.mjs';
+import {startNeteaseSessionMaintenance} from '../song-library/netease-auth.mjs';
 const uid=()=>randomUUID(),now=()=>new Date().toISOString();
 const cleanError=e=>/^[a-z_]{2,80}$/.test(e?.message||'')?e.message:'tool_unavailable';
-const terminal=['completed','failed','cancelled','rejected'];
-const norm=s=>String(s||'').normalize('NFKC').replace(/[\s《》「」“”]/g,'').toLowerCase();
-export const reasons={singing_provider_resource_not_granted:'请在语音 Key 所属项目开通端到端实时语音大模型（volc.speech.dialog），再重试',singing_provider_configuration_error:'唱歌鉴权失败，请检查豆包语音 Key 与所属项目',singing_provider_unavailable:'实时语音服务暂时不可用，请稍后重试',provider_not_singing:'模型返回了说话音频，尚未生成可试听唱段',song_parser_not_configured:'点歌解析服务未配置',song_parser_balance:'点歌解析服务额度不足',song_parser_unavailable:'点歌解析服务暂时不可用',tool_unavailable:'工具暂时不可用',singing_not_configured:'Vivi 唱歌服务未配置',singing_no_complete_audio:'没有收到完整歌声音频',generator_failed:'歌声生成调用失败',generation_outcome_unknown:'生成结果未知，需核对原尝试后再决定是否重试',process_restarted_unknown:'服务重启，原生成结果未知，不自动重复付费生成',audio_range_exceeded:'生成长度超出展示范围，需要调整方案，未截短',voice_configuration_mismatch:'生成使用的声音配置不匹配',review_rejected:'试听未通过',request_cancelled:'请求已取消',needs_material:'缺少可确定的歌曲或片段资料',range_needs_clarification:'请求超出首版单段范围，需确认替代片段',playback_lost:'播放页面断开或未收到有效回执',audio_decode_failed:'音频无法解析',audio_silent:'音频为空或静音',audio_truncated:'音频不完整'};
+const terminal=['scheduled','completed','failed','cancelled','rejected'];
+export const reasons={
+ singing_provider_resource_not_granted:'唱歌服务尚未开通，请后台操作者检查语音项目权限',singing_provider_configuration_error:'唱歌鉴权失败，请后台操作者检查语音配置',singing_provider_unavailable:'唱歌服务暂时不可用',provider_not_singing:'生成服务返回了说话音频，尚无可用歌声',song_parser_not_configured:'点歌解析服务未配置',song_parser_balance:'点歌解析额度不足',song_parser_unavailable:'点歌解析暂时不可用',song_parser_rate_limited:'点歌解析繁忙',tool_unavailable:'准备唱段暂时失败',singing_not_configured:'唱歌服务未配置',singing_no_complete_audio:'没有收到完整歌声音频',generator_failed:'歌声生成未完成',generation_outcome_unknown:'上次生成结果未知，需要后台核对后才能重试',process_restarted_unknown:'服务重启，原生成结果未知，需要后台核对',audio_range_exceeded:'只支持不超过90秒的明确唱段',voice_configuration_mismatch:'声音配置不匹配',review_rejected:'此前素材已被明确拒绝，不再使用',material_previously_rejected:'此前参考资料已被明确拒绝，不再使用',request_cancelled:'点歌已取消',needs_material:'请补充歌名或片段',range_needs_clarification:'请指定第一句、主歌、副歌、桥段或90秒以内的明确范围',audio_decode_failed:'歌声音频无法解析',audio_silent:'歌声音频为空或静音',audio_truncated:'歌声音频不完整',asset_integrity_failed:'歌声文件校验失败',official_not_found:'没有找到符合条件的指定歌曲版本',official_audio_unavailable:'暂时拿不到指定版本的完整音频或歌词',search_incomplete:'歌曲查询暂未完成',netease_login_required:'主播侧网易云需要后台登录',netease_login_expired:'主播侧网易云登录已过期，需要后台重新登录',netease_session_invalid:'主播侧网易云登录状态异常，需要后台处理',netease_account_mismatch:'后台网易云账号与绑定账号不一致',netease_login_check_failed:'暂时无法确认后台网易云登录状态',audio_trial_only_authenticated:'后台已登录，但这首歌仍只有试听音频',audio_access_unavailable_authenticated:'后台已登录，但暂时无法获取这首歌的完整音频',audio_decoder_not_installed:'后台缺少音频解码器',source_not_configured:'歌曲资料来源尚未配置'
+};
+const voiceMatches=(a,v)=>['identity','speaker','singingModel','mode'].every(k=>a?.[k]===v[k])&&String(a?.revision)===String(v.revision);
+export const playableAsset=a=>a&&a.review?.approved!==false&&(a.approved===true||a.acceptance?.policy==='technical_audio_v1'&&a.acceptance.sha256===a.sha256);
+const segment=p=>p.segment.kind==='time_range'?{kind:'time_range',startMs:p.segment.startMs,endMs:p.segment.endMs}:p.segment.kind==='lyric_start'?{kind:'lyric_start',text:p.segment.lyricStart,...(p.segment.ordinal>1?{occurrence:p.segment.ordinal}:{})}:{kind:p.segment.kind,ordinal:p.segment.ordinal};
 
+// One durable queue; the existing live host remains the only conversation/TTS owner.
 export class SingingService {
-  static async open({root,directory=path.join(root,'data/singing'),environment,parse=parseSongRequest,generate=generateSinging,autoStart=true}={}) {
-    await fs.mkdir(directory,{recursive:true,mode:0o700});
-    // One service owns the local DB and provider queue. A second preview must
-    // not recover or duplicate another process's paid generation.
-    const lock=path.join(directory,'service.lock');
-    try{const old=JSON.parse(await fs.readFile(lock,'utf8'));try{process.kill(old.pid,0);throw Error('singing_service_already_running');}catch(e){if(e.code!=='ESRCH')throw e;}await fs.unlink(lock);}catch(e){if(e.code!=='ENOENT')throw e;}
-    const handle=await fs.open(lock,'wx',0o600);await handle.writeFile(JSON.stringify({pid:process.pid}));await handle.close();
-    const self=new SingingService();Object.assign(self,{root,directory,lock,environment,parse,generate,controller:null,busy:false,closed:false});
-    try{
-      self.db=new DatabaseSync(path.join(directory,'singing.sqlite'));
-      self.db.exec('PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL; CREATE TABLE IF NOT EXISTS state (id INTEGER PRIMARY KEY CHECK(id=1), value TEXT NOT NULL);');
-      if(!self.db.prepare('SELECT id FROM state WHERE id=1').get())self.db.prepare('INSERT INTO state VALUES(1,?)').run(JSON.stringify({version:1,voice:Z_VOICE,tasks:[],songs:[],assets:[],events:[],playbacks:[]}));
-      await self.seed();
-      self.change(s=>{for(const t of s.tasks){if(['parsing','generating','checking'].includes(t.status))self.record(s,t,'failed','process_restarted_unknown');}
-        for(const p of s.playbacks)if(['reserved','playing','paused'].includes(p.status)){p.status='interrupted';const t=s.tasks.find(t=>t.id===p.taskId);if(t&&t.status==='playing'){t.status='ready';self.record(s,t,'ready','playback_lost');}}});
-      if(autoStart)self.timer=setInterval(()=>void self.tick(),1000);
-      return self;
-    }catch(e){self.db?.close();await fs.unlink(lock).catch(()=>{});throw e;}
+ static async open({root,directory=path.join(root,'.runtime/singing'),libraryDirectory=path.join(directory,'library'),environment=()=>({}),parse=parseSongRequest,generate=generateSinging,autoStart=true,sources=[new NeteaseSource()],autoRenew=autoStart,onSessionStatus=()=>{}}={}) {
+  await fs.mkdir(directory,{recursive:true});
+  const lock=path.join(directory,'service.lock');
+  try{const old=JSON.parse(await fs.readFile(lock,'utf8'));try{process.kill(old.pid,0);throw Error('singing_service_already_running');}catch(e){if(e.code!=='ESRCH')throw e;}await fs.unlink(lock);}catch(e){if(e.code!=='ENOENT')throw e;}
+  const handle=await fs.open(lock,'wx',0o600);await handle.writeFile(JSON.stringify({pid:process.pid}));await handle.close();
+  const self=new SingingService();Object.assign(self,{root,directory,lock,environment,parse,generate,busy:false,closed:false});
+  try{
+   self.db=new DatabaseSync(path.join(directory,'singing.sqlite'));
+   self.db.exec('PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL; CREATE TABLE IF NOT EXISTS state (id INTEGER PRIMARY KEY, value TEXT NOT NULL);');
+   if(!self.db.prepare('SELECT id FROM state WHERE id=1').get())self.db.prepare('INSERT INTO state VALUES(1,?)').run(JSON.stringify({version:2,voice:Z_VOICE,tasks:[],songs:[],assets:[],events:[],playbacks:[]}));
+   self.library=new SongLibrary({directory:libraryDirectory,sources});
+   await self.seed();await self.migrate();self.syncLibrary();
+   if(autoStart)self.timer=setInterval(()=>void self.tick(),1000);
+   if(autoRenew&&sources.some(s=>s instanceof NeteaseSource))self.maintenance=startNeteaseSessionMaintenance({onStatus:onSessionStatus});
+   return self;
+  }catch(e){self.library?.close();self.db?.close();await fs.unlink(lock).catch(()=>{});throw e;}
+ }
+ read(){return JSON.parse(this.db.prepare('SELECT value FROM state WHERE id=1').get().value);}
+ change(fn){this.db.exec('BEGIN IMMEDIATE');try{const s=this.read(),r=fn(s);this.db.prepare('UPDATE state SET value=? WHERE id=1').run(JSON.stringify(s));this.db.exec('COMMIT');return r;}catch(e){this.db.exec('ROLLBACK');throw e;}}
+ record(s,t,status,code='',detail={}){t.status=status;t.updatedAt=now();t.reason=code;t.note=reasons[code]||code;s.events.push({id:uid(),taskId:t.id,revision:t.revision,at:now(),status,code,...detail});}
+ async seed(){
+  await fs.mkdir(path.join(this.directory,'assets'),{recursive:true});
+  const review=JSON.parse(await fs.readFile(path.join(this.root,'seed-review.json'),'utf8'));
+  const extra=JSON.parse(await fs.readFile(path.join(this.root,'server/assets/songs/imported-seeds.json'),'utf8'));
+  const seeds=[{id:'wanan-yanrenzhong-vivi2-chorus',file:'wanan-yanrenzhong-vivi2-chorus.wav',title:'晚安',artist:'颜人中',sha256:review.sha256,segment:{kind:'chorus',ordinal:1},review},...extra.map(x=>({...x,id:'qingtian-vivi-chorus'}))];
+  for(const item of seeds){
+   if(this.read().assets.some(a=>a.id===item.id))continue;
+   const bytes=await fs.readFile(path.join(this.root,'server/assets/songs',item.file));if(sha256(bytes)!==item.sha256||!item.review.approved)throw Error('seed_review_mismatch');
+   const checks=checkWav(bytes);await fs.writeFile(path.join(this.directory,'assets',checks.sha256+'.wav'),bytes,{mode:0o600});
+   this.change(s=>s.assets.push({id:item.id,plan:{intent:'request',title:item.title,artist:item.artist,version:'',question:'',segment:{...item.segment,description:'第一段完整副歌',lyricStart:''}},voice:Z_VOICE,sha256:checks.sha256,durationMs:checks.durationMs,approved:true,review:item.review,checks,createdAt:now()}));
   }
-  read(){return JSON.parse(this.db.prepare('SELECT value FROM state WHERE id=1').get().value);}
-  change(fn){this.db.exec('BEGIN IMMEDIATE');try{const s=this.read(),result=fn(s);this.db.prepare('UPDATE state SET value=? WHERE id=1').run(JSON.stringify(s));this.db.exec('COMMIT');return result;}catch(e){this.db.exec('ROLLBACK');throw e;}}
-  record(s,t,status,code='',detail={}){t.status=status;t.updatedAt=now();t.reason=code;t.note=reasons[code]||code;s.events.push({id:uid(),taskId:t.id,revision:t.revision,at:t.updatedAt,status,code,...detail});}
-  async seed(){
-    if(this.read().assets.some(a=>a.id==='wanan-yanrenzhong-vivi2-chorus'))return;
-    const review=JSON.parse(await fs.readFile(path.join(this.root,'seed-review.json'),'utf8'));
-    const bytes=await fs.readFile(path.join(this.root,'server/assets/songs/wanan-yanrenzhong-vivi2-chorus.wav'));
-    if(sha256(bytes)!==review.sha256||!review.approved)throw Error('seed_review_mismatch');
-    await fs.mkdir(path.join(this.directory,'assets'),{recursive:true,mode:0o700});
-    await fs.writeFile(path.join(this.directory,'assets',review.sha256+'.wav'),bytes,{mode:0o600});
-    const seedVoice={identity:review.voiceIdentity,revision:review.voiceVersion,speaker:'zh_female_vv_uranus_bigtts',speakingModel:'seed-tts-2.0',singingModel:'1.2.6.1',mode:'single_voice_a_cappella'};
-    const plan={intent:'request',title:'晚安',artist:'颜人中',version:'',question:'',segment:{kind:'chorus',ordinal:1,description:'第一段完整副歌',lyricStart:''}};
-    this.change(s=>{s.songs.push({id:'wanan-yanrenzhong',title:plan.title,artist:plan.artist,version:'颜人中歌曲版本',coverage:['第一段完整副歌'],source:'existing_user_review',independentScoreAvailable:false});s.assets.push({id:'wanan-yanrenzhong-vivi2-chorus',plan,voice:seedVoice,sha256:review.sha256,durationMs:Math.round(review.durationSeconds*1000),approved:true,createdAt:now(),review:{source:'seed-review.json',scope:review.scope,approvedAt:review.reviewedOn},checks:{technical:'pass',humanOverall:'pass',independentAutomaticVoice:'unverified'}});});
+ }
+ async migrate(){
+  // Retain old evidence and explicit rejections. Pending audio gets technical validation,
+  // never a fabricated human approval. Shared tasks consult the same asset result.
+  for(const a of this.read().assets){
+   if(a.approved||a.acceptance||a.review?.approved===false||a.review&&!a.approved)continue;
+   try{const bytes=await fs.readFile(path.join(this.directory,'assets',a.sha256+'.wav'));if(sha256(bytes)!==a.sha256)throw Error('asset_integrity_failed');const checks=checkWav(bytes);
+    this.change(s=>{const x=s.assets.find(x=>x.id===a.id);x.checks=checks;x.acceptance={policy:'technical_audio_v1',sha256:a.sha256,listeningVerified:false};});
+   }catch(e){this.change(s=>{s.assets.find(x=>x.id===a.id).unavailable=cleanError(e);});}
   }
-  findAsset(s,plan){return s.assets.find(a=>a.approved&&a.voice.identity===s.voice.identity&&a.voice.revision===s.voice.revision&&a.voice.speaker===s.voice.speaker&&a.voice.singingModel===s.voice.singingModel&&a.voice.mode===s.voice.mode&&norm(a.plan.title)===norm(plan.title)&&(!plan.artist||norm(a.plan.artist)===norm(plan.artist))&&(!plan.version||norm(a.plan.version)===norm(plan.version))&&a.plan.segment.kind===plan.segment.kind&&a.plan.segment.ordinal===plan.segment.ordinal&&norm(a.plan.segment.lyricStart)===norm(plan.segment.lyricStart)&&a.plan.segment.startMs===plan.segment.startMs&&a.plan.segment.endMs===plan.segment.endMs&&(!['other','lyric_start'].includes(plan.segment.kind)||norm(a.plan.segment.description)===norm(plan.segment.description)));}
-  submit({text,sourceId,sessionId,owner='local-preview-owner'}){
-    if(typeof text!=='string'||!text.trim()||text.length>600||typeof sourceId!=='string'||!sourceId||sourceId.length>100||typeof sessionId!=='string'||!sessionId||sessionId.length>100)throw Error('invalid_request');
-    return this.change(s=>{const old=s.tasks.find(t=>t.owner===owner&&t.sourceId===sourceId&&t.originSessionId===sessionId);if(old){if(old.originalText!==text)throw Error('request_conflict');return old;}
-      if(s.tasks.length>=500||s.tasks.filter(t=>t.owner===owner&&!terminal.includes(t.status)&&t.status!=='ready').length>=3)throw Error('task_limit');
-      const t={id:uid(),owner,sourceId,originSessionId:sessionId,originalText:text,requestText:text,revision:0,attempt:0,createdAt:now(),updatedAt:now(),voice:structuredClone(s.voice),status:'queued',reason:'',note:'',assetId:null,plan:null};s.tasks.push(t);this.record(s,t,'queued');return t;});
+  this.change(s=>{
+   s.version=2;
+   for(const t of s.tasks){
+    if(['parsing','retrieving','generating','checking'].includes(t.status))this.record(s,t,'failed','process_restarted_unknown');
+    else if(t.status==='playing')this.record(s,t,'scheduled','',{legacyPlaybackUnknown:true});
+    else if(t.status==='awaiting_review'){const a=s.assets.find(x=>x.id===t.assetId);this.record(s,t,playableAsset(a)&&!a.unavailable?'ready':'failed',a?.unavailable||(!playableAsset(a)?'review_rejected':''));}
+   }
+  });
+ }
+ syncLibrary(){
+  for(const a of this.read().assets){
+   if(a.libraryAssetId||!playableAsset(a)||a.unavailable)continue;
+   const p=a.plan;
+   const r=this.library.register({title:p.title,artist:p.artist||'歌手待确认',version:p.version||'Z 唱段（原参考录音未绑定）'});
+   const prior=this.library.db.prepare('SELECT id FROM assets WHERE provenance=?').get('singing-service:'+a.id);
+   const item=prior?this.library.asset(prior.id):this.library.addAsset(r.id,{file:path.join(this.directory,'assets',a.sha256+'.wav'),segment:segment(p),voice:a.voice,provenance:'singing-service:'+a.id});
+   if(!item.acceptance&&item.review?.approved!==false)this.library.acceptTechnical(item.id);
+   this.change(s=>{const x=s.assets.find(x=>x.id===a.id);x.libraryAssetId=item.id;x.recordingId=item.recording_id;});
   }
-  owned(s,id,owner){const t=s.tasks.find(t=>t.id===id&&t.owner===owner);if(!t)throw Error('task_not_found');return t;}
-  context(owner){const s=this.read();return {enabled:true,voice:s.voice,tasks:s.tasks.filter(t=>t.owner===owner).slice(-24).map(t=>({id:t.id,sourceId:t.sourceId,originSessionId:t.originSessionId,requesterKind:['provider-verification','management'].includes(t.originSessionId)?'operator':'player',request:t.originalText,plan:t.plan,status:t.status,reason:t.note,createdAt:t.createdAt,updatedAt:t.updatedAt,assetId:t.assetId,question:t.question||'',attempt:t.attempt})),knowledge:s.songs.slice(-30),limits:{singleSegmentSeconds:90,backgroundConcurrency:1,review:'human_required',providerLookup:'internal_not_exposed',automaticCoverageExpansion:false}};}
-  overview(owner){const s=this.read();return {...this.context(owner),assets:s.assets.map(({id,plan,approved,durationMs,sha256,checks,review,voice,createdAt})=>({id,plan,approved,durationMs,sha256,checks,review,voice,createdAt})),events:s.events.filter(e=>s.tasks.some(t=>t.id===e.taskId&&t.owner===owner)).slice(-200)};}
-  async tick(){
-    if(this.busy||this.closed)return;this.busy=true;
-    try{
-      const selected=this.change(s=>{const t=s.tasks.find(t=>t.status==='queued');if(!t)return null;this.record(s,t,'parsing');return structuredClone(t);});
-      if(!selected)return;const id=selected.id,revision=selected.revision;this.activeId=id;this.controller=new AbortController();
-      const update=fn=>this.change(s=>{const t=s.tasks.find(t=>t.id===id);if(!t||t.revision!==revision||t.status==='cancelled'||this.closed)throw Error('generation_cancelled');return fn(s,t);});
-      try{
-        const env=await this.environment();
-        const plan=await this.parse(selected.requestText,{secret:env.DEEPSEEK_API_KEY,signal:AbortSignal.any([this.controller.signal,AbortSignal.timeout(20000)])});
-        const next=update((s,t)=>{t.plan=plan;if(plan.intent!=='request'){t.question=plan.question;this.record(s,t,plan.intent==='clarify'?'needs_input':'rejected',plan.intent==='clarify'?'needs_material':'not_a_song_request');return 'stop';}
-          const matches=s.songs.filter(x=>norm(x.title)===norm(plan.title));if(!plan.artist&&new Set(matches.map(x=>x.artist)).size>1){t.question='你想听哪个歌手或版本？';this.record(s,t,'needs_input','needs_material');return 'stop';}
-          const asset=this.findAsset(s,plan);if(asset){t.assetId=asset.id;this.record(s,t,'ready','',{cacheHit:true,assetId:asset.id});return 'stop';}
-          if(plan.segment.kind==='full'||plan.segment.kind==='other'){t.question='首版支持明确的第一句、主歌、副歌、桥段或不超过90秒的范围；请指定片段。';this.record(s,t,'needs_input','range_needs_clarification');return 'stop';}
-          t.attempt++;t.attemptId=uid();this.record(s,t,'generating','',{lookup:'provider_internal_not_exposed',attempt:t.attempt,attemptId:t.attemptId});return structuredClone(t);});
-        if(next==='stop')return;
-        const generated=await this.generate(plan,{root:this.root,directory:path.join(this.directory,'attempts',next.attemptId),secret:env.VOLC_TTS_API_KEY,signal:this.controller.signal});
-        update((s,t)=>this.record(s,t,'checking'));
-        if(generated.report.voice!==Z_VOICE.speaker||generated.report.model!==Z_VOICE.singingModel||!generated.report.enableMusic||!generated.report.generationDone)throw Error('voice_configuration_mismatch');
-        const checks=checkWav(generated.bytes);const assetId=uid();await fs.writeFile(path.join(this.directory,'assets',checks.sha256+'.wav'),generated.bytes,{mode:0o600});
-        update((s,t)=>{s.assets.push({id:assetId,plan,voice:structuredClone(t.voice),sha256:checks.sha256,durationMs:checks.durationMs,checks,approved:false,createdAt:now(),attemptId:t.attemptId,provider:generated.report});t.assetId=assetId;this.record(s,t,'awaiting_review','',{assetId,checks,lookup:'provider_internal_not_exposed'});});
-      }catch(e){if(!this.closed)this.change(s=>{const t=s.tasks.find(t=>t.id===id);if(t&&t.revision===revision&&t.status!=='cancelled')this.record(s,t,'failed',cleanError(e));});}
-    }finally{this.busy=false;this.activeId=null;this.controller=null;}
-  }
-  review(id,owner,{approved,checks,note}){
-    if(typeof approved!=='boolean'||typeof note!=='string'||!note.trim()||note.length>600||approved&&(!checks||!['song','segment','voice','aCappella','ending'].every(k=>checks[k]===true)))throw Error('review_incomplete');
-    return this.change(s=>{const t=this.owned(s,id,owner);if(t.status!=='awaiting_review')throw Error('stale_review');const a=s.assets.find(a=>a.id===t.assetId);if(!a||a.voice.revision!==s.voice.revision||a.voice.speaker!==s.voice.speaker||a.voice.singingModel!==s.voice.singingModel||a.voice.mode!==s.voice.mode)throw Error('voice_configuration_mismatch');
-      a.approved=approved;a.review={approvedAt:now(),reviewer:owner,note,checks,source:'human_listening'};
-      if(approved){let song=s.songs.find(x=>norm(x.title)===norm(a.plan.title)&&norm(x.artist)===norm(a.plan.artist)&&norm(x.version)===norm(a.plan.version));if(!song){song={id:uid(),title:a.plan.title,artist:a.plan.artist,version:a.plan.version,source:'provider_generation_and_human_review',coverage:[],independentScoreAvailable:false};s.songs.push(song);}if(!song.coverage.includes(a.plan.segment.description))song.coverage.push(a.plan.segment.description);}
-      this.record(s,t,approved?'ready':'failed',approved?'':'review_rejected',{note,checks});return t;});
-  }
-  retry(id,owner,{acknowledgeUnknown=false}={}){return this.change(s=>{const t=this.owned(s,id,owner);if(t.status!=='failed'||t.attempt>=3)throw Error('retry_not_allowed');if(/unknown/.test(t.reason)&&!acknowledgeUnknown)throw Error('confirm_unknown_attempt');t.revision++;t.assetId=null;t.voice=structuredClone(s.voice);this.record(s,t,'queued','',{explicitRetry:true});return t;});}
-  clarify(id,owner,text){if(typeof text!=='string'||!text.trim()||text.length>600)throw Error('invalid_request');return this.change(s=>{const t=this.owned(s,id,owner);if(t.status!=='needs_input')throw Error('clarification_not_allowed');t.requestText=text;t.revision++;t.question='';this.record(s,t,'queued','',{clarifiedRequest:text});return t;});}
-  cancel(id,owner){const t=this.change(s=>{const t=this.owned(s,id,owner);if(t.status==='playing')throw Error('stop_player_first');if(terminal.includes(t.status))return t;t.revision++;this.record(s,t,'cancelled','request_cancelled');return t;});if(this.activeId===id)this.controller?.abort();return t;}
-  reserve(id,owner,{sessionId,operationId}){
-    if(typeof sessionId!=='string'||!sessionId||sessionId.length>100||typeof operationId!=='string'||!operationId||operationId.length>100)throw Error('invalid_playback');
-    return this.change(s=>{const t=this.owned(s,id,owner);let p=s.playbacks.find(p=>p.owner===owner&&p.operationId===operationId);if(p){if(p.taskId!==id||p.sessionId!==sessionId||!['reserved','playing','paused'].includes(p.status))throw Error('stale_playback');return this.playResult(s,t,p);}
-      if(!['ready','completed'].includes(t.status)||s.playbacks.some(p=>p.owner===owner&&['reserved','playing','paused'].includes(p.status)))throw Error('playback_not_ready');
-      const a=s.assets.find(a=>a.id===t.assetId);if(!a?.approved||a.voice.revision!==s.voice.revision||a.voice.speaker!==s.voice.speaker||a.voice.singingModel!==s.voice.singingModel||a.voice.mode!==s.voice.mode)throw Error('voice_configuration_mismatch');
-      p={id:uid(),owner,taskId:id,assetId:a.id,revision:t.revision,sessionId,operationId,status:'reserved',createdAt:now(),updatedAt:now(),positionMs:0,receiptIds:[]};s.playbacks.push(p);this.record(s,t,'playing','',{playbackId:p.id,presentationSessionId:sessionId});return this.playResult(s,t,p);});
-  }
-  playResult(s,t,p){const a=s.assets.find(a=>a.id===p.assetId);return {playbackId:p.id,taskId:t.id,sessionId:p.sessionId,song:{id:a.id,title:a.plan.title,version:a.plan.version||a.plan.artist,section:a.plan.segment.description,src:`/api/singing/assets/${a.id}`,sha256:a.sha256,approved:true,aCappella:true,reviewRef:'persistent-human-review',voiceIdentity:a.voice.identity,voiceVersion:a.voice.revision}};}
-  receipt(id,owner,{eventId,phase,positionMs=0}){
-    if(typeof eventId!=='string'||eventId.length>100||!eventId||!['playing','paused','completed','failed','interrupted'].includes(phase)||!Number.isFinite(positionMs)||positionMs<0)throw Error('invalid_receipt');
-    return this.change(s=>{const p=s.playbacks.find(p=>p.id===id&&p.owner===owner);if(!p)throw Error('playback_not_found');if(p.receiptIds.includes(eventId))return p;if(['completed','failed','interrupted'].includes(p.status))throw Error('stale_receipt');
-      const t=this.owned(s,p.taskId,owner),a=s.assets.find(a=>a.id===p.assetId);if(t.revision!==p.revision||t.status!=='playing')throw Error('stale_receipt');if(phase==='completed'&&(p.status!=='playing'||positionMs<a.durationMs-500))throw Error('invalid_completion');
-      p.receiptIds.push(eventId);p.status=phase;p.positionMs=Math.min(positionMs,a.durationMs);p.updatedAt=now();
-      if(phase==='completed')this.record(s,t,'completed','',{playbackId:id,positionMs:p.positionMs,presentationSessionId:p.sessionId});
-      if(['failed','interrupted'].includes(phase))this.record(s,t,'ready',phase==='failed'?'playback_failed':'playback_interrupted',{playbackId:id,positionMs:p.positionMs});return p;});
-  }
-  expirePlaybacks(){this.change(s=>{for(const p of s.playbacks){if(['reserved','playing','paused'].includes(p.status)&&Date.now()-Date.parse(p.updatedAt)>120000){p.status='interrupted';const t=s.tasks.find(t=>t.id===p.taskId);if(t?.status==='playing')this.record(s,t,'ready','playback_lost',{playbackId:p.id,positionMs:p.positionMs});}}});}
-  async audio(id,{allowUnreviewed=false}={}){const a=this.read().assets.find(a=>a.id===id);if(!a||!a.approved&&!allowUnreviewed)throw Error('asset_unavailable');const bytes=await fs.readFile(path.join(this.directory,'assets',a.sha256+'.wav'));if(sha256(bytes)!==a.sha256)throw Error('asset_integrity_failed');return bytes;}
-  async close(){this.closed=true;clearInterval(this.timer);this.controller?.abort();while(this.busy)await new Promise(r=>setTimeout(r,20));this.db.close();await fs.unlink(this.lock).catch(()=>{});}
+ }
+ submit({text,sourceId,sessionId,owner='local-preview-owner'}){
+  if(typeof text!=='string'||!text.trim()||text.length>600||typeof sourceId!=='string'||!sourceId||sourceId.length>100||typeof sessionId!=='string'||!sessionId||sessionId.length>100)throw Error('invalid_request');
+  return this.change(s=>{const old=s.tasks.find(t=>t.owner===owner&&t.sourceId===sourceId&&t.originSessionId===sessionId);if(old){if(old.originalText!==text)throw Error('request_conflict');return old;}
+   if(s.tasks.length>=500||s.tasks.filter(t=>t.owner===owner&&!terminal.includes(t.status)&&t.status!=='ready').length>=3)throw Error('task_limit');
+   const t={id:uid(),owner,sourceId,originSessionId:sessionId,originalText:text,requestText:text,revision:0,attempt:0,createdAt:now(),voice:Z_VOICE,assetId:null,plan:null};s.tasks.push(t);this.record(s,t,'queued');return t;});
+ }
+ owned(s,id,owner){const t=s.tasks.find(t=>t.id===id&&t.owner===owner);if(!t)throw Error('task_not_found');return t;}
+ context(owner){const s=this.read();return {enabled:true,voice:s.voice,tasks:s.tasks.filter(t=>t.owner===owner).slice(-24).map(t=>({id:t.id,sourceId:t.sourceId,originSessionId:t.originSessionId,requesterKind:['provider-verification','management'].includes(t.originSessionId)?'operator':'player',request:t.originalText,plan:t.plan,status:t.status,reason:t.note,createdAt:t.createdAt,updatedAt:t.updatedAt,assetId:t.assetId,question:t.question||'',attempt:t.attempt})),knowledge:s.assets.filter(a=>playableAsset(a)&&!a.unavailable).map(a=>({title:a.plan.title,artist:a.plan.artist,coverage:[a.plan.segment.description],listeningVerified:false})).slice(-30),limits:{singleSegmentSeconds:90,backgroundConcurrency:1,review:'none',fixedWaiting:false,providerLookup:'netease_source_policy',referenceConditioning:false}};}
+ overview(owner){return this.context(owner);}
+ async tick(){
+  if(this.busy||this.closed)return;this.busy=true;
+  try{
+   const selected=this.change(s=>{const t=s.tasks.find(t=>t.status==='queued');if(!t)return;this.record(s,t,'parsing');return structuredClone(t);});if(!selected)return;
+   const {id,revision}=selected;this.activeId=id;this.controller=new AbortController();
+   const update=fn=>this.change(s=>{const t=s.tasks.find(t=>t.id===id);if(this.closed||this.controller.signal.aborted||!t||t.revision!==revision||t.status==='cancelled')throw Error('generation_cancelled');return fn(s,t);});
+   try{
+    const env=await this.environment();let plan=await this.parse(selected.requestText,{secret:env.DEEPSEEK_API_KEY,signal:AbortSignal.any([this.controller.signal,AbortSignal.timeout(20000)])});
+    update((s,t)=>t.plan=plan);this.syncLibrary();
+    let decision=decide(this.library,plan,{officialOnly:true});
+    if(decision.route==='clarify'){update((s,t)=>{t.question=decision.reason;this.record(s,t,plan.intent==='not_request'?'rejected':'needs_input','needs_material');});return;}
+    if(decision.route==='unavailable')throw Error(decision.reason);
+    if(decision.route==='missing'){
+     update((s,t)=>this.record(s,t,'retrieving'));
+     if(!this.library.sources.has('netease'))throw Error('source_not_configured');
+     const result=await new OfficialRetrieval(this.library).prepare(plan);
+     update((s,t)=>t.retrieval={status:result.status,outcome:result.outcome,recordingId:result.recordingId,error:result.error});
+     if(result.status!=='completed')throw Error(result.error&&reasons[result.error]?result.error:result.outcome||'official_audio_unavailable');
+     const r=this.library.recording(result.recordingId);plan={...plan,title:r.title,artist:r.artist};
+     decision=decide(this.library,plan,{officialOnly:true,recordingId:r.id});
+    }
+    if(decision.route==='cached'){
+     const asset=this.read().assets.find(a=>a.libraryAssetId===decision.assetId&&playableAsset(a)&&!a.unavailable);
+     if(!asset)throw Error('asset_integrity_failed');await this.audio(asset.id);
+     update((s,t)=>{t.plan=asset.plan;t.assetId=asset.id;this.record(s,t,'ready','',{cacheHit:true});});return;
+    }
+    if(decision.route!=='generate')throw Error('needs_material');
+    const recording=this.library.recording(decision.recording.id);
+    if(this.library.material(recording.id).status==='review_rejected')throw Error('material_previously_rejected');
+    plan={...plan,artist:recording.artist};
+    // Unknown paid attempts are not bypassed by a second task for the same range.
+    const prior=this.read().tasks.find(t=>t.id!==id&&/unknown/.test(t.reason||'')&&t.recordingId===recording.id&&JSON.stringify(segment(t.plan))===JSON.stringify(segment(plan)));
+    if(prior&&!selected.acknowledgeUnknown)throw Error('generation_outcome_unknown');
+    const attemptId=uid();update((s,t)=>{t.plan=plan;t.recordingId=recording.id;t.attempt++;t.attemptId=attemptId;this.record(s,t,'generating');});
+    const generated=await this.generate(plan,{root:this.root,directory:path.join(this.directory,'attempts',attemptId),secret:env.VOLC_TTS_API_KEY,signal:this.controller.signal});
+    update((s,t)=>this.record(s,t,'checking'));
+    if(!voiceMatches(generated.report&&{...Z_VOICE,speaker:generated.report.voice,singingModel:generated.report.model},Z_VOICE)||!generated.report.enableMusic||!generated.report.generationDone)throw Error('voice_configuration_mismatch');
+    const checks=checkWav(generated.bytes),assetId=uid(),file=path.join(this.directory,'assets',checks.sha256+'.wav');
+    await fs.writeFile(file,generated.bytes,{mode:0o600});
+    update(()=>{});const libAsset=this.library.addAsset(recording.id,{file,segment:segment(plan),voice:Z_VOICE,provenance:'singing-service:'+assetId});this.library.acceptTechnical(libAsset.id);
+    update((s,t)=>{s.assets.push({id:assetId,libraryAssetId:libAsset.id,recordingId:recording.id,plan,voice:Z_VOICE,sha256:checks.sha256,durationMs:checks.durationMs,checks,approved:false,acceptance:{policy:'technical_audio_v1',sha256:checks.sha256,listeningVerified:false},createdAt:now(),provider:generated.report});t.assetId=assetId;this.record(s,t,'ready');});
+   }catch(e){if(!this.closed)this.change(s=>{const t=s.tasks.find(t=>t.id===id);if(t&&t.revision===revision&&t.status!=='cancelled')this.record(s,t,'failed',cleanError(e));});}
+  }finally{this.busy=false;this.activeId=null;this.controller=null;}
+ }
+ retry(id,owner,{acknowledgeUnknown=false}={}){return this.change(s=>{const t=this.owned(s,id,owner);if(t.status!=='failed'||t.attempt>=3)throw Error('retry_not_allowed');if(/unknown/.test(t.reason)&&!acknowledgeUnknown)throw Error('confirm_unknown_attempt');t.revision++;t.assetId=null;t.acknowledgeUnknown=acknowledgeUnknown;this.record(s,t,'queued');return t;});}
+ clarify(id,owner,text){if(typeof text!=='string'||!text.trim()||text.length>600)throw Error('invalid_request');return this.change(s=>{const t=this.owned(s,id,owner);if(t.status!=='needs_input')throw Error('clarification_not_allowed');t.requestText=JSON.stringify({originalRequest:t.originalText,previousPlan:t.plan,clarification:text});t.revision++;t.question='';this.record(s,t,'queued');return t;});}
+ cancel(id,owner){const t=this.change(s=>{const t=this.owned(s,id,owner);if(terminal.includes(t.status))return t;t.revision++;this.record(s,t,'cancelled','request_cancelled');return t;});if(this.activeId===id)this.controller?.abort();return t;}
+ async reserve(id,owner){
+  const snapshot=this.read(),task=this.owned(snapshot,id,owner);if(task.status!=='ready')throw Error('playback_not_ready');
+  await this.audio(task.assetId);
+  return this.change(s=>{const t=this.owned(s,id,owner);if(t.status!=='ready')throw Error('playback_not_ready');const a=s.assets.find(a=>a.id===t.assetId);
+   // Dispatch is not a playback receipt. Coalesce requests already waiting for this rendition.
+   for(const x of s.tasks)if(x.owner===owner&&x.assetId===a.id&&x.status==='ready')this.record(s,x,'scheduled','',{dispatched:true});
+   return {taskId:id,song:{id:a.id,title:a.plan.title,version:a.plan.version||a.plan.artist,section:a.plan.segment.description,src:'/api/singing/assets/'+a.id,sha256:a.sha256,playable:true,aCappella:true,readinessRef:'technical_audio_v1',voiceIdentity:a.voice.identity,voiceVersion:Number(a.voice.revision)}};
+  });
+ }
+ async audio(id){const a=this.read().assets.find(a=>a.id===id);if(!playableAsset(a)||a.unavailable||!voiceMatches(a.voice,this.read().voice))throw Error('asset_unavailable');if(a.recordingId&&this.library.material(a.recordingId).status==='review_rejected')throw Error('material_previously_rejected');if(a.libraryAssetId&&this.library.asset(a.libraryAssetId).review?.approved===false)throw Error('asset_unavailable');const bytes=await fs.readFile(path.join(this.directory,'assets',a.sha256+'.wav'));if(sha256(bytes)!==a.sha256)throw Error('asset_integrity_failed');checkWav(bytes);return bytes;}
+ async close(){this.closed=true;clearInterval(this.timer);this.controller?.abort();const maintenance=this.maintenance?.stop();while(this.busy)await new Promise(r=>setTimeout(r,20));await maintenance;this.library.close();this.db.close();await fs.unlink(this.lock).catch(()=>{});}
 }

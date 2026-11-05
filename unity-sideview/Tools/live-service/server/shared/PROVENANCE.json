@@ -83,6 +83,7 @@
     }
   ],
   "adaptations": [
-    "PlayEngine private deck persistence for native sessions"
+    "PlayEngine private deck persistence for native sessions",
+    "Native durable singing host adapter: NetEase retrieval, shared technical-accepted library and main-agent scheduling; no singing review UI or persistent playback receipt API (2026-11-05)."
   ]
 }

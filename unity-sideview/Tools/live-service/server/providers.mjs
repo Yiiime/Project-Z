@@ -8,7 +8,7 @@ import {SpeechDirector} from './shared/ui/speech-director.js';
 export const uid=()=>randomUUID();
 export const hash=b=>createHash('sha256').update(b).digest('hex');
 export function loadEnvironment(source){
- const env={};for(const [name,file] of [['DEEPSEEK_API_KEY','DeepSeek配置.env'],['VOLC_TTS_API_KEY','火山语音配置.env'],['VOLC_ASR_API_KEY','火山识别配置.env']]){
+ const env={};for(const [name,file] of [['DEEPSEEK_API_KEY','DeepSeek配置.env'],['VOLC_TTS_API_KEY','火山语音配置.env'],['VOLC_ASR_API_KEY','火山识别配置.env'],['NETEASE_SESSION_FILE','.env.local'],['FFMPEG_PATH','.env.local'],['Z_NETEASE_AUTO_RENEW','.env.local'],['Z_SONG_CATALOG','.env.local']]){
   env[name]=process.env[name]?.trim()||'';if(env[name])continue;
   for(const f of ['.env.local',file,'.env']){try{const s=fs.readFileSync(path.join(source,f),'utf8');const m=s.match(new RegExp('^\\s*(?:export\\s+)?'+name+'\\s*=\\s*(.*?)\\s*$','m'));if(!m)continue;const v=m[1];const q=v.match(/^(['"])(.*?)\1\s*(?:#.*)?$/);env[name]=q?q[2]:v.replace(/\s+#.*$/,'').trim();if(env[name])break;}catch{}}
  }return env;

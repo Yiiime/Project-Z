@@ -51,7 +51,7 @@ public sealed partial class LiveFeatureController {
         paper.Add(Action("×",CloseDialog,"dialog-close quiet"));dialogLayer.RegisterCallback<ClickEvent>(e=>{if(e.target==dialogLayer)CloseDialog();});
     }
     void OpenDialog(string eyebrow,string title) {dialogContent.Clear();dialogContent.Add(Text(eyebrow,"dialog-eyebrow"));dialogContent.Add(Text(title,"dialog-title"));dialogLayer.style.display=DisplayStyle.Flex;}
-    public bool HandleBack(){if(dialogLayer.style.display!=DisplayStyle.None){CloseDialog();return true;}if(songPanel.style.display!=DisplayStyle.None){ToggleSongs();return true;}if(emojiPopover.style.display!=DisplayStyle.None){emojiPopover.style.display=DisplayStyle.None;return true;}if(expanded){ToggleExpanded();return true;}return false;}
+    public bool HandleBack(){if(dialogLayer.style.display!=DisplayStyle.None){CloseDialog();return true;}if(emojiPopover.style.display!=DisplayStyle.None){emojiPopover.style.display=DisplayStyle.None;return true;}if(expanded){ToggleExpanded();return true;}return false;}
     void CloseDialog()=>dialogLayer.style.display=DisplayStyle.None;
     void ShowAudience(){OpenDialog("MOON ISLAND FRIENDS","今晚的小岛同伴");dialogContent.Add(Text("谢谢每一位来到小屋的朋友。此刻有 "+((int?)state?["room"]?["viewers"]??24186).ToString("N0")+" 人和你一起看月亮。","dialog-description"));AddLeaders(dialogContent);dialogContent.Add(Text("观众人数与相伴时光为演示数据","demo-note"));}
     void ShowProfile(int index){OpenDialog("MOON ISLAND RESIDENT",LeaderNames[index]);dialogContent.Add(Text("在月亮小岛收集一点星光，也把温柔留给认真生活的人。","dialog-description"));dialogContent.Add(Text("Lv. 12  ·  小岛居民     "+LeaderMinutes[index]+" 分钟  ·  一起看月亮","dialog-description"));dialogContent.Add(Action("向 TA 打招呼",()=>{CloseDialog();SendText("@"+LeaderNames[index]+" 晚上好，一起听 Z 占卜吧！");},"dialog-primary"));}
@@ -69,7 +69,6 @@ public sealed partial class LiveFeatureController {
         SettingSwitch("画面弹幕","右侧聊天记录始终保留",danmakuEnabled,value=>{if(value!=danmakuEnabled)ToggleDanmaku();});
         SettingSwitch("轻柔动画","减少肢体摆动和漂浮效果",character.Performance.Reduced,value=>{character.Performance.Reduced=value;PlayerPrefs.SetInt("ZLive.ReducedMotion",value?1:0);});
         dialogContent.Add(Action("好了，继续看月亮",CloseDialog,"dialog-primary"));
-        dialogContent.Add(Action("点歌准备与试听",()=>{CloseDialog();ToggleSongs();},"dialog-secondary"));
         dialogContent.Add(Action("重新开始对话",()=>{CloseDialog();_=RestartConversation();},"dialog-secondary"));
         dialogContent.Add(Text("模拟观众由模型生成。自由聊天的连接状态可在弹幕区查看。","demo-note"));
     }

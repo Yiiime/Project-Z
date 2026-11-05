@@ -87,10 +87,6 @@ Button:disabled { opacity: 1; color: #687b82; }
 .mood-label, .chat-tip, .stat { color: #53647c; }
 .companion-actions { flex-direction: row; flex-wrap: wrap; align-items: center; }
 .call-status, .song-note { white-space: normal; font-size: 13px; color: #655c59; margin-top: 5px; margin-bottom: 7px; }
-.song-panel { position: absolute; right: 18px; top: 18px; bottom: 18px; width: 460px; max-width: 85%; padding: 18px; background-color: #fff9f2; border-radius: 16px; border-width: 1px; border-color: #e2cbbc; }
-.song-request { min-height: 60px; margin-top: 6px; margin-bottom: 8px; }
-.song-card { padding: 10px; margin-top: 8px; background-color: #f4e9dd; border-radius: 8px; }
-.song-title { white-space: normal; font-size: 16px; color: #463a35; }
 .story-choices { margin-top: 6px; }
 .header { padding: 0 24px; border-bottom-width: 2px; border-bottom-color: #8d9ca3; }
 .header > .back { width: 63px; white-space: normal; font-size: 15px; padding: 0; color: #687b82; }
