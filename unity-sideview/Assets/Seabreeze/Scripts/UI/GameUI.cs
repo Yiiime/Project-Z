@@ -225,6 +225,7 @@ namespace Seabreeze
         void Update()
         {
             if(!initialized||session==null)return;
+            if(session.Memory!=null&&session.Memory.PlayerChatOpen){HideInteraction();return;}
             if(overlayMode=="live")
             {
                 if(Application.isFocused&&GameInput.Pressed(Key.Escape)&&!(nativeLive?.HandleBack()??false))CloseOverlay();

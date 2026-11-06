@@ -36,6 +36,7 @@ namespace Seabreeze
         float speed, blockedTime, movementTime, movementTimeout, nextDecisionTime;
         int simulatedIndex;
         bool initialized, available, wasBlocked = true;
+        bool interactionHold;
 
         public string ActorId => presence != null ? presence.npcId : "";
         public bool IsReady => initialized;
@@ -50,7 +51,24 @@ namespace Seabreeze
             && presence.isActiveAndEnabled && session != null && session == GameSession.Instance && session.IsReady
             && world != null && world == WorldDirector.Instance && stage != null && world.Stage == stage
             && presence.location == session.CurrentPlace && gameObject.scene == stage.gameObject.scene;
-        bool CanAct => InCurrentWorld && !session.InputBlocked && !world.IsTransitioning && Time.timeScale > 0;
+        bool CanAct => InCurrentWorld && !session.NonPlayerInputBlocked && !interactionHold && !world.IsTransitioning && Time.timeScale > 0;
+        public bool InteractionHeld => interactionHold;
+        public void SetInteractionHold(bool value)
+        {
+            if (value && !interactionHold) Interrupt("conversation_hold");
+            interactionHold = value;
+            if (!value) resolved.Remove("conversation");
+        }
+        public bool CanReachConversationPoint(Vector2 point) => InCurrentWorld && Finite(point) && IsSupportedTarget(new NpcDestination("conversation", point));
+        public bool MoveForConversation(Vector2 point, int facing)
+        {
+            if (!CanAct || !CanReachConversationPoint(point)) return false;
+            resolved["conversation"] = new NpcDestination("conversation", point, facing);
+            var request = BeginDecision();
+            if (request == null) return false;
+            var output = new NpcMoveOutput { dialogue = "", action = new NpcMoveCommand { type = "move", target = "conversation", action_id = "move_conversation" }, info = new NpcMoveOutput.ActorInfo { actor_id = ActorId } };
+            return AcceptDecision(request.request_id, JsonUtility.ToJson(output), out _);
+        }
 
         public void Configure(NpcPresence owner, CharacterVisual artwork, NpcDestination[] points)
         {

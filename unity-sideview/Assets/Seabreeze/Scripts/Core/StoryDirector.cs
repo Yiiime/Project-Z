@@ -16,6 +16,7 @@ namespace Seabreeze
             get
             {
                 if (!session) return "沿着海边走走";
+                if (MemoryRuntimeConfig.Enabled) return session.State.day >= 4 ? "全岛公告：小岛将要毁灭。听听岛民各自的打算。" : "走近岛民按 E 交谈；长椅和咖啡可以推进时段。";
                 if (!string.IsNullOrEmpty(session.State.ending)) return "这一日，已经有了自己的名字。还可以继续散步。";
                 if (!Has("postcard_found")) return "海边长椅旁，有一张被风吹来的旧明信片。";
                 if (!Has("cafe_story")) return "去街道左侧的「潮汐」咖啡馆，问问阿遥。";
@@ -33,6 +34,7 @@ namespace Seabreeze
         public bool IsAvailable(string id)
         {
             if (!session || !session.IsReady) return false;
+            if (MemoryRuntimeConfig.Enabled && SevenCharacterCatalog.Find(id) != null) return session.Memory != null && session.Memory.CanInteract(id);
             if (id.StartsWith("npc_", StringComparison.Ordinal))
             {
                 var npc = session.Database ? session.Database.FindNpc(id) : null;
@@ -42,6 +44,11 @@ namespace Seabreeze
         }
         public string PromptFor(string id)
         {
+            if (MemoryRuntimeConfig.Enabled)
+            {
+                var actor = SevenCharacterCatalog.Find(id);
+                if (actor != null) return "和" + actor.displayName + "交谈";
+            }
             switch (id)
             {
                 case "npc_mio": return "和澪交谈";
@@ -63,6 +70,13 @@ namespace Seabreeze
         public void Interact(string id)
         {
             if (!session || session.InputBlocked || !IsAvailable(id)) return;
+            if (MemoryRuntimeConfig.Enabled)
+            {
+                if (SevenCharacterCatalog.Find(id) != null) { session.Memory?.BeginPlayerChat(id); return; }
+                if (id == "bench" || id == "lighthouse_bench" || id == "coffee") { session.Clock.Advance(); return; }
+                Notify(id == "noticeboard" && session.State.day >= 4 ? "小岛将要毁灭。" : "海风吹过小岛，你留意着身边的人和事。");
+                return;
+            }
             switch (id)
             {
                 case "npc_aya":
@@ -128,6 +142,7 @@ namespace Seabreeze
         }
         public void Evaluate()
         {
+            if (MemoryRuntimeConfig.Enabled) { session?.Memory?.EnsureDay4(); return; }
             if (evaluating || !session || !session.Database) return;
             evaluating = true;
             try
@@ -152,6 +167,12 @@ namespace Seabreeze
         {
             phone.Clear();
             if (!session) return;
+            if (MemoryRuntimeConfig.Enabled)
+            {
+                phone.Add("小岛通讯\n走近岛民按 E 交谈，也可以旁听附近正在发生的交流。");
+                if (session.State.memory != null && session.State.memory.day4Published) phone.Add("全岛公告\n小岛将要毁灭。");
+                return;
+            }
             phone.Add("汐风镇天气\n" + session.Clock.WeatherLabel + "。傍晚海堤风大，记得带件外套。");
             phone.Add("民宿房东 · 08:54\n钥匙放在门口的蓝罐子里。晚点回来也没关系，灯给你留着。今天不用赶路。");
             if (Has("mio_met") || Has("chen_story"))

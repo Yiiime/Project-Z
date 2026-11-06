@@ -12,11 +12,13 @@ namespace Seabreeze
         public DialogueRunner Dialogue { get; private set; }
         public StoryDirector Story { get; private set; }
         public StoryDatabase Database { get; private set; }
+        public MemoryGameController Memory { get; internal set; }
         public event Action Changed;
         public event Action<PlaceId> TravelRequested;
         public bool IsReady { get; private set; }
         bool overlay;
-        public bool InputBlocked => overlay || (Dialogue && Dialogue.IsOpen);
+        public bool NonPlayerInputBlocked => overlay || (Dialogue && Dialogue.IsOpen);
+        public bool InputBlocked => NonPlayerInputBlocked || (Memory != null && Memory.PlayerChatOpen);
         public PlaceId CurrentPlace => State != null && Enum.TryParse(State.place, out PlaceId p) ? p : PlaceId.Street;
 
         void Awake()
@@ -30,6 +32,7 @@ namespace Seabreeze
             Instance = this;
             Database = Resources.Load<StoryDatabase>("Content/StoryDatabase");
             State = SaveRepository.Load();
+            if (MemoryRuntimeConfig.Enabled && State.memory == null) State.memory = new MemorySaveState();
             Clock = GetComponent<GameClock>() ?? gameObject.AddComponent<GameClock>();
             Dialogue = GetComponent<DialogueRunner>() ?? gameObject.AddComponent<DialogueRunner>();
             Story = GetComponent<StoryDirector>() ?? gameObject.AddComponent<StoryDirector>();
@@ -41,10 +44,10 @@ namespace Seabreeze
             if (!State.started)
             {
                 State.started = true;
-                Story.AddJournal("来到汐风镇的第一天。今天没有行程，也许先沿着海边走走。咖啡馆在街道左侧，灯塔在右侧。");
-                Dialogue.StartDialogue("intro");
+                if (MemoryRuntimeConfig.Enabled) Story.AddJournal("来到小岛。可以走近岛民按 E 交谈；坐长椅或喝咖啡推进游戏时段。");
+                else { Story.AddJournal("来到汐风镇的第一天。今天没有行程，也许先沿着海边走走。咖啡馆在街道左侧，灯塔在右侧。"); Dialogue.StartDialogue("intro"); }
             }
-            else if (!string.IsNullOrEmpty(State.resumeDialogue)) Dialogue.StartDialogue(State.resumeDialogue);
+            else if (!MemoryRuntimeConfig.Enabled && !string.IsNullOrEmpty(State.resumeDialogue)) Dialogue.StartDialogue(State.resumeDialogue);
             Story.Evaluate();
             NotifyChanged();
         }
@@ -58,22 +61,36 @@ namespace Seabreeze
         public bool Save()
         {
             if (State == null) return false;
+            Memory?.BeforeSave();
             bool saved = SaveRepository.Write(State);
             if (!saved && Story) Story.Notify("暂时无法写入存档，当前进度仍保留在本次游戏中。");
             return saved;
         }
         public void NewGame()
         {
+            Memory?.BeforeStateChange();
             Dialogue.Cancel();
             State = new SaveData { started = true };
+            if (MemoryRuntimeConfig.Enabled) State.memory = new MemorySaveState();
             overlay = false;
             Story.ResetTransientState();
-            Story.AddJournal("来到汐风镇的第一天。今天没有行程，也许先沿着海边走走。咖啡馆在街道左侧，灯塔在右侧。");
+            Story.AddJournal(MemoryRuntimeConfig.Enabled ? "新的一次小岛生活。走近岛民按 E 交谈。" : "来到汐风镇的第一天。今天没有行程，也许先沿着海边走走。咖啡馆在街道左侧，灯塔在右侧。");
             Clock.Refresh();
             TravelRequested?.Invoke(PlaceId.Street);
-            Dialogue.StartDialogue("intro");
+            if (!MemoryRuntimeConfig.Enabled) Dialogue.StartDialogue("intro");
+            Memory?.AfterStateChange();
             NotifyChanged();
             Save();
+        }
+        public void LoadSavedGame()
+        {
+            if (!MemoryRuntimeConfig.Enabled) return;
+            Memory?.BeforeStateChange(); Dialogue.Cancel();
+            State = SaveRepository.Load();
+            if (State.memory == null) State.memory = new MemorySaveState();
+            State.started = true; overlay = false; Story.ResetTransientState(); Clock.Refresh();
+            TravelRequested?.Invoke(CurrentPlace);
+            Memory?.AfterStateChange(); NotifyChanged();
         }
         public void Travel(PlaceId place)
         {

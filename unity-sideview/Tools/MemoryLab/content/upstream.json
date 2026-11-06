@@ -1,0 +1,27 @@
+{
+  "source": "NPC Natural Memory Lab, demo/lib",
+  "version": "0.1.0",
+  "files": [
+    {
+      "file": "natural-memory.mjs",
+      "sourceSha256": "88ee5ef99a427de9d4b1dbbcb72f44684c998fba0adebad80dda76d55ba5c0c4"
+    },
+    {
+      "file": "natural-engine.mjs",
+      "sourceSha256": "877f66f43436a600d4e376ef763e6f3655c360d3f93b21af05cb95ddca476373"
+    },
+    {
+      "file": "provider.mjs",
+      "sourceSha256": "0a19c58b27e1a1359e4e0a3c023c9656cc4f5975358b229979aa4c6476c2feec"
+    },
+    {
+      "file": "store.mjs",
+      "sourceSha256": "b1662a2d75b420eed69206e13c2577560c25819f2d3cfb0202d437d2754c070e"
+    }
+  ],
+  "worldbook": {
+    "name": "七人世界书_七人人设_MD_V0.7.zip",
+    "sha256": "d14db9b3a1a42e0c04e6ecb4502270ba7fb2f70498aa4ca38ea0db720c65e282",
+    "note": "Character facts curated from the seven files; unconfirmed route proposals and real-world inspiration names are not imported as facts."
+  }
+}

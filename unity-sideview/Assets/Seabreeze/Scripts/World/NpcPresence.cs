@@ -11,6 +11,8 @@ namespace Seabreeze
         public NpcMovementController Movement { get; private set; }
         public CharacterVisual Visual { get; private set; }
         public bool IsPresent { get; private set; }
+        public NpcData RuntimeData { get; set; }
+        public Transform ConversationPartner { get; set; }
         GameObject visual;
         Interactable interaction;
         bool subscribed;
@@ -54,6 +56,12 @@ namespace Seabreeze
             if (visual == null || !visual.activeSelf || WorldDirector.Instance == null || WorldDirector.Instance.Player == null)
                 return;
             if (Movement != null && Movement.IsMoving) return;
+            if (ConversationPartner != null)
+            {
+                float direction = ConversationPartner.position.x - transform.position.x;
+                if (Mathf.Abs(direction) > .01f) visual.transform.localScale = new Vector3(Mathf.Sign(direction) * 1.17f, 1.17f, 1);
+                return;
+            }
             float dx = WorldDirector.Instance.Player.position.x - transform.position.x;
             if (Mathf.Abs(dx) > .6f && Mathf.Abs(dx) < 6)
                 visual.transform.localScale = new Vector3(Mathf.Sign(dx) * 1.17f, 1.17f, 1);
@@ -64,7 +72,7 @@ namespace Seabreeze
             var s = GameSession.Instance;
             if (s == null)
                 return;
-            var data = s.Database != null ? s.Database.FindNpc(npcId) : null;
+            var data = RuntimeData != null ? RuntimeData : s.Database != null ? s.Database.FindNpc(npcId) : null;
             bool present = data != null && data.IsPresent(location, s.Clock.Period, s.State.flags);
             IsPresent = present;
             if (visual != null)
