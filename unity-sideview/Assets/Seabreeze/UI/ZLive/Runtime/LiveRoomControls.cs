@@ -62,8 +62,8 @@ public sealed partial class LiveFeatureController {
     void ShowShare(){OpenDialog("SHARE A LITTLE MOONLIGHT","把小屋分享给朋友");dialogContent.Add(Text("Z 的聊天小屋 · 月亮小岛","dialog-description"));dialogContent.Add(Action("复制邀请文字",()=>{GUIUtility.systemCopyBuffer="来月亮小岛，一起听 Z 聊聊天。";CloseDialog();Toast("邀请文字已复制");},"dialog-primary"));}
     void ShowSettings() {
         OpenDialog("MAKE YOURSELF AT HOME","让小屋更合你心意");
-        var mode=new DropdownField("角色形象",new List<string>{"Live2D 示例 · Haru","Z 的原画"},mangaMode?1:0);mode.RegisterValueChangedCallback(e=>SetCharacterMode(e.newValue=="Z 的原画"));dialogContent.Add(mode);
-        dialogContent.Add(Text("Haru 是 Live2D Inc. 官方示例，暂时代替 Z 展示动态效果。","demo-note"));
+        var mode=new DropdownField("角色形象",new List<string>{"Z · Live2D","Z 的原画"},mangaMode?1:0);mode.RegisterValueChangedCallback(e=>SetCharacterMode(e.newValue=="Z 的原画"));dialogContent.Add(mode);
+        dialogContent.Add(Text("Z 会随着聊天展现表情和动作，说话与唱歌时同步口型。","demo-note"));
         SettingSwitch("Vivi 2.0 语音",(bool?)state?["room"]?["voiceAvailable"]==true?"语音服务已配置":"语音尚未配置，文字互动照常进行",!muted,value=>{if(value==muted)ToggleSound();});
         var volumeRow=Box("settings-row");volumeRow.Add(Text("语音音量","settings-label"));volumeRow.Add(Box("spacer"));var volume=new Slider(0,100){value=audioPlayer.Source.volume*100,showInputField=true};volume.style.width=150;volume.RegisterValueChangedCallback(e=>{audioPlayer.Source.volume=e.newValue/100;PlayerPrefs.SetFloat("ZLive.Volume",audioPlayer.Source.volume);_=SyncAudioCapabilities();});volumeRow.Add(volume);dialogContent.Add(volumeRow);
         SettingSwitch("画面弹幕","右侧聊天记录始终保留",danmakuEnabled,value=>{if(value!=danmakuEnabled)ToggleDanmaku();});
