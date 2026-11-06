@@ -10,16 +10,16 @@ import {SingingService} from '../server/singing/service.mjs';
 import {LiveSongLibrary} from '../server/song-library/index.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const plan={intent:'request',title:'晚安',artist:'颜人中',version:'',question:'',segment:{kind:'chorus',ordinal:1,description:'第一段完整副歌',lyricStart:''}};
-async function fixture(t,{transcribe}={}) {
+async function fixture(t,{transcribe,tokens}={}) {
  const directory=fs.mkdtempSync(path.join(os.tmpdir(),'z-native-http-'));
  const singing=await SingingService.open({root,directory:path.join(directory,'singing'),autoStart:false,sources:[],environment:()=>({}),parse:async()=>plan});
  const library=new LiveSongLibrary({root,directory:path.join(directory,'library'),singing});
  const providers=new Providers({VOLC_ASR_API_KEY:'fake-for-injected-asr'},{singing,singingContext:()=>singing.context('local-owner')});
- const {server,sessions}=await createLiveServer({root:path.join(directory,'sessions'),providers,artifacts:new ArtifactStore(path.join(directory,'artifacts')),songRoot:path.join(root,'server/assets/songs'),token:'fixture-token',library,transcribe});
+ const {server,sessions}=await createLiveServer({root:path.join(directory,'sessions'),providers,artifacts:new ArtifactStore(path.join(directory,'artifacts')),songRoot:path.join(root,'server/assets/songs'),token:'fixture-token',tokens,library,transcribe});
  await new Promise(r=>server.listen(0,'127.0.0.1',r));
  t.after(async()=>{server.closeAllConnections();await new Promise(r=>server.close(r));await singing.close();library.close();fs.rmSync(directory,{recursive:true,force:true});});
  const url=`http://127.0.0.1:${server.address().port}`;
- const request=(route,body,key=crypto.randomUUID())=>fetch(url+route,{method:body?'POST':'GET',headers:{Authorization:'Bearer fixture-token',...(body?{'Content-Type':'application/json','Idempotency-Key':key}:{})},...(body?{body:JSON.stringify(body)}:{})});
+ const request=(route,body,key=crypto.randomUUID(),token='fixture-token')=>fetch(url+route,{method:body?'POST':'GET',headers:{Authorization:'Bearer '+token,...(body?{'Content-Type':'application/json','Idempotency-Key':key}:{})},...(body?{body:JSON.stringify(body)}:{})});
  const response=await request('/v1/live/sessions',{protocolVersion:1,mode:'private',capabilities:{audioEnabled:true}}),state=await response.json(),s=sessions.get(state.sessionId);clearInterval(s.engine._timer);
  const envelope=extra=>({protocolVersion:1,sessionId:s.id,epoch:s.epoch,...extra});
  s.control(envelope({action:'resume'}));return {request,url,s,singing,library,envelope};
@@ -86,4 +86,25 @@ test('dictation returns a draft without joining or publishing and rejects a late
  s.engine.enabled=true;s.input(f.envelope({type:'viewer.message',payload:{text:'语音输入草稿'}}));assert(s.snapshot().room.messages.some(m=>m.text==='语音输入草稿'));
  delayed=true;const pending=send();await began;s.input(f.envelope({type:'call.join',payload:{}}));finish();
  assert.equal((await pending).status,409);assert.equal((await send()).status,409);assert(!s.engine.inbox.some(m=>m.text==='迟到的草稿'));
+});
+
+test('office identities isolate sessions, voice, event streams and singing operations',async t=>{
+ const f=await fixture(t,{tokens:{alice:'fixture-token',bob:'bob-token'}});
+ const other=(route,body,key='same-key-123')=>f.request(route,body,key,'bob-token');
+ for(const suffix of ['', '/events','/artifacts/'+ 'a'.repeat(64)])assert.equal((await other('/v1/live/sessions/'+f.s.id+suffix)).status,404);
+ assert.equal((await other('/v1/live/sessions/'+f.s.id+'/control',f.envelope({action:'end'}))).status,404);
+ assert.equal((await fetch(f.url+'/v1/live/sessions/'+f.s.id+'/asr',{method:'POST',headers:{Authorization:'Bearer bob-token','Content-Type':'audio/pcm'},body:Buffer.alloc(32)})).status,404);
+ const body={protocolVersion:1,mode:'private',capabilities:{}};
+ const a=await(await f.request('/v1/live/sessions',body,'same-create-key')).json();
+ const b=await(await other('/v1/live/sessions',body,'same-create-key')).json();assert.notEqual(a.sessionId,b.sessionId);
+ const song={text:'唱晚安',sourceId:'same-source',sessionId:f.s.id};
+ const ta=await(await f.request('/api/singing/tasks',song,'same-task-key')).json();
+ const tb=await(await other('/api/singing/tasks',song,'same-task-key')).json();assert.notEqual(ta.id,tb.id);
+ const state=await(await other('/api/singing/state')).json();assert.deepEqual(state.tasks.map(x=>x.id),[tb.id]);
+ assert.equal((await other('/api/singing/tasks/'+ta.id+'/cancel',{})).status,409);
+ assert.equal((await f.request('/health',null,undefined,'wrong-token')).status,401);
+ assert.equal(f.s.owner,'alice');assert.equal(f.s.providers.options.owner,'alice');
+ assert.equal((await f.s.providers.singingFetch('/api/singing/state').then(r=>r.json())).tasks[0].id,ta.id);
+ const raced=await Promise.all(Array.from({length:4},(_,i)=>other('/v1/live/sessions',body,'race-key-'+i)));
+ assert.equal(raced.filter(r=>r.status===201).length,1);assert.equal(raced.filter(r=>r.status===429).length,3);
 });

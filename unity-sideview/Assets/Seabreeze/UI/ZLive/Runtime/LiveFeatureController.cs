@@ -14,20 +14,24 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     Label status,caption,activity,characterStatus;ScrollView chat;TextField input;Button pause;VisualElement tarot,drawing;DrawingPresenter canvas;JObject state;
     readonly ConcurrentQueue<JObject> events=new ConcurrentQueue<JObject>();readonly ConcurrentQueue<string> connections=new ConcurrentQueue<string>();
     readonly Dictionary<string,CancellationTokenSource> running=new Dictionary<string,CancellationTokenSource>();readonly Dictionary<string,JObject> outcomes=new Dictionary<string,JObject>();readonly HashSet<string> messageIds=new HashSet<string>();
-    readonly CancellationTokenSource life=new CancellationTokenSource();readonly HashSet<TaskCompletionSource<bool>> frameWaiters=new HashSet<TaskCompletionSource<bool>>();float heartbeatAt;bool connected,locallyPaused=true,disposed,leaving;string pendingBase,pendingToken;const string SessionKey="ZLive.LocalSession";
+    readonly CancellationTokenSource life=new CancellationTokenSource();readonly HashSet<TaskCompletionSource<bool>> frameWaiters=new HashSet<TaskCompletionSource<bool>>();float heartbeatAt;bool connected,locallyPaused=true,disposed,leaving;string pendingBase,pendingToken,pendingPin;string SessionKey {get {using(var sha=System.Security.Cryptography.SHA256.Create())return "ZLive.Session."+BitConverter.ToString(sha.ComputeHash(System.Text.Encoding.UTF8.GetBytes(pendingBase+"|"+pendingToken))).Replace("-","");}}
     public Action ExitRequested;
     public void Configure(string serviceUrl,string gameSessionToken){pendingBase=serviceUrl;pendingToken=gameSessionToken;}
     async void Start(){try{character=gameObject.AddComponent<CharacterPresenter>();character.Initialize();audioPlayer=gameObject.AddComponent<LiveAudioPlayer>();audioPlayer.Character=character;character.Audio=audioPlayer.Source;audioPlayer.Frame=NextFrame;audioPlayer.Receipt=Report;audioPlayer.Caption=s=>caption.text=s;BuildUI();BuildCompanionUI();
+#if !UNITY_EDITOR
+        if(string.IsNullOrEmpty(pendingBase))ReadConnection(Path.Combine(Application.dataPath,"Resources","zlive-connection.json"));
+#endif
         if(string.IsNullOrEmpty(pendingBase)) {
             string file=Path.Combine(Application.persistentDataPath,"ZLive","local-connection.json");
-            if(File.Exists(file)){var c=JObject.Parse(File.ReadAllText(file));pendingBase=(string)c["baseUrl"];pendingToken=(string)c["token"];}
+            if(File.Exists(file)){ReadConnection(file);}
         }
 #if UNITY_EDITOR
-        if(string.IsNullOrEmpty(pendingBase)){string file=Path.GetFullPath(Path.Combine(Application.dataPath,"../UserSettings/ZLive/local-connection.json"));if(File.Exists(file)){var c=JObject.Parse(File.ReadAllText(file));pendingBase=(string)c["baseUrl"];pendingToken=(string)c["token"];}}
+        if(string.IsNullOrEmpty(pendingBase)){string file=Path.GetFullPath(Path.Combine(Application.dataPath,"../UserSettings/ZLive/local-connection.json"));if(File.Exists(file)){ReadConnection(file);}}
 #endif
         if(string.IsNullOrEmpty(pendingBase)){status.text="尚未连接 · 请先启动直播服务，再重新进入";return;}await Enter();
     }catch(Exception e){Error(e);}}
-    public async Task Enter(){transport=new LiveTransport(pendingBase,pendingToken);transport.Event+=e=>events.Enqueue(e);transport.Connection+=s=>connections.Enqueue(s);audioPlayer.Transport=transport;
+    void ReadConnection(string file){if(!File.Exists(file))return;var c=JObject.Parse(File.ReadAllText(file));pendingBase=(string)c["baseUrl"];pendingToken=(string)c["token"];pendingPin=(string)c["certificateSha256"];}
+    public async Task Enter(){transport=new LiveTransport(pendingBase,pendingToken,pendingPin);transport.Event+=e=>events.Enqueue(e);transport.Connection+=s=>connections.Enqueue(s);audioPlayer.Transport=transport;
         state=await transport.Enter(PlayerPrefs.GetString(SessionKey,""),!muted&&audioPlayer.Source.volume>0,character.Ready);if(leaving||disposed){await transport.Control("end");return;}PlayerPrefs.SetString(SessionKey,transport.SessionId);PlayerPrefs.Save();ApplyState(state);await transport.Control("resume");
         // A new Unity process cannot prove an old audio instance completed. Never replay it silently.
         foreach(JObject c in (JArray)state["pendingCommands"]){if((string)c["type"]=="host.present"||(string)c["type"]=="media.play"||(string)c["type"]=="audience.present")await Report(c,new JObject{{"status","interrupted"},{"reason","client_restarted"}});else Queue(c);}

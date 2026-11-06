@@ -29,7 +29,7 @@
 
 无供应商密钥时可验证界面、服务连接和返回探索；AI 生成与对应语音能力需要配置后使用。供应商密钥只由 Node 服务读取。
 
-独立 Player 从 `Application.persistentDataPath/ZLive/local-connection.json` 读取同格式连接文件。部署宿主也可在 `LiveFeatureController.Start` 前调用 `Configure(serviceUrl, gameSessionToken)`。连接使用 HTTPS，回环地址允许 HTTP。当前服务面向单机开发者，使用一个本机 Bearer token；多人账号隔离和公开服务器部署需要单独接入游戏登录系统。
+独立 Player 从 `Application.persistentDataPath/ZLive/local-connection.json` 读取同格式连接文件。部署宿主也可在 `LiveFeatureController.Start` 前调用 `Configure(serviceUrl, gameSessionToken)`。连接使用 HTTPS，回环地址允许 HTTP。默认本机模式使用一个 Bearer token。办公室模式支持六份独立访问凭据及会话隔离，Mac 包优先读取包内连接配置，详见 [办公室部署](OFFICE-LAN.md)。公开服务器部署仍需单独接入游戏登录系统。
 
 ## 操作
 

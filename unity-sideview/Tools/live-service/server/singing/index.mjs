@@ -5,7 +5,7 @@ export async function singingRequest(service,owner,route,body){
   const p=new URL(route,'http://127.0.0.1').pathname;
   if(p==='/api/singing/state'&&!body)return reply(service.overview(owner));
   const asset=p.match(/^\/api\/singing\/assets\/([a-zA-Z0-9-]+)$/);
-  if(asset&&!body)return new Response(await service.audio(asset[1]),{headers:{'Content-Type':'audio/wav','Cache-Control':'no-store'}});
+  if(asset&&!body){const state=service.read();if(!state.assets.some(a=>a.id===asset[1]&&a.approved===true)&&!state.tasks.some(t=>t.owner===owner&&t.assetId===asset[1]&&['ready','scheduled'].includes(t.status)))return Response.json({error:'not_found'},{status:404});return new Response(await service.audio(asset[1]),{headers:{'Content-Type':'audio/wav','Cache-Control':'no-store'}});}
   if(p==='/api/singing/tasks'&&body)return reply(service.submit({...body,owner}));
   const task=p.match(/^\/api\/singing\/tasks\/([a-zA-Z0-9-]+)\/(retry|clarify|cancel|play)$/);
   if(task&&body){const [,id,action]=task;

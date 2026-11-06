@@ -16,15 +16,24 @@ public sealed class LiveTransport : IDisposable {
     public static JObject ParseWireJson(string json) {
         using(var text=new StringReader(json))using(var reader=new JsonTextReader(text){DateParseHandling=DateParseHandling.None})return JObject.Load(reader);
     }
-    readonly HttpClient http = new HttpClient { Timeout = Timeout.InfiniteTimeSpan };
+    readonly HttpClient http;
     readonly CancellationTokenSource life = new CancellationTokenSource();
     public string BaseUrl {get;} public string Token {get;}
     public string SessionId {get; private set;} public string Lease {get; private set;} public int Epoch {get; private set;}
     public long Cursor {get;set;}
     public event Action<JObject> Event; public event Action<string> Connection;
-    public LiveTransport(string baseUrl,string token) {
+    public LiveTransport(string baseUrl,string token,string certificateSha256=null) {
         var uri=new Uri(baseUrl);
         if(uri.Scheme!="https" && !(uri.Scheme=="http" && uri.IsLoopback))throw new Exception("HTTPS is required outside loopback.");
+        var handler=new HttpClientHandler{AllowAutoRedirect=false,UseProxy=false};
+        if(!string.IsNullOrEmpty(certificateSha256)) {
+            if(uri.Scheme!="https"||!System.Text.RegularExpressions.Regex.IsMatch(certificateSha256,"^[a-f0-9]{64}$"))throw new Exception("invalid_certificate_pin");
+            handler.ServerCertificateCustomValidationCallback=(request,certificate,chain,errors)=>{
+                if(certificate==null||request.RequestUri.Host!=uri.Host)return false;
+                using(var sha=System.Security.Cryptography.SHA256.Create())return BitConverter.ToString(sha.ComputeHash(certificate.RawData)).Replace("-","").ToLowerInvariant()==certificateSha256;
+            };
+        }
+        http=new HttpClient(handler){Timeout=Timeout.InfiniteTimeSpan};
         BaseUrl=baseUrl.TrimEnd('/');Token=token;http.DefaultRequestHeaders.Authorization=new AuthenticationHeaderValue("Bearer",token);
     }
     public string Route(string suffix="")=>"/v1/live/sessions/"+SessionId+suffix;
