@@ -26,6 +26,7 @@ namespace Seabreeze
         public float playerX = -8f;
         public bool started;
         public string resumeDialogue = "";
+        public MemorySaveState memory;
 
         public void Sanitize()
         {

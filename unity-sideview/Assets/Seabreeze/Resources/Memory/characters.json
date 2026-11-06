@@ -1,0 +1,9 @@
+{"version":1,"actors":[
+{"id":"c01","displayName":"留洋","occupation":"码头船长","appearance":3,"place":"Street","x":6,"color":"#E4B972"},
+{"id":"c02","displayName":"晴子","occupation":"花店老板","appearance":2,"place":"Street","x":-6,"color":"#EDA6B4"},
+{"id":"c03","displayName":"梨园","occupation":"工程师","appearance":3,"place":"Lighthouse","x":1,"color":"#97BCCB"},
+{"id":"c04","displayName":"伊停","occupation":"Z的同学／发小","appearance":1,"place":"Street","x":0,"color":"#A8CFAD"},
+{"id":"c05","displayName":"周结","occupation":"照相馆老板","appearance":3,"place":"Cafe","x":-2,"color":"#C5AFD9"},
+{"id":"c06","displayName":"正义","occupation":"岛上警察","appearance":1,"place":"Street","x":12,"color":"#91BFE2"},
+{"id":"c07","displayName":"星亮","occupation":"岛上医生","appearance":3,"place":"Cafe","x":3,"color":"#9FD8CA"}
+]}

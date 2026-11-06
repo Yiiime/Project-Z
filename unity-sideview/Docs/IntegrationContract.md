@@ -45,3 +45,20 @@ Arrival is checked against physical position, not elapsed animation time. Dialog
 Player/NPC pass-through follows the existing exploration behavior; NPC bodies cannot seal the horizontal route. Environment and peer-NPC obstructions stop movement with a truthful result. One-way benches retain their original ground-level pass-through behavior. `CharacterVisual` receives actual velocity; existing NPC art remains single-frame with prototype motion unless role-specific walk frames are supplied. This is same-scene movement, not an offscreen scheduler or cross-scene NPC navigation/persistence system.
 
 Verification: `Seabreeze/Verify NPC Movement` or `-executeMethod Seabreeze.Editor.NpcMovementVerification.Run`. Optional arguments: `-npc-save-root <absolute temporary directory>`, `-npcReport <json path>`, `-npcCaptureDir <directory>`. The editor-only `SaveRepository.VerificationDirectory` is established before Play mode and cleared after exit; standalone/default save paths are unchanged. The NPC suite writes its report and screenshots outside tracked content and does not invoke the original story walkthrough's save-reset workflow on a player's normal save.
+
+## Seven-character memory mode
+
+`Resources/Memory/integration.json` enables the mode and supplies a local service URL without credentials. `-memoryDisabled` preserves the original story mode. Seven-mode saves use `seven-memory-save.json`; legacy saves keep their original name. Explicit QA save roots are isolated.
+
+| Owner | Contract |
+| --- | --- |
+| `MemoryGameController` | Bridges game time, Day4, actual observations and utterances. Holds no model credentials. |
+| `MemoryLabClient` | Nonblocking local HTTP, durable event outbox, checkpoint/revision acceptance and per-load run identity. A stale response cannot replace a later checkpoint. |
+| `SevenNpcSpawner` | Runtime assembly in existing scenes; keeps independent character IDs, presence and saved positions. Original scenes/prefabs are not rebuilt. |
+| `NpcConversationCoordinator` | One bounded session, participant reservations, approach/face/speak/end; separate generation per speaker. Player intervention or context loss cancels unspoken results. |
+| `NpcMovementController` | `SetInteractionHold`, `CanReachConversationPoint` and `MoveForConversation` use engine-owned targets and existing collision checks. Only the participants receive holds. |
+| Memory Lab service | Public directory and private knowledge projection, source-attributed extraction/reflection, game-validated events, idempotent receipts and snapshot restoration. |
+
+`NonPlayerInputBlocked` retains existing global menus/legacy-dialogue semantics. A seven-mode player text box only adds player input blocking; it does not freeze unrelated NPC movement. Day4 is persisted independently of scene presence and model availability.
+
+API and model setup: `Tools/MemoryLab/README.md`. Full playtest guide: `Docs/MemoryIntegration.md`. Runtime tests distinguish real and simulated providers; gameplay does not silently switch to a fixed-response fallback.
