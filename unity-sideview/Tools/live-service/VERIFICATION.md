@@ -69,3 +69,13 @@ PR 保持草稿，等待用户手工体验验收。
 验证过程的边界：第一次播放验证的注入 TTS 使用 WAV，与现有 MP3 通道不符；修正测试数据后重跑。第二次驱动漏观察瞬时 ready 状态而停在等待，产品已经播放完成；修正验证驱动后第三次完整通过。Unity 自带 `SearchDatabase` 索引异常单独记录，不视为已修复。未重新进行真人麦克风、真实模型选歌/生成、网易云扫码及线上下载的完整联调；没有本轮手工音质或视觉验收。技术检查不保证旋律、片段和音色正确，参考音频未传入 Vivi。
 
 本机日志：`/private/tmp/z-all-tests.log`、`/private/tmp/z-final-team-check.log`、`/private/tmp/z-singing-unity-compile.log`、`/private/tmp/z-singing-unity-play-3.log`、`/private/tmp/z-singing-smoke-server.log`。本地 FFmpeg 路径位于 Git 忽略的 `.env.local`，不随交付分发。用户验收后再按指示上传 GitHub。
+
+## 2026-11-06 办公室直播接入（草稿 PR）
+
+- 仅直播服务、两个直播客户端文件及新增 Mac 构建编辑器脚本；记忆文件未修改。
+- `npm test`：70/70 通过，含不同凭据的会话/SSE/音频访问、ASR、控制、点歌任务与幂等键隔离；并发创建上限验证通过。
+- `tools/team/z check` 通过：240 个 C# 文件语法零错误。Unity 6000.3.27f1 在临时工程副本完成真实编译及 macOS Universal 构建，保留原编辑器会话。
+- 同一 Mac、实际 Unity Mono 的 `LiveTransport` 通过主机内网地址完成 HTTPS/证书 pin/认证/创建与结束直播会话；错误 pin 拒绝。日志标记 `OFFICE_VERIFY_PASS`。
+- 安装包重新本地签名并验证；177 个文件扫描未含本机实际供应商 Key、host.json 或 TLS 私钥。包内仅含该玩家访问凭据与证书指纹，不提交仓库。
+- 未完成：另一台 Mac 的办公室网络互访、实际界面/麦克风/TTS/唱歌试玩、六人并发体验。Unity UI 自动化未能取得当前窗口，因此不把传输层验证称为完整游戏试玩。网易云当前匿名登录状态，新歌获取仍受其服务权限约束。
+- 本任务保持草稿，不合入 main。区域红色提醒由用户明确授权跳过，未宣称已与其他作者沟通。
