@@ -10,25 +10,69 @@ import {parseAgentReply,buildAgentRequest,handleAgent} from '../server/shared/wo
 const root=fileURLToPath(new URL('../',import.meta.url)),owner='local-preview-owner';
 const bytes=await fs.readFile(path.join(root,'server/assets/songs/wanan-yanrenzhong-vivi2-chorus.wav'));
 const plan=(kind='chorus')=>({intent:'request',title:'晚安',artist:'颜人中',version:'',question:'',segment:{kind,ordinal:1,description:kind==='chorus'?'第一段完整副歌':'第一句',lyricStart:''}});
-async function fixture(t,options={}){const directory=await fs.mkdtemp(path.join(os.tmpdir(),'z-singing-'));let service=await SingingService.open({root,directory,autoStart:false,environment:async()=>({}),parse:async()=>plan(),generate:async()=>{throw Error('should_not_generate');},...options});t.after(async()=>{if(!service.closed)await service.close();await fs.rm(directory,{recursive:true,force:true});});return {get service(){return service;},directory,async reopen(){await service.close();service=await SingingService.open({root,directory,autoStart:false,environment:async()=>({}),...options});return service;}};}
+async function fixture(t,options={}){const directory=await fs.mkdtemp(path.join(os.tmpdir(),'z-singing-'));let service=await SingingService.open({root,directory,autoStart:false,sources:[],environment:async()=>({}),parse:async()=>plan(),generate:async()=>{throw Error('should_not_generate');},...options});t.after(async()=>{if(!service.closed)await service.close();await fs.rm(directory,{recursive:true,force:true});});return {get service(){return service;},directory,async reopen(){await service.close();service=await SingingService.open({root,directory,autoStart:false,sources:[],environment:async()=>({}),...options});return service;}};}
 const submit=(s,sourceId='one',sessionId='day-one')=>s.submit({text:'唱一下颜人中《晚安》的副歌',sourceId,sessionId});
-test('same segment is reused without paid generation; state and ownership survive restart',async t=>{const f=await fixture(t);const a=submit(f.service);assert.equal(submit(f.service).id,a.id);await f.service.tick();const task=f.service.context(owner).tasks[0];assert.equal(task.status,'ready');assert.equal(task.attempt,0);assert.throws(()=>f.service.cancel(a.id,'someone-else'));
-  await assert.rejects(()=>SingingService.open({root,directory:f.directory,environment:async()=>({})}),/already_running/);
-  const s=await f.reopen();assert.equal(s.context(owner).tasks[0].status,'ready');assert.equal(s.context('another-owner').tasks.length,0);const playback=s.reserve(a.id,owner,{sessionId:'day-two',operationId:'play-one'});assert.equal(playback.song.sha256,checkWav(bytes).sha256);assert.equal(playback.sessionId,'day-two');});
-test('first line does not silently hit chorus; generation stays unapproved until all review checks pass',async t=>{let calls=0;const f=await fixture(t,{parse:async()=>plan('first_line'),generate:async()=>{calls++;return {bytes,report:{voice:Z_VOICE.speaker,model:Z_VOICE.singingModel,enableMusic:true,generationDone:true}};}});const s=f.service,a=submit(s);await s.tick();assert.equal(calls,1);assert.equal(s.context(owner).tasks[0].status,'awaiting_review');assert.throws(()=>s.reserve(a.id,owner,{sessionId:'two',operationId:'x'}),/not_ready/);assert.throws(()=>s.review(a.id,owner,{approved:true,note:'ok',checks:{voice:true}}),/incomplete/);
-  s.review(a.id,owner,{approved:false,note:'返回了副歌，范围错误',checks:{segment:false}});assert.equal(s.context(owner).tasks[0].status,'failed');assert.equal(s.read().events.at(-1).note,'返回了副歌，范围错误');await f.reopen();assert.equal(f.service.context(owner).tasks[0].reason,'试听未通过');});
-test('approved generated segment enters persistent cache; original failure history remains',async t=>{let calls=0;const f=await fixture(t,{parse:async()=>plan('verse'),generate:async()=>{calls++;return {bytes,report:{voice:Z_VOICE.speaker,model:Z_VOICE.singingModel,enableMusic:true,generationDone:true}};}});const s=f.service,a=submit(s);await s.tick();s.review(a.id,owner,{approved:true,note:'Injected audio review fixture; not real semantic verification',checks:{song:true,segment:true,voice:true,aCappella:true,ending:true}});submit(s,'second');await s.tick();assert.equal(calls,1);assert.equal(s.context(owner).tasks[1].assetId,s.context(owner).tasks[0].assetId);assert.equal(s.context(owner).knowledge.at(-1).independentScoreAvailable,false);});
-test('cancel discards late generation and cannot revive task',async t=>{let release;const promise=new Promise(r=>release=r);const f=await fixture(t,{parse:async()=>plan('verse'),generate:async()=>promise});const s=f.service,a=submit(s),work=s.tick();while(s.context(owner).tasks[0].status!=='generating')await new Promise(r=>setTimeout(r,1));s.cancel(a.id,owner);release({bytes,report:{voice:Z_VOICE.speaker,model:Z_VOICE.singingModel,enableMusic:true,generationDone:true}});await work;assert.equal(s.context(owner).tasks[0].status,'cancelled');assert.equal(s.read().assets.length,1);});
-test('restart during generating records unknown; retry requires explicit acknowledgement',async t=>{const f=await fixture(t);const a=submit(f.service);f.service.change(s=>{s.tasks[0].status='generating';s.tasks[0].attempt=1;});const s=await f.reopen();assert.equal(s.context(owner).tasks[0].status,'failed');assert.throws(()=>s.retry(a.id,owner),/confirm_unknown/);s.retry(a.id,owner,{acknowledgeUnknown:true});assert.equal(s.context(owner).tasks[0].status,'queued');assert(s.read().events.some(e=>e.code==='process_restarted_unknown'));});
-test('playback receipts require actual start, matching instance and duration; duplicates do not finish twice',async t=>{const {service:s}=await fixture(t);const a=submit(s);await s.tick();const p=s.reserve(a.id,owner,{sessionId:'day-two',operationId:'play1'});assert.equal(s.reserve(a.id,owner,{sessionId:'day-two',operationId:'play1'}).playbackId,p.playbackId);
-  const duration=checkWav(bytes).durationMs;assert.throws(()=>s.receipt(p.playbackId,owner,{eventId:'early',phase:'completed',positionMs:duration}),/invalid_completion/);s.receipt(p.playbackId,owner,{eventId:'start',phase:'playing',positionMs:0});assert.throws(()=>s.receipt(p.playbackId,owner,{eventId:'partial',phase:'completed',positionMs:100}),/invalid_completion/);
-  const done={eventId:'end',phase:'completed',positionMs:duration};s.receipt(p.playbackId,owner,done);s.receipt(p.playbackId,owner,done);assert.equal(s.read().events.filter(e=>e.status==='completed').length,1);const p2=s.reserve(a.id,owner,{sessionId:'day-three',operationId:'play2'});assert.notEqual(p2.playbackId,p.playbackId);s.receipt(p2.playbackId,owner,{eventId:'stop',phase:'interrupted',positionMs:200});assert.equal(s.context(owner).tasks[0].status,'ready');assert.equal(s.read().events.at(-1).positionMs,200);});
-test('voice change and tampered audio block playback',async t=>{const {service:s}=await fixture(t);const a=submit(s);await s.tick();s.change(v=>v.voice.revision++);assert.throws(()=>s.reserve(a.id,owner,{sessionId:'x',operationId:'x'}),/voice_configuration/);const asset=s.read().assets[0];await fs.writeFile(path.join(s.directory,'assets',asset.sha256+'.wav'),'changed');await assert.rejects(()=>s.audio(asset.id),/integrity/);});
+const generated=()=>({bytes,report:{voice:Z_VOICE.speaker,model:Z_VOICE.singingModel,enableMusic:true,generationDone:true}});
+test('cached segment survives restart and dispatch has no singing playback ledger',async t=>{
+ const f=await fixture(t),a=submit(f.service);assert.equal(submit(f.service).id,a.id);await f.service.tick();
+ assert.equal(f.service.context(owner).tasks[0].status,'ready');assert.throws(()=>f.service.cancel(a.id,'someone-else'));
+ await assert.rejects(()=>SingingService.open({root,directory:f.directory}),/already_running/);
+ const s=await f.reopen();assert.equal(s.context('other').tasks.length,0);
+ const dispatch=await s.reserve(a.id,owner);assert.equal(dispatch.song.sha256,checkWav(bytes).sha256);
+ assert.equal(s.context(owner).tasks[0].status,'scheduled');assert.equal(s.read().playbacks.length,0);
+ await assert.rejects(()=>s.reserve(a.id,owner),/not_ready/);
+});
+test('different range generates once; technical acceptance immediately readies all subsequent requests',async t=>{
+ let calls=0;const {service:s}=await fixture(t,{parse:async()=>plan('verse'),generate:async()=>{calls++;return generated();}});
+ const a=submit(s),b=submit(s,'two');await s.tick();await s.tick();
+ assert.equal(calls,1);assert(s.context(owner).tasks.every(t=>t.status==='ready'));
+ assert.equal(s.read().tasks[0].assetId,s.read().tasks[1].assetId);
+ const asset=s.read().assets.at(-1);assert.equal(asset.approved,false);assert.equal(asset.acceptance.listeningVerified,false);
+ assert.equal(s.context(owner).limits.fixedWaiting,false);assert.equal(s.context(owner).limits.review,'none');
+ const dispatches=await Promise.allSettled([s.reserve(a.id,owner),s.reserve(b.id,owner)]);
+ assert.equal(dispatches.filter(x=>x.status==='fulfilled').length,1);assert(s.read().tasks.every(t=>t.status==='scheduled'));
+ submit(s,'three');await s.tick();assert.equal(calls,1);assert.equal(s.read().tasks.at(-1).status,'ready');
+});
+test('old shared awaiting-review tasks migrate together, explicit rejections remain blocked',async t=>{
+ const f=await fixture(t);submit(f.service);submit(f.service,'two');
+ f.service.change(s=>{const a={...structuredClone(s.assets[0]),id:'old-pending',approved:false};delete a.review;delete a.libraryAssetId;s.assets.push(a);for(const task of s.tasks){task.status='awaiting_review';task.assetId=a.id;}
+ const rejected={...a,id:'old-rejected',review:{approved:false}};s.assets.push(rejected);});
+ const s=await f.reopen();assert(s.read().tasks.every(t=>t.status==='ready'));
+ assert.equal(s.read().assets.find(a=>a.id==='old-pending').acceptance.listeningVerified,false);
+ await assert.rejects(()=>s.audio('old-rejected'),/asset_unavailable/);
+});
+test('cancel discards a late generation and does not revive task',async t=>{
+ let release,started;const began=new Promise(r=>started=r),done=new Promise(r=>release=r);
+ const {service:s}=await fixture(t,{parse:async()=>plan('verse'),generate:async()=>{started();return done;}});
+ const a=submit(s),count=s.read().assets.length,work=s.tick();await began;
+ s.cancel(a.id,owner);release(generated());await work;
+ assert.equal(s.read().tasks[0].status,'cancelled');assert.equal(s.read().assets.length,count);
+});
+test('unknown paid result cannot be bypassed by another request; explicit retry remains possible',async t=>{
+ let calls=0;const f=await fixture(t,{parse:async()=>plan('verse'),generate:async()=>{calls++;if(calls===1)throw Error('generation_outcome_unknown');return generated();}});
+ const a=submit(f.service);await f.service.tick();submit(f.service,'again');await f.service.tick();assert.equal(calls,1);
+ assert.throws(()=>f.service.retry(a.id,owner),/confirm_unknown/);
+ f.service.retry(a.id,owner,{acknowledgeUnknown:true});await f.service.tick();assert.equal(calls,2);assert.equal(f.service.read().tasks[0].status,'ready');
+});
+test('restart records unknown attempt and original history; clarification preserves context',async t=>{
+ const f=await fixture(t,{parse:async()=>({...plan(),segment:{...plan().segment,kind:'full'}})});const a=submit(f.service);await f.service.tick();assert.equal(f.service.read().tasks[0].status,'needs_input');
+ f.service.clarify(a.id,owner,'第一句');assert.equal(JSON.parse(f.service.read().tasks[0].requestText).originalRequest,a.originalText);
+ f.service.change(s=>{s.tasks[0].status='generating';s.tasks[0].attempt=1;});const s=await f.reopen();
+ assert.equal(s.read().tasks[0].reason,'process_restarted_unknown');assert.throws(()=>s.retry(a.id,owner),/confirm_unknown/);
+});
+test('voice changes and tampered files block playback before dispatch',async t=>{
+ const {service:s}=await fixture(t),a=submit(s);await s.tick();s.change(v=>v.voice.revision++);
+ await assert.rejects(()=>s.reserve(a.id,owner),/asset_unavailable/);s.change(v=>v.voice.revision--);
+ const asset=s.read().assets[0];await fs.writeFile(path.join(s.directory,'assets',asset.sha256+'.wav'),'changed');await assert.rejects(()=>s.audio(asset.id),/integrity/);
+ assert.equal(s.read().tasks[0].status,'ready');
+});
 test('main agent can submit exact source and play only trusted ready tasks; NPC does not get private memory',()=>{
   const c={host:{inbox:[{id:'player1',mine:true,text:'唱第一句'}]},activeSkill:null,mediaRuntime:{audioEnabled:true},singing:{enabled:true,tasks:[{id:'task1',status:'ready'}]}};
   const base={action:'tool',speech:'我试着准备这段。',mood:'warm',handledIds:['player1'],wakeAfterMs:5000,memory:''};
   assert.equal(parseAgentReply({...base,tool:{name:'prepare_song',args:{messageId:'player1'}}},{kind:'host',context:c}).tool.name,'prepare_song');
   assert.throws(()=>parseAgentReply({...base,tool:{name:'prepare_song',args:{messageId:'npc'}}},{kind:'host',context:c}));
+  assert.equal(parseAgentReply({...base,tool:{name:'cancel_song',args:{taskId:'task1',messageId:'player1'}}},{kind:'host',context:c}).tool.name,'cancel_song');
+  assert.throws(()=>parseAgentReply({...base,tool:{name:'cancel_song',args:{taskId:'task1',messageId:'npc'}}},{kind:'host',context:c}));
   assert.throws(()=>parseAgentReply({...base,tool:{name:'play_prepared_song',args:{taskId:'task1'}}},{kind:'host',context:c}));
   assert.equal(parseAgentReply({...base,handledIds:[],tool:{name:'play_prepared_song',args:{taskId:'task1'}}},{kind:'host',context:{...c,host:{inbox:[]}}}).tool.name,'play_prepared_song');
   assert.throws(()=>parseAgentReply({...base,tool:{name:'play_prepared_song',args:{taskId:'not-ready'}}},{kind:'host',context:c}));
@@ -56,5 +100,32 @@ test('singing reports preserve actionable provider failures without exposing pay
   await check({outcome:'closed_without_audio_completion',audioGenerated:false},'singing_no_complete_audio');
   const {service:s}=await fixture(t,{parse:async()=>plan('verse'),generate:async()=>{throw Error('singing_provider_resource_not_granted');}});
   submit(s);await s.tick();const task=s.context(owner).tasks[0];
-  assert.equal(task.status,'failed');assert.match(task.reason,/volc\.speech\.dialog/);assert.doesNotMatch(task.reason,/private/);
+  assert.equal(task.status,'failed');assert.match(task.reason,/语音项目权限/);assert.doesNotMatch(task.reason,/private/);
+});
+
+function newSongSource({error}={}) {
+ const descriptor={sourceId:'netease',externalId:'fixture-1',title:'测试新歌',artist:'测试歌手',version:'网易云录音 fixture-1',evidence:'synthetic test only',performers:[{id:1,name:'测试歌手'}],performerKey:'1',searchRank:1,officialEvidence:{eligible:true,basis:'test_fixture'},audio:{songId:'fixture-1'},lyrics:{songId:'fixture-1'}};
+ return {id:'netease',searchOfficial:async()=>({candidates:[descriptor],inspectionComplete:true}),fetch:async(ref,kind)=>{if(error)throw Error(error);return kind==='audio'?bytes:Buffer.from('[00:00.00]测试歌词');}};
+}
+test('new song retrieves full references, immediately generates once, caches and survives restart',async t=>{
+ let calls=0;const f=await fixture(t,{sources:[newSongSource()],parse:async()=>({...plan(),title:'测试新歌',artist:''}),generate:async(p)=>{calls++;assert.equal(p.artist,'测试歌手');return generated();}});
+ submit(f.service);await f.service.tick();const task=f.service.read().tasks[0];assert.equal(task.status,'ready');assert.equal(calls,1);
+ const m=f.service.library.material(task.recordingId);assert.equal(m.status,'ready');assert.equal(m.fullSongRetained,true);assert.equal(m.review,null);
+ assert.deepEqual(f.service.read().events.filter(e=>e.taskId===task.id).map(e=>e.status),['queued','parsing','retrieving','generating','checking','ready']);
+ submit(f.service,'again');await f.service.tick();assert.equal(calls,1);
+ await f.reopen();assert.equal(f.service.read().tasks[1].status,'ready');await f.service.reserve(task.id,owner);
+});
+test('rejected references block both cached and new ranges, even when a resource later disappears',async t=>{
+ const {service:s}=await fixture(t,{sources:[newSongSource()],parse:async()=>({...plan(),title:'测试新歌',artist:''}),generate:async()=>generated()});
+ submit(s);await s.tick();const task=s.read().tasks[0],m=s.library.material(task.recordingId);
+ s.library.reviewMaterial(task.recordingId,{approved:false,reviewer:'prior-review',note:'wrong reference',audioSha:m.audio.sha256,lyricsSha:m.lyrics.sha256});
+ await assert.rejects(()=>s.audio(task.assetId),/material_previously_rejected/);
+ assert.equal(s.library.state(task.recordingId,{kind:'chorus',ordinal:1}).assetId,null);
+ s.library.db.prepare('UPDATE materials SET lyrics=NULL WHERE recording_id=?').run(task.recordingId);
+ s.parse=async()=>({...plan('verse'),title:'测试新歌',artist:''});s.generate=async()=>{throw Error('must_not_generate');};
+ submit(s,'new-range');await s.tick();assert.equal(s.read().tasks[1].reason,'material_previously_rejected');assert.equal(s.read().tasks[1].attempt,0);
+});
+test('expired login fails preparation before paid generation with actionable safe reason',async t=>{
+ const {service:s}=await fixture(t,{sources:[newSongSource({error:'netease_login_expired'})],parse:async()=>({...plan(),title:'测试新歌',artist:''}),generate:async()=>{throw Error('must_not_generate');}});
+ submit(s);await s.tick();assert.equal(s.read().tasks[0].reason,'netease_login_expired');assert.equal(s.read().tasks[0].attempt,0);assert.match(s.context(owner).tasks[0].reason,/登录已过期/);
 });

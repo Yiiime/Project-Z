@@ -25,7 +25,7 @@ export const TALENT_MOODS = ['neutral','happy','warm','serious','thinking','shy'
 export const TALENT_GESTURES = Object.keys(HARU_ACTIONS).filter(id => HARU_ACTIONS[id].automatic);
 export const EXPRESSION_GESTURES = TALENT_GESTURES.map(id => ({id,label:HARU_ACTIONS[id].label}));
 export function playableSongs(catalog = TALENT_CATALOG) {
-  return catalog.songs.filter(s => s.approved === true && s.aCappella === true && s.voiceIdentity === catalog.voiceIdentity && s.voiceVersion === catalog.voiceVersion && s.reviewRef && (/^(?:\/audio\/songs\/[a-zA-Z0-9_-]+\.(?:mp3|wav)|\/api\/singing\/assets\/[a-zA-Z0-9-]+)$/.test(s.src)));
+  return catalog.songs.filter(s => (s.approved === true || s.playable === true) && s.aCappella === true && s.voiceIdentity === catalog.voiceIdentity && s.voiceVersion === catalog.voiceVersion && (s.reviewRef || s.readinessRef) && (/^(?:\/audio\/songs\/[a-zA-Z0-9_-]+\.(?:mp3|wav)|\/api\/singing\/assets\/[a-zA-Z0-9-]+)$/.test(s.src)));
 }
 export function validatePerformance(args, inbox = []) {
   const fail = () => { throw Error('invalid_performance'); };

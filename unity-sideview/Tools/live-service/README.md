@@ -4,7 +4,7 @@
 
 ## 启动
 
-需要 Unity 6000.3.27f1、Node.js 24+。
+需要 Unity 6000.3.27f1、Node.js 24+；下载新歌原曲还需要 FFmpeg（可用 `FFMPEG_PATH` 指定）。
 
 1. 在此目录执行 `npm ci --ignore-scripts`。
 2. 将 `.env.example` 复制为 `.env`（或 `.env.local`），填写所需服务密钥。
@@ -18,7 +18,10 @@
 | `DEEPSEEK_API_KEY` | 主播决策、观众、绘图和点歌需求解析 |
 | `VOLC_TTS_API_KEY` | Vivi 话语、台词演绎和唱段生成 |
 | `VOLC_ASR_API_KEY` | 连麦语音识别 |
-| `Z_SONG_CATALOG` | 可选本地歌曲资料清单路径 |
+| `Z_SONG_CATALOG` | 可选本地歌曲资料清单路径，保留诊断查询能力 |
+| `NETEASE_SESSION_FILE` | 可选私有登录文件路径，默认 `.runtime/netease-auth/session.json` |
+| `FFMPEG_PATH` | 可选 FFmpeg 可执行文件路径 |
+| `Z_NETEASE_AUTO_RENEW` | 默认启用登录维护；设为 `0` 关闭 |
 
 配置读取顺序为：进程环境变量 → `.env.local` → 对应厂商的 `*配置.env` → `.env`。修改后重启直播服务并重新进入直播。
 
@@ -38,9 +41,10 @@
 - 首次上麦先请求系统麦克风权限，授权弹窗期间保持直播状态。编辑输入框时暂停收音；挂断、暂停、失焦和退出会释放麦克风并取消该轮识别，迟到结果不会进入后续对话。
 - 设置中可切换 Haru 动态形象与 Z 原画，调整声音、音量、画面弹幕和轻柔动画，并重新开始对话。Esc 优先关闭弹窗或展开画面，再返回探索。
 - 主播可以展示可选明信片话题，也可以邀请观众回应。选择只影响当前直播话题。
-- 右侧顶部「点歌与试听」提交歌曲、歌手与明确片段，设置中也保留入口。后台任务跨会话保存；新音频需要确认歌曲、片段、音色、无伴奏、结尾五项并填写结论。
-- 点击「听 Z 试唱」即可在直播中听唱段，角色嘴型随歌声音量变化；点歌面板自动收起，重新打开可停止试听或填写审核结论。试听期间主播只播放歌声，结束后继续聊天；试听不计入已审核歌曲的正式播放完成记录。已审核任务由主播按对话时机安排演唱。
-- 曲库查询显示第一段副歌的已掌握状态。资料、已审核唱段与实际播放分别记录；当前资料查询不触发整曲下载或自动歌词对齐。
+- 直接在弹幕或连麦里点歌，例如“唱一下颜人中《晚安》的副歌”。主 Agent 登记需求、回应进度，准备好后按对话时机唱；没有独立点歌/播放/试听审核面板。
+- 同一版本、片段和 Z 音色命中可用缓存时直接待唱；新歌先检索网易云并保存完整原曲、歌词，再生成唱段。未指定歌手时取平台排序首个合格结果，明确指定版本时严格匹配，不换成翻唱。
+- 新唱段通过文件、时长、非静音和生成模式检查后即可安排，不需要人工审核，不固定等待五分钟或24小时。后台任务跨会话保存；取消可以直接告诉 Z。结果未知的付费尝试仍需后台核对再重试，防止重复计费。
+- 唱歌、说话仍共用现有音轨与口型。内部媒介事件用于释放音轨、恢复聊天，不建立唱歌业务播放回执库；任务 `scheduled` 仅表示已交给播放器，不代表唱完。
 - 绘画、塔罗与台词演绎由主 Agent 调度，Unity 回传实际展示及播放结果。塔罗支持暂停选牌、三轮选牌和牌意复看；绘画支持放大和修改请求。
 
 动态生成支持明确单段且最长 90 秒。整曲与含糊范围会要求补充说明。生成中断且结果未知时，核对原尝试后再明确重试。
@@ -50,9 +54,69 @@
 - `server/shared/`：最新直播主 Agent、连麦及才艺调度；来源哈希见 `server/shared/PROVENANCE.json`。
 - `server/session.mjs`、`http.mjs`：原生会话、SSE 命令、执行回执、幂等和租约。
 - `server/voice/`：PCM16LE / 16 kHz / 单声道识别桥接。
-- `server/singing/`：SQLite 点歌队列、生成、审核与持久播放回执。
-- `server/song-library/`：按歌曲版本、片段和声音配置计算资料状态。
+- `server/singing/`：SQLite 点歌队列、生成、技术检查、取消与调度。
+- `server/song-library/`：网易云检索、完整原曲/歌词留存、共享唱段缓存及资料状态。
 - `.runtime/`：本机凭据、会话、音频和 SQLite 数据；备份应在停止服务后复制完整目录。
 - `tests/`：会话、网关、唱歌和 ASR 的离线回归；`npm test` 不调用付费供应商。
 
 本地服务重启会暂停未结束会话，并使旧执行回执失效。关闭窗口或断网后执行租约到期会暂停会话。
+
+## 在现有直播上增加内容
+
+本服务与 `Assets/Seabreeze/UI/ZLive/` 是当前横版工程的直播实现。新增需求请描述入口、玩家动作、Z 的反应、结束条件及失败时的表现，并说明是否影响正在进行的连麦或演唱。
+
+| 要增加或调整什么 | 实现入口（相对 `unity-sideview/`） |
+| --- | --- |
+| 连麦按钮、收音和识别草稿 | `Assets/Seabreeze/UI/ZLive/Runtime/LiveCompanionView.cs` |
+| 发送消息、暂停/恢复、退出、状态与执行回执 | `Assets/Seabreeze/UI/ZLive/Runtime/LiveFeatureController.cs` |
+| 直播布局、样式、房间控制 | `Assets/Seabreeze/UI/ZLive/Runtime/LiveFeatureView.cs`、`LiveRoomControls.cs`；`Assets/Seabreeze/UI/ZLive/Resources/live.uss` |
+| 声音播放、进度与口型驱动 | `Assets/Seabreeze/UI/ZLive/Runtime/LiveAudioPlayer.cs`、`LiveCharacterPerformance.cs` |
+| 手机入口及退出后恢复探索 | `Assets/Seabreeze/Scripts/UI/NativeLiveHost.cs` 及同目录手机 UI |
+| 连麦轮次、话题/选项、状态规则 | `Tools/live-service/server/shared/ui/call-engine.js`、`call-contract.js`；原生协议入口为 `server/session.mjs` |
+| 语音识别接入 | `Tools/live-service/server/voice/`、`server/http.mjs` |
+| 点歌解析、生成、队列、技术检查、重试 | `Tools/live-service/server/singing/` |
+| 检索、曲库资料及片段状态 | `Tools/live-service/server/song-library/`；网易云入口为 `netease.mjs`，排序规则为 `official-retrieval.mjs` |
+| 直播内演唱与音轨调度 | `Tools/live-service/server/remote-talent.mjs`、`server/session.mjs` |
+| 主播人设、决策和才艺安排 | `Tools/live-service/server/shared/worker/z-persona.js`、`agent-director.js` |
+| 回归测试 | `Tools/live-service/tests/`；Unity 控件验证为 `Assets/Seabreeze/Editor/LiveDraftVerification.cs` |
+
+注意：`main-agent/prompts/`、`main-agent/config/` 和 `skills/` 保留了导入的内容来源；当前 `agent-director.js` 实际导入的是 `server/shared/worker/agent-bundle-data.js`。只改来源文本不会自动更新这个运行时包。涉及提示词/技能时，应一起核对包的生成与版本来源，验证实际发给模型的内容。
+
+调试时从 `Street.unity` 运行，按 Tab 进入手机直播。服务变更后重启服务并重新进入直播。服务日志与 Unity Console 分别定位后台失败和客户端执行失败；不要把供应商返回成功等同于角色已播放完成。
+
+超长识别文本完整放入输入框，编辑到弹幕 120 字或连麦 360 字以内后才能发送。
+
+## 多个聊天并行与汇总
+
+每个开发聊天使用独立 Git worktree、任务分支和草稿 PR；在各自目录中遵守仓库 `AGENTS.md` 并运行 `tools/team/z start`。不要让多个聊天在同一个本地目录切换分支。当前协作工具的 `start` 固定从最新 `origin/main` 开工；依赖另一个未合并任务的新功能，应等前置 PR 合并再开工，或先明确安排依赖分支，不能假设 `start` 会保留所选功能分支作为基线。
+
+- 按具体文件分工。例如一项修改 `server/singing/`，另一项修改 `server/voice/`；两项都需要改 `LiveCompanionView.cs` 或 `server/session.mjs` 时，指定一项统一接线。
+- 每个 worktree 的依赖、Unity Library、服务 `.runtime` 和本机配置独立准备。并行启动服务使用不同的 `Z_UNITY_PORT`；各 Unity 实例打开对应 worktree 的工程。
+- 阶段完成运行 `tools/team/z save --message "本次修改" --handoff "已完成、未完成、下一步"`，记录 PR 地址、文件范围和验收结果。
+- 单项验收后运行 `tools/team/z ship`，仓库机器人按队列检查并合并至 `main`。依赖任务先合并，后续任务同步最新 `main` 后重新检查；红色难合并文件冲突先确认处理顺序。
+- 最后一项合并后，在包含所有 PR 的最新版本做整体验收。需要修复时另开集成修复任务；检查全部 PR 为 `MERGED`，再通过 `tools/team/z done` 回到最新 `main`。聊天完成、保存成功和 PR 合并是三个不同状态。
+
+Unity 控件回归：编辑器菜单 `Seabreeze > Verify Live Input Drafts`，或批处理调用 `-executeMethod Seabreeze.Editor.LiveDraftVerification.Run`。此检查覆盖超长语音文本完整保留与输入长度复原，不替代真人麦克风、真实歌声和完整流程试玩。
+
+
+## 网易云后台登录与维护
+
+本次沿用集成包 `Z唱歌玩法集成包-20261105` 的固定账号指纹（`config/netease-account.json`），不复制其 Cookie、真实数据库或登录文件。不读取浏览器登录态。账号不匹配时明确报错；更换绑定账号应单独决定。
+
+```sh
+npm run netease:login -- status
+npm run netease:login -- begin
+# 打开上一步返回的 qrImageFile，用已绑定的网易云账号扫码确认
+npm run netease:login -- wait
+npm run netease:login -- status
+```
+
+登录由后台操作者完成，不让直播观众处理。服务启动时及每小时检查，约24小时刷新一次登录；这只是登录维护周期，不是演唱等待时间。过期、账号不匹配、查询失败和“已登录但只有试听权限”分别报告；不自动换歌或绕过试听限制。`maintain` / `refresh` 可手动触发维护。
+
+## 数据兼容与限制
+
+首次升级在原 `.runtime/library` 中加入技术验收字段，并同步原 `.runtime/singing` 的合格唱段。旧的待试听音频通过技术检查后可以待唱，同一资产关联的任务一起恢复；明确拒绝的音频或参考资料保持拒绝。旧审核记录与旧播放记录保留为历史证据，不再写入新唱歌回执。升级前停止服务并备份整个 `.runtime`，回退旧程序时一并恢复备份。
+
+集成包随附的《晴天》副歌加入曲库，原《晚安》副歌保留。导入包里的历史试听记录仅作为来源记录；本次没有重新进行人工音质验收。当前 Vivi 仍用文字指定歌曲、版本和片段，下载的原曲/歌词不作为音频条件输入，技术检查不能保证旋律、歌词、片段或音色完全正确。
+
+研究对照：参照 K03/K04 对动作结果与状态分离的思路，保留请求、素材准备、任务失败和前台活动的因果关系。按本次明确需求不采用固定时间门槛；技术可用状态与主 Agent 的演唱时机分开。修改仅在本次允许路径，根设计文档和机制采用记录未改动。

@@ -122,11 +122,12 @@ test('call waits for the host turn and suspension hangs up before accepting more
 
 test('local service reads .env and gives local overrides precedence',t=>{
  const root=fs.mkdtempSync(path.join(os.tmpdir(),'z-env-test-'));t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
- const keys=['DEEPSEEK_API_KEY','VOLC_TTS_API_KEY','VOLC_ASR_API_KEY'];const saved=Object.fromEntries(keys.map(k=>[k,process.env[k]]));
+ const keys=['DEEPSEEK_API_KEY','VOLC_TTS_API_KEY','VOLC_ASR_API_KEY','NETEASE_SESSION_FILE','FFMPEG_PATH','Z_NETEASE_AUTO_RENEW','Z_SONG_CATALOG'];const saved=Object.fromEntries(keys.map(k=>[k,process.env[k]]));
  t.after(()=>{for(const k of keys)if(saved[k]===undefined)delete process.env[k];else process.env[k]=saved[k];});for(const k of keys)delete process.env[k];
  fs.writeFileSync(path.join(root,'.env'),'DEEPSEEK_API_KEY="test-text"\nVOLC_TTS_API_KEY=test-voice\nexport VOLC_ASR_API_KEY=test-asr # local\n');
- assert.deepEqual(loadEnvironment(root),{DEEPSEEK_API_KEY:'test-text',VOLC_TTS_API_KEY:'test-voice',VOLC_ASR_API_KEY:'test-asr'});
- fs.writeFileSync(path.join(root,'.env.local'),'DEEPSEEK_API_KEY=test-override\n');assert.equal(loadEnvironment(root).DEEPSEEK_API_KEY,'test-override');
+ assert.deepEqual(loadEnvironment(root),{DEEPSEEK_API_KEY:'test-text',VOLC_TTS_API_KEY:'test-voice',VOLC_ASR_API_KEY:'test-asr',NETEASE_SESSION_FILE:'',FFMPEG_PATH:'',Z_NETEASE_AUTO_RENEW:'',Z_SONG_CATALOG:''});
+ fs.writeFileSync(path.join(root,'.env.local'),'DEEPSEEK_API_KEY=test-override\nNETEASE_SESSION_FILE=/fixture/private-session.json\nFFMPEG_PATH=/fixture/ffmpeg\nZ_NETEASE_AUTO_RENEW=0\n');assert.equal(loadEnvironment(root).DEEPSEEK_API_KEY,'test-override');
+ assert.equal(loadEnvironment(root).NETEASE_SESSION_FILE,'/fixture/private-session.json');assert.equal(loadEnvironment(root).FFMPEG_PATH,'/fixture/ffmpeg');assert.equal(loadEnvironment(root).Z_NETEASE_AUTO_RENEW,'0');
  process.env.DEEPSEEK_API_KEY='test-process';assert.equal(loadEnvironment(root).DEEPSEEK_API_KEY,'test-process');
 });
 

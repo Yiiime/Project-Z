@@ -83,7 +83,6 @@ export class ConversationEngine extends PlayEngine {
     this.talent=talent;
     talent.addEventListener('state',({detail})=>{
       const old=this._state.media;this._state.media=detail;
-      if(detail&&old?.phase!==detail.phase)void this._singingReceipt(detail);
       if(detail&&old?.phase!==detail.phase){
         if(['completed','failed','interrupted'].includes(detail.phase)){this.epoch++;this.pending?.abort();this.pending=null;}
         this._public('talent.'+detail.phase,JSON.stringify(detail));this.nextWake=this._clock;
@@ -99,34 +98,28 @@ export class ConversationEngine extends PlayEngine {
   async _pollSinging(){if(!this.singingEnabled||this._destroyed||this.singingPolling)return;this.singingPolling=true;try{
     const state=await this._singingApi('state'),key=JSON.stringify(state.tasks.map(t=>[t.id,t.status,t.updatedAt]));
     if(key!==this.singingSnapshot){this.singingSnapshot=key;this._cancelPreparation('singing_state_changed');this.nextWake=this._clock;}
-    const j=this.talent?.current;if(j?.persistentPlayback&&['playing','paused'].includes(j.phase))void this._singingReceipt(this.talent.snapshot());
   }catch{}finally{this.singingPolling=false;}}
-  _singingReceipt(detail){
-    const persistent=this.talent?.current?.persistentPlayback;if(!persistent||!['playing','paused','completed','failed','interrupted'].includes(detail.phase))return;
-    const payload={eventId:id(),phase:detail.phase,positionMs:detail.positionMs};
-    this.singingReceipts=(this.singingReceipts||Promise.resolve()).catch(()=>{}).then(async()=>{
-      // Retry the same receipt ID: completion must not be lost or counted twice.
-      for(let attempt=0;attempt<2;attempt++){try{await this._singingApi('playbacks/'+persistent.playbackId,payload);return;}catch(e){if(attempt===1){this.audience.dialogue.log({stage:'singing.receipt.failed',phase:detail.phase});return;}}}
-    });return this.singingReceipts;
-  }
   async _executeSinging(tool){
-    if(!this.singingEnabled)return false;
+    if(!this.singingEnabled||this.singingExecuting)return false;this.singingExecuting=true;
     const a=tool.args||{},epoch=this.epoch,sessionId=this.session.snapshot().sessionId;
     try{
       if(tool.name==='prepare_song'||tool.name==='clarify_song'){
         const m=[...this.inbox,...this._state.messages,...this._sessionPlayers()].find(m=>m.id===a.messageId&&m.mine);if(!m)throw Error('request_source_missing');
         const task=await this._singingApi(tool.name==='prepare_song'?'tasks':`tasks/${a.taskId}/clarify`,{text:m.text,sourceId:m.id,sessionId});
         if(!this._destroyed)this._toolEvent(JSON.stringify({tool:tool.name,status:'persisted',taskId:task.id,state:task.status,request:task.originalText}));
+      }else if(tool.name==='cancel_song'){
+        if(![...this.inbox,...this._state.messages,...this._sessionPlayers()].some(m=>m.id===a.messageId&&m.mine))throw Error('request_source_missing');
+        const task=await this._singingApi(`tasks/${a.taskId}/cancel`,{});this._toolEvent(JSON.stringify({tool:tool.name,status:task.status,taskId:task.id}));
       }else{
         if(this._state.play.active||this._state.media||this._state.paused)throw Error('audio_busy');
         const playback=await this._singingApi(`tasks/${a.taskId}/play`,{sessionId,operationId:id()});
-        if(this._destroyed||epoch!==this.epoch||this._state.paused||this._state.media||this._state.play.active){await this._singingApi('playbacks/'+playback.playbackId,{eventId:id(),phase:'interrupted',positionMs:0});return false;}
+        if(this._destroyed||epoch!==this.epoch||this._state.paused||this._state.media||this._state.play.active){return false;}
         const catalog=this.talent.catalog;catalog.songs=catalog.songs.filter(s=>s.id!==playback.song.id).concat(playback.song);
-        if(!this.talent.start('singing',{songId:playback.song.id})){await this._singingApi('playbacks/'+playback.playbackId,{eventId:id(),phase:'failed',positionMs:0});throw Error('playback_not_started');}
-        this.talent.current.persistentPlayback=playback;
+        if(!this.talent.start('singing',{songId:playback.song.id})){throw Error('playback_not_started');}
+        this.talent.current.songRequestId=playback.taskId;
       }
       this.nextWake=this._clock;return true;
-    }catch(e){if(!this._destroyed)this._toolEvent(JSON.stringify({tool:tool.name,status:'failed',reason:/^[a-z_]+$/.test(e.message)?e.message:'singing_unavailable'}));return false;}
+    }catch(e){if(!this._destroyed)this._toolEvent(JSON.stringify({tool:tool.name,status:'failed',reason:/^[a-z_]+$/.test(e.message)?e.message:'singing_unavailable'}));return false;}finally{this.singingExecuting=false;}
   }
   _mediaPlaying(){return ['starting','playing','paused'].includes(this._state.media?.phase);}
   stopTalent(){return this.talent?.cancel('viewer_stop')||false;}
@@ -278,11 +271,11 @@ export class ConversationEngine extends PlayEngine {
   }
   _toolEvent(text){this._public('tool.result',text);this.nextWake=this._clock;}
   _executeTool(tool){
-    if(['prepare_song','clarify_song','play_prepared_song'].includes(tool?.name)){void this._executeSinging(tool);return true;}
+    if(['prepare_song','clarify_song','cancel_song','play_prepared_song'].includes(tool?.name)){void this._executeSinging(tool);return true;}
     const a=tool?.args||{},p=this._state.play,t=p[p.active];let ok=false;
     if(['start_performance','start_singing'].includes(tool?.name)&&!p.active&&!this._state.media){
       ok=this.talent?.start(tool.name==='start_performance'?'voice-performance':'singing',a,{inbox:[...this.inbox,...this._state.messages,...this._sessionPlayers()]})||false;
-    }else if(tool?.name==='replay_talent'&&this._state.media&&a.taskId===this._state.media.id){const persistent=this.talent.current?.persistentPlayback;if(persistent){this.talent.finish();void this._executeSinging({name:'play_prepared_song',args:{taskId:persistent.taskId}});ok=true;}else ok=this.talent.replay();}
+    }else if(tool?.name==='replay_talent'&&this._state.media&&a.taskId===this._state.media.id){ok=this.talent.replay();}
     else if(tool?.name==='finish_activity'&&this._state.media&&a.taskId===this._state.media.id)ok=this.talent.finish(a.cancel);
     else if(tool?.name==='start_tarot'&&!p.active&&!this._state.media&&['host','viewer'].includes(a.origin)&&['single','three'].includes(a.spread)&&typeof a.question==='string'&&a.question.trim()){
       if(a.origin==='host'||this.inbox.some(m=>m.id===a.requesterId&&m.mine)||this._state.messages.some(m=>m.id===a.requesterId&&m.mine)||this._sessionPlayers().some(m=>m.id===a.requesterId))ok=this._request({kind:'tarot',origin:a.origin,question:a.question.slice(0,120),spread:a.spread});

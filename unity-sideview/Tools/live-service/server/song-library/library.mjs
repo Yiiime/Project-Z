@@ -4,11 +4,12 @@ import {randomUUID} from 'node:crypto';
 import {DatabaseSync} from 'node:sqlite';
 import {BlobStore, inspectWav, parseLyrics, hash, canonical, fail, normalize, text} from './media.mjs';
 import {capabilities} from './sources.mjs';
+import {Z_VOICE_PROFILE} from '../shared/ui/talent-config.js';
 
 const now = () => new Date().toISOString();
 const decode = value => value ? JSON.parse(value) : null;
 const safeError = e => /^[a-z_]{2,80}$/.test(e?.message || '') ? e.message : 'source_unavailable';
-export const Z_VOICE = Object.freeze({identity:'z-vivi', revision:1, speaker:'zh_female_vv_uranus_bigtts', singingModel:'1.2.6.1', mode:'single_voice_a_cappella'});
+export const Z_VOICE = Z_VOICE_PROFILE;
 function voiceKey(v) {
   return canonical({identity:text(v.identity), revision:text(String(v.revision)), speaker:text(v.speaker), singingModel:text(v.singingModel), mode:text(v.mode)});
 }
@@ -31,6 +32,8 @@ export class SongLibrary {
     this.db = new DatabaseSync(path.join(this.directory, 'library.sqlite'));
     this.db.exec('PRAGMA busy_timeout=5000;');
     this.db.exec(fs.readFileSync(new URL('./schema.sql', import.meta.url), 'utf8'));
+    if(!this.db.prepare('PRAGMA table_info(materials)').all().some(c=>c.name==='acceptance'))this.db.exec('ALTER TABLE materials ADD COLUMN acceptance TEXT');
+    if(!this.db.prepare('PRAGMA table_info(assets)').all().some(c=>c.name==='acceptance'))this.db.exec('ALTER TABLE assets ADD COLUMN acceptance TEXT');
     this.sources = new Map(sources.map(s => [s.id,s]));
     this.capabilities = capabilities;
   }
@@ -91,16 +94,26 @@ export class SongLibrary {
     const r = this.db.prepare('SELECT * FROM materials WHERE recording_id=?').get(id);
     const audio = decode(r.audio), lyrics = decode(r.lyrics), review = decode(r.review);
     const audioAvailable = this.blobs.available(audio), lyricsAvailable = this.blobs.available(lyrics);
-    const verified = audioAvailable && lyricsAvailable && review?.approved === true && review?.audioSha === audio.sha256 && review?.lyricsSha === lyrics.sha256;
+    const acceptance=decode(r.acceptance);
+    const policyAccepted=acceptance?.policy==='official_source_v1'&&acceptance.audioSha===audio?.sha256&&acceptance.lyricsSha===lyrics?.sha256;
+    const verified = audioAvailable && lyricsAvailable && review?.approved!==false && (policyAccepted || review?.approved === true && review?.audioSha === audio.sha256 && review?.lyricsSha === lyrics.sha256);
     const index = r.active_index ? this.index(r.active_index) : null;
     const validIndex = verified && index?.review?.approved && index.audio_sha === audio.sha256 && index.lyrics_sha === lyrics.sha256;
-    return {recordingId:id, audio, lyrics, review, audioAvailable, lyricsAvailable,
-      status:verified ? 'ready' : audioAvailable && lyricsAvailable ? review?.approved === false ? 'review_rejected' : 'awaiting_review' : audioAvailable || lyricsAvailable ? 'partial' : 'missing',
-      fullSongRetained:Boolean(audioAvailable && review?.approved === true && review?.audioSha === audio.sha256),
+    return {recordingId:id, audio, lyrics, review, acceptance:policyAccepted?acceptance:null, audioAvailable, lyricsAvailable,
+      status:review?.approved===false ? 'review_rejected' : verified ? 'ready' : audioAvailable && lyricsAvailable ? 'awaiting_review' : audioAvailable || lyricsAvailable ? 'partial' : 'missing',
+      fullSongRetained:Boolean(verified),
       indexStatus:validIndex ? index.review.fullCoverage ? 'complete' : 'partial' : 'missing',
       activeIndexId:validIndex ? index.id : null};
   }
   job(id) { return this.db.prepare('SELECT * FROM jobs WHERE recording_id=?').get(id) || null; }
+  acceptBySourcePolicy(id,evidence) {
+    const m=this.material(id);
+    if(!m.audioAvailable||!m.lyricsAvailable||!evidence?.eligible)fail('material_not_ready');
+    if(m.review?.approved===false)fail('material_previously_rejected');
+    const acceptance={policy:'official_source_v1',audioSha:m.audio.sha256,lyricsSha:m.lyrics.sha256,evidence,at:now(),listeningVerified:false};
+    this.tx(()=>{this.db.prepare('UPDATE materials SET acceptance=?,updated_at=? WHERE recording_id=?').run(JSON.stringify(acceptance),now(),id);this.db.prepare("UPDATE jobs SET status='completed',stage='retained_by_source_policy',error=NULL,updated_at=? WHERE recording_id=?").run(now(),id);this.event(id,'material_accepted_by_source_policy',acceptance);});
+    return this.material(id);
+  }
   invalidateResource(id, kind, reason) {
     if (!['audio','lyrics'].includes(kind)) fail('invalid_resource_kind');
     reason=text(reason,2000);
@@ -291,14 +304,23 @@ export class SongLibrary {
     const bytes = fs.readFileSync(file), blob = {...this.blobs.put(bytes),...inspectWav(bytes)};
     const assetId = randomUUID();
     this.tx(() => {
-      this.db.prepare('INSERT INTO assets VALUES(?,?,?,?,?,?,?,?,?)').run(assetId,id,JSON.stringify(range),voiceKey(voice),JSON.stringify(blob),indexId,null,provenance,now());
+      this.db.prepare('INSERT INTO assets(id,recording_id,segment,voice,blob,index_id,review,provenance,created_at) VALUES(?,?,?,?,?,?,?,?,?)').run(assetId,id,JSON.stringify(range),voiceKey(voice),JSON.stringify(blob),indexId,null,provenance,now());
       this.event(id,'asset_candidate_saved',{assetId,segment:range,sha256:blob.sha256,indexId});
     });
     return this.asset(assetId);
   }
   asset(id) {
     const a = this.db.prepare('SELECT * FROM assets WHERE id=?').get(id); if (!a) fail('asset_not_found');
-    return {...a,segment:decode(a.segment),voice:decode(a.voice),blob:decode(a.blob),review:decode(a.review)};
+    return {...a,segment:decode(a.segment),voice:decode(a.voice),blob:decode(a.blob),review:decode(a.review),acceptance:decode(a.acceptance)};
+  }
+  acceptTechnical(id) {
+    const a=this.asset(id);
+    if(a.review?.approved===false)fail('asset_previously_rejected');
+    const info=inspectWav(this.blobs.read(a.blob));
+    if(info.durationMs<100||info.durationMs>90000)fail('audio_range_exceeded');
+    const acceptance={policy:'technical_audio_v1',sha256:a.blob.sha256,listeningVerified:false,at:now()};
+    this.db.prepare('UPDATE assets SET acceptance=? WHERE id=?').run(JSON.stringify(acceptance),id);
+    return this.asset(id);
   }
   importLegacyReview(id, review) {
     const a = this.asset(id);
@@ -326,13 +348,13 @@ export class SongLibrary {
   state(id, input, voice = Z_VOICE) {
     const r = this.recording(id), request = selector(input), material = this.material(id), key = voiceKey(voice);
     const all = this.db.prepare('SELECT id FROM assets WHERE recording_id=? AND voice=?').all(id,key).map(a => this.asset(a.id));
-    const approved = all.filter(a => a.review?.approved === true && this.blobs.available(a.blob));
+    const approved = all.filter(a => material.review?.approved !== false && a.review?.approved !== false && (a.review?.approved === true || a.acceptance?.policy==='technical_audio_v1'&&a.acceptance.sha256===a.blob.sha256) && this.blobs.available(a.blob));
     const asset = approved.find(a => canonical(a.segment) === canonical(request) && (!a.index_id || a.index_id === material.activeIndexId));
     const status = asset ? 'segment_ready' : approved.length ? 'song_partially_mastered' : 'song_unmastered';
     return {recording:{id:r.id,title:r.title,artist:r.artist,version:r.version},request,status,
       label:({segment_ready:'所点唱段已有素材',song_partially_mastered:'这首歌已有部分唱段',song_unmastered:'这首歌尚无已掌握唱段'})[status],
       assetId:asset?.id || null,masteredSegments:approved.map(a => ({assetId:a.id,segment:a.segment,indexId:a.index_id})),
-      pendingReview:all.filter(a => !a.review).map(a => a.id),material,locator:this.resolve(id,request),job:this.job(id),
+      pendingReview:all.filter(a => !a.review&&!a.acceptance).map(a => a.id),material,locator:this.resolve(id,request),job:this.job(id),
       next:asset ? 'use_reviewed_asset' : material.status !== 'ready' ? 'prepare_or_review_material' : this.resolve(id,request).status !== 'resolved' ? 'prepare_or_review_index' : 'generation_adapter_required',
       capabilities};
   }
