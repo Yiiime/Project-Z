@@ -21,36 +21,6 @@
       "outputDiscriminator": "decision",
       "implementationStatus": "spec_only",
       "executionEnabledByDefault": false
-    },
-    {
-      "id": "voice-performance",
-      "legacyCapabilityId": "dubbing",
-      "caller": "host",
-      "entry": "skills/voice-performance/SKILL.md",
-      "contract": "skills/voice-performance/references/contracts.md",
-      "outputDiscriminator": "action",
-      "implementationStatus": "spec_only",
-      "executionEnabledByDefault": false
-    },
-    {
-      "id": "simple-drawing",
-      "legacyCapabilityId": "drawing",
-      "caller": "host",
-      "entry": "skills/simple-drawing/SKILL.md",
-      "contract": "skills/simple-drawing/references/contracts.md",
-      "outputDiscriminator": "action",
-      "implementationStatus": "spec_only",
-      "executionEnabledByDefault": false
-    },
-    {
-      "id": "entertainment-tarot",
-      "legacyCapabilityId": "tarot",
-      "caller": "host",
-      "entry": "skills/entertainment-tarot/SKILL.md",
-      "contract": "skills/entertainment-tarot/references/contracts.md",
-      "outputDiscriminator": "action",
-      "implementationStatus": "spec_only",
-      "executionEnabledByDefault": false
     }
   ],
   "excludedLegacyCapabilities": [

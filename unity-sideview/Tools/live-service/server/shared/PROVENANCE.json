@@ -84,6 +84,7 @@
   ],
   "adaptations": [
     "PlayEngine private deck persistence for native sessions",
-    "Native durable singing host adapter: NetEase retrieval, shared technical-accepted library and main-agent scheduling; no singing review UI or persistent playback receipt API (2026-11-05)."
+    "Native durable singing host adapter: NetEase retrieval, shared technical-accepted library and main-agent scheduling; no singing review UI or persistent playback receipt API (2026-11-05).",
+    "2026-11-06: Live ConversationEngine now uses chat/speech base directly; native talent and agent API expose singing only. Retired activities are cleared during restore. Singing/host/audience/call prompts rebuilt with scripts/build-agent-bundle.mjs; original import hashes above remain historical provenance."
   ]
 }

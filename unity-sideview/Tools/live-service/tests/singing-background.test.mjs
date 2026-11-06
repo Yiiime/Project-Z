@@ -76,7 +76,7 @@ test('main agent can submit exact source and play only trusted ready tasks; NPC 
   assert.throws(()=>parseAgentReply({...base,tool:{name:'play_prepared_song',args:{taskId:'task1'}}},{kind:'host',context:c}));
   assert.equal(parseAgentReply({...base,handledIds:[],tool:{name:'play_prepared_song',args:{taskId:'task1'}}},{kind:'host',context:{...c,host:{inbox:[]}}}).tool.name,'play_prepared_song');
   assert.throws(()=>parseAgentReply({...base,tool:{name:'play_prepared_song',args:{taskId:'not-ready'}}},{kind:'host',context:c}));
-  assert.match(buildAgentRequest({kind:'host',context:c}).system,/后台唱歌适配/);
+  assert.match(buildAgentRequest({kind:'host',context:c}).system,/唱歌执行接口/);
   const prompt=buildAgentRequest({kind:'host',context:c});
   assert.doesNotMatch(prompt.system,/支持预制曲库播放，不支持动态歌声生成/);
   assert.deepEqual(prompt.input.songLibrary,[]);
@@ -128,4 +128,22 @@ test('rejected references block both cached and new ranges, even when a resource
 test('expired login fails preparation before paid generation with actionable safe reason',async t=>{
  const {service:s}=await fixture(t,{sources:[newSongSource({error:'netease_login_expired'})],parse:async()=>({...plan(),title:'测试新歌',artist:''}),generate:async()=>{throw Error('must_not_generate');}});
  submit(s);await s.tick();assert.equal(s.read().tasks[0].reason,'netease_login_expired');assert.equal(s.read().tasks[0].attempt,0);assert.match(s.context(owner).tasks[0].reason,/登录已过期/);
+});
+
+
+test('conversation state keeps song facts but leaves maintenance diagnostics in management',async()=>{
+ const {singingConversationState}=await import('../server/shared/worker/agent-director.js');
+ const original={enabled:true,tasks:[{id:'one',status:'failed',reason:'private maintenance diagnostic',request:'唱晚安',question:''}],limits:{singleSegmentSeconds:90,providerLookup:'internal'}};
+ const view=singingConversationState(original);
+ assert.equal(view.tasks[0].status,'failed');assert.equal(view.tasks[0].request,'唱晚安');assert.equal(view.tasks[0].reason,undefined);
+ assert.equal(original.tasks[0].reason,'private maintenance diagnostic');assert.equal(view.limits.providerLookup,undefined);
+});
+
+
+test('ready song can echo its historical request without handling a new message',()=>{
+ const c={host:{inbox:[],session:{evidence:[{id:'old-player',type:'player.message',speakerRole:'player'}],unfinishedItems:[]}},activeSkill:null,mediaRuntime:{audioEnabled:true},singing:{enabled:true,tasks:[{id:'ready-song',status:'ready',sourceId:'old-player'}]}};
+ const reply={action:'tool',speech:'好啦，我唱给你听。',mood:'warm',handledIds:['old-player'],wakeAfterMs:2000,memory:'',tool:{name:'play_prepared_song',args:{taskId:'ready-song'}}};
+ assert.deepEqual(parseAgentReply(reply,{kind:'host',context:c}).handledIds,[]);
+ assert.throws(()=>parseAgentReply({...reply,handledIds:['unknown']},{kind:'host',context:c}));
+ assert.throws(()=>parseAgentReply(reply,{kind:'host',context:{...c,host:{...c.host,inbox:[{id:'new-player',mine:true,text:'等等'}]}}}));
 });

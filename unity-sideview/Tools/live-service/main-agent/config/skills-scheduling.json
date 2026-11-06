@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "profile": "demo-five-skills-v1",
+  "profile": "z-chat-singing-v2",
   "activation": "explicit-demo-import-only",
   "parameterBasis": "Skill constraints are normative; numerical budgets are initial tuning defaults, not measured SLAs.",
   "host": {
@@ -128,52 +128,6 @@
       "spokenIntroOutro": false,
       "muteBgmDuringPlayback": true,
       "completion": "matching_playback_completed"
-    },
-    "voice-performance": {
-      "prepareDeadlineMs": 60000,
-      "maxDurationMs": 60000,
-      "maxScriptChars": 600,
-      "defaultVoice": "current_character_voice",
-      "voiceBindingScope": "task_local",
-      "defaultRoleOverlap": false,
-      "completeBundleBeforePlayback": true,
-      "completion": "matching_playback_completed"
-    },
-    "simple-drawing": {
-      "prepareDeadlineMs": 45000,
-      "preferredMode": "vector_strokes",
-      "fallbackMode": "final_only",
-      "defaultComplexity": "low",
-      "defaultPalette": "monochrome",
-      "defaultBackground": "blank",
-      "defaultCanvas": {
-        "width": 768,
-        "height": 768
-      },
-      "maxStages": 3,
-      "detailBudgets": {
-        "low": 40,
-        "medium": 100,
-        "high": 180
-      },
-      "completion": "current_final_artifact_displayed"
-    },
-    "entertainment-tarot": {
-      "toolDeadlineMs": 5000,
-      "defaultSpread": "single_focus",
-      "supportedSpreads": [
-        "single_focus",
-        "three_reflection"
-      ],
-      "candidateCount": 3,
-      "reversalsEnabled": false,
-      "selectionWaitMs": 45000,
-      "selectionReminderAfterMs": 15000,
-      "maxSelectionRemindersPerRound": 1,
-      "selectionTimeoutAction": "pause",
-      "autoSelectViewer": false,
-      "maxActiveTarotTasks": 1,
-      "completion": "revealed_snapshot_interpretation_played"
     }
   }
 }

@@ -1,26 +1,33 @@
 {
-  "bundle": "z-agent-skills-demo-v1",
-  "importedAt": "2026-11-02",
+  "bundle": "z-chat-singing-v2",
   "files": [
     {
       "path": "main-agent/config/skill-registry.json",
-      "sha256": "f7fb84f1fc664e33135f6a424ad4f687ec4e5c9f110bad4218a21c283da7858d"
+      "sha256": "fffe94f7778a0f6d465a2c6b90d80257698bb3ea52f90d7e810c20f82377f101"
     },
     {
       "path": "main-agent/config/skills-scheduling.json",
-      "sha256": "74a15d1197658100dd43c19b24622724a1e72a2f98524c21d42f07f80219de71"
+      "sha256": "81d8e216b12b429153249a7c0ae2cfe3c09de64fd9e5fff5c1c8ab4fd562601b"
     },
     {
       "path": "main-agent/config/skills-source-lock.json",
-      "sha256": "717a75b030aa3bf06eb389814df3e670d299548d24265b97a042112136794166"
+      "sha256": "e36e04f39dff690eb7445d3542c8a6029286bcf567f16856e0b46c1531911e13"
+    },
+    {
+      "path": "main-agent/prompts/conversation-host.txt",
+      "sha256": "bc2dcc7cf24da176d413f58b214c6a48bce2eb051827a054db3e0a0df4eba5bb"
     },
     {
       "path": "main-agent/prompts/main-agent-skills.txt",
-      "sha256": "f33716f0ca87445813a3f907fcc9f2f85cd0e175f399b21fccec5f0fced3e27a"
+      "sha256": "91bc15f027d4386c4bd0427a43bf6cbed1544c33cd5015df230ee4db66d7d63d"
+    },
+    {
+      "path": "main-agent/prompts/topic-progress.txt",
+      "sha256": "3c2298e578d9a0434e55ed9e308b2aae0adc1f4a64493ae3f11b22165725d9ff"
     },
     {
       "path": "skills/audience-reaction/SKILL.md",
-      "sha256": "7cdb8b39e4d49ba2fbb8e519f7937990ddf5c0c407701ea91f378d82922d3590"
+      "sha256": "867c3868c13f9dfd375a904b0016307594e9d329eccba7b41fcac9aef12e08c0"
     },
     {
       "path": "skills/audience-reaction/agents/openai.yaml",
@@ -31,52 +38,44 @@
       "sha256": "c6488bdd209c9585ec4f997935879d2d3da582a9e5123f8a58e6f714a1df5f62"
     },
     {
+      "path": "skills/audience-reaction/references/dialogue-review.md",
+      "sha256": "e68f2d4f296c2f6d4569a39a750bcc3eb2d5278b4c0aa49870a100ed061225d3"
+    },
+    {
       "path": "skills/audience-reaction/references/examples.md",
-      "sha256": "a64312679f3a22cc3c6559ee8455320dc385ec70da3755afacbd86dae900a4e9"
+      "sha256": "80018d44abd1eacc385c488b80647f343ea9f3b8dffd18018de333b6755c226a"
     },
     {
-      "path": "skills/entertainment-tarot/SKILL.md",
-      "sha256": "0072e2353dd8e89e4b4252e62e73731283102977770e716682d43077a57744dc"
+      "path": "skills/call-companion/SKILL.md",
+      "sha256": "62ae1e13c1ff4b91f4749a5bbf5f144f954afd3aeb2ab39c2a696953ca25a3c9"
     },
     {
-      "path": "skills/entertainment-tarot/agents/openai.yaml",
-      "sha256": "bd4c551ff8e03d266d09e66c26db2e19613f2e1d40e022ade6b8ad7f04cdfa6e"
+      "path": "skills/call-companion/references/audience.md",
+      "sha256": "19339821be3a2ec108e96769df50544b79c9072e60dfbf28d0041edc2a0720a0"
     },
     {
-      "path": "skills/entertainment-tarot/references/contracts.md",
-      "sha256": "32e6d0fc0ede7c8a9298b1c86f302b99bbbd72da35c55567a0cacb4d36b2b48f"
+      "path": "skills/call-companion/references/companionship.md",
+      "sha256": "ed7562e0bf2550a6a00b3fb588387437e7c242d47bc60c79c505cd80b9617549"
     },
     {
-      "path": "skills/entertainment-tarot/references/examples.md",
-      "sha256": "d56e547e0dd1da76c411f43db8b25f5bd0a493272b7c23b492c0d0dea3894195"
+      "path": "skills/call-companion/references/contract.md",
+      "sha256": "79fcf14c1169bae39cbaf558d71eb0f4071c70abe44803c743b387b94611e47f"
     },
     {
-      "path": "skills/entertainment-tarot/references/interpretation.md",
-      "sha256": "8cb1cde5a8e907440e95246b16035159e1eb144fdb3914502ecbe60ee5a2def0"
+      "path": "skills/call-companion/references/examples.md",
+      "sha256": "2168d8fb2cd35e1dbe0141c2394421034ae4ec708e583b4f2a01f17bd10f76d5"
     },
     {
-      "path": "skills/simple-drawing/SKILL.md",
-      "sha256": "21865f6a3cee4001b4add14b8a00180d90ba9d937095c054fc1c967ce07f1d1b"
+      "path": "skills/call-companion/references/story.md",
+      "sha256": "1d570f423232c7c17ad164f59f8cce08adde5e818c70ad97e6916021db49f4cf"
     },
     {
-      "path": "skills/simple-drawing/agents/openai.yaml",
-      "sha256": "f055b5bba39138a8d0029623ff41434ca7509fdc54f750826f7232f97aaeb7cc"
-    },
-    {
-      "path": "skills/simple-drawing/references/contracts.md",
-      "sha256": "a01c27664ff879a20a7f4d55ec8a2fd0b588b192bf69d473ea24cc336f8f7e45"
-    },
-    {
-      "path": "skills/simple-drawing/references/drawing-methods.md",
-      "sha256": "816e7f9212a9b83209bbc119c47c60fc5e5516facc776b216fbc2da4f52c5bce"
-    },
-    {
-      "path": "skills/simple-drawing/references/examples.md",
-      "sha256": "eafa522f271f0e4b770e1a215837372f9654af308be1e583fb6525260a23e1b5"
+      "path": "skills/call-companion/references/talents.md",
+      "sha256": "8b1425cf5c06a5498c2ce7314a4a28c215c4b1c078f9fb729806dce0b5c75beb"
     },
     {
       "path": "skills/singing/SKILL.md",
-      "sha256": "f5483b3229a4e494f3ef4f73383c304bb2e56301e79950ea4fac47ceb732d1fa"
+      "sha256": "7781c6bc86dd86c29e996114e854c5d35f2dab3c524f6aca1657e03e9f787bcd"
     },
     {
       "path": "skills/singing/agents/openai.yaml",
@@ -88,43 +87,15 @@
     },
     {
       "path": "skills/singing/references/examples.md",
-      "sha256": "248d0bf9fcbf9f178674affba855db3076c62625cc93256c11c6b4229ba04515"
+      "sha256": "5ebf87e038c789dd59ae9db661104f5fd62609b847df9b7713172fed16e377c6"
+    },
+    {
+      "path": "skills/singing/references/expression.md",
+      "sha256": "80f32b1a9ea88a4d51ad3f11831377d0a327a73e427acec2846950be0ba4fd0e"
     },
     {
       "path": "skills/singing/references/voice.md",
       "sha256": "b53d0e0c77ffb056a469cc3fb7495167d215a635f2f5e0f771639049f07f2170"
-    },
-    {
-      "path": "skills/voice-performance/SKILL.md",
-      "sha256": "fb0d19d2ffc0d5bb1366a9e065cc6ec2f9beaa9e233c843f870e98a7acbe9f48"
-    },
-    {
-      "path": "skills/voice-performance/agents/openai.yaml",
-      "sha256": "1b53d393b33c048616c8a7cac8aa6dfbbe1304c2391ca04dce610a0779c7d3ec"
-    },
-    {
-      "path": "skills/voice-performance/references/contracts.md",
-      "sha256": "f8ac1ad9054166ff71c29110fd4460caa38e38b1c6d4130bd656d12188d45330"
-    },
-    {
-      "path": "skills/voice-performance/references/examples.md",
-      "sha256": "a028a9e4ba22d33d03bf504265291cac46e267fe817d8a4d82c07fa54fab9859"
-    },
-    {
-      "path": "skills/voice-performance/references/performance-methods.md",
-      "sha256": "cba77c57f33ff4446b4b0bea3df4a575fbdcbeb366e2dc8785bc163c4002d4c9"
-    },
-    {
-      "path": "skills/audience-reaction/references/dialogue-review.md",
-      "sha256": "bde75bb6e11471d12fea78abafe63de8b80950d96705f12d14d8227f7379bac8"
-    },
-    {
-      "path": "main-agent/prompts/conversation-host.txt",
-      "sha256": "08bacb95b7e30b1367dfc05b937138cf42793d596ffacb3a405c2c9b48576d10"
-    },
-    {
-      "path": "main-agent/prompts/topic-progress.txt",
-      "sha256": "3c2298e578d9a0434e55ed9e308b2aae0adc1f4a64493ae3f11b22165725d9ff"
     }
   ]
 }

@@ -1,18 +1,16 @@
 import {SessionContinuity,validateAgendaUpdates,validateTopicProgress} from './session-continuity.js';
-import {DrawingDirector} from './drawing-director.js';
-import {PlayEngine} from './play-engine.js';
+import {LiveEngine} from './live-engine.js';
 import {AudienceDirector} from './audience-director.js';
 import {TALENT_MOODS,TALENT_GESTURES} from './talent-config.js';
 const id=()=>crypto.randomUUID();
 // The model owns conversational decisions. This runtime only executes speech/wait.
-export class ConversationEngine extends PlayEngine {
+export class ConversationEngine extends LiveEngine {
   constructor(){
-    super({storage:null});this.client=null;this.enabled=false;this.epoch=0;this.inbox=[];this.facts=[];this.memory='';this.nextWake=0;this.pending=null;
+    super();this.client=null;this.enabled=false;this.epoch=0;this.inbox=[];this.facts=[];this.memory='';this.nextWake=0;this.pending=null;
     this.session=new SessionContinuity();this.preparing=null;this.prepared=null;this.preparationVersion=0;this.speechPlan=null;this.speechAudio=null;this.failureStreak=0;this.topicEnabled=false;this.topicWork=null;this.topicProgress=null;this.topicVersion=0;this.handoffEnabled=false;this.audiencePreview=null;this.inboxVersion=0;
     this._state.play={active:null,queue:[],tarot:null,drawing:null,history:[]};
     this._state.agent={enabled:false,source:'local',capabilities:[]};
     this.talent=null;this._state.media=null;
-    this.drawings=new DrawingDirector({generate:(p,o)=>this.client.generate(p,o),now:()=>this._clock,changed:d=>{this._state.play.drawing=d;this._emitState();},event:(type,text)=>{this.epoch++;this.pending?.abort();this.pending=null;this._public(type,text);this.nextWake=this._clock;}});
     this.recentExpressions=[]; this.speechLinks=new Map();
     this.addEventListener('speak',({detail})=>{
       if(detail.resume)return;
@@ -171,7 +169,7 @@ export class ConversationEngine extends PlayEngine {
     if(this._active&&(this._speechDriven?this._active.complete:this._active.until<=this._clock))this._finishSpeech();
     this._pumpSpeech();
     if(this._canPresentMedia?.()!==false&&this._state.media?.phase==='ready'&&!this._active&&!this._queue.length&&!this.pending)void this.talent.play();
-    if(!this._active&&!this._queue.length&&!this.pending)this.drawings.advance();this.audience.tick();this._maybeAssessTopic();this._maybePrepare();this._think();}
+    this.audience.tick();this._maybeAssessTopic();this._maybePrepare();this._think();}
   _pumpSpeech(){if(!this._mediaPlaying())super._pumpSpeech();}
   _cancelPreparation(reason){
     if(this.prepared)this.speechAudio?.dropWarmSpeech(this.prepared.requestId);
@@ -179,7 +177,7 @@ export class ConversationEngine extends PlayEngine {
     this.audience?.dialogue.log({stage:'host.prepare.invalidated',reason});
   }
   _hostContext(inbox,turn={mode:'live'}){
-    return {...this._toolContext(),experience:'autonomous',publicEvents:this.facts.slice(-12),host:{inbox,memory:this.memory,round:this._state.play.tarot?.round||0,recentExpressions:this.recentExpressions.map(e=>({...e})),session:this.session.snapshot(),turn,...(turn.mode==='prepare'&&this.audiencePreview?.status==='pending'?{pendingAudience:(({id,messageId,npcId,text,status})=>({id,messageId,npcId,text,status}))(this.audiencePreview)}:{}),...(this.topicProgress?{topicProgress:this.topicProgress}:{})}};
+    return {...this._toolContext(),experience:'autonomous',publicEvents:this.facts.slice(-12),host:{inbox,memory:this.memory,recentExpressions:this.recentExpressions.map(e=>({...e})),session:this.session.snapshot(),turn,...(turn.mode==='prepare'&&this.audiencePreview?.status==='pending'?{pendingAudience:(({id,messageId,npcId,text,status})=>({id,messageId,npcId,text,status}))(this.audiencePreview)}:{}),...(this.topicProgress?{topicProgress:this.topicProgress}:{})}};
   }
   _maybePrepare(){
     const speech=this._active,plan=this.speechPlan,preview=this.audiencePreview?.status==='pending'?this.audiencePreview:null;
@@ -258,67 +256,25 @@ export class ConversationEngine extends PlayEngine {
   }
   _sessionPlayers(){return this.session.evidence().filter(e=>e.type==='player.message'&&e.speakerRole==='player').map(e=>({id:e.id,name:'小岛来客',text:e.text,mine:true}));}
   _toolContext(){
-    const p=this._state.play,t=p[p.active];const c={phase:'chat',activeSkill:p.active==='tarot'?'entertainment-tarot':p.active==='drawing'?'simple-drawing':null};
+    const c={phase:'chat',activeSkill:null};
     c.mediaRuntime={audioEnabled:!!this.talent?.speech.enabled&&this.talent.speech.volume>0,ttsAvailable:!!this.talent?.speech.available};
     if(this._state.media){const m=this.talent.snapshot();return {...c,activeSkill:m.kind,phase:m.phase,taskId:m.id,media:m};}
-    const d=p.drawing;if(d?.mode==='generated_vector')c.drawing={mode:d.mode,artworkId:d.id,revision:d.revision,artifactId:d.artifactId,title:d.title,phase:d.phase,stage:d.stage,stageCount:d.stageCount,visible:d.open,displayedRevision:d.displayedRevision,elements:(d.scene?.elements||[]).map(({id,label,stage,fill,stroke})=>({id,label,stage,fill,stroke,shown:d.displayed===`${d.revision}:${d.stage}`&&stage<=d.stage&&d.open}))};
-    if(!t)return c;c.taskId=t.id;c.revision=t.revision||0;
-    if(p.active==='tarot'){c.phase=t.phase;c.origin=t.origin;c.question=t.question;
-      if(t.phase==='awaiting_selection'&&t.origin==='host')c.candidates=t.candidates.map(({id,label})=>({id,label}));
-      if(['interpreting','completed'].includes(t.phase))c.cards=t.cards.map(({name,title,meaning,advice,position})=>({name,title,meaning,advice,position}));
-    }else if(t.mode==='generated_vector'){c.phase=t.phase;}else{c.phase=t.phase;const shown=t.displayed?.split(':').map(Number);if(shown?.[0]===t.revision)c.drawing={title:shown[1]>=1?t.title:'轮廓',subject:t.subject,stage:shown[1],...(shown[1]>=1?{accessory:t.accessory}:{})};}
     return c;
   }
   _toolEvent(text){this._public('tool.result',text);this.nextWake=this._clock;}
   _executeTool(tool){
     if(['prepare_song','clarify_song','cancel_song','play_prepared_song'].includes(tool?.name)){void this._executeSinging(tool);return true;}
-    const a=tool?.args||{},p=this._state.play,t=p[p.active];let ok=false;
-    if(['start_performance','start_singing'].includes(tool?.name)&&!p.active&&!this._state.media){
-      ok=this.talent?.start(tool.name==='start_performance'?'voice-performance':'singing',a,{inbox:[...this.inbox,...this._state.messages,...this._sessionPlayers()]})||false;
-    }else if(tool?.name==='replay_talent'&&this._state.media&&a.taskId===this._state.media.id){ok=this.talent.replay();}
+    const a=tool?.args||{};let ok=false;
+    if(tool?.name==='start_singing'&&!this._state.media){
+      ok=this.talent?.start('singing',a)||false;
+    }else if(tool?.name==='replay_talent'&&this._state.media&&a.taskId===this._state.media.id)ok=this.talent.replay();
     else if(tool?.name==='finish_activity'&&this._state.media&&a.taskId===this._state.media.id)ok=this.talent.finish(a.cancel);
-    else if(tool?.name==='start_tarot'&&!p.active&&!this._state.media&&['host','viewer'].includes(a.origin)&&['single','three'].includes(a.spread)&&typeof a.question==='string'&&a.question.trim()){
-      if(a.origin==='host'||this.inbox.some(m=>m.id===a.requesterId&&m.mine)||this._state.messages.some(m=>m.id===a.requesterId&&m.mine)||this._sessionPlayers().some(m=>m.id===a.requesterId))ok=this._request({kind:'tarot',origin:a.origin,question:a.question.slice(0,120),spread:a.spread});
-    }else if(tool?.name==='start_drawing'&&!p.active)ok=this.requestDrawing(a);
-    else if(tool?.name==='choose_tarot'&&t?.id===a.taskId&&p.active==='tarot')ok=this._chooseTarot(t.id,a.round,a.candidateId,'host');
-    else if(tool?.name==='finish_activity'&&t?.id===a.taskId)ok=this.finishActivity(!!a.cancel);
-    else if(tool?.name==='set_panel'&&p[a.kind]?.id===a.taskId)ok=this.setPanel(a.kind,a.open);
-    else if(tool?.name==='edit_drawing'&&p.drawing?.id===a.taskId)ok=this.editDrawing(a);
-    this._toolEvent(JSON.stringify({tool:tool?.name,status:ok?'accepted':'unavailable_or_stale',taskId:this._state.media?.id||this._state.play[this._state.play.active]?.id||null}));return ok;
+    this._toolEvent(JSON.stringify({tool:tool?.name,status:ok?'accepted':'unavailable_or_stale',taskId:this._state.media?.id||null}));return ok;
   }
-  requestDrawing(args={}){
-    const p=this._state.play;if(!this.enabled||!this.client||p.active||this._state.media||this._state.paused||this._destroyed)return false;
-    const requester=args.requesterId?[...this.inbox,...this._state.messages,...this._sessionPlayers()].find(m=>m.id===args.requesterId&&m.mine):null;
-    if(args.requesterId&&!requester)return false;
-    const previous=p.drawing;
-    p.active='drawing';
-    const ok=this.drawings.start({request:args.request,owner:requester?.name||'Z',requesterId:requester?.id||null});
-    if(!ok){p.active=null;return false;}
-    if(previous)p.drawingHistory=[...(p.drawingHistory||[]),previous].slice(-5);
-    this._state.stageLabel='绘画 · Z 的小画室';this._emitState();return true;
-  }
-  editDrawing(args){
-    const p=this._state.play;if(this._state.media||p.active&&p.active!=='drawing'||this._state.paused||this._destroyed||!this.enabled)return false;
-    const old=p.active;p.active='drawing';const ok=this.drawings.edit(args||{});if(!ok)p.active=old;
-    if(ok){this.epoch++;this.pending?.abort();this.pending=null;this.nextWake=this._clock;this._emitState();}return ok;
-  }
-  setPanel(kind,open){if(kind==='drawing'&&this._state.media)return false;return super.setPanel(kind,open);}
-  // Existing modules execute geometry and deck transitions, never scripted hosting.
-  _line(kind,taskId,line,done,revision){if(this._valid(kind,taskId,revision))done?.();}
-  _autoClose(){}
-  _drainPlayQueue(){}
-  _request(request){if(this._state.play.active||this._state.media||request.kind==='lottery')return false;return super._request(request);}
-  candidatesDisplayed(taskId,round){const t=this._state.play.tarot;
-    if(!this._valid('tarot',taskId)||t.round!==round||t.phase!=='candidates_ready'||!t.open||t.paused||this._state.paused)return false;
-    t.phase='awaiting_selection';this._toolEvent('牌背已展示，等待'+(t.origin==='host'?'Z':'提问观众')+'选择。');this._emitState();return true;}
-  _readTarot(){this._state.play.tarot.phase='completed';this._emitState();}
-  tarotDisplayed(taskId){const ok=super.tarotDisplayed(taskId);if(ok)this._toolEvent('牌面已实际展示：'+this._state.play.tarot.cards.map(c=>c.title+'正位').join('、'));return ok;}
-  drawingDisplayed(taskId,revision,stage){if(this._state.play.drawing?.mode==='generated_vector')return this.drawings.displayed(taskId,revision,stage);const ok=super.drawingDisplayed(taskId,revision,stage);if(ok)this._toolEvent('画板已实际展示：'+(stage===0?'轮廓':this._state.play.drawing.title)+'，阶段'+stage);return ok;}
-  finishActivity(cancel=false){const p=this._state.play,d=p.drawing;if(p.active==='drawing'&&d?.mode==='generated_vector'){if(this._state.paused||!cancel&&!['completed','failed'].includes(d.phase))return false;if(cancel)this.drawings.cancel();d.open=false;p.active=null;this._setStage('free');this._toolEvent(cancel?'当前绘画已取消。':d.phase==='failed'?'本次绘画未完成，已结束任务并回到聊天。':'草图展示已结束，可以继续聊天或随后修改这幅画。');this._emitState();return true;}const ok=super.finishActivity(cancel);if(ok)this._toolEvent(cancel?'当前才艺已取消。':'当前才艺已结束。');return ok;}
   _finishSpeech(){const speech=this._active;super._finishSpeech();if(speech){this._public('speech.completed',speech.text,{id:`speech-${speech.id}`,speakerRole:'host',speakerId:'Z',speechId:String(speech.id),status:'completed',replyTo:this.speechLinks.get(speech.id)||[]});this.speechLinks.delete(speech.id);}}
-  setPaused(value){this.drawings.setPaused(value);if(value){if(this.handoffEnabled){this.audience.clearPreparation('paused');this.audiencePreview=null;}this._cancelTopic('paused');this.speechAudio?.dropWarmSpeech();this._cancelPreparation('paused');this.epoch++;this.pending?.abort();this.pending=null;this.audience.dialogue.invalidate();}super.setPaused(value);if(value)this.talent?.pause();else {this.talent?.resume();if(this.handoffEnabled&&this._active?.source==='deepseek')this.audience.setHostPreview({speechId:this._active.id,text:this._active.text});}}
+  setPaused(value){if(value){if(this.handoffEnabled){this.audience.clearPreparation('paused');this.audiencePreview=null;}this._cancelTopic('paused');this.speechAudio?.dropWarmSpeech();this._cancelPreparation('paused');this.epoch++;this.pending?.abort();this.pending=null;this.audience.dialogue.invalidate();}super.setPaused(value);if(value)this.talent?.pause();else {this.talent?.resume();if(this.handoffEnabled&&this._active?.source==='deepseek')this.audience.setHostPreview({speechId:this._active.id,text:this._active.text});}}
   replay(){this.audiencePreview=null;this.inboxVersion=0;this._cancelTopic('replay');this.speechAudio?.dropWarmSpeech();this._cancelPreparation('replay');this.session.reset();this.speechPlan=null;this.failureStreak=0;this.epoch++;this.pending?.abort();this.pending=null;this.client?.cancel();this.audience.invalidate();this.inbox=[];this.facts=[];this.memory='';this.nextWake=0;
     this.recentExpressions=[];this.speechLinks.clear();
-    this.drawings.reset();this.talent?.reset();this.facts=[];this.session.reset();const agent=this._state.agent;super.replay();this._state.media=null;this._state.play={active:null,queue:[],tarot:null,drawing:null,history:[]};this._state.stage='free';this._state.stageLabel='和 Z 聊聊天';this._state.agent=agent;this.audience.setConfig(this.audience.config);this._emitState();return true;}
-  destroy(){clearInterval(this.singingPoll);this.audiencePreview=null;this._cancelTopic('destroyed');this.speechAudio?.dropWarmSpeech();this._cancelPreparation('destroyed');this.epoch++;this.pending?.abort();this.client?.cancel();this.audience.invalidate();this.drawings.reset();this.talent?.destroy();super.destroy();}
+    this.talent?.reset();this.facts=[];this.session.reset();const agent=this._state.agent;super.replay();this._state.media=null;this._state.play={active:null,queue:[],tarot:null,drawing:null,history:[]};this._state.stage='free';this._state.stageLabel='和 Z 聊聊天';this._state.agent=agent;this.audience.setConfig(this.audience.config);this._emitState();return true;}
+  destroy(){clearInterval(this.singingPoll);this.audiencePreview=null;this._cancelTopic('destroyed');this.speechAudio?.dropWarmSpeech();this._cancelPreparation('destroyed');this.epoch++;this.pending?.abort();this.client?.cancel();this.audience.invalidate();this.talent?.destroy();super.destroy();}
 }

@@ -6,7 +6,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {ArtifactStore,loadEnvironment,Providers} from '../server/providers.mjs';
 import {LiveSession} from '../server/session.mjs';
-import {normalizeAgentInput} from '../server/shared/worker/agent-director.js';
+import {normalizeAgentInput,parseAgentReply,buildAgentRequest} from '../server/shared/worker/agent-director.js';
 const frame=()=>new Promise(r=>setImmediate(r));
 async function fixture(t){const root=fs.mkdtempSync(path.join(os.tmpdir(),'z-unity-test-'));const providers={env:{},config:async()=>({enabled:false}),generate:async()=>({action:'wait',speech:'',mood:'neutral',handledIds:[],wakeAfterMs:120000,memory:''})};const s=new LiveSession({root:path.join(root,'sessions'),providers,artifacts:new ArtifactStore(path.join(root,'artifacts')),songRoot:fileURLToPath(new URL('../server/assets/songs',import.meta.url))});await s.initialize();clearInterval(s.engine._timer);t.after(()=>{s.close();fs.rmSync(root,{recursive:true,force:true});});s.control(envelope(s,{action:'resume'}));return s;}
 const envelope=(s,extra={})=>({protocolVersion:1,sessionId:s.id,epoch:s.epoch,...extra});
@@ -15,7 +15,7 @@ const latest=(s,type)=>[...s.commands.values()].filter(c=>c.type===type).at(-1);
 
 test('preparing talent snapshot is accepted by the actual agent input contract',async t=>{
  const s=await fixture(t);
- s.talent.current={id:crypto.randomUUID(),kind:'voice-performance',title:'便利店小剧场',phase:'preparing'};
+ s.talent.current={id:crypto.randomUUID(),kind:'singing',title:'晚安 · 副歌',phase:'preparing'};
  s.talent.changed();
  const context=JSON.parse(JSON.stringify(s.engine._hostContext([])));
  assert.equal(context.media.playbackId,null);assert.equal(context.media.artifactId,null);
@@ -23,10 +23,6 @@ test('preparing talent snapshot is accepted by the actual agent input contract',
 });
 
 test('host completion requires actual execution; interruption never publishes completed speech',async t=>{const s=await fixture(t);s.engine._say('你好，今天怎么样？','warm','none',{source:'deepseek'});await frame();const c=latest(s,'host.present');assert(c);assert(!s.engine.facts.some(e=>e.type==='speech.completed'));assert.throws(()=>receipt(s,c,'completed',{positionMs:2000}),/invalid_transition/);receipt(s,c,'started',{durationMs:2000,positionMs:0});receipt(s,c,'progress',{positionMs:500,text:'你好'});assert(s.engine.facts.some(e=>e.type==='speech.progress'&&e.text==='你好'));receipt(s,c,'interrupted',{reason:'viewer_stop'});assert(!s.engine.facts.some(e=>e.type==='speech.completed'));assert.equal(s.engine._active,null);});
-
-test('tarot viewer and host choices remain distinct; concealed deck is not sent',async t=>{const s=await fixture(t);s.engine.sendMessage('想看看新计划');const requesterId=s.engine.inbox.at(-1).id;assert(s.engine._executeTool({name:'start_tarot',args:{origin:'viewer',requesterId,question:'新计划',spread:'single'}}));const c=latest(s,'tarot.present');const task=s.engine._state.play.tarot;assert.equal(task.phase,'candidates_ready');assert.equal(c.payload.cards,undefined);assert(!JSON.stringify(s.snapshot()).includes('"deck"'));receipt(s,c,'displayed');assert.equal(task.phase,'awaiting_selection');assert.equal(s.engine._executeTool({name:'choose_tarot',args:{taskId:task.id,round:task.round,candidateId:task.candidates[0].id}}),false);s.input(envelope(s,{type:'tarot.selection',payload:{taskId:task.id,resourceRevision:0,round:task.round,candidateId:task.candidates[0].id}}));assert.throws(()=>s.input(envelope(s,{type:'tarot.selection',payload:{taskId:task.id,resourceRevision:0,round:task.round,candidateId:task.candidates[0].id}})),/state_conflict/);s.engine._afterSelection();assert.equal(s.engine._toolContext().cards,undefined);receipt(s,latest(s,'tarot.present'),'displayed');assert.equal(s.engine._toolContext().cards.length,1);});
-
-test('drawing stays hidden until requested and advances only after a valid display receipt',async t=>{const s=await fixture(t);const scene={title:'一棵树',stages:['轮廓','树冠'],elements:[{id:'trunk',label:'树干',stage:0,stroke:'#334455',fill:'none',strokeWidth:3,commands:[['M',120,120],['L',120,300]]},{id:'leaves',label:'树冠',stage:1,stroke:'#335544',fill:'none',strokeWidth:3,commands:[['M',40,120],['L',200,120]]}]};s.engine.enabled=true;s.engine.client.generate=async p=>({status:'ready',taskId:p.context.drawingJob.taskId,revision:p.context.drawingJob.revision,scene});assert(s.engine.requestDrawing({request:'画一棵树'}));await frame();assert.equal(latest(s,'drawing.present'),undefined);const d=s.engine.drawings.current;s.engine.setPanel('drawing',true);let c=latest(s,'drawing.present');assert(c);assert.throws(()=>receipt(s,c,'displayed',{stage:1}),/invalid_evidence/);receipt(s,c,'displayed');assert.equal(d.phase,'drawing');s.engine._clock+=2000;s.engine.drawings.advance();c=latest(s,'drawing.present');assert.equal(c.payload.stage,1);receipt(s,c,'displayed');assert.equal(d.phase,'completed');});
 
 test('server restart changes epoch and invalidates old execution receipts',async t=>{const s=await fixture(t);s.engine._say('这句还没说完','warm','none',{source:'deepseek'});await frame();const c=latest(s,'host.present');const saved=s.persistData();const restored=new LiveSession({id:s.id,root:s.root,providers:s.providers,artifacts:s.artifacts,songRoot:s.songRoot,saved});t.after(()=>restored.close());assert.equal(restored.epoch,s.epoch+1);assert(!restored.engine.facts.some(e=>e.type==='speech.completed'));assert.equal(restored.commands.get(c.commandId).status,'interrupted');assert.throws(()=>restored.receipt(envelope(s,{executorLeaseId:s.lease})),/stale_epoch/);});
 
@@ -37,31 +33,11 @@ test('song must really finish and be released before another talent can start',a
  const play=latest(s,'media.play');receipt(s,play,'started',{durationMs:32284,positionMs:0});
  assert.throws(()=>receipt(s,play,'completed',{positionMs:1000}),/not_finished/);
  receipt(s,play,'progress',{positionMs:31000,lineIndex:0});receipt(s,play,'completed',{positionMs:32284});
- const tarot={name:'start_tarot',args:{origin:'host',question:'唱完后的灵感',spread:'single'}};
- assert.equal(s.engine._executeTool(tarot),false);
+ const nextSong={name:'start_singing',args:{songId:'wanan-yanrenzhong-vivi2-chorus'}};
+ assert.equal(s.engine._executeTool(nextSong),false);
  assert(s.engine._executeTool({name:'finish_activity',args:{taskId:play.taskId,cancel:false}}));
  assert.equal(s.engine._state.media,null);assert.equal(latest(s,'activity.release').taskId,play.taskId);
- assert(s.engine._executeTool(tarot));
-});
-
-test('three-card viewer selection and host choice both reveal then release to chat',async t=>{
- const s=await fixture(t);s.engine.sendMessage('我想分三次选牌');const requesterId=s.engine.inbox.at(-1).id;
- assert(s.engine._executeTool({name:'start_tarot',args:{origin:'viewer',requesterId,question:'新计划',spread:'three'}}));
- const task=s.engine._state.play.tarot;
- for(let round=1;round<=3;round++){
-  const c=latest(s,'tarot.present');assert.equal(c.payload.round,round);assert.equal(c.payload.view,'backs');receipt(s,c,'displayed');
-  assert.equal(s.engine._executeTool({name:'choose_tarot',args:{taskId:task.id,round,candidateId:task.candidates[0].id}}),false);
-  s.input(envelope(s,{type:'tarot.selection',payload:{taskId:task.id,resourceRevision:0,round,candidateId:task.candidates[1].id}}));
-  s.engine._afterSelection();if(round<3)assert.equal(s.snapshot().tarot.cards.length,0);
- }
- const revealed=latest(s,'tarot.present');assert.equal(revealed.payload.cards.length,3);assert.equal(revealed.payload.view,'revealed');
- receipt(s,revealed,'displayed');assert.equal(task.phase,'completed');
- assert(s.engine._executeTool({name:'finish_activity',args:{taskId:task.id,cancel:false}}));assert.equal(s.snapshot().activeTask,null);assert.equal(s.snapshot().panels.tarot,false);
- assert(s.engine._executeTool({name:'start_tarot',args:{origin:'host',question:'我的灵感',spread:'single'}}));
- const host=s.engine._state.play.tarot;receipt(s,latest(s,'tarot.present'),'displayed');
- assert.throws(()=>s.input(envelope(s,{type:'tarot.selection',payload:{taskId:host.id,resourceRevision:0,round:host.round,candidateId:host.candidates[0].id}})),/state_conflict/);
- assert(s.engine._executeTool({name:'choose_tarot',args:{taskId:host.id,round:host.round,candidateId:host.candidates[0].id}}));s.engine._afterSelection();receipt(s,latest(s,'tarot.present'),'displayed');
- assert(s.engine._executeTool({name:'finish_activity',args:{taskId:host.id,cancel:false}}));assert.equal(s.snapshot().activeTask,null);
+ assert(s.engine._executeTool(nextSong));
 });
 
 test('character waiting follows agent reply state without imposing a schedule',async t=>{
@@ -99,18 +75,6 @@ test('pause cancels a listening turn and end prevents delayed inputs',async t=>{
  assert.throws(()=>s.input(envelope(s,{type:'viewer.message',payload:{text:'迟到语音'}})),/session_paused/);
 });
 
-test('native room exposes web message receipts and selection pause without pausing the room',async t=>{
- const s=await fixture(t);s.engine.sendMessage('我想看看新计划');const message=s.engine._state.messages.findLast(m=>m.mine);
- const room=s.snapshot().room;assert.equal(room.viewers,s.engine._state.viewers);assert.equal(room.messages.find(m=>m.id===message.id).replyStatus,'seen');assert.equal(room.voiceAvailable,false);
- assert(s.engine._executeTool({name:'start_tarot',args:{origin:'viewer',requesterId:message.id,question:'新计划',spread:'three'}}));
- const task=s.engine._state.play.tarot;receipt(s,latest(s,'tarot.present'),'displayed');
- s.input(envelope(s,{type:'tarot.pause',payload:{taskId:task.id}}));
- assert.equal(s.snapshot().tarot.paused,true);assert.equal(s.snapshot().tarot.spread,'three');assert.equal(s.snapshot().phase,'live');
- assert.throws(()=>s.input(envelope(s,{type:'tarot.selection',payload:{taskId:task.id,resourceRevision:0,round:task.round,candidateId:task.candidates[0].id}})),/state_conflict/);
- s.input(envelope(s,{type:'tarot.pause',payload:{taskId:task.id}}));assert.equal(s.snapshot().tarot.paused,false);
- assert.throws(()=>s.input(envelope(s,{type:'activity.finish',payload:{taskId:'expired'}})),/stale_revision/);
-});
-
 test('call waits for the host turn and suspension hangs up before accepting more audio',async t=>{
  const s=await fixture(t);s.engine.enabled=true;s.input(envelope(s,{type:'call.join',payload:{}}));
  s.engine.callNeedsTurn=true;assert.equal(s.snapshot().call.busy,true);
@@ -136,4 +100,47 @@ test('voice entitlement failures reach the native status without provider payloa
  const providers=new Providers({VOLC_TTS_API_KEY:'test-only'},{fetch:async()=>new Response('data: '+JSON.stringify({code:45000030,message:'provider-private-details'})+'\n\n',{headers:{'Content-Type':'text/event-stream'}})});
  await assert.rejects(providers.synthesize('test-owner','晚上好','warm'),{message:'tts_provider_resource_not_granted'});
  assert.equal(providers.voiceError,'tts_provider_resource_not_granted');
+});
+
+const retiredTools=['start_tarot','choose_tarot','start_drawing','edit_drawing','set_panel','start_performance'];
+test('retired talent tools cannot run in the room or call; chat remains available',async t=>{
+ const s=await fixture(t);s.engine.enabled=true;
+ for(const call of [false,true]){
+  if(call)assert(s.engine.joinCall());
+  for(const name of retiredTools)assert.equal(s.engine._executeTool({name,args:{}}),false,name);
+  assert.equal(s.talent.start('voice-performance',{title:'test',lines:[]}),false);
+  assert(s.engine.sendMessage('我们聊聊今天吧'));
+  assert.equal(s.snapshot().activeTask,null);assert.equal(s.snapshot().recentArtwork,null);assert.equal(s.snapshot().tarot,null);
+ }
+ assert(![...s.commands.values()].some(c=>['drawing.present','tarot.present'].includes(c.type)));
+ for(const type of ['tarot.selection','tarot.pause','panel.intent','activity.finish'])assert.throws(()=>s.input(envelope(s,{type,payload:{taskId:'old'}})),/state_conflict/);
+});
+
+test('host tool contract and advertised capabilities only expose singing',async t=>{
+ const s=await fixture(t),context=normalizeAgentInput({requestId:crypto.randomUUID(),eventId:'test',kind:'host',context:s.engine._hostContext([])}).context;
+ const reply={action:'tool',speech:'我试试。',mood:'warm',handledIds:[],wakeAfterMs:2000,memory:''};
+ for(const name of retiredTools)assert.throws(()=>parseAgentReply({...reply,tool:{name,args:{}}},{kind:'host',context}));
+ for(const kind of ['artwork','talent','decision'])assert.throws(()=>normalizeAgentInput({requestId:crypto.randomUUID(),eventId:'test',kind,context:{phase:'chat'}}));
+ const host=buildAgentRequest({kind:'host',context});
+ assert.deepEqual(host.input.capabilities.map(c=>c.id).sort(),['audience-reaction','singing']);
+ assert(!retiredTools.some(name=>host.system.includes(name)));
+ const audience=buildAgentRequest(normalizeAgentInput({requestId:crypto.randomUUID(),eventId:'event',kind:'audience',context:{phase:'chat',publicEvents:[]}}));
+ assert.deepEqual(audience.input.capabilities.map(c=>c.id),['singing']);
+ assert(!audience.system.includes('戴围巾的小猫'));
+ // Wording is generated, not rejected by a blacklist in the output parser.
+ assert.equal(parseAgentReply({...reply,action:'speak',speech:'我想想，唱给你听。'},{kind:'host',context}).speech,'我想想，唱给你听。');
+});
+
+test('old activities and unfinished voice performances never resume after restart',async t=>{
+ const s=await fixture(t);
+ for(const kind of ['tarot','drawing','voice-performance']){
+  const saved=s.persistData();saved.engine=structuredClone(saved.engine);
+  saved.engine.state.play={active:kind==='voice-performance'?null:kind,[kind]:{id:'old',open:true,phase:'preparing'},queue:[{kind}],history:[]};
+  saved.engine.memory='an obsolete talent promise';saved.engine.session.items=[{id:'old',status:'open',sources:[]}];
+  saved.engine.media=kind==='voice-performance'?{id:'old',kind,phase:'preparing'}:null;
+  const restored=new LiveSession({id:crypto.randomUUID(),root:s.root,providers:s.providers,artifacts:s.artifacts,songRoot:s.songRoot,saved});t.after(()=>restored.close());
+  const state=restored.snapshot();assert.equal(state.activeTask,null);assert.equal(state.tarot,null);assert.equal(state.recentArtwork,null);assert.deepEqual(state.panels,{tarot:false,drawing:false});
+  assert.equal(restored.engine.memory,'');assert.deepEqual(restored.engine.session.items,[]);
+  assert(!state.pendingCommands.some(c=>['drawing.present','tarot.present','media.prepare','media.play'].includes(c.type)));
+ }
 });

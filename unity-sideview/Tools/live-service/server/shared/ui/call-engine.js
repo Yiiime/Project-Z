@@ -25,7 +25,7 @@ export class CallConversationEngine extends ConversationEngine {
     if(this._state.call?.active&&this._state.media){this.talent?.cancel('call_interrupt');this.talent?.finish(true);}
     this.callNeedsTurn=false;this.callContinuationBudget=0;this.callVersion++;this._emitState();return true;
   }
-  _cancelCallActivity(){if(this._state.media){this.talent?.cancel('call_boundary');this.talent?.finish(true);}if(this._state.play.active)this.finishActivity(true);}
+  _cancelCallActivity(){if(this._state.media){this.talent?.cancel('call_boundary');this.talent?.finish(true);}}
   endCall(){
     if(!this._state.call.active)return false;
     this.interruptCall('hangup');this._cancelCallActivity();this._state.call=this._emptyCall();this.callAudience=[];
@@ -96,7 +96,7 @@ export class CallConversationEngine extends ConversationEngine {
     return delay;
   }
   _toolEvent(text){super._toolEvent(text);if(this._state.call?.active)this._wakeCall();}
-  _public(type,text,metadata={}){super._public(type,text,metadata);if(this._state.call?.active&&/^(talent\.(completed|failed|interrupted)|drawing\.)/.test(type))this._wakeCall();}
+  _public(type,text,metadata={}){super._public(type,text,metadata);if(this._state.call?.active&&/^talent\.(completed|failed|interrupted)/.test(type))this._wakeCall();}
   async _pollSinging(){const previous=this.singingSnapshot;await super._pollSinging();if(this._state.call?.active&&previous!==this.singingSnapshot)this._wakeCall();}
   _executeTool(tool){
     if(tool?.name==='offer_call_story'){const ok=this.offerCallStory();this._toolEvent(JSON.stringify({tool:tool.name,status:ok?'offered':'unavailable'}));return ok;}
