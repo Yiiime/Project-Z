@@ -16,7 +16,7 @@ namespace Seabreeze
         MemoryGameController memory; GameSession session; WorldDirector world;
         RectTransform root,statusPanel,speechPanel,playerPanel,inspectorPanel,portrait,column,content;
         TextMeshProUGUI statusText,speechTitle,speechText,playerTitle,locationText,historyText,playerState;
-        TMP_InputField input; Button send; ScrollRect historyScroll;
+        TMP_InputField input; Button send; ScrollRect historyScroll,infoScroll;
         CanvasGroup playerGroup; Live2DCharacterView character; Coroutine transition;
         readonly List<string> history=new List<string>();
         readonly Dictionary<NpcPresence,TextMeshProUGUI> names=new Dictionary<NpcPresence,TextMeshProUGUI>();
@@ -43,14 +43,20 @@ namespace Seabreeze
             speechText=Label("台词",speechPanel,Vector2.up,Vector2.up,new Vector2(26,-60),new Vector2(1008,122),"",25,Paper);speechTitle.richText=speechText.richText=false;
             speechText.enableAutoSizing=true;speechText.fontSizeMin=18;speechText.fontSizeMax=25;speechPanel.gameObject.SetActive(false);
             BuildPlayerView();
-            inspectorPanel=Panel("Action与Info",root,Vector2.one,Vector2.one,new Vector2(-26,-310),new Vector2(430,438),Style.PanelFill).rectTransform;
-            actionInfoText=Label("行动与数值",inspectorPanel,Vector2.up,Vector2.up,new Vector2(18,-14),new Vector2(394,225),"",16,Paper);actionInfoText.richText=false;actionInfoText.enableAutoSizing=true;actionInfoText.fontSizeMin=11;actionInfoText.fontSizeMax=16;
-            taskTitle=Label("当前玩家任务",inspectorPanel,Vector2.up,Vector2.up,new Vector2(18,-245),new Vector2(394,32),"",17,Accent);taskTitle.richText=false;
-            acceptTask=ButtonAt("接受任务",inspectorPanel,new Vector2(16,-290),new Vector2(125,36),()=>memory.RespondTask(offeredTask,true));
-            declineTask=ButtonAt("暂不接受",inspectorPanel,new Vector2(154,-290),new Vector2(125,36),()=>memory.RespondTask(offeredTask,false));
-            ButtonAt("切换任务",inspectorPanel,new Vector2(292,-290),new Vector2(122,36),()=>{if(activeTasks.Count>0)selectedTask=(selectedTask+1)%activeTasks.Count;});
-            inviteTask=ButtonAt("邀请当前NPC协作",inspectorPanel,new Vector2(16,-340),new Vector2(240,36),()=>{if(activeTasks.Count>0)memory.InviteTask(activeTasks[selectedTask],selectedActor,"我接受了这项委托。你愿意和我一起做吗？只帮一部分或者另约也可以。");});
-            executeAction=ButtonAt("结束交谈并执行下一步",inspectorPanel,new Vector2(16,-388),new Vector2(395,36),()=>memory.Conversations.Cancel("执行已提出的下一步"));
+            inspectorPanel=Panel("Action与Info",root,Vector2.one,Vector2.one,new Vector2(-26,0),new Vector2(430,438),Style.PanelFill).rectTransform;
+            inspectorPanel.anchorMin=new Vector2(1,.11f);inspectorPanel.anchorMax=new Vector2(1,.87f);inspectorPanel.pivot=new Vector2(1,.5f);inspectorPanel.sizeDelta=new Vector2(430,0);
+            var infoViewport=Stretch("Action Info scroll viewport",inspectorPanel,new Vector2(18,196),new Vector2(-18,-14));infoViewport.gameObject.AddComponent<RectMask2D>();
+            var infoHit=infoViewport.gameObject.AddComponent<Image>();infoHit.color=Color.clear;infoHit.raycastTarget=true;
+            infoScroll=infoViewport.gameObject.AddComponent<ScrollRect>();infoScroll.horizontal=false;infoScroll.movementType=ScrollRect.MovementType.Clamped;infoScroll.scrollSensitivity=34;infoScroll.viewport=infoViewport;
+            actionInfoText=Label("行动与数值",infoViewport,Vector2.up,Vector2.up,Vector2.zero,Vector2.zero,"",18,Paper);actionInfoText.richText=false;actionInfoText.rectTransform.anchorMax=Vector2.one;
+            actionInfoText.gameObject.AddComponent<ContentSizeFitter>().verticalFit=ContentSizeFitter.FitMode.PreferredSize;infoScroll.content=actionInfoText.rectTransform;
+            var taskControls=Rect("Task controls",inspectorPanel,Vector2.zero,Vector2.zero,Vector2.zero,new Vector2(430,184));
+            taskTitle=Label("当前玩家任务",taskControls,Vector2.up,Vector2.up,new Vector2(18,-8),new Vector2(394,32),"",17,Accent);taskTitle.richText=false;taskTitle.overflowMode=TextOverflowModes.Ellipsis;
+            acceptTask=ButtonAt("接受任务",taskControls,new Vector2(16,-50),new Vector2(125,36),()=>memory.RespondTask(offeredTask,true));
+            declineTask=ButtonAt("暂不接受",taskControls,new Vector2(154,-50),new Vector2(125,36),()=>memory.RespondTask(offeredTask,false));
+            ButtonAt("切换任务",taskControls,new Vector2(292,-50),new Vector2(122,36),()=>{if(activeTasks.Count>0)selectedTask=(selectedTask+1)%activeTasks.Count;});
+            inviteTask=ButtonAt("邀请当前NPC协作",taskControls,new Vector2(16,-96),new Vector2(240,36),()=>{if(activeTasks.Count>0)memory.InviteTask(activeTasks[selectedTask],selectedActor,"我接受了这项委托。你愿意和我一起做吗？只帮一部分或者另约也可以。");});
+            executeAction=ButtonAt("结束交谈并执行下一步",taskControls,new Vector2(16,-142),new Vector2(395,36),()=>memory.Conversations.Cancel("执行已提出的下一步"));
             inspectorPanel.gameObject.SetActive(false);
         }
         static RectTransform Region(string name,Transform parent,Vector2 min,Vector2 max)
@@ -61,9 +67,9 @@ namespace Seabreeze
         {
             playerPanel=Stretch("玩家交谈",root,Vector2.zero,Vector2.zero);playerGroup=playerPanel.gameObject.AddComponent<CanvasGroup>();
             var shade=Stretch("Scene dim",playerPanel,Vector2.zero,Vector2.zero).gameObject.AddComponent<Image>();shade.color=Style.Scrim;shade.raycastTarget=true;
-            portrait=Region("Live2D portrait viewport",playerPanel,new Vector2(.025f,.015f),new Vector2(.51f,.95f));portrait.gameObject.AddComponent<RectMask2D>();
+            portrait=Region("Live2D portrait viewport",playerPanel,new Vector2(.025f,.015f),new Vector2(.36f,.95f));portrait.gameObject.AddComponent<RectMask2D>();
             character=portrait.gameObject.AddComponent<Live2DCharacterView>();character.Initialize(portrait);
-            column=Region("Conversation column",playerPanel,new Vector2(.545f,.11f),new Vector2(.925f,.87f));
+            column=Region("Conversation column",playerPanel,new Vector2(.385f,.11f),new Vector2(1,.87f));column.offsetMax=new Vector2(-488,0);
             playerTitle=Label("交谈对象",column,Vector2.up,Vector2.up,Vector2.zero,new Vector2(690,58),"",42,Paper);
             locationText=Label("地点时段",column,Vector2.up,Vector2.up,new Vector2(0,-68),new Vector2(690,36),"",20,Muted);
             foreach(var label in new[]{playerTitle,locationText}){label.richText=false;label.rectTransform.anchorMax=Vector2.one;label.rectTransform.sizeDelta=new Vector2(0,label.rectTransform.sizeDelta.y);}
@@ -151,6 +157,7 @@ namespace Seabreeze
             var result=reply.result;
             actionInfoText.text="ACTION · "+result.action.type+" → "+(result.action.target??"原地")+"\n"+result.action.description+"\n\nINFO\n"+result.info.ToString(Newtonsoft.Json.Formatting.Indented);
             inspectorPanel.gameObject.SetActive(true);
+            Canvas.ForceUpdateCanvases();infoScroll.verticalNormalizedPosition=1;
         }
         void RefreshTasks()
         {

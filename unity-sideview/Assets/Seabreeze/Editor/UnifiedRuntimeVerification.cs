@@ -9,13 +9,15 @@ namespace Seabreeze.Editor
 {
     public static class UnifiedRuntimeVerification
     {
-        static string output;static double deadline;static int phase;static Result result;
-        [Serializable] sealed class Result {public bool passed,sceneReady,connected,playerFocusIsolated;public int rosterCount,visibleActors;public string identities,dialogue,error,mode;}
+        static string output;static double deadline,changedAt;static int phase;static Result result;
+        [Serializable] sealed class Result {public bool passed,sceneReady,connected,playerFocusIsolated,focusReleased,panelsSeparated,screenshotCaptured;public int rosterCount,visibleActors;public string identities,dialogue,error,mode,screenshot;}
         public static void Begin()
         {
             var args=Environment.GetCommandLineArgs();int index=Array.IndexOf(args,"-moonlifeVerificationOutput");if(index<0||index+1>=args.Length)throw new Exception("Verification output argument required");output=args[index+1];
             if(!output.StartsWith("/private/tmp/",StringComparison.Ordinal)&&!output.StartsWith(Path.GetTempPath(),StringComparison.Ordinal))throw new Exception("Use an isolated verification path");
-            EditorSceneManager.OpenScene("Assets/Seabreeze/Scenes/Street.unity");result=new Result{rosterCount=SevenCharacterCatalog.Actors.Length,identities=string.Join(",",SevenCharacterCatalog.Actors.Select(a=>a.id))};phase=0;deadline=EditorApplication.timeSinceStartup+90;EditorApplication.update+=Tick;EditorApplication.isPlaying=true;
+            EditorSceneManager.OpenScene("Assets/Seabreeze/Scenes/Street.unity");
+            if(!Application.isBatchMode){var view=EditorWindow.GetWindow(typeof(EditorWindow).Assembly.GetType("UnityEditor.GameView"));view.Show();view.Focus();}
+            result=new Result{rosterCount=SevenCharacterCatalog.Actors.Length,identities=string.Join(",",SevenCharacterCatalog.Actors.Select(a=>a.id))};phase=0;deadline=EditorApplication.timeSinceStartup+120;EditorApplication.update+=Tick;EditorApplication.isPlaying=true;
         }
         static void Tick()
         {
@@ -36,7 +38,29 @@ namespace Seabreeze.Editor
                     result.dialogue=memory.LastReply.result?.dialogue??"";
                     result.playerFocusIsolated=memory.Conversations.PlayerActor?.npcId=="z"&&memory.Spawner.Actors.Any(a=>a.npcId!="z"&&!a.Movement.InteractionHeld);
                     result.passed=result.rosterCount==8&&result.connected&&result.dialogue.Contains("李庭")&&result.playerFocusIsolated;
-                    Finish();
+                    changedAt=EditorApplication.timeSinceStartup;phase=3;return;
+                }
+                if(phase==3&&EditorApplication.timeSinceStartup-changedAt>3)
+                {
+                    Canvas.ForceUpdateCanvases();
+                    var rects=memory.View.GetComponentsInChildren<RectTransform>();
+                    var dialogue=rects.First(r=>r.name=="Conversation column");var inspector=rects.First(r=>r.name=="Action与Info");
+                    var left=new Vector3[4];var right=new Vector3[4];dialogue.GetWorldCorners(left);inspector.GetWorldCorners(right);
+                    result.panelsSeparated=left[2].x<right[0].x;
+                    result.passed=result.passed&&result.panelsSeparated;
+                    result.screenshot=Path.ChangeExtension(output,"png");ScreenCapture.CaptureScreenshot(result.screenshot);
+                    changedAt=EditorApplication.timeSinceStartup;phase=4;return;
+                }
+                if(phase==4&&EditorApplication.timeSinceStartup-changedAt>1)
+                {
+                    result.screenshotCaptured=File.Exists(result.screenshot);if(!result.screenshotCaptured)result.screenshot=null;
+                    if(!Application.isBatchMode)result.passed=result.passed&&result.screenshotCaptured;
+                    memory.Conversations.Cancel("Verification completed");changedAt=EditorApplication.timeSinceStartup;phase=5;return;
+                }
+                if(phase==5&&EditorApplication.timeSinceStartup-changedAt>1)
+                {
+                    result.focusReleased=memory.Conversations.PlayerActor==null&&!memory.Spawner.Find("z").Movement.InteractionHeld;
+                    result.passed=result.passed&&result.focusReleased;Finish();
                 }
             }
             catch(Exception e){result.error=e.Message;result.passed=false;Finish();}

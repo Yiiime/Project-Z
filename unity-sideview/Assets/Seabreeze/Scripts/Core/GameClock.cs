@@ -28,6 +28,22 @@ namespace Seabreeze
             session.NotifyChanged();
             session.Save();
         }
+        public bool CompleteLiveSession(string sessionId)
+        {
+            if (!session || session.State == null || !Guid.TryParse(sessionId, out var id)) return false;
+            string marker = "live_day_completed_" + id.ToString("N");
+            if (session.HasFlag(marker) || session.State.day == int.MaxValue) return false;
+            // Save the receipt and next morning together. Replay after loading is a no-op.
+            session.SetFlag(marker);
+            session.State.day++;
+            session.State.period = (int)TimePeriod.Morning;
+            Refresh();
+            session.Story?.Evaluate();
+            session.Story?.Notify("直播结束了。新的一天，海风又从窗边吹了进来。");
+            session.NotifyChanged();
+            session.Save();
+            return true;
+        }
         public void Refresh()
         {
             if (!session) return;

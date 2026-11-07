@@ -33,7 +33,7 @@ public sealed partial class LiveFeatureController {
     }
 
     async void ToggleCall() {
-        if(transport==null||callChanging)return;
+        if(transport==null||callChanging||SessionClosing||SessionInputBlocked)return;
         callChanging=true;CancelMicrophone();
         try {
             bool active=(bool?)state?["call"]?["active"]==true;
@@ -49,7 +49,7 @@ public sealed partial class LiveFeatureController {
     }
 
     async Task CallAction(string action,JObject payload=null) {
-        if(transport==null||locallyPaused)return;
+        if(transport==null||locallyPaused||SessionClosing||SessionInputBlocked)return;
         CancelMicrophone();
         try{await transport.Input(action,payload??new JObject());ApplyState(await transport.Request(transport.Route()));}
         catch(Exception e){Error(e);}
@@ -61,8 +61,9 @@ public sealed partial class LiveFeatureController {
         bool active=(bool?)call?["active"]==true,voice=(bool?)call?["voiceAvailable"]==true;
         callButton.tooltip=active?"请先下麦再使用语音输入":dictating?(recording?"结束录音并转文字":"取消语音输入"):"语音输入 · 识别后确认发送";
         callButton.EnableInClassList("connected",dictating);
-        bool enabled=!callChanging&&transport!=null&&(active||(bool?)state?["agent"]?["enabled"]==true);
-        callButton.SetEnabled(transport!=null&&!active&&!callChanging);sidebarCallButton.SetEnabled(enabled&&!dictating);
+        bool sessionOpen=!SessionClosing&&!SessionInputBlocked;
+        bool enabled=sessionOpen&&!callChanging&&transport!=null&&(active||(bool?)state?["agent"]?["enabled"]==true);
+        callButton.SetEnabled(sessionOpen&&transport!=null&&!active&&!callChanging);sidebarCallButton.SetEnabled(enabled&&!dictating);
         sidebarCallButton.text=callChanging?"连接中…":active?"下麦":"上麦连聊";
         sidebarCallButton.EnableInClassList("connected",active);
         callStatus.text=recording?(dictating?"正在录音 · 再点麦克风结束":"正在听你说…"):transcribing?"正在识别这一句":voiceNotice.Length>0?voiceNotice:active?(state?["voiceOwner"]?.Type!=JTokenType.Null?"Z 在说话…":(bool?)call?["busy"]==true?"Z 正在回应…":(string)call?["input"]=="reviewing"?"确认输入后发送":"已上麦"):"";
@@ -85,7 +86,7 @@ public sealed partial class LiveFeatureController {
     }
 
     void UpdateCompanion() {
-        if(transport==null)return;
+        if(transport==null||SessionClosing||SessionInputBlocked){CancelCompanion();return;}
         if(recording) {
             int position=Microphone.GetPosition(microphoneDevice);
             if(position>=256) {
@@ -106,7 +107,7 @@ public sealed partial class LiveFeatureController {
 
 
     async void ToggleDictation() {
-        if(transport==null||callChanging||(bool?)state?["call"]?["active"]==true)return;
+        if(transport==null||callChanging||SessionClosing||SessionInputBlocked||(bool?)state?["call"]?["active"]==true)return;
         if(dictating){if(recording)FinishMicrophone();else{CancelMicrophone();UpdateCallView();}return;}
         CancelMicrophone();dictating=true;micStarting=true;voiceNotice="";
         var turn=microphoneCancel=CancellationTokenSource.CreateLinkedTokenSource(life.Token);var token=turn.Token;
@@ -147,7 +148,7 @@ public sealed partial class LiveFeatureController {
     }
 
     async Task BeginMicrophone() {
-        if(transport==null||locallyPaused||(bool?)state?["call"]?["active"]!=true)return;
+        if(transport==null||locallyPaused||SessionClosing||SessionInputBlocked||(bool?)state?["call"]?["active"]!=true)return;
         CancelMicrophone();micStarting=true;
         var turn=microphoneCancel=CancellationTokenSource.CreateLinkedTokenSource(life.Token);var token=turn.Token;
         try {

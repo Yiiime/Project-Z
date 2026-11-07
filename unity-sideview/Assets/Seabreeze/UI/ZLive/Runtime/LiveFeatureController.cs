@@ -16,6 +16,8 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     readonly Dictionary<string,CancellationTokenSource> running=new Dictionary<string,CancellationTokenSource>();readonly Dictionary<string,JObject> outcomes=new Dictionary<string,JObject>();readonly HashSet<string> messageIds=new HashSet<string>();
     readonly CancellationTokenSource life=new CancellationTokenSource();readonly HashSet<TaskCompletionSource<bool>> frameWaiters=new HashSet<TaskCompletionSource<bool>>();float heartbeatAt;bool connected,locallyPaused=true,disposed,leaving;string pendingBase,pendingToken,pendingPin;string SessionKey {get {using(var sha=System.Security.Cryptography.SHA256.Create())return "ZLive.Session."+BitConverter.ToString(sha.ComputeHash(System.Text.Encoding.UTF8.GetBytes(pendingBase+"|"+pendingToken))).Replace("-","");}}
     public Action ExitRequested;
+    public Action<string> SessionEnded;
+    bool sessionEndNotified;
     public void Configure(string serviceUrl,string gameSessionToken){pendingBase=serviceUrl;pendingToken=gameSessionToken;}
     async void Start(){try{character=gameObject.AddComponent<CharacterPresenter>();character.Initialize();audioPlayer=gameObject.AddComponent<LiveAudioPlayer>();audioPlayer.Character=character;character.Audio=audioPlayer.Source;audioPlayer.Frame=NextFrame;audioPlayer.Receipt=Report;audioPlayer.Caption=s=>caption.text=s;BuildUI();BuildCompanionUI();
 #if !UNITY_EDITOR
@@ -41,6 +43,13 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     void Update(){if(disposed||leaving)return;UpdateView();UpdateCompanion();while(connections.TryDequeue(out var c)){if(c=="disconnected"){connected=false;locallyPaused=true;CancelCompanion();audioPlayer.Pause(true);status.text="连接中断 · 已暂停播放";pause.text="继续";}else{connected=true;if(locallyPaused)status.text="连接已恢复 · 点击继续";}}
         if(transport==null)return;int budget=30;while(budget-->0&&events.TryDequeue(out var e)){if((int)e["epoch"]!=transport.Epoch){CancelAll();status.text="会话版本已更新 · 请重新进入直播";connected=false;continue;}long seq=(long)e["serverSeq"];if(seq<=transport.Cursor)continue;if(seq!=transport.Cursor+1){locallyPaused=true;audioPlayer.Pause(true);status.text="同步缺口 · 请重新进入直播";continue;}Queue(e);transport.Cursor=seq;}
         if(transport!=null&&connected&&Time.unscaledTime>=heartbeatAt){heartbeatAt=Time.unscaledTime+10;_=Observe(transport.Heartbeat());}
+        NotifySessionEnded();
+    }
+    void NotifySessionEnded(){
+        if(sessionEndNotified||leaving||disposed||SessionPhase!="ended"||SessionEnded==null||string.IsNullOrEmpty(transport?.SessionId))return;
+        sessionEndNotified=true;
+        SessionEnded.Invoke(transport.SessionId);
+        PlayerPrefs.DeleteKey(SessionKey);PlayerPrefs.Save();
     }
     void Queue(JObject e){if((string)e["type"]=="session.state"){ApplyState((JObject)e["payload"]);return;}if(e["commandId"]==null)return;string id=(string)e["commandId"];if(outcomes.TryGetValue(id,out var outcome)){_=Observe(transport.Receipt(e,outcome));return;}if(running.ContainsKey(id))return;
         var cancel=CancellationTokenSource.CreateLinkedTokenSource(life.Token);running[id]=cancel;_=Execute(e,cancel);
@@ -59,7 +68,7 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
         case "media.resume":locallyPaused=false;audioPlayer.Pause(false);pause.text="暂停";await Report(c,new JObject{{"status","completed"}});break;
         case "execution.cancel":if((bool?)p["all"]==true)CancelAll(id);else if(running.TryGetValue((string)p["targetCommandId"]??"",out var old))old.Cancel();await Report(c,new JObject{{"status","completed"}});break;
         case "activity.release":activity.text="和 Z 聊聊天";await Report(c,new JObject{{"status","completed"}});break;
-        case "session.ended":CancelAll(id);status.text="直播已结束";await Report(c,new JObject{{"status","completed"}});break;
+        case "session.ended":CancelAll(id);status.text="直播已结束";stopRequested=false;PlayerPrefs.DeleteKey(SessionKey);await Report(c,new JObject{{"status","completed"}});break;
         default:throw new Exception("unsupported_command");}
     }catch(OperationCanceledException){await TryFailure(c,"interrupted","execution_cancelled");}catch(Exception e){await TryFailure(c,"failed",e is LiveProtocolException||e.Message=="audio_output_unavailable"?e.Message:"execution_failed");Error(e);}finally{running.Remove(id);cancel.Dispose();}}
     async Task TryFailure(JObject c,string statusValue,string reason){try{await Report(c,new JObject{{"status",statusValue},{"reason",reason}});}catch(LiveProtocolException e)when(e.Message=="state_conflict"||e.Message=="stale_epoch"){}catch(Exception){status.text="执行回执待恢复";}}
@@ -70,14 +79,14 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     Task NextFrame(){var tcs=new TaskCompletionSource<bool>();if(disposed){tcs.SetCanceled();return tcs.Task;}frameWaiters.Add(tcs);StartCoroutine(EndFrame(tcs));return tcs.Task;}
     IEnumerator EndFrame(TaskCompletionSource<bool> tcs){yield return null;frameWaiters.Remove(tcs);if(disposed||leaving)tcs.TrySetCanceled();else tcs.TrySetResult(true);}
     async Task PanelIntent(string kind,bool visible){try{var t=kind=="drawing"?state?["recentArtwork"]:state?["tarot"];if(t==null||t.Type==JTokenType.Null)return;if(!visible)(kind=="drawing"?drawing:tarot).style.display=DisplayStyle.None;UpdatePanelLayout();await transport.Input("panel.intent",new JObject{{"kind",kind},{"visible",visible},{"taskId",t["id"]},{"resourceRevision",t["revision"]??0}});}catch(Exception e){Error(e);}}
-    void ApplyState(JObject snapshot){state=snapshot;RefreshRoomState();UpdateCallView();character.SetWaiting((bool?)snapshot["performance"]?["waiting"]??false);RestorePanels(snapshot);var art=snapshot["recentArtwork"];if(art!=null&&art.Type!=JTokenType.Null){activity.text=DrawingTitle(art);var labels=new List<string>();int i=0;foreach(var step in (JArray)(art["stages"]??new JArray())){labels.Add(((int?)art["stage"]>=i?"✓ ":"")+(++i)+" "+(string)step);}drawingSteps.text=string.Join("   ",labels);}foreach(JObject e in (JArray)(snapshot["publicEvents"]??new JArray())){string id=(string)e["id"],type=(string)e["type"];if(messageIds.Contains(id)||!(type=="player.message"||type=="npc.message"||type=="speech.completed"))continue;messageIds.Add(id);if(snapshot["room"]?["messages"]==null)AddChat(type=="speech.completed"?"Z":type=="player.message"?"你":NpcName((string)e["speakerId"]),(string)e["text"],type=="player.message");}
+    void ApplyState(JObject snapshot){state=snapshot;sessionSnapshotAt=Time.realtimeSinceStartupAsDouble;RefreshRoomState();UpdateCallView();character.SetWaiting((bool?)snapshot["performance"]?["waiting"]??false);RestorePanels(snapshot);var art=snapshot["recentArtwork"];if(art!=null&&art.Type!=JTokenType.Null){activity.text=DrawingTitle(art);var labels=new List<string>();int i=0;foreach(var step in (JArray)(art["stages"]??new JArray())){labels.Add(((int?)art["stage"]>=i?"✓ ":"")+(++i)+" "+(string)step);}drawingSteps.text=string.Join("   ",labels);}foreach(JObject e in (JArray)(snapshot["publicEvents"]??new JArray())){string id=(string)e["id"],type=(string)e["type"];if(messageIds.Contains(id)||!(type=="player.message"||type=="npc.message"||type=="speech.completed"))continue;messageIds.Add(id);if(snapshot["room"]?["messages"]==null)AddChat(type=="speech.completed"?"Z":type=="player.message"?"你":NpcName((string)e["speakerId"]),(string)e["text"],type=="player.message");}
         foreach(JObject message in (JArray)(snapshot["room"]?["messages"]??new JArray())){string id="message:"+(string)message["id"];if(messageIds.Add(id)&&(string)message["type"]!="z")AddChat((string)message["name"]??"小屋通知",(string)message["text"],(bool?)message["mine"]==true,(string)message["id"],(string)message["replyStatus"],(string)message["type"]=="system");}
         UpdatePanelLayout();if((string)snapshot["phase"]=="paused"){locallyPaused=true;audioPlayer.Pause(true);pause.text="继续";}RefreshRoomState();
     }
     static string DrawingTitle(JToken art){string phase=(string)art["phase"];string label=phase=="completed"?"已完成":phase=="drawing"?$"绘制中 · 第 {(int?)art["stage"]+1}/{(int?)art["stageCount"]} 步":phase=="editing"?"正在修改":phase=="preparing"?"正在构思":phase=="failed"?"本次生成未完成":phase=="ready"?"画作已就绪":"画作";return (string)art["title"]+" · "+label;}
     static string NpcName(string id)=>id=="wind"?"晚风来信":id=="moon"?"月亮邮差":id=="salt"?"海盐汽水":"小岛来客";
     async void Send() {
-        if(sendingInput)return;
+        if(sendingInput||SessionInputBlocked)return;
         if(ChatInputComposing){Toast("请先选好汉字，再发送");return;}
         CancelMicrophone();
         if(transport==null){Toast("请先启动直播服务");return;}
@@ -99,13 +108,13 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
         }catch(Exception e){
             if(!accepted)RestoreFailedDraft(draft,clearedRevision);
             Error(e);Toast(FriendlyError(e));
-        }finally{sendingInput=false;if(!disposed)sendButton.SetEnabled(true);}
+        }finally{sendingInput=false;if(!disposed)RefreshSessionControls();}
     }
-    async void TogglePause(){try{if(transport==null)return;CancelMicrophone();bool resume=locallyPaused;if(!resume){locallyPaused=true;audioPlayer.Pause(true);}await transport.Control(resume?"resume":"pause");ApplyState(await transport.Request(transport.Route()));locallyPaused=!resume;audioPlayer.Pause(!resume);if(resume)await SyncAudioCapabilities();}catch(Exception e){Error(e);}}
+    async void TogglePause(){try{if(transport==null||SessionClosing||SessionPhase=="ended")return;CancelMicrophone();bool resume=locallyPaused;if(!resume){locallyPaused=true;audioPlayer.Pause(true);}await transport.Control(resume?"resume":"pause");ApplyState(await transport.Request(transport.Route()));locallyPaused=!resume;audioPlayer.Pause(!resume);if(resume)await SyncAudioCapabilities();}catch(Exception e){Error(e);}}
     async void StopActivity(){audioPlayer.Stop();try{var task=state?["activeTask"];if(task==null||task.Type==JTokenType.Null)return;bool drawingTask=(string)task["kind"]=="drawing";await transport.Control("stop_activity",(string)(task["taskId"]??task["id"]),drawingTask?((int?)state?["recentArtwork"]?["revision"]??0):0);}catch(Exception e){Error(e);}}
     public async Task Leave(){leaving=true;CancelCompanion();CancelAll();PlayerPrefs.DeleteKey(SessionKey);if(transport!=null)await transport.Control("end");}
     public void StopPlayback(){leaving=true;CancelCompanion();locallyPaused=true;CancelAll();audioPlayer?.Pause(true);}
-    void OnApplicationFocus(bool focus){if(!focus&&!requestingMicrophonePermission&&transport!=null&&!disposed&&!leaving){CancelCompanion();locallyPaused=true;audioPlayer.Pause(true);_=Observe(transport.Control("pause"));}}
+    void OnApplicationFocus(bool focus){if(!SessionClosing&&!stopRequested&&!focus&&!requestingMicrophonePermission&&transport!=null&&!disposed&&!leaving){CancelCompanion();locallyPaused=true;audioPlayer.Pause(true);_=Observe(transport.Control("pause"));}}
     void CancelAll(string except=null){foreach(var entry in new List<KeyValuePair<string,CancellationTokenSource>>(running))if(entry.Key!=except)entry.Value.Cancel();audioPlayer?.Stop();}
     static string FriendlyError(Exception error) {
         switch(error.Message) {

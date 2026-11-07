@@ -14,7 +14,7 @@ namespace Seabreeze
         LiveFeatureController feature;
         bool previousAudioPause, previousBackground, previousUnscaled, closing, restored;
 
-        public static NativeLiveHost Open(Transform parent, Action returnToGame)
+        public static NativeLiveHost Open(Transform parent, Action returnToGame, Action<string> sessionEnded = null)
         {
             var root = new GameObject("Z Native Live");
             root.transform.SetParent(parent, false);
@@ -32,6 +32,7 @@ namespace Seabreeze
             }
             host.feature = root.AddComponent<LiveFeatureController>();
             host.feature.ExitRequested = returnToGame;
+            host.feature.SessionEnded = sessionEnded;
             return host;
         }
 
@@ -42,6 +43,7 @@ namespace Seabreeze
             if (closing) return;
             closing = true;
             feature.ExitRequested = null;
+            feature.SessionEnded = null;
             feature.StopPlayback();
             var document = GetComponent<UIDocument>();
             if (document != null) document.enabled = false;

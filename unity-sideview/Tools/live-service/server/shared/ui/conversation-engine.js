@@ -219,6 +219,7 @@ export class ConversationEngine extends LiveEngine {
       const agendaUpdates=validateAgendaUpdates(result.agendaUpdates,{items:context.host.session.unfinishedItems,evidence:context.host.session.evidence,allowCurrentSpeech:result.action!=='wait'});
       const gesture=result.gesture??'none',transition=result.transition??'smooth';
       if(!TALENT_MOODS.includes(result.mood)||!TALENT_GESTURES.includes(gesture)||!['smooth','sudden'].includes(transition)||result.action==='wait'&&gesture!=='none')throw Error('invalid_host_expression');
+      if(result.sessionDecision?.intent==='stop'&&this.commitSessionDecision?.(result,context))return;
       if(this._mediaPlaying()&&result.action!=='wait'){
         if(result.action!=='tool'||result.tool?.name!=='finish_activity'||result.tool.args?.taskId!==this._state.media.id||result.tool.args?.cancel!==true)throw Error('audio_busy');
         // Stop playback only after this utterance passes review.
@@ -235,6 +236,7 @@ export class ConversationEngine extends LiveEngine {
         if(!ticket)throw Object.assign(Error('reply_not_approved'),{code:'agent_reply_not_approved'});
         if(this._active||this._queue.length){this.nextWake=this._clock+2000;return;}
         const committed=this.audience.dialogue.commit(ticket,()=>{
+          if(result.sessionDecision&&this.commitSessionDecision?.(result,context))return;
           if(this._mediaPlaying()){this._executeTool(result.tool);result.action='speak';}
           const handled=new Set(result.handledIds);for(const mid of handled)this._setReceipt(mid,'queued');
           // _say starts immediately here; no asynchronous gap after the revision check.
