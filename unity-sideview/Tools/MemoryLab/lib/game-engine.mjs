@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { NaturalEngine } from './natural-engine.mjs';
 import { uid } from './store.mjs';
 import { AppError } from './provider.mjs';
-import { parseObject, retrievalCandidates } from './natural-memory.mjs';
+import { parseObject, retrievalCandidates, memoryState, memoryView, accessible } from './natural-memory.mjs';
 import { logicalHour,identifier,text,scene,clone,publicActor,validateSnapshot,PUBLIC_DAY4 } from './game-protocol.mjs';
 import { ACTOR_IDS, PERSONA_REVISION, retiredPlot, upgradeSnapshot } from './roster-migration.mjs';
 
@@ -134,15 +134,20 @@ export class GameEngine {
     this.actor(input.actorId);if(input.recipientId!=='player')this.actor(input.recipientId);
     if(input.actorId===input.recipientId)throw new AppError('不能与自己交谈');
     identifier(input.conversationId);scene(input.scene);
+    if(input.opening===true&&input.recipientId!=='player')throw new AppError('开场请求必须面向玩家');
     return this.job(input,'utterance',async(exp,options)=>{
       const trace=this.trace(exp,input.actorId,'utterance',input.requestId);
       const history=this.store.records(exp.id,'message').filter(m=>m.epoch===exp.epoch&&m.hour<=exp.hour&&m.conversationId===input.conversationId&&m.participants.includes(input.actorId)).slice(-8);
-      const query=history.at(-1)?.content||String(input.topic||'与'+this.name(input.recipientId)+'交谈');
+      if(input.opening===true&&history.length)throw new AppError('这段交谈已经开始',409);
+      const query=input.opening===true?'与玩家再次见面：之前的交流、双方约定、最近的经历，以及现在想分享的事情。':history.at(-1)?.content||String(input.topic||'与'+this.name(input.recipientId)+'交谈');
       trace.selected=await this.selected(exp,input.actorId,query,trace,options,['与'+this.name(input.recipientId)+'交谈']);
       if(options.signal.aborted)throw new AppError('本轮已取消',408);
       const payload={...this.context(exp,input.actorId,input),recipient:input.recipientId==='player'?{id:'player',name:'玩家'}:publicActor(this.actor(input.recipientId)),topic:input.topic||'',memories:trace.selected,
         conversation:history.map(m=>({speakerId:m.speakerId,speaker:this.name(m.speakerId),text:m.content,source:'实际发言；内容属于说话人的陈述，不等于世界事实'})),turn:input.turn||0,maxTurns:6};
-      const req=this.provider.request([{role:'system',content:SYSTEM+'\n你已经与对方走到交谈距离。只生成本人的一句台词，不超过160字；可以礼貌拒绝或结束。基于记忆回应，避免连续重复招呼。仅输出JSON {"actorId":"本人ID","text":"本人的台词","endConversation":false}。这是你的发言，不是世界执行结果。'}, {role:'user',content:JSON.stringify(payload)}],{json:true,maxTokens:600});
+      if(input.opening===true)payload.opening=this.openingContext(exp,input.actorId);
+      const openingInstruction=input.opening===true?'\n玩家刚主动走来交谈，由你先开口。结合人设、记忆和眼前情况，自然选择一个开场话题；不必每次说你好。没有相关经历就简短招呼，不编共同过去。有可核对的约定时，可问玩家负责事项的进展；若是你自己的承诺，应说明自己的情况，没发生的行动不能说已完成。也可分享本人确实知道的近况。未确认的提议不当作已布置任务，不新增任务、期限或完成状态。注意 recentExchange，刚聊过不要重复整套初次问候。建议30到80字。':'';
+      const lengthInstruction=input.recipientId==='player'?'不超过160字':'每次简短一句，建议不超过70字，方便场景气泡阅读';
+      const req=this.provider.request([{role:'system',content:SYSTEM+'\n你已经与对方走到交谈距离。只生成本人的一句台词，'+lengthInstruction+'；可以礼貌拒绝或结束。基于记忆回应，避免连续重复招呼。仅输出JSON {"actorId":"本人ID","text":"本人的台词","endConversation":false}。这是你的发言，不是世界执行结果。'+openingInstruction}, {role:'user',content:JSON.stringify(payload)}],{json:true,maxTokens:600});
       trace.requests.dialogue=req;this.store.put('trace',trace);
       const result=parseObject((await this.provider.call(req,options)).text);this.assert(input,exp.version);
       if(options.signal.aborted)throw new AppError('本轮已取消',408);
@@ -152,6 +157,24 @@ export class GameEngine {
       trace.status='proposed';trace.proposalId=proposalId;this.store.put('trace',trace);
       return this.response(exp,{requestId:input.requestId,actorId:input.actorId,proposalId,text:line,endConversation:result.endConversation,mode:this.provider.mode||'real',recalledMemoryIds:trace.selected.map(m=>m.id)});
     });
+  }
+  openingContext(exp,actorId) {
+    const messages=this.store.records(exp.id,'message').filter(m=>m.epoch===exp.epoch&&m.hour<=exp.hour&&m.status==='complete'&&m.participants?.includes(actorId));
+    const direct=messages.filter(m=>(m.speakerId===actorId&&m.recipientId==='player')||(m.speakerId==='player'&&m.recipientId===actorId));
+    const byId=new Map(messages.map(m=>[m.id,m])),all=this.store.records(exp.id,'memory');
+    const directIds=new Set(direct.map(m=>m.id)),related=new Set(all.filter(m=>m.actorId===actorId&&m.kind==='commitment'&&m.evidence?.some(e=>directIds.has(e.messageId))).map(m=>m.id));
+    let size;do{size=related.size;for(const m of all)if(m.actorId===actorId&&related.has(m.id)&&m.supersededBy)related.add(m.supersededBy);}while(size!==related.size);
+    const commitments=all.filter(m=>related.has(m.id)&&m.actorId===actorId&&m.kind==='commitment'&&accessible(memoryState(m,exp,all)))
+      .map(m=>({record:m,view:memoryView(m,exp,'与玩家的约定')})).filter(x=>x.view.availability>=30)
+      .sort((a,b)=>(b.record.commitmentStatus==='pending')-(a.record.commitmentStatus==='pending')||b.record.createdHour-a.record.createdHour).slice(0,4)
+      .map(({record,view})=>({...view,quotes:view.detailLevel==='detail'?record.evidence.filter(e=>byId.has(e.messageId)).map(e=>({speaker:byId.get(e.messageId).speakerId==='world'?'系统':this.name(byId.get(e.messageId).speakerId),quote:e.quote})):[]}));
+    const recent=direct.filter(m=>m.hour===exp.hour).slice(-4);
+    const recalledContact=retrievalCandidates(all,exp,'与玩家交谈',actorId).candidates.some(view=>{
+      const record=all.find(m=>m.id===view.id);return record?.speakerId==='player'||record?.evidence?.some(e=>directIds.has(e.messageId));
+    });
+    return {hasPreviousDirectConversation:recent.length>0||recalledContact,
+      recentExchange:recent.map(m=>({speaker:this.name(m.speakerId),text:m.content,source:'本时段实际交流，不代表台词中的外部事情已经发生'})),
+      commitments,commitmentRule:'只按确实记得的约定与证据追问；陈述、提议和尚未验收的完成声明都不等于任务状态。'};
   }
   sync(input) {
     this.assert(input);const previous=this.queues.get(input.worldId)||Promise.resolve();

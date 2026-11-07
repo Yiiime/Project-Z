@@ -103,7 +103,7 @@ namespace Seabreeze.Editor
             {yield return VerifyUnavailable();yield break;}
             yield return Wait(()=>M.Client.CanGenerate,35,"Configured isolated model connection");
             bool real=M.Client.Mode!="simulated";
-            if(!real){yield return VerifyPresentation();yield return VerifyInput();yield return VerifyReadback();}
+            if(!real){yield return VerifyPresentation();yield return VerifyInput();yield return VerifyReadback();yield return VerifyNoJump();}
             yield return Wait(()=>M.Client.CanGenerate&&M.Spawner.Actors.All(a=>a.Movement!=null&&a.Movement.IsReady),30,"Restored scene ready");
             M.Conversations.Cancel("Verification setup");
             var player=W.Player.GetComponent<PlayerController>();player.Teleport(new Vector2(-2.8f,.1f));W.Follow.Snap();
@@ -124,6 +124,27 @@ namespace Seabreeze.Editor
             var pair=new[]{first.npcId,second.npcId};
             var observer=M.Spawner.Actors.First(a=>a!=first&&a!=second);
             player.Teleport(new Vector2((first.transform.position.x+second.transform.position.x)/2-2.4f,.1f));W.Follow.Snap();
+            yield return Wait(()=>M.View.SpeechBubble.Visible,real?60:20,"Overhead NPC speech appears without player interaction");
+            Require(!M.PlayerChatOpen&&pair.Contains(M.View.SpeechBubble.SpeakerId),"NPC-to-NPC speech uses a head bubble, not the player dialogue panel.");
+            var nearby=player.transform.position;
+            float middle=(first.transform.position.x+second.transform.position.x)*.5f;
+            player.Teleport(new Vector2(middle+(middle>0?-7.5f:7.5f),.1f));W.Follow.Snap();yield return Frames(3);
+            Require(!M.PlayerCanHear(first.transform.position)&&!M.PlayerCanHear(second.transform.position),"Player is beyond hearing range of both speakers.");
+            Require(M.View.SpeechBubble.Visible,"Visible NPCs keep their bubble beyond hearing range.");
+            int beforeFarLine=M.Conversations.CommittedNpcLines;
+            yield return Wait(()=>M.Conversations.CommittedNpcLines>beforeFarLine,real?75:25,"New NPC speech while player is far away");
+            Require(M.View.SpeechBubble.Visible&&!M.PlayerChatOpen,"A new far-away utterance appears automatically in a bubble.");
+            string bubbleActor=M.View.SpeechBubble.SpeakerId;
+            var queued=S.State.memory.outbox.LastOrDefault(e=>e.kind=="utterance"&&e.conversationId==M.Conversations.ActiveId&&e.speakerId==bubbleActor);
+            var heard=queued!=null?queued.observers:ReadCheckpoint().messages.Last(m=>m.conversationId==M.Conversations.ActiveId&&m.speakerId==bubbleActor).participants;
+            Require(!heard.Contains("player"),"Displaying a distant bubble does not change its actual witness list.");
+            Capture();File.Copy(Path.Combine(output,"frames",frames.Last().file),Path.Combine(output,"overhead-bubble.png"),true);
+            var viewCamera=W.Follow.GetComponent<Camera>();var cameraPosition=viewCamera.transform.position;
+            W.Follow.enabled=false;
+            try{viewCamera.transform.position+=Vector3.right*100;yield return Frames(2);Require(!M.View.SpeechBubble.Visible,"Off-screen speakers do not show bubbles.");}
+            finally{viewCamera.transform.position=cameraPosition;W.Follow.enabled=true;}
+            player.Teleport(nearby);W.Follow.Snap();yield return Frames(2);
+            checks.Add("On-screen NPC speech ignores player distance, including newly spoken lines; off-screen hides it while memory witnesses stay unchanged");
             float playerX=player.transform.position.x,otherMin=observer.transform.position.x,otherMax=otherMin;
             float t=Time.unscaledTime;
             while(Time.unscaledTime-t<1)
@@ -152,6 +173,11 @@ namespace Seabreeze.Editor
             var rememberedActor=M.Spawner.Find(pair[0]);
             player.Teleport(rememberedActor.transform.position+Vector3.left*1.2f);W.Follow.Snap();
             M.BeginPlayerChat(pair[0]);
+            yield return Wait(()=>M.Conversations.OpeningComplete&&!M.Conversations.Sending&&M.Client.CanGenerate,real?90:25,"NPC opening before follow-up");
+            var openingLines=ReadCheckpoint().messages.Where(m=>m.conversationId==M.Conversations.ActiveId).ToArray();
+            Require(openingLines.Length==1&&openingLines[0].speakerId==pair[0]&&openingLines[0].origin=="model","NPC generated the first line; no synthetic player prompt was recorded.");
+            Capture();File.Copy(Path.Combine(output,"frames",frames.Last().file),Path.Combine(output,"model-opening.png"),true);
+            checks.Add("Player meeting begins with a model-generated, memory-contextual opening before the player speaks");
             int beforeReply=M.Conversations.CommittedNpcLines;
             M.Conversations.SendPlayer("你和"+SevenCharacterCatalog.Name(pair[1])+"刚才聊到了什么？你现在有什么打算？");
             yield return Wait(()=>M.Conversations.CommittedNpcLines>beforeReply,real?90:20,"Recall in a separate player conversation");
@@ -176,6 +202,7 @@ namespace Seabreeze.Editor
             var npc=M.Spawner.Find("c01");W.Player.GetComponent<PlayerController>().Teleport(npc.transform.position+Vector3.left*1.2f);
             yield return null;Press(UnityEngine.InputSystem.Key.E);yield return Frames(3);Press();
             Require(M.PlayerChatOpen,"Existing E interaction opens NPC memory conversation.");
+            yield return Wait(()=>M.Conversations.OpeningComplete&&!M.Conversations.Sending&&M.Client.CanGenerate,25,"Opening before rollback probe");
             M.Conversations.SendPlayer("这是读档后不应存在的未来测试句子。");
             yield return Frames(2);
             M.BeforeStateChange();File.WriteAllText(SaveRepository.PathOnDisk,old);S.LoadSavedGame();
@@ -190,7 +217,14 @@ namespace Seabreeze.Editor
             yield return Wait(()=>!M.PlayerChatOpen,5,"Previous view closed");
             var z=M.Spawner.Find("z_story");Require(z!=null,"Z is present alongside the other islanders.");
             W.Player.GetComponent<PlayerController>().Teleport(z.transform.position+Vector3.left*1.2f);W.Follow.Snap();
-            M.BeginPlayerChat("z_story");yield return Wait(()=>M.View.PlayerInputReady,8,"PR32 Z view entering");yield return Frames(8);
+            M.BeginPlayerChat("z_story");yield return Wait(()=>M.View.PlayerInputReady,8,"PR32 Z view entering");
+            string openingId=M.Conversations.ActiveId;
+            yield return Wait(()=>M.Conversations.OpeningComplete&&!M.Conversations.Sending&&M.Client.Synchronized,25,"NPC speaks before the player types");
+            var openingMessages=ReadCheckpoint().messages.Where(m=>m.conversationId==openingId).ToArray();
+            Require(openingMessages.Length==1&&openingMessages[0].speakerId=="z_story","Opening is a real NPC event without a fabricated player message.");
+            Press(UnityEngine.InputSystem.Key.E);yield return Frames(3);Press();yield return Frames(8);
+            Require(M.Conversations.ActiveId==openingId&&ReadCheckpoint().messages.Count(m=>m.conversationId==openingId)==1,"Repeated E does not issue another opening.");
+            checks.Add("E entry generates exactly one memory-based NPC opening before any player line; repeated E does not duplicate it");
             var portrait=M.View.GetComponentInChildren<Live2DCharacterView>(true);
             Require(portrait!=null&&portrait.IsVisible&&portrait.CurrentProfile.characterId=="z_story","Only Z has the configured Live2D portrait.");
             var image=portrait.GetComponentInChildren<UnityEngine.UI.RawImage>();
@@ -250,7 +284,7 @@ namespace Seabreeze.Editor
         {
             M.Conversations.Cancel("IME verification setup");
             var npc=M.Spawner.Find("c01");W.Player.GetComponent<PlayerController>().Teleport(npc.transform.position+Vector3.left*1.2f);
-            M.BeginPlayerChat("c01");yield return Wait(()=>M.View.PlayerInputReady,5,"Input view entered");
+            M.BeginPlayerChat("c01");yield return Wait(()=>M.View.PlayerInputReady&&M.Conversations.OpeningComplete&&!M.Conversations.Sending&&M.Client.CanGenerate,25,"Input view and NPC opening ready");
             var field=M.View.GetComponentInChildren<TMPro.TMP_InputField>();
             Require(field!=null&&M.PlayerChatOpen,"Player dialogue has an editable field.");
             var module=EventSystem.current.currentInputModule;var previous=module.inputOverride;
@@ -281,11 +315,33 @@ namespace Seabreeze.Editor
             yield return Wait(()=>M.Client.Synchronized&&!M.PlayerChatOpen,30,"IME test memory settled");
             checks.Add("Simulated Chinese IME composition, candidate-submit guard, mixed-text backspace and literal paste; only committed text enters memory");
         }
+        static IEnumerator VerifyNoJump()
+        {
+            M.Conversations.Cancel("No-jump check");yield return Wait(()=>!M.PlayerChatOpen,5,"Conversation closed before movement check");
+            var player=W.Player.GetComponent<PlayerController>();player.Teleport(new Vector2(-12,.1f));yield return Frames(12);
+            float ground=player.transform.position.y,peak=ground;
+            foreach(var key in new[]{UnityEngine.InputSystem.Key.Space,UnityEngine.InputSystem.Key.W,UnityEngine.InputSystem.Key.UpArrow})
+            {
+                for(int i=0;i<12;i++){Press(key);yield return null;peak=Mathf.Max(peak,player.transform.position.y);}Press();yield return Frames(4);
+            }
+            Require(peak-ground<.15f&&player.Grounded,"Space, W and Up cannot launch the player.");
+            player.Teleport(new Vector2(-12,1.1f));yield return Wait(()=>player.Grounded&&player.transform.position.y<.2f,4,"Gravity and landing still work");
+            Require(player.transform.position.y<.2f,"Natural falling remains after jump removal.");
+            checks.Add("Jump bindings removed while horizontal movement, gravity and landing remain");
+        }
         static IEnumerator VerifyUnavailable()
         {
             bool offline=Environment.GetCommandLineArgs().Contains("-memoryOffline");
             if(!offline)yield return Wait(()=>M.Client.Reachable&&!M.Client.Configured&&M.Client.Synchronized,15,"Unconfigured service");
             else yield return Frames(60);
+            if(!offline)
+            {
+                var npc=M.Spawner.Find("c01");W.Player.GetComponent<PlayerController>().Teleport(npc.transform.position+Vector3.left*1.2f);
+                M.BeginPlayerChat("c01");yield return Wait(()=>M.View.PlayerInputReady&&!M.Conversations.Opening,8,"Unconfigured opening returns to waiting");
+                Require(!M.Conversations.OpeningComplete&&M.Conversations.CanRetryOpening&&M.Conversations.CommittedNpcLines==0,"Missing model never invents a greeting.");
+                M.Conversations.Cancel("Unavailable opening checked");yield return Wait(()=>!M.PlayerChatOpen,5,"Unavailable opening can close");
+                checks.Add("Unconfigured automatic opening shows waiting/retry state without a fake greeting and releases movement on exit");
+            }
             var player=W.Player.GetComponent<PlayerController>();float x=player.transform.position.x;float until=Time.unscaledTime+1;
             while(Time.unscaledTime<until){Press(UnityEngine.InputSystem.Key.D);yield return null;}Press();
             Require(player.transform.position.x>x+.3f,"Missing model/service does not block player movement.");

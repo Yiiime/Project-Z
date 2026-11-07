@@ -70,3 +70,13 @@ The active roster is c01–c07, z_story, npc_aya, npc_chen. `SevenCharacterCatal
 `MemoryDialogueView.PlayerInputReady` gates free-text submission during presentation transitions; `Closing` keeps player input blocked until the reverse transition ends. This never adds a global NPC pause. `GameUI.IsOverlayTransitioning` and `CloseOverlayImmediately()` handle menu animation and external scene transitions.
 
 Day4 is public for all ten; retired staff/AI-identity lore is not in any persona. Checkpoints and new utterance events carry `personaRevision: 2`. Old snapshots are archived locally and migrated before restoration. The existing save filename, event IDs and sequence receipts remain compatible. The live-room backend and player locomotion are unchanged.
+
+### Opening and overhead speech (2026-11-07)
+
+`MemoryRequest.opening` is optional and defaults to false. A true value is valid only for an empty player conversation. The server returns a normal utterance proposal; no synthetic player message is inserted. Confirmed commitments and current-period actual exchanges are scoped to the speaker, and faded details stay omitted.
+
+`NpcConversationCoordinator.Opening`, `OpeningComplete`, `CanRetryOpening` describe the player opening flow. Draft input remains editable while its single generation is pending. Cancellation invalidates the same operation token as ordinary replies.
+
+`NpcSpeechBubble` displays already-committed speech from on-screen NPCs regardless of player distance, follows the speaking NPC, and never enables raycasts. `ReadDuration` is shared with turn timing so automatic pagination finishes before the next turn. `MemoryGameController.PlayerCanHear` still applies distance and occlusion to memory witness selection; screen presentation does not broaden that list.
+
+PlayerController keeps horizontal locomotion and gravity; jump impulse, buffer and jump input mappings have been removed. Legacy references to jumping above describe the earlier prototype.

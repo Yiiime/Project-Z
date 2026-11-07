@@ -135,20 +135,12 @@ namespace Seabreeze.Editor
             yield return new WaitForSecondsRealtime(.3f);
             Check(Mathf.Abs(world.Player.position.x - stopped) < .15f, "Movement decelerates to rest");
             float ground = world.Player.position.y, peak = ground;
-            float jumpElapsed = 0;
-            Press(Key.Space);
-            while (jumpElapsed < .8f)
+            foreach(var key in new[]{Key.Space,Key.W,Key.UpArrow})
             {
-                yield return null;
-                if (jumpElapsed > .06f)
-                    Press();
-                jumpElapsed += Time.deltaTime;
-                peak = Mathf.Max(peak, world.Player.position.y);
+                Press(key);yield return new WaitForSecondsRealtime(.12f);Press();
+                yield return new WaitForSecondsRealtime(.15f);peak=Mathf.Max(peak,world.Player.position.y);
             }
-
-            Check(peak > ground + .35f, "Buffered jump leaves ground (height=" + (peak - ground).ToString("F2") + ")");
-            yield return new WaitForSeconds(.4f);
-            Check(player.Grounded, "Ground cast detects landing");
+            Check(peak < ground+.15f && player.Grounded,"Former jump keys keep the player on the ground");
             player.Teleport(new Vector2(12,.1f));
             float stroll = 0;
             while(stroll < .75f){Press(Key.D);yield return null;stroll += Time.deltaTime;}
@@ -157,16 +149,16 @@ namespace Seabreeze.Editor
             player.Teleport(new Vector2(12,.1f));
             yield return new WaitForSeconds(.3f);
             float benchStartY = world.Player.position.y;
-            float benchJump = 0;
-            while (benchJump < .65f)
+            float benchWalk = 0;
+            while (benchWalk < .65f)
             {
-                if (benchJump < .06f) Press(Key.D,Key.Space); else Press(Key.D);
+                if (benchWalk < .06f) Press(Key.D,Key.Space); else Press(Key.D);
                 yield return null;
-                benchJump += Time.deltaTime;
+                benchWalk += Time.deltaTime;
             }
             Press();
             yield return new WaitForSeconds(.9f);
-            Check(benchStartY < .2f && player.Grounded && world.Player.position.y > 1.1f,"Jump from pavement lands on the illustrated bench seat");
+            Check(benchStartY < .2f && player.Grounded && world.Player.position.y < .2f,"Walking past the bench with Space does not jump onto the seat");
             foreach (var key in new[]{Key.M, Key.Tab, Key.J, Key.Escape})
             {
                 yield return Tap(key);

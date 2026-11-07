@@ -11,7 +11,7 @@ namespace Seabreeze
         readonly Dictionary<string,float> pairCooldown=new Dictionary<string,float>();
         readonly Dictionary<NpcPresence,bool> oldSimulation=new Dictionary<NpcPresence,bool>();
         string conversation="",stage="等待";NpcPresence first,second;int plannerIndex,operation;
-        float nextDecision,startedAt;bool running,playerSending,shuttingDown;
+        float nextDecision,startedAt;bool running,playerSending,shuttingDown,opening,openerSpoken;
         public NpcPresence PlayerActor {get;private set;}
         public int CompletedConversations {get;private set;}
         public int CommittedNpcLines {get;private set;}
@@ -22,6 +22,9 @@ namespace Seabreeze
         public NpcPresence First => first;
         public NpcPresence Second => second;
         public bool Sending => playerSending;
+        public bool Opening => opening;
+        public bool OpeningComplete => openerSpoken;
+        public bool CanRetryOpening => PlayerActor!=null&&!playerSending&&!openerSpoken;
         public void Initialize(MemoryGameController m,GameSession s,WorldDirector w){memory=m;session=s;world=w;nextDecision=Time.unscaledTime+4;}
         bool WorldReady=>session!=null&&session.IsReady&&world!=null&&world.Stage!=null&&!world.IsTransitioning&&!session.NonPlayerInputBlocked&&Time.timeScale>0;
         bool Present(NpcPresence a)=>a!=null&&a.IsPresent&&a.isActiveAndEnabled&&a.Movement!=null&&a.Movement.IsReady&&world.Stage!=null&&a.gameObject.scene==world.Stage.gameObject.scene;
@@ -82,7 +85,7 @@ namespace Seabreeze
                 if(token!=operation)yield break;
                 if(error!=null||line==null||!Present(first)||!Present(second)||!WorldReady||Vector2.Distance(first.transform.position,second.transform.position)>2){Finish(false);yield break;}
                 memory.CommitLine(conversation,speaker.npcId,recipient.npcId,line.text,line.proposalId);LastRecalledMemoryIds=line.recalledMemoryIds??Array.Empty<string>();CommittedNpcLines++;
-                float displayUntil=Time.unscaledTime+Mathf.Clamp(1.3f+line.text.Length*.05f,2.5f,6);
+                float displayUntil=Time.unscaledTime+NpcSpeechBubble.ReadDuration(line.text);
                 while(token==operation&&Time.unscaledTime<displayUntil)yield return null;
                 if(token!=operation)yield break;
                 if(line.endConversation)break;
@@ -101,27 +104,42 @@ namespace Seabreeze
             Cancel("玩家介入");if(!Present(npc))return;
             PlayerActor=first=npc;second=null;running=true;stage="玩家交谈";startedAt=Time.unscaledTime;conversation="player_"+Guid.NewGuid().ToString("N");
             Hold(npc);npc.ConversationPartner=world.Player;memory.View.OpenPlayer(npc.npcId);
+            RetryOpening();
+        }
+        public void RetryOpening()
+        {
+            if(!CanRetryOpening)return;
+            opening=playerSending=true;startedAt=Time.unscaledTime;
+            StartCoroutine(PlayerReply(operation,true));
         }
         public void SendPlayer(string message)
         {
             if(PlayerActor==null||playerSending||!memory.Client.CanGenerate||string.IsNullOrWhiteSpace(message))return;
+            // A manual message after an opening failure starts a normal exchange.
+            openerSpoken=true;
             playerSending=true;startedAt=Time.unscaledTime;
             memory.CommitLine(conversation,"player",PlayerActor.npcId,message.Trim(),"");
             StartCoroutine(PlayerReply(operation));
         }
-        IEnumerator PlayerReply(int token)
+        IEnumerator PlayerReply(int token,bool openingTurn=false)
         {
-            while(token==operation&&PlayerActor!=null&&!memory.Client.CanGenerate&&Time.unscaledTime-startedAt<MemoryRuntimeConfig.Settings.conversationTimeout)yield return null;
+            float readinessTimeout=openingTurn?Mathf.Min(35,MemoryRuntimeConfig.Settings.conversationTimeout):MemoryRuntimeConfig.Settings.conversationTimeout;
+            while(token==operation&&PlayerActor!=null&&(!memory.Client.CanGenerate||(openingTurn&&!memory.View.PlayerInputReady))&&Time.unscaledTime-startedAt<readinessTimeout)
+            {
+                if(memory.Client.Reachable&&!memory.Client.Configured)break;
+                yield return null;
+            }
             if(token!=operation||PlayerActor==null)yield break;
-            if(!memory.Client.CanGenerate){playerSending=false;yield break;}
+            if(!memory.Client.CanGenerate||(openingTurn&&!memory.View.PlayerInputReady)){opening=playerSending=false;yield break;}
             bool done=false;MemoryReply line=null;string error=null;
             var request=memory.Client.RequestBase();request.actorId=PlayerActor.npcId;request.recipientId="player";request.conversationId=conversation;request.scene=session.CurrentPlace.ToString();request.topic="与玩家的交流";
+            request.opening=openingTurn;
             request.observers=memory.Listeners(PlayerActor.transform.position,PlayerActor.npcId,"player");
             memory.Client.Generate("/api/game/utterance",request,r=>{line=r;done=true;},e=>{error=e;done=true;});
             while(!done&&token==operation)yield return null;
             if(token!=operation)yield break;
-            if(error==null&&line!=null&&Present(PlayerActor)&&WorldReady){memory.CommitLine(conversation,PlayerActor.npcId,"player",line.text,line.proposalId);LastRecalledMemoryIds=line.recalledMemoryIds??Array.Empty<string>();CommittedNpcLines++;}
-            playerSending=false;
+            if(error==null&&line!=null&&Present(PlayerActor)&&WorldReady){memory.CommitLine(conversation,PlayerActor.npcId,"player",line.text,line.proposalId);LastRecalledMemoryIds=line.recalledMemoryIds??Array.Empty<string>();CommittedNpcLines++;if(openingTurn)openerSpoken=true;}
+            opening=false;playerSending=line!=null&&line.endConversation;
             if(line!=null&&line.endConversation){yield return new WaitForSecondsRealtime(3);if(token==operation)Finish(true);}
         }
         public void Cancel(string reason="会话取消") {operation++;StopAllCoroutines();Finish(false);}
@@ -135,7 +153,7 @@ namespace Seabreeze
                 entry.Key.ConversationPartner=null;entry.Key.Movement.Interrupt("conversation_finished");entry.Key.Movement.SetInteractionHold(false);entry.Key.Movement.SimulateDecisions=entry.Value;
             }
             oldSimulation.Clear();if(completed)CompletedConversations++;
-            first=second=PlayerActor=null;running=playerSending=false;conversation="";stage="等待";
+            first=second=PlayerActor=null;running=playerSending=opening=openerSpoken=false;conversation="";stage="等待";
             nextDecision=Time.unscaledTime+MemoryRuntimeConfig.Settings.decisionInterval;
             if(memory.View!=null)memory.View.HidePlayer();
         }

@@ -13,7 +13,11 @@ export class FixtureProvider {
     else if(sys.includes('主动找一个在场NPC')){
       const remembered=p.memories.find(m=>m.speakerId&&p.candidates.some(c=>c.id===m.speakerId));
       value={actorId:p.self.id,targetId:remembered?.speakerId||p.candidates[0]?.id||'',reason:remembered?'我记得对方之前说过的话，想继续问。':'想了解身边人的打算。',topic:p.publicFacts.length?'小岛通知与各自的打算':'今天的生活与最近的事情'};
-    }else if(sys.includes('你已经与对方走到交谈距离'))value={actorId:p.self.id,text:p.publicFacts.length?`${p.self.name}：关于小岛将要毁灭的通知，我想听听你的打算，也说说我能做的。`:`${p.self.name}：今天想和你聊聊最近的事情。有什么需要一起想办法的吗？`,endConversation:p.turn>=5};
+    }else if(sys.includes('你已经与对方走到交谈距离')){
+      const promise=p.opening?.commitments.find(m=>m.commitmentStatus==='pending');
+      const opening=promise?`关于我们之前的约定：${promise.content}，现在进展怎么样？`:p.opening?.hasPreviousDirectConversation?'又见面了，刚才的话我还记得。':p.publicFacts.length?'刚收到小岛的通知，我想听听你的想法。':p.memories.length?`我最近想起一件事：${p.memories[0].content}`:'你好，很高兴见到你。';
+      value={actorId:p.self.id,text:p.opening?opening:p.publicFacts.length?`${p.self.name}：关于小岛将要毁灭的通知，我想听听你的打算，也说说我能做的。`:`${p.self.name}：今天想和你聊聊最近的事情。有什么需要一起想办法的吗？`,endConversation:p.turn>=5};
+    }
     else if(sys.includes('为观察者 NPC 整理')){
       value={memories:p.messages.filter(m=>m.speakerId!==p.observer.id).slice(0,4).map(m=>({kind:'hearsay',content:`${m.speaker}说：${m.text}`,gist:`${m.speaker}谈过最近的事情和打算。`,subject:m.speaker,keywords:[m.speaker],importance:2,emotion:1,evidence:[{id:m.id,quote:m.text}],replaces:null})),used_memories:[]};
     }else if(sys.includes('根据 NPC 当前记得')){
