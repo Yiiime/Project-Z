@@ -5,7 +5,7 @@ namespace Seabreeze
     [Serializable] public sealed class MemoryEvent
     {
         public string id, kind, conversationId, speakerId, recipientId, text, proposalId, location, title, gist, fulfilledId;
-        public int seq, day, period;
+        public int seq, day, period, personaRevision;
         public string[] observers = Array.Empty<string>();
     }
     [Serializable] public sealed class MemoryRequest

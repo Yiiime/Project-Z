@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { Store } from './lib/store.mjs';
 import { ModelProvider,AppError } from './lib/provider.mjs';
 import { GameEngine } from './lib/game-engine.mjs';
+import { inspectMemories } from './lib/memory-inspector.mjs';
 const ROOT=dirname(fileURLToPath(import.meta.url));
 
 export function createMemoryServer({dbPath=join(ROOT,'.data/game.sqlite'),configPath=join(ROOT,'.local/model.json'),providerFactory,allowTestEndpoint=false,timeoutMs=30000}={}) {
@@ -31,7 +32,12 @@ export function createMemoryServer({dbPath=join(ROOT,'.data/game.sqlite'),config
       const url=new URL(req.url,'http://'+host);
       if(req.method==='GET') {
         if(url.pathname==='/api/health'||url.pathname==='/api/config')return json(res,status());
-        const files={'/':'settings.html','/settings':'settings.html','/settings.js':'settings.js','/settings.css':'settings.css'};
+        if(url.pathname==='/api/debug/memories') {
+          if(req.headers['x-z-memory']!=='1'||(req.headers.origin&&req.headers.origin!=='http://'+host))throw new AppError('请求来源无效',403);
+          return json(res,inspectMemories(store,engine.book,{worldId:url.searchParams.get('worldId')||'',actorId:url.searchParams.get('actorId')||'c01'}));
+        }
+        const files={'/':'settings.html','/settings':'settings.html','/settings.js':'settings.js','/settings.css':'settings.css',
+          '/memories':'memories.html','/memories.js':'memories.js','/memories.css':'memories.css'};
         const file=files[url.pathname];if(!file)throw new AppError('接口不存在',404);
         res.writeHead(200,{'Content-Type':file.endsWith('.html')?'text/html; charset=utf-8':file.endsWith('.js')?'text/javascript; charset=utf-8':'text/css; charset=utf-8','Cache-Control':'no-store'});
         return res.end(readFileSync(join(ROOT,'public',file)));

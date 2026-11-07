@@ -7,8 +7,8 @@ import { strength,memoryState,retrievalCandidates } from '../lib/natural-memory.
 import { FixtureProvider } from './fixtures.mjs';
 function setup(t,day=1){const s=new Store(),p=new FixtureProvider(),e=new GameEngine(s,p);t.after(()=>s.close());const input={worldId:'worldA',runId:'runA',day,period:0};const opened=e.open(input);return {s,p,e,input,opened};}
 async function emit(e,input,event){return e.sync({...input,eventData:{day:input.day,period:input.period,...event}});}
-test('actual seven-person roster, public profiles and private knowledge are isolated',async t=>{
- const {e,p,input}=setup(t);assert.deepEqual(BOOK.actors.map(a=>a.name),['留洋','晴子','梨园','伊停','周结','正义','星亮']);
+test('actual ten-person roster, public profiles and private knowledge are isolated',async t=>{
+ const {e,p,input}=setup(t);assert.deepEqual(BOOK.actors.map(a=>a.name),['留洋','晴子','梨园','伊停','周结','正义','星亮','Z','阿遥','陈伯']);
  await e.intent({...input,requestId:'decision1',actorId:'c01',scene:'Street',candidates:[{id:'c05'}]});
  const req=p.calls.find(c=>c.messages[0].content.includes('主动找一个在场NPC'));
  const payload=JSON.parse(req.messages[1].content);
@@ -16,13 +16,13 @@ test('actual seven-person roster, public profiles and private knowledge are isol
  assert.ok(!JSON.stringify(payload).includes('幕后导演'));assert.ok(!JSON.stringify(payload).includes('撤岛与替代安排'));
  assert.throws(()=>e.actor('z'));assert.throws(()=>e.actor('aning'));
 });
-test('Day4 is authoritative, covers all seven off-scene actors, and is idempotent after save/load',async t=>{
+test('Day4 is authoritative, covers all ten off-scene actors, and is idempotent after save/load',async t=>{
  const {e,input}=setup(t,3);const day4={...input,day:4};
  await emit(e,day4,{id:'clock1',seq:1,kind:'clock'});
  const event={id:'worldA_day4',seq:2,kind:'day4',day:4,period:0};
  const state=await emit(e,day4,event);const snap=JSON.parse(state.checkpoint);
- assert.equal(snap.memories.filter(m=>m.origin==='public_day4').length,7);
- assert.equal(snap.memories.filter(m=>m.origin==='staff_day4').length,7);
+ assert.equal(snap.memories.filter(m=>m.origin==='public_day4').length,10);
+ assert.equal(snap.memories.filter(m=>m.origin==='staff_day4').length,0);
  for(const a of BOOK.actors)assert.deepEqual(e.context(e.assert(day4),a.id,{scene:'Street'}).publicFacts,[PUBLIC_DAY4]);
  await emit(e,day4,event);assert.equal(JSON.parse(e.response(e.assert(day4)).checkpoint).memories.length,snap.memories.length);
  const loaded=e.open({...day4,runId:'runB',checkpoint:state.checkpoint});

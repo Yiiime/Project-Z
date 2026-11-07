@@ -5,9 +5,10 @@ namespace Seabreeze
 {
     [Serializable] public sealed class SevenCharacter
     {
-        public string id,displayName,occupation,place,color;
+        public string id,displayName,occupation,place,color,portrait;
         public int appearance;
         public float x;
+        public NpcSchedule[] schedule = Array.Empty<NpcSchedule>();
         public PlaceId Place => Enum.TryParse(place,out PlaceId p)?p:PlaceId.Street;
         public Color Accent => ColorUtility.TryParseHtmlString(color,out var c)?c:Color.white;
     }
@@ -22,8 +23,8 @@ namespace Seabreeze
                 if(actors!=null)return actors;
                 var text=Resources.Load<TextAsset>("Memory/characters");
                 var roster=text!=null?JsonUtility.FromJson<SevenRoster>(text.text):null;
-                if(roster==null||roster.version!=1||roster.actors==null||roster.actors.Length!=7
-                    ||string.Join(",",roster.actors.Select(a=>a.id))!="c01,c02,c03,c04,c05,c06,c07")throw new InvalidOperationException("Seven-character public roster is invalid.");
+                if(roster==null||roster.version!=2||roster.actors==null||roster.actors.Length!=10
+                    ||string.Join(",",roster.actors.Select(a=>a.id))!="c01,c02,c03,c04,c05,c06,c07,z_story,npc_aya,npc_chen")throw new InvalidOperationException("Island character roster is invalid.");
                 actors=roster.actors;return actors;
             }
         }

@@ -25,7 +25,7 @@ namespace Seabreeze
             if(!Temporary(output)||!Temporary(saves)){Debug.LogError("Standalone smoke requires temporary output and save paths.");Application.Quit(1);yield break;}
             Directory.CreateDirectory(output);Application.logMessageReceived+=Log;
             float deadline=Time.realtimeSinceStartup+45;
-            while(Time.realtimeSinceStartup<deadline&&(GameSession.Instance?.Memory==null||!GameSession.Instance.Memory.Client.Synchronized))yield return null;
+            while(Time.realtimeSinceStartup<deadline&&(GameSession.Instance?.Memory==null||!GameSession.Instance.Memory.Client.Synchronized||WorldDirector.Instance?.Stage==null||WorldDirector.Instance.IsTransitioning))yield return null;
             var s=GameSession.Instance;var w=WorldDirector.Instance;
             if(s?.Memory==null||!s.Memory.Client.Synchronized){Finish("Startup did not synchronize.");yield break;}
             original=InputSystem.settings;settings=Instantiate(original);settings.backgroundBehavior=InputSettings.BackgroundBehavior.IgnoreFocus;InputSystem.settings=settings;
@@ -38,7 +38,7 @@ namespace Seabreeze
             deadline=Time.realtimeSinceStartup+30;
             while(Time.realtimeSinceStartup<deadline&&(!s.State.memory.day4Shown||!s.Memory.Client.Synchronized))yield return null;
             var checkpoint=JsonUtility.FromJson<Checkpoint>(s.State.memory.checkpoint);
-            if(checkpoint?.memories==null||checkpoint.memories.Count(m=>m.origin=="public_day4")!=7){Finish("Day4 did not reach seven NPCs.");yield break;}
+            if(checkpoint?.memories==null||checkpoint.memories.Count(m=>m.origin=="public_day4")!=10){Finish("Day4 did not reach ten NPCs.");yield break;}
             string image=Path.Combine(output,"standalone.png");ScreenCapture.CaptureScreenshot(image);
             deadline=Time.realtimeSinceStartup+10;while(!File.Exists(image)&&Time.realtimeSinceStartup<deadline)yield return null;
             yield return new WaitForSecondsRealtime(1);

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -18,17 +19,20 @@ namespace Seabreeze
         bool IsTransitioning => WorldDirector.Instance != null && WorldDirector.Instance.IsTransitioning;
         Canvas canvas;
         NativeLiveHost nativeLive;
-        RectTransform canvasRect, hud, bottomStrip, overlayRoot, dialogueRoot, promptRoot;
+        RectTransform canvasRect, hud, bottomStrip, overlayRoot, dialogueRoot;
         Transform overlayContent;
         TextMeshProUGUI dateText, timeText, weatherText, placeText, ambienceText, objectiveText;
-        TextMeshProUGUI speakerText, dialogueText, nextText, promptText, toastText;
+        TextMeshProUGUI speakerText, dialogueText, nextText, toastText;
         RectTransform choiceRoot;
         Button nextButton;
-        CanvasGroup toastGroup;
+        CanvasGroup toastGroup, overlayGroup;
+        InteractionPromptUI interactionPrompt;
+        Coroutine overlayRoutine;
+        bool overlayBusy;
+        public bool IsOverlayTransitioning => overlayBusy;
         GameSession session;
-        bool initialized, hidden, interactionVisible;
+        bool initialized, hidden;
         string overlayMode = "", observedEnding = "", pendingEnding = "";
-        Vector3 interactionPosition;
         float visibleCharacters, toastUntil;
         int dialogueFrame = -1;
         readonly List<Button> choiceButtons = new List<Button>();
@@ -50,7 +54,7 @@ namespace Seabreeze
             if(EventSystem.current==null)
             { var es=new GameObject("UI Event System",typeof(EventSystem),typeof(InputSystemUIInputModule)); es.transform.SetParent(transform,false); }
             BuildHUD(); BuildDialogue(); BuildInteraction(); BuildToast();
-            overlayRoot=Stretch("Overlay",canvasRect,Vector2.zero,Vector2.zero);overlayRoot.gameObject.SetActive(false);
+            overlayRoot=Stretch("Overlay",canvasRect,Vector2.zero,Vector2.zero);overlayGroup=overlayRoot.gameObject.AddComponent<CanvasGroup>();overlayRoot.gameObject.SetActive(false);
             session.Changed+=OnStateChanged;
             session.Dialogue.Changed+=OnDialogueChanged;
             session.Dialogue.Closed+=OnDialogueClosed;
@@ -99,8 +103,9 @@ namespace Seabreeze
         Button CircleButton(string name,Transform parent,Vector2 anchor,Vector2 pivot,Vector2 pos,LineIcon.Symbol symbol,Action action)
         {
             var p=Panel(name,parent,anchor,pivot,pos,new Vector2(66,66),new Color(.05f,.10f,.19f,.68f),true);
-            p.sprite = UIPrimitives.CircleSprite;
-            var b=p.gameObject.AddComponent<Button>();b.targetGraphic=p;b.navigation=new Navigation{mode=Navigation.Mode.None};b.onClick.AddListener(()=>{if(!IsTransitioning)action();});
+            ((RoundedPanel)p).CornerRadius=33;
+            var b=p.gameObject.AddComponent<Button>();b.targetGraphic=p;b.navigation=new Navigation{mode=Navigation.Mode.None};b.onClick.AddListener(()=>{if(!IsTransitioning&&!overlayBusy&&!(session.Memory?.PlayerChatOpen??false))action();});
+            UIHoverFeedback.Attach(b);
             var icon=Stretch("Icon",p.transform,Vector2.zero,Vector2.zero).gameObject.AddComponent<LineIcon>();icon.symbol=symbol;icon.ring=true;icon.color=new Color(.87f,.91f,.97f,.9f);icon.raycastTarget=false;
             return b;
         }
@@ -119,11 +124,8 @@ namespace Seabreeze
         }
         void BuildInteraction()
         {
-            promptRoot=Rect("Interaction prompt",canvasRect,C,C,Vector2.zero,new Vector2(250,50));
-            Panel("Prompt glass",promptRoot,C,C,Vector2.zero,new Vector2(250,50),new Color(.045f,.08f,.15f,.88f));
-            Line(promptRoot,BL,BL,Vector2.zero,new Vector2(250,1),new Color(.85f,.9f,1,.4f));
-            promptText=Label("Prompt",promptRoot,C,C,Vector2.zero,new Vector2(235,44),"E  交谈",22,Paper,TextAlignmentOptions.Midline);
-            promptRoot.gameObject.SetActive(false);
+            interactionPrompt=gameObject.AddComponent<InteractionPromptUI>();
+            interactionPrompt.Initialize(canvasRect);
         }
         void BuildToast()
         {
@@ -205,33 +207,24 @@ namespace Seabreeze
         {if(session.Dialogue.IsOpen&&!HasOverlay&&!IsTransitioning&&Time.frameCount>dialogueFrame&&FullyRevealed)session.Dialogue.Choose(index);}
         public void ShowInteraction(string text,Vector3 worldPosition)
         {
-            if(!initialized)return;
-            interactionVisible=true;interactionPosition=worldPosition;
-            string caption=text.StartsWith("E")?text:"E  "+text;
-            if(promptText.text!=caption)
-            {
-                promptText.text=caption;
-                float width=Mathf.Clamp(promptText.GetPreferredValues(caption).x+38,250,510);
-                promptRoot.sizeDelta=new Vector2(width,50);
-                ((RectTransform)promptRoot.GetChild(0)).sizeDelta=new Vector2(width,50);
-                ((RectTransform)promptRoot.GetChild(1)).sizeDelta=new Vector2(width,1);
-                promptText.rectTransform.sizeDelta=new Vector2(width-24,44);
-            }
+            if(initialized)interactionPrompt.Show(text,worldPosition);
         }
-        public void HideInteraction(){interactionVisible=false;if(promptRoot!=null)promptRoot.gameObject.SetActive(false);}
+        public void HideInteraction(){interactionPrompt?.Hide();}
         public void ShowToast(string text)
         {if(!initialized)return;toastText.text=text;toastUntil=Time.unscaledTime+3.8f;toastGroup.alpha=1;toastGroup.transform.SetAsLastSibling();}
 
         void Update()
         {
             if(!initialized||session==null)return;
-            if(session.Memory!=null&&session.Memory.PlayerChatOpen){HideInteraction();return;}
+            bool playerChat=session.Memory!=null&&session.Memory.PlayerChatOpen;
+            hud.gameObject.SetActive(!hidden&&!playerChat);
+            if(playerChat){HideInteraction();return;}
             if(overlayMode=="live")
             {
                 if(Application.isFocused&&GameInput.Pressed(Key.Escape)&&!(nativeLive?.HandleBack()??false))CloseOverlay();
                 return;
             }
-            if(IsTransitioning)
+            if(IsTransitioning||overlayBusy)
             {
                 HideInteraction();
                 if(toastGroup!=null)toastGroup.alpha=Mathf.MoveTowards(toastGroup.alpha,Time.unscaledTime<toastUntil?1:0,Time.unscaledDeltaTime*2);
@@ -268,39 +261,67 @@ namespace Seabreeze
         void LateUpdate()
         {
             if(!initialized)return;
-            bool visible=interactionVisible&&!HasOverlay&&!session.Dialogue.IsOpen&&!hidden&&!IsTransitioning;
-            promptRoot.gameObject.SetActive(visible);
-            if(!visible||Camera.main==null)return;
-            Vector3 screen=Camera.main.WorldToScreenPoint(interactionPosition);
-            if(screen.z<0){promptRoot.gameObject.SetActive(false);return;}
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect,screen,null,out Vector2 local);
-            float halfWidth=canvasRect.rect.width*.5f,halfHeight=canvasRect.rect.height*.5f;
-            promptRoot.anchoredPosition=new Vector2(Mathf.Clamp(local.x,-halfWidth+promptRoot.sizeDelta.x*.5f+12,halfWidth-promptRoot.sizeDelta.x*.5f-12),Mathf.Clamp(local.y,-halfHeight+190,halfHeight-90));
+            interactionPrompt.SetSuppressed(HasOverlay||overlayBusy||session.Dialogue.IsOpen||hidden||IsTransitioning||(session.Memory?.PlayerChatOpen??false));
         }
         void ToggleOverlay(string mode)
-        {if(session.Dialogue.IsOpen&&mode!="pause")return;if(overlayMode==mode)CloseOverlay();else OpenOverlay(mode);}
+        {
+            if(overlayBusy||(session.Memory?.PlayerChatOpen??false))return;
+            if(session.Dialogue.IsOpen&&mode!="pause")return;
+            if(overlayMode==mode)CloseOverlay();else OpenOverlay(mode);
+        }
         void OpenOverlay(string mode)
         {
-            if(!initialized||IsTransitioning)return;
-            overlayMode=mode;Time.timeScale=0f;session.SetOverlay(true);HideInteraction();dialogueRoot.gameObject.SetActive(false);
-            Clear(overlayRoot);overlayRoot.gameObject.SetActive(true);
-            var scrim=Stretch("Backdrop",overlayRoot,Vector2.zero,Vector2.zero).gameObject.AddComponent<Image>();scrim.color=new Color(.015f,.035f,.08f,.76f);scrim.raycastTarget=true;
-            if(mode=="live"){canvas.enabled=false;nativeLive=NativeLiveHost.Open(transform,CloseOverlay);return;}
+            if(!initialized||IsTransitioning||overlayBusy||(session.Memory?.PlayerChatOpen??false))return;
+            overlayBusy=true;Time.timeScale=0f;session.SetOverlay(true);HideInteraction();dialogueRoot.gameObject.SetActive(false);
+            overlayRoutine=StartCoroutine(ShowOverlayRoutine(mode));
+        }
+        IEnumerator ShowOverlayRoutine(string mode)
+        {
+            if(HasOverlay)yield return FadeOverlay(0,Style.FadeOutDuration);
+            overlayMode=mode;Clear(overlayRoot);overlayRoot.gameObject.SetActive(true);overlayGroup.alpha=0;
+            var scrim=Stretch("Backdrop",overlayRoot,Vector2.zero,Vector2.zero).gameObject.AddComponent<Image>();scrim.color=Style.Scrim;scrim.raycastTarget=true;
+            if(mode=="live")
+            {
+                canvas.enabled=false;nativeLive=NativeLiveHost.Open(transform,CloseOverlay);overlayBusy=false;overlayRoutine=null;yield break;
+            }
             Vector2 size=mode=="pause"||mode=="restart"?new Vector2(760,730):mode=="ending"?new Vector2(1160,790):new Vector2(1280,790);
-            var panel=Panel("Panel",overlayRoot,C,C,Vector2.zero,size,Ink,true);
-            overlayContent=panel.transform;
-            Line(panel.transform,TL,TL,Vector2.zero,new Vector2(size.x,2),new Color(.66f,.76f,.88f,.55f));
+            var panel=Panel("Panel",overlayRoot,C,C,Vector2.zero,size,Ink,true);overlayContent=panel.transform;
             CircleButton("Close",panel.transform,new Vector2(1,1),new Vector2(1,1),new Vector2(-24,-24),LineIcon.Symbol.Close,CloseOverlay);
             if(mode=="map")BuildMap();else if(mode=="phone")BuildPhone();else if(mode=="journal")BuildJournal();else if(mode=="pause")BuildPause();else if(mode=="restart")BuildRestart();else if(mode=="ending")BuildEnding();
+            yield return FadeOverlay(1,Style.FadeInDuration);overlayBusy=false;overlayRoutine=null;
         }
-        public void CloseOverlay()
+        IEnumerator FadeOverlay(float target,float duration)
+        {
+            overlayGroup.interactable=false;overlayGroup.blocksRaycasts=false;
+            float start=overlayGroup.alpha;
+            for(float t=0;t<1;t+=Time.unscaledDeltaTime/Mathf.Max(.01f,duration))
+            {overlayGroup.alpha=Mathf.Lerp(start,target,t*t*(3-2*t));yield return null;}
+            overlayGroup.alpha=target;overlayGroup.interactable=target>0;overlayGroup.blocksRaycasts=target>0;
+        }
+        public void CloseOverlay(){CloseOverlayThen(null);}
+        public void CloseOverlayImmediately()
         {
             if(!initialized)return;
+            if(overlayRoutine!=null)StopCoroutine(overlayRoutine);
+            overlayRoutine=null;FinishCloseOverlay();
+        }
+        void CloseOverlayThen(Action next)
+        {
+            if(!initialized||overlayBusy)return;
+            if(nativeLive!=null){FinishCloseOverlay();next?.Invoke();return;}
+            if(!HasOverlay){next?.Invoke();return;}
+            overlayBusy=true;overlayRoutine=StartCoroutine(CloseOverlayRoutine(next));
+        }
+        IEnumerator CloseOverlayRoutine(Action next)
+        {
+            yield return FadeOverlay(0,Style.FadeOutDuration);FinishCloseOverlay();next?.Invoke();
+        }
+        void FinishCloseOverlay()
+        {
             if(nativeLive!=null){nativeLive.Close();nativeLive=null;}
-            canvas.enabled=true;
-            overlayMode="";Time.timeScale=1f;overlayRoot.gameObject.SetActive(false);session.SetOverlay(false);
-            dialogueRoot.gameObject.SetActive(session.Dialogue.IsOpen);dialogueFrame=Time.frameCount;
-            RefreshHUD();
+            canvas.enabled=true;overlayBusy=false;overlayRoutine=null;
+            overlayMode="";Time.timeScale=1f;overlayRoot.gameObject.SetActive(false);session.SetOverlay(IsTransitioning);
+            dialogueRoot.gameObject.SetActive(session.Dialogue.IsOpen);dialogueFrame=Time.frameCount;RefreshHUD();
         }
         void Header(string eyebrow,string title,string subtitle)
         {
@@ -329,7 +350,7 @@ namespace Seabreeze
             var icon=rt.gameObject.AddComponent<LineIcon>();icon.symbol=LineIcon.Symbol.Pin;icon.ring=true;icon.color=session.CurrentPlace==place?Accent:Paper;icon.raycastTarget=false;
             Label("Place",parent,BL,C,new Vector2(x,266),new Vector2(270,40),PlaceName(place),26,session.CurrentPlace==place?Accent:Paper,TextAlignmentOptions.Midline);
             Label("Thought",parent,BL,C,new Vector2(x,150),new Vector2(310,32),thought,19,Muted,TextAlignmentOptions.Midline);
-            var button=Button("Travel",parent,BL,C,new Vector2(x,102),new Vector2(240,40),session.CurrentPlace==place?"在这里继续探索":"前往  "+PlaceName(place),()=>{CloseOverlay();if(session.CurrentPlace!=place)session.Travel(place);},session.CurrentPlace==place,18);
+            var button=Button("Travel",parent,BL,C,new Vector2(x,102),new Vector2(240,40),session.CurrentPlace==place?"在这里继续探索":"前往  "+PlaceName(place),()=>CloseOverlayThen(()=>{if(session.CurrentPlace!=place)session.Travel(place);}),session.CurrentPlace==place,18);
             button.GetComponentInChildren<TextMeshProUGUI>().alignment=TextAlignmentOptions.Midline;
         }
         void BuildPhone()
@@ -397,7 +418,7 @@ namespace Seabreeze
             Header("NEW DAY  /  START AGAIN","把今天，重新翻开","这会替换当前存档。已经做出的选择和今天的日志会清空。" );
             Label("Restart details",overlayContent,TL,TL,new Vector2(46,-260),new Vector2(660,110),"如果只是想再逛一会儿，可以返回游戏。\n如果想听听另一种回答，就从海边的早晨开始。",25,Paper);
             Button("Cancel restart",overlayContent,TL,TL,new Vector2(46,-430),new Vector2(668,64),"保留今天，继续散步",()=>OpenOverlay("pause"),true,24);
-            Button("Confirm restart",overlayContent,TL,TL,new Vector2(46,-515),new Vector2(668,64),"确认重新开始",()=>{CloseOverlay();observedEnding="";pendingEnding="";session.NewGame();RefreshHUD();OnDialogueChanged();},false,24);
+            Button("Confirm restart",overlayContent,TL,TL,new Vector2(46,-515),new Vector2(668,64),"确认重新开始",()=>CloseOverlayThen(()=>{observedEnding="";pendingEnding="";session.NewGame();RefreshHUD();OnDialogueChanged();}),false,24);
         }
         string ResolveEndingMemory()
         {
