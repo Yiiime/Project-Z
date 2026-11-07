@@ -83,6 +83,29 @@ public sealed class LiveTransport : IDisposable {
             }
         }
     }
+    public async Task ReadPcm(string id,Action<JObject> receive,CancellationToken cancel) {
+        if(!Guid.TryParse(id,out _))throw new LiveProtocolException("invalid_audio_stream");
+        using(var timeout=CancellationTokenSource.CreateLinkedTokenSource(life.Token,cancel)) {
+            timeout.CancelAfter(40000);
+            using(var response=await http.GetAsync(BaseUrl+Route("/audio-stream/"+id),HttpCompletionOption.ResponseHeadersRead,timeout.Token).ConfigureAwait(false)) {
+                if(!response.IsSuccessStatusCode)throw new LiveProtocolException("tts_stream_failed");
+                using(var stream=await response.Content.ReadAsStreamAsync().ConfigureAwait(false))using(timeout.Token.Register(()=>stream.Dispose()))using(var reader=new StreamReader(stream,Encoding.UTF8)) {
+                    int bytes=0;bool done=false;while(!done){timeout.Token.ThrowIfCancellationRequested();string line=await reader.ReadLineAsync().ConfigureAwait(false);if(line==null)throw new LiveProtocolException("tts_stream_incomplete");bytes+=line.Length;if(bytes>8000000||line.Length>2000000)throw new LiveProtocolException("tts_stream_too_large");var item=ParseWireJson(line);receive(item);done=(string)item["type"]=="done";}
+                }
+            }
+        }
+    }
+    public Task<JObject> Voice(string action,string callId=null){var b=Envelope();b["executorLeaseId"]=Lease;if(callId!=null)b["callId"]=callId;return Request(Route("/voice/"+action),b);}
+    public async Task<JObject> EnrollVoice(byte[] wav,CancellationToken cancel) {
+        using(var timeout=CancellationTokenSource.CreateLinkedTokenSource(life.Token,cancel)) {
+            timeout.CancelAfter(30000);
+            using(var request=new HttpRequestMessage(HttpMethod.Post,BaseUrl+Route("/voice/enroll"))) {
+                request.Headers.Add("X-Live-Epoch",Epoch.ToString());request.Headers.Add("X-Live-Executor-Lease",Lease);
+                request.Content=new ByteArrayContent(wav);request.Content.Headers.ContentType=new MediaTypeHeaderValue("audio/wav");
+                using(var response=await http.SendAsync(request,timeout.Token)){var result=ParseWireJson(await response.Content.ReadAsStringAsync());if(!response.IsSuccessStatusCode)throw new LiveProtocolException((string)result["error"]??"voiceprint_registration_failed");return result;}
+            }
+        }
+    }
     public async Task Heartbeat(){var b=Envelope();b["executorLeaseId"]=Lease;b["lastServerSeq"]=Cursor;await Request(Route("/heartbeat"),b);}
     public async Task Subscribe(){while(!life.IsCancellationRequested){try{
         using(var request=new HttpRequestMessage(HttpMethod.Get,BaseUrl+Route("/events?afterSeq="+Cursor)))using(var response=await http.SendAsync(request,HttpCompletionOption.ResponseHeadersRead,life.Token)){

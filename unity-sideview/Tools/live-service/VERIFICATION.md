@@ -122,3 +122,52 @@ PR 保持草稿，等待用户手工体验验收。
 - `node --test tests/*.test.mjs`：79/79；覆盖短编号在 handledIds、工具消息来源、议程证据中还原，未知引用仍拒绝；失败停止等待、连续重试上限、主动重试和新消息恢复。`git diff --check`、`tools/team/z check` 通过（248 个 C# 文件零语法错误）。
 - Unity 6000.3.27f1 `ZLive.EditorTools.ZLiveVerification.BuildWithInputChecks`：输入回归和 macOS 构建成功；新独立 Player 48/48 自动检查通过。Player 使用测试音，不代表已经在直播界面手工听完《青藏高原》。本轮真实模型诊断只检查结构和工具选择，不代表所有候选都通过语义审阅。
 - 本地试玩原位更新，旧应用备份保留在临时目录；连接文件、网易云登录态、歌曲库和存档保留。PR 始终为草稿，不合并 main。
+
+
+## 2026-11-07 · Web 连麦资产迁入 Unity 原生直播
+
+- `Tools/live-call-demo/` 保留原始 250 文件交付包及清单，SHA-256 校验通过；其 37 个默认离线脚本、10 项唱歌后台回归与声纹配置/传输回归已在本工作树通过。Unity 实际使用原生 UI、macOS RTC C ABI、原主 Agent 服务和 AudioSource。
+- 原生服务 `npm test`：107/107 通过。新增覆盖目标说话人逐轮验证、旧 callId 失效、重复结束事件、凭证不进入持久记录、owner/executor lease、真实适配器的精简审阅请求、短消息 ID 还原、逐句完整播放、打断保留已播前缀、拒绝不匹配字幕及空配置跨行读取。
+- `bash Tools/native-rtc/build-macos.sh`：ARM64 + x86_64 Universal 编译通过；SDK ZIP 按锁定 SHA-256 校验。桥接可在本机和独立 Player 中加载。SDK 二进制与生成目录不提交。
+- Unity 6000.3.27f1 `ZLive.EditorTools.ZLiveVerification.BuildWithInputChecks`：输入回归通过并生成独立 macOS 试玩包。导入器自动改写的模型、URP/连接设置和临时性能测试资源已还原，不纳入本任务。
+- 独立 Player 原生连麦验收 13/13：单麦克风、两条对话、14px 原字号、166px 面板上限、SDK 加载、PCM 首段起播、尾段补齐、仅一次完成回执、柔和淡出、取消不误报完成、音量恢复和停止。查看了实际 Player 截图。模拟器在首段后延迟 1.2 秒才发送尾段；最终检查中播放器约 26 ms 起播，仅代表本机测试音链路。
+- 现有独立 Player Live2D/音频恢复回归 48/48；沿用生成测试音，未新生成歌曲或做人工曲调听验。
+- 复用本机原配置，RTC `ListVoicePrint` HTTP 200；使用 `ApiKey` 的 MMPG `session.create` 成功。检查没有打开麦克风、发送录音或登记新声纹，不能等同于真实多人环境降噪效果。
+- 真实主 Agent → 审阅 → Vivi 测时使用一条合成文本，无真实玩家音频。最终一次：首句 1822 ms、主持最终结果 1838 ms、审阅通过 3032 ms、服务端首段 PCM 3790 ms、TTS 完成 4182 ms。首句、审阅、TTS 分别一次请求；不包含 RTC/ASR 上行和 Unity 出声时间，不能据单次结果声称普遍提速。前一诊断发现精简审阅请求层级错误，已修复并补回归。
+- 分支独立试玩服务在 4184 启动；健康检查主 Agent、Vivi 已配置，声纹配置完整，测试用暂停会话已关闭。配置通过忽略文件引用本机既有目录，密钥、声纹 ID、歌曲库和个人存档未提交。原 Web Demo 和其他 Unity 试玩服务保留。
+- `tools/team/z check` 通过：264 个 C# 文件零语法错误，资源与场景引用检查通过。供应商许可 HTML 原始快照按字节保留，其空白不规范通过专门的 `.gitattributes` 排除，避免修改交付清单哈希；业务代码与其他文件继续检查空白。
+
+复查入口：`node scripts/check-native-voice.mjs`（仅本地），追加 `--live` 才检查云端；`node scripts/measure-native-call.mjs --live` 最多一次主持、一次审阅、一次 TTS，可能产生供应商计费。两条诊断都不会打开麦克风。
+
+本地证据：`/tmp/z-native-call-qa/report.json`、`/tmp/z-native-call-qa/call-panel.png`、`/tmp/z-native-live2d-qa/report.json`、`/tmp/z-native-voice-permission.json`、`/tmp/z-native-call-latency.json`、`/tmp/z-call-unity-build.log`。现场待验：办公室旁人说话、扬声器回声、真实 RTC 发布/收音到 ASR 的完整链路与真人接话延迟；当前仅实现 macOS 原生桥接。
+
+
+## 2026-11-07 · 六条连麦输入的真实测时
+
+- 用户要求测试几条并统计平均生成耗时。仅新增测时脚本与报告，没有改动运行时、提示词、模型或播放策略。
+- 运行 `node scripts/measure-native-call-batch.mjs --live`：六个独立合成上下文，顺序测试招呼、疲惫、建议、音乐、轻剧情、上文与弹幕；每条最多一次主持、一次首段审阅、一次 Vivi 预合成，无自动重试。当前主模型 `deepseek-flash`，音色 Vivi 2.0。
+- 按当前运行链路并行进行首段审阅和 TTS 预合成；“可开口”取审阅通过与至少 100 ms 服务端 PCM 可用的较晚时间。没有真实播放、RTC/ASR、观众生成并发负载或“我想想啊”占位声音。
+- 六条完整回复文字：平均 1727 ms，中位数 1619 ms，范围 1564—2027 ms。
+- 五条首轮成功：具备开口条件平均 2970 ms，中位数 2984 ms，范围 2539—3490 ms；首段音频全部生成且获准平均 3588 ms。
+- 成功样本中，审阅自身耗时平均 1288 ms，Vivi 从请求到首包平均 719 ms，两者有重叠，不能直接相加计算总等待。
+- “接上文与弹幕”生成文字 1948 ms，但首段被语义审阅退回；不计入成功开口耗时，不用零值稀释平均值。真实运行中的重试还会增加等待。本测试不能代表每轮都能在三秒左右开口。
+- 机器可读明细见 `verification/native-call-benchmark-20261107.json`。这次口径按生产中的并行预合成计时；上一条单次诊断脚本是先审阅后 TTS，两次数据不能直接当成代码提速对比。
+
+## 连麦审阅提速复测
+
+基线为 `f270235`。主模型为 deepseek-flash，音色为 Vivi 2.0。使用相同六条合成玩家输入，各版本独立生成回复。在审阅与 Vivi 并行的路径，计时从提交玩家文字到审阅通过且服务端具备至少 100 ms PCM。两次均取第一次尝试，均有五条相同场景成功。六条输入的文字生成均成功。
+
+| 指标 | 基线 | 优化后 |
+|---|---:|---:|
+| 完整回复文字平均（6 条） | 1727 ms | 1624 ms |
+| 首段可播平均（相同 5 条） | 2970 ms | 2363 ms |
+| 首段可播中位数（相同 5 条） | 2984 ms | 2459 ms |
+| 审阅平均（相同 5 条） | 1288 ms | 796 ms |
+| Vivi 首包平均（相同 5 条） | 719 ms | 583 ms |
+
+第六条为上文和弹幕联动，基线误拒了“这个我信”，优化后独立生成的文本包含“这个我试过”，本次审阅请求超时，未得到判定。两次都未计入可播均值。模型采样、供应商响应和网络均有波动，607 ms 差值包含这些因素。计时覆盖服务端，不含 RTC、ASR、客户端缓冲或物理扬声器。复现用 `node scripts/measure-native-call-batch.mjs --live --output=/tmp/z-call-review-new.json`。
+
+- 同文本 A/B 使用预先标注的 8 个可说和 8 个应拦样本。两个版本均 16/16，无误拒、无误放，平均审阅 1162 → 944 ms。单独复测历史上被退回的弹幕原句三次，交替调用顺序，两版均放行 3/3。原始历史误拒确有记录，本次配对测试未复现，尚无法量化误判率降幅。
+- 玩家明确“没辞职，只是请一天假”。给真实审阅器预置了相反的首句。初审拦截 1259 ms，主 Agent 修复该句 841 ms，复审 701 ms，合计约 2803 ms（无 TTS）。修复结果正确回到了“请一天假”，仍带有“我记岔了”的口头表达。
+- 服务测试 116/116，通过片段修复、打断取消、保留已播内容、后台质量取消、两次请求上下文时关闭放行，以及修复失败不自动重生成等回归。独立 Unity Player 本地测试音验收 13/13，覆盖单麦克风、两条对话、等待尾段、安静让话和不误报完成。`tools/team/z check` 通过，264 个 C# 文件语法检查无错误。
+- 逐项数据在 `verification/native-call-review-optimized.json`、`verification/release-review-ab.json`、`verification/release-review-historical.json` 和 `verification/release-review-repair.json`。

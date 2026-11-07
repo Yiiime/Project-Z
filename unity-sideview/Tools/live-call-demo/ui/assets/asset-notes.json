@@ -1,0 +1,11 @@
+{
+  "source": "Night lighting edit of the Figma design asset using built-in image_gen",
+  "name": "Z 直播 · 聊天与唱歌",
+  "illustration": {
+    "file": "manga-live-night.png",
+    "width": 1584,
+    "height": 993
+  },
+  "edit": "Only time of day and lighting changed. Original illustration retained; character, composition and landmark positions preserved.",
+  "motion": "Existing source-aligned CSS masks and vector eye/mouth overlays in manga-face.js retained."
+}

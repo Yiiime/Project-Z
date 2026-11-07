@@ -1,0 +1,4 @@
+interface:
+  display_name: "角色清唱"
+  short_description: "检索观众点歌并定位片段，沿用当前角色音色无伴奏清唱，播放完成后自然互动"
+  default_prompt: "使用 $singing 处理这次点歌：先确认歌曲，按指定片段或默认副歌沿用当前角色音色清唱，并依据真实任务与播放事件接回观众互动。"

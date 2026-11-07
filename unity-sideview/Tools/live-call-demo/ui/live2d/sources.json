@@ -1,0 +1,360 @@
+{
+  "schemaVersion": 1,
+  "runtime": {
+    "pixi": {
+      "path": "vendor/pixi.min.js",
+      "url": "https://pixijs.download/v6.5.10/pixi.min.js",
+      "sha256": "403f2f2ee8145fa17f60c5c89403056efe2680e5096ec2762036486914ed19c5",
+      "size": 460333,
+      "license": "MIT",
+      "version": "6.5.10",
+      "copyright": "Copyright (c) 2013-2017 Mathew Groves, Chad Engler",
+      "source": "https://github.com/pixijs/pixijs/tree/8cdbf55064b7adc05f65c51e177f1c22f7329f0f",
+      "sourceCommit": "8cdbf55064b7adc05f65c51e177f1c22f7329f0f"
+    },
+    "display": {
+      "path": "vendor/cubism4.min.js",
+      "url": "https://cdn.jsdelivr.net/npm/pixi-live2d-display@0.4.0/dist/cubism4.min.js",
+      "sha256": "af1267e6d52759b245766c578d905bfa025b532d5c3cc727c370957c4409e21b",
+      "size": 119922,
+      "license": "MIT",
+      "version": "0.4.0",
+      "copyright": "Copyright (c) 2020 Guan",
+      "source": "https://github.com/guansss/pixi-live2d-display/tree/12148332b8838ca00ad76764e0e7521abf980e3b",
+      "sourceCommit": "12148332b8838ca00ad76764e0e7521abf980e3b"
+    },
+    "core": {
+      "url": "https://cubism.live2d.com/sdk-web/core/05/live2dcubismcore.min.js",
+      "compatibilityFamily": "05 / Cubism 5.2",
+      "embedded": false,
+      "integrity": "sha384-MeKqhuhBpq1ZqqshjOzqDOQJ/00BuDVdnNeYgPKul9hmgROzmT17WkmUeFJ9Jlrb",
+      "crossOrigin": "anonymous",
+      "sha256": "25ae938cb4fe282ce189b357bcc97e603d1e1f7ec78bf04150d401c23cdc792f",
+      "size": 207155,
+      "license": "Live2D Proprietary Software License Agreement",
+      "copyright": "Copyright © Live2D Inc. All rights reserved.",
+      "source": "https://www.live2d.com/en/sdk/download/web/"
+    }
+  },
+  "model": {
+    "name": "Haru",
+    "role": "Official Live2D sample stand-in; not the original Z character model",
+    "entry": "models/Haru/Haru.model3.json",
+    "sourceCommit": "ba0d4ed65e2e62736bf68ba9f237971fc9df79ac",
+    "sourceTag": "4-r.5",
+    "sourceBase": "https://raw.githubusercontent.com/Live2D/CubismWebSamples/ba0d4ed65e2e62736bf68ba9f237971fc9df79ac/Samples/Resources/Haru/",
+    "license": "Live2D Free Material License Agreement + Live2D Cubism Sample Data Terms",
+    "copyright": "Copyright © Live2D Inc. All rights reserved.",
+    "fileCount": 22,
+    "sampleAudioIncluded": false,
+    "files": [
+      "models/Haru/Haru.2048/texture_00.png",
+      "models/Haru/Haru.2048/texture_01.png",
+      "models/Haru/Haru.cdi3.json",
+      "models/Haru/Haru.moc3",
+      "models/Haru/Haru.model3.json",
+      "models/Haru/Haru.physics3.json",
+      "models/Haru/Haru.pose3.json",
+      "models/Haru/Haru.userdata3.json",
+      "models/Haru/expressions/F01.exp3.json",
+      "models/Haru/expressions/F02.exp3.json",
+      "models/Haru/expressions/F03.exp3.json",
+      "models/Haru/expressions/F04.exp3.json",
+      "models/Haru/expressions/F05.exp3.json",
+      "models/Haru/expressions/F06.exp3.json",
+      "models/Haru/expressions/F07.exp3.json",
+      "models/Haru/expressions/F08.exp3.json",
+      "models/Haru/motions/haru_g_idle.motion3.json",
+      "models/Haru/motions/haru_g_m06.motion3.json",
+      "models/Haru/motions/haru_g_m09.motion3.json",
+      "models/Haru/motions/haru_g_m15.motion3.json",
+      "models/Haru/motions/haru_g_m20.motion3.json",
+      "models/Haru/motions/haru_g_m26.motion3.json"
+    ]
+  },
+  "terms": [
+    {
+      "id": "proprietary",
+      "name": "Live2D Proprietary Software License Agreement",
+      "url": "https://www.live2d.com/eula/live2d-proprietary-software-license-agreement_en.html"
+    },
+    {
+      "id": "open-software",
+      "name": "Live2D Open Software License Agreement",
+      "url": "https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html"
+    },
+    {
+      "id": "free-material",
+      "name": "Live2D Free Material License Agreement",
+      "url": "https://www.live2d.com/eula/live2d-free-material-license-agreement_en.html"
+    },
+    {
+      "id": "sample-data",
+      "name": "Terms of Use for Live2D Cubism Sample Data",
+      "url": "https://www.live2d.com/en/learn/sample/model-terms/"
+    }
+  ],
+  "licenseAcknowledgement": {
+    "requiredCliFlag": "--accept-live2d-license",
+    "scope": "Acknowledgement only; actual use and publication remain subject to all linked agreements."
+  },
+  "files": [
+    {
+      "path": "licenses/Live2D-free-material.source.html.txt",
+      "url": "https://www.live2d.com/eula/live2d-free-material-license-agreement_en.html",
+      "sha256": "e7daa8a2a20b491fa9e530455a83faf8f4fe5876d7b85cf9d9ad1bcdddcbaf8f",
+      "size": 54499,
+      "license": "Live2D Free Material License Agreement"
+    },
+    {
+      "path": "licenses/Live2D-open-software.source.html.txt",
+      "url": "https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html",
+      "sha256": "a8274bf5f461335738791e9f392eb3f3684eaa22cbb4dfe1f3f887c3586a8d82",
+      "size": 73603,
+      "license": "Live2D Open Software License Agreement"
+    },
+    {
+      "path": "licenses/Live2D-proprietary.source.html.txt",
+      "url": "https://www.live2d.com/eula/live2d-proprietary-software-license-agreement_en.html",
+      "sha256": "e7b4ffc6c636de2cfdd6d2eed6a4e43fa7034e7f15a0c3a15f1603dbb3b4c2b6",
+      "size": 85820,
+      "license": "Live2D Proprietary Software License Agreement"
+    },
+    {
+      "path": "licenses/Live2D-sample-data.source.html.txt",
+      "url": "https://www.live2d.com/en/learn/sample/model-terms/",
+      "sha256": "49e856354affa390890d04cdcc0e33f25ed2c9bd6c30134325fed32ce9c76e06",
+      "size": 51731,
+      "license": "Terms of Use for Live2D Cubism Sample Data"
+    },
+    {
+      "path": "licenses/Live2D-upstream-LICENSE.md",
+      "url": "https://raw.githubusercontent.com/Live2D/CubismWebSamples/ba0d4ed65e2e62736bf68ba9f237971fc9df79ac/LICENSE.md",
+      "sha256": "d889b91d409c3addc895357c9766ef59682bfa936ca083226b460474337e9951",
+      "size": 2971,
+      "license": "Live2D license notice"
+    },
+    {
+      "path": "licenses/NOTICE.txt",
+      "url": "local:generated-attribution",
+      "sha256": "e492400695ea91813dbe92ab80032bd0b7dbb5f0aeeac0cf70d8e027761213cf",
+      "size": 1720,
+      "license": "Attribution and source notice"
+    },
+    {
+      "path": "licenses/pixi-LICENSE.txt",
+      "url": "https://raw.githubusercontent.com/pixijs/pixijs/8cdbf55064b7adc05f65c51e177f1c22f7329f0f/LICENSE",
+      "sha256": "536a16e090f0b6c1454a7c0b47ee8414a39a2f1724a154f10ca1edc750a2dcfd",
+      "size": 1092,
+      "license": "MIT"
+    },
+    {
+      "path": "licenses/pixi-live2d-display-LICENSE.txt",
+      "url": "https://raw.githubusercontent.com/guansss/pixi-live2d-display/12148332b8838ca00ad76764e0e7521abf980e3b/LICENSE",
+      "sha256": "8ccace668a041e78ed525d091b0b5daf8b623ff447f912616de535415e4f302f",
+      "size": 1061,
+      "license": "MIT"
+    },
+    {
+      "path": "models/Haru/Haru.2048/texture_00.png",
+      "url": "https://raw.githubusercontent.com/Live2D/CubismWebSamples/ba0d4ed65e2e62736bf68ba9f237971fc9df79ac/Samples/Resources/Haru/Haru.2048/texture_00.png",
+      "sha256": "30fce81e6b2d69fb99e8d1b5f391a6e0240f671095e491e9bbe24ddd7c7f434d",
+      "size": 1526786,
+      "license": "Live2D Free Material License Agreement + Live2D Cubism Sample Data Terms",
+      "sourceCommit": "ba0d4ed65e2e62736bf68ba9f237971fc9df79ac"
+    },
+    {
+      "path": "models/Haru/Haru.2048/texture_01.png",
+      "url": "https://raw.githubusercontent.com/Live2D/CubismWebSamples/ba0d4ed65e2e62736bf68ba9f237971fc9df79ac/Samples/Resources/Haru/Haru.2048/texture_01.png",
+      "sha256": "e1e977447ee7e6e347f1b96b9103ae269e6f4e4a8cf38068d161537415cc51c8",
+      "size": 1188664,
+      "license": "Live2D Free Material License Agreement + Live2D Cubism Sample Data Terms",
+      "sourceCommit": "ba0d4ed65e2e62736bf68ba9f237971fc9df79ac"
+    },
+    {
+      "path": "models/Haru/Haru.cdi3.json",
+      "url": "https://raw.githubusercontent.com/Live2D/CubismWebSamples/ba0d4ed65e2e62736bf68ba9f237971fc9df79ac/Samples/Resources/Haru/Haru.cdi3.json",
+      "sha256": "f0b7b68e8404fb2a327f77515388f9f2418d038e3eb98a7ecff89818c3dd4e97",
+      "size": 5536,
+      "license": "Live2D Free Material License Agreement + Live2D Cubism Sample Data Terms",
+      "sourceCommit": "ba0d4ed65e2e62736bf68ba9f237971fc9df79ac"
+    },
+    {
+      "path": "models/Haru/Haru.moc3",
+      "url": "https://raw.githubusercontent.com/Live2D/CubismWebSamples/ba0d4ed65e2e62736bf68ba9f237971fc9df79ac/Samples/Resources/Haru/Haru.moc3",
+      "sha256": "aa59f7a3dc3b30b23b5f10afd9192ed755e4d01dc9a12442d99b972a418e2543",
+      "size": 384704,
+      "license": "Live2D Free Material License Agreement + Live2D Cubism Sample Data Terms",
+      "sourceCommit": "ba0d4ed65e2e62736bf68ba9f237971fc9df79ac"
+    },
+    {
+      "path": "models/Haru/Haru.model3.json",
+      "url": "https://raw.githubusercontent.com/Live2D/CubismWebSamples/ba0d4ed65e2e62736bf68ba9f237971fc9df79ac/Samples/Resources/Haru/Haru.model3.json",
+      "sha256": "425a9d4f77cdcb1e80749a3d460dba28ee3be2d2646833e45b022268f0dcb3a5",
+      "size": 2280,
+      "license": "Live2D Free Material License Agreement + Live2D Cubism Sample Data Terms",
+      "sourceCommit": "ba0d4ed65e2e62736bf68ba9f237971fc9df79ac",
+      "upstreamSha256": "780f2b4b24b02ba2c61a0ad34e32f465b13f792c2eeff4a1d94a139ba13becf5",
+      "upstreamSize": 2090,
+      "modification": "Removed Sound entries from motion definitions; original sample WAV files are neither downloaded nor played."
+    },
+    {
+      "path": "models/Haru/Haru.physics3.json",
+      "url": "https://raw.githubusercontent.com/Live2D/CubismWebSamples/ba0d4ed65e2e62736bf68ba9f237971fc9df79ac/Samples/Resources/Haru/Haru.physics3.json",
+      "sha256": "b09a654759a0a0a49998a263757b10f310377adab4b8a281ae5c70902a8a7d1f",
+      "size": 5914,
+      "license": "Live2D Free Material License Agreement + Live2D Cubism Sample Data Terms",
+      "sourceCommit": "ba0d4ed65e2e62736bf68ba9f237971fc9df79ac"
+    },
+    {
+      "path": "models/Haru/Haru.pose3.json",
+      "url": "https://raw.githubusercontent.com/Live2D/CubismWebSamples/ba0d4ed65e2e62736bf68ba9f237971fc9df79ac/Samples/Resources/Haru/Haru.pose3.json",
+      "sha256": "cd1c1e2c0faac3bf0c42fdf1a4d5a064ebd5e1f2dc4116a9a7c723b948818ef6",
+      "size": 274,
+      "license": "Live2D Free Material License Agreement + Live2D Cubism Sample Data Terms",
+      "sourceCommit": "ba0d4ed65e2e62736bf68ba9f237971fc9df79ac"
+    },
+    {
+      "path": "models/Haru/Haru.userdata3.json",
+      "url": "https://raw.githubusercontent.com/Live2D/CubismWebSamples/ba0d4ed65e2e62736bf68ba9f237971fc9df79ac/Samples/Resources/Haru/Haru.userdata3.json",
+      "sha256": "6d001365965cdabd9fb36cffa9583c9e3eff20331d791c00064c4f9246ca2893",
+      "size": 313,
+      "license": "Live2D Free Material License Agreement + Live2D Cubism Sample Data Terms",
+      "sourceCommit": "ba0d4ed65e2e62736bf68ba9f237971fc9df79ac"
+    },
+    {
+      "path": "models/Haru/expressions/F01.exp3.json",
+      "url": "https://raw.githubusercontent.com/Live2D/CubismWebSamples/ba0d4ed65e2e62736bf68ba9f237971fc9df79ac/Samples/Resources/Haru/expressions/F01.exp3.json",
+      "sha256": "b143d37d24af8fa5d619e333e791facd87d6396ab75e09fa9051e760f8ff96e7",
+      "size": 124,
+      "license": "Live2D Free Material License Agreement + Live2D Cubism Sample Data Terms",
+      "sourceCommit": "ba0d4ed65e2e62736bf68ba9f237971fc9df79ac"
+    },
+    {
+      "path": "models/Haru/expressions/F02.exp3.json",
+      "url": "https://raw.githubusercontent.com/Live2D/CubismWebSamples/ba0d4ed65e2e62736bf68ba9f237971fc9df79ac/Samples/Resources/Haru/expressions/F02.exp3.json",
+      "sha256": "c0bd4f923b12f40f8ad778766cf48a260054ff346156aaee062dcad788053063",
+      "size": 464,
+      "license": "Live2D Free Material License Agreement + Live2D Cubism Sample Data Terms",
+      "sourceCommit": "ba0d4ed65e2e62736bf68ba9f237971fc9df79ac"
+    },
+    {
+      "path": "models/Haru/expressions/F03.exp3.json",
+      "url": "https://raw.githubusercontent.com/Live2D/CubismWebSamples/ba0d4ed65e2e62736bf68ba9f237971fc9df79ac/Samples/Resources/Haru/expressions/F03.exp3.json",
+      "sha256": "cdea71773205e6299155820c12afe20c15dcf53f0e73da7a30c364fe5d16d38c",
+      "size": 739,
+      "license": "Live2D Free Material License Agreement + Live2D Cubism Sample Data Terms",
+      "sourceCommit": "ba0d4ed65e2e62736bf68ba9f237971fc9df79ac"
+    },
+    {
+      "path": "models/Haru/expressions/F04.exp3.json",
+      "url": "https://raw.githubusercontent.com/Live2D/CubismWebSamples/ba0d4ed65e2e62736bf68ba9f237971fc9df79ac/Samples/Resources/Haru/expressions/F04.exp3.json",
+      "sha256": "354c58609b64a74daf8d7e37b4d28a365548aa5ba1bf941ec4d8db4bd3bb43bd",
+      "size": 841,
+      "license": "Live2D Free Material License Agreement + Live2D Cubism Sample Data Terms",
+      "sourceCommit": "ba0d4ed65e2e62736bf68ba9f237971fc9df79ac"
+    },
+    {
+      "path": "models/Haru/expressions/F05.exp3.json",
+      "url": "https://raw.githubusercontent.com/Live2D/CubismWebSamples/ba0d4ed65e2e62736bf68ba9f237971fc9df79ac/Samples/Resources/Haru/expressions/F05.exp3.json",
+      "sha256": "4f43af57229467492fab13a88f600b741f42887493e993b6ec9f558688d2dcea",
+      "size": 474,
+      "license": "Live2D Free Material License Agreement + Live2D Cubism Sample Data Terms",
+      "sourceCommit": "ba0d4ed65e2e62736bf68ba9f237971fc9df79ac"
+    },
+    {
+      "path": "models/Haru/expressions/F06.exp3.json",
+      "url": "https://raw.githubusercontent.com/Live2D/CubismWebSamples/ba0d4ed65e2e62736bf68ba9f237971fc9df79ac/Samples/Resources/Haru/expressions/F06.exp3.json",
+      "sha256": "1bf9ad6a640b8009d429d883718b2bf2d0091b380c63ca1c65326bdbc17105aa",
+      "size": 475,
+      "license": "Live2D Free Material License Agreement + Live2D Cubism Sample Data Terms",
+      "sourceCommit": "ba0d4ed65e2e62736bf68ba9f237971fc9df79ac"
+    },
+    {
+      "path": "models/Haru/expressions/F07.exp3.json",
+      "url": "https://raw.githubusercontent.com/Live2D/CubismWebSamples/ba0d4ed65e2e62736bf68ba9f237971fc9df79ac/Samples/Resources/Haru/expressions/F07.exp3.json",
+      "sha256": "77e3b941e2525aff0308ed82998e6b4356c896e97d9411c528f98fd4a753d685",
+      "size": 907,
+      "license": "Live2D Free Material License Agreement + Live2D Cubism Sample Data Terms",
+      "sourceCommit": "ba0d4ed65e2e62736bf68ba9f237971fc9df79ac"
+    },
+    {
+      "path": "models/Haru/expressions/F08.exp3.json",
+      "url": "https://raw.githubusercontent.com/Live2D/CubismWebSamples/ba0d4ed65e2e62736bf68ba9f237971fc9df79ac/Samples/Resources/Haru/expressions/F08.exp3.json",
+      "sha256": "be652831b79458fd3f9d55b28c15b0e93d551dd730c5e1053e23d238fe879a21",
+      "size": 421,
+      "license": "Live2D Free Material License Agreement + Live2D Cubism Sample Data Terms",
+      "sourceCommit": "ba0d4ed65e2e62736bf68ba9f237971fc9df79ac"
+    },
+    {
+      "path": "models/Haru/motions/haru_g_idle.motion3.json",
+      "url": "https://raw.githubusercontent.com/Live2D/CubismWebSamples/ba0d4ed65e2e62736bf68ba9f237971fc9df79ac/Samples/Resources/Haru/motions/haru_g_idle.motion3.json",
+      "sha256": "8a4fac459abf35dfb049188e4330d485a9fce54ae6111625f4ffae4d9b03abfb",
+      "size": 21183,
+      "license": "Live2D Free Material License Agreement + Live2D Cubism Sample Data Terms",
+      "sourceCommit": "ba0d4ed65e2e62736bf68ba9f237971fc9df79ac"
+    },
+    {
+      "path": "models/Haru/motions/haru_g_m06.motion3.json",
+      "url": "https://raw.githubusercontent.com/Live2D/CubismWebSamples/ba0d4ed65e2e62736bf68ba9f237971fc9df79ac/Samples/Resources/Haru/motions/haru_g_m06.motion3.json",
+      "sha256": "311c544c67282cbc40ac1e0287751b20a7f49a46f4eea989b7071efc3188053c",
+      "size": 15118,
+      "license": "Live2D Free Material License Agreement + Live2D Cubism Sample Data Terms",
+      "sourceCommit": "ba0d4ed65e2e62736bf68ba9f237971fc9df79ac"
+    },
+    {
+      "path": "models/Haru/motions/haru_g_m09.motion3.json",
+      "url": "https://raw.githubusercontent.com/Live2D/CubismWebSamples/ba0d4ed65e2e62736bf68ba9f237971fc9df79ac/Samples/Resources/Haru/motions/haru_g_m09.motion3.json",
+      "sha256": "d6c8abb01dcfee8246cccbe7a437f025cb31884f8408f3207e1a6e4139888e45",
+      "size": 25066,
+      "license": "Live2D Free Material License Agreement + Live2D Cubism Sample Data Terms",
+      "sourceCommit": "ba0d4ed65e2e62736bf68ba9f237971fc9df79ac"
+    },
+    {
+      "path": "models/Haru/motions/haru_g_m15.motion3.json",
+      "url": "https://raw.githubusercontent.com/Live2D/CubismWebSamples/ba0d4ed65e2e62736bf68ba9f237971fc9df79ac/Samples/Resources/Haru/motions/haru_g_m15.motion3.json",
+      "sha256": "4383147bd61a7bd2d990591512bfe29eea743f93868e8679ffed16e588628088",
+      "size": 13540,
+      "license": "Live2D Free Material License Agreement + Live2D Cubism Sample Data Terms",
+      "sourceCommit": "ba0d4ed65e2e62736bf68ba9f237971fc9df79ac"
+    },
+    {
+      "path": "models/Haru/motions/haru_g_m20.motion3.json",
+      "url": "https://raw.githubusercontent.com/Live2D/CubismWebSamples/ba0d4ed65e2e62736bf68ba9f237971fc9df79ac/Samples/Resources/Haru/motions/haru_g_m20.motion3.json",
+      "sha256": "536e467d6533c0883b2ad6c8915bc632b4d4188fc3d3abb19cc6b4f5fd12ddb9",
+      "size": 23651,
+      "license": "Live2D Free Material License Agreement + Live2D Cubism Sample Data Terms",
+      "sourceCommit": "ba0d4ed65e2e62736bf68ba9f237971fc9df79ac"
+    },
+    {
+      "path": "models/Haru/motions/haru_g_m26.motion3.json",
+      "url": "https://raw.githubusercontent.com/Live2D/CubismWebSamples/ba0d4ed65e2e62736bf68ba9f237971fc9df79ac/Samples/Resources/Haru/motions/haru_g_m26.motion3.json",
+      "sha256": "2b20fbbf31439a5792c808085ecd4c9dc5addeb6195c6d113a25e77f7acc0f4f",
+      "size": 23275,
+      "license": "Live2D Free Material License Agreement + Live2D Cubism Sample Data Terms",
+      "sourceCommit": "ba0d4ed65e2e62736bf68ba9f237971fc9df79ac"
+    },
+    {
+      "path": "vendor/cubism4.min.js",
+      "url": "https://cdn.jsdelivr.net/npm/pixi-live2d-display@0.4.0/dist/cubism4.min.js",
+      "sha256": "af1267e6d52759b245766c578d905bfa025b532d5c3cc727c370957c4409e21b",
+      "size": 119922,
+      "license": "MIT",
+      "version": "0.4.0",
+      "copyright": "Copyright (c) 2020 Guan",
+      "source": "https://github.com/guansss/pixi-live2d-display/tree/12148332b8838ca00ad76764e0e7521abf980e3b",
+      "sourceCommit": "12148332b8838ca00ad76764e0e7521abf980e3b"
+    },
+    {
+      "path": "vendor/pixi.min.js",
+      "url": "https://pixijs.download/v6.5.10/pixi.min.js",
+      "sha256": "403f2f2ee8145fa17f60c5c89403056efe2680e5096ec2762036486914ed19c5",
+      "size": 460333,
+      "license": "MIT",
+      "version": "6.5.10",
+      "copyright": "Copyright (c) 2013-2017 Mathew Groves, Chad Engler",
+      "source": "https://github.com/pixijs/pixijs/tree/8cdbf55064b7adc05f65c51e177f1c22f7329f0f",
+      "sourceCommit": "8cdbf55064b7adc05f65c51e177f1c22f7329f0f"
+    }
+  ]
+}

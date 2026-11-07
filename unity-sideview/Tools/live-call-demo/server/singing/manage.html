@@ -1,0 +1,44 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Z · 唱歌工作台</title>
+<style>body{margin:0;background:#f7f5fa;color:#30283a;font:15px/1.6 system-ui}main{max-width:1040px;margin:auto;padding:32px 20px}h1{font-size:28px;margin:0}small,.muted{color:#72677d}a{color:#72538c}section,article{background:white;border:1px solid #e6deec;border-radius:14px;padding:20px;margin:16px 0}textarea{box-sizing:border-box;width:100%;min-height:70px;padding:10px;border:1px solid #d1c4dd;border-radius:8px;font:inherit}button{background:#705185;color:white;border:0;border-radius:8px;padding:9px 14px;margin:8px 8px 0 0;cursor:pointer}button:disabled{opacity:.45}button.secondary{background:#eee7f3;color:#44334e}label{display:inline-block;margin:8px 14px 0 0}audio{width:100%;margin:10px 0}pre{white-space:pre-wrap;font-size:12px;overflow-wrap:anywhere}.row{display:flex;justify-content:space-between;gap:12px}#notice{position:sticky;top:0;background:#fff2dc;padding:10px;border-radius:8px;display:none}.badge{background:#eee7f3;border-radius:20px;padding:3px 10px;font-size:13px}details{margin-top:12px}h3{margin:0 0 8px}.controls{border-top:1px solid #eee;padding-top:10px}</style>
+<main><div class="row"><div><small>Z / 音乐准备</small><h1>唱歌工作台</h1></div><a href="/">返回直播间</a></div><p class="muted">点歌在后台准备，关掉网页不取消任务。只有通过试听的唱段才进入待播。服务进程需保持运行；跨场记录保存在本机数据库。</p><div id="notice" role="status"></div>
+<section><h3>一句话点歌</h3><form id="request"><textarea id="text" placeholder="例如：唱一下颜人中《晚安》的第一句，只唱第一句。" required maxlength="600"></textarea><button>提交后台准备</button><small>新片段会调用真实服务并消耗额度；已有合格片段直接复用。</small></form></section>
+<div class="row"><h2>点歌任务与记忆</h2><button id="refresh" class="secondary">刷新</button></div><div id="tasks"></div><section><h3>已积累的歌曲与覆盖范围</h3><div id="knowledge"></div></section><details><summary>最近任务事件</summary><pre id="events"></pre></details></main>
+<script>
+const $=id=>document.getElementById(id),states={queued:'排队中',parsing:'正在理解点歌',needs_input:'需要补充',generating:'Vivi 后台生成中',checking:'检查音频',awaiting_review:'等待试听',ready:'待展示',playing:'本场播放中',completed:'已播放完成',failed:'未完成 · 已记录',cancelled:'已取消',rejected:'不是明确点歌请求'};
+let fingerprint='',working=false;
+const node=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;};
+function notice(text){$('notice').textContent=text;$('notice').style.display='block';}
+async function post(url,body){const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}),d=await r.json();if(!r.ok)throw Error(d.error);return d;}
+async function action(fn){if(working)return;working=true;try{await fn();fingerprint='';await refresh();notice('已保存。');}catch(e){notice('未执行：'+e.message);}finally{working=false;}}
+$('request').onsubmit=e=>{e.preventDefault();void action(()=>post('/api/singing/tasks',{text:$('text').value,sourceId:crypto.randomUUID(),sessionId:'management'}));};
+function button(text,fn){const b=node('button',text);b.onclick=()=>void action(fn);return b;}
+async function refresh(){try{const r=await fetch('/api/singing/state'),s=await r.json();if(!r.ok)throw Error(s.error);const key=JSON.stringify(s);if(key===fingerprint)return;
+  // Keep an unfinished review form intact while other tasks progress.
+  if(document.activeElement?.closest('#tasks')&&!['BUTTON','BODY'].includes(document.activeElement.tagName))return;
+  fingerprint=key;$('tasks').replaceChildren();
+  for(const t of [...s.tasks].reverse()){
+    const a=node('article'),row=node('div',undefined,'row');row.append(node('h3',t.request),node('span',states[t.status]||t.status,'badge'));a.append(row,node('small',`${new Date(t.createdAt).toLocaleString()} · ${t.requesterKind==='operator'?'工作台/验证记录':'玩家点歌'} · 尝试 ${t.attempt} · ${t.id}`));
+    if(t.plan)a.append(node('p',`${t.plan.title} / ${t.plan.artist||'未指定歌手'} / ${t.plan.segment.description}`));
+    if(t.reason)a.append(node('p',t.reason));if(t.question)a.append(node('p',t.question));
+    const asset=s.assets.find(x=>x.id===t.assetId);
+    if(asset){const audio=node('audio');audio.controls=true;audio.preload='none';audio.src='/api/singing/assets/'+asset.id+'?review=1';a.append(audio,node('small',`${(asset.durationMs/1000).toFixed(2)} 秒 · ${asset.voice.identity} v${asset.voice.revision} · ${asset.approved?'已验收':'尚未验收，不能自动播放'}`));}
+    if(t.status==='awaiting_review'){
+      const checks={},names={song:'歌曲正确',segment:'指定范围正确',voice:'与 Z / 晚安声音一致',aCappella:'单人无伴奏',ending:'开头结尾完整'};
+      const controls=node('div',undefined,'controls');
+      for(const [key,label] of Object.entries(names)){const l=node('label'),input=node('input');input.type='checkbox';checks[key]=input;l.append(input,document.createTextNode(label));controls.append(l);}
+      const note=node('textarea');note.placeholder='试听结论或驳回原因（必填）';note.maxLength=600;controls.append(note);
+      const values=()=>Object.fromEntries(Object.entries(checks).map(([k,v])=>[k,v.checked]));
+      controls.append(button('通过试听并入库',()=>post(`/api/singing/tasks/${t.id}/review`,{approved:true,checks:values(),note:note.value})),button('驳回并记录原因',()=>post(`/api/singing/tasks/${t.id}/review`,{approved:false,checks:values(),note:note.value})));a.append(controls);
+    }
+    if(t.status==='needs_input'){const input=node('textarea');input.value=t.request;a.append(input,button('用完整需求补充',()=>post(`/api/singing/tasks/${t.id}/clarify`,{text:input.value})));}
+    if(t.status==='failed'){a.append(button('明确重试一次',()=>{if(/unknown/.test(t.reason)&&!confirm('原任务结果未知。请先核对供应商调用记录；再次生成可能重复计费。确认仍要重试？'))return;return post(`/api/singing/tasks/${t.id}/retry`,{acknowledgeUnknown:true});}));}
+    if(['ready','completed'].includes(t.status))a.append(node('p','已可供 Z 在直播间选择。回直播间告诉 Z 想听这段，或让它在合适的话口展示。','muted'));
+    if(!['playing','completed','failed','cancelled','rejected'].includes(t.status))a.append(button('取消准备',()=>post(`/api/singing/tasks/${t.id}/cancel`,{})));
+    $('tasks').append(a);
+  }
+  if(!s.tasks.length)$('tasks').append(node('p','还没有点歌任务。'));
+  $('knowledge').replaceChildren(...s.knowledge.map(k=>node('p',`${k.title} · ${k.artist||'待确认版本'}：${k.coverage.join('、')}。${k.independentScoreAvailable?'已有旋律资料':'无独立乐谱；已验收音频按范围复用。'}`)));
+  $('events').textContent=JSON.stringify(s.events.slice(-40),null,2);
+}catch(e){notice('无法读取后台：'+e.message);}}
+$('refresh').onclick=()=>{fingerprint='';void refresh();};void refresh();setInterval(()=>{if(!working)void refresh();},5000);
+</script></html>

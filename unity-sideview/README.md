@@ -61,6 +61,8 @@
 
 按 Tab 打开手机，点击「Z 的直播 · 进入聊天小屋」。支持文字和语音连麦、Live2D 表情与口型、对话点歌与演唱；歌曲准备好后由主 Agent 安排演唱。返回或 Esc 恢复探索。先按 [直播服务说明](Tools/live-service/README.md) 启动服务；验证范围见 [原生接入验证](Tools/live-service/VERIFICATION.md)。
 
+原生连麦分支支持单麦克风上/下麦、最多两条对话、RTC/MMPG 声纹保护和 Vivi 流式播放。macOS 依赖安装、独立试玩入口及验收范围见 [原生连麦接入](Tools/live-service/NATIVE-CALL.md)。
+
 ## 当前八人 Skill / 记忆运行入口（2026-11-07）
 
 当前运行身份统一为 Z、梨园、李庭、阿星、正义、小小晴、林序、周伯伯。沿用已有横版场景和资源，职业、地图、人设、任务均来自当前Skill。后端启动 `Tools/MemoryLab/start.sh`；默认4330，`/`体验对话与玩家任务，`/memories`查看独立记忆。Action／Info由后端存储并供Unity执行器使用，不在玩家界面展示。详细协议、任务、取消与存档验收见[当前接入说明](Docs/MemoryIntegration.md)。

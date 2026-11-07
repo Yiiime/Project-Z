@@ -1,0 +1,35 @@
+import assert from 'node:assert/strict';
+import {randomUUID,webcrypto} from 'node:crypto';
+import {handlePerformance,parsePerformancePlan} from '../worker/performance-director.js';
+import {handleChat} from '../worker/deepseek-chat.js';
+const env={DEEPSEEK_API_KEY:'fixture-secret-never-in-response'};
+const text='太谢谢你了，我想比个心！';
+const segment={text,mood:'happy',gesture:'wavePose',transition:'smooth',fit:'approximate',reason:'举掌表达感谢，但无法摆出手指爱心。',missingAction:'双手比心'};
+const output=segments=>({choices:[{finish_reason:'stop',message:{content:JSON.stringify({segments})}}]});
+const req=(body={},headers={},route='/api/performance')=>new Request('https://z.example.test'+route,{method:'POST',headers:{'Content-Type':'application/json',Origin:'https://z.example.test','oai-authenticated-user-id':'performance-tests',...headers},body:JSON.stringify({requestId:randomUUID(),message:text,...body})});
+let calls=0;
+const options={crypto:webcrypto,diagnostics:()=>{},fetch:async(url,init)=>{
+ calls++;assert.equal(url,'https://api.deepseek.com/chat/completions');assert.equal(init.redirect,'manual');assert.equal(init.headers.Authorization,'Bearer '+env.DEEPSEEK_API_KEY);
+ const body=JSON.parse(init.body);assert.equal(body.model,'deepseek-flash');assert.equal(body.thinking.type,'disabled');assert.equal(body.response_format.type,'json_object');
+ assert(body.messages[0].content.includes('coverMouth'));assert(!body.messages[0].content.includes('sampleM26'));assert(!body.messages[0].content.includes('"id":"cheek"'));assert.deepEqual(JSON.parse(body.messages[1].content),{message:text});
+ return Response.json(output([segment]));
+}};
+const config=await handlePerformance(new Request('https://z.example.test/api/performance/config'),env);assert.equal((await config.json()).enabled,true);assert.equal(calls,0);
+assert.equal((await handlePerformance(req({}, {'oai-authenticated-user-id':''}),env,options)).status,401);
+assert.equal((await handlePerformance(req({}, {Origin:'https://evil.test'}),env,options)).status,403);
+assert.equal((await handlePerformance(req({message:'长'.repeat(161)}),env,options)).status,400);
+assert.equal((await handlePerformance(req(),{},options)).status,503);assert.equal(calls,0);
+const requestId=randomUUID();const [r1,r2]=await Promise.all([handlePerformance(req({requestId}),env,options),handlePerformance(req({requestId}),env,options)]);
+assert.equal(r1.status,200);const result=await r1.json();assert.equal(result.source,'deepseek');assert.deepEqual(result.segments,[segment]);assert.deepEqual(await r2.json(),result);assert.equal(calls,1);assert(!JSON.stringify(result).includes(env.DEEPSEEK_API_KEY));
+assert.equal((await handlePerformance(req({requestId,message:'新句子'}),env,options)).status,409);
+// Same request id in chat is isolated from the performance plan cache.
+const chat=await handleChat(req({requestId},{},'/api/chat'),env,{crypto:webcrypto,fetch:async()=>Response.json({choices:[{finish_reason:'stop',message:{content:JSON.stringify({text:'你好呀。',mood:'happy'})}}]})});assert.equal((await chat.json()).text,'你好呀。');
+console.log('PASS server-only configuration, auth/origin/length, shared protected transport and mode-isolated request deduplication');
+for(const altered of [{...segment,text:'被改写的句子'}, {...segment,gesture:'inventedHeart'}, {...segment,gesture:'sampleM26'}, {...segment,gesture:'cheek'}, {...segment,mood:'angry'}, {...segment,fit:'supported'}, {...segment,fit:'missing'}, {...segment,transition:'teleport'}])assert.throws(()=>parsePerformancePlan(output([altered]),text));
+assert.throws(()=>parsePerformancePlan(output(Array(5).fill(segment)),text));
+const two=[{...segment,text:'太谢谢你了，',gesture:'none',fit:'supported',missingAction:''},{...segment,text:'我想比个心！'}];assert.deepEqual(parsePerformancePlan(output(two),text).segments,two);
+assert.equal(parsePerformancePlan(output([{...segment,fit:'missing',gesture:'none'}]),text).segments[0].fit,'missing');
+const invalid=await handlePerformance(req(),env,{crypto:webcrypto,diagnostics:()=>{},fetch:async()=>Response.json(output([{...segment,text:'改写'}]))});assert.equal(invalid.status,502);assert.equal((await invalid.json()).error,'invalid_plan');
+const failed=await handlePerformance(req(),env,{crypto:webcrypto,diagnostics:()=>{},fetch:async()=>Response.json({error:env.DEEPSEEK_API_KEY},{status:402})});assert.equal(failed.status,503);assert(!JSON.stringify(await failed.json()).includes(env.DEEPSEEK_API_KEY));
+const timeout=await handlePerformance(req(),env,{crypto:webcrypto,diagnostics:()=>{},timeoutMs:10,fetch:()=>new Promise(()=>{})});assert.equal(timeout.status,504);
+console.log('PASS exact original text, segment limits, enum/asset whitelist, honest missing-action contract and safe failure/timeout');

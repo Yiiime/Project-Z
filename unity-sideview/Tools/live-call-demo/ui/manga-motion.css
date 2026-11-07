@@ -1,0 +1,138 @@
+/* The same night illustration supplies the base and every clipped layer. */
+#live-stage .room-art {
+  background-image: url('assets/manga-live-night.png');
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  transform: none;
+}
+#live-stage .room-shade { background: none; }
+#live-stage #character-wrap {
+  position: absolute;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  aspect-ratio: 1584 / 993;
+  transform: none !important;
+  filter: none;
+  overflow: hidden;
+}
+#character {
+  inset: 0;
+  animation: none !important;
+  transform: none !important;
+}
+#character .character-piece, #character .head-group {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+#character .character-piece {
+  background: url('assets/manga-live-night.png') center / 100% 100% no-repeat;
+}
+#character .body-piece {
+  background: none !important;
+  animation: none !important;
+  transform: none !important;
+}
+#character .head-group {
+  transform-origin: 54.545% 39.779%;
+  animation: manga-head 6.4s ease-in-out infinite;
+}
+#character .head-piece { animation: none; }
+#character .left-arm {
+  transform-origin: 37.879% 59.013%;
+  animation: manga-card-idle 5.8s ease-in-out infinite;
+}
+#character .right-arm {
+  transform-origin: 55.492% 81.470%;
+  animation: manga-hand-idle 7.1s ease-in-out infinite;
+}
+#character.speaking .head-group {
+  animation: manga-speaking-head 2.1s ease-in-out infinite;
+}
+#character[data-mood='serious'] .head-group,
+#character[data-mood='thinking'] .head-group {
+  animation: manga-thinking-head 5.1s ease-in-out infinite;
+}
+#character[data-gesture='draw'] .left-arm,
+#character[data-gesture='explain'] .left-arm {
+  animation: manga-card-explain 1.8s ease-in-out infinite;
+}
+#character[data-gesture='wave'] .right-arm,
+#character[data-gesture='explain'] .right-arm {
+  animation: manga-hand-explain 2.2s ease-in-out infinite;
+}
+#character .face-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+#character .eye-lid { opacity: 0; animation: manga-blink 5.9s linear infinite; }
+#character .eye-lid.right { animation-delay: .018s; }
+#character .mouth-cover { opacity: 0; transition: opacity 70ms linear; }
+#character.speaking .mouth-cover { opacity: 1; }
+#character .mouth-moving {
+  opacity: 1;
+  transform-box: fill-box;
+  transform-origin: 50% 38%;
+}
+#character.speaking .mouth-moving { animation: manga-speech .31s ease-in-out infinite; }
+#character[data-mood='serious'].speaking .mouth-moving { animation-duration: .36s; }
+#live-stage .table-front { display: none; background: none; }
+#live-stage .character-hit { left: 40%; right: 34%; top: 12%; bottom: 25%; }
+#live-stage .character-emotion { left: 64%; top: 20%; font-size: 20px; }
+
+/* Maximal displacement stays below one source pixel to avoid double contours. */
+@keyframes manga-head {
+  0%,100% { transform: rotate(-.035deg) translateY(0); }
+  50% { transform: rotate(.035deg) translateY(-.22px); }
+}
+@keyframes manga-speaking-head {
+  0%,100% { transform: rotate(-.04deg) translateY(0); }
+  40% { transform: rotate(.04deg) translateY(-.28px); }
+  70% { transform: rotate(0) translateY(.12px); }
+}
+@keyframes manga-thinking-head {
+  0%,100% { transform: rotate(-.05deg); }
+  50% { transform: rotate(-.01deg) translateY(.18px); }
+}
+@keyframes manga-card-idle {
+  0%,100% { transform: rotate(-.035deg); }
+  50% { transform: rotate(.035deg) translateY(-.16px); }
+}
+@keyframes manga-card-explain {
+  0%,100% { transform: rotate(0); }
+  45% { transform: rotate(.06deg) translateY(-.22px); }
+}
+@keyframes manga-hand-idle {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-.2px); }
+}
+@keyframes manga-hand-explain {
+  0%,100% { transform: rotate(-.08deg); }
+  45% { transform: rotate(.1deg) translateY(-.18px); }
+}
+@keyframes manga-blink {
+  0%,37.2%,40.7%,100% { opacity: 0; }
+  38.1%,39.8% { opacity: 1; }
+}
+@keyframes manga-speech {
+  0%,100% { transform: scaleY(.42) scaleX(.97); }
+  30% { transform: scaleY(.85) scaleX(1); }
+  58% { transform: scaleY(.62) scaleX(.98); }
+  78% { transform: scaleY(1) scaleX(1); }
+}
+.low-motion #character .head-group,
+.low-motion #character .left-arm,
+.low-motion #character .right-arm,
+.low-motion #character .eye-lid { animation: none !important; }
+.low-motion #character .mouth-moving { animation: none !important; transform: scaleY(.72); }
+@media (prefers-reduced-motion: reduce) {
+  #character .head-group, #character .left-arm, #character .right-arm,
+  #character .eye-lid, #character .mouth-moving { animation: none !important; }
+}

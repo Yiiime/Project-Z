@@ -1,0 +1,122 @@
+{
+  "testedAt": "2026-11-07T15:32:33.504Z",
+  "modelUnchanged": true,
+  "microphoneUsed": false,
+  "method": "Fixed labeled synthetic candidates, alternating baseline/current order, same text and evidence. One expansion allowed; no candidate rewriting in verdict comparison.",
+  "cases": [
+    {
+      "id": "historical-1",
+      "expected": "allow",
+      "text": "海盐汽水说累了就伸个懒腰，这个我信，伸完真的会松一点。",
+      "before": {
+        "decision": "allow",
+        "correct": true,
+        "ms": 1089,
+        "calls": 1,
+        "reason": "主播以自身口吻回应观众放松建议，引用并表达认同，有实际交流作用，且未预设未知事实。",
+        "metrics": []
+      },
+      "after": {
+        "decision": "allow",
+        "correct": true,
+        "ms": 1100,
+        "calls": 1,
+        "reason": "",
+        "metrics": [
+          {
+            "kind": "review",
+            "release": true,
+            "expanded": false,
+            "elapsedMs": 1099,
+            "inputChars": 2219,
+            "promptTokens": 958,
+            "completionTokens": 5,
+            "cacheHitTokens": 384
+          }
+        ]
+      }
+    },
+    {
+      "id": "historical-2",
+      "expected": "allow",
+      "text": "海盐汽水说累了就伸个懒腰，这个我信，伸完真的会松一点。",
+      "after": {
+        "decision": "allow",
+        "correct": true,
+        "ms": 824,
+        "calls": 1,
+        "reason": "",
+        "metrics": [
+          {
+            "kind": "review",
+            "release": true,
+            "expanded": false,
+            "elapsedMs": 823,
+            "inputChars": 2219,
+            "promptTokens": 958,
+            "completionTokens": 5,
+            "cacheHitTokens": 768
+          }
+        ]
+      },
+      "before": {
+        "decision": "allow",
+        "correct": true,
+        "ms": 1325,
+        "calls": 1,
+        "reason": "主播以自身立场回应观众放松话题，引用海盐汽水的伸懒腰建议并表达认同，属于自然承接，未虚构经历或越位。",
+        "metrics": []
+      }
+    },
+    {
+      "id": "historical-3",
+      "expected": "allow",
+      "text": "海盐汽水说累了就伸个懒腰，这个我信，伸完真的会松一点。",
+      "before": {
+        "decision": "allow",
+        "correct": true,
+        "ms": 1008,
+        "calls": 1,
+        "reason": "主播回应了观众关于放松建议的提问，引用了另一位观众的具体建议并给出自己的认同，属于正常接话，没有越位或编造事实。",
+        "metrics": []
+      },
+      "after": {
+        "decision": "allow",
+        "correct": true,
+        "ms": 735,
+        "calls": 1,
+        "reason": "",
+        "metrics": [
+          {
+            "kind": "review",
+            "release": true,
+            "expanded": false,
+            "elapsedMs": 734,
+            "inputChars": 2219,
+            "promptTokens": 958,
+            "completionTokens": 5,
+            "cacheHitTokens": 768
+          }
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "before": {
+      "total": 3,
+      "correct": 3,
+      "falseReject": 0,
+      "falseAllow": 0,
+      "errors": 0,
+      "meanMs": 1141
+    },
+    "after": {
+      "total": 3,
+      "correct": 3,
+      "falseReject": 0,
+      "falseAllow": 0,
+      "errors": 0,
+      "meanMs": 886
+    }
+  }
+}

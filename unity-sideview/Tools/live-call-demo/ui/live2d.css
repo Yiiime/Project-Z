@@ -1,0 +1,27 @@
+/* This layer never changes the original manga or the subtitle/card geometry. */
+.live2d-room,.live2d-host,.live2d-foreground { position:absolute; inset:0; display:none; pointer-events:none; }
+.live2d-room { z-index:0; background:center / 100% 100% no-repeat; }
+.live2d-foreground { z-index:5; background:center / 100% 100% no-repeat; clip-path:inset(79.5% 0 0 0); }
+.live2d-host { z-index:3; overflow:hidden; }
+.live2d-canvas { display:block; width:100%!important; height:100%!important; pointer-events:none; }
+.live2d-greet { display:none; position:absolute; z-index:4; left:34%; top:8%; width:32%; height:65%; border:0; background:transparent; box-shadow:none; cursor:pointer; }
+.live2d-greet:focus-visible { outline:2px solid var(--blue,#a5d8ee); outline-offset:-5px; border-radius:45%; }
+#live-stage.live2d-active .room-art,
+#live-stage.live2d-active #character-wrap,
+#live-stage.live2d-active .character-emotion { display:none!important; }
+#live-stage.live2d-active .live2d-room,
+#live-stage.live2d-active .live2d-host,
+#live-stage.live2d-active .live2d-foreground,
+#live-stage.live2d-active .live2d-greet { display:block; }
+.live2d-notice { position:absolute; z-index:12; top:48px; left:14px; max-width:min(400px,calc(100% - 28px)); display:flex; align-items:center; gap:10px; padding:7px 10px; color:var(--ink,#35434c); font-size:12px; line-height:1.5; background:rgba(250,251,249,.94); border:1px solid var(--line,#8d9ca3); box-shadow:2px 3px 0 rgba(53,67,76,.12); }
+.live2d-notice[hidden],.live2d-notice button[hidden] { display:none; }
+.live2d-notice button { flex:none; padding:3px 7px; font-size:12px; color:var(--ink,#35434c); background:var(--blue,#a5d8ee); }
+.character-mode-select { width:150px; max-width:48%; padding:8px 6px; border:1px solid var(--line,#8d9ca3); border-radius:1px; background:var(--paper,#fafbf9); color:var(--ink,#35434c); font:inherit; font-size:12px; }
+.character-example-note { margin:8px 0 16px; color:var(--muted,#687b82); font-size:12px; line-height:1.6; }
+@media(max-width:800px){
+  .live2d-notice { top:39px; left:8px; max-width:calc(100% - 16px); padding:5px 7px; gap:6px; font-size:11px; }
+  .live2d-notice button { padding:3px 5px; font-size:11px; }
+  .live2d-greet { left:30%; width:40%; height:57%; }
+}
+/* A transparent hit target must stay transparent under the shared button hover. */
+.live2d-greet:hover,.live2d-greet:active { background:transparent; box-shadow:none; transform:none; }
