@@ -42,10 +42,15 @@ export function normalizeAgentInput(raw) {
   if(raw.kind==='review'){
     const c=keys(raw.context,['revision','publicEvents','sessionEvents','waiting_messages','candidate']);
     if(!Number.isSafeInteger(c.revision)||c.revision<0)throw bad();
-    const candidate=keys(c.candidate,['id','role','speakerId','text','intent','replyTo','evidenceIds']);
+    const candidate=keys(c.candidate,['id','role','speakerId','text','intent','replyTo','evidenceIds','plannedTool']);
     if(!['host','audience'].includes(candidate.role))throw bad();
     if(candidate.role==='audience'&&!NPCS.some(n=>n.npc_id===candidate.speakerId)||candidate.role==='host'&&candidate.speakerId!=='Z')throw bad();
     const normalized={id:str(candidate.id,100),role:candidate.role,speakerId:candidate.speakerId,text:str(candidate.text,candidate.role==='host'?360:72),intent:str(candidate.intent,40),replyTo:list(candidate.replyTo,16,x=>str(x,100)),evidenceIds:list(candidate.evidenceIds,12,x=>str(x,100))};
+    if(candidate.plannedTool!==undefined){
+      const tool=keys(candidate.plannedTool,['name','targetId']);
+      if(candidate.role!=='host'||candidate.intent!=='tool'||!['prepare_song','clarify_song','cancel_song','play_prepared_song','start_singing','replay_talent','finish_activity','offer_call_story'].includes(tool.name))throw bad();
+      normalized.plannedTool={name:tool.name,targetId:str(tool.targetId,100,true)};
+    }
     const publicEvents=list(c.publicEvents,40,normalizePublicEvent),sessionEvents=list(c.sessionEvents,32,normalizePublicEvent);
     if(sessionEvents.some(e=>e.type==='speech.progress'))throw bad();
     const waiting_messages=list(c.waiting_messages,16,m=>{keys(m,['id','speakerRole','speakerId','text']);if(!['player','audience'].includes(m.speakerRole))throw bad();return {id:str(m.id,100),speakerRole:m.speakerRole,speakerId:str(m.speakerId,100),text:str(m.text,360)};});
@@ -163,7 +168,7 @@ const SINGING_HOST_ADAPTER = `
 【唱歌执行接口，仅供内部行动判断】context.singing 为服务端持久记录。现有直播/连麦主 Agent 决定回应和演唱时机，台词统一走现有 TTS；检索服务不替主播说话。
 真人明确点歌用 prepare_song {messageId:"真人消息ID"}，handledIds 包含该消息；先登记原文，再解析、查共享曲库，缺少参考资料时检索网易云、获取完整音频与歌词、后台生成。无需人为等待五分钟、24小时或第二次见面。不要因为尚未就绪重复提交，也不由模拟弹幕创建付费生成。歌手未指定时选择平台返回的首个合格版本；明确指定歌手/版本则严格匹配，不拿翻唱替代。第一句、主歌、副歌不可互换。单段最多90秒，整首等不支持范围应澄清。
 queued/parsing/retrieving/generating/checking 是准备中；needs_input 依 question 用 speak 向玩家澄清；收到真人的新回答后，再用 clarify_song {taskId,messageId} 保留原始需求并补充回答；failed 表示这次没准备好，目前唱不了这个片段；以 Z 的口吻接住观众，具体诊断留在管理端。没有人工审核关卡，ready 表示音频通过技术检查，可以安排，不证明曲调、片段、音色已经人工听验。不要声称已核验旋律或学会整首。参考音频与歌词用于检索与资料留存，当前生成接口不支持音频条件输入。
-任务 ready 后，由你选择合适对话时机调用 play_prepared_song {taskId}；当前没有前台才艺、声音开启且没有未处理真人消息时才执行。可以先回应来客再唱，不自动连续播放，也不再加固定等待。scheduled 仅表示已交给播放器，不是唱完或实际听到的证据；依当前通用媒介状态衔接。完成/失败/中断后用 finish_activity {taskId,cancel:false} 释放活动、自然回到原话题。播放中取消用 finish_activity {taskId,cancel:true}。后台任务的明确取消请求用 cancel_song {taskId,messageId}。
+任务 ready 后，由你选择合适对话时机调用 play_prepared_song {taskId}；当前没有前台才艺、声音开启，且真人消息已在之前或本轮 handledIds 中接住时执行。本轮可先回应、明确把另一个话题留到唱完，再用同一轮的 play_prepared_song 衔接；不要为了等 inbox 完全空白而一直口头预告。新的点歌仍先 prepare_song，取消或换歌先处理真实意图。可以先回应来客再唱，不自动连续播放，也不再加固定等待。scheduled 仅表示已交给播放器，不是唱完或实际听到的证据；依当前通用媒介状态衔接。完成/失败/中断后用 finish_activity {taskId,cancel:false} 释放活动、自然回到原话题。播放中取消用 finish_activity {taskId,cancel:true}。后台任务的明确取消请求用 cancel_song {taskId,messageId}。
 主动唱现有曲库仍可 start_singing；真人新点歌必须先 prepare_song。handledIds 描述本轮 inbox 的处理情况，不填写历史点歌 sourceId。提交前表达准备尝试，工具受理后才能表达确实正在准备。任务 sourceId、originSessionId 和时间用于承接，不编造日期或点歌者当前在线；requesterKind=operator 不是观众。任务跨场保存，普通下播不取消。向观众不报编号或登录维护细节；需要账号维护时如实说明暂时无法准备，由后台处理。已拒绝素材不得生成、失败或取消任务不得播放。后台状态不自动成为观众已知事实。`;
 
 // Keep the legacy prerecorded contract only for hosts without the durable service.
@@ -188,8 +193,8 @@ export function buildAgentRequest(value,now=Date.now()) {
   const c=value.context, config=publicConfig(true);
   if(c.singing)config.capabilities=config.capabilities.map(x=>x.id==='singing'?{...x,mode:'durable_background_vivi',reason:'明确点歌后台准备，已验收片段命中缓存直接待播；新片段技术检查通过即可由主Agent安排，任务跨场持久化'}:x);
   if(value.kind==='topic')return {system:AGENT_BUNDLE.topicPrompt,input:c};
-  if(value.kind==='review')return {system:AGENT_BUNDLE.review.prompt+(c.singing?'\ncontext.singing 是宿主从持久任务库注入的可信私有事实，可支持主播回忆点歌和报告准备/失败/已播放状态。ready/scheduled不等于唱过；技术检查不是人工听验，不需要人工审核。它不是观众已知内容；主播此刻可以用自己的口吻首次告知。唱歌准备时的想一想、熟悉一下、小曲库脑袋等表达可以是当下意愿或角色比喻，不必逐字对应技术动作；是否声称已经学会、唱完或经历过练习，仍结合语境与真实状态判断。未执行prepare_song的台词只能提议尝试，不能声称已接单或完成。':''),input:c};
-  if(value.kind==='host')return {system:Z_PERSONA+'\n'+AGENT_BUNDLE.skills.singing.instructions+conversationPrompt(c)+(c.call?.active?'\n【连麦方法】\n'+AGENT_BUNDLE.callPrompt+CALL_HOST_ADAPTER:'')+'\n最终宿主适配：当前是host主持决策。以上Skill只提供玩法方法与内容边界，最终只输出conversation-host定义的action/speech/mood/gesture/transition/handledIds/wakeAfterMs/continuation/memory/agendaUpdates/tool协议，不输出Skill原始request_id或task_id顶层回包。不可用才艺只能用speak说明缺失能力。'+(c.singing?SINGING_HOST_ADAPTER+`\n本轮唱歌工具许可：${c.host.inbox.some(m=>m.mine)?'有待处理真人消息，禁止start_singing和play_prepared_song。明确点歌选prepare_song，普通聊天选speak；即使已有别人的同歌ready任务，也必须先登记这次点歌。':!c.mediaRuntime?.audioEnabled?'声音关闭，禁止start_singing和play_prepared_song；仍可prepare_song后台准备。':c.activeSkill?'有前台活动，禁止新增播放；先完成当前活动。':'可以在合适话口play_prepared_song播放ready任务。'}`:'')+'\n'+AGENT_BUNDLE.skills.singing.expression+'\n输出协议提示：handledIds 只表示当前 inbox 的处理情况；inbox 为空时是 []。历史任务 sourceId 用于承接来源，不填入 handledIds。',input:{...value,capabilities:config.capabilities,performanceGestures:TALENT_GESTURES,expressionResources:{moods:MOODS,gestures:EXPRESSION_GESTURES},songLibrary:(c.singing&&c.host.inbox.some(m=>m.mine)?[]:playableSongs()).map(({id,title,version,section})=>({id,title,version,section}))}};
+  if(value.kind==='review')return {system:AGENT_BUNDLE.review.prompt+(c.singing?'\ncontext.singing 是宿主从持久任务库注入的可信私有事实，可支持主播回忆点歌和报告准备/失败/已播放状态。ready/scheduled不等于唱过；技术检查不是人工听验，不需要人工审核。它不是观众已知内容；主播此刻可以用自己的口吻首次告知。唱歌准备时的想一想、熟悉一下、小曲库脑袋等表达可以是当下意愿或角色比喻，不必逐字对应技术动作；是否声称已经学会、唱完或经历过练习，仍结合语境与真实状态判断。未执行prepare_song的台词只能提议尝试，不能声称已接单或完成。':''),input:{...c,...(c.candidate.role==='host'?{executionContext:c.candidate.intent==='tool'&&['play_prepared_song','start_singing','replay_talent'].includes(c.candidate.plannedTool?.name)?'本轮台词完成后会尝试执行所列播放工具；这只是待执行安排，尚无播放成功回执。':'本轮没有安排播放歌曲。台词完成后不会自动开唱，即使某首歌已经 ready 也一样；若想开唱，需要主 Agent 在另一轮重新选择播放工具。'}:{})}};
+  if(value.kind==='host')return {system:Z_PERSONA+'\n'+AGENT_BUNDLE.skills.singing.instructions+conversationPrompt(c)+(c.call?.active?'\n【连麦方法】\n'+AGENT_BUNDLE.callPrompt+CALL_HOST_ADAPTER:'')+'\n最终宿主适配：当前是host主持决策。以上Skill只提供玩法方法与内容边界，最终只输出conversation-host定义的action/speech/mood/gesture/transition/handledIds/wakeAfterMs/continuation/memory/agendaUpdates/tool协议，不输出Skill原始request_id或task_id顶层回包。不可用才艺只能用speak说明缺失能力。'+(c.singing?SINGING_HOST_ADAPTER+`\n本轮唱歌工具许可：${c.host.inbox.some(m=>m.mine)?'有待处理真人消息：新的点歌选prepare_song，普通聊天可speak；如已决定回应或暂缓这些消息并接着唱ready任务，可在本轮handledIds接住全部真人消息后play_prepared_song。不要用start_singing绕过点歌登记。':!c.mediaRuntime?.audioEnabled?'声音关闭，禁止start_singing和play_prepared_song；仍可prepare_song后台准备。':c.activeSkill?'有前台活动，禁止新增播放；先完成当前活动。':'可以在合适话口play_prepared_song播放ready任务。'}`:'')+'\n'+AGENT_BUNDLE.skills.singing.expression+'\n输出协议提示：handledIds 只表示当前 inbox 的处理情况；inbox 为空时是 []。历史任务 sourceId 用于承接来源，不填入 handledIds。',input:{...value,capabilities:config.capabilities,performanceGestures:TALENT_GESTURES,expressionResources:{moods:MOODS,gestures:EXPRESSION_GESTURES},songLibrary:(c.singing&&c.host.inbox.some(m=>m.mine)?[]:playableSongs()).map(({id,title,version,section})=>({id,title,version,section}))}};
   if(value.kind==='audience'){
     const phase=c.phase,{budget,eligibleNpcIds,allowAdvance,recentMessages}=audienceRuntime(c);
     const expires=new Date(now+AGENT_BUNDLE.policy.audience.candidateTtlMs).toISOString();
@@ -229,22 +234,22 @@ export function parseAgentReply(raw,value) {
     const agendaUpdates=validateAgendaUpdates(reply.agendaUpdates,{items:c.host.session?.unfinishedItems,evidence:c.host.session?.evidence,allowCurrentSpeech:reply.action!=='wait'});
     const returnedIds=list(reply.handledIds,16,x=>str(x,100));
     if(new Set(returnedIds).size!==returnedIds.length)throw bad();
-    const readySource=reply.action==='tool'&&reply.tool?.name==='play_prepared_song'&&!c.host.inbox.length
+    const readySource=reply.action==='tool'&&reply.tool?.name==='play_prepared_song'
       ? c.singing?.tasks.find(t=>t.id===reply.tool.args?.taskId&&t.status==='ready')?.sourceId : null;
     // A delayed song may refer back to its already-answered request. That is
     // provenance, not another pending message; do not re-mark it as handled.
-    const handledIds=returnedIds.filter(id=>!(id===readySource&&c.host.session?.evidence.some(e=>e.id===id&&e.type==='player.message'&&e.speakerRole==='player')));
+    const handledIds=returnedIds.filter(id=>!(id===readySource&&!c.host.inbox.some(m=>m.id===id)&&c.host.session?.evidence.some(e=>e.id===id&&e.type==='player.message'&&e.speakerRole==='player')));
     if(new Set(handledIds).size!==handledIds.length||handledIds.some(id=>!c.host.inbox.some(m=>m.id===id)&&!(c.host.turn?.mode==='prepare'&&c.host.pendingAudience?.messageId===id)))throw bad();
     if(reply.action==='wait'&&reply.speech!=='')throw bad();
     const gesture=reply.gesture??'none',transition=reply.transition??'smooth';
     if(!TALENT_GESTURES.includes(gesture)||!['smooth','sudden'].includes(transition)||reply.action==='wait'&&gesture!=='none')throw bad();
-    if(['starting','playing','paused'].includes(c.media?.phase)&&reply.action==='speak')throw bad();
+    if(['preparing','ready','starting','playing','paused'].includes(c.media?.phase)&&reply.action==='speak')throw bad();
     let tool;
     if(reply.action==='tool'){
       const t=keys(reply.tool,['name','args']),a=keys(t.args,[] .concat(
         t.name==='finish_activity'?['taskId','cancel']:
         t.name==='prepare_song'?['messageId']:(t.name==='clarify_song'||t.name==='cancel_song')?['taskId','messageId']:t.name==='play_prepared_song'?['taskId']:t.name==='start_singing'?['songId']:t.name==='replay_talent'?['taskId']:[]));
-      if(['starting','playing','paused'].includes(c.media?.phase)&&!(t.name==='finish_activity'&&a.cancel===true))throw bad();
+      if(['preparing','ready','starting','playing','paused'].includes(c.media?.phase)&&!(t.name==='finish_activity'&&a.cancel===true))throw bad();
       if(t.name==='offer_call_story'){
         if(!c.call?.active||c.call.story||c.activeSkill||c.call.input!=='idle')throw bad();
       }else if(t.name==='prepare_song'||t.name==='clarify_song'||t.name==='cancel_song'){
@@ -252,7 +257,7 @@ export function parseAgentReply(raw,value) {
         if(t.name==='cancel_song'&&!c.singing.tasks.some(t=>t.id===a.taskId&&!['scheduled','completed','failed','cancelled','rejected'].includes(t.status)))throw bad();
         if(t.name==='clarify_song'&&!c.singing.tasks.some(t=>t.id===a.taskId&&t.status==='needs_input'))throw bad();
       }else if(t.name==='play_prepared_song'){
-        if(c.activeSkill||!c.mediaRuntime?.audioEnabled||c.host.inbox.some(m=>m.mine)||!c.singing?.tasks.some(t=>t.id===a.taskId&&t.status==='ready'))throw bad();
+        if(c.activeSkill||!c.mediaRuntime?.audioEnabled||c.host.inbox.some(m=>m.mine&&!handledIds.includes(m.id))||!c.singing?.tasks.some(t=>t.id===a.taskId&&t.status==='ready'))throw bad();
       }else if(t.name==='start_singing'){
         if(c.activeSkill||!c.mediaRuntime?.audioEnabled||c.singing&&c.host.inbox.some(m=>m.mine)||!playableSongs().some(s=>s.id===a.songId))throw bad();
       }else if(t.name==='replay_talent'){

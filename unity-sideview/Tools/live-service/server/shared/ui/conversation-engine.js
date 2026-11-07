@@ -3,11 +3,11 @@ import {LiveEngine} from './live-engine.js';
 import {AudienceDirector} from './audience-director.js';
 import {TALENT_MOODS,TALENT_GESTURES} from './talent-config.js';
 const id=()=>crypto.randomUUID();
-// The model owns conversational decisions. This runtime only executes speech/wait.
+// The model owns conversational decisions. This runtime executes reviewed speech and tool decisions.
 export class ConversationEngine extends LiveEngine {
   constructor(){
     super();this.client=null;this.enabled=false;this.epoch=0;this.inbox=[];this.facts=[];this.memory='';this.nextWake=0;this.pending=null;
-    this.session=new SessionContinuity();this.preparing=null;this.prepared=null;this.preparationVersion=0;this.speechPlan=null;this.speechAudio=null;this.failureStreak=0;this.topicEnabled=false;this.topicWork=null;this.topicProgress=null;this.topicVersion=0;this.handoffEnabled=false;this.audiencePreview=null;this.inboxVersion=0;
+    this.session=new SessionContinuity();this.preparing=null;this.prepared=null;this.preparationVersion=0;this.speechPlan=null;this.playbackLifecycle=0;this.speechAudio=null;this.failureStreak=0;this.topicEnabled=false;this.topicWork=null;this.topicProgress=null;this.topicVersion=0;this.handoffEnabled=false;this.audiencePreview=null;this.inboxVersion=0;
     this._state.play={active:null,queue:[],tarot:null,drawing:null,history:[]};
     this._state.agent={enabled:false,source:'local',capabilities:[]};
     this.talent=null;this._state.media=null;
@@ -99,7 +99,7 @@ export class ConversationEngine extends LiveEngine {
   }catch{}finally{this.singingPolling=false;}}
   async _executeSinging(tool){
     if(!this.singingEnabled||this.singingExecuting)return false;this.singingExecuting=true;
-    const a=tool.args||{},epoch=this.epoch,sessionId=this.session.snapshot().sessionId;
+    const a=tool.args||{},lifecycle=this.playbackLifecycle,sessionId=this.session.snapshot().sessionId;
     try{
       if(tool.name==='prepare_song'||tool.name==='clarify_song'){
         const m=[...this.inbox,...this._state.messages,...this._sessionPlayers()].find(m=>m.id===a.messageId&&m.mine);if(!m)throw Error('request_source_missing');
@@ -111,7 +111,7 @@ export class ConversationEngine extends LiveEngine {
       }else{
         if(this._state.play.active||this._state.media||this._state.paused)throw Error('audio_busy');
         const playback=await this._singingApi(`tasks/${a.taskId}/play`,{sessionId,operationId:id()});
-        if(this._destroyed||epoch!==this.epoch||this._state.paused||this._state.media||this._state.play.active){return false;}
+        if(this._destroyed||lifecycle!==this.playbackLifecycle||this._state.paused||this._state.media||this._state.play.active){return false;}
         const catalog=this.talent.catalog;catalog.songs=catalog.songs.filter(s=>s.id!==playback.song.id).concat(playback.song);
         if(!this.talent.start('singing',{songId:playback.song.id})){throw Error('playback_not_started');}
         this.talent.current.songRequestId=playback.taskId;
@@ -119,8 +119,8 @@ export class ConversationEngine extends LiveEngine {
       this.nextWake=this._clock;return true;
     }catch(e){if(!this._destroyed)this._toolEvent(JSON.stringify({tool:tool.name,status:'failed',reason:/^[a-z_]+$/.test(e.message)?e.message:'singing_unavailable'}));return false;}finally{this.singingExecuting=false;}
   }
-  _mediaPlaying(){return ['starting','playing','paused'].includes(this._state.media?.phase);}
-  stopTalent(){return this.talent?.cancel('viewer_stop')||false;}
+  _mediaPlaying(){return ['preparing','ready','starting','playing','paused'].includes(this._state.media?.phase);}
+  stopTalent(){this.playbackLifecycle++;return this.talent?.cancel('viewer_stop')||false;}
   _public(type,text,metadata={}){
     if(this.handoffEnabled&&!['speech.progress','speech.completed','npc.message','player.message'].includes(type)){
       this.audience.clearPreparation('public_context_changed');this.audiencePreview=null;
@@ -199,7 +199,7 @@ export class ConversationEngine extends LiveEngine {
     }).catch(()=>{if(!controller.signal.aborted)this.audience.dialogue.log({stage:'host.prepare.unavailable',requestId});})
       .finally(()=>{if(this.preparing===work)this.preparing=null;});
   }
-  async _think(){if(!this.enabled||!this._started||this.pending||this._active||this._queue.length||this._state.paused||this._destroyed||this._clock<this.nextWake)return;
+  async _think(){if(this.singingExecuting||!this.enabled||!this._started||this.pending||this._active||this._queue.length||this._state.paused||this._destroyed||this._clock<this.nextWake)return;
     if(this._mediaPlaying()&&!this.inbox.some(m=>m.mine))return;
     if(this.audiencePreview?.status==='pending'||this.preparing)return;
     let prepared=this.prepared;this.prepared=null;
@@ -226,7 +226,7 @@ export class ConversationEngine extends LiveEngine {
       if(result.action==='speak'||result.action==='tool'){
         if(!result.speech)throw Error('missing_speech');
         this._warmCandidate(requestId,result);
-        const candidate={id:requestId,role:'host',speakerId:'Z',text:result.speech,intent:result.action,replyTo:result.handledIds,evidenceIds:[]};
+        const candidate={id:requestId,role:'host',speakerId:'Z',text:result.speech,intent:result.action,replyTo:result.handledIds,evidenceIds:[],...(result.action==='tool'?{plannedTool:{name:result.tool.name,targetId:result.tool.args?.taskId||result.tool.args?.songId||result.tool.args?.messageId||''}}:{})};
         const ticket=await this.audience.dialogue.inspect(candidate,{signal:controller.signal,generationContext,sessionEvents:this.session.evidence()});
         if(epoch!==this.epoch||controller.signal.aborted||this._destroyed||this._state.paused)return;
         if(!ticket||this._active||this._queue.length){this.nextWake=this._clock+2000;return;}
@@ -234,7 +234,7 @@ export class ConversationEngine extends LiveEngine {
           if(this._mediaPlaying()){this._executeTool(result.tool);result.action='speak';}
           const handled=new Set(result.handledIds);for(const mid of handled)this._setReceipt(mid,'queued');
           // _say starts immediately here; no asynchronous gap after the revision check.
-          const speechId=this._speechId+1;this.speechLinks.set(speechId,[...handled]);
+          const speechId=this._speechId+1,playbackLifecycle=this.playbackLifecycle;this.speechLinks.set(speechId,[...handled]);
           if(this.audiencePreview?.status==='published')this.audiencePreview=null;
           this._say(result.speech,result.mood,gesture,{source:'deepseek',transition,preparedAudioKey:requestId,onComplete:()=>{
             for(const mid of handled)this._setReceipt(mid,'replied');this.inbox=this.inbox.filter(m=>!handled.has(m.id));
@@ -243,7 +243,13 @@ export class ConversationEngine extends LiveEngine {
             if(completed){this.session.apply(agendaUpdates,context.host.session,completed,!handled.size);this.memory=String(result.memory||'').slice(0,800);}
             if(this.speechPlan?.speechId===speechId)this.speechPlan.completedAt=this._clock;
             this.nextWake=this._clock+(epoch===this.epoch&&this.speechPlan?.inboxVersion===this.inboxVersion?this._wakeDelay(result):0);
-            if(result.action==='tool'){if(epoch===this.epoch)this._executeTool(result.tool);else this._toolEvent('工具提议已取消，期间收到新观众消息。');}
+            if(result.action==='tool'){
+              const committedPlayback=['play_prepared_song','start_singing','replay_talent'].includes(result.tool?.name);
+              // Once its reviewed introduction completes, ordinary chat waits for the song.
+              // Pause, stop, replay and destruction still revoke this committed action.
+              const valid=committedPlayback?playbackLifecycle===this.playbackLifecycle&&!this._state.paused&&!this._destroyed:epoch===this.epoch;
+              if(valid)this._executeTool(result.tool);else this._toolEvent('工具提议已取消，直播状态或请求已改变。');
+            }
             this._emitState();}});
           this.speechPlan={speechId,epoch,result,attempted:false,inboxVersion:this.inboxVersion};
         });
@@ -272,9 +278,9 @@ export class ConversationEngine extends LiveEngine {
     this._toolEvent(JSON.stringify({tool:tool?.name,status:ok?'accepted':'unavailable_or_stale',taskId:this._state.media?.id||null}));return ok;
   }
   _finishSpeech(){const speech=this._active;super._finishSpeech();if(speech){this._public('speech.completed',speech.text,{id:`speech-${speech.id}`,speakerRole:'host',speakerId:'Z',speechId:String(speech.id),status:'completed',replyTo:this.speechLinks.get(speech.id)||[]});this.speechLinks.delete(speech.id);}}
-  setPaused(value){if(value){if(this.handoffEnabled){this.audience.clearPreparation('paused');this.audiencePreview=null;}this._cancelTopic('paused');this.speechAudio?.dropWarmSpeech();this._cancelPreparation('paused');this.epoch++;this.pending?.abort();this.pending=null;this.audience.dialogue.invalidate();}super.setPaused(value);if(value)this.talent?.pause();else {this.talent?.resume();if(this.handoffEnabled&&this._active?.source==='deepseek')this.audience.setHostPreview({speechId:this._active.id,text:this._active.text});}}
-  replay(){this.audiencePreview=null;this.inboxVersion=0;this._cancelTopic('replay');this.speechAudio?.dropWarmSpeech();this._cancelPreparation('replay');this.session.reset();this.speechPlan=null;this.failureStreak=0;this.epoch++;this.pending?.abort();this.pending=null;this.client?.cancel();this.audience.invalidate();this.inbox=[];this.facts=[];this.memory='';this.nextWake=0;
+  setPaused(value){if(value){this.playbackLifecycle++;if(this.handoffEnabled){this.audience.clearPreparation('paused');this.audiencePreview=null;}this._cancelTopic('paused');this.speechAudio?.dropWarmSpeech();this._cancelPreparation('paused');this.epoch++;this.pending?.abort();this.pending=null;this.audience.dialogue.invalidate();}super.setPaused(value);if(value)this.talent?.pause();else {this.talent?.resume();if(this.handoffEnabled&&this._active?.source==='deepseek')this.audience.setHostPreview({speechId:this._active.id,text:this._active.text});}}
+  replay(){this.playbackLifecycle++;this.audiencePreview=null;this.inboxVersion=0;this._cancelTopic('replay');this.speechAudio?.dropWarmSpeech();this._cancelPreparation('replay');this.session.reset();this.speechPlan=null;this.failureStreak=0;this.epoch++;this.pending?.abort();this.pending=null;this.client?.cancel();this.audience.invalidate();this.inbox=[];this.facts=[];this.memory='';this.nextWake=0;
     this.recentExpressions=[];this.speechLinks.clear();
     this.talent?.reset();this.facts=[];this.session.reset();const agent=this._state.agent;super.replay();this._state.media=null;this._state.play={active:null,queue:[],tarot:null,drawing:null,history:[]};this._state.stage='free';this._state.stageLabel='和 Z 聊聊天';this._state.agent=agent;this.audience.setConfig(this.audience.config);this._emitState();return true;}
-  destroy(){clearInterval(this.singingPoll);this.audiencePreview=null;this._cancelTopic('destroyed');this.speechAudio?.dropWarmSpeech();this._cancelPreparation('destroyed');this.epoch++;this.pending?.abort();this.client?.cancel();this.audience.invalidate();this.talent?.destroy();super.destroy();}
+  destroy(){this.playbackLifecycle++;clearInterval(this.singingPoll);this.audiencePreview=null;this._cancelTopic('destroyed');this.speechAudio?.dropWarmSpeech();this._cancelPreparation('destroyed');this.epoch++;this.pending?.abort();this.client?.cancel();this.audience.invalidate();this.talent?.destroy();super.destroy();}
 }

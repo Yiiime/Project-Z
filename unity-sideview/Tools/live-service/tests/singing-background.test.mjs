@@ -6,7 +6,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {SingingService} from '../server/singing/service.mjs';
 import {Z_VOICE,checkWav,validatePlan,readSingingResult} from '../server/singing/provider.mjs';
-import {parseAgentReply,buildAgentRequest,handleAgent} from '../server/shared/worker/agent-director.js';
+import {parseAgentReply,buildAgentRequest,handleAgent,normalizeAgentInput} from '../server/shared/worker/agent-director.js';
 const root=fileURLToPath(new URL('../',import.meta.url)),owner='local-preview-owner';
 const bytes=await fs.readFile(path.join(root,'server/assets/songs/wanan-yanrenzhong-vivi2-chorus.wav'));
 const plan=(kind='chorus')=>({intent:'request',title:'晚安',artist:'颜人中',version:'',question:'',segment:{kind,ordinal:1,description:kind==='chorus'?'第一段完整副歌':'第一句',lyricStart:''}});
@@ -73,7 +73,8 @@ test('main agent can submit exact source and play only trusted ready tasks; NPC 
   assert.throws(()=>parseAgentReply({...base,tool:{name:'prepare_song',args:{messageId:'npc'}}},{kind:'host',context:c}));
   assert.equal(parseAgentReply({...base,tool:{name:'cancel_song',args:{taskId:'task1',messageId:'player1'}}},{kind:'host',context:c}).tool.name,'cancel_song');
   assert.throws(()=>parseAgentReply({...base,tool:{name:'cancel_song',args:{taskId:'task1',messageId:'npc'}}},{kind:'host',context:c}));
-  assert.throws(()=>parseAgentReply({...base,tool:{name:'play_prepared_song',args:{taskId:'task1'}}},{kind:'host',context:c}));
+  assert.equal(parseAgentReply({...base,tool:{name:'play_prepared_song',args:{taskId:'task1'}}},{kind:'host',context:c}).tool.name,'play_prepared_song');
+  assert.throws(()=>parseAgentReply({...base,handledIds:[],tool:{name:'play_prepared_song',args:{taskId:'task1'}}},{kind:'host',context:c}));
   assert.equal(parseAgentReply({...base,handledIds:[],tool:{name:'play_prepared_song',args:{taskId:'task1'}}},{kind:'host',context:{...c,host:{inbox:[]}}}).tool.name,'play_prepared_song');
   assert.throws(()=>parseAgentReply({...base,tool:{name:'play_prepared_song',args:{taskId:'not-ready'}}},{kind:'host',context:c}));
   assert.match(buildAgentRequest({kind:'host',context:c}).system,/唱歌执行接口/);
@@ -146,4 +147,13 @@ test('ready song can echo its historical request without handling a new message'
  assert.deepEqual(parseAgentReply(reply,{kind:'host',context:c}).handledIds,[]);
  assert.throws(()=>parseAgentReply({...reply,handledIds:['unknown']},{kind:'host',context:c}));
  assert.throws(()=>parseAgentReply(reply,{kind:'host',context:{...c,host:{...c.host,inbox:[{id:'new-player',mine:true,text:'等等'}]}}}));
+});
+
+test('review gets explicit execution facts and rejects audience tool claims',()=>{
+ const payload={requestId:crypto.randomUUID(),kind:'review',eventId:'opening',context:{revision:1,candidate:{id:'opening',role:'host',speakerId:'Z',text:'这就唱',intent:'speak',replyTo:[],evidenceIds:[]}}};
+ const speak=normalizeAgentInput(payload);assert.match(buildAgentRequest(speak).input.executionContext,/没有安排播放/);
+ payload.context.candidate.intent='tool';payload.context.candidate.plannedTool={name:'play_prepared_song',targetId:'ready-task'};
+ const play=normalizeAgentInput(payload);assert.match(buildAgentRequest(play).input.executionContext,/尝试执行所列播放工具/);
+ payload.context.candidate.plannedTool.name='prepare_song';assert.match(buildAgentRequest(normalizeAgentInput(payload)).input.executionContext,/没有安排播放/);
+ payload.context.candidate.role='audience';payload.context.candidate.speakerId='moon';assert.throws(()=>normalizeAgentInput(payload));
 });
