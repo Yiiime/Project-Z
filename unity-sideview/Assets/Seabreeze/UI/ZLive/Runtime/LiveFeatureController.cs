@@ -61,7 +61,7 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
         case "activity.release":activity.text="和 Z 聊聊天";await Report(c,new JObject{{"status","completed"}});break;
         case "session.ended":CancelAll(id);status.text="直播已结束";await Report(c,new JObject{{"status","completed"}});break;
         default:throw new Exception("unsupported_command");}
-    }catch(OperationCanceledException){await TryFailure(c,"interrupted","execution_cancelled");}catch(Exception e){await TryFailure(c,"failed",e is LiveProtocolException?e.Message:"execution_failed");Error(e);}finally{running.Remove(id);cancel.Dispose();}}
+    }catch(OperationCanceledException){await TryFailure(c,"interrupted","execution_cancelled");}catch(Exception e){await TryFailure(c,"failed",e is LiveProtocolException||e.Message=="audio_output_unavailable"?e.Message:"execution_failed");Error(e);}finally{running.Remove(id);cancel.Dispose();}}
     async Task TryFailure(JObject c,string statusValue,string reason){try{await Report(c,new JObject{{"status",statusValue},{"reason",reason}});}catch(LiveProtocolException e)when(e.Message=="state_conflict"||e.Message=="stale_epoch"){}catch(Exception){status.text="执行回执待恢复";}}
     async Task Report(JObject c,JObject evidence){var p=(JObject)c["payload"];string result=(string)evidence["status"];var body=new JObject();foreach(string key in new[]{"artifactId","playbackId","speechId","stage","round","view","modality"})if(p[key]!=null)body[key]=p[key].DeepClone();foreach(var item in evidence.Properties())body[item.Name]=item.Value.DeepClone();
         if(result=="completed"||result=="displayed"||result=="ready"||result=="failed"||result=="interrupted")outcomes[(string)c["commandId"]]=(JObject)body.DeepClone();await transport.Receipt(c,body);if((result=="completed"||result=="displayed")&&connected&&status.text.StartsWith("暂未完成"))status.text="已连接 · 和 Z 聊聊天";
@@ -76,7 +76,31 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     }
     static string DrawingTitle(JToken art){string phase=(string)art["phase"];string label=phase=="completed"?"已完成":phase=="drawing"?$"绘制中 · 第 {(int?)art["stage"]+1}/{(int?)art["stageCount"]} 步":phase=="editing"?"正在修改":phase=="preparing"?"正在构思":phase=="failed"?"本次生成未完成":phase=="ready"?"画作已就绪":"画作";return (string)art["title"]+" · "+label;}
     static string NpcName(string id)=>id=="wind"?"晚风来信":id=="moon"?"月亮邮差":id=="salt"?"海盐汽水":"小岛来客";
-    async void Send(){CancelMicrophone();if(transport==null){Toast("请先启动直播服务");return;}if(string.IsNullOrWhiteSpace(input.value)){Toast("先写一句想对 Z 说的话吧");return;}string text=input.value.Trim();int limit=(bool?)state?["call"]?["active"]==true?360:120;if(text.Length>limit){Toast($"请将内容编辑至 {limit} 字以内再发送");return;}character.NoticeMessage();try{if(locallyPaused){await transport.Control("resume");locallyPaused=false;audioPlayer.Pause(false);await SyncAudioCapabilities();}await transport.Input("viewer.message",new JObject{{"text",text}});input.value="";voiceNotice="";emojiPopover.style.display=DisplayStyle.None;ApplyState(await transport.Request(transport.Route()));Toast((bool?)state?["call"]?["active"]==true?"连麦消息已发送":"弹幕已发送");}catch(Exception e){Error(e);Toast(FriendlyError(e));}}
+    async void Send() {
+        if(sendingInput)return;
+        if(ChatInputComposing){Toast("请先选好汉字，再发送");return;}
+        CancelMicrophone();
+        if(transport==null){Toast("请先启动直播服务");return;}
+        string draft=input.value??"",text=draft.Trim();
+        if(text.Length==0){Toast("先写一句想对 Z 说的话吧");return;}
+        int limit=(bool?)state?["call"]?["active"]==true?360:120;
+        if(text.Length>limit){Toast($"请将内容编辑至 {limit} 字以内再发送");return;}
+        // Clear before awaiting the network, while no IME composition is active.
+        // An acknowledgement must never erase the next draft or its preview cursor.
+        ReplaceChatDraft("");int clearedRevision=inputRevision;
+        sendingInput=true;sendButton.SetEnabled(false);bool accepted=false;
+        character.NoticeMessage();
+        try {
+            if(locallyPaused){await transport.Control("resume");locallyPaused=false;audioPlayer.Pause(false);await SyncAudioCapabilities();}
+            await transport.Input("viewer.message",new JObject{{"text",text}});accepted=true;
+            voiceNotice="";emojiPopover.style.display=DisplayStyle.None;
+            ApplyState(await transport.Request(transport.Route()));
+            Toast((bool?)state?["call"]?["active"]==true?"连麦消息已发送":"弹幕已发送");
+        }catch(Exception e){
+            if(!accepted)RestoreFailedDraft(draft,clearedRevision);
+            Error(e);Toast(FriendlyError(e));
+        }finally{sendingInput=false;if(!disposed)sendButton.SetEnabled(true);}
+    }
     async void TogglePause(){try{if(transport==null)return;CancelMicrophone();bool resume=locallyPaused;if(!resume){locallyPaused=true;audioPlayer.Pause(true);}await transport.Control(resume?"resume":"pause");ApplyState(await transport.Request(transport.Route()));locallyPaused=!resume;audioPlayer.Pause(!resume);if(resume)await SyncAudioCapabilities();}catch(Exception e){Error(e);}}
     async void StopActivity(){audioPlayer.Stop();try{var task=state?["activeTask"];if(task==null||task.Type==JTokenType.Null)return;bool drawingTask=(string)task["kind"]=="drawing";await transport.Control("stop_activity",(string)(task["taskId"]??task["id"]),drawingTask?((int?)state?["recentArtwork"]?["revision"]??0):0);}catch(Exception e){Error(e);}}
     public async Task Leave(){leaving=true;CancelCompanion();CancelAll();PlayerPrefs.DeleteKey(SessionKey);if(transport!=null)await transport.Control("end");}
@@ -98,6 +122,8 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
             case "talent_busy":return "Z 正在表演，请先结束当前表演";
             case "asset_unavailable":return "当前唱段暂时无法播放";
             case "audio_disabled":return "请开启声音后再唱歌";
+            case "audio_output_unavailable":return "声音设备未就绪，请检查耳机连接后重试";
+            case "audio_interrupted":case "audio_timeout":return "声音播放中断，请重试";
             case "session_paused":return "请先继续直播";
             case "state_conflict":case "stale_review":return "状态已更新，请稍后重试";
             case "unauthorized":return "直播连接已失效，请重新启动直播服务";
@@ -107,6 +133,6 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     }
     void Error(Exception e){if(status!=null)status.text="暂未完成 · "+FriendlyError(e);Debug.LogWarning("ZLive: "+e.GetType().Name+" "+e.Message);}
     void OnApplicationPause(bool paused){if(paused)OnApplicationFocus(false);}
-    void OnDestroy(){disposed=true;CancelCompanion();foreach(var waiter in frameWaiters)waiter.TrySetCanceled();frameWaiters.Clear();if(document!=null&&document.panelSettings!=null)Destroy(document.panelSettings);life.Cancel();CancelAll();transport?.Dispose();life.Dispose();}
+    void OnDestroy(){disposed=true;ReleaseInputKeyboard();CancelCompanion();foreach(var waiter in frameWaiters)waiter.TrySetCanceled();frameWaiters.Clear();if(document!=null&&document.panelSettings!=null)Destroy(document.panelSettings);life.Cancel();CancelAll();transport?.Dispose();life.Dispose();}
 }
 }

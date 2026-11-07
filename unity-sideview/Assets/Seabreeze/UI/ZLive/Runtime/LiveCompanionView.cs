@@ -68,7 +68,7 @@ public sealed partial class LiveFeatureController {
         callStatus.text=recording?(dictating?"正在录音 · 再点麦克风结束":"正在听你说…"):transcribing?"正在识别这一句":voiceNotice.Length>0?voiceNotice:active?(state?["voiceOwner"]?.Type!=JTokenType.Null?"Z 在说话…":(bool?)call?["busy"]==true?"Z 正在回应…":(string)call?["input"]=="reviewing"?"确认输入后发送":"已上麦"):"";
         callStatus.style.display=active||dictating||voiceNotice.Length>0?DisplayStyle.Flex:DisplayStyle.None;
         sidebarCallStatus.text=callStatus.text.Length>0?callStatus.text:voice?"点击上麦，和 Z 轮流说话":"语音识别待配置，可先打字聊天";
-        input.maxLength=Math.Max(active?360:120,input.value?.Length??0);input.textEdition.placeholder=active?"已上麦，也可以打字…":"和 Z 聊聊……";
+        UpdateChatInputLimit();input.textEdition.placeholder=active?"已上麦，也可以打字…":"和 Z 聊聊……";
         var story=call?["story"] as JObject;bool offered=active&&(string)story?["status"]=="offered";
         callBar.style.display=offered?DisplayStyle.Flex:DisplayStyle.None;
         string fingerprint=offered?story.ToString():"";
@@ -187,8 +187,7 @@ public sealed partial class LiveFeatureController {
     }
 
     void SetVoiceDraft(string text,int limit) {
-        input.maxLength=Math.Max(limit,text?.Length??0);
-        input.value=text??"";
+        ReplaceChatDraft(text??"",limit);
     }
 
     async Task ResetCallInput(CancellationTokenSource turn) {

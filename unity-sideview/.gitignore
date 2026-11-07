@@ -9,3 +9,8 @@ Builds/
 *.sln
 *.user
 .vs/
+
+# Rebuilt from Art/Z/Model.model3.json by the Cubism importer.
+Assets/Seabreeze/UI/ZLive/Art/Z/*.asset*
+Assets/Seabreeze/UI/ZLive/Art/Z/Model.prefab*
+Assets/Seabreeze/UI/ZLive/Resources/ZLiveModel.prefab*

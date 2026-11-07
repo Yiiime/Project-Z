@@ -1,6 +1,6 @@
 {
-  "label": "Haru · Live2D 官方示例",
-  "modelUrl": "/live2d/models/Haru/Haru.model3.json",
+  "label": "Z · Live2D",
+  "modelUrl": "ZLiveModel",
   "roomUrl": "assets/live2d-empty-room.png",
   "storageKey": "z-character-mode-v1",
   "runtime": {
@@ -13,9 +13,9 @@
   "loadTimeoutMs": 20000,
   "layout": {
     "x": 0.49,
-    "top": -0.08,
-    "height": 2.3,
-    "maxWidth": 0.92
+    "top": -0.03,
+    "height": 1.6,
+    "maxWidth": 0.95
   },
   "parameters": {
     "mouthOpen": "ParamMouthOpenY",

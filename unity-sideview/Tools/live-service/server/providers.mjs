@@ -19,7 +19,7 @@ export class Providers {
  forOwner(owner){return new Providers(this.env,{...this.options,owner,singingContext:()=>this.singing?.context(owner)});}
  async singingFetch(route,options={}){if(!this.singing)return Response.json({error:"singing_unavailable"},{status:503});return singingRequest(this.singing,this.options.owner||"local-owner",route,options.body?JSON.parse(options.body):null);}
  async config(identity){return (await handleAgent(request('/api/agent/config',identity),this.env,this.options)).json();}
- async generate(identity,payload,{signal}={}){const r=await handleAgent(request('/api/agent',identity,payload,signal),this.env,this.options),body=await r.json();if(!r.ok)throw Object.assign(Error(body.error),{code:body.error});return body;}
+ async generate(identity,payload,{signal}={}){const r=await handleAgent(request('/api/agent',identity,payload,signal),this.env,this.options),body=await r.json();if(!r.ok)throw Object.assign(Error(body.error),{code:body.error,validationReason:body.validationReason});return body;}
  async synthesize(identity,text,mood,signal){
   let failure=null;const options={...this.options,diagnostics:detail=>{this.options.diagnostics?.(detail);if(detail.classification==='provider_error_code'&&detail.status===45000010)failure='tts_provider_configuration_error';if(detail.classification==='provider_error_code'&&detail.status===45000030)failure='tts_provider_resource_not_granted';}};
   const requestId=uid(),controller=new AbortController();const abort=()=>controller.abort();signal?.addEventListener('abort',abort,{once:true});const timer=setTimeout(abort,30000);

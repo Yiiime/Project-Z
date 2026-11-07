@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {uid,hash} from './providers.mjs';
-import {TALENT_CATALOG,playableSongs,validatePerformance} from './shared/ui/talent-config.js';
+import {TALENT_CATALOG,playableSongs} from './shared/ui/talent-config.js';
 const terminal=p=>['completed','interrupted','failed'].includes(p);
 export class RemoteTalent extends EventTarget {
  constructor(session,speech){super();this.session=session;this.speech=speech;this.current=null;this.paused=false;this.catalog=structuredClone(TALENT_CATALOG);}
@@ -10,14 +10,15 @@ export class RemoteTalent extends EventTarget {
  changed(){this.emit('state',this.snapshot());}
  start(kind,args,{inbox=[]}={}){
   if(this.current||this.paused||!this.speech.enabled||!this.speech.volume)return false;let song;
-  try{if(kind==='voice-performance'){if(!this.speech.available)return false;validatePerformance(args,inbox);}else if(kind==='singing'){song=playableSongs(this.catalog).find(s=>s.id===args.songId);if(!song)return false;}else return false;}catch{return false;}
-  const j=this.current={id:uid(),kind,title:song?`${song.title} · ${song.section}`:args.title,args,song,phase:'preparing',controller:new AbortController(),positionMs:0};this.changed();void this.prepare(j);return true;
+  if(kind!=='singing')return false;
+  song=playableSongs(this.catalog).find(s=>s.id===args.songId);if(!song)return false;
+  const j=this.current={id:uid(),kind,title:`${song.title} · ${song.section}`,args,song,phase:'preparing',controller:new AbortController(),positionMs:0};this.changed();void this.prepare(j);return true;
  }
  async prepare(j){try{
-  const clips=[];if(j.kind==='singing'){
+  const clips=[];{
    const bytes=j.song.src.startsWith('/api/singing/assets/')?await this.session.providers.singing.audio(j.song.id):fs.readFileSync(path.join(this.session.songRoot,path.basename(j.song.src)));if(hash(bytes)!==j.song.sha256)throw Error('song_hash_mismatch');
    const meta=this.session.artifacts.put(bytes,'audio/wav',{sourceSha256:j.song.sha256});this.session.artifactIds.add(meta.artifactId);clips.push({...meta,text:j.title,mood:'warm',gesture:'none',words:[],pauseAfterMs:0});
-  }else for(const line of j.args.lines){const audio=await this.speech.prepareAudio(line.text,line.mood,{signal:j.controller.signal});clips.push({...audio,...line});}
+  }
   if(this.current!==j||j.controller.signal.aborted)return;
   j.clips=clips;const m=this.session.artifacts.put({clips},'application/json');j.artifactId=m.artifactId;this.session.artifactIds.add(m.artifactId);
   this.session.command('media.prepare',{kind:j.kind,artifactId:j.artifactId,clips,voiceVersion:TALENT_CATALOG.voiceVersion},j.id,0);

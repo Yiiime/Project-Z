@@ -1,6 +1,6 @@
 ---
 name: call-companion
-description: 在虚拟主播已接通的单人连麦中主持陪伴聊天，安排弹幕参与，衔接唱歌、画画与娱乐塔罗，并按已提供剧情卡推进轻剧情。用于连麦消息、技能回执和回场；不负责开启麦克风、控制媒体或独立执行才艺工具。
+description: 在虚拟主播已接通的单人连麦中主持陪伴聊天，安排弹幕参与，衔接唱歌，并按已提供剧情卡推进轻剧情。用于连麦消息、技能回执和回场；不负责开启麦克风、控制媒体或独立执行才艺工具。
 ---
 
 # 连麦陪伴
@@ -23,7 +23,7 @@ description: 在虚拟主播已接通的单人连麦中主持陪伴聊天，安�
 
 - [陪伴聊天](references/companionship.md)：接话、节奏、记忆、冷场、打断和结束。
 - [弹幕参与](references/audience.md)：连麦主线、参与窗口、真实/NPC 弹幕与回场。
-- [才艺衔接](references/talents.md)：唱歌、画画、塔罗的引入、等待、完成与失败。
+- [才艺衔接](references/talents.md)：唱歌的引入、等待、完成与失败。
 - [轻剧情](references/story.md)：触发、邀请、玩家选择和后续关系延续。
 - [输入输出契约](references/contract.md)：开发者接入模型时读取。
 - [对话与验收案例](references/examples.md)：验收或调整表达时读取。

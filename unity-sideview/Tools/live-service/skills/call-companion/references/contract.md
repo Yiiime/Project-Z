@@ -4,7 +4,7 @@
 
 `turnId/eventId` 由宿主生成；context 含 sessionId、callId、guest、persona、memories、event、history、task、storyCards、allowedActions、capabilities、muted。
 
-event.source 为 guest/audience/system，来源不可由模型更改。history 只含真实玩家消息、已播前缀与已确认结果；task 的就绪产物内容在展示前被隐藏，尤其是塔罗。memories 仅为 public+confirmed+当前 guest 的条目。
+event.source 为 guest/audience/system，来源不可由模型更改。history 只含真实玩家消息、已播前缀与已确认结果；task 的就绪产物内容在展示前被隐藏。memories 仅为 public+confirmed+当前 guest 的条目。
 
 程序将人设作为结构数据与 system 规则共同送入现有模型；persona 内不放用户可修改的系统规则。当前事件必须是宿主选中的 event，不由模型从整场弹幕重新选人。
 

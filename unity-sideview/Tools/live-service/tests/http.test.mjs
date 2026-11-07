@@ -1,4 +1,5 @@
 import {test} from 'node:test';
+import {parseAgentReply,normalizeAgentInput} from '../server/shared/worker/agent-director.js';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -107,4 +108,70 @@ test('office identities isolate sessions, voice, event streams and singing opera
  assert.equal((await f.s.providers.singingFetch('/api/singing/state').then(r=>r.json())).tasks[0].id,ta.id);
  const raced=await Promise.all(Array.from({length:4},(_,i)=>other('/v1/live/sessions',body,'race-key-'+i)));
  assert.equal(raced.filter(r=>r.status===201).length,1);assert.equal(raced.filter(r=>r.status===429).length,3);
+});
+
+async function hostSongTurn(f,{emptyTool=false,deny=false,staleReview=false}={}) {
+ const s=f.s,e=s.engine;
+ const task=f.singing.submit({text:'晚安的副歌',sourceId:'original-order',sessionId:s.id,owner:'local-owner'});await f.singing.tick();
+ e.enabled=true;e.nextWake=e._clock;
+ s.input(f.envelope({type:'viewer.message',payload:{text:'你知道花店晴大姐吗'}}));
+ s.input(f.envelope({type:'viewer.message',payload:{text:'你快唱啊'}}));
+ e.client.generate=async p=>{
+  if(p.kind==='review'){
+   if(staleReview)e.audience.dialogue.record({id:'new-fact',type:'system.fact',text:'公开现场发生变化',speakerRole:'system',speakerId:'system'});
+   const checked=normalizeAgentInput(p);assert.equal(checked.context.candidate.plannedTool?.name,emptyTool?undefined:'play_prepared_song');
+   return {decision:deny?'reject':'allow',reason:'fixture',candidateId:p.context.candidate.id,revision:p.context.revision,promptVersion:e.audience.dialogue.version||'handoff-test'};
+  }
+  assert.equal(p.kind,'host');
+  return parseAgentReply({action:emptyTool?'speak':'tool',speech:'这就唱，晴大姐的事留到唱完聊。',mood:'warm',gesture:'none',handledIds:p.context.host.inbox.filter(m=>m.mine).map(m=>m.id),wakeAfterMs:2000,memory:'唱完接回晴大姐的话题',...(emptyTool?{}:{tool:{name:'play_prepared_song',args:{taskId:task.id}}})},{...p,context:{...p.context,singing:f.singing.context('local-owner')}});
+ };
+ await e._think();await new Promise(r=>setImmediate(r));return task;
+}
+const lastCommand=(s,type)=>[...s.commands.values()].filter(c=>c.type===type).at(-1);
+function acknowledge(f,c,status,extra={}){return f.s.receipt(f.envelope({executorLeaseId:f.s.lease,commandId:c.commandId,taskId:c.taskId,resourceRevision:c.resourceRevision,payload:{...Object.fromEntries(['speechId','modality','artifactId','playbackId'].filter(k=>c.payload[k]!==undefined).map(k=>[k,c.payload[k]])),status,...extra}}));}
+async function finishIntro(f){const c=lastCommand(f.s,'host.present');acknowledge(f,c,'started',{durationMs:3000,positionMs:0});acknowledge(f,c,'completed',{positionMs:3000});await new Promise(r=>setTimeout(r,30));}
+
+test('ready song follows the reviewed intro despite chat arriving during speech or dispatch',async t=>{
+ const f=await fixture(t),s=f.s,e=s.engine,task=await hostSongTurn(f);
+ assert(lastCommand(s,'host.present'));assert(!lastCommand(s,'media.prepare'));
+ s.input(f.envelope({type:'viewer.message',payload:{text:'唱完再聊也行'}}));
+ const fetch=e.client.fetch;let release,entered;
+ const started=new Promise(r=>entered=r),gate=new Promise(r=>release=r);
+ e.client.fetch=async(route,options)=>{if(route.endsWith('/play')){entered();await gate;}return fetch(route,options);};
+ const finishing=finishIntro(f);await started;
+ s.input(f.envelope({type:'viewer.message',payload:{text:'我等着听'}}));release();await finishing;
+ assert.equal(e._state.agent.errorCode,null);
+ assert.equal(f.singing.context('local-owner').tasks.find(x=>x.id===task.id).status,'scheduled');
+ const prepare=lastCommand(s,'media.prepare');assert(prepare);
+ acknowledge(f,prepare,'ready',{durationMs:32285});e.enabled=false;e._tick();
+ const play=lastCommand(s,'media.play');assert(play);assert.equal([...s.commands.values()].filter(c=>c.type==='media.play').length,1);
+ acknowledge(f,play,'started',{durationMs:32285,positionMs:0});acknowledge(f,play,'completed',{positionMs:32285});
+ assert.equal(s.talent.snapshot().phase,'completed');assert(e.inbox.some(m=>m.text==='我等着听'));
+});
+
+test('pausing the committed introduction still revokes its pending playback',async t=>{
+ const f=await fixture(t);await hostSongTurn(f);f.s.engine.setPaused(true);f.s.engine.setPaused(false);
+ await finishIntro(f);assert(!lastCommand(f.s,'media.prepare'));assert.equal(f.singing.context('local-owner').tasks[0].status,'ready');
+});
+
+test('review rejection of a speech-only opening publishes neither promise nor playback',async t=>{
+ const f=await fixture(t);await hostSongTurn(f,{emptyTool:true,deny:true});
+ assert(!lastCommand(f.s,'host.present'));assert(!lastCommand(f.s,'media.prepare'));assert.equal(f.singing.context('local-owner').tasks[0].status,'ready');
+});
+
+test('invalid host decisions stop thinking, retain the question and retry only a bounded number',async t=>{
+ const f=await fixture(t),e=f.s.engine;e.enabled=true;e.nextWake=e._clock;
+ f.s.input(f.envelope({type:'viewer.message',payload:{text:'青藏高原能听了吗'}}));
+ let calls=0;e.client.generate=async()=>{calls++;throw Object.assign(Error('invalid'),{code:'agent_invalid_reply',validationReason:'unknown_handled_id'});};
+ for(let i=0;i<3;i++){e.nextWake=e._clock;await e._think();assert.equal(f.s.snapshot().performance.waiting,false);assert.equal(f.s.snapshot().room.messages.find(m=>m.mine).replyStatus,'failed');}
+ e.nextWake=e._clock;await e._think();assert.equal(calls,3);assert.equal(e.inbox.filter(m=>m.mine).length,1);
+ f.s.control(f.envelope({action:'retry_reply'}));await e._think();assert.equal(calls,4);
+ f.s.input(f.envelope({type:'viewer.message',payload:{text:'那先聊聊'}}));await e._think();assert.equal(calls,5);
+ assert(!lastCommand(f.s,'host.present'));assert.equal(e._state.agent.validationReason,'unknown_handled_id');
+});
+
+test('a review made stale by public context reschedules without consuming the failure budget',async t=>{
+ const f=await fixture(t);await hostSongTurn(f,{staleReview:true});
+ assert.equal(f.s.engine.failureStreak,0);assert(!lastCommand(f.s,'host.present'));assert.equal(f.s.engine._state.agent.errorCode,null);
+ assert(f.s.engine.inbox.some(m=>m.mine));
 });
