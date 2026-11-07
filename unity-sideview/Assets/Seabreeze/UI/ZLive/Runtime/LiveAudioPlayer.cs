@@ -18,7 +18,7 @@ public sealed class LiveAudioPlayer:MonoBehaviour {
     void OnEnable(){AudioSettings.OnAudioConfigurationChanged+=OutputChanged;}
     void OnDisable(){AudioSettings.OnAudioConfigurationChanged-=OutputChanged;}
     void OutputChanged(bool deviceChanged){outputGeneration++;foreach(var id in cache.Keys)invalidatedClips.Add(id);Debug.Log("ZLive audio: output configuration changed; device="+deviceChanged);}
-    void Awake(){Source=gameObject.AddComponent<AudioSource>();Source.playOnAwake=false;Source.ignoreListenerPause=true;Source.ignoreListenerVolume=true;Source.loop=false;Source.spatialBlend=0;Source.volume=.85f;}
+    void Awake(){Source=gameObject.AddComponent<AudioSource>();Source.playOnAwake=false;Source.ignoreListenerPause=true;Source.loop=false;Source.spatialBlend=0;Source.volume=.85f;}
     public void Pause(bool paused){if(Paused==paused)return;Paused=paused;if(paused)Source.Pause();else Source.UnPause();if(Character!=null)Character.Paused=paused;}
     public void Stop(){stopGeneration++;Source.Stop();Character?.EndCue();}
     public async Task<AudioClip> Decode(JObject meta,CancellationToken cancel){string id=(string)meta["artifactId"];if(cache.TryGetValue(id,out var clip)&&!invalidatedClips.Contains(id))return clip;
@@ -44,7 +44,6 @@ public sealed class LiveAudioPlayer:MonoBehaviour {
     }finally{Source.Stop();Character?.EndCue();voiceGate.Release();}}
     async Task WaitReady(CancellationToken cancel){while(Paused){cancel.ThrowIfCancellationRequested();await Frame();}cancel.ThrowIfCancellationRequested();}
     async Task PlayClip(JObject command,AudioClip clip,string text,JArray words,float offset,int line,CancellationToken cancel,bool titleOnly=false) {
-        Debug.Log($"ZLive audio: playback sourceVolume={Source.volume}, sourceMuted={Source.mute}, worldVolume={AudioListener.volume}, independentVolume={Source.ignoreListenerVolume}, sampleRate={AudioSettings.outputSampleRate}");
         float last=-1000,seconds=0,stalled=0,activeTime=0;
         int generation=outputGeneration,stoppedAt=stopGeneration,recoveries=0,previousSample=Source.timeSamples;
         int sampleCount=clip.samples,channels=clip.channels,frequency=clip.frequency;float duration=clip.length;seconds=previousSample/(float)frequency;
