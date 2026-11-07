@@ -91,7 +91,7 @@ namespace Seabreeze
             Panel("Bottom atmosphere",bottomStrip,BL,BL,Vector2.zero,new Vector2(5000,140),new Color(.025f,.065f,.13f,.65f));
             Line(bottomStrip,BL,BL,new Vector2(60,133),new Vector2(1800,1),new Color(.65f,.77f,.86f,.13f));
             ambienceText=Label("Ambience",bottomStrip,BL,BL,new Vector2(60,83),new Vector2(1400,32),"海风，和远处的浪。",21,Muted,TextAlignmentOptions.BottomLeft);
-            Label("Controls",bottomStrip,BL,BL,new Vector2(60,35),new Vector2(1450,32),"A / D  移动     空格  跳跃     E  交互     M  地图     J  日志     Esc  暂停",20,Paper,TextAlignmentOptions.BottomLeft);
+            Label("Controls",bottomStrip,BL,BL,new Vector2(60,35),new Vector2(1450,32),"A / D  移动     E  交互     M  地图     J  日志     Esc  暂停",20,Paper,TextAlignmentOptions.BottomLeft);
             objectiveText=Label("Current thought",hud,new Vector2(1,1),new Vector2(1,1),new Vector2(-60,-56),new Vector2(650,90),"",21,Muted,TextAlignmentOptions.TopRight);
             var sound=CircleButton("Sound",hud,new Vector2(1,0),new Vector2(1,0),new Vector2(-54,30),LineIcon.Symbol.Sound,()=>{AudioListener.volume=AudioListener.volume>.01f?0:1;ShowToast(AudioListener.volume<.01f?"声音已关闭":"海风回来了");});
         }
@@ -411,7 +411,7 @@ namespace Seabreeze
             var handle=Panel("Handle",track.transform,new Vector2(0,.5f),C,Vector2.zero,new Vector2(18,24),Accent,true);
             slider.handleRect=handle.rectTransform;slider.targetGraphic=handle;slider.direction=Slider.Direction.LeftToRight;slider.navigation=new Navigation{mode=Navigation.Mode.None};
             slider.onValueChanged.AddListener(value=>{AudioListener.volume=value;volumeLabel.text=Mathf.RoundToInt(value*100)+"%";});
-            Label("Pause help",overlayContent,BL,BL,new Vector2(46,51),new Vector2(670,56),"Esc  返回游戏\n移动 A / D  ·  跳跃 空格  ·  交互 E",18,Muted);
+            Label("Pause help",overlayContent,BL,BL,new Vector2(46,51),new Vector2(670,56),"Esc  返回游戏\n移动 A / D  ·  交互 E",18,Muted);
         }
         void BuildRestart()
         {

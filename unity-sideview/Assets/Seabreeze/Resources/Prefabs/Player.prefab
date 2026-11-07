@@ -174,7 +174,6 @@ MonoBehaviour:
   speed: 4.2
   acceleration: 28
   deceleration: 36
-  jumpSpeed: 8.6
 --- !u!114 &2088218882912660647
 MonoBehaviour:
   m_ObjectHideFlags: 0

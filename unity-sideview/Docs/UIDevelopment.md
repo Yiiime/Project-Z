@@ -6,7 +6,7 @@
 | --- | --- |
 | 玩家对话 | MemoryDialogueView 使用左人物区、右对话与输入；Esc 有反向退出动画。关闭动画期间只继续锁玩家输入。 |
 | 立绘 | 仅 z_story 绑定 PR32 Z 模型；无立绘时隐藏人物区，同一输入流程。按文字显示驱动嘴部变化。 |
-| NPC 互聊 | 沿用附近字幕，只暂停参与者，不打开全屏界面。 |
+| NPC 互聊 | 使用说话者头顶气泡，跟随角色、自动停留与分段；显示画面内 NPC 的发言，不限玩家距离，不打开全屏界面。 |
 | 菜单 | 地图、手机、日志与暂停渐入渐出；关闭完成后执行旅行或重开；WorldDirector 可立即取消菜单过渡。 |
 | 直播 | 保留现有 NativeLiveHost 与 ZLive 功能，live.uss 适配深色半透明外观。 |
 | 输入 | TMP_InputField 与文本组件统一纯文本；IME 组合文本未提交时不发送。 |
@@ -48,3 +48,5 @@ After inspecting `Docs/Verification/street-integration.png`, moved conversation 
 
 - Manual save now displays success only when `GameSession.Save()` returns true. The existing failed-write notification remains visible instead of being overwritten by an unconditional success message. Other save callers may ignore the new boolean return value.
 - Ending recall resolves the completed ending's authored `StoryEffect.ending` / `journal` pair, then restores its saved journal date prefix when available. Exploring additional objects after the ending no longer replaces the recalled ending text with the newest unrelated observation. No save-schema changes were introduced.
+
+2026-11-07：E 进入后自动请求 NPC 开场，PR32 对话区显示真实模型结果与等待状态。失败时提供重试开场，保留输入草稿。NPCSpeechBubble 只负责实际已发言的显示，不写记忆、不抢焦点；跳跃提示同步移除。

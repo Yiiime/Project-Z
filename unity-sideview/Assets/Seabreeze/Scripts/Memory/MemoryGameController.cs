@@ -63,9 +63,10 @@ namespace Seabreeze
                 &&CanHear(origin,a.transform.position)).Select(a=>a.npcId).ToList();
             if(!heard.Contains(speaker))heard.Add(speaker);
             if(!heard.Contains(recipient))heard.Add(recipient);
-            if(world.Player!=null&&Vector2.Distance(world.Player.position,origin)<=MemoryRuntimeConfig.Settings.hearingDistance&&CanHear(origin,world.Player.position))heard.Add("player");
+            if(PlayerCanHear(origin))heard.Add("player");
             return heard.Distinct().ToArray();
         }
+        public bool PlayerCanHear(Vector3 origin)=>world?.Player!=null&&Vector2.Distance(world.Player.position,origin)<=MemoryRuntimeConfig.Settings.hearingDistance&&CanHear(origin,world.Player.position);
         static bool CanHear(Vector3 from,Vector3 to)
         {
             var hits=Physics2D.LinecastAll(from+Vector3.up*1.5f,to+Vector3.up*1.5f,1<<8);
@@ -77,7 +78,9 @@ namespace Seabreeze
             var observers=Listeners(origin,speaker,recipient);
             Append(new MemoryEvent { kind="utterance",conversationId=conversation,speakerId=speaker,recipientId=recipient,text=text,proposalId=proposalId,
                 observers=observers,location=session.CurrentPlace.ToString() });
-            if(observers.Contains("player"))View.ShowLine(speaker,text,origin,PlayerChatOpen);
+            bool playerConversation=speaker=="player"||recipient=="player";
+            // Screen presentation is independent from the witnesses used by memory.
+            if(!playerConversation||observers.Contains("player"))View.ShowLine(speaker,text,origin,playerConversation);
         }
         public void RecordMeeting(NpcPresence first,NpcPresence second)
         {

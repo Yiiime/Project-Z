@@ -254,7 +254,9 @@ namespace Seabreeze.Editor
                 else if (t >= 2 && t < 3) Press(Key.A);
                 else if (t >= 3.5f && t < 3.85f) Press(Key.D);
                 else if (t >= 3.85f && t < 4.4f) Press(Key.A);
-                else if (t >= 4.9f && t < 4.95f) Press(Key.Space);
+                else if (t >= 4.9f && t < 5.0f) Press(Key.Space);
+                else if (t >= 5.2f && t < 5.3f) Press(Key.W);
+                else if (t >= 5.5f && t < 5.6f) Press(Key.UpArrow);
                 else Press();
                 yield return null;
                 Vector3 scale = renderer.transform.localScale;
@@ -268,17 +270,17 @@ namespace Seabreeze.Editor
             Press();
             yield return Frames(fps / 3);
             Require(Facts() == facts, "Walking does not change story state or time.");
-            Require(player.speed == 4.2f && player.acceleration == 28 && player.deceleration == 36 && player.jumpSpeed == 8.6f,
-                "Physics parameters unchanged.");
+            Require(player.speed == 4.2f && player.acceleration == 28 && player.deceleration == 36,
+                "Horizontal movement parameters unchanged.");
             Require(samples.Any(s => s.velocity > 3.5f) && samples.Any(s => s.velocity < -3.5f), "Real left and right input recorded.");
-            Require(samples.Max(s => s.y) > .5f && player.Grounded, "Existing jump still works and lands.");
-            checks.Add("Real input covers walk, stop, reversal and existing jump without changing physics or story");
+            Require(samples.Max(s => s.y) - samples.Min(s => s.y) < .15f && player.Grounded, "Space, W and Up no longer cause jumping.");
+            checks.Add("Real input covers walk, stop, reversal and removed jump bindings without changing horizontal physics or story");
             if (!baseline)
             {
                 var definition = JsonUtility.FromJson<Definition>(File.ReadAllText(Folder + "/motion.json"));
                 string[] used = samples.Where(s => s.pose == "Walk").Select(s => s.sprite).Distinct().ToArray();
                 Require(used.Length == definition.walk.Length && used.All(n => definition.walk.Contains(n)), "All registered walk poses are used.");
-                Require(samples.All(s => Mathf.Abs(s.scaleX - 1) < .0001f && Mathf.Abs(s.scaleY - 1) < .0001f), "Sprite scale stays fixed in idle, walk, turn and jump.");
+                Require(samples.All(s => Mathf.Abs(s.scaleX - 1) < .0001f && Mathf.Abs(s.scaleY - 1) < .0001f), "Sprite scale stays fixed in idle, walk and turn.");
                 Require(visual.Pose == "Idle" && renderer.sprite.name == "idle", "Stops settle to the matching Figma idle.");
                 foreach (Asset asset in definition.assets)
                 {

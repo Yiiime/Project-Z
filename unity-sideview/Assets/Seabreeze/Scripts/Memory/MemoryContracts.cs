@@ -11,6 +11,7 @@ namespace Seabreeze
     [Serializable] public sealed class MemoryRequest
     {
         public string worldId, runId, requestId, checkpoint, actorId, recipientId, conversationId, topic, scene;
+        public bool opening;
         public int day, period, turn;
         public string[] candidates = Array.Empty<string>(), observers = Array.Empty<string>();
         public MemoryEvent eventData;
