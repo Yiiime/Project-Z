@@ -140,3 +140,15 @@ PR 保持草稿，等待用户手工体验验收。
 复查入口：`node scripts/check-native-voice.mjs`（仅本地），追加 `--live` 才检查云端；`node scripts/measure-native-call.mjs --live` 最多一次主持、一次审阅、一次 TTS，可能产生供应商计费。两条诊断都不会打开麦克风。
 
 本地证据：`/tmp/z-native-call-qa/report.json`、`/tmp/z-native-call-qa/call-panel.png`、`/tmp/z-native-live2d-qa/report.json`、`/tmp/z-native-voice-permission.json`、`/tmp/z-native-call-latency.json`、`/tmp/z-call-unity-build.log`。现场待验：办公室旁人说话、扬声器回声、真实 RTC 发布/收音到 ASR 的完整链路与真人接话延迟；当前仅实现 macOS 原生桥接。
+
+
+## 2026-11-07 · 六条连麦输入的真实测时
+
+- 用户要求测试几条并统计平均生成耗时。仅新增测时脚本与报告，没有改动运行时、提示词、模型或播放策略。
+- 运行 `node scripts/measure-native-call-batch.mjs --live`：六个独立合成上下文，顺序测试招呼、疲惫、建议、音乐、轻剧情、上文与弹幕；每条最多一次主持、一次首段审阅、一次 Vivi 预合成，无自动重试。当前主模型 `deepseek-flash`，音色 Vivi 2.0。
+- 按当前运行链路并行进行首段审阅和 TTS 预合成；“可开口”取审阅通过与至少 100 ms 服务端 PCM 可用的较晚时间。没有真实播放、RTC/ASR、观众生成并发负载或“我想想啊”占位声音。
+- 六条完整回复文字：平均 1727 ms，中位数 1619 ms，范围 1564—2027 ms。
+- 五条首轮成功：具备开口条件平均 2970 ms，中位数 2984 ms，范围 2539—3490 ms；首段音频全部生成且获准平均 3588 ms。
+- 成功样本中，审阅自身耗时平均 1288 ms，Vivi 从请求到首包平均 719 ms，两者有重叠，不能直接相加计算总等待。
+- “接上文与弹幕”生成文字 1948 ms，但首段被语义审阅退回；不计入成功开口耗时，不用零值稀释平均值。真实运行中的重试还会增加等待。本测试不能代表每轮都能在三秒左右开口。
+- 机器可读明细见 `verification/native-call-benchmark-20261107.json`。这次口径按生产中的并行预合成计时；上一条单次诊断脚本是先审阅后 TTS，两次数据不能直接当成代码提速对比。
