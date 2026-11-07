@@ -16,7 +16,7 @@ namespace Seabreeze
             get
             {
                 if (!session) return "沿着海边走走";
-                if (MemoryRuntimeConfig.Enabled) return session.State.day >= 4 ? "全岛公告：小岛将要毁灭。听听岛民各自的打算。" : "走近岛民按 E 交谈；长椅和咖啡可以推进时段。";
+                if (MemoryRuntimeConfig.Enabled) return "走近岛民按 E 交谈；长椅和咖啡可以推进时段。";
                 if (!string.IsNullOrEmpty(session.State.ending)) return "这一日，已经有了自己的名字。还可以继续散步。";
                 if (!Has("postcard_found")) return "海边长椅旁，有一张被风吹来的旧明信片。";
                 if (!Has("cafe_story")) return "去街道左侧的「潮汐」咖啡馆，问问阿遥。";
@@ -74,7 +74,7 @@ namespace Seabreeze
             {
                 if (SevenCharacterCatalog.Find(id) != null) { session.Memory?.BeginPlayerChat(id); return; }
                 if (id == "bench" || id == "lighthouse_bench" || id == "coffee") { session.Clock.Advance(); return; }
-                Notify(id == "noticeboard" && session.State.day >= 4 ? "小岛将要毁灭。" : "海风吹过小岛，你留意着身边的人和事。");
+                Notify("海风吹过小岛，你留意着身边的人和事。");
                 return;
             }
             switch (id)

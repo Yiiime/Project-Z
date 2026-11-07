@@ -292,6 +292,11 @@ export class Policy {
         )
       )
         throw new TurnError("不允许向该对象转述这些内容");
+      for(const id of comm.shared_claim_ids) {
+        const claim=[...c.character_state.known_facts,...c.character_state.memories].find(m=>m.id===id);
+        if((c.environment.actual_audience||[]).some(listener=>listener!=="player"&&!claim?.disclose_to?.includes(listener)))
+          throw new TurnError("旁听者无权听取该信息");
+      }
       const channel = action.parameters.channel;
       if (
         ["face_to_face", "whisper"].includes(channel) &&
@@ -345,6 +350,8 @@ export class Policy {
     const s = this.schema(c.actor_id),
       i = s.$defs.info,
       p = i.properties;
+    p.agenda_update.properties.goal_id.enum = (c.character_state.allowed_goals || []).map(g=>g.id||g);
+    p.agenda_update.properties.next_action_id.enum = [null, ...(c.character_state.allowed_next_action_ids || [])];
     if (c.environment.intent_only) {
       s.$defs.output.properties.dialogue = { const: "" };
       p.social_decision = false;

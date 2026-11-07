@@ -497,6 +497,7 @@ export function createServer({
               channel: p.channel || "face_to_face",
               environment: {
                 sceneId: p.scene,
+                actual_audience: isPlayer ? [actor,"player"] : [...new Set([actor,recipient,...(p.observers||[])])],
                 ...(!isPlayer
                   ? {
                       social_opportunity: {
