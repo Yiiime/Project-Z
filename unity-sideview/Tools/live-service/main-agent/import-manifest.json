@@ -11,7 +11,7 @@
     },
     {
       "path": "main-agent/config/skills-source-lock.json",
-      "sha256": "6310cf41d0afa49fdf636ec4eb181914eb518c78634b10391951293cd601a4b2"
+      "sha256": "8e0e02dcdcf5f40be58eb1ea0241da7e16c5263e9d4f0d04ec9ff738fc77b6d0"
     },
     {
       "path": "main-agent/prompts/conversation-host.txt",
@@ -47,11 +47,11 @@
     },
     {
       "path": "skills/audience-reaction/references/host-release-review.md",
-      "sha256": "29ef0ac1f1b43c8bf30bffe77ca2ea238d65626501e6c7be77d9df8ada88d53b"
+      "sha256": "d99466edbc11fa9617080a48658b576d48bec47ee895d07486eee88d458cfeed"
     },
     {
       "path": "skills/audience-reaction/references/host-sentence-repair.md",
-      "sha256": "fa0bd2edf68a01d871d963f0c919edd9c95a19781e332a94a59c2c50ccf32350"
+      "sha256": "37eeae2be63b2b41b673184680635872f39e102620aef9fb83cf02b42ab400d2"
     },
     {
       "path": "skills/audience-reaction/references/host-turn-quality.md",
@@ -67,7 +67,7 @@
     },
     {
       "path": "skills/call-companion/references/companionship.md",
-      "sha256": "28f3e0ee30ded9ce3c6ffe0a5125abd0d115914ef57ce54a894018ed5f9846f8"
+      "sha256": "140105a5cf119f78fac64282cc0a982ba6901cc01f526a21c10e089860c96472"
     },
     {
       "path": "skills/call-companion/references/contract.md",

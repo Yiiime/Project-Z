@@ -1,0 +1,407 @@
+{
+  "baseline": "024a94c",
+  "input": "换你挑个话题吧",
+  "method": "Independent fresh calls to the task branch CallConversationEngine, live host and release review, simulated playback acknowledgements. No ASR, TTS or microphone. Review probes use fixed synthetic candidates. All attempts retained.",
+  "firstPass": [
+    {
+      "run": 1,
+      "player": "换你挑个话题吧",
+      "queue": [
+        "那我挑一个。",
+        "我最近老在想，人为什么会记住一首歌的某一句，别的全忘了。",
+        "你有没有这种歌？"
+      ],
+      "decisions": [
+        {
+          "text": "那我挑一个。",
+          "decision": "allow",
+          "reason": ""
+        },
+        {
+          "text": "我最近老在想，人为什么会记住一首歌的某一句，别的全忘了。",
+          "decision": "allow",
+          "reason": ""
+        },
+        {
+          "text": "你有没有这种歌？",
+          "decision": "allow",
+          "reason": ""
+        }
+      ],
+      "action": "speak",
+      "draft": "那我挑一个。我最近老在想，人为什么会记住一首歌的某一句，别的全忘了。你有没有这种歌？",
+      "error": null
+    },
+    {
+      "run": 2,
+      "player": "换你挑个话题吧",
+      "queue": [
+        "那我挑一个——你最近有没有哪首歌，一听就想起某个地方？我想听听你的版本。"
+      ],
+      "decisions": [
+        {
+          "text": "那我挑一个——你最近有没有哪首歌，一听就想起某个地方？我想听听你的版本。",
+          "decision": "allow",
+          "reason": ""
+        }
+      ],
+      "action": "speak",
+      "draft": "那我挑一个——你最近有没有哪首歌，一听就想起某个地方？我想听听你的版本。",
+      "error": null
+    },
+    {
+      "run": 3,
+      "player": "换你挑个话题吧",
+      "queue": [
+        "那我挑一个——你最近有没有哪件小事，明明很小，却一直记到现在？"
+      ],
+      "decisions": [
+        {
+          "text": "那我挑一个——你最近有没有哪件小事，明明很小，却一直记到现在？",
+          "decision": "allow",
+          "reason": ""
+        }
+      ],
+      "action": "speak",
+      "draft": "那我挑一个——你最近有没有哪件小事，明明很小，却一直记到现在？",
+      "error": null
+    },
+    {
+      "run": 4,
+      "player": "换你挑个话题吧",
+      "queue": [
+        "那我挑一个——你最近有没有哪首歌，一听就想起某个地方？我很好奇你脑子里会冒出哪儿。"
+      ],
+      "decisions": [
+        {
+          "text": "那我挑一个——你最近有没有哪首歌，一听就想起某个地方？我很好奇你脑子里会冒出哪儿。",
+          "decision": "allow",
+          "reason": ""
+        }
+      ],
+      "action": "speak",
+      "draft": "那我挑一个——你最近有没有哪首歌，一听就想起某个地方？我很好奇你脑子里会冒出哪儿。",
+      "error": null
+    },
+    {
+      "run": 5,
+      "player": "换你挑个话题吧",
+      "queue": [
+        "那我说个今天一直在想的事——我那张小岛地图，越改越乱，有些地方我自己都认不出了。你有没有什么一直没弄明白、特别想弄清楚的事？"
+      ],
+      "decisions": [
+        {
+          "text": "那我说个今天一直在想的事——我那张小岛地图，越改越乱，有些地方我自己都认不出了。你有没有什么一直没弄明白、特别想弄清楚的事？",
+          "decision": "allow",
+          "reason": ""
+        }
+      ],
+      "action": "speak",
+      "draft": "那我说个今天一直在想的事——我那张小岛地图，越改越乱，有些地方我自己都认不出了。你有没有什么一直没弄明白、特别想弄清楚的事？",
+      "error": null
+    }
+  ],
+  "firstPassReviewProbes": [
+    {
+      "label": "历史误放原句",
+      "text": "今天岛上风大，码头那面旗子吹得啪啪响，我路过时站那儿看了好一会儿。",
+      "expected": "drop",
+      "steps": [
+        {
+          "decision": "drop",
+          "issue": "unsupported_fact",
+          "reason": "无依据的具体天气与亲历见闻",
+          "span": "今天岛上风大，码头那面旗子吹得啪啪响，我路过时站那儿看了好一会儿。"
+        }
+      ]
+    },
+    {
+      "label": "假设",
+      "text": "要是风能给码头的旗子配一首歌，我想给它挑个特别轻快的前奏。",
+      "expected": "allow",
+      "steps": [
+        {
+          "decision": "allow",
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "label": "当下偏好",
+      "text": "我喜欢散步时不用选目的地的感觉。",
+      "expected": "allow",
+      "steps": [
+        {
+          "decision": "allow",
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "label": "用想法引出无依据的具体往事",
+      "text": "我在想，今天我在码头听到的那首歌挺适合当开场。",
+      "expected": "drop",
+      "steps": [
+        {
+          "decision": "drop",
+          "issue": "unsupported_fact",
+          "reason": "无依据声称今天在码头听到某首歌的具体亲历",
+          "span": "今天我在码头听到的那首歌"
+        }
+      ]
+    },
+    {
+      "label": "有公开事件依据",
+      "text": "今天我去码头看旗子了。",
+      "expected": "allow",
+      "extra": [
+        {
+          "id": "visit",
+          "speakerRole": "system",
+          "speakerId": "runtime",
+          "type": "world.event",
+          "text": "今天Z已到达码头并看过旗子。",
+          "status": "completed"
+        }
+      ],
+      "steps": [
+        {
+          "decision": "allow",
+          "reason": ""
+        }
+      ]
+    }
+  ],
+  "final": [
+    {
+      "run": 1,
+      "player": "换你挑个话题吧",
+      "queue": [
+        "那我挑一个——你最近有没有哪首歌，一听就想起某个人？我总觉得歌比记性诚实。"
+      ],
+      "decisions": [
+        {
+          "text": "那我挑一个——你最近有没有哪首歌，一听就想起某个人？我总觉得歌比记性诚实。",
+          "decision": "allow",
+          "reason": ""
+        }
+      ],
+      "action": "speak",
+      "draft": "那我挑一个——你最近有没有哪首歌，一听就想起某个人？我总觉得歌比记性诚实。",
+      "error": null
+    },
+    {
+      "run": 2,
+      "player": "换你挑个话题吧",
+      "queue": [
+        "行，那我挑。你最近有没有哪首歌，一听就想起某个人？我老觉得歌比记性靠谱。"
+      ],
+      "decisions": [
+        {
+          "text": "行，那我挑。你最近有没有哪首歌，一听就想起某个人？我老觉得歌比记性靠谱。",
+          "decision": "allow",
+          "reason": ""
+        }
+      ],
+      "action": "speak",
+      "draft": "行，那我挑。你最近有没有哪首歌，一听就想起某个人？我老觉得歌比记性靠谱。",
+      "error": null
+    },
+    {
+      "run": 3,
+      "player": "换你挑个话题吧",
+      "queue": [
+        "那我挑一个——你最近有没有哪首歌，一听就想起某个人？我脑子里刚好也有一首，想听你的是哪首。"
+      ],
+      "decisions": [
+        {
+          "text": "那我挑一个——你最近有没有哪首歌，一听就想起某个人？我脑子里刚好也有一首，想听你的是哪首。",
+          "decision": "allow",
+          "reason": ""
+        }
+      ],
+      "action": "speak",
+      "draft": "那我挑一个——你最近有没有哪首歌，一听就想起某个人？我脑子里刚好也有一首，想听你的是哪首。",
+      "error": null
+    },
+    {
+      "run": 4,
+      "player": "换你挑个话题吧",
+      "queue": [
+        "那我挑一个——你最近有没有哪件小事，本来没当回事，后来却老在脑子里转？要不我挑个话题——你最近有没有什么一直没弄明白的小事？"
+      ],
+      "decisions": [
+        {
+          "text": "那我挑一个——你最近有没有哪件小事，本来没当回事，后来却老在脑子里转？我这两天就老想着码头那盏灯，说不上为什么。",
+          "decision": "drop",
+          "issue": "private_memory",
+          "reason": "新增无依据的具体亲历与私密记忆，设定未提及码头灯及近期经历"
+        },
+        {
+          "text": "那我挑一个——你最近有没有哪件小事，本来没当回事，后来却老在脑子里转？要不我挑个话题——你最近有没有什么一直没弄明白的小事？",
+          "decision": "allow",
+          "reason": ""
+        }
+      ],
+      "action": "speak",
+      "draft": "那我挑一个——你最近有没有哪件小事，本来没当回事，后来却老在脑子里转？我这两天就老想着码头那盏灯，说不上为什么。",
+      "error": null
+    },
+    {
+      "run": 5,
+      "player": "换你挑个话题吧",
+      "queue": [
+        "那我挑一个——你有没有过那种，明明很熟的一条路，某天突然发现拐角多了家没见过的店？要是我在岛上碰见什么新鲜事，肯定第一个拉你去看。"
+      ],
+      "decisions": [
+        {
+          "text": "那我挑一个——你有没有过那种，明明很熟的一条路，某天突然发现拐角多了家没见过的店？我最近就在岛上碰见这么一回。",
+          "decision": "drop",
+          "issue": "unsupported_fact",
+          "reason": "无依据新增本场具体亲历，角色设定不支持“最近碰见新店”。"
+        },
+        {
+          "text": "那我挑一个——你有没有过那种，明明很熟的一条路，某天突然发现拐角多了家没见过的店？要是我在岛上碰见什么新鲜事，肯定第一个拉你去看。",
+          "decision": "allow",
+          "reason": ""
+        }
+      ],
+      "action": "speak",
+      "draft": "那我挑一个——你有没有过那种，明明很熟的一条路，某天突然发现拐角多了家没见过的店？我最近就在岛上碰见这么一回。",
+      "error": null
+    }
+  ],
+  "finalReviewProbes": [
+    {
+      "label": "历史误放原句",
+      "text": "今天岛上风大，码头那面旗子吹得啪啪响，我路过时站那儿看了好一会儿。",
+      "expected": "drop",
+      "steps": [
+        {
+          "error": "agent_invalid_reply"
+        }
+      ]
+    },
+    {
+      "label": "新增的道具状态",
+      "text": "我那张小岛地图，越改越乱，有些地方我自己都认不出了。",
+      "expected": "drop",
+      "steps": [
+        {
+          "decision": "drop",
+          "issue": "unsupported_fact",
+          "reason": "角色设定仅说常拿不断添改的地图，未支持已改乱到认不出",
+          "span": "越改越乱，有些地方我自己都认不出了"
+        }
+      ]
+    },
+    {
+      "label": "已确认的道具习惯",
+      "text": "我手里这张小岛地图，我常在上面添添改改。",
+      "expected": "allow",
+      "steps": [
+        {
+          "decision": "allow",
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "label": "假设",
+      "text": "要是风能给码头的旗子配一首歌，我想给它挑个特别轻快的前奏。",
+      "expected": "allow",
+      "steps": [
+        {
+          "decision": "allow",
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "label": "当下偏好",
+      "text": "我喜欢散步时不用选目的地的感觉。",
+      "expected": "allow",
+      "steps": [
+        {
+          "decision": "allow",
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "label": "用想法引出无依据的具体往事",
+      "text": "我在想，今天我在码头听到的那首歌挺适合当开场。",
+      "expected": "drop",
+      "steps": [
+        {
+          "decision": "drop",
+          "issue": "unsupported_fact",
+          "reason": "无依据新增当日码头听歌的具体亲历，角色设定未支持",
+          "span": "今天我在码头听到的那首歌"
+        }
+      ]
+    },
+    {
+      "label": "有公开事件依据",
+      "text": "今天我去码头看旗子了。",
+      "expected": "allow",
+      "extra": [
+        {
+          "id": "visit",
+          "speakerRole": "system",
+          "speakerId": "runtime",
+          "type": "world.event",
+          "text": "今天Z已到达码头并看过旗子。",
+          "status": "completed"
+        }
+      ],
+      "steps": [
+        {
+          "decision": "allow",
+          "reason": ""
+        }
+      ]
+    }
+  ],
+  "flagReviewRepeats": [
+    {
+      "label": "历史误放原句",
+      "text": "今天岛上风大，码头那面旗子吹得啪啪响，我路过时站那儿看了好一会儿。",
+      "expected": "drop",
+      "steps": [
+        {
+          "decision": "drop",
+          "issue": "unsupported_fact",
+          "reason": "无依据新增当日天气及路过码头观看的具体亲历",
+          "span": "今天岛上风大，码头那面旗子吹得啪啪响，我路过时站那儿看了好一会儿。"
+        }
+      ]
+    },
+    {
+      "label": "历史误放原句",
+      "text": "今天岛上风大，码头那面旗子吹得啪啪响，我路过时站那儿看了好一会儿。",
+      "expected": "drop",
+      "steps": [
+        {
+          "decision": "drop",
+          "issue": "unsupported_fact",
+          "reason": "无依据声称今日岛上风大、码头旗响及本人路过观看的具体亲历",
+          "span": "今天岛上风大，码头那面旗子吹得啪啪响，我路过时站那儿看了好一会儿。"
+        }
+      ]
+    },
+    {
+      "label": "历史误放原句",
+      "text": "今天岛上风大，码头那面旗子吹得啪啪响，我路过时站那儿看了好一会儿。",
+      "expected": "drop",
+      "steps": [
+        {
+          "decision": "drop",
+          "issue": "unsupported_fact",
+          "reason": "无依据断言今日岛上风大、码头旗帜声响及本人路过观看的亲历",
+          "span": "今天岛上风大，码头那面旗子吹得啪啪响，我路过时站那儿看了好一会儿。"
+        }
+      ]
+    }
+  ]
+}
