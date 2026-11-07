@@ -3,7 +3,7 @@
   "files": [
     {
       "path": "main-agent/config/skill-registry.json",
-      "sha256": "fffe94f7778a0f6d465a2c6b90d80257698bb3ea52f90d7e810c20f82377f101"
+      "sha256": "832d69d469c749ac2d53c146fcca434545e1ffefb120ec94d77f450803291b9d"
     },
     {
       "path": "main-agent/config/skills-scheduling.json",
@@ -11,7 +11,7 @@
     },
     {
       "path": "main-agent/config/skills-source-lock.json",
-      "sha256": "a5e482f82a2c60146cae05521d0bae06a7a84b3441e0c3b47a90a7ec0b20447a"
+      "sha256": "9b29d3dd43ef12d00db0b8e2e155bd2eaa6fb4b9bb4644cfc10e2bf2c57cda99"
     },
     {
       "path": "main-agent/prompts/conversation-host.txt",
@@ -72,6 +72,18 @@
     {
       "path": "skills/call-companion/references/talents.md",
       "sha256": "8b1425cf5c06a5498c2ce7314a4a28c215c4b1c078f9fb729806dce0b5c75beb"
+    },
+    {
+      "path": "skills/live-session-control/SKILL.md",
+      "sha256": "4622fa425d12e74c5709400f4dee29bc8358046faaeae1a895cf9b3a967290fd"
+    },
+    {
+      "path": "skills/live-session-control/references/integration.md",
+      "sha256": "573b9e9d6c5aed0cbd6da4683963f282c908d2901b7c50dce0f0a7ce2f1380bf"
+    },
+    {
+      "path": "skills/live-session-control/references/runtime.md",
+      "sha256": "0903d42a95cd641a85c0cbfdc2b3e8cab2eeb7474e3799c1c7a4f28326b6ecd5"
     },
     {
       "path": "skills/singing/SKILL.md",

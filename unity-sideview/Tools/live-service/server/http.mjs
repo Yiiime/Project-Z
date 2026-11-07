@@ -23,7 +23,7 @@ export async function createLiveServer({root,providers,artifacts,songRoot,token,
   if(voiceRoute&&req.method==='POST'){
    const session=sessions.get(voiceRoute[1]);if(!session||session.owner!==owner)return json(res,404,{error:'not_found'});const version=Number(req.headers['x-live-call-version']);
    const dictation=voiceRoute[2]==='dictation',phase=session?.phase;
-   const current=()=>session&&!session.closed&&session.phase===phase&&phase!=='ended'&&version===session.engine.callVersion&&(dictation?!session.engine._state.call.active:phase==='live'&&session.engine._state.call.active&&session.engine._state.call.input==='listening');
+   const current=()=>session&&!session.closed&&session.sessionControl.normal&&session.phase===phase&&phase!=='ended'&&version===session.engine.callVersion&&(dictation?!session.engine._state.call.active:phase==='live'&&session.engine._state.call.active&&session.engine._state.call.input==='listening');
    if(!current())return json(res,409,{error:'stale_voice_turn'});
    if(voiceRequests.has(session.id))return json(res,409,{error:'asr_busy'});
    if(req.headers['content-type']!=='audio/pcm')return json(res,415,{error:'pcm_required'});
