@@ -1,0 +1,954 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using UnityEngine;
+using Live2D.Cubism.Core;
+using Live2D.Cubism.Framework;
+
+namespace ZDialogueDemo
+{
+    public enum ZFaceExpression
+    {
+        Neutral,
+        Smile,
+        Surprise,
+        Angry,
+        Troubled,
+        Blush,
+    }
+
+    public enum ZGesture
+    {
+        None,
+        Wave,
+        Explain,
+        Point,
+    }
+
+    /// <summary>
+    /// 由控制器生成的连续动作。动作只写入头部和身体的连续参数，
+    /// 与 exp3 姿势、表情、眨眼保持分层。
+    /// </summary>
+    public enum ZMotionPreset
+    {
+        Idle,
+        Nod,
+        Shake,
+        Think,
+        Listen,
+        Happy,
+    }
+
+    public enum ZGaze
+    {
+        Player,
+        Away,
+    }
+
+    /// <summary>从最终 Z Model.cdi3 读取的 32 个参数及其用途。</summary>
+    [Serializable]
+    public sealed class ZParameterDescriptor
+    {
+        public string id;
+        public string group;
+        public string purpose;
+
+        public ZParameterDescriptor(string id, string group, string purpose)
+        {
+            this.id = id;
+            this.group = group;
+            this.purpose = purpose;
+        }
+    }
+
+    /// <summary>
+    /// Z Live2D 表演适配层。
+    ///
+    /// 表情和手势只写入 cdi3 已确认的白名单参数，不调用 ExpressionController。
+    /// 组件实现 ICubismUpdatable，由 CubismUpdateController 在统一的 OnLateUpdate
+    /// 阶段调用；执行顺序默认 1000，需和导入模型上的其他 Cubism 更新组件一起验收。
+    /// </summary>
+    [DisallowMultipleComponent]
+    public sealed class ZPerformanceController : MonoBehaviour, ICubismUpdatable
+    {
+        private static readonly ZParameterDescriptor[] s_parameterDescriptors =
+        {
+            new ZParameterDescriptor("ParamAngleX", "head", "头部 X 角度（连续动作）"),
+            new ZParameterDescriptor("ParamAngleY", "head", "头部 Y 角度（连续动作）"),
+            new ZParameterDescriptor("ParamAngleZ", "head", "头部 Z 角度（连续动作）"),
+            new ZParameterDescriptor("ParamBodyAngleZ", "body", "身体 Z 角度（连续动作）"),
+            new ZParameterDescriptor("ParamBreath", "idle", "轻呼吸"),
+            new ZParameterDescriptor("ParamEyeLOpen", "blink", "左眼开合"),
+            new ZParameterDescriptor("ParamEyeROpen", "blink", "右眼开合"),
+            new ZParameterDescriptor("ParamEyeSmile", "face", "smile.exp3：眼睛微笑"),
+            new ZParameterDescriptor("ParamEyeBallX", "gaze", "视线 X"),
+            new ZParameterDescriptor("ParamEyeBallY", "gaze", "视线 Y"),
+            new ZParameterDescriptor("ParamBrowForm", "face", "angry/troubled.exp3：眉形"),
+            new ZParameterDescriptor("ParamMouthOpenY", "mouth", "嘴部开合（无语音时不主动写）"),
+            new ZParameterDescriptor("ParamMouthVariant", "face", "surprise.exp3：嘴型变体"),
+            new ZParameterDescriptor("ParamHairSideL", "hair", "左侧发丝（控制器不主动写）"),
+            new ZParameterDescriptor("ParamHairSideR", "hair", "右侧发丝（控制器不主动写）"),
+            new ZParameterDescriptor("ParamHairBang", "hair", "刘海（控制器不主动写）"),
+            new ZParameterDescriptor("ParamHairBack", "hair", "后发（控制器不主动写）"),
+            new ZParameterDescriptor("ParamHairPitch", "hair", "发丝俯仰（控制器不主动写）"),
+            new ZParameterDescriptor("ParamPosePoint", "gesture", "point.exp3：指向姿势"),
+            new ZParameterDescriptor("ParamPoseExplain", "gesture", "explain.exp3：解释姿势"),
+            new ZParameterDescriptor("ParamPoseWave", "gesture", "wave.exp3：挥手姿势"),
+            new ZParameterDescriptor("ParamBodyAngleX", "body", "身体 X 角度（连续动作）"),
+            new ZParameterDescriptor("ParamBodyAngleY", "body", "身体 Y 角度（连续动作）"),
+            new ZParameterDescriptor("ParamHairSideL2", "hair", "左侧发丝层 2（控制器不主动写）"),
+            new ZParameterDescriptor("ParamHairSideR2", "hair", "右侧发丝层 2（控制器不主动写）"),
+            new ZParameterDescriptor("ParamHairBack2", "hair", "后发层 2（控制器不主动写）"),
+            new ZParameterDescriptor("ParamHairSideL3", "hair", "左侧发丝层 3（控制器不主动写）"),
+            new ZParameterDescriptor("ParamHairSideR3", "hair", "右侧发丝层 3（控制器不主动写）"),
+            new ZParameterDescriptor("ParamHairBack3", "hair", "后发层 3（控制器不主动写）"),
+            new ZParameterDescriptor("ParamMouthForm", "mouth", "嘴形（控制器不主动写）"),
+            new ZParameterDescriptor("ParamCheek", "face", "blush.exp3：脸颊"),
+            new ZParameterDescriptor("ParamDangle1", "physics", "物理摆动（控制器不主动写）"),
+        };
+
+        private static readonly ExpressionBinding[] s_expressionBindings =
+        {
+            new ExpressionBinding(ZFaceExpression.Smile, "ParamEyeSmile", 1f, "smile.exp3"),
+            new ExpressionBinding(ZFaceExpression.Surprise, "ParamMouthVariant", 1f, "surprise.exp3"),
+            new ExpressionBinding(ZFaceExpression.Angry, "ParamBrowForm", -1f, "angry.exp3"),
+            new ExpressionBinding(ZFaceExpression.Troubled, "ParamBrowForm", 1f, "troubled.exp3"),
+            new ExpressionBinding(ZFaceExpression.Blush, "ParamCheek", 1f, "blush.exp3"),
+        };
+
+        private static readonly GestureBinding[] s_gestureBindings =
+        {
+            new GestureBinding(ZGesture.Wave, "ParamPoseWave", "wave.exp3"),
+            new GestureBinding(ZGesture.Explain, "ParamPoseExplain", "explain.exp3"),
+            new GestureBinding(ZGesture.Point, "ParamPosePoint", "point.exp3"),
+        };
+
+        private static readonly string[] s_motionParameterIds =
+        {
+            "ParamAngleX",
+            "ParamAngleY",
+            "ParamAngleZ",
+            "ParamBodyAngleX",
+            "ParamBodyAngleY",
+            "ParamBodyAngleZ",
+        };
+
+        private static readonly ReadOnlyCollection<ZParameterDescriptor> s_readOnlyDescriptors =
+            Array.AsReadOnly(s_parameterDescriptors);
+
+        [Header("Cubism")]
+        [SerializeField] private CubismModel cubismModel;
+        [Tooltip("模型上的 CubismUpdateController。为空时自动从子层级查找。")]
+        [SerializeField] private CubismUpdateController cubismUpdateController;
+        // SDK R4.2 的 Expression/EyeBlink/Mouth/Physics 顺序为 300/400/500/800，
+        // Render 为 10000；1000 置于其后、渲染前。仍需在实际 Prefab 中做运行时验收。
+        [SerializeField] private int executionOrder = 1000;
+
+        [Header("平滑")]
+        [SerializeField, Min(0.1f)] private float blendSpeed = 8f;
+        [SerializeField, Min(0.1f)] private float segmentDuration = 2.2f;
+        [SerializeField, Min(0.1f)] private float maxSegmentDuration = 4.5f;
+
+        [Header("连续动作预设")]
+        [SerializeField, Range(0.01f, 0.3f)] private float headMotionRangeRatio = 0.12f;
+        [SerializeField, Range(0.01f, 0.3f)] private float bodyMotionRangeRatio = 0.07f;
+        [SerializeField, Range(0.5f, 4f)] private float activeHeadMotionGain = 3f;
+        [SerializeField, Range(0.5f, 8f)] private float activeBodyMotionGain = 5f;
+        [SerializeField, Range(0.5f, 2f)] private float idleMotionGain = 1.25f;
+        [SerializeField, Min(0.1f)] private float motionBlendSpeed = 7f;
+        [SerializeField, Min(0.5f)] private float idleMotionPeriod = 5.2f;
+        [SerializeField, Range(0.25f, 2f)] private float motionAmplitudeMultiplier = 1f;
+        [SerializeField, Range(0.25f, 2f)] private float motionSpeedMultiplier = 1f;
+        [Tooltip("运行时暂停模型上的旧 Animator，避免动画资产与程序化动作争用参数。禁用组件时恢复原状态。")]
+        [SerializeField] private bool suspendAnimatorDuringRuntime = true;
+
+        [Header("Idle")]
+        [SerializeField, Range(0f, 0.15f)] private float breathAmplitude = 0.035f;
+        [SerializeField, Min(0.5f)] private float breathPeriod = 4f;
+        [SerializeField, Min(0.2f)] private float blinkMinInterval = 2.2f;
+        [SerializeField, Min(0.3f)] private float blinkMaxInterval = 5.4f;
+        [SerializeField, Min(0.03f)] private float blinkDuration = 0.12f;
+        [SerializeField, Range(-1f, 1f)] private float awayGazeX = -0.65f;
+
+        private readonly Dictionary<string, CubismParameter> parameters =
+            new Dictionary<string, CubismParameter>(StringComparer.Ordinal);
+        private readonly Dictionary<string, float> targets =
+            new Dictionary<string, float>(StringComparer.Ordinal);
+        // 不以 CubismParameter.Value 作为平滑源。ParameterStore、Animator 或其他
+        // updater 可能在本组件之后写回 Value；独立状态可避免表情每帧被重新稀释。
+        private readonly Dictionary<string, float> smoothedValues =
+            new Dictionary<string, float>(StringComparer.Ordinal);
+        private readonly HashSet<string> activeWriters = new HashSet<string>(StringComparer.Ordinal);
+        private readonly HashSet<string> warnedMissingIds = new HashSet<string>(StringComparer.Ordinal);
+
+        private Coroutine performanceCoroutine;
+        private string activePerformanceTurnId;
+        private ZFaceExpression currentExpression = ZFaceExpression.Neutral;
+        private ZGesture currentGesture = ZGesture.None;
+        private ZGaze currentGaze = ZGaze.Player;
+        private ZMotionPreset currentMotion = ZMotionPreset.Idle;
+        private float motionElapsed;
+        private int motionTriggerSerial;
+        private float nextBlinkIn;
+        private float blinkRemaining;
+        private bool warnedNoModel;
+        private bool warnedNoUpdateController;
+        private bool cacheBuilt;
+        private readonly List<AnimatorState> suspendedAnimatorStates = new List<AnimatorState>();
+        private bool animatorStatesCaptured;
+        private bool previewPresentationActive;
+
+        public static IReadOnlyList<ZParameterDescriptor> ParameterWhitelist => s_readOnlyDescriptors;
+        public CubismModel CubismModel => cubismModel;
+        public CubismUpdateController CubismUpdateController => cubismUpdateController;
+        public bool IsModelReady => cacheBuilt && cubismModel != null && parameters.Count > 0;
+        public bool HasCubismUpdateController => cubismUpdateController != null;
+        public ZFaceExpression CurrentExpression => currentExpression;
+        public ZGesture CurrentGesture => currentGesture;
+        public ZGaze CurrentGaze => currentGaze;
+        public ZMotionPreset CurrentMotion => currentMotion;
+        public float MotionElapsed => motionElapsed;
+        public int MotionTriggerSerial => motionTriggerSerial;
+        public float MotionAmplitudeMultiplier => motionAmplitudeMultiplier;
+        public float MotionSpeedMultiplier => motionSpeedMultiplier;
+
+        public int ExecutionOrder => executionOrder;
+        // 该表演控制器只在运行时驱动；不让 Cubism 编辑器阶段写入模型参数。
+        public bool NeedsUpdateOnEditing => false;
+        public bool HasUpdateController { get; set; }
+
+        private struct ExpressionBinding
+        {
+            public readonly ZFaceExpression expression;
+            public readonly string parameterId;
+            public readonly float value;
+            public readonly string resourceName;
+
+            public ExpressionBinding(ZFaceExpression expression, string parameterId, float value, string resourceName)
+            {
+                this.expression = expression;
+                this.parameterId = parameterId;
+                this.value = value;
+                this.resourceName = resourceName;
+            }
+        }
+
+        private struct GestureBinding
+        {
+            public readonly ZGesture gesture;
+            public readonly string parameterId;
+            public readonly string resourceName;
+
+            public GestureBinding(ZGesture gesture, string parameterId, string resourceName)
+            {
+                this.gesture = gesture;
+                this.parameterId = parameterId;
+                this.resourceName = resourceName;
+            }
+        }
+
+        private struct AnimatorState
+        {
+            public readonly Animator animator;
+            public readonly bool enabled;
+
+            public AnimatorState(Animator animator, bool enabled)
+            {
+                this.animator = animator;
+                this.enabled = enabled;
+            }
+        }
+
+        private void Awake()
+        {
+            nextBlinkIn = UnityEngine.Random.Range(blinkMinInterval, blinkMaxInterval);
+            ResolveCubismComponents();
+            CaptureAndSuspendAnimators();
+            BuildParameterCache();
+            ResetPerformanceToNeutral();
+        }
+
+        private void OnEnable()
+        {
+            ResolveCubismComponents();
+            CaptureAndSuspendAnimators();
+            RefreshCubismUpdateController();
+            ResetPerformanceToNeutral();
+            if (nextBlinkIn <= 0f)
+                nextBlinkIn = UnityEngine.Random.Range(blinkMinInterval, blinkMaxInterval);
+        }
+
+        private void Start()
+        {
+            ResolveCubismComponents();
+            BuildParameterCache();
+            RefreshCubismUpdateController();
+        }
+
+        private void OnDisable()
+        {
+            CancelCurrentPerformance();
+            WriteDefaultsImmediately();
+            RestoreAnimatorStates();
+            HasUpdateController = false;
+        }
+
+        public void OnLateUpdate()
+        {
+            // CubismUpdateController 会保留已注册的 delegate，不会替 disabled 组件过滤调用。
+            if (!enabled)
+                return;
+            EvaluateAndWrite(Time.deltaTime);
+        }
+
+        /// <summary>模型或更新控制器后补绑定，并刷新 Cubism 的 updater 列表。</summary>
+        public void RefreshCubismUpdateController()
+        {
+            ResolveCubismComponents();
+            HasUpdateController = cubismUpdateController != null;
+            if (cubismUpdateController != null)
+                cubismUpdateController.Refresh();
+            else if (!warnedNoUpdateController)
+            {
+                warnedNoUpdateController = true;
+                Debug.LogWarning("[ZPerformanceController] 未找到 CubismUpdateController，表演不会更新。", this);
+            }
+        }
+
+        public void PlaySegments(string turnId, IList<DialogueClient.ChatSegment> segments)
+        {
+            CancelCurrentPerformance();
+            activePerformanceTurnId = turnId ?? string.Empty;
+            if (segments == null || segments.Count == 0)
+                return;
+            performanceCoroutine = StartCoroutine(PlaySegmentsRoutine(activePerformanceTurnId, segments));
+        }
+
+        public void CancelCurrentPerformance()
+        {
+            if (performanceCoroutine != null)
+            {
+                StopCoroutine(performanceCoroutine);
+                performanceCoroutine = null;
+            }
+
+            activePerformanceTurnId = string.Empty;
+            ResetPerformanceToNeutral();
+        }
+
+        public void SetExpression(string expression)
+        {
+            SetExpression(ParseExpression(expression));
+        }
+
+        public void SetExpression(ZFaceExpression expression)
+        {
+            currentExpression = expression;
+            foreach (var binding in s_expressionBindings)
+                SetTargetToDefault(binding.parameterId);
+
+            foreach (var binding in s_expressionBindings)
+            {
+                if (binding.expression == expression)
+                    SetTarget(binding.parameterId, binding.value);
+            }
+        }
+
+        public void SetGesture(string gesture)
+        {
+            SetGesture(ParseGesture(gesture));
+        }
+
+        public void SetGesture(ZGesture gesture)
+        {
+            currentGesture = gesture;
+            foreach (var binding in s_gestureBindings)
+            {
+                SetTargetToDefault(binding.parameterId);
+                if (binding.gesture == gesture)
+                    SetTarget(binding.parameterId, 1f);
+            }
+        }
+
+        public void SetGaze(string gaze)
+        {
+            SetGaze(ParseGaze(gaze));
+        }
+
+        public void SetGaze(ZGaze gaze)
+        {
+            currentGaze = gaze;
+            SetTargetToDefault("ParamEyeBallX");
+            SetTargetToDefault("ParamEyeBallY");
+            if (gaze == ZGaze.Away)
+                SetTarget("ParamEyeBallX", awayGazeX);
+        }
+
+        /// <summary>切换到一个可中断的连续动作。切换从当前平滑值继续，不重置参数。</summary>
+        public void SetMotionPreset(string motion)
+        {
+            SetMotionPreset(ParseMotionPreset(motion));
+        }
+
+        public void SetMotionPreset(ZMotionPreset motion)
+        {
+            // 同一动作再次触发也要从头开始；这让连续点击“点头”仍然可预览。
+            if (currentMotion != motion || motion != ZMotionPreset.Idle)
+                motionElapsed = 0f;
+            if (motion != ZMotionPreset.Idle)
+                motionTriggerSerial++;
+            currentMotion = motion;
+            if (motion == ZMotionPreset.Idle)
+                motionElapsed = 0f;
+        }
+
+        public void SetMotionAmplitudeMultiplier(float multiplier)
+        {
+            motionAmplitudeMultiplier = Mathf.Clamp(multiplier, 0.25f, 2f);
+        }
+
+        public void SetMotionSpeedMultiplier(float multiplier)
+        {
+            motionSpeedMultiplier = Mathf.Clamp(multiplier, 0.25f, 2f);
+        }
+
+        /// <summary>供 Demo 一键预览使用。预览结束后回到自然待机。</summary>
+        public void PreviewMotion(string motion)
+        {
+            PreviewMotion(ParseMotionPreset(motion));
+        }
+
+        public void PreviewMotion(ZMotionPreset motion)
+        {
+            // A manual preview owns the presentation until the motion finishes.
+            // Stop an older dialogue coroutine first, otherwise its next segment
+            // can immediately replace the preview expression or gaze.
+            if (performanceCoroutine != null)
+            {
+                StopCoroutine(performanceCoroutine);
+                performanceCoroutine = null;
+                activePerformanceTurnId = string.Empty;
+            }
+
+            if (motion == ZMotionPreset.Idle)
+            {
+                ClearMotionPreviewPresentation();
+                SetMotionPreset(ZMotionPreset.Idle);
+                return;
+            }
+
+            previewPresentationActive = true;
+            SetGesture(ZGesture.None);
+            SetExpression(GetPreviewExpression(motion));
+            SetGaze(GetPreviewGaze(motion));
+            // 预览只切换状态，动作时钟统一由 UpdateMotionTargets 推进。
+            SetMotionPreset(motion);
+        }
+
+        public void StopMotionPreview()
+        {
+            SetMotionPreset(ZMotionPreset.Idle);
+            ClearMotionPreviewPresentation();
+        }
+
+        public void ResetPerformance()
+        {
+            CancelCurrentPerformance();
+        }
+
+        public bool IsParameterAvailable(string id)
+        {
+            BuildParameterCache();
+            return !string.IsNullOrEmpty(id) && parameters.ContainsKey(id);
+        }
+
+        public bool TryGetParameterValue(string id, out float value)
+        {
+            BuildParameterCache();
+            if (parameters.TryGetValue(id ?? string.Empty, out var parameter))
+            {
+                value = parameter.Value;
+                return true;
+            }
+
+            value = 0f;
+            return false;
+        }
+
+        public bool TryGetParameterRange(string id, out float minimum, out float maximum)
+        {
+            BuildParameterCache();
+            if (parameters.TryGetValue(id ?? string.Empty, out var parameter))
+            {
+                minimum = parameter.MinimumValue;
+                maximum = parameter.MaximumValue;
+                return true;
+            }
+
+            minimum = 0f;
+            maximum = 0f;
+            return false;
+        }
+
+        public bool TryGetParameterInfo(string id, out float minimum, out float maximum, out float defaultValue)
+        {
+            BuildParameterCache();
+            if (parameters.TryGetValue(id ?? string.Empty, out var parameter))
+            {
+                minimum = parameter.MinimumValue;
+                maximum = parameter.MaximumValue;
+                defaultValue = parameter.DefaultValue;
+                return true;
+            }
+
+            minimum = 0f;
+            maximum = 0f;
+            defaultValue = 0f;
+            return false;
+        }
+
+        private IEnumerator PlaySegmentsRoutine(string turnId, IList<DialogueClient.ChatSegment> segments)
+        {
+            for (var i = 0; i < segments.Count; i++)
+            {
+                if (!string.Equals(turnId, activePerformanceTurnId, StringComparison.Ordinal))
+                    yield break;
+
+                var segment = segments[i];
+                if (segment == null)
+                    continue;
+
+                SetExpression(segment.expression);
+                SetGesture(segment.gesture);
+                SetGaze(segment.gaze);
+                SetMotionForSegment(segment);
+                yield return new WaitForSeconds(Mathf.Clamp(segmentDuration, 0.1f, maxSegmentDuration));
+            }
+
+            if (string.Equals(turnId, activePerformanceTurnId, StringComparison.Ordinal))
+            {
+                performanceCoroutine = null;
+                ResetPerformanceToNeutral();
+            }
+        }
+
+        private void ResetPerformanceToNeutral()
+        {
+            previewPresentationActive = false;
+            SetExpression(ZFaceExpression.Neutral);
+            SetGesture(ZGesture.None);
+            SetGaze(ZGaze.Player);
+            SetMotionPreset(ZMotionPreset.Idle);
+        }
+
+        private void EndMotionPreviewPresentation()
+        {
+            if (!previewPresentationActive)
+                return;
+
+            ClearMotionPreviewPresentation();
+        }
+
+        private void ClearMotionPreviewPresentation()
+        {
+            previewPresentationActive = false;
+            SetExpression(ZFaceExpression.Neutral);
+            SetGesture(ZGesture.None);
+            SetGaze(ZGaze.Player);
+        }
+
+        private static ZFaceExpression GetPreviewExpression(ZMotionPreset motion)
+        {
+            switch (motion)
+            {
+                case ZMotionPreset.Nod:
+                case ZMotionPreset.Happy:
+                    return ZFaceExpression.Smile;
+                case ZMotionPreset.Shake:
+                case ZMotionPreset.Think:
+                    return ZFaceExpression.Troubled;
+                default:
+                    return ZFaceExpression.Neutral;
+            }
+        }
+
+        private static ZGaze GetPreviewGaze(ZMotionPreset motion)
+        {
+            return motion == ZMotionPreset.Think ? ZGaze.Away : ZGaze.Player;
+        }
+
+        private void EvaluateAndWrite(float deltaTime)
+        {
+            BuildParameterCache();
+            if (!IsModelReady)
+                return;
+
+            UpdateIdleTargets(Mathf.Max(0f, deltaTime));
+            UpdateMotionTargets(Mathf.Max(0f, deltaTime));
+            foreach (var id in activeWriters)
+            {
+                if (!parameters.TryGetValue(id, out var parameter))
+                    continue;
+                if (!targets.TryGetValue(id, out var target))
+                    target = parameter.DefaultValue;
+                if (!smoothedValues.TryGetValue(id, out var smoothedValue))
+                    smoothedValue = parameter.DefaultValue;
+
+                var speed = IsMotionParameter(id)
+                    ? motionBlendSpeed * Mathf.Clamp(motionSpeedMultiplier, 0.25f, 2f)
+                    : blendSpeed;
+                var factor = 1f - Mathf.Exp(-Mathf.Max(0.1f, speed) * Mathf.Max(0f, deltaTime));
+                smoothedValue = Mathf.Lerp(smoothedValue, target, factor);
+                smoothedValue = Mathf.Clamp(smoothedValue, parameter.MinimumValue, parameter.MaximumValue);
+                smoothedValues[id] = smoothedValue;
+                parameter.Value = smoothedValue;
+            }
+        }
+
+        private void UpdateIdleTargets(float deltaTime)
+        {
+            if (parameters.ContainsKey("ParamBreath"))
+            {
+                var breath = Mathf.Sin(Time.time * Mathf.PI * 2f / Mathf.Max(0.5f, breathPeriod)) * breathAmplitude;
+                SetTarget("ParamBreath", GetDefaultValue("ParamBreath") + breath);
+            }
+
+            if (blinkRemaining > 0f)
+            {
+                blinkRemaining -= deltaTime;
+                SetTarget("ParamEyeLOpen", 0f);
+                SetTarget("ParamEyeROpen", 0f);
+                if (blinkRemaining <= 0f)
+                    nextBlinkIn = UnityEngine.Random.Range(blinkMinInterval, blinkMaxInterval);
+            }
+            else
+            {
+                nextBlinkIn -= deltaTime;
+                SetTargetToDefault("ParamEyeLOpen");
+                SetTargetToDefault("ParamEyeROpen");
+                if (nextBlinkIn <= 0f)
+                    blinkRemaining = Mathf.Max(0.03f, blinkDuration);
+            }
+        }
+
+        private void UpdateMotionTargets(float deltaTime)
+        {
+            motionElapsed += deltaTime * Mathf.Clamp(motionSpeedMultiplier, 0.25f, 2f);
+            for (var i = 0; i < s_motionParameterIds.Length; i++)
+                SetTargetToDefault(s_motionParameterIds[i]);
+
+            var phase = Time.time * Mathf.PI * 2f * Mathf.Clamp(motionSpeedMultiplier, 0.25f, 2f) /
+                        Mathf.Max(0.5f, idleMotionPeriod);
+            switch (currentMotion)
+            {
+                case ZMotionPreset.Nod:
+                    ApplyNodMotion(motionElapsed);
+                    if (motionElapsed >= 1.35f)
+                    {
+                        SetMotionPreset(ZMotionPreset.Idle);
+                        EndMotionPreviewPresentation();
+                    }
+                    break;
+                case ZMotionPreset.Shake:
+                    ApplyShakeMotion(motionElapsed);
+                    if (motionElapsed >= 1.45f)
+                    {
+                        SetMotionPreset(ZMotionPreset.Idle);
+                        EndMotionPreviewPresentation();
+                    }
+                    break;
+                case ZMotionPreset.Think:
+                    ApplyThinkMotion(motionElapsed);
+                    if (motionElapsed >= 2.4f)
+                    {
+                        SetMotionPreset(ZMotionPreset.Idle);
+                        EndMotionPreviewPresentation();
+                    }
+                    break;
+                case ZMotionPreset.Listen:
+                    ApplyListenMotion(motionElapsed);
+                    if (motionElapsed >= 2.8f)
+                    {
+                        SetMotionPreset(ZMotionPreset.Idle);
+                        EndMotionPreviewPresentation();
+                    }
+                    break;
+                case ZMotionPreset.Happy:
+                    ApplyHappyMotion(motionElapsed);
+                    if (motionElapsed >= 1.8f)
+                    {
+                        SetMotionPreset(ZMotionPreset.Idle);
+                        EndMotionPreviewPresentation();
+                    }
+                    break;
+                default:
+                    // 待机只做很小的漂移，避免模型在没有回复时完全僵住。
+                    SetMotionOffset("ParamAngleZ", 0.18f * Mathf.Sin(phase));
+                    SetMotionOffset("ParamAngleX", 0.08f * Mathf.Sin(phase * 0.61f + 0.7f));
+                    SetMotionOffset("ParamBodyAngleZ", 0.12f * Mathf.Sin(phase * 0.53f + 1.1f));
+                    break;
+            }
+        }
+
+        private void ApplyNodMotion(float elapsed)
+        {
+            var envelope = Mathf.Exp(-1.55f * elapsed);
+            var wave = Mathf.Sin(elapsed * Mathf.PI * 2f * 1.15f) * envelope;
+            SetMotionOffset("ParamAngleY", -0.9f * wave);
+            SetMotionOffset("ParamBodyAngleY", -0.28f * wave);
+            SetMotionOffset("ParamAngleZ", 0.14f * wave);
+        }
+
+        private void ApplyShakeMotion(float elapsed)
+        {
+            var envelope = Mathf.Exp(-1.25f * elapsed);
+            var wave = Mathf.Sin(elapsed * Mathf.PI * 2f * 2.15f) * envelope;
+            SetMotionOffset("ParamAngleX", 0.72f * wave);
+            SetMotionOffset("ParamBodyAngleX", 0.22f * wave);
+            SetMotionOffset("ParamAngleZ", 0.10f * wave);
+        }
+
+        private void ApplyThinkMotion(float elapsed)
+        {
+            var settle = 1f - Mathf.Exp(-2.4f * elapsed);
+            var exit = Mathf.SmoothStep(1f, 0f, Mathf.InverseLerp(1.8f, 2.4f, elapsed));
+            var slowWave = Mathf.Sin(elapsed * Mathf.PI * 2f * 0.48f);
+            SetMotionOffset("ParamAngleZ", (0.48f * settle + 0.15f * slowWave) * exit);
+            SetMotionOffset("ParamAngleY", -0.22f * settle * exit);
+            SetMotionOffset("ParamBodyAngleZ", 0.20f * settle * exit);
+        }
+
+        private void ApplyListenMotion(float elapsed)
+        {
+            var settle = 1f - Mathf.Exp(-2.8f * elapsed);
+            var exit = Mathf.SmoothStep(1f, 0f, Mathf.InverseLerp(2.15f, 2.8f, elapsed));
+            var breathe = Mathf.Sin(elapsed * Mathf.PI * 2f * 0.36f);
+            SetMotionOffset("ParamAngleZ", (-0.32f * settle + 0.08f * breathe) * exit);
+            SetMotionOffset("ParamAngleY", 0.12f * settle * exit);
+            SetMotionOffset("ParamBodyAngleZ", -0.16f * settle * exit);
+        }
+
+        private void ApplyHappyMotion(float elapsed)
+        {
+            var envelope = Mathf.Exp(-1.35f * elapsed);
+            var wave = Mathf.Sin(elapsed * Mathf.PI * 2f * 1.45f) * envelope;
+            SetMotionOffset("ParamAngleY", -0.48f * wave);
+            SetMotionOffset("ParamAngleZ", 0.28f * wave);
+            SetMotionOffset("ParamBodyAngleZ", 0.32f * wave);
+        }
+
+        private void SetMotionOffset(string id, float normalizedOffset)
+        {
+            if (!parameters.TryGetValue(id ?? string.Empty, out var parameter))
+                return;
+
+            var range = Mathf.Max(0.001f, parameter.MaximumValue - parameter.MinimumValue);
+            var isBodyParameter = id.StartsWith("ParamBody", StringComparison.Ordinal);
+            var ratio = isBodyParameter ? bodyMotionRangeRatio : headMotionRangeRatio;
+            var gain = currentMotion == ZMotionPreset.Idle
+                ? idleMotionGain
+                : (isBodyParameter ? activeBodyMotionGain : activeHeadMotionGain);
+            var value = parameter.DefaultValue + normalizedOffset * range * ratio *
+                        gain * Mathf.Clamp(motionAmplitudeMultiplier, 0.25f, 2f);
+            SetTarget(id, Mathf.Clamp(value, parameter.MinimumValue, parameter.MaximumValue));
+        }
+
+        private bool IsMotionParameter(string id)
+        {
+            for (var i = 0; i < s_motionParameterIds.Length; i++)
+            {
+                if (s_motionParameterIds[i] == id)
+                    return true;
+            }
+            return false;
+        }
+
+        private void SetMotionForSegment(DialogueClient.ChatSegment segment)
+        {
+            if (segment == null)
+                return;
+
+            var gesture = segment.gesture ?? string.Empty;
+            if (string.Equals(gesture, "wave", StringComparison.OrdinalIgnoreCase))
+                SetMotionPreset(ZMotionPreset.Happy);
+            else if (string.Equals(gesture, "explain", StringComparison.OrdinalIgnoreCase))
+                SetMotionPreset(ZMotionPreset.Nod);
+            else if (string.Equals(gesture, "point", StringComparison.OrdinalIgnoreCase))
+                SetMotionPreset(ZMotionPreset.Listen);
+            else if (string.Equals(segment.expression, "troubled", StringComparison.OrdinalIgnoreCase))
+                SetMotionPreset(ZMotionPreset.Think);
+            else if (string.Equals(segment.expression, "angry", StringComparison.OrdinalIgnoreCase))
+                SetMotionPreset(ZMotionPreset.Shake);
+            else if (string.Equals(segment.expression, "smile", StringComparison.OrdinalIgnoreCase))
+                SetMotionPreset(ZMotionPreset.Happy);
+            else
+                // 普通 neutral 回应也给一个很轻的点头，避免对话反馈突然僵住。
+                SetMotionPreset(ZMotionPreset.Nod);
+        }
+
+        private void SetTarget(string id, float value)
+        {
+            if (!IsWhitelisted(id))
+                return;
+            targets[id] = value;
+            activeWriters.Add(id);
+        }
+
+        private void SetTargetToDefault(string id)
+        {
+            SetTarget(id, GetDefaultValue(id));
+        }
+
+        private float GetDefaultValue(string id)
+        {
+            return parameters.TryGetValue(id ?? string.Empty, out var parameter) ? parameter.DefaultValue : 0f;
+        }
+
+        private bool IsWhitelisted(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return false;
+            for (var i = 0; i < s_parameterDescriptors.Length; i++)
+            {
+                if (s_parameterDescriptors[i].id == id)
+                    return true;
+            }
+            return false;
+        }
+
+        private void WriteDefaultsImmediately()
+        {
+            foreach (var id in activeWriters)
+            {
+                if (parameters.TryGetValue(id, out var parameter))
+                {
+                    parameter.Value = parameter.DefaultValue;
+                    smoothedValues[id] = parameter.DefaultValue;
+                }
+            }
+
+            targets.Clear();
+            activeWriters.Clear();
+            smoothedValues.Clear();
+        }
+
+        private void ResolveCubismComponents()
+        {
+            if (cubismModel == null)
+                cubismModel = GetComponentInChildren<CubismModel>(true);
+            if (cubismUpdateController == null)
+                cubismUpdateController = GetComponentInChildren<CubismUpdateController>(true);
+
+            if (cubismModel == null && !warnedNoModel)
+            {
+                warnedNoModel = true;
+                Debug.LogWarning("[ZPerformanceController] 未找到 CubismModel，请绑定导入模型 Prefab。", this);
+            }
+        }
+
+        private void CaptureAndSuspendAnimators()
+        {
+            if (!suspendAnimatorDuringRuntime || animatorStatesCaptured)
+                return;
+
+            var animators = GetComponentsInChildren<Animator>(true);
+            for (var i = 0; i < animators.Length; i++)
+            {
+                var animator = animators[i];
+                if (animator == null)
+                    continue;
+
+                suspendedAnimatorStates.Add(new AnimatorState(animator, animator.enabled));
+                if (animator.enabled)
+                    animator.enabled = false;
+            }
+            animatorStatesCaptured = true;
+        }
+
+        private void RestoreAnimatorStates()
+        {
+            if (!animatorStatesCaptured)
+                return;
+
+            for (var i = 0; i < suspendedAnimatorStates.Count; i++)
+            {
+                var state = suspendedAnimatorStates[i];
+                if (state.animator != null)
+                    state.animator.enabled = state.enabled;
+            }
+            suspendedAnimatorStates.Clear();
+            animatorStatesCaptured = false;
+        }
+
+        private void BuildParameterCache()
+        {
+            ResolveCubismComponents();
+            CaptureAndSuspendAnimators();
+            // MVP 只绑定场景中的一个模型生命周期；运行时换模型不在支持范围内。
+            if (cacheBuilt)
+                return;
+            if (cubismModel == null || cubismModel.Parameters == null)
+                return;
+
+            var hadCache = cacheBuilt;
+            parameters.Clear();
+            targets.Clear();
+            smoothedValues.Clear();
+            activeWriters.Clear();
+            for (var i = 0; i < s_parameterDescriptors.Length; i++)
+            {
+                var id = s_parameterDescriptors[i].id;
+                var parameter = cubismModel.Parameters.FindById(id);
+                if (parameter == null)
+                {
+                    if (warnedMissingIds.Add(id))
+                        Debug.LogWarning("[ZPerformanceController] 模型缺少参数：" + id, this);
+                    continue;
+                }
+                parameters[id] = parameter;
+                smoothedValues[id] = parameter.DefaultValue;
+            }
+
+            cacheBuilt = parameters.Count > 0;
+            if (!hadCache && cacheBuilt)
+                ResetPerformanceToNeutral();
+        }
+
+        private static ZFaceExpression ParseExpression(string value)
+        {
+            if (string.Equals(value, "smile", StringComparison.OrdinalIgnoreCase)) return ZFaceExpression.Smile;
+            if (string.Equals(value, "surprise", StringComparison.OrdinalIgnoreCase)) return ZFaceExpression.Surprise;
+            if (string.Equals(value, "angry", StringComparison.OrdinalIgnoreCase)) return ZFaceExpression.Angry;
+            if (string.Equals(value, "troubled", StringComparison.OrdinalIgnoreCase)) return ZFaceExpression.Troubled;
+            if (string.Equals(value, "blush", StringComparison.OrdinalIgnoreCase)) return ZFaceExpression.Blush;
+            return ZFaceExpression.Neutral;
+        }
+
+        private static ZGesture ParseGesture(string value)
+        {
+            if (string.Equals(value, "wave", StringComparison.OrdinalIgnoreCase)) return ZGesture.Wave;
+            if (string.Equals(value, "explain", StringComparison.OrdinalIgnoreCase)) return ZGesture.Explain;
+            if (string.Equals(value, "point", StringComparison.OrdinalIgnoreCase)) return ZGesture.Point;
+            return ZGesture.None;
+        }
+
+        private static ZGaze ParseGaze(string value)
+        {
+            return string.Equals(value, "away", StringComparison.OrdinalIgnoreCase)
+                ? ZGaze.Away
+                : ZGaze.Player;
+        }
+
+        private static ZMotionPreset ParseMotionPreset(string value)
+        {
+            if (string.Equals(value, "nod", StringComparison.OrdinalIgnoreCase)) return ZMotionPreset.Nod;
+            if (string.Equals(value, "shake", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(value, "shake_head", StringComparison.OrdinalIgnoreCase)) return ZMotionPreset.Shake;
+            if (string.Equals(value, "think", StringComparison.OrdinalIgnoreCase)) return ZMotionPreset.Think;
+            if (string.Equals(value, "listen", StringComparison.OrdinalIgnoreCase)) return ZMotionPreset.Listen;
+            if (string.Equals(value, "happy", StringComparison.OrdinalIgnoreCase)) return ZMotionPreset.Happy;
+            return ZMotionPreset.Idle;
+        }
+    }
+}
