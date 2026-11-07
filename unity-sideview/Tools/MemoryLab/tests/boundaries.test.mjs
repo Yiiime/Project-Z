@@ -21,7 +21,7 @@ test('timeout releases the request slot and subsequent generation recovers',asyn
 test('no configured model still accepts authoritative Day4, but never fabricates speech',async t=>{
  const {engine,provider,input}=setup(t,4);provider.publicConfig=()=>({configured:false});
  const delivered=await engine.sync({...input,eventData:{id:'boundary_world_day4',seq:1,kind:'day4',day:4,period:0}});
- assert.equal(JSON.parse(delivered.checkpoint).memories.filter(m=>m.origin==='public_day4').length,7);
+ assert.equal(JSON.parse(delivered.checkpoint).memories.filter(m=>m.origin==='public_day4').length,10);
  await assert.rejects(engine.utterance({...input,requestId:'no_model',actorId:'c01',recipientId:'c02',scene:'Street',conversationId:'none'}),/尚未连接/);
  assert.equal(provider.calls.length,0);
 });

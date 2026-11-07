@@ -1,3 +1,20 @@
+# 当前界面：PR32 外观与十人 AI 对话
+
+2026-11-06：以 PR32 提交 `70be1c7` 的布局和样式为基准，移植 UIStyleConfig、RoundedPanel、UIHoverFeedback 与 InteractionPromptUI。当前功能由已有记忆／移动／直播模块驱动，不引入 PR32 的剧情书签、8 帧主角或全局对话物理锁。
+
+| 界面 | 接入方式 |
+| --- | --- |
+| 玩家对话 | MemoryDialogueView 使用左人物区、右对话与输入；Esc 有反向退出动画。关闭动画期间只继续锁玩家输入。 |
+| 立绘 | 仅 z_story 绑定 PR32 Z 模型；无立绘时隐藏人物区，同一输入流程。按文字显示驱动嘴部变化。 |
+| NPC 互聊 | 沿用附近字幕，只暂停参与者，不打开全屏界面。 |
+| 菜单 | 地图、手机、日志与暂停渐入渐出；关闭完成后执行旅行或重开；WorldDirector 可立即取消菜单过渡。 |
+| 直播 | 保留现有 NativeLiveHost 与 ZLive 功能，live.uss 适配深色半透明外观。 |
+| 输入 | TMP_InputField 与文本组件统一纯文本；IME 组合文本未提交时不发送。 |
+
+当前验收与限制见 [MemoryIntegration.md](MemoryIntegration.md)。以下保留旧阶段的实施记录，不覆盖上面的当前规则。
+
+---
+
 # Phase 4 · UI implementation
 
 Implemented under `Assets/Seabreeze/Scripts/UI` as an independent UGUI / TextMeshPro module. GameBootstrap calls GameUI.Initialize after GameSession is ready.

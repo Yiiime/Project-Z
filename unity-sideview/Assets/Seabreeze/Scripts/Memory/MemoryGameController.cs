@@ -11,7 +11,7 @@ namespace Seabreeze
         public SevenNpcSpawner Spawner {get;private set;}
         public NpcConversationCoordinator Conversations {get;private set;}
         public MemoryDialogueView View {get;private set;}
-        public bool PlayerChatOpen => Conversations!=null&&Conversations.PlayerActor!=null;
+        public bool PlayerChatOpen => (Conversations!=null&&Conversations.PlayerActor!=null)||(View!=null&&View.Closing);
         public void Initialize(GameSession s,WorldDirector w)
         {
             session=s;world=w;
@@ -38,10 +38,10 @@ namespace Seabreeze
         {
             if(changing||session?.State?.memory==null||View==null||session.State.day<4)return;
             var state=session.State.memory;
+            state.publicDay4KnownBy=SevenCharacterCatalog.Actors.Select(a=>a.id).Concat(new[]{"player"}).Distinct().ToArray();
             if(!state.day4Published)
             {
                 state.day4Published=true;
-                state.publicDay4KnownBy=SevenCharacterCatalog.Actors.Select(a=>a.id).Concat(new[]{"player","z_story"}).ToArray();
                 session.Story.AddJournal("Day4 全岛公告：小岛将要毁灭。所有角色收到公开消息，未公布具体期限。");
                 Append(new MemoryEvent { id=state.worldId+"_day4",kind="day4",day=4,period=0 });
             }
@@ -50,6 +50,7 @@ namespace Seabreeze
         public void Append(MemoryEvent e)
         {
             var state=session.State.memory;
+            e.personaRevision=2;
             e.seq=++state.nextSeq;
             if(string.IsNullOrEmpty(e.id))e.id="evt_"+Guid.NewGuid().ToString("N");
             if(e.day==0){e.day=session.State.day;e.period=session.State.period;}

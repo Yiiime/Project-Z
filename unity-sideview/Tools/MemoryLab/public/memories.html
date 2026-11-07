@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>岛民记忆 · 观察室</title><link rel="stylesheet" href="/memories.css"></head>
+<body>
+<header class="top"><div><p class="eyebrow">PROJECT Z · MEMORY LAB</p><h1>岛民的记忆</h1><p class="intro">看看他们经历了什么，又怎样记住彼此。</p></div><a href="/settings">模型设置 ↗</a></header>
+<main>
+  <section class="toolbar" aria-label="游戏进度">
+    <label class="world-label">正在查看的进度<select id="world"><option value="">等待游戏连接</option></select></label>
+    <div class="refresh"><label><input id="auto" type="checkbox" checked>自动刷新</label><button id="refresh" type="button">刷新</button><span id="status" role="status">正在连接…</span></div>
+  </section>
+  <p class="notice">本机开发视角 · 包含私有记忆与剧情剧透。查看不会让 NPC 多知道什么，也不会强化或修改记忆。页面显示服务最近确认的进度。</p>
+  <nav id="actors" aria-label="选择 NPC"></nav>
+  <section class="workspace">
+    <div class="collection">
+      <div class="collection-title"><div><p class="eyebrow">MEMORY COLLECTION</p><h2 id="actor-name">等待角色记忆</h2></div><span id="total" class="count">0 条</span></div>
+      <p id="pending" class="pending" hidden></p>
+      <div class="filters"><label class="search"><span class="sr-only">搜索记忆</span><input id="search" type="search" placeholder="搜索内容、人物或来源"></label><label><span class="sr-only">记忆类型</span><select id="kind"><option value="">全部类型</option><option value="experience">亲身经历</option><option value="hearsay">听别人说</option><option value="commitment">约定</option><option value="reflection">自己的看法</option></select></label></div>
+      <div id="memory-list" aria-label="记忆列表"></div>
+    </div>
+    <article id="detail" aria-label="记忆详情"><div class="empty">在左侧选择一条记忆，查看原文与来源。</div></article>
+  </section>
+</main>
+<footer>容易想起 ≠ 细节清晰 · 数值随游戏时间变化，不随网页打开时长变化。</footer>
+<script src="/memories.js"></script>
+</body></html>
