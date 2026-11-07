@@ -124,6 +124,9 @@ namespace Seabreeze
                 while(Game.State.day<day)Game.Clock.Advance();yield return Ready();
                 if(day==4)
                 {
+                    string notice=null;Action<string> capture=message=>notice=message;
+                    Game.Story.Toast+=capture;Game.Story.Interact("noticeboard");Game.Story.Toast-=capture;
+                    Record("no-fixed-day4-announcement",!Game.Story.Objective.Contains("毁灭")&&notice!=null&&!notice.Contains("毁灭"));
                     Memory.PublishStoryEvent("verify_private_day4","仅林序接收的船务测试通知，核对代号：琥珀海燕492。",new[]{"linxu"},true,new[]{"linxu"});yield return Ready();
                     var secret=Checkpoint()["records"]?["event"]?.FirstOrDefault(e=>(string)e["id"]==Memory.StoryEventId("verify_private_day4"));
                     Record("day4-directed-event",secret!=null&&!secret["visible"].Values<string>().Contains("z"),secret?["visible"]);
