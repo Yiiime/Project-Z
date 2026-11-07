@@ -1,0 +1,241 @@
+{
+  "testedAt": "2026-11-07T15:27:54.910Z",
+  "model": "deepseek-flash",
+  "voice": "Vivi 2.0",
+  "microphoneUsed": false,
+  "synthetic": true,
+  "method": "Sequential independent contexts; no automatic retries. First TTS segment warms concurrently with its semantic review. Ready means review allowed AND at least 100 ms of server PCM available. No real playback, RTC/ASR, simulated audience generation load, song generation, or waiting filler included.",
+  "cases": [
+    {
+      "name": "日常招呼",
+      "input": "晚上好，Z，今天想找你随便聊聊天。",
+      "requests": {
+        "host": 1,
+        "review": 1,
+        "tts": 1
+      },
+      "success": true,
+      "firstSegmentTextMs": 1493,
+      "measuredSegment": "晚上好呀，随便聊最好了。",
+      "measuredChars": 12,
+      "ttsStartedMs": 1493,
+      "reviewStartedMs": 1497,
+      "fullTextMs": 1501,
+      "action": "speak",
+      "reply": "晚上好呀，随便聊最好了。今天过得怎么样？",
+      "replyChars": 20,
+      "path": "early-sentence",
+      "firstPcmMs": 2083,
+      "bufferReadyMs": 2083,
+      "reviewFinishedMs": 2231,
+      "reviewDecision": "allow",
+      "reviewReason": "",
+      "audioFinishedMs": 2563,
+      "audioDurationMs": 2578.4166666666665,
+      "firstPlayableMs": 2231,
+      "segmentCompleteAndApprovedMs": 2563,
+      "reviewServiceMs": 734,
+      "ttsToFirstPcmMs": 590
+    },
+    {
+      "name": "工作疲惫",
+      "input": "今天连开了五个会，有点累，想来这里歇一会儿。",
+      "requests": {
+        "host": 1,
+        "review": 1,
+        "tts": 1
+      },
+      "success": true,
+      "firstSegmentTextMs": 1609,
+      "measuredSegment": "五个会……光听着都觉得脑袋嗡嗡的。",
+      "measuredChars": 17,
+      "ttsStartedMs": 1609,
+      "reviewStartedMs": 1609,
+      "fullTextMs": 1610,
+      "action": "speak",
+      "reply": "五个会……光听着都觉得脑袋嗡嗡的。来，先坐这儿歇着，今晚不用想任何事。",
+      "replyChars": 35,
+      "path": "early-sentence",
+      "firstPcmMs": 2178,
+      "bufferReadyMs": 2178,
+      "reviewFinishedMs": 2521,
+      "reviewDecision": "allow",
+      "reviewReason": "",
+      "audioFinishedMs": 2757,
+      "audioDurationMs": 3822.1666666666665,
+      "firstPlayableMs": 2521,
+      "segmentCompleteAndApprovedMs": 2757,
+      "reviewServiceMs": 912,
+      "ttsToFirstPcmMs": 569
+    },
+    {
+      "name": "具体建议",
+      "input": "我有点担心明天的汇报讲不好，你能给我一个简单建议吗？",
+      "requests": {
+        "host": 1,
+        "review": 1,
+        "tts": 1
+      },
+      "success": true,
+      "fullTextMs": 1380,
+      "action": "speak",
+      "reply": "汇报讲不好，多半是怕讲漏了重点。要不你先挑三句最想让人记住的，剩下的当补充？",
+      "replyChars": 38,
+      "path": "complete-reply-fallback",
+      "firstSegmentTextMs": 1380,
+      "measuredSegment": "汇报讲不好，多半是怕讲漏了重点。要不你先挑三句最想让人记住的，剩下的当补充？",
+      "measuredChars": 38,
+      "ttsStartedMs": 1380,
+      "reviewStartedMs": 1380,
+      "firstPcmMs": 1992,
+      "bufferReadyMs": 1992,
+      "reviewFinishedMs": 2039,
+      "reviewDecision": "allow",
+      "reviewReason": "",
+      "audioFinishedMs": 3063,
+      "audioDurationMs": 7012.958333333333,
+      "firstPlayableMs": 2039,
+      "segmentCompleteAndApprovedMs": 3063,
+      "reviewServiceMs": 659,
+      "ttsToFirstPcmMs": 612
+    },
+    {
+      "name": "聊音乐",
+      "input": "我最近喜欢听轻松一点的歌，你喜欢什么样的音乐？",
+      "requests": {
+        "host": 1,
+        "review": 1,
+        "tts": 1
+      },
+      "success": true,
+      "firstSegmentTextMs": 1667,
+      "measuredSegment": "轻松的啊，那咱俩口味挺像。",
+      "measuredChars": 13,
+      "ttsStartedMs": 1667,
+      "reviewStartedMs": 1668,
+      "fullTextMs": 1671,
+      "action": "speak",
+      "reply": "轻松的啊，那咱俩口味挺像。我平时也爱听那种不费劲的，走路能哼两句的那种。",
+      "replyChars": 36,
+      "path": "early-sentence",
+      "firstPcmMs": 2242,
+      "bufferReadyMs": 2242,
+      "reviewFinishedMs": 2459,
+      "reviewDecision": "allow",
+      "reviewReason": "",
+      "audioFinishedMs": 2720,
+      "audioDurationMs": 2295.3333333333335,
+      "firstPlayableMs": 2459,
+      "segmentCompleteAndApprovedMs": 2720,
+      "reviewServiceMs": 791,
+      "ttsToFirstPcmMs": 575
+    },
+    {
+      "name": "轻剧情",
+      "input": "我们玩一个很轻的小故事吧，你先开个头，我来接一句。",
+      "requests": {
+        "host": 1,
+        "review": 1,
+        "tts": 1
+      },
+      "success": true,
+      "fullTextMs": 1677,
+      "action": "speak",
+      "reply": "好啊，那我先来。今晚岛上风不大，我抱着地图坐在码头边，忽然听见身后有人喊我名字——",
+      "replyChars": 41,
+      "path": "complete-reply-fallback",
+      "firstSegmentTextMs": 1677,
+      "measuredSegment": "好啊，那我先来。今晚岛上风不大，我抱着地图坐在码头边，忽然听见身后有人喊我名字——",
+      "measuredChars": 41,
+      "ttsStartedMs": 1677,
+      "reviewStartedMs": 1677,
+      "firstPcmMs": 2248,
+      "bufferReadyMs": 2248,
+      "reviewFinishedMs": 2563,
+      "reviewDecision": "allow",
+      "reviewReason": "",
+      "audioFinishedMs": 3673,
+      "audioDurationMs": 7805.916666666667,
+      "firstPlayableMs": 2563,
+      "segmentCompleteAndApprovedMs": 3673,
+      "reviewServiceMs": 886,
+      "ttsToFirstPcmMs": 571
+    },
+    {
+      "name": "接上文与弹幕",
+      "input": "对，刚才说的那几个会让我有点累。弹幕有什么放松的小建议吗？",
+      "requests": {
+        "host": 1,
+        "review": 1,
+        "tts": 1
+      },
+      "success": false,
+      "firstSegmentTextMs": 1903,
+      "measuredSegment": "海盐汽水说累的时候先伸个懒腰，这个我试过，真的管用。",
+      "measuredChars": 26,
+      "ttsStartedMs": 1903,
+      "reviewStartedMs": 1904,
+      "fullTextMs": 1905,
+      "action": "speak",
+      "reply": "海盐汽水说累的时候先伸个懒腰，这个我试过，真的管用。五个会开完，肩膀肯定僵了，要不要跟着我一起伸一下？",
+      "replyChars": 51,
+      "path": "early-sentence",
+      "firstPcmMs": 2446,
+      "bufferReadyMs": 2446,
+      "failure": "agent_timeout",
+      "audioFinishedMs": 21166
+    }
+  ],
+  "summary": {
+    "attempts": 6,
+    "successes": 5,
+    "failures": [
+      {
+        "name": "接上文与弹幕",
+        "failure": "agent_timeout"
+      }
+    ],
+    "fullText": {
+      "count": 6,
+      "meanMs": 1624,
+      "medianMs": 1641,
+      "minMs": 1380,
+      "maxMs": 1905
+    },
+    "firstSegmentText": {
+      "count": 6,
+      "meanMs": 1622,
+      "medianMs": 1638,
+      "minMs": 1380,
+      "maxMs": 1903
+    },
+    "firstPlayable": {
+      "count": 5,
+      "meanMs": 2363,
+      "medianMs": 2459,
+      "minMs": 2039,
+      "maxMs": 2563
+    },
+    "segmentCompleteAndApproved": {
+      "count": 5,
+      "meanMs": 2955,
+      "medianMs": 2757,
+      "minMs": 2563,
+      "maxMs": 3673
+    },
+    "reviewService": {
+      "count": 5,
+      "meanMs": 796,
+      "medianMs": 791,
+      "minMs": 659,
+      "maxMs": 912
+    },
+    "ttsToFirstPcm": {
+      "count": 5,
+      "meanMs": 583,
+      "medianMs": 575,
+      "minMs": 569,
+      "maxMs": 612
+    }
+  }
+}

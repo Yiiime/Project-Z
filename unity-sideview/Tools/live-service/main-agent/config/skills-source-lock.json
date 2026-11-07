@@ -22,6 +22,18 @@
       "sha256": "80018d44abd1eacc385c488b80647f343ea9f3b8dffd18018de333b6755c226a"
     },
     {
+      "path": "audience-reaction/references/host-release-review.md",
+      "sha256": "29ef0ac1f1b43c8bf30bffe77ca2ea238d65626501e6c7be77d9df8ada88d53b"
+    },
+    {
+      "path": "audience-reaction/references/host-sentence-repair.md",
+      "sha256": "2b0ffccf084db06b2e60469d48a44f94b2be6c03d8e23feeb61ae46b231600a1"
+    },
+    {
+      "path": "audience-reaction/references/host-turn-quality.md",
+      "sha256": "db9d1b720fb292c1341c50f33ecace9a631cf136609c3ce39d07f2968d94921b"
+    },
+    {
       "path": "call-companion/SKILL.md",
       "sha256": "1bf7febb823d3f69a2fd10ec86cdcdb9d79bc5a970e8154eb0f8721ad1af8a49"
     },

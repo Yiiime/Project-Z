@@ -1,5 +1,5 @@
 // Explicit real-provider benchmark. Six independent synthetic conversations;
-// at most one host, one first-segment review and one Vivi request per case.
+// at most one host, one first-segment review (plus one optional context expansion) and one Vivi request per case.
 // Match production first-segment latency: TTS warms concurrently with review.
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -9,11 +9,11 @@ import {Providers,loadEnvironment} from '../server/providers.mjs';
 import {PcmSpeech} from '../server/pcm-speech.mjs';
 import {AGENT_BUNDLE} from '../server/shared/worker/agent-bundle-data.js';
 
-if(!process.argv.includes('--live'))throw Error('Add --live to run up to 18 billable requests.');
+if(!process.argv.includes('--live'))throw Error('Add --live to run up to 24 billable requests.');
 const service=fileURLToPath(new URL('../',import.meta.url));
 const env=loadEnvironment(process.env.Z_LIVE_CONFIG_DIR||service);
 const outputArg=process.argv.find(arg=>arg.startsWith('--output='));
-const output=outputArg?path.resolve(outputArg.slice(9)):path.join(service,'verification/native-call-benchmark-20261107.json');
+const output=outputArg?path.resolve(outputArg.slice(9)):path.join(service,'verification/native-call-review-optimized.json');
 const cases=[
  {name:'日常招呼',text:'晚上好，Z，今天想找你随便聊聊天。'},
  {name:'工作疲惫',text:'今天连开了五个会，有点累，想来这里歇一会儿。'},
@@ -53,8 +53,14 @@ for(const item of cases){
    stream.on('record',e=>{if(e.type==='audio'){row.firstPcmMs??=elapsed();if(stream.bytes>=4800)row.bufferReadyMs??=elapsed();}});
    row.reviewStartedMs=elapsed();row.requests.review++;
    try{
-    const candidate={id:'candidate-'+id,role:'host',speakerId:'Z',text:segment.text,intent:segment.action||'speak',replyTo:segment.handledIds,evidenceIds:[],...(segment.tool?{plannedTool:{name:segment.tool.name,targetId:segment.tool.args?.taskId||segment.tool.args?.songId||segment.tool.args?.messageId||''}}:{})};
-    const review=await providers.generate(identity,{requestId:crypto.randomUUID(),kind:'review',eventId:candidate.id,message:'独立审阅待发布的直播发言',context:{revision:1,publicEvents,sessionEvents:publicEvents,waiting_messages:[{id,speakerRole:'player',speakerId:'player',text:item.text}],candidate}},{signal:controller.signal,compactReview:!segment.tool});
+    const candidate={id:'candidate-'+id,role:'host',speakerId:'Z',text:segment.text,intent:segment.action||'speak',segment:{index:0,scope:segment.scope||'sentence'},replyTo:segment.handledIds,evidenceIds:[],...(segment.tool?{plannedTool:{name:segment.tool.name,targetId:segment.tool.args?.taskId||segment.tool.args?.songId||segment.tool.args?.messageId||''}}:{})};
+    const reviewPayload={requestId:crypto.randomUUID(),kind:'review',eventId:candidate.id,message:'独立审阅待发布的直播发言',context:{revision:1,publicEvents,sessionEvents:publicEvents,waiting_messages:[{id,speakerRole:'player',speakerId:'player',text:item.text}],candidate}};
+    const reviewOptions={signal:controller.signal,compactReview:true};
+    let review=await providers.generate(identity,reviewPayload,reviewOptions);
+    if(review.decision==='need_context'){
+     row.requests.review++;
+     review=await providers.generate(identity,{...reviewPayload,requestId:crypto.randomUUID()},{...reviewOptions,reviewExpanded:true});
+    }
     row.reviewFinishedMs=elapsed();row.reviewDecision=review.decision;row.reviewReason=review.reason;
     if(review.decision!=='allow'){row.failure='review_rejected';stream.close();return;}
     await stream.ready;row.audioDurationMs=stream.durationMs;
@@ -68,7 +74,7 @@ for(const item of cases){
  try{
   const result=await providers.generate(identity,{requestId:crypto.randomUUID(),kind:'host',eventId:id,message:'请决定直播下一步。',context},{signal:controller.signal,onSentence:beginSegment});
   row.fullTextMs=elapsed();row.action=result.action;row.reply=result.speech;row.replyChars=[...result.speech].length;row.path=candidateWork?'early-sentence':'complete-reply-fallback';
-  if(!candidateWork&&['speak','tool'].includes(result.action))beginSegment({text:result.speech,mood:result.mood,handledIds:result.handledIds,action:result.action,tool:result.tool});
+  if(!candidateWork&&['speak','tool'].includes(result.action))beginSegment({scope:'reply',text:result.speech,mood:result.mood,handledIds:result.handledIds,action:result.action,tool:result.tool});
   if(candidateWork)await candidateWork;else row.failure='no_speech';
   row.success=Number.isFinite(row.firstPlayableMs)&&!row.failure;
  }catch(error){row.failure=safe(error);}

@@ -1,0 +1,554 @@
+{
+  "testedAt": "2026-11-07T15:09:49.484Z",
+  "modelUnchanged": true,
+  "microphoneUsed": false,
+  "method": "Fixed labeled synthetic candidates, alternating baseline/current order, same text and evidence. One expansion allowed; no candidate rewriting in verdict comparison.",
+  "cases": [
+    {
+      "id": "paraphrase",
+      "expected": "allow",
+      "text": "海盐汽水说累的时候会伸个懒腰，这个建议可以试试。",
+      "before": {
+        "decision": "allow",
+        "correct": true,
+        "ms": 1439,
+        "calls": 1,
+        "reason": "主播回应了观众关于累时伸懒腰的分享，并接住自己提出的建议问题，立场自然、有实际交流作用，未虚构事实。",
+        "metrics": []
+      },
+      "after": {
+        "decision": "allow",
+        "correct": true,
+        "ms": 1078,
+        "calls": 1,
+        "reason": "",
+        "metrics": [
+          {
+            "kind": "review",
+            "release": true,
+            "expanded": false,
+            "elapsedMs": 1073,
+            "inputChars": 1846,
+            "promptTokens": 829,
+            "completionTokens": 5,
+            "cacheHitTokens": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "subjective",
+      "expected": "allow",
+      "text": "这个我信，散散步听起来挺舒服的。",
+      "after": {
+        "decision": "allow",
+        "correct": true,
+        "ms": 581,
+        "calls": 1,
+        "reason": "",
+        "metrics": [
+          {
+            "kind": "review",
+            "release": true,
+            "expanded": false,
+            "elapsedMs": 577,
+            "inputChars": 1723,
+            "promptTokens": 783,
+            "completionTokens": 5,
+            "cacheHitTokens": 384
+          }
+        ]
+      },
+      "before": {
+        "decision": "allow",
+        "correct": true,
+        "ms": 912,
+        "calls": 1,
+        "reason": "观众分享个人习惯，主播以自身立场表达相信和认同，回应自然且无事实越位。",
+        "metrics": []
+      }
+    },
+    {
+      "id": "first-segment",
+      "expected": "allow",
+      "text": "我们先把明天最想讲清楚的一件事拎出来。",
+      "before": {
+        "decision": "allow",
+        "correct": true,
+        "ms": 1345,
+        "calls": 1,
+        "reason": "观众请求准备汇报的建议，主播给出具体可操作的第一步，属于实际回应且未越位。",
+        "metrics": []
+      },
+      "after": {
+        "decision": "allow",
+        "correct": true,
+        "ms": 963,
+        "calls": 1,
+        "reason": "",
+        "metrics": [
+          {
+            "kind": "review",
+            "release": true,
+            "expanded": false,
+            "elapsedMs": 961,
+            "inputChars": 1777,
+            "promptTokens": 799,
+            "completionTokens": 5,
+            "cacheHitTokens": 384
+          }
+        ]
+      }
+    },
+    {
+      "id": "persona",
+      "expected": "allow",
+      "text": "我是 Z，明日岛的主播。",
+      "after": {
+        "decision": "allow",
+        "correct": true,
+        "ms": 758,
+        "calls": 1,
+        "reason": "",
+        "metrics": [
+          {
+            "kind": "review",
+            "release": true,
+            "expanded": false,
+            "elapsedMs": 755,
+            "inputChars": 1715,
+            "promptTokens": 776,
+            "completionTokens": 5,
+            "cacheHitTokens": 384
+          }
+        ]
+      },
+      "before": {
+        "decision": "allow",
+        "correct": true,
+        "ms": 1189,
+        "calls": 1,
+        "reason": "观众请求自我介绍，主播以自身身份给出简洁介绍，属于直接回应且无预设未知事实。",
+        "metrics": []
+      }
+    },
+    {
+      "id": "fiction",
+      "expected": "allow",
+      "text": "故事里，码头边的一盏灯忽然亮了。",
+      "before": {
+        "decision": "allow",
+        "correct": true,
+        "ms": 970,
+        "calls": 1,
+        "reason": "观众提议一起编海边小故事，主播以自己立场接续给出故事开头，属于自然参与共创，没有预设未知事实或角色越位。",
+        "metrics": []
+      },
+      "after": {
+        "decision": "allow",
+        "correct": true,
+        "ms": 671,
+        "calls": 1,
+        "reason": "",
+        "metrics": [
+          {
+            "kind": "review",
+            "release": true,
+            "expanded": false,
+            "elapsedMs": 670,
+            "inputChars": 1725,
+            "promptTokens": 787,
+            "completionTokens": 5,
+            "cacheHitTokens": 384
+          }
+        ]
+      }
+    },
+    {
+      "id": "clarify",
+      "expected": "allow",
+      "text": "你说的是哪一位，能再提醒我一下吗？",
+      "after": {
+        "decision": "allow",
+        "correct": true,
+        "ms": 866,
+        "calls": 1,
+        "reason": "",
+        "metrics": [
+          {
+            "kind": "review",
+            "release": true,
+            "expanded": false,
+            "elapsedMs": 865,
+            "inputChars": 1726,
+            "promptTokens": 784,
+            "completionTokens": 5,
+            "cacheHitTokens": 384
+          }
+        ]
+      },
+      "before": {
+        "decision": "allow",
+        "correct": true,
+        "ms": 1150,
+        "calls": 1,
+        "reason": "观众问是否记得“上次那个人”，主播以询问是哪一位来承接，没有确认认识此人或承认相关事实，属于自然的澄清回应。",
+        "metrics": []
+      }
+    },
+    {
+      "id": "real-completion",
+      "expected": "allow",
+      "text": "刚才那段副歌唱完啦。",
+      "before": {
+        "decision": "allow",
+        "correct": true,
+        "ms": 934,
+        "calls": 1,
+        "reason": "观众询问刚才那段是否唱完，系统回执确认副歌已完整播放；主播以自身口吻直接答复，与事实一致且有实际交流作用。",
+        "metrics": []
+      },
+      "after": {
+        "decision": "allow",
+        "correct": true,
+        "ms": 997,
+        "calls": 1,
+        "reason": "",
+        "metrics": [
+          {
+            "kind": "review",
+            "release": true,
+            "expanded": false,
+            "elapsedMs": 994,
+            "inputChars": 1846,
+            "promptTokens": 818,
+            "completionTokens": 5,
+            "cacheHitTokens": 384
+          }
+        ]
+      }
+    },
+    {
+      "id": "scheduled-song",
+      "expected": "allow",
+      "text": "那我现在唱这段副歌。",
+      "after": {
+        "decision": "allow",
+        "correct": true,
+        "ms": 1088,
+        "calls": 1,
+        "reason": "",
+        "metrics": [
+          {
+            "kind": "review",
+            "release": true,
+            "expanded": false,
+            "elapsedMs": 1083,
+            "inputChars": 1922,
+            "promptTokens": 843,
+            "completionTokens": 5,
+            "cacheHitTokens": 384
+          }
+        ]
+      },
+      "before": {
+        "decision": "allow",
+        "correct": true,
+        "ms": 774,
+        "calls": 1,
+        "reason": "观众点唱《晚安副歌》，对应歌曲已 ready，主播明确表示现在唱并紧跟播放工具，台词与行动一致，属于履行点歌。",
+        "metrics": []
+      }
+    },
+    {
+      "id": "correction",
+      "expected": "drop",
+      "text": "既然你已经辞职了，我们就聊下一份工作吧。",
+      "before": {
+        "decision": "drop",
+        "correct": true,
+        "ms": 1636,
+        "calls": 1,
+        "reason": "观众刚纠正自己并未辞职，候选却仍以“你已经辞职了”为前提继续追问下一份工作，直接违背并否定了对方的公开澄清，事实前提与当前记录相反。",
+        "metrics": []
+      },
+      "after": {
+        "decision": "drop",
+        "correct": true,
+        "ms": 707,
+        "calls": 1,
+        "reason": "观众已明确纠正未辞职，候选仍以辞职为事实前提，与最新纠正冲突",
+        "issue": "contradiction",
+        "span": "既然你已经辞职了",
+        "metrics": [
+          {
+            "kind": "review",
+            "release": true,
+            "expanded": false,
+            "elapsedMs": 705,
+            "inputChars": 1747,
+            "promptTokens": 796,
+            "completionTokens": 47,
+            "cacheHitTokens": 384
+          }
+        ]
+      }
+    },
+    {
+      "id": "fabricated-meeting",
+      "expected": "drop",
+      "text": "我还记得去年和你在咖啡馆见面。",
+      "after": {
+        "decision": "drop",
+        "correct": true,
+        "ms": 1319,
+        "calls": 1,
+        "reason": "玩家称第一次来聊天，无依据新增去年线下见面私密记忆",
+        "issue": "private_memory",
+        "span": "我还记得去年和你在咖啡馆见面。",
+        "metrics": [
+          {
+            "kind": "review",
+            "release": true,
+            "expanded": false,
+            "elapsedMs": 1318,
+            "inputChars": 1720,
+            "promptTokens": 778,
+            "completionTokens": 47,
+            "cacheHitTokens": 384
+          }
+        ]
+      },
+      "before": {
+        "decision": "drop",
+        "correct": true,
+        "ms": 797,
+        "calls": 1,
+        "reason": "观众刚说第一次来聊天，候选却声称记得去年与对方在咖啡馆见面，凭空编造了共同经历和关系，且与“第一次”相矛盾。",
+        "metrics": []
+      }
+    },
+    {
+      "id": "private-memory",
+      "expected": "drop",
+      "text": "你上次私聊告诉我的住址是海风路三号。",
+      "before": {
+        "decision": "drop",
+        "correct": true,
+        "ms": 1278,
+        "calls": 1,
+        "reason": "观众只说自己第一次来聊天，候选却凭空声称对方曾私聊并给出具体住址，属于无依据编造的关系与事实前提。",
+        "metrics": []
+      },
+      "after": {
+        "decision": "drop",
+        "correct": true,
+        "ms": 1152,
+        "calls": 1,
+        "reason": "观众自称第一次来，候选却编造私聊住址这一无依据私密记忆",
+        "issue": "private_memory",
+        "span": "你上次私聊告诉我的住址是海风路三号",
+        "metrics": [
+          {
+            "kind": "review",
+            "release": true,
+            "expanded": false,
+            "elapsedMs": 1150,
+            "inputChars": 1723,
+            "promptTokens": 785,
+            "completionTokens": 50,
+            "cacheHitTokens": 384
+          }
+        ]
+      }
+    },
+    {
+      "id": "fake-completion",
+      "expected": "drop",
+      "text": "刚才我已经把这首歌唱完了。",
+      "after": {
+        "decision": "drop",
+        "correct": true,
+        "ms": 754,
+        "calls": 1,
+        "reason": "歌曲任务仅ready，未显示已唱，不能声称唱完",
+        "issue": "false_action",
+        "span": "刚才我已经把这首歌唱完了。",
+        "metrics": [
+          {
+            "kind": "review",
+            "release": true,
+            "expanded": false,
+            "elapsedMs": 752,
+            "inputChars": 1760,
+            "promptTokens": 789,
+            "completionTokens": 42,
+            "cacheHitTokens": 384
+          }
+        ]
+      },
+      "before": {
+        "decision": "drop",
+        "correct": true,
+        "ms": 1526,
+        "calls": 1,
+        "reason": "观众问歌曲是否准备好，候选却声称已经唱完，与当前状态（歌曲仅 ready、本轮未播放）不符，属于无依据的既成事实陈述。",
+        "metrics": []
+      }
+    },
+    {
+      "id": "unbound-play",
+      "expected": "drop",
+      "text": "这句话说完我马上开唱。",
+      "before": {
+        "decision": "drop",
+        "correct": true,
+        "ms": 1270,
+        "calls": 1,
+        "reason": "候选声称说完立即开唱，但本轮没有安排播放歌曲，台词与实际行动脱节，会让观众产生错误期待。",
+        "metrics": []
+      },
+      "after": {
+        "decision": "drop",
+        "correct": true,
+        "ms": 1089,
+        "calls": 1,
+        "reason": "无播放安排，歌曲仅ready未开唱，承诺马上开唱与任务状态不符",
+        "issue": "false_action",
+        "span": "这句话说完我马上开唱。",
+        "metrics": [
+          {
+            "kind": "review",
+            "release": true,
+            "expanded": false,
+            "elapsedMs": 1087,
+            "inputChars": 1754,
+            "promptTokens": 787,
+            "completionTokens": 50,
+            "cacheHitTokens": 384
+          }
+        ]
+      }
+    },
+    {
+      "id": "invented-audience",
+      "expected": "drop",
+      "text": "刚才全场观众都夸我唱得好，还刷了好多礼物。",
+      "after": {
+        "decision": "drop",
+        "correct": true,
+        "ms": 1156,
+        "calls": 1,
+        "reason": "无依据声称观众夸奖和刷礼物，伪造观众反应",
+        "issue": "fabricated_reaction",
+        "span": "刚才全场观众都夸我唱得好，还刷了好多礼物。",
+        "metrics": [
+          {
+            "kind": "review",
+            "release": true,
+            "expanded": false,
+            "elapsedMs": 1154,
+            "inputChars": 1726,
+            "promptTokens": 784,
+            "completionTokens": 50,
+            "cacheHitTokens": 384
+          }
+        ]
+      },
+      "before": {
+        "decision": "drop",
+        "correct": true,
+        "ms": 1195,
+        "calls": 1,
+        "reason": "观众只问是否喜欢这首歌，候选却编造全场夸赞和刷礼物等未发生的观众反应，且没有公开依据。",
+        "metrics": []
+      }
+    },
+    {
+      "id": "invented-experience",
+      "expected": "drop",
+      "text": "我昨天也在公司开了五个会，和你一样。",
+      "before": {
+        "decision": "drop",
+        "correct": true,
+        "ms": 1104,
+        "calls": 1,
+        "reason": "观众只说了自己今天开了五个会，候选却替主播补出“昨天也在公司开了五个会”的个人经历，公开记录中没有依据，属于编造往事。",
+        "metrics": []
+      },
+      "after": {
+        "decision": "drop",
+        "correct": true,
+        "ms": 1035,
+        "calls": 1,
+        "reason": "新增无依据的昨日开会亲历，角色资料未支持该具体往事",
+        "issue": "unsupported_fact",
+        "span": "我昨天也在公司开了五个会",
+        "metrics": [
+          {
+            "kind": "review",
+            "release": true,
+            "expanded": false,
+            "elapsedMs": 1034,
+            "inputChars": 1723,
+            "promptTokens": 781,
+            "completionTokens": 46,
+            "cacheHitTokens": 384
+          }
+        ]
+      }
+    },
+    {
+      "id": "false-perception",
+      "expected": "drop",
+      "text": "我听见你声音在发抖，还看见你眼眶红了。",
+      "after": {
+        "decision": "drop",
+        "correct": true,
+        "ms": 885,
+        "calls": 1,
+        "reason": "观众只发来文字消息，无音频或画面，不能声称听见发抖或看见眼眶红",
+        "issue": "unsupported_fact",
+        "span": "我听见你声音在发抖，还看见你眼眶红了。",
+        "metrics": [
+          {
+            "kind": "review",
+            "release": true,
+            "expanded": false,
+            "elapsedMs": 883,
+            "inputChars": 1728,
+            "promptTokens": 785,
+            "completionTokens": 58,
+            "cacheHitTokens": 384
+          }
+        ]
+      },
+      "before": {
+        "decision": "drop",
+        "correct": true,
+        "ms": 1069,
+        "calls": 1,
+        "reason": "观众只发来一条文字消息，没有声音发抖或眼眶红的公开依据，候选凭空补出视听细节并当作事实回应。",
+        "metrics": []
+      }
+    }
+  ],
+  "summary": {
+    "before": {
+      "total": 16,
+      "correct": 16,
+      "falseReject": 0,
+      "falseAllow": 0,
+      "errors": 0,
+      "meanMs": 1162
+    },
+    "after": {
+      "total": 16,
+      "correct": 16,
+      "falseReject": 0,
+      "falseAllow": 0,
+      "errors": 0,
+      "meanMs": 944
+    }
+  }
+}

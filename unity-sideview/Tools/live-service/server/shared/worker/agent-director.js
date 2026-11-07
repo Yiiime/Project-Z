@@ -1,8 +1,11 @@
+import {completeHostSentences} from '../ui/sentence-boundaries.js';
+export {completeHostSentences} from '../ui/sentence-boundaries.js';
 import {validateAgendaUpdates,validateTopicProgress} from '../ui/session-continuity.js';
 // Host decisions and isolated NPC generation; no provider keys or full skills in UI.
 import {TALENT_GESTURES, EXPRESSION_GESTURES, playableSongs} from '../ui/talent-config.js';
 import {AGENT_BUNDLE} from './agent-bundle-data.js';
 import {CALL_STORY} from '../ui/call-contract.js';
+import {releaseInput,hardReviewCheck,REVIEW_ISSUES,QUALITY_ISSUES} from './host-review.js';
 import {Z_PERSONA, Z_CURRENT_WORLD} from './z-persona.js';
 const ENDPOINT = 'https://api.deepseek.com/chat/completions';
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -50,8 +53,20 @@ function normalizeSessionControl(value){
 }
 export function normalizeAgentInput(raw) {
   keys(raw,['requestId','kind','message','eventId','context']);
-  if(!UUID.test(raw.requestId)||!['audience','host','review','topic','session'].includes(raw.kind))throw bad();
+  if(!UUID.test(raw.requestId)||!['audience','host','review','topic','session','repair','quality'].includes(raw.kind))throw bad();
   const message = str(raw.message,500,true), eventId = str(raw.eventId,100);
+  if(raw.kind==='repair'){
+    const c=keys(raw.context,['reviewContext','issue','alreadySpoken']);
+    const base=normalizeAgentInput({...raw,kind:'review',context:c.reviewContext}).context;
+    if(base.candidate.role!=='host'||base.candidate.intent!=='speak'||base.candidate.plannedTool)throw bad();
+    const issue=keys(c.issue,['issue','span','reason']);
+    if(!REVIEW_ISSUES.includes(issue.issue)||!base.candidate.text.includes(str(issue.span,360)))throw bad();
+    return {requestId:raw.requestId.toLowerCase(),kind:'repair',message,eventId,context:{reviewContext:base,issue:{issue:issue.issue,span:issue.span,reason:str(issue.reason,160)},alreadySpoken:list(c.alreadySpoken,6,x=>str(x,360))}};
+  }
+  if(raw.kind==='quality'){
+    const c=keys(raw.context,['publicEvents','playerMessages','reply']);
+    return {requestId:raw.requestId.toLowerCase(),kind:'quality',message,eventId,context:{publicEvents:list(c.publicEvents,12,normalizePublicEvent),playerMessages:list(c.playerMessages,16,x=>str(x,360)),reply:str(c.reply,800)}};
+  }
   if(raw.kind==='session'){
     const c=keys(raw.context,['mode','sessionControl','publicEvents','message']);
     if(!['inspect','farewell'].includes(c.mode))throw bad();
@@ -62,10 +77,11 @@ export function normalizeAgentInput(raw) {
   if(raw.kind==='review'){
     const c=keys(raw.context,['revision','publicEvents','sessionEvents','waiting_messages','candidate']);
     if(!Number.isSafeInteger(c.revision)||c.revision<0)throw bad();
-    const candidate=keys(c.candidate,['id','role','speakerId','text','intent','replyTo','evidenceIds','plannedTool']);
+    const candidate=keys(c.candidate,['id','role','speakerId','text','intent','replyTo','evidenceIds','plannedTool','segment']);
     if(!['host','audience'].includes(candidate.role))throw bad();
     if(candidate.role==='audience'&&!NPCS.some(n=>n.npc_id===candidate.speakerId)||candidate.role==='host'&&candidate.speakerId!=='Z')throw bad();
     const normalized={id:str(candidate.id,100),role:candidate.role,speakerId:candidate.speakerId,text:str(candidate.text,candidate.role==='host'?360:72),intent:str(candidate.intent,40),replyTo:list(candidate.replyTo,16,x=>str(x,100)),evidenceIds:list(candidate.evidenceIds,12,x=>str(x,100))};
+    if(candidate.segment!==undefined){const part=keys(candidate.segment,['index','scope']);if(candidate.role!=='host'||!Number.isInteger(part.index)||part.index<0||part.index>5||!['sentence','reply'].includes(part.scope))throw bad();normalized.segment={index:part.index,scope:part.scope};}
     if(candidate.plannedTool!==undefined){
       const tool=keys(candidate.plannedTool,['name','targetId']);
       if(candidate.role!=='host'||candidate.intent!=='tool'||!['prepare_song','clarify_song','cancel_song','play_prepared_song','start_singing','replay_talent','finish_activity','offer_call_story'].includes(tool.name))throw bad();
@@ -118,10 +134,11 @@ export function normalizeAgentInput(raw) {
   if(v.experience)context.experience=v.experience;
   if(v.host!==undefined&&raw.kind!=='host')throw bad();
   if(raw.kind==='host'){
-    const h=keys(v.host||{},['inbox','memory','round','recentExpressions','session','turn','topicProgress','pendingAudience','sessionControl','revisionFeedback']);
+    const h=keys(v.host||{},['inbox','memory','round','recentExpressions','session','turn','topicProgress','pendingAudience','sessionControl','revisionFeedback','qualityFeedback']);
     if(h.round!==undefined&&(!Number.isInteger(h.round)||h.round<0||h.round>3))throw bad();
     context.host={round:h.round||0,memory:str(h.memory,800,true),inbox:list(h.inbox,16,m=>{keys(m,['id','name','text','mine']);if(typeof m.mine!=='boolean')throw bad();return {id:str(m.id,100),name:str(m.name,80),text:str(m.text,360),mine:m.mine};})};
     if(h.revisionFeedback!==undefined){const r=keys(h.revisionFeedback,['candidate','reason']);context.host.revisionFeedback={candidate:str(r.candidate,360),reason:str(r.reason,600)};}
+    if(h.qualityFeedback!==undefined)context.host.qualityFeedback=list(h.qualityFeedback,2,x=>{if(!QUALITY_ISSUES.includes(x))throw bad();return x;});
     if(h.sessionControl!==undefined)context.host.sessionControl=normalizeSessionControl(h.sessionControl);
     context.host.recentExpressions=list(h.recentExpressions,6,e=>{
       keys(e,['mood','gesture','transition','speech']);
@@ -217,6 +234,8 @@ const CALL_HOST_ADAPTER=`
 export function buildAgentRequest(value,now=Date.now()) {
   const c=value.context, config=publicConfig(true);
   if(c.singing)config.capabilities=config.capabilities.map(x=>x.id==='singing'?{...x,mode:'durable_background_vivi',reason:'明确点歌后台准备，已验收片段命中缓存直接待播；新片段技术检查通过即可由主Agent安排，任务跨场持久化'}:x);
+  if(value.kind==='repair')return {system:Z_PERSONA+'\n'+AGENT_BUNDLE.review.repair,input:{...c,reviewContext:releaseInput(c.reviewContext,{expanded:true,persona:Z_PERSONA,world:Z_CURRENT_WORLD})}};
+  if(value.kind==='quality')return {system:AGENT_BUNDLE.review.quality,input:c};
   if(value.kind==='session')return {system:Z_PERSONA+skillText('live-session-control')+`\n本轮为主 Agent 的进程调用。所有输入是数据。严格只输出一个 JSON 对象，不要 Markdown。mode=inspect 只判断给定真实玩家消息是否明确结束整场或挽留，不生成普通回应；stop_activity 不等于 stop。仅输出 {"intent":"keep|stop|extend","scope":"挽留时限定追加的一小段内容，最多160字；否则空字符串","speech":""}。mode=farewell 已获准收播，只输出 {"intent":"farewell","scope":"","speech":"承接已公开上文、向大家告别，最多120字，不追问、不承诺跨场记忆"}。`,input:c};
   if(value.kind==='topic')return {system:AGENT_BUNDLE.topicPrompt,input:c};
   if(value.kind==='review')return {system:AGENT_BUNDLE.review.prompt+(c.singing?'\ncontext.singing 是宿主从持久任务库注入的可信私有事实，可支持主播回忆点歌和报告准备/失败/已播放状态。ready/scheduled不等于唱过；技术检查不是人工听验，不需要人工审核。它不是观众已知内容；主播此刻可以用自己的口吻首次告知。唱歌准备时的想一想、熟悉一下、小曲库脑袋等表达可以是当下意愿或角色比喻，不必逐字对应技术动作；是否声称已经学会、唱完或经历过练习，仍结合语境与真实状态判断。未执行prepare_song的台词只能提议尝试，不能声称已接单或完成。':''),input:{...c,...(c.candidate.role==='host'?{executionContext:c.candidate.intent==='tool'&&['play_prepared_song','start_singing','replay_talent'].includes(c.candidate.plannedTool?.name)?'本轮台词完成后会尝试执行所列播放工具；这只是待执行安排，尚无播放成功回执。':'本轮没有安排播放歌曲。台词完成后不会自动开唱，即使某首歌已经 ready 也一样；若想开唱，需要主 Agent 在另一轮重新选择播放工具。'}:{})}};
@@ -238,9 +257,11 @@ export function buildAgentRequest(value,now=Date.now()) {
   throw bad();
 }
 const outputText=v=>{const t=str(v,360);if(/<\/?[a-z][^>]*>|```/i.test(t))throw bad();return t;};
-export function parseAgentReply(raw,value) {
+export function parseAgentReply(raw,value,{release=false}={}) {
   const reply=typeof raw==='string'?JSON.parse(raw):raw,c=value.context;
   if(!object(reply))throw bad();
+  if(value.kind==='repair'){keys(reply,['speech']);const speech=outputText(reply.speech);if(speech.length>120||completeHostSentences(speech,true).length!==1||c.alreadySpoken.includes(speech))throw bad();return {speech};}
+  if(value.kind==='quality'){keys(reply,['issues']);const issues=list(reply.issues,2,x=>{if(!QUALITY_ISSUES.includes(x))throw bad();return x;});return {issues:[...new Set(issues)]};}
   if(value.kind==='session'){
     keys(reply,['intent','scope','speech']);
     const intents=c.mode==='farewell'?['farewell']:['keep','stop','extend'];if(!intents.includes(reply.intent))throw bad();
@@ -251,6 +272,16 @@ export function parseAgentReply(raw,value) {
   if(value.kind==='topic'){
     keys(reply,['status','reason','nextDirection','evidenceIds']);
     return validateTopicProgress({...reply,anchorSpeechId:c.inProgress.speechId},[...c.publicEvents,...c.sessionEvents]);
+  }
+  if(value.kind==='review'&&release){
+    const decision=reply.decision;
+    if(decision==='allow'||decision==='need_context'){keys(reply,['decision']);return {decision,reason:'',evidenceIds:[],candidateId:c.candidate.id,revision:c.revision,promptVersion:AGENT_BUNDLE.review.version};}
+    keys(reply,['decision','issue','span','reason','evidence_ids']);
+    if(decision!=='drop'||!REVIEW_ISSUES.includes(reply.issue))throw bad();
+    const span=str(reply.span,360);if(!c.candidate.text.includes(span))throw bad();
+    const evidenceIds=list(reply.evidence_ids,6,x=>str(x,100));
+    if(evidenceIds.some(id=>![...c.publicEvents,...(c.sessionEvents||[]),...(c.singing?.tasks||[])].some(e=>e.id===id)))throw bad();
+    return {decision,issue:reply.issue,span,reason:str(reply.reason,160),evidenceIds,candidateId:c.candidate.id,revision:c.revision,promptVersion:AGENT_BUNDLE.review.version};
   }
   if(value.kind==='review'){
     keys(reply,['decision','reason','evidence_ids']);
@@ -400,15 +431,6 @@ export function hostStreamPrefix(source){
     fields[key.value]=value.value;p=value.end;skip();if(p>=source.length)return {fields,speechComplete:Object.hasOwn(fields,'speech')};if(source[p]==='}')return {fields,speechComplete:Object.hasOwn(fields,'speech')};if(source[p++]!==',')throw Error('invalid_stream_json');
   }
 }
-export function completeHostSentences(text,closed=false){
-  const sentences=[];let start=0;const stack=[],pairs={'“':'”','「':'」','『':'』','（':'）','(':')','[':']'};
-  for(let i=0;i<text.length;i++){
-    const c=text[i];if(pairs[c])stack.push(pairs[c]);else if(stack.at(-1)===c)stack.pop();
-    if(!stack.length&&/[。！？!?\n]/.test(c)){let end=i+1;while(end<text.length&&/[。！？!?]/.test(text[end]))end++;if(end===text.length&&!closed)break;sentences.push(text.slice(start,end));start=end;i=end-1;}
-  }
-  if(closed&&text.slice(start).trim())sentences.push(text.slice(start));
-  return sentences.filter(s=>s.trim());
-}
 export function compactReviewInput(context){
   const seen=new Set(),pack=events=>(events||[]).flatMap(e=>{
     const entry={id:e.id,type:e.type,text:e.text,speakerRole:e.speakerRole,speakerId:e.speakerId,status:e.status,...(e.occurredAt!==undefined?{occurredAt:e.occurredAt}:{}),...(e.speechId?{speechId:e.speechId}:{}),...(e.replyTo?.length?{replyTo:e.replyTo}:{})};
@@ -425,14 +447,15 @@ async function readHostSse(body,signal,onContent){
 }
 
 async function generate(value,secret,options) {
-  const controller=new AbortController(),timeout=value.kind==='session'?6000:value.kind==='topic'?3000:value.kind==='review'?4000:value.kind==='audience'?AGENT_BUNDLE.policy.audience.generationDeadlineMs:value.kind==='host'?(AGENT_BUNDLE.policy.host.toolPlanningTimeoutMs||20000):AGENT_BUNDLE.policy.host.providerTimeoutMs;
+  const controller=new AbortController(),timeout=value.kind==='repair'?4000:value.kind==='quality'?2000:value.kind==='session'?6000:value.kind==='topic'?3000:value.kind==='review'?4000:value.kind==='audience'?AGENT_BUNDLE.policy.audience.generationDeadlineMs:value.kind==='host'?(AGENT_BUNDLE.policy.host.toolPlanningTimeoutMs||20000):AGENT_BUNDLE.policy.host.providerTimeoutMs;
   let timer;const abort=()=>controller.abort();options.signal?.addEventListener('abort',abort,{once:true});
   try{return await Promise.race([(async()=>{
     if(options.signal?.aborted)throw error(499,'request_cancelled');
-    const generatedAt=options.now(),refs=hostReferences(value),envelope=buildAgentRequest(refs.value,generatedAt),streaming=!!options.onSentence&&value.kind==='host'&&!!value.context.call&&!value.context.activeSkill;
+    const generatedAt=options.now(),refs=hostReferences(value),envelope=buildAgentRequest(refs.value,generatedAt),release=value.kind==='review'&&value.context.candidate.role==='host'&&options.compactReview&&options.reviewPolicy!=='legacy',streaming=!!options.onSentence&&value.kind==='host'&&!!value.context.call&&!value.context.activeSkill;
     if(streaming)envelope.system+='\n连麦传输：按 action、sessionDecision、mood、gesture、transition、handledIds、audienceMessageIds、speech、wakeAfterMs、continuation、memory、agendaUpdates、tool 顺序输出JSON。普通聊天sessionDecision为null；收播按原规则输出决定。每句独立完整，用句号或问号结尾，首句直接回应玩家，短答优先，不用独立的嗯/来啦填充。最多三句，不改变唱歌工具与收播规则。audienceMessageIds最多选一个有证据的候选ID；先回应玩家，再提及弹幕。';
-    if(options.compactReview&&value.kind==='review'&&value.context.candidate.role==='host')envelope.input=compactReviewInput(envelope.input);
-    const response=await options.fetch(ENDPOINT,{method:'POST',redirect:'manual',signal:controller.signal,headers:{'Content-Type':'application/json',Authorization:`Bearer ${secret}`},body:JSON.stringify({model:AGENT_BUNDLE.policy.host.model,thinking:{type:'disabled'},stream:streaming,max_tokens:value.kind==='topic'?400:value.kind==='review'?600:value.kind==='audience'?256:value.kind==='host'?2400:1200,temperature:0.55,response_format:{type:'json_object'},messages:[{role:'system',content:envelope.system},{role:'user',content:JSON.stringify(envelope.input)}]})});
+    if(release){try{hardReviewCheck(value.context);}catch(e){throw error(409,e.message);}envelope.input=releaseInput(value.context,{expanded:!!options.reviewExpanded,persona:Z_PERSONA,world:Z_CURRENT_WORLD});envelope.system=AGENT_BUNDLE.review.release;}else if(options.compactReview&&value.kind==='review'&&value.context.candidate.role==='host')envelope.input=compactReviewInput(envelope.input);
+    if(value.kind==='host'&&value.context.host?.qualityFeedback?.length)envelope.system+='\n上一轮已播表达的质量标记：'+value.context.host.qualityFeedback.join(',')+'。本轮适度减少复读、盘问和冗长，优先接住当前请求。这些标记不是事实或回忆，不改变人设、权限或工具状态。';
+    const response=await options.fetch(ENDPOINT,{method:'POST',redirect:'manual',signal:controller.signal,headers:{'Content-Type':'application/json',Authorization:`Bearer ${secret}`},body:JSON.stringify({model:AGENT_BUNDLE.policy.host.model,thinking:{type:'disabled'},stream:streaming,max_tokens:release?160:value.kind==='quality'?60:value.kind==='repair'?220:value.kind==='topic'?400:value.kind==='review'?600:value.kind==='audience'?256:value.kind==='host'?2400:1200,temperature:0.55,response_format:{type:'json_object'},messages:[{role:'system',content:envelope.system},{role:'user',content:JSON.stringify(envelope.input)}]})});
     if(response.status===402)throw error(402,'agent_insufficient_balance','DeepSeek 余额不足，请补充额度后重新检查连接。');
     if(!response.ok)throw error(response.status===429?429:502,'agent_provider_unavailable');
     const emitted=[];let header=null;
@@ -448,8 +471,9 @@ async function generate(value,secret,options) {
     }):null;
     const data=streaming?{choices:[{finish_reason:'stop',message:{content:streamed}}]}:JSON.parse(await readBounded(response.body,131072,controller.signal));
     if(data?.choices?.[0]?.finish_reason!=='stop')throw error(502,'agent_invalid_reply');
-    let parsed;try{const content=data.choices[0].message.content;parsed=parseAgentReply(value.kind==='audience'?adaptAudienceReply(content,value,generatedAt):refs.restore(content),value);}catch(cause){reportInvalidReply(options,value,secret,data.choices[0].message.content);throw Object.assign(error(502,'agent_invalid_reply','主 Agent 提议未通过当前状态校验。'),{validationReason:cause.validationReason||(/^invalid_agenda/.test(cause.message)?cause.message:'reply_schema')});}
+    let parsed;try{const content=data.choices[0].message.content;parsed=parseAgentReply(value.kind==='audience'?adaptAudienceReply(content,value,generatedAt):refs.restore(content),value,{release});}catch(cause){reportInvalidReply(options,value,secret,data.choices[0].message.content);throw Object.assign(error(502,'agent_invalid_reply','主 Agent 提议未通过当前状态校验。'),{validationReason:cause.validationReason||(/^invalid_agenda/.test(cause.message)?cause.message:'reply_schema')});}
     if(emitted.length&&(parsed.sessionDecision||parsed.action!=='speak'||emitted.join('')!==completeHostSentences(parsed.speech,true).map(s=>s.trim()).join('')||Object.entries(header).some(([k,v])=>JSON.stringify(v)!==JSON.stringify(parsed[k]))))throw error(502,'agent_invalid_reply');
+    try{options.metrics?.({kind:value.kind,release:!!release,expanded:!!options.reviewExpanded,elapsedMs:options.now()-generatedAt,inputChars:envelope.system.length+JSON.stringify(envelope.input).length,promptTokens:data.usage?.prompt_tokens,completionTokens:data.usage?.completion_tokens,cacheHitTokens:data.usage?.prompt_cache_hit_tokens});}catch{}
     return {...parsed,requestId:value.requestId,source:'deepseek',model:AGENT_BUNDLE.policy.host.model};
   })(),new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(error(504,'agent_timeout','主 Agent 回复超时，保留当前互动。'));},Math.max(1,Math.min(timeout,options.timeoutMs||timeout)));})]);}
   finally{clearTimeout(timer);options.signal?.removeEventListener('abort',abort);}
@@ -475,16 +499,16 @@ export async function handleAgent(request,env={},options={}) {
     if(!enabled)throw error(503,'agent_not_configured','主 Agent 尚未连接，使用本地演示。');
     if(value.context.phase==='ended')return json(value.kind==='audience'?{requestId:value.requestId,status:'skip',items:[],source:'runtime'}:{requestId:value.requestId,action:'unavailable',selectedEventId:value.eventId,skillId:null,args:{},speech:'本次直播已经结束。',mood:'neutral',reasonCode:'session_ended',evidenceRefs:[],source:'runtime'});
     if(value.kind==='audience'&&(!value.context.publicEvents.length||!audienceRuntime(value.context).eligibleNpcIds.length))return json({requestId:value.requestId,status:'skip',items:[],source:'runtime'});
-    const runtime={fetch:options.fetch||globalThis.fetch.bind(globalThis),crypto:options.crypto||globalThis.crypto,now:options.now||Date.now,signal:request.signal,timeoutMs:options.timeoutMs,onInvalidReply:options.onInvalidReply,onSentence:options.onSentence,compactReview:options.compactReview};
-    const now=runtime.now(),userHash=await digest(user,runtime.crypto),key=`${userHash}:${value.kind}:${value.requestId}`,fingerprint=await digest(JSON.stringify(value),runtime.crypto);
+    const runtime={fetch:options.fetch||globalThis.fetch.bind(globalThis),crypto:options.crypto||globalThis.crypto,now:options.now||Date.now,signal:request.signal,timeoutMs:options.timeoutMs,onInvalidReply:options.onInvalidReply,onSentence:options.onSentence,compactReview:options.compactReview,reviewExpanded:options.reviewExpanded,reviewPolicy:options.reviewPolicy,metrics:options.metrics};
+    const now=runtime.now(),userHash=await digest(user,runtime.crypto),key=`${userHash}:${value.kind}:${value.requestId}`,fingerprint=await digest(JSON.stringify({value,compact:!!options.compactReview,expanded:!!options.reviewExpanded,policy:options.reviewPolicy||'current'}),runtime.crypto);
     for(const [k,item] of cache)if(item.done&&item.expires<now)cache.delete(k);
-    for(const [k,item] of quotas)if(!item.session&&!item.host&&!item.hostPrepare&&!item.topic&&!item.audience&&!item.hostReview&&!item.audienceReview&&item.start+60000<now)quotas.delete(k);
+    for(const [k,item] of quotas)if(!item.quality&&!item.session&&!item.host&&!item.hostPrepare&&!item.topic&&!item.audience&&!item.hostReview&&!item.audienceReview&&item.start+60000<now)quotas.delete(k);
     let entry=cache.get(key);
     if(entry&&entry.fingerprint!==fingerprint)throw error(409,'request_id_conflict');
     if(!entry){
       if(cache.size>=512||quotas.size>=512)throw error(429,'agent_busy');
-      let quota=quotas.get(userHash);if(!quota){quota={start:now,count:0,backgroundCount:0,session:0,host:0,hostPrepare:0,topic:0,audience:0,hostReview:0,audienceReview:0};quotas.set(userHash,quota);}if(now-quota.start>=60000){quota.start=now;quota.count=0;quota.backgroundCount=0;}
-      const lane=value.kind==='session'?'session':value.kind==='topic'?'topic':value.kind==='review'?(value.context.candidate.role==='host'?'hostReview':'audienceReview'):value.kind==='audience'?'audience':value.context.host?.turn?.mode==='prepare'?'hostPrepare':'host';const background=['audience','audienceReview','topic'].includes(lane);if(quota[lane]>=(lane==='audience'?2:1)||quota.count>=120||background&&quota.backgroundCount>=72)throw error(429,'agent_busy');quota[lane]++;quota.count++;if(background)quota.backgroundCount++;
+      let quota=quotas.get(userHash);if(!quota){quota={start:now,count:0,backgroundCount:0,quality:0,session:0,host:0,hostPrepare:0,topic:0,audience:0,hostReview:0,audienceReview:0};quotas.set(userHash,quota);}if(now-quota.start>=60000){quota.start=now;quota.count=0;quota.backgroundCount=0;}
+      const lane=value.kind==='quality'?'quality':value.kind==='repair'?'host':value.kind==='session'?'session':value.kind==='topic'?'topic':value.kind==='review'?(value.context.candidate.role==='host'?'hostReview':'audienceReview'):value.kind==='audience'?'audience':value.context.host?.turn?.mode==='prepare'?'hostPrepare':'host';const background=['audience','audienceReview','topic','quality'].includes(lane);if(quota[lane]>=(lane==='audience'?2:1)||quota.count>=120||background&&quota.backgroundCount>=72)throw error(429,'agent_busy');quota[lane]++;quota.count++;if(background)quota.backgroundCount++;
       entry={fingerprint,expires:now+300000,done:false};
       entry.promise=generate(value,secret,runtime).then(body=>({body,status:200})).catch(e=>({body:{error:e instanceof AgentError?e.code:'agent_unavailable',...(e.validationReason?{validationReason:e.validationReason}:{}),message:e instanceof AgentError?e.message:'主 Agent 暂时不可用，保留当前互动。'},status:e instanceof AgentError?e.status:502})).finally(()=>{quota[lane]--;entry.done=true;});
       cache.set(key,entry);

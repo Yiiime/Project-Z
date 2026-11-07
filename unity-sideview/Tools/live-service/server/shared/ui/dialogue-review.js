@@ -66,19 +66,23 @@ export class DialogueReview {
     this.log({stage:'review.request',requestId:payload.requestId,promptVersion:this.version,candidate,generationContext,snapshot});
     if(signal?.aborted)return null;
     signal?.addEventListener('abort',abort,{once:true});this.controllers.add(controller);
-    let timer,aborted;
+    let timer,aborted,timedOut=false;
     const cancelled=new Promise((_,reject)=>{aborted=()=>reject(new Error('review_cancelled'));controller.signal.addEventListener('abort',aborted,{once:true});});
-    timer=setTimeout(abort,this.timeoutMs);
+    timer=setTimeout(()=>{timedOut=true;abort();},this.timeoutMs);
     try {
-      const reply=await Promise.race([Promise.resolve().then(()=>this.request(payload,{signal:controller.signal,compactReview:compact})),cancelled]);
+      let reply=await Promise.race([Promise.resolve().then(()=>this.request(payload,{signal:controller.signal,compactReview:compact})),cancelled]);
+      if(compact&&reply?.decision==='need_context'&&!controller.signal.aborted&&this._current(approved)){
+        this.log({stage:'review.expand',candidateId:candidate.id});
+        reply=await Promise.race([Promise.resolve().then(()=>this.request({...payload,requestId:newId()},{signal:controller.signal,compactReview:true,reviewExpanded:true})),cancelled]);
+      }
       const valid=!controller.signal.aborted&&reply?.decision==='allow'&&reply.candidateId===candidate.id&&reply.revision===snapshot.revision
         &&typeof reply.promptVersion==='string'&&(!this.version||reply.promptVersion===this.version)&&this._current(approved);
       if(session===this.session)this.log({stage:'review.result',requestId:payload.requestId,candidateId:candidate.id,reply,accepted:valid,currentRevision:this.revision});
-      if(!valid){outcome(controller.signal.aborted?'cancelled':reply?.candidateId!==candidate.id||reply?.revision!==snapshot.revision?'invalid_reply':this.version&&reply?.promptVersion!==this.version?'version_mismatch':!this._current(approved)?'stale':reply?.decision==='drop'?'rejected':'invalid_reply',{reason:reply?.reason});return null;}
+      if(!valid){outcome(timedOut?'unavailable':controller.signal.aborted?'cancelled':reply?.candidateId!==candidate.id||reply?.revision!==snapshot.revision?'invalid_reply':this.version&&reply?.promptVersion!==this.version?'version_mismatch':!this._current(approved)?'stale':reply?.decision==='drop'?'rejected':'invalid_reply',{reason:reply?.reason,issue:reply?.issue,span:reply?.span,evidenceIds:reply?.evidenceIds});return null;}
       outcome('allowed');
       const ticket={};this.tickets.set(ticket,{...approved,promptVersion:reply.promptVersion});
       return ticket;
-    }catch(error) {outcome(controller.signal.aborted?'cancelled':'unavailable');if(session===this.session)this.log({stage:'review.unavailable',requestId:payload.requestId,candidateId:candidate.id,code:error?.code||'review_unavailable'});return null;}
+    }catch(error) {outcome(timedOut?'unavailable':controller.signal.aborted?'cancelled':'unavailable');if(session===this.session)this.log({stage:'review.unavailable',requestId:payload.requestId,candidateId:candidate.id,code:error?.code||'review_unavailable'});return null;}
     finally{clearTimeout(timer);controller.signal.removeEventListener('abort',aborted);signal?.removeEventListener('abort',abort);this.controllers.delete(controller);}
   }
   commit(ticket, publish) {

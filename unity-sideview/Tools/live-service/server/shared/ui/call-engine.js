@@ -1,3 +1,4 @@
+import {approveCallCandidate} from './call-review.js';
 import {ConversationEngine} from './conversation-engine.js';
 import {CALL_STORY} from './call-contract.js';
 
@@ -16,7 +17,8 @@ export class CallConversationEngine extends ConversationEngine {
   }
   _wakeCall(){this.callNeedsTurn=true;this.callVersion++;this.nextWake=this._clock;}
   interruptCall(reason='guest_interrupt'){
-    this.callRevisionFeedback=null;
+    this.callRevisionFeedback=null;this.callReviewBlocked=false;this._cancelCallQuality();
+    if(['join','hangup'].includes(reason))this.callQualityFeedback=[];
     this.callYieldVersion=(this.callYieldVersion||0)+1;this.callYield=null;
     const speech=this._active;if(speech)this.callAudienceSpeech?.delete(speech.id);
     this.epoch++;this.pending?.abort();this.pending=null;this._cancelPreparation(reason);this._cancelTopic(reason);
@@ -111,7 +113,7 @@ export class CallConversationEngine extends ConversationEngine {
   _hostContext(inbox,turn){const context=super._hostContext(inbox,turn),c=this._state.call;
     if(c.active){const audienceCandidates=this._callAudienceCandidates(context);context.call={active:true,id:c.id,input:c.input,turns:c.turns,audienceOpen:audienceCandidates.length>0,audienceCandidates,audienceReason:audienceCandidates.length?(c.audienceUntil>this._clock?'invited':'cadence'):'none',story:c.story?{id:c.story.id,step:c.story.step,status:c.story.status,choices:[...c.story.choices]}:null};
       if(audienceCandidates.length){this.callAudienceNextAt=this._clock+20000;c.audienceUntil=0;}
-    }if(c.active&&this.callRevisionFeedback)context.host.revisionFeedback={...this.callRevisionFeedback};return context;
+    }if(c.active&&this.callRevisionFeedback)context.host.revisionFeedback={...this.callRevisionFeedback};if(c.active&&this.callQualityFeedback?.length)context.host.qualityFeedback=[...this.callQualityFeedback];return context;
   }
   _validateCallReply(result,context){if(!context.call?.active)return;const ids=result.audienceMessageIds||[];
     const latest=context.host.inbox.findLast(m=>m.mine);
@@ -122,12 +124,26 @@ export class CallConversationEngine extends ConversationEngine {
     if(this._state.call?.active&&['speak','tool'].includes(result?.action)&&result.speech)return this.speechAudio?.warmSpeech(requestId,result.speech,result.mood,{streaming:true});
     return super._warmCandidate(requestId,result);
   }
+  _approveCallCandidate(options){return approveCallCandidate(this,options);}
+  retryReply(){this.callReviewBlocked=false;return super.retryReply();}
+  _cancelCallQuality(){clearTimeout(this.callQualityTimer);this.callQualityTimer=null;this.callQualityWork?.abort();this.callQualityWork=null;}
+  _onHostReplyCompleted(result,context){
+    if(!this._state.call?.active||!context.call?.active)return;
+    this._cancelCallQuality();const callId=this._state.call.id,epoch=this.epoch;
+    this.callQualityTimer=setTimeout(async()=>{
+      this.callQualityTimer=null;if(this.epoch!==epoch||!this._state.call.active||this._state.paused||this._destroyed||this.pending||this._active||this._state.call.input!=='idle')return;
+      const work=this.callQualityWork=new AbortController();
+      try{const reply=await this.client.generate({requestId:crypto.randomUUID(),kind:'quality',eventId:crypto.randomUUID(),message:'评估刚刚实际播完的整轮表达',context:{publicEvents:this.facts.slice(-12),playerMessages:context.host.inbox.filter(m=>m.mine).map(m=>m.text),reply:result.speech}},{signal:work.signal});
+        if(!work.signal.aborted&&this.epoch===epoch&&this._state.call.id===callId){this.callQualityFeedback=(reply.issues||[]).filter(x=>['repetitive','over_questioning','overlong','missed_request'].includes(x)).slice(0,2);this.audience.dialogue.log({stage:'host.quality',issues:this.callQualityFeedback});}
+      }catch{}finally{if(this.callQualityWork===work)this.callQualityWork=null;}
+    },500);this.callQualityTimer.unref?.();
+  }
   _beginSentenceReply({controller,epoch,inbox,requestId,context,generationContext}){
     if(!this._state.call?.active||context.activeSkill||context.media||!this.client.sentenceStreaming)return null;
-    const signal=controller.signal,callId=this._state.call.id,received=[],spoken=[],owned=new Set();let chain=Promise.resolve(),failure=null,stopped=false,warmKey=null,waitCancel=null;
+    const signal=controller.signal,callId=this._state.call.id,received=[],spoken=[],owned=new Set();let chain=Promise.resolve(),failure=null,stopped=false,warmKey=null,waitCancel=null,resolveGeneration,repairedAny=false;const generationDone=new Promise(r=>resolveGeneration=r),budget={remaining:1};
     const valid=()=>!stopped&&!signal.aborted&&epoch===this.epoch&&!this._destroyed&&!this._state.paused&&this._state.call?.id===callId&&this._state.call.input==='idle';
     const abort=()=>{
-      stopped=true;waitCancel?.();if(warmKey)this.speechAudio?.dropWarmSpeech(warmKey);
+      stopped=true;resolveGeneration();waitCancel?.();if(warmKey)this.speechAudio?.dropWarmSpeech(warmKey);
       // A voice interruption owns its 180 ms fade; aborting generation must not cut it short.
       if(this._active&&owned.has(this._active.id)&&this.callYield?.phase!=='fading'){this._active.onComplete=null;this.speechLinks.delete(this._active.id);this._active=null;this.speechPlan=null;this._queue=[];Object.assign(this._state,{currentSpeech:'',currentSpeechId:null,gesture:'none'});this.speechAudio?.cancel();this._emitState();}
     };
@@ -136,20 +152,19 @@ export class CallConversationEngine extends ConversationEngine {
       if(!valid())throw Error('stale_sentence');
       const result={action:'speak',speech:sentence.text,mood:sentence.mood,gesture:sentence.gesture,transition:sentence.transition,handledIds:sentence.handledIds,audienceMessageIds:sentence.audienceMessageIds};
       this._validateCallReply(result,context);
-      warmKey=requestId+'-s'+sentence.index;const candidateId=warmKey;
-      this._warmCandidate(candidateId,result);
-      const candidate={id:candidateId,role:'host',speakerId:'Z',text:sentence.text,intent:'speak',replyTo:sentence.handledIds,evidenceIds:[]};
-      let outcome='unavailable';
-      const ticket=await this.audience.dialogue.inspect(candidate,{signal,generationContext,sessionEvents:this.session.evidence(),compact:true,onOutcome:(value,detail)=>{outcome=value;if(value==='rejected')this.callRevisionFeedback={candidate:sentence.text,reason:String(detail?.reason||'请核对实际证据').slice(0,600)};}});
-      if(!ticket)throw Object.assign(Error('sentence_not_approved'),{code:({rejected:'agent_reply_rejected',stale:'agent_reply_stale',version_mismatch:'agent_review_version_mismatch'})[outcome]||'agent_review_unavailable'});
+      const initial={id:requestId+'-s'+sentence.index,role:'host',speakerId:'Z',text:sentence.text,intent:'speak',replyTo:sentence.handledIds,evidenceIds:[],segment:{index:sentence.index,scope:'sentence'}};
+      warmKey=initial.id;
+      const approved=await this._approveCallCandidate({candidate:initial,result,context,signal,valid,budget,beforeRepair:()=>generationDone});
+      const {ticket,candidate}=approved;const candidateId=candidate.id;warmKey=candidateId;repairedAny||=approved.repaired;
+      const spokenText=candidate.text;
       if(!valid()||this._active||this._queue.length)throw Object.assign(Error('sentence_not_current'),{code:'agent_reply_stale'});
       await new Promise((resolve,reject)=>{
         let timer;const cancel=()=>{waitCancel=null;clearTimeout(timer);signal.removeEventListener('abort',cancel);reject(Error('sentence_cancelled'));};waitCancel=cancel;signal.addEventListener('abort',cancel,{once:true});
         timer=setTimeout(cancel,90000);
         const committed=this.audience.dialogue.commit(ticket,()=>{
           const speechId=this._speechId+1;owned.add(speechId);this.speechLinks.set(speechId,[...sentence.handledIds]);
-          this._say(sentence.text,sentence.mood,sentence.index===0?sentence.gesture:'none',{source:'deepseek',transition:sentence.transition,preparedAudioKey:candidateId,onComplete:()=>{
-            waitCancel=null;clearTimeout(timer);signal.removeEventListener('abort',cancel);spoken.push({speechId,text:sentence.text});resolve();
+          this._say(spokenText,sentence.mood,sentence.index===0?sentence.gesture:'none',{source:'deepseek',transition:sentence.transition,preparedAudioKey:candidateId,onComplete:()=>{
+            waitCancel=null;clearTimeout(timer);signal.removeEventListener('abort',cancel);spoken.push({speechId,text:spokenText});resolve();
           }});
           warmKey=null;
         });
@@ -164,13 +179,15 @@ export class CallConversationEngine extends ConversationEngine {
         chain=chain.then(()=>{if(failure)throw failure;return play(sentence);}).catch(error=>{failure=error;abort();});
       },
       finish:async(result,agendaUpdates)=>{
+        resolveGeneration();
         if(result.action!=='speak'||received.map(s=>s.text).join('').replace(/\s/g,'')!==result.speech.replace(/\s/g,''))throw Error('sentence_final_mismatch');
         await chain;if(failure)throw failure;if(!valid()||spoken.length!==received.length)throw Error('sentence_incomplete');
         this.callRevisionFeedback=null;
         const handled=new Set(result.handledIds);for(const mid of handled)this._setReceipt(mid,'replied');this.inbox=this.inbox.filter(m=>!handled.has(m.id));this.audience.dialogue.setWaiting(this.inbox);
         const last=spoken.at(-1),completed=this.session.events.find(e=>e.id===`speech-${last.speechId}`&&e.type==='speech.completed');
         if(!completed)throw Error('sentence_not_played');
-        this.session.apply(agendaUpdates,context.host.session,completed,!handled.size);this.memory=String(result.memory||'').slice(0,800);
+        if(!repairedAny){this.session.apply(agendaUpdates,context.host.session,completed,!handled.size);this.memory=String(result.memory||'').slice(0,800);}
+        result={...result,speech:spoken.map(s=>s.text).join('')};this._onHostReplyCompleted(result,context);
         for(const mid of result.audienceMessageIds||[])this.callAudienceUsed.add(mid);
         if(result.audienceMessageIds?.length){this.callAudienceLastTurn=this._state.call.turns;this.callAudienceNextAt=this._clock+20000;}
         this.speechPlan={speechId:last.speechId,epoch,result,attempted:false,inboxVersion:this.inboxVersion,completedAt:this._clock};
@@ -185,8 +202,8 @@ export class CallConversationEngine extends ConversationEngine {
   _maybeAssessTopic(){if(!this._state.call?.active)super._maybeAssessTopic();}
   async _think(){
     if(!this._state.call?.active)return super._think();
-    if(this.callYield||!this._canPresentMedia()||!this.callNeedsTurn||!this.enabled||!this._started||this.pending||this._active||this._queue.length||this._state.paused||this._destroyed||this._clock<this.nextWake)return;
-    const version=this.callVersion,speechId=this._speechId;this.callNeedsTurn=false;const thinking=super._think();this._emitState();await thinking;
+    if(this.callReviewBlocked||this.callYield||!this._canPresentMedia()||!this.callNeedsTurn||!this.enabled||!this._started||this.pending||this._active||this._queue.length||this._state.paused||this._destroyed||this._clock<this.nextWake)return;
+    this._cancelCallQuality();const version=this.callVersion,speechId=this._speechId;this.callNeedsTurn=false;const thinking=super._think();this._emitState();await thinking;
     if(this._state.call.active&&version===this.callVersion){if(this.failureStreak)this.callNeedsTurn=this.failureStreak<3;else if(this._speechId===speechId&&this.inbox.some(m=>m.mine)&&!this._state.media&&this.callReviewRetries++<2)this.callNeedsTurn=true;}
   }
   _wakeDelay(result){
