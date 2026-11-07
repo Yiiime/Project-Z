@@ -81,6 +81,9 @@ namespace Seabreeze
                 while(!done&&!c.cancelled)yield return null;
                 if(c.cancelled)yield break;
                 if(error!=null||line==null||!Valid(c)||Vector2.Distance(speaker.transform.position,recipient.transform.position)>2){Finish(c,false);yield break;}
+                // The model planned for the submitted audience. A new listener
+                // changes what may be said; discard before presentation/receipt.
+                if(memory.Listeners(speaker.transform.position,speaker.npcId,recipient.npcId).Except(request.observers).Any()){Finish(c,false);yield break;}
                 if(string.IsNullOrEmpty(line.result?.dialogue)){memory.Client.CommitDecision(line,speaker.npcId,request.observers,request.locationId);break;}
                 memory.ShowResult(line);memory.CommitLine(c.id,speaker.npcId,recipient.npcId,line.result.dialogue,line.proposalId,"face_to_face");LastRecalledMemoryIds=line.recalledMemoryIds??Array.Empty<string>();CommittedNpcLines++;
                 float visibleUntil=Time.unscaledTime+Mathf.Clamp(1.3f+line.result.dialogue.Length*.05f,2.5f,6);

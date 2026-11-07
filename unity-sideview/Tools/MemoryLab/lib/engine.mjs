@@ -611,7 +611,8 @@ export class Engine {
         .map((id) => [
           id,
           [...facts, ...memories]
-            .filter((m) => m.disclose_to?.includes(id))
+            .filter((m) => m.disclose_to?.includes(id) &&
+              (j.environment?.actual_audience||[]).every(listener=>listener==="player"||m.disclose_to?.includes(listener)))
             .map((m) => m.id),
         ]),
     );
@@ -1359,6 +1360,10 @@ export class Engine {
         reason: o.action.description,
         topic: o.action.description,
       };
+    } catch(error) {
+      j.status = "failed";
+      j.error = error instanceof TurnError ? error.message : "意向生成失败";
+      throw error;
     } finally {
       this.store.put("job", j);
     }

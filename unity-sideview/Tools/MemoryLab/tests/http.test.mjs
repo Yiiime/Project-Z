@@ -77,6 +77,14 @@ async function setup(t, decide = reply) {
   return { app, post, base };
 }
 const base = { worldId: "native", runId: "r1", day: 1, period: 0 };
+test("Unity supplies actual bystanders to the model before generating NPC speech",async t=>{
+  let observed=false;
+  const {post}=await setup(t,c=>{observed=true;assert.deepEqual(c.environment.actual_audience,["linxu","axing","z"]);return reply(c);});
+  await post("game/open",base,true);
+  await post("game/sync",{...base,eventData:{id:"meeting",seq:1,day:1,period:0,kind:"observation",text:"林序和阿星在码头停下交谈，Z站在旁边。",observers:["linxu","axing","z"],discloseTo:["linxu","axing","z"],locationId:"dock",conversationId:"pair"}},true);
+  const r=await post("game/utterance",{...base,actorId:"linxu",recipientId:"axing",conversationId:"pair",scene:"Street",locationId:"dock",observers:["linxu","axing","z"]},true);
+  assert.equal(r.code,200,r.data.error);assert(observed);
+});
 const event = (id, seq, kind = "utterance") => ({
   id,
   seq,

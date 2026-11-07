@@ -11,6 +11,42 @@ const make = () => {
   engine.create("w");
   return engine;
 };
+test("a failed meeting decision leaves no running job and the next plan can succeed", async(t)=>{
+  const e=make();t.after(()=>e.store.close());
+  e.decide=()=>{throw new Error("test model failure");};
+  await assert.rejects(e.plan("w","z",["linxu"]));
+  assert(e.records(e.world("w"),"job").every(j=>j.status==="failed"));
+  e.decide=c=>({...reply(c),dialogue:""});
+  const next=await e.plan("w","z",["linxu"]);
+  assert.equal(next.targetId,"");
+  assert(!e.records(e.world("w"),"job").some(j=>j.status==="running"));
+});
+test("runtime omits an explicit no-communication sentinel but still rejects substantive invalid payloads",async(t)=>{
+  const e=make();t.after(()=>e.store.close());
+  const c=e.context(e.player("w","z","你好"));
+  let output=reply(c);
+  e.runtime.provider={publicConfig:()=>({configured:true}),request:()=>({}),call:async()=>({text:JSON.stringify(output),finishReason:"stop"})};
+  for(const absent of [false,null]){output.info.communication=absent;assert(!Object.hasOwn((await e.runtime.generate(c)).info,"communication"));}
+  for(const invalid of [true,{},"inform"]){output.info.communication=invalid;await assert.rejects(e.runtime.generate(c));}
+});
+test("the model agenda contract lists only current executable action IDs",t=>{
+  const e=make();t.after(()=>e.store.close());
+  const c=e.context(e.player("w","liyuan","我们已经接受地图委托了，等Z自己选地方"));
+  const agenda=e.policy.outputContract(c).$defs.info.properties.agenda_update;
+  assert.deepEqual(agenda.properties.next_action_id.enum,[null,...c.character_state.allowed_next_action_ids]);
+  assert.deepEqual(agenda.properties.goal_id.enum,c.character_state.allowed_goals.map(g=>g.id||g));
+});
+test("actual bystanders restrict disclosure before a line is presented",t=>{
+  const e=make();t.after(()=>e.store.close());
+  e.place("w","axing","dock");
+  const secret=e.observe("w","林序和阿星之间的私人安排",["linxu","axing"],{wake:false,disclose_to:["linxu","axing"]});
+  const job=e.job("w","linxu",secret.id,{environment:{actual_audience:["linxu","axing","z"],present_characters:["linxu","axing"]}});
+  const c=e.context(job);
+  assert(!c.character_state.disclosure_by_recipient.axing.includes(secret.id));
+  const o=reply(c,"communicate","axing");o.info.communication.shared_claim_ids=[secret.id];
+  assert.throws(()=>e.policy.validate(c,o),/不允许|旁听者/);
+  assert.equal(e.records(e.world("w"),"proposal").length,0);
+});
 export function reply(c, type = "wait", target) {
   const a = c.available_actions.find(
     (a) => a.type === type && (!target || a.target === target),

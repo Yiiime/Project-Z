@@ -25,7 +25,18 @@ namespace Seabreeze
         public void ShowResult(MemoryReply reply){LastReply=reply;}
         public bool CanInteract(string id)=>Spawner!=null&&Spawner.Find(id)!=null;
         public void BeginPlayerChat(string id){var npc=Spawner.Find(id);if(npc!=null&&world.Player!=null&&Vector2.Distance(npc.transform.position,world.Player.position)<=2)Conversations.BeginPlayer(npc);}
-        public void PublishStoryEvent(string stableId,string text,string[] observers,bool verified=false,string[] discloseTo=null){Append(new MemoryEvent{id=stableId,kind="story_event",text=text,observers=observers,verified=verified,discloseTo=discloseTo??observers,location=session.CurrentPlace.ToString(),locationId=Location(null)});}
+        public string StoryEventId(string stableId)=>"story_"+session.State.memory.worldId+"_"+stableId;
+        public void PublishStoryEvent(string stableId,string text,string[] observers,bool verified=false,string[] discloseTo=null)
+        {
+            string id=StoryEventId(stableId);
+            if(session.State.memory.outbox.Any(e=>e.id==id))return;
+            if(!string.IsNullOrEmpty(session.State.memory.checkpoint))
+            {
+                var cp=JObject.Parse(session.State.memory.checkpoint);
+                if((cp["records"]?["event"]??new JArray()).Any(e=>(string)e["id"]==id))return;
+            }
+            Append(new MemoryEvent{id=id,kind="story_event",text=text,observers=observers,verified=verified,discloseTo=discloseTo??observers,location=session.CurrentPlace.ToString(),locationId=Location(null)});
+        }
         public void RespondTask(string taskId,bool accepted){Client.RespondTask(taskId,accepted,r=>Conversations.RequestPlayerReply());}
         public void InviteTask(string taskId,string actorId,string text){BeginPlayerChat(actorId);Client.InviteTask(taskId,actorId,text,r=>Conversations.RequestPlayerReply());}
         public void BeforeSave(){if(!changing)Spawner?.CapturePositions();}
