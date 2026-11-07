@@ -15,7 +15,7 @@ export class ConversationEngine extends LiveEngine {
     this.addEventListener('speak',({detail})=>{
       if(detail.resume)return;
       this._cancelTopic('new_speech');
-      this.audience?.dialogue.invalidate();
+      this.audience?.dialogue.invalidate(this._state.call?.active?'host':null);
       if(detail.source!=='deepseek')return;
       if(this.handoffEnabled)this.audience.setHostPreview({speechId:detail.id,text:detail.text});
       // These are dispatched speech cues, not proof that a model was rendered.
@@ -209,10 +209,12 @@ export class ConversationEngine extends LiveEngine {
     }
     const controller=new AbortController(),epoch=this.epoch;this.pending=controller;
     const inbox=this.inbox.map(m=>({...m})),requestId=prepared?.requestId||id(),context=prepared?.context||this._hostContext(inbox),generationContext={publicEvents:context.publicEvents,inbox:context.host.inbox,turn:context.host.turn};
+    const sentenceReply=this._beginSentenceReply?.({controller,epoch,inbox,requestId,context,generationContext});
     try{
       this._waitingReceipts('pending',inbox);this._state.agent.source='pending';this._state.agent.errorCode=null;this._emitState();
-      const result=prepared?.result||await this.client.generate({requestId,kind:'host',eventId:requestId,message:'请决定直播下一步。',context},{signal:controller.signal});
+      let result=prepared?.result||await this.client.generate({requestId,kind:'host',eventId:requestId,message:'请决定直播下一步。',context},{signal:controller.signal,...(sentenceReply?{onSentence:sentenceReply.onSentence}:{})});
       if(epoch!==this.epoch||this._destroyed||this._state.paused)return;
+      this._validateCallReply?.(result,context);
       const allowed=new Set(inbox.map(m=>m.id));
       if(!['speak','wait','tool'].includes(result.action)||!Array.isArray(result.handledIds)||result.handledIds.some(x=>!allowed.has(x))||!Number.isInteger(result.wakeAfterMs)||result.wakeAfterMs<2000||result.wakeAfterMs>120000)throw Error('invalid_host_decision');
       if(result.continuation!==undefined&&!['continue','leave_space','await_event'].includes(result.continuation))throw Error('invalid_continuation');
@@ -225,12 +227,15 @@ export class ConversationEngine extends LiveEngine {
         // Stop playback only after this utterance passes review.
 
       }
-      if(result.action==='speak'||result.action==='tool'){
+      if(sentenceReply?.received()){await sentenceReply.finish(result,agendaUpdates);}
+      else if(result.action==='speak'||result.action==='tool'){
         if(!result.speech)throw Error('missing_speech');
-        this._warmCandidate(requestId,result);
-        const candidate={id:requestId,role:'host',speakerId:'Z',text:result.speech,intent:result.action,replyTo:result.handledIds,evidenceIds:[],...(result.action==='tool'?{plannedTool:{name:result.tool.name,targetId:result.tool.args?.taskId||result.tool.args?.songId||result.tool.args?.messageId||''}}:{})};
-        let reviewFailure=null;
-        const ticket=await this.audience.dialogue.inspect(candidate,{signal:controller.signal,generationContext,sessionEvents:this.session.evidence(),onFailure:reason=>{reviewFailure=reason;}});
+        let preparedAudioKey=requestId,repaired=false,ticket,reviewFailure=null;
+        const candidate={id:requestId,role:'host',speakerId:'Z',text:result.speech,intent:result.action,replyTo:result.handledIds,evidenceIds:[],...(this._state.call?.active?{segment:{index:0,scope:'reply'}}:{}),...(result.action==='tool'?{plannedTool:{name:result.tool.name,targetId:result.tool.args?.taskId||result.tool.args?.songId||result.tool.args?.messageId||''}}:{})};
+        if(this._state.call?.active&&this._approveCallCandidate){
+          const approved=await this._approveCallCandidate({candidate,result,context,signal:controller.signal,valid:()=>epoch===this.epoch&&!controller.signal.aborted&&!this._destroyed&&!this._state.paused&&this._state.call?.active&&this._state.call.input==='idle'});
+          ticket=approved.ticket;preparedAudioKey=approved.candidate.id;repaired=approved.repaired;result={...result,speech:approved.candidate.text};
+        }else{this._warmCandidate(requestId,result);ticket=await this.audience.dialogue.inspect(candidate,{signal:controller.signal,generationContext,sessionEvents:this.session.evidence(),onFailure:reason=>{reviewFailure=reason;}});}
         if(epoch!==this.epoch||controller.signal.aborted||this._destroyed||this._state.paused)return;
         if(!ticket&&reviewFailure==='stale'){this.nextWake=this._clock+350;return;}
         if(!ticket)throw Object.assign(Error('reply_not_approved'),{code:'agent_reply_not_approved'});
@@ -240,13 +245,13 @@ export class ConversationEngine extends LiveEngine {
           if(this._mediaPlaying()){this._executeTool(result.tool);result.action='speak';}
           const handled=new Set(result.handledIds);for(const mid of handled)this._setReceipt(mid,'queued');
           // _say starts immediately here; no asynchronous gap after the revision check.
-          const speechId=this._speechId+1,playbackLifecycle=this.playbackLifecycle;this.speechLinks.set(speechId,[...handled]);
+          const speechId=this._speechId+1,playbackLifecycle=this.playbackLifecycle;this.speechLinks.set(speechId,[...handled]);this._onHostSpeechCommitted?.(speechId,result);
           if(this.audiencePreview?.status==='published')this.audiencePreview=null;
-          this._say(result.speech,result.mood,gesture,{source:'deepseek',transition,preparedAudioKey:requestId,onComplete:()=>{
+          this._say(result.speech,result.mood,gesture,{source:'deepseek',transition,preparedAudioKey,onComplete:()=>{
             for(const mid of handled)this._setReceipt(mid,'replied');this.inbox=this.inbox.filter(m=>!handled.has(m.id));
             this.audience.dialogue.setWaiting(this.inbox);
             const completed=this.session.events.find(e=>e.id===`speech-${speechId}`&&e.type==='speech.completed');
-            if(completed){this.session.apply(agendaUpdates,context.host.session,completed,!handled.size);this.memory=String(result.memory||'').slice(0,800);}
+            if(completed&&!repaired){this.session.apply(agendaUpdates,context.host.session,completed,!handled.size);this.memory=String(result.memory||'').slice(0,800);}if(completed)this._onHostReplyCompleted?.(result,context);
             if(this.speechPlan?.speechId===speechId)this.speechPlan.completedAt=this._clock;
             this.nextWake=this._clock+(epoch===this.epoch&&this.speechPlan?.inboxVersion===this.inboxVersion?this._wakeDelay(result):0);
             if(result.action==='tool'){
@@ -263,8 +268,8 @@ export class ConversationEngine extends LiveEngine {
       }else{if(this.audiencePreview?.status==='published')this.audiencePreview=null;for(const mid of result.handledIds)this._setReceipt(mid,'seen');this.inbox=this.inbox.filter(m=>!result.handledIds.includes(m.id));this.audience.dialogue.setWaiting(this.inbox);this.session.apply(agendaUpdates,context.host.session);this.memory=String(result.memory||'').slice(0,800);}
       this.nextWake=this._clock+this._wakeDelay(result);
       this.failureStreak=0;this._state.agent.errorCode=null;this._state.agent.validationReason=null;this._state.agent.source='deepseek';this._state.textStatus='ready';
-    }catch(error){if(epoch===this.epoch&&!this._destroyed&&!controller.signal.aborted){this.failureStreak++;const retryMs=error.code==='agent_insufficient_balance'?60000:this.failureStreak<=3?1000*2**(this.failureStreak-1):15000;this.audience.dialogue.log({stage:'host.request.failed',code:error.code||'host_decision_unavailable',retryMs});this._state.agent.errorCode=error.code||'host_decision_unavailable';this._state.agent.validationReason=error.validationReason||null;this._state.agent.source='unavailable';this._state.textStatus='fallback';this._waitingReceipts('failed',inbox);this.nextWake=this._clock+retryMs;}}
-    finally{this.speechAudio?.dropWarmSpeech(requestId);if(this.pending===controller)this.pending=null;this._emitState();}
+    }catch(error){sentenceReply?.abort();if(error.code==='agent_reply_stale'){if(epoch===this.epoch&&!controller.signal.aborted){this.nextWake=this._clock+350;if(this._state.call?.active)this.callNeedsTurn=true;}return;}if(epoch===this.epoch&&!this._destroyed&&!controller.signal.aborted){if(error.code==='agent_reply_repair_failed')this.callReviewBlocked=true;this.failureStreak++;const retryMs=this.callReviewBlocked?0:error.code==='agent_insufficient_balance'?60000:this.failureStreak<=3?1000*2**(this.failureStreak-1):15000;this.audience.dialogue.log({stage:'host.request.failed',code:error.code||'host_decision_unavailable',retryMs});this._state.agent.errorCode=error.code||'host_decision_unavailable';this._state.agent.validationReason=error.validationReason||null;this._state.agent.source='unavailable';this._state.textStatus='fallback';this._waitingReceipts('failed',inbox);this.nextWake=this._clock+retryMs;}}
+    finally{sentenceReply?.dispose();this.speechAudio?.dropWarmSpeech(requestId);if(this.pending===controller)this.pending=null;this._emitState();}
   }
   _waitingReceipts(status,messages=this.inbox){
     const waiting=messages.filter(m=>m.mine&&this.inbox.some(x=>x.id===m.id));

@@ -89,5 +89,11 @@
     "2026-11-07: Ready-song handoff accepts player messages addressed in the same turn; committed playback survives ordinary chat but respects lifecycle cancellation. Semantic review receives planned tool intent, with natural-language singing/host/review guidance; original hashes remain historical provenance.",
     "2026-11-07: Request-local host message references restore exact canonical IDs before validation; bounded reply failures preserve pending questions and expose retry without endless thinking.",
     "2026-11-07: Native live-session-control skill, validated host sessionDecision and separate semantic/farewell lane; P00 executor barrier, bounded close and one extension. Original import hashes remain historical provenance; runtime bundle regenerated from source lock."
-  ]
+  ],
+  "nativeCallAdaptation": {
+    "date": "2026-11-07",
+    "source": "../live-call-demo (Z-live-singing-integration-20261107T124439Z)",
+    "sourceZipSha256": "ce279f5f97d109ba660ec28875ff34c53f2db97924c1597e807892d83915c88b",
+    "notes": "Selective call scheduler, concurrent review and sentence streaming migration. Original file hashes above describe original imports, not the adapted working copies. Current singing and session-control rules retained."
+  }
 }

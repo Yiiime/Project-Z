@@ -11,7 +11,8 @@
     "netease:login": "node scripts/netease-login.mjs"
   },
   "dependencies": {
-    "ws": "8.22.1",
-    "@neteasecloudmusicapienhanced/api": "4.41.1"
+    "@neteasecloudmusicapienhanced/api": "4.41.1",
+    "@volcengine/openapi": "1.36.2",
+    "ws": "8.22.1"
   }
 }

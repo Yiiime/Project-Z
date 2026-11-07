@@ -1,0 +1,134 @@
+{
+  "date": "2026-11-07",
+  "serviceTests": {
+    "passed": 107,
+    "failed": 0
+  },
+  "unityPlayer": {
+    "passed": true,
+    "checks": [
+      {
+        "name": "rtc_universal_plugin_loads",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "name": "single_microphone",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "name": "two_dialogue_rows",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "name": "original_font_size",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "name": "bounded_panel",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "name": "stream_finishes",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "name": "starts_before_final_audio",
+        "passed": true,
+        "detail": "0.026 seconds"
+      },
+      {
+        "name": "completion_once",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "name": "complete_position",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "name": "quiet_fade",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "name": "no_false_completion_after_interrupt",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "name": "volume_restored",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "name": "stopped_after_interrupt",
+        "passed": true,
+        "detail": ""
+      }
+    ],
+    "source": "Unity Player; generated local sine PCM; no microphone or cloud calls"
+  },
+  "existingLive2dRegression": {
+    "passed": true,
+    "checks": 48,
+    "failed": []
+  },
+  "voicePermissions": {
+    "configuration": {
+      "provider": "volc-mmpg",
+      "requested": true,
+      "configured": true,
+      "credentialsConfigured": true,
+      "needsEnrollment": false,
+      "asrSource": "api-key",
+      "validated": false,
+      "active": false,
+      "missing": [],
+      "invalidMode": false
+    },
+    "microphoneUsed": false,
+    "rtc": {
+      "ok": true,
+      "httpStatus": 200
+    },
+    "mmpg": {
+      "ok": true,
+      "stage": "configured_session_created_no_audio"
+    }
+  },
+  "oneLiveLatencySample": {
+    "microphoneUsed": false,
+    "requests": {
+      "host": 1,
+      "review": 1,
+      "tts": 1
+    },
+    "note": "Synthetic text -> reviewed first sentence -> first server PCM. Excludes ASR, RTC uplink and Unity output.",
+    "firstSentenceMs": 1822,
+    "hostFinishedMs": 1838,
+    "hostAction": "speak",
+    "path": "early-sentence",
+    "reviewMs": 3032,
+    "reviewDecision": "allow",
+    "firstPcmMs": 3790,
+    "ttsFinishedMs": 4182,
+    "ttsComplete": true
+  },
+  "teamCheck": {
+    "csharpFiles": 264,
+    "syntaxErrors": 0,
+    "passed": true
+  },
+  "limits": [
+    "No live microphone was used.",
+    "No systematic office noise or real RTC microphone roundtrip acceptance.",
+    "Latency sample excludes RTC, ASR, network delivery to player and hardware output."
+  ]
+}

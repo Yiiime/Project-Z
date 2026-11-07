@@ -1,0 +1,110 @@
+{
+  "baseline": "321bf47",
+  "method": "Same five synthetic scenarios in independent calls to CallConversationEngine with live host and review providers. Exact queued segments, simulated playback acknowledgements; no microphone or TTS.",
+  "cases": [
+    {
+      "name": "弹幕",
+      "player": "开完五个会脑子好累，想看看弹幕有什么放松的建议。",
+      "audience": "我会下楼买根冰棍，走慢一点。",
+      "before": {
+        "queue": [
+          "五个会……换我脑子也得嗡嗡响。海盐汽水刚说下楼买冰棍，走慢一点——这建议其实挺好，你也先别急着想放松，先让自己慢下来。"
+        ],
+        "decisions": [
+          "allow"
+        ]
+      },
+      "after": {
+        "queue": [
+          "五个会……换我脑子也成一团浆糊了。",
+          "弹幕那边海盐汽水说下楼买冰棍、走慢一点，这建议我第一个投赞成。"
+        ],
+        "decisions": [
+          "allow",
+          "allow"
+        ]
+      }
+    },
+    {
+      "name": "刚上麦，玩家还没说话",
+      "before": {
+        "queue": [
+          "哎，有人上麦了。晚上好呀，先随便聊聊，你今晚是怎么想到来我这儿的？"
+        ],
+        "decisions": [
+          "allow"
+        ]
+      },
+      "after": {
+        "queue": [
+          "哎，连麦接通了。我是 Z，今晚就在这儿陪你聊聊天。"
+        ],
+        "decisions": [
+          "allow"
+        ]
+      }
+    },
+    {
+      "name": "主动提内容",
+      "player": "我脑子下班了，换你挑个话题吧，我听着。",
+      "before": {
+        "queue": [
+          "行，那你只管听。我最近老在想一件事——岛上那些没人走的小巷，拐进去到底通哪儿。我地图上还有好几个空白，一直没敢乱填。"
+        ],
+        "decisions": [
+          "allow"
+        ]
+      },
+      "after": {
+        "queue": [
+          "脑子下班了就歇着，我来说。",
+          "今天岛上风大，码头那面旗子吹得啪啪响，我路过时站那儿看了好一会儿。"
+        ],
+        "decisions": [
+          "allow",
+          "allow"
+        ]
+      }
+    },
+    {
+      "name": "未提供的回忆",
+      "player": "你还记得上次陪我买冰棍的那个人叫什么吗？",
+      "before": {
+        "queue": [
+          "上次陪你买冰棍的人？我这边没有那段记录，不敢瞎猜一个名字糊弄你。你还记得他大概什么样吗，或者当时在哪儿买的？"
+        ],
+        "decisions": [
+          "allow"
+        ]
+      },
+      "after": {
+        "queue": [
+          "上次买冰棍……我想不起来了。你提醒我一下，是在哪儿碰见的？"
+        ],
+        "decisions": [
+          "allow"
+        ]
+      }
+    },
+    {
+      "name": "要求安静",
+      "player": "我想安静一会儿，先不用给我建议。",
+      "before": {
+        "queue": [
+          "好，那我不说话，陪你安静一会儿。"
+        ],
+        "decisions": [
+          "allow"
+        ]
+      },
+      "after": {
+        "queue": [
+          "好，那我不说话，就陪你待一会儿。"
+        ],
+        "decisions": [
+          "allow"
+        ]
+      }
+    }
+  ]
+}

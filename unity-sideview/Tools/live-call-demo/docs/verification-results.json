@@ -1,0 +1,60 @@
+{
+  "manifest": {
+    "exitCode": 0
+  },
+  "install": {
+    "exitCode": 0
+  },
+  "build": {
+    "exitCode": 0
+  },
+  "test": {
+    "exitCode": 0
+  },
+  "voiceprint": {
+    "exitCode": 0
+  },
+  "asr-bridge": {
+    "exitCode": 0
+  },
+  "voiceprint-bridge": {
+    "exitCode": 0
+  },
+  "singing": {
+    "exitCode": 0
+  },
+  "http": {
+    "/": {
+      "status": 200,
+      "bytes": 5613353
+    },
+    "/api/agent/config": {
+      "status": 200,
+      "bytes": 4123
+    },
+    "/api/asr/config": {
+      "status": 200,
+      "bytes": 265
+    },
+    "/api/voiceprint/config": {
+      "status": 200,
+      "bytes": 311
+    },
+    "/live2d/models/Haru/Haru.model3.json": {
+      "status": 200,
+      "bytes": 2280
+    },
+    "/audio/songs/wanan-yanrenzhong-vivi2-chorus.wav": {
+      "status": 200,
+      "bytes": 1549714
+    },
+    "/api/singing/state": {
+      "status": 200,
+      "bytes": 1520
+    },
+    "/api/voiceprint/rtc.js": {
+      "status": 200,
+      "bytes": 2259135
+    }
+  }
+}

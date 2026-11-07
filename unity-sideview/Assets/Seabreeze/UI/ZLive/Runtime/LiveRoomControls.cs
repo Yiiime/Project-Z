@@ -67,6 +67,7 @@ public sealed partial class LiveFeatureController {
         dialogContent.Add(Text("Z 会随着聊天展现表情和动作，说话与唱歌时同步口型。","demo-note"));
         SettingSwitch("Vivi 2.0 语音",(bool?)state?["room"]?["voiceAvailable"]==true?"语音服务已配置":"语音尚未配置，文字互动照常进行",!muted,value=>{if(value==muted)ToggleSound();});
         var volumeRow=Box("settings-row");volumeRow.Add(Text("语音音量","settings-label"));volumeRow.Add(Box("spacer"));var volume=new Slider(0,100){value=audioPlayer.Source.volume*100,showInputField=true};volume.style.width=150;volume.RegisterValueChangedCallback(e=>{audioPlayer.Source.volume=e.newValue/100;PlayerPrefs.SetFloat("ZLive.Volume",audioPlayer.Source.volume);_=SyncAudioCapabilities();});volumeRow.Add(volume);dialogContent.Add(volumeRow);
+        dialogContent.Add(Action("连麦声音设置",ShowVoiceSettings,"dialog-secondary"));
         SettingSwitch("画面弹幕","右侧聊天记录始终保留",danmakuEnabled,value=>{if(value!=danmakuEnabled)ToggleDanmaku();});
         SettingSwitch("轻柔动画","减少肢体摆动和漂浮效果",character.Performance.Reduced,value=>{character.Performance.Reduced=value;PlayerPrefs.SetInt("ZLive.ReducedMotion",value?1:0);});
         dialogContent.Add(Action("好了，继续看月亮",CloseDialog,"dialog-primary"));

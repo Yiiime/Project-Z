@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "pathBase": "bundle root",
+  "skills": [
+    {
+      "id": "audience-reaction",
+      "legacyCapabilityId": null,
+      "caller": "audience_director",
+      "entry": "skills/audience-reaction/SKILL.md",
+      "contract": "skills/audience-reaction/references/contracts.md",
+      "outputDiscriminator": "status",
+      "implementationStatus": "spec_only",
+      "executionEnabledByDefault": false
+    },
+    {
+      "id": "singing",
+      "legacyCapabilityId": "singing",
+      "caller": "host",
+      "entry": "skills/singing/SKILL.md",
+      "contract": "skills/singing/references/contracts.md",
+      "outputDiscriminator": "decision",
+      "implementationStatus": "spec_only",
+      "executionEnabledByDefault": false
+    },
+    {
+      "id": "voice-performance",
+      "legacyCapabilityId": "dubbing",
+      "caller": "host",
+      "entry": "skills/voice-performance/SKILL.md",
+      "contract": "skills/voice-performance/references/contracts.md",
+      "outputDiscriminator": "action",
+      "implementationStatus": "spec_only",
+      "executionEnabledByDefault": false
+    },
+    {
+      "id": "simple-drawing",
+      "legacyCapabilityId": "drawing",
+      "caller": "host",
+      "entry": "skills/simple-drawing/SKILL.md",
+      "contract": "skills/simple-drawing/references/contracts.md",
+      "outputDiscriminator": "action",
+      "implementationStatus": "spec_only",
+      "executionEnabledByDefault": false
+    },
+    {
+      "id": "entertainment-tarot",
+      "legacyCapabilityId": "tarot",
+      "caller": "host",
+      "entry": "skills/entertainment-tarot/SKILL.md",
+      "contract": "skills/entertainment-tarot/references/contracts.md",
+      "outputDiscriminator": "action",
+      "implementationStatus": "spec_only",
+      "executionEnabledByDefault": false
+    }
+  ],
+  "excludedLegacyCapabilities": [
+    "birthday"
+  ],
+  "activationRule": "Only the demo host may enable verified adapter capabilities; presence of a SKILL.md is not capability availability."
+}

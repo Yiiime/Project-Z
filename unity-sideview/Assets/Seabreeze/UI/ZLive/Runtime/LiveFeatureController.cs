@@ -19,7 +19,7 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     public Action<string> SessionEnded;
     bool sessionEndNotified;
     public void Configure(string serviceUrl,string gameSessionToken){pendingBase=serviceUrl;pendingToken=gameSessionToken;}
-    async void Start(){try{character=gameObject.AddComponent<CharacterPresenter>();character.Initialize();audioPlayer=gameObject.AddComponent<LiveAudioPlayer>();audioPlayer.Character=character;character.Audio=audioPlayer.Source;audioPlayer.Frame=NextFrame;audioPlayer.Receipt=Report;audioPlayer.Caption=s=>caption.text=s;BuildUI();BuildCompanionUI();
+    async void Start(){try{character=gameObject.AddComponent<CharacterPresenter>();character.Initialize();audioPlayer=gameObject.AddComponent<LiveAudioPlayer>();audioPlayer.Character=character;character.Audio=audioPlayer.Source;audioPlayer.Frame=NextFrame;audioPlayer.Receipt=Report;audioPlayer.Caption=SetHostCaption;gameObject.AddComponent<NativeRtcAudioReference>();BuildUI();BuildCompanionUI();
 #if !UNITY_EDITOR
         if(string.IsNullOrEmpty(pendingBase))ReadConnection(Path.Combine(Application.dataPath,"Resources","zlive-connection.json"));
 #endif
@@ -51,12 +51,13 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
         SessionEnded.Invoke(transport.SessionId);
         PlayerPrefs.DeleteKey(SessionKey);PlayerPrefs.Save();
     }
-    void Queue(JObject e){if((string)e["type"]=="session.state"){ApplyState((JObject)e["payload"]);return;}if(e["commandId"]==null)return;string id=(string)e["commandId"];if(outcomes.TryGetValue(id,out var outcome)){_=Observe(transport.Receipt(e,outcome));return;}if(running.ContainsKey(id))return;
+    void Queue(JObject e){if((string)e["type"]=="call.voice"){ReceiveCallVoice((JObject)e["payload"]);return;}if((string)e["type"]=="session.state"){ApplyState((JObject)e["payload"]);return;}if(e["commandId"]==null)return;string id=(string)e["commandId"];if(outcomes.TryGetValue(id,out var outcome)){_=Observe(transport.Receipt(e,outcome));return;}if(running.ContainsKey(id))return;
         var cancel=CancellationTokenSource.CreateLinkedTokenSource(life.Token);running[id]=cancel;_=Execute(e,cancel);
     }
     async Task Execute(JObject c,CancellationTokenSource cancel){string id=(string)c["commandId"],type=(string)c["type"];var p=(JObject)c["payload"];try{
         if((int)c["protocolVersion"]!=1)throw new Exception("unsupported_protocol");if(DateTimeOffset.TryParse((string)c["expiresAt"],out var expiry)&&expiry<DateTimeOffset.UtcNow)throw new Exception("command_expired");await Report(c,new JObject{{"status","received"}});cancel.Token.ThrowIfCancellationRequested();
         switch(type){
+        case "host.fade":await audioPlayer.FadeOut((string)p["speechId"],(int?)p["durationMs"]??180,cancel.Token);await Report(c,new JObject{{"status","completed"}});break;
         case "host.present":if(p["fallbackReason"]?.Type==JTokenType.String)Toast("语音暂不可用 · "+VoiceErrorText((string)p["fallbackReason"]));ShowMood(p);await audioPlayer.Host(c,cancel.Token);break;
         case "audience.present":{string mid=(string)p["messageId"];if(!messageIds.Contains(mid)){AddChat(NpcName((string)p["npcId"]),(string)p["text"],false);messageIds.Add(mid);messageIds.Add("message:"+mid);}await VisibleFrame(chat,cancel.Token);await Report(c,new JObject{{"status","displayed"}});break;}
         case "panel.set":{var panel=(string)p["kind"]=="drawing"?drawing:tarot;panel.style.display=(bool)p["visible"]?DisplayStyle.Flex:DisplayStyle.None;UpdatePanelLayout();await NextFrame();cancel.Token.ThrowIfCancellationRequested();await Report(c,new JObject{{"status","completed"},{"visible",(bool)p["visible"]}});break;}
@@ -88,7 +89,6 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     async void Send() {
         if(sendingInput||SessionInputBlocked)return;
         if(ChatInputComposing){Toast("请先选好汉字，再发送");return;}
-        CancelMicrophone();
         if(transport==null){Toast("请先启动直播服务");return;}
         string draft=input.value??"",text=draft.Trim();
         if(text.Length==0){Toast("先写一句想对 Z 说的话吧");return;}
@@ -101,7 +101,7 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
         character.NoticeMessage();
         try {
             if(locallyPaused){await transport.Control("resume");locallyPaused=false;audioPlayer.Pause(false);await SyncAudioCapabilities();}
-            await transport.Input("viewer.message",new JObject{{"text",text}});accepted=true;
+            await transport.Input("viewer.message",new JObject{{"text",text}});accepted=true;if((bool?)state?["call"]?["active"]==true)ShowPlayerSpeech(text,true);
             voiceNotice="";emojiPopover.style.display=DisplayStyle.None;
             ApplyState(await transport.Request(transport.Route()));
             Toast((bool?)state?["call"]?["active"]==true?"连麦消息已发送":"弹幕已发送");
@@ -119,6 +119,16 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     static string FriendlyError(Exception error) {
         switch(error.Message) {
             case "microphone_permission_required":return "请在系统设置中允许使用麦克风";
+            case "rtc_plugin_missing":case "rtc_plugin_invalid":return "原生连麦组件尚未安装，请运行 Tools/native-rtc/build-macos.sh";
+            case "rtc_platform_unsupported":return "当前原生连麦暂支持 macOS";
+            case "rtc_join_failed":return "未能连接语音房间，请检查网络后重试";
+            case "voiceprint_enrollment_required":return "请先在设置里的连麦声音设置录入声音";
+            case "voiceprint_not_configured":return "连麦声音服务尚未配置，可继续打字聊天";
+            case "voiceprint_recording_too_quiet":return "录音中的人声不足，请靠近麦克风重试";
+            case "voiceprint_permission":case "voiceprint_provider_rejected":return "声音服务权限暂不可用，请检查服务配置";
+            case "voiceprint_connect_timeout":case "voiceprint_connection_failed":case "voiceprint_disconnected":return "连麦连接中断，请重新上麦";
+            case "voiceprint_verification_inactive":return "本轮声音保护未生效，请重新上麦";
+            case "voiceprint_session_expired":return "本轮连麦已结束，请重新上麦";
             case "microphone_unavailable":return "没有可用麦克风，可继续发文字";
             case "asr_not_configured":return "语音识别服务尚未配置，可继续发文字";
             case "asr_busy":return "上一句还在识别，请稍候";
