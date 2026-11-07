@@ -11,11 +11,11 @@
     },
     {
       "path": "main-agent/config/skills-source-lock.json",
-      "sha256": "b74bd4dd223d768080f84ee9cb484c911205da003479c11b64e1d820c0ae7e77"
+      "sha256": "a5e482f82a2c60146cae05521d0bae06a7a84b3441e0c3b47a90a7ec0b20447a"
     },
     {
       "path": "main-agent/prompts/conversation-host.txt",
-      "sha256": "a5da46777980512043687a146106cea0132696023ee97fbdc8c961b5368de91f"
+      "sha256": "f4b040503daaff33be64e15dc1fe710ea3e9567d9f950855c163ae57e0b6f007"
     },
     {
       "path": "main-agent/prompts/main-agent-skills.txt",
@@ -39,7 +39,7 @@
     },
     {
       "path": "skills/audience-reaction/references/dialogue-review.md",
-      "sha256": "f8f74d64097feb77e0686dbc00140355e2d65e4451b73a1a7c23c3d339c4b37f"
+      "sha256": "a81a5bbbb5a4ed083ba613c6ab6b71d28c8af78de161af93ff6ca182e3e7f25a"
     },
     {
       "path": "skills/audience-reaction/references/examples.md",
@@ -91,7 +91,7 @@
     },
     {
       "path": "skills/singing/references/expression.md",
-      "sha256": "3c10a0e5ff3e13e98c2d35d0523f8c3e96713f6165a76d2a99de00f1c419068c"
+      "sha256": "39f68649c6369692337d45958a8efb705987543a987efa5774a6feb1c823c327"
     },
     {
       "path": "skills/singing/references/voice.md",
