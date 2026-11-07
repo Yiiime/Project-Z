@@ -63,7 +63,7 @@ public sealed partial class LiveFeatureController {
         string detail,hint;
         if(control==null){detail="正在连接直播…";hint="连接后显示本场实际阶段";}
         else if(!connected&&phase!="ended"){detail="连接中断，正在恢复…";hint="当前阶段待服务确认";}
-        else if(phase=="ended"){detail="本场直播已结束";hint="点击“返回游戏”离开小屋";}
+        else if(phase=="ended"){detail="本场直播已结束";hint=SessionEnded!=null?"即将返回主游戏，迎接新的一天":"点击“返回游戏”离开小屋";}
         else if(stopRequested&&(phase=="opening"||phase=="live")){detail="正在请求收尾…";hint="等待 Z 接到结束请求";}
         else if(phase=="farewell"){detail="Z 正在道别 · 说完这段就结束";hint="本场不再接受挽留";}
         else if(phase=="closing"){
@@ -91,8 +91,8 @@ public sealed partial class LiveFeatureController {
         RefreshSessionProgress();
         string phase=SessionPhase;
         bool ended=phase=="ended",closing=phase=="closing"||phase=="farewell";
-        endLiveButton.text=ended?"返回游戏":stopRequested||phase=="farewell"||(closing&&(string)state?["sessionControl"]?["closeReason"]=="player")?"正在收尾…":closing?"立即收尾":"结束直播";
-        endLiveButton.SetEnabled(ended||connected&&!stopRequested&&(!closing||(string)state?["sessionControl"]?["closeReason"]=="host"&&phase=="closing"));
+        endLiveButton.text=ended?(SessionEnded!=null?"正在返回游戏…":"返回游戏"):stopRequested||phase=="farewell"||(closing&&(string)state?["sessionControl"]?["closeReason"]=="player")?"正在收尾…":closing?"立即收尾":"结束直播";
+        endLiveButton.SetEnabled((ended&&SessionEnded==null)||(!ended&&connected&&!stopRequested&&(!closing||(string)state?["sessionControl"]?["closeReason"]=="host"&&phase=="closing")));
         input?.SetEnabled(!SessionInputBlocked);
         sendButton?.SetEnabled(!sendingInput&&!SessionInputBlocked);
         pause?.SetEnabled(!closing&&!ended&&!stopRequested);

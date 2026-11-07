@@ -16,6 +16,8 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     readonly Dictionary<string,CancellationTokenSource> running=new Dictionary<string,CancellationTokenSource>();readonly Dictionary<string,JObject> outcomes=new Dictionary<string,JObject>();readonly HashSet<string> messageIds=new HashSet<string>();
     readonly CancellationTokenSource life=new CancellationTokenSource();readonly HashSet<TaskCompletionSource<bool>> frameWaiters=new HashSet<TaskCompletionSource<bool>>();float heartbeatAt;bool connected,locallyPaused=true,disposed,leaving;string pendingBase,pendingToken,pendingPin;string SessionKey {get {using(var sha=System.Security.Cryptography.SHA256.Create())return "ZLive.Session."+BitConverter.ToString(sha.ComputeHash(System.Text.Encoding.UTF8.GetBytes(pendingBase+"|"+pendingToken))).Replace("-","");}}
     public Action ExitRequested;
+    public Action<string> SessionEnded;
+    bool sessionEndNotified;
     public void Configure(string serviceUrl,string gameSessionToken){pendingBase=serviceUrl;pendingToken=gameSessionToken;}
     async void Start(){try{character=gameObject.AddComponent<CharacterPresenter>();character.Initialize();audioPlayer=gameObject.AddComponent<LiveAudioPlayer>();audioPlayer.Character=character;character.Audio=audioPlayer.Source;audioPlayer.Frame=NextFrame;audioPlayer.Receipt=Report;audioPlayer.Caption=s=>caption.text=s;BuildUI();BuildCompanionUI();
 #if !UNITY_EDITOR
@@ -41,6 +43,13 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     void Update(){if(disposed||leaving)return;UpdateView();UpdateCompanion();while(connections.TryDequeue(out var c)){if(c=="disconnected"){connected=false;locallyPaused=true;CancelCompanion();audioPlayer.Pause(true);status.text="连接中断 · 已暂停播放";pause.text="继续";}else{connected=true;if(locallyPaused)status.text="连接已恢复 · 点击继续";}}
         if(transport==null)return;int budget=30;while(budget-->0&&events.TryDequeue(out var e)){if((int)e["epoch"]!=transport.Epoch){CancelAll();status.text="会话版本已更新 · 请重新进入直播";connected=false;continue;}long seq=(long)e["serverSeq"];if(seq<=transport.Cursor)continue;if(seq!=transport.Cursor+1){locallyPaused=true;audioPlayer.Pause(true);status.text="同步缺口 · 请重新进入直播";continue;}Queue(e);transport.Cursor=seq;}
         if(transport!=null&&connected&&Time.unscaledTime>=heartbeatAt){heartbeatAt=Time.unscaledTime+10;_=Observe(transport.Heartbeat());}
+        NotifySessionEnded();
+    }
+    void NotifySessionEnded(){
+        if(sessionEndNotified||leaving||disposed||SessionPhase!="ended"||SessionEnded==null||string.IsNullOrEmpty(transport?.SessionId))return;
+        sessionEndNotified=true;
+        SessionEnded.Invoke(transport.SessionId);
+        PlayerPrefs.DeleteKey(SessionKey);PlayerPrefs.Save();
     }
     void Queue(JObject e){if((string)e["type"]=="session.state"){ApplyState((JObject)e["payload"]);return;}if(e["commandId"]==null)return;string id=(string)e["commandId"];if(outcomes.TryGetValue(id,out var outcome)){_=Observe(transport.Receipt(e,outcome));return;}if(running.ContainsKey(id))return;
         var cancel=CancellationTokenSource.CreateLinkedTokenSource(life.Token);running[id]=cancel;_=Execute(e,cancel);

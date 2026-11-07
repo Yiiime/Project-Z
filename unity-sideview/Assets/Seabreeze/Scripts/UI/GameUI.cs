@@ -282,7 +282,10 @@ namespace Seabreeze
             var scrim=Stretch("Backdrop",overlayRoot,Vector2.zero,Vector2.zero).gameObject.AddComponent<Image>();scrim.color=Style.Scrim;scrim.raycastTarget=true;
             if(mode=="live")
             {
-                canvas.enabled=false;nativeLive=NativeLiveHost.Open(transform,CloseOverlay);overlayBusy=false;overlayRoutine=null;yield break;
+                canvas.enabled=false;
+                var owner=session.State;NativeLiveHost opened=null;
+                opened=NativeLiveHost.Open(transform,CloseOverlay,id=>CompleteLiveSession(opened,owner,id));
+                nativeLive=opened;overlayBusy=false;overlayRoutine=null;yield break;
             }
             Vector2 size=mode=="pause"||mode=="restart"?new Vector2(760,730):mode=="ending"?new Vector2(1160,790):new Vector2(1280,790);
             var panel=Panel("Panel",overlayRoot,C,C,Vector2.zero,size,Ink,true);overlayContent=panel.transform;
@@ -297,6 +300,12 @@ namespace Seabreeze
             for(float t=0;t<1;t+=Time.unscaledDeltaTime/Mathf.Max(.01f,duration))
             {overlayGroup.alpha=Mathf.Lerp(start,target,t*t*(3-2*t));yield return null;}
             overlayGroup.alpha=target;overlayGroup.interactable=target>0;overlayGroup.blocksRaycasts=target>0;
+        }
+        void CompleteLiveSession(NativeLiveHost source,SaveData owner,string sessionId)
+        {
+            // A late callback from a closed room or a replaced save cannot advance a new day.
+            if(source==null||source!=nativeLive||overlayMode!="live"||session.State!=owner)return;
+            CloseOverlayThen(()=>session.Clock.CompleteLiveSession(sessionId));
         }
         public void CloseOverlay(){CloseOverlayThen(null);}
         public void CloseOverlayImmediately()

@@ -51,15 +51,15 @@
     },
     {
       "path": "live-session-control/SKILL.md",
-      "sha256": "e1391e9123b5aa2933c5fb85dd40293d1afbc7bbb7bdc50dacdfe047831e5098"
+      "sha256": "4622fa425d12e74c5709400f4dee29bc8358046faaeae1a895cf9b3a967290fd"
     },
     {
       "path": "live-session-control/references/integration.md",
-      "sha256": "4a3919594c280c5c8502203ce44d2a825201023702b93902260e78d4f3b8d6e4"
+      "sha256": "573b9e9d6c5aed0cbd6da4683963f282c908d2901b7c50dce0f0a7ce2f1380bf"
     },
     {
       "path": "live-session-control/references/runtime.md",
-      "sha256": "c924a400dd2659871e3f8615048ff89428c93b2f1d724d16d3dc1fc19bb7bd9b"
+      "sha256": "0903d42a95cd641a85c0cbfdc2b3e8cab2eeb7474e3799c1c7a4f28326b6ecd5"
     },
     {
       "path": "singing/SKILL.md",
