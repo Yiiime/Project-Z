@@ -22,7 +22,9 @@ public static class LiveSessionVerification {
     static string output;
     static bool returned,sawFarewell;
     static LiveSessionVerification(){EditorApplication.update+=Tick;}
-    public static void Run(){
+    public static void Run(){SessionState.SetBool(Key+".Timed",false);Start();}
+    public static void RunTimed(){SessionState.SetBool(Key+".Timed",true);Start();}
+    static void Start(){
         SessionState.SetBool(Key,true);
         EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);
         EditorApplication.EnterPlaymode();
@@ -39,7 +41,7 @@ public static class LiveSessionVerification {
         if(!SessionState.GetBool(Key,false)||!EditorApplication.isPlaying||EditorApplication.isCompiling)return;
         try{
             if(stage==0){
-                output=Path.GetFullPath("Builds/LiveSession/verification");Directory.CreateDirectory(output);
+                output=Path.GetFullPath(SessionState.GetBool(Key+".Timed",false)?"Builds/LiveSession/timed-verification":"Builds/LiveSession/verification");Directory.CreateDirectory(output);
                 deadline=EditorApplication.timeSinceStartup+50;
                 Application.runInBackground=true;
                 feature=new GameObject("Isolated live session verification").AddComponent<LiveFeatureController>();
@@ -63,13 +65,16 @@ public static class LiveSessionVerification {
                 if(EditorApplication.timeSinceStartup-changedAt<1||Field<bool>("sendingInput"))return;
                 Require(Field<JObject>("state")["room"]["messages"].ToString().Contains("晚霞"),"Input did not reach real session.");
                 Require(document.rootVisualElement.Q("session-progress")!=null,"Session progress is not visible.");
-                Require(Field<Label>("sessionProgressDetail").text.Contains("尚未确定结束时间"),"Live stage promises a fictitious end time.");
+                Require(Field<Label>("sessionProgressDetail").text=="确定话题","Opening time checkpoint is not visible.");
+                Require(Field<Label>("sessionTiming").text.Contains("整场最多还剩 09:"),"Ten-minute hard budget is not visible.");
                 var background=document.rootVisualElement.resolvedStyle.backgroundColor;
                 Require(background.r>.75f&&background.g>.75f&&background.b>.75f,"Live room did not restore its light palette.");
                 Capture("before-stop.png");
-                Click(document.rootVisualElement.Q<Button>("end-live-button"));
-                Require(Field<bool>("stopRequested"),"Button submit did not invoke stop action.");
-                Require(!Field<TextField>("input").enabledSelf,"P00 must block new input immediately.");
+                if(!SessionState.GetBool(Key+".Timed",false)){
+                    Click(document.rootVisualElement.Q<Button>("end-live-button"));
+                    Require(Field<bool>("stopRequested"),"Button submit did not invoke stop action.");
+                    Require(!Field<TextField>("input").enabledSelf,"P00 must block new input immediately.");
+                }
                 stage=3;return;
             }
             if(stage==3){
@@ -90,7 +95,7 @@ public static class LiveSessionVerification {
                 Require(Field<Label>("caption").text.Contains("晚霞"),"Contextual farewell was not presented.");
                 Require(!Field<Button>("sidebarCallButton").enabledSelf,"Ended session permits joining a call.");
                 Capture("ended.png");VerifyExtensionDisplay();Click(button);Require(returned,"Return action did not reach host.");
-                File.WriteAllText(Path.Combine(output,"result.txt"),"PASS: restored light palette and real live/farewell/ended stage display, actual stop button submit, authenticated transport, real cancel barrier, contextual text farewell completion, ended UI without resume overlay, disabled input/microphone, return callback.\nProvider: deterministic local fixture; no paid model calls.\n");
+                File.WriteAllText(Path.Combine(output,"result.txt"),"PASS: "+(SessionState.GetBool(Key+".Timed",false)?"accelerated eight-minute automatic closing without button click":"actual P00 stop button submit")+", light palette, timing/phase display, authenticated transport, real cancel barrier, contextual text farewell completion, ended UI, disabled input/microphone, extension countdown, return callback.\nProvider: deterministic local fixture; no paid model calls.\n");
                 Finish(0);
             }
         }catch(Exception error){Debug.LogException(error);if(output!=null)File.WriteAllText(Path.Combine(output,"result.txt"),"FAIL: "+error);Finish(1);}

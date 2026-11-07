@@ -2,17 +2,45 @@ import {randomUUID} from 'node:crypto';
 
 const FALLBACK='那今天就先聊到这里。谢谢大家陪我，大家晚安。';
 const terminal=new Set(['completed','displayed','ready','failed','skipped','interrupted','cancelled']);
-export const SESSION_LIMITS={playerClosingMs:30000,hostClosingMs:45000,extensionMs:120000,invitationMs:6000};
+export const SESSION_LIMITS={playerClosingMs:30000,hostClosingMs:45000,extensionMs:120000,invitationMs:6000,targetMs:480000,hardMs:600000};
+const BEATS=[
+  {id:"connect",at:0,label:"确定话题",directive:"接住玩家当前表达，选择一个有公开依据的本场话题，不重复完整开场。"},
+  {id:"develop",at:60000,label:"展开交流",directive:"沿当前话题展开具体细节或人物动机，回应玩家，不不断另起话题。"},
+  {id:"advance",at:180000,label:"推进故事",directive:"基于已知故事或本场真实交流推进一个小变化，或给玩家一个可自由回应的选择；不虚构世界事实，不代选、不因时间到宣称任务完成。无剧情素材时深化当前话题。"},
+  {id:"resolve",at:300000,label:"回应与回收",directive:"接住玩家实际回应，说明已有依据的结果，回收本场线索；未回答的选择不代答，不开启新长活动。"},
+  {id:"wrap",at:420000,label:"准备收尾",directive:"处理一个关键未尽事项，给已聊内容一个落点，表达准备收播；不再展开新故事或才艺。"},
+  {id:"close",at:480000,label:"收尾时间",directive:"停止扩展内容，简短交代未完事项并自然道别；仅在宿主允许时接受一次有限挽留。"}
+];
 
 // Transport live/paused is separate from the conversation's five phases.
 export class SessionControl {
   constructor(session,saved=null,{now=Date.now,limits={}}={}) {
     this.s=session;this.now=now;this.limits={...SESSION_LIMITS,...limits};
     this.data=saved?structuredClone(saved):{phase:'opening',version:0,startedAt:now(),closeReason:null,extensionUsed:0,extensionActive:false,extensionScope:'',deadlineAt:null,extensionDeadline:null,readyAt:null};
+    // Persist absolute deadlines: pause, reconnect and restart never buy more time.
+    this.data.targetAt??=this.data.startedAt+this.limits.targetMs;
+    this.data.hardAt??=this.data.startedAt+this.limits.hardMs;
+    this.data.paceIndex??=-1;
     this.inputQueue=[];this.requests=new Set();this.disposed=false;
   }
   get normal(){return ['opening','live'].includes(this.data.phase);}
-  snapshot(){const d=this.data;return {phase:d.phase,version:d.version,closeReason:d.closeReason,extensionUsed:d.extensionUsed,extensionActive:d.extensionActive,extensionScope:d.extensionScope,remainingMs:d.deadlineAt||d.extensionActive?Math.max(0,(d.deadlineAt||d.extensionDeadline)-this.now()):null,elapsedMs:Math.max(0,(d.endedAt||this.now())-d.startedAt)};}
+  timing(){
+    const d=this.data,at=d.endedAt??this.now(),elapsed=Math.max(0,at-d.startedAt);
+    const index=BEATS.findLastIndex(b=>elapsed>=b.at),beat=BEATS[Math.max(0,index)];
+    const next=BEATS[index+1];
+    return {targetMs:d.targetAt-d.startedAt,hardMs:d.hardAt-d.startedAt,targetRemainingMs:Math.max(0,d.targetAt-at),hardRemainingMs:Math.max(0,d.hardAt-at),beat:beat.id,beatLabel:beat.label,directive:d.extensionActive?'只完成已经约定的追加范围，不重开故事；范围完成就提出 finish_extension。':beat.directive,nextBeatInMs:next?Math.max(0,d.startedAt+next.at-at):null};
+  }
+  snapshot(){const d=this.data;return {phase:d.phase,version:d.version,closeReason:d.closeReason,extensionUsed:d.extensionUsed,extensionActive:d.extensionActive,extensionScope:d.extensionScope,remainingMs:d.deadlineAt||d.extensionActive?Math.max(0,(d.deadlineAt||d.extensionDeadline)-this.now()):null,elapsedMs:Math.max(0,(d.endedAt??this.now())-d.startedAt),timing:this.timing()};}
+  advancePace(){
+    const index=BEATS.findLastIndex(b=>this.now()-this.data.startedAt>=b.at);
+    if(index<=this.data.paceIndex)return;
+    this.data.paceIndex=index;this.data.version++;
+    // Replan the next turn with fresh timing; never interrupt the current utterance here.
+    const e=this.s.engine;e.epoch++;e.pending?.abort();e.pending=null;
+    e._cancelPreparation('session_time_checkpoint');e._cancelTopic('session_time_checkpoint');
+    this.s.speech.dropWarmSpeech();e.speechPlan=null;e._continuations=[];e.nextWake=e._clock;
+    this.changed();
+  }
   changed(){this.s.changed();}
   opened(){if(this.data.phase==='opening'){this.data.phase='live';this.data.version++;this.changed();}}
   context(mode,message=null){return {mode,sessionControl:this.snapshot(),publicEvents:this.s.engine.session.evidence().slice(-32),message};}
@@ -79,17 +107,17 @@ export class SessionControl {
   begin(reason,announcement=''){
     const d=this.data,oldDeadline=d.deadlineAt;
     d.phase='closing';d.closeReason=reason;d.version++;d.extensionActive=false;
-    d.deadlineAt=Math.min(oldDeadline||Infinity,this.now()+(reason==='player'?this.limits.playerClosingMs:this.limits.hostClosingMs));
+    d.deadlineAt=Math.min(d.hardAt,oldDeadline||Infinity,this.now()+(reason==='player'?this.limits.playerClosingMs:this.limits.hostClosingMs));
     this.pendingHandled=[];d.readyAt=null;this.announcement=reason==='host'?announcement:'';this.announcementId=null;this.farewellId=null;
     this.generating=false;for(const c of this.requests)c.abort();this.inputQueue=[];
     this.freeze();this.changed();
   }
   extend(sourceId,scope){
     const d=this.data;
-    if(d.phase!=='closing'||d.closeReason!=='host'||d.extensionUsed!==0||!scope?.trim()||scope.length>160||this.now()>=d.deadlineAt||!this.barrierReady)return false;
+    if(d.phase!=='closing'||d.closeReason!=='host'||d.extensionUsed!==0||!scope?.trim()||scope.length>160||this.now()>=d.deadlineAt||!this.barrierReady||this.now()>=d.hardAt-this.limits.hostClosingMs)return false;
     // Only a real player input already accepted into this session can extend it.
     if(!this.s.engine.session.evidence().some(e=>e.id===sourceId&&e.type==='player.message'))return false;
-    d.extensionUsed=1;d.extensionActive=true;d.extensionScope=scope;d.extensionDeadline=this.now()+this.limits.extensionMs;
+    d.extensionUsed=1;d.extensionActive=true;d.extensionScope=scope;d.extensionDeadline=Math.min(this.now()+this.limits.extensionMs,d.hardAt-this.limits.hostClosingMs);
     d.phase='live';d.closeReason=null;d.deadlineAt=null;d.readyAt=null;d.version++;
     this.s.cancelHost('extension_accepted');this.s.engine._continuations=[];
     this.s.engine._public('session.extended','已接受本场唯一一次挽留，追加范围：'+scope);
@@ -140,8 +168,12 @@ export class SessionControl {
   }
   tick(){
     const d=this.data;if(this.disposed||d.phase==='ended')return;
+    if(this.now()>=d.hardAt){this.end('session_hard_limit');return;}
     if(d.deadlineAt&&this.now()>=d.deadlineAt){this.end('closing_timeout');return;}
     if(d.extensionActive&&this.now()>=d.extensionDeadline){this.begin('host');return;}
+    if(this.normal&&!d.extensionActive&&this.now()>=d.targetAt){this.begin('host','今晚的时间差不多了，我们把话题轻轻收住，准备和大家道个晚安。');return;}
+    if(this.normal&&this.now()>=d.hardAt-this.limits.hostClosingMs){this.begin('host');return;}
+    if(this.normal)this.advancePace();
     if(d.phase==='closing'&&this.barrierReady&&!this.announcementId&&d.readyAt&&this.now()>=d.readyAt&&!this.inspecting)void this.farewell();
   }
   end(reason){

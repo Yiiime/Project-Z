@@ -27,7 +27,14 @@ try {
 }catch{process.exit(1);}
 JS
 then
-  (cd "$service_root" && nohup "$node_bin" server/index.mjs > "$project_root/Builds/LiveSession/service.log" 2>&1 < /dev/null &)
+  "$node_bin" --input-type=module - <<'JS'
+import fs from 'node:fs';
+import {spawn} from 'node:child_process';
+const root=process.env.Z_LIVE_PREVIEW_ROOT;
+const log=fs.openSync(root+'/Builds/LiveSession/service.log','a',0o600);
+const child=spawn(process.execPath,['server/index.mjs'],{cwd:root+'/Tools/live-service',env:process.env,detached:true,stdio:['ignore',log,log]});
+child.unref();fs.closeSync(log);
+JS
 fi
 "$node_bin" --input-type=module - <<'JS'
 import fs from 'node:fs';

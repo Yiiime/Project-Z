@@ -136,3 +136,58 @@ test('actual main-agent publish path commits host closing only after semantic re
  allowed=true;e.nextWake=0;await e._think();assert.equal(s.sessionControl.data.phase,'closing');assert.equal(s.sessionControl.data.closeReason,'host');
  assert.equal(latest(s,'host.present'),undefined);receipt(s,s.commands.get(s.sessionControl.barrier),'completed');await frame();assert.match(latest(s,'host.present').payload.text,/聊清楚/);
 });
+
+test('time checkpoints invalidate old work, wake host once and reach real request payload',async t=>{
+ const s=await fixture(t),c=s.sessionControl,start=c.data.startedAt;let now=start;
+ c.now=()=>now;
+ const checkpoints=[[60000,'develop'],[180000,'advance'],[300000,'resolve'],[420000,'wrap']];
+ for(const [elapsed,beat] of checkpoints){
+  const pending=new AbortController();s.engine.pending=pending;s.engine.nextWake=Infinity;
+  now=start+elapsed;c.tick();assert(pending.signal.aborted);assert.equal(s.engine.nextWake,s.engine._clock);
+  const version=c.data.version;c.tick();assert.equal(c.data.version,version,'one invalidation per boundary');
+  const request=buildAgentRequest(normalizeAgentInput({requestId:crypto.randomUUID(),kind:'host',eventId:'time',context:s.engine._hostContext([])}));
+  assert.equal(request.input.context.host.sessionControl.timing.beat,beat);
+  assert.equal(request.input.context.host.sessionControl.timing.hardRemainingMs,600000-elapsed);
+  assert(request.system.includes('时间节点与剧情推进'));
+ }
+});
+
+test('silent or stalled host is forced to close at eight minutes even paused and playing',async t=>{
+ const s=await fixture(t),c=s.sessionControl,start=c.data.startedAt;let now=start+479999;c.now=()=>now;
+ s.speech.enabled=true;s.speech.volume=1;assert(s.engine._executeTool({name:'start_singing',args:{songId:'wanan-yanrenzhong-vivi2-chorus'}}));await frame();s.engine.pending=new AbortController();
+ s.control(body(s,{action:'pause'}));c.tick();assert(c.normal);
+ now++;c.tick();assert.equal(c.data.phase,'closing');assert.equal(c.data.closeReason,'host');
+ assert.equal(c.data.deadlineAt,start+525000);assert.equal(s.engine.pending,null);
+ assert(s.commands.get(c.barrier));assert.equal(s.engine._state.paused,false);
+ receipt(s,s.commands.get(c.barrier),'completed');await frame();const announcement=latest(s,'host.present');assert(announcement);
+ await finish(s,announcement);now+=6001;c.tick();await frame();await frame();
+ assert.equal(c.data.phase,'farewell');await finish(s,latest(s,'host.present'));assert.equal(s.phase,'ended');
+});
+
+test('eight-minute extension is clamped to 9:15 and farewell cannot exceed ten minutes',async t=>{
+ const s=await fixture(t),c=s.sessionControl,start=c.data.startedAt;let now=start+480000;c.now=()=>now;c.tick();
+ receipt(s,s.commands.get(c.barrier),'completed');await frame();await finish(s,latest(s,'host.present'));
+ now=start+485000;
+ const message=s.engine._message('把晚霞说完好吗',{mine:true,name:'你'});s.engine._public('player.message',message.text,{id:message.id,speakerRole:'player',speakerId:'player'});
+ assert(c.extend(message.id,'把晚霞说完'));assert.equal(c.data.extensionDeadline,start+555000);
+ assert.equal(c.snapshot().remainingMs,70000);c.tick();assert.equal(c.data.phase,'live','target time must not instantly cancel accepted extension');
+ now=start+555000;c.tick();assert.equal(c.data.phase,'closing');assert.equal(c.data.deadlineAt,start+600000);
+ assert.equal(c.extend(message.id,'再多聊一点'),false);
+ now=start+600000;c.tick();assert.equal(c.data.endReason,'session_hard_limit');assert.equal(s.phase,'ended');
+});
+
+test('absolute limit survives restart and ends without any executor or model response',async t=>{
+ const s=await fixture(t),c=s.sessionControl;const saved=s.persistData();
+ saved.sessionControl.startedAt=Date.now()-610000;saved.sessionControl.targetAt=saved.sessionControl.startedAt+480000;saved.sessionControl.hardAt=saved.sessionControl.startedAt+600000;
+ const restored=new LiveSession({id:s.id,root:s.root,providers:s.providers,artifacts:s.artifacts,songRoot:s.songRoot,saved});t.after(()=>restored.close());await restored.initialize();clearInterval(restored.engine._timer);
+ assert.equal(restored.sessionControl.data.hardAt,saved.sessionControl.hardAt);assert.equal(restored.phase,'ended');assert.equal(restored.sessionControl.data.endReason,'session_hard_limit');
+ assert.equal(latest(restored,'host.present'),undefined);
+});
+
+test('P00 overrides timed invitation; even delayed semantic extension cannot extend it',async t=>{
+ const s=await fixture(t),c=s.sessionControl;let now=c.data.startedAt+480000;c.now=()=>now;c.tick();
+ receipt(s,s.commands.get(c.barrier),'completed');await frame();let resolve;s.providers.generate=async()=>new Promise(r=>resolve=r);
+ s.input(body(s,{type:'viewer.message',payload:{text:'再聊一下'}}));await frame();c.stop();const deadline=c.data.deadlineAt;
+ resolve({intent:'extend',scope:'再聊晚霞',speech:''});await frame();now+=1000;c.tick();
+ assert.equal(c.data.closeReason,'player');assert.equal(c.data.extensionUsed,0);assert.equal(c.data.deadlineAt,deadline);
+});

@@ -6,7 +6,7 @@ using UnityEngine;
 namespace ZLive {
 public sealed partial class LiveFeatureController {
     Button endLiveButton;
-    Label liveSessionLabel,sessionProgressDetail,sessionProgressHint;
+    Label liveSessionLabel,sessionProgressDetail,sessionProgressHint,sessionTiming;
     readonly Label[] sessionSteps=new Label[5];
     double sessionSnapshotAt;
     bool stopRequested;
@@ -29,6 +29,7 @@ public sealed partial class LiveFeatureController {
         for(int i=0;i<names.Length;i++){sessionSteps[i]=Text(names[i],"session-step");steps.Add(sessionSteps[i]);}
         sessionProgressDetail=Text("正在连接直播…","session-progress-detail");progress.Add(sessionProgressDetail);
         sessionProgressHint=Text("","session-progress-hint");progress.Add(sessionProgressHint);
+        sessionTiming=Text("","session-progress-hint");progress.Add(sessionTiming);
         sidebar.Insert(0,progress);
     }
     async void RequestEndLive() {
@@ -43,6 +44,11 @@ public sealed partial class LiveFeatureController {
         }catch(Exception e){stopRequested=false;Error(e);Toast("结束请求未确认，请重试");}
         finally{if(!disposed)RefreshSessionControls();}
     }
+    string RemainingTime(JToken milliseconds) {
+        double remaining=Math.Max(0,((double?)milliseconds??0)-(Time.realtimeSinceStartupAsDouble-sessionSnapshotAt)*1000);
+        int seconds=(int)Math.Ceiling(remaining/1000);
+        return $"{seconds/60:00}:{seconds%60:00}";
+    }
     void RefreshSessionProgress() {
         if(sessionProgressDetail==null)return;
         var control=state?["sessionControl"];
@@ -52,6 +58,8 @@ public sealed partial class LiveFeatureController {
             sessionSteps[i].EnableInClassList("current",i==current);
             sessionSteps[i].EnableInClassList("past",current>=0&&i<current);
         }
+        var timing=control?["timing"];
+        sessionTiming.text=timing!=null&&phase!="ended"&&connected?$"计划收尾还剩 {RemainingTime(timing["targetRemainingMs"])} · 整场最多还剩 {RemainingTime(timing["hardRemainingMs"])}":"";
         string detail,hint;
         if(control==null){detail="正在连接直播…";hint="连接后显示本场实际阶段";}
         else if(!connected&&phase!="ended"){detail="连接中断，正在恢复…";hint="当前阶段待服务确认";}
@@ -69,6 +77,10 @@ public sealed partial class LiveFeatureController {
             detail=seconds>0?$"额外交流 · 最多还剩 {seconds/60:00}:{seconds%60:00}":"额外交流已到时 · 正在收尾";
             string scope=(string)control["extensionScope"]??"约定的一小段内容";
             hint="挽留已用 1/1 · "+scope+"；聊完可提前结束";
+        }
+        else if(timing!=null){
+            detail=(string)timing["beatLabel"]??"互动中";
+            hint=timing["nextBeatInMs"]?.Type==JTokenType.Null?"正在准备收尾；你可随时结束":$"下一推进节点 {RemainingTime(timing["nextBeatInMs"])} · 可提前自然收尾";
         }
         else{detail=phase=="opening"?"正在开场 · 尚未确定结束时间":"互动中 · 尚未确定结束时间";hint="Z 会根据交流进展收尾；你可随时结束";}
         sessionProgressDetail.text=detail;sessionProgressHint.text=hint;
