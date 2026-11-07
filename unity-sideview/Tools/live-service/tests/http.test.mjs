@@ -11,12 +11,12 @@ import {SingingService} from '../server/singing/service.mjs';
 import {LiveSongLibrary} from '../server/song-library/index.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const plan={intent:'request',title:'晚安',artist:'颜人中',version:'',question:'',segment:{kind:'chorus',ordinal:1,description:'第一段完整副歌',lyricStart:''}};
-async function fixture(t,{transcribe,tokens}={}) {
+async function fixture(t,{transcribe,tokens,voice}={}) {
  const directory=fs.mkdtempSync(path.join(os.tmpdir(),'z-native-http-'));
  const singing=await SingingService.open({root,directory:path.join(directory,'singing'),autoStart:false,sources:[],environment:()=>({}),parse:async()=>plan});
  const library=new LiveSongLibrary({root,directory:path.join(directory,'library'),singing});
  const providers=new Providers({VOLC_ASR_API_KEY:'fake-for-injected-asr'},{singing,singingContext:()=>singing.context('local-owner')});
- const {server,sessions}=await createLiveServer({root:path.join(directory,'sessions'),providers,artifacts:new ArtifactStore(path.join(directory,'artifacts')),songRoot:path.join(root,'server/assets/songs'),token:'fixture-token',tokens,library,transcribe});
+ const {server,sessions}=await createLiveServer({root:path.join(directory,'sessions'),providers,artifacts:new ArtifactStore(path.join(directory,'artifacts')),songRoot:path.join(root,'server/assets/songs'),token:'fixture-token',tokens,library,transcribe,voice});
  await new Promise(r=>server.listen(0,'127.0.0.1',r));
  t.after(async()=>{server.closeAllConnections();await new Promise(r=>server.close(r));await singing.close();library.close();fs.rmSync(directory,{recursive:true,force:true});});
  const url=`http://127.0.0.1:${server.address().port}`;
@@ -174,4 +174,15 @@ test('a review made stale by public context reschedules without consuming the fa
  const f=await fixture(t);await hostSongTurn(f,{staleReview:true});
  assert.equal(f.s.engine.failureStreak,0);assert(!lastCommand(f.s,'host.present'));assert.equal(f.s.engine._state.agent.errorCode,null);
  assert(f.s.engine.inbox.some(m=>m.mine));
+});
+
+test('native RTC endpoints enforce owner and executor lease before issuing credentials',async t=>{
+ let starts=0;const voice={publicConfig:async()=>({configured:true,requested:true}),start:async()=>{starts++;return {callId:'call',token:'short-room-token'};},joined:()=>({accepted:true}),stop:()=>({accepted:true}),close(){}};
+ const f=await fixture(t,{tokens:{alice:'fixture-token',bob:'bob-token'},voice}),route='/v1/live/sessions/'+f.s.id+'/voice';
+ assert.equal((await f.request(route+'/config',null,undefined,'bob-token')).status,404);
+ assert.equal((await f.request(route+'/config',null,undefined,'wrong-token')).status,401);
+ assert.equal((await f.request(route+'/start',f.envelope({executorLeaseId:'wrong'}))).status,409);assert.equal(starts,0);
+ const r=await f.request(route+'/start',f.envelope({executorLeaseId:f.s.lease}));assert.equal(r.status,200);assert.equal((await r.json()).token,'short-room-token');
+ assert(!JSON.stringify(f.s.persistData()).includes('short-room-token'));
+ f.s.leaseUntil=0;assert.equal((await f.request(route+'/start',f.envelope({executorLeaseId:f.s.lease}))).status,409);assert.equal(starts,1);
 });

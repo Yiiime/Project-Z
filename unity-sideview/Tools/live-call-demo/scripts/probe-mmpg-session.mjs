@@ -1,0 +1,23 @@
+// Bounded session creation probe; no microphone and no assistant audio.
+import { fileURLToPath } from 'node:url';
+import { randomUUID } from 'node:crypto';
+import { loadVoiceprintConfig } from '../server/voiceprint/config.mjs';
+import { buildVoiceprintSession } from '../server/voiceprint/session.mjs';
+import { connectMmpg } from '../server/voiceprint/volc-client.mjs';
+const config = await loadVoiceprintConfig(fileURLToPath(new URL('../', import.meta.url)));
+const id = randomUUID().replaceAll('-', '');
+const request = buildVoiceprintSession({ ...config, missing: [] }, { roomId: 'z_probe_' + id, userId: 'p_' + id, agentId: 'z_' + id });
+request.session.AudioConfig.VoicePrint = { Mode: 1, EnableSV: true, VoiceDuration: 12, ProcessMode: 2, SVMode: 2 };
+const socket = connectMmpg(config);
+const secrets = [config.rtcAppId, config.rtcAppKey, config.accessKey, config.secretKey, config.asrApiKey, config.asrAccessToken].filter(Boolean);
+const redact = value => { let text = String(value); for (const secret of secrets) text = text.split(secret).join('[redacted]'); return text.slice(0,1000); };
+let done = false;
+const finish = result => { if(done)return; done=true; clearTimeout(timer); console.log(JSON.stringify(result));
+  if(socket.readyState===1){socket.send(JSON.stringify({event_id:randomUUID(),type:'session.close'}));socket.close();}else socket.terminate();
+  setTimeout(()=>socket.terminate(),1000).unref(); if(!result.ok)process.exitCode=1; };
+const timer=setTimeout(()=>finish({ok:false,code:'timeout'}),20000);
+socket.on('open',()=>socket.send(JSON.stringify(request)));
+socket.on('message',data=>{try{const event=JSON.parse(data);if(event.type==='session.created')finish({ok:true,mode:config.asrSource,stage:'session.created',audioVerified:false,voiceprint:'dynamic-request-accepted-not-yet-enrolled'});else if(event.type==='error')finish({ok:false,code:event.code,message:redact(event.message)});}catch{finish({ok:false,code:'invalid_json'});}});
+socket.on('error',()=>finish({ok:false,code:'connection_error'}));
+socket.on('unexpected-response',(req,res)=>{res.resume();finish({ok:false,httpStatus:res.statusCode});});
+socket.on('close',()=>finish({ok:false,code:'closed'}));

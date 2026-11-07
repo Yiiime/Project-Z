@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#fafbf9"><meta name="description" content="欢迎来到月亮小岛。和 Z 聊聊天，翻一张塔罗牌，收下今天的小小指引。">
+  <title>Z 的聊天小屋 · 月亮小岛直播</title>
+  <link rel="preload" as="image" href="assets/manga-live-night.png"><link rel="icon" href="assets/avatar-z.svg"><link rel="stylesheet" href="styles.css?v=20261022-text">
+</head>
+<body>
+  <header class="topbar">
+    <button class="back quiet" id="back" aria-label="返回月亮小岛"><span>←</span><span class="back-label">返回</span></button>
+    <button class="host-avatar" id="host-profile" aria-label="查看 Z 的介绍"><img src="assets/avatar-z.svg" alt=""><span>Z</span></button>
+    <div class="room-title"><h1>Z 的聊天小屋</h1><p><i></i> LIVE <span>·</span> 自主对话</p></div>
+    <button class="follow" id="follow">＋ 关注</button>
+    <div class="room-stats"><button class="rank quiet" id="rank">♛ <span>热度排名</span> <b id="rank-number">#14</b></button><button class="viewers quiet" id="viewers-button"><i></i><span>在线</span> <b id="viewers">24,186</b></button><span class="duration">直播时长 <b id="duration">00:00:00</b></span></div>
+  </header>
+
+  <main class="live-layout">
+    <section class="stage-column" aria-label="Z 的直播画面">
+      <div class="live-stage" id="live-stage">
+        <div class="room-art"></div><div class="room-shade"></div><div class="stars" aria-hidden="true"><i>✦</i><i>✧</i><i>✦</i><i>✧</i></div>
+        <div class="live2d-room" id="live2d-room" aria-hidden="true"></div><div class="live2d-host" id="live2d-host" aria-hidden="true"></div><div class="live2d-foreground" id="live2d-foreground" aria-hidden="true"></div><button class="live2d-greet" id="live2d-greet" aria-label="和 Z 打招呼（Live2D 示例）"></button>
+        <div class="live2d-notice" id="live2d-status" role="status" hidden><span id="live2d-status-text"></span><button type="button" id="live2d-retry" hidden>重新加载</button></div>
+        <div class="scene-top"><button class="scene-badge" id="program"><span class="pulse-dot"></span><span id="stage-label">月亮小岛 · 今晚有好事</span><span class="tiny-arrow">⌄</span></button><span class="quality">高清 <i></i></span></div>
+        <div class="danmaku-layer" id="danmaku-layer" aria-hidden="true"></div>
+        <div class="character-wrap" id="character-wrap"><div class="character" id="character" data-mood="happy" data-gesture="wave"><div class="character-piece body-piece"></div><div class="character-piece left-arm"></div><div class="character-piece right-arm"></div><div class="head-group"><div class="character-piece head-piece"></div><svg class="face-overlay" id="face-overlay" viewBox="0 0 1122 1402" aria-hidden="true"></svg></div></div><button class="character-hit" id="greet-z" aria-label="和 Z 打招呼"></button></div>
+        <div class="character-emotion" id="character-emotion" aria-hidden="true">✦</div>
+        <div class="table-front"></div>
+        <button class="current-card-chip" id="current-card-chip" hidden><span>☀</span><span><small>今日指引</small><b>太阳 · 正位</b></span><span>↗</span></button>
+        <div class="speech-box" id="speech-box" aria-live="polite"><div class="speech-heading"><span class="speaker-z">Z</span><span id="mood-label">等 Z 开口</span><div class="reply-pulse"><i></i><i></i><i></i><i></i></div></div><p id="speech-text">正在连接 Z…</p><button id="speech-skip" aria-label="推进直播流程" title="推进直播流程">↗</button></div>
+        <div class="scene-bottom"><span class="location">☾ <span>月亮小岛 · Z 的小屋</span></span><div class="scene-controls"><button class="icon-btn" id="pause" aria-label="暂停直播演示" title="暂停演示"></button><button class="icon-btn active" id="danmaku" aria-label="关闭画面弹幕" title="弹幕开关">弹</button><button class="icon-btn" id="fullscreen" aria-label="全屏直播" title="全屏"></button><button class="icon-btn" id="settings" aria-label="直播设置" title="设置"></button></div></div>
+        <div class="effect-layer" id="effect-layer" aria-hidden="true"></div><div class="pause-overlay" id="pause-overlay" hidden><span>Ⅱ</span><b>把这一刻留久一点</b><button id="resume">继续直播</button></div>
+      </div>
+      <section class="fortune-panel" id="fortune-panel" aria-label="今日运势投票与翻牌" hidden>
+        <div class="fortune-heading"><div><p class="eyebrow">TODAY’S LITTLE MAGIC</p><h2 id="fortune-title">今晚，直觉站哪边？</h2></div><span class="vote-timer" id="vote-timer">准备中</span></div>
+        <p class="fortune-intro" id="fortune-intro">从三张牌里选一张，和直播间一起接住今天的好运。</p>
+        <div class="fortune-choices" id="fortune-choices"></div>
+        <div class="vote-summary"><span id="vote-total">等待大家入席</span><span id="my-vote">你还没有投票</span></div>
+        <div class="fortune-insight" id="fortune-insight" hidden><b id="insight-title"></b><p id="insight-text"></p></div>
+        <div class="fortune-actions"><span id="vote-note">演示观众参与 · 每人一票，可改选</span><button id="fortune-next">开始投票</button></div>
+      </section>
+      <div class="play-dock"><button id="tarot-chip" hidden>☾ 本轮塔罗</button><button id="drawing-chip" hidden>✎ 看看画板</button><div id="play-queue" aria-label="等待中的玩法"></div></div>
+      <section class="play-panel" id="tarot-panel" aria-label="塔罗选牌" hidden>
+        <div class="play-heading"><span class="eyebrow">A MOMENT WITH THE CARDS</span><button id="tarot-hide" aria-label="收起塔罗牌桌">收起 ↘</button></div>
+        <h2 id="tarot-owner"></h2><p class="play-question" id="tarot-question-text"></p>
+        <div class="play-status"><span id="tarot-status" role="status"></span><b id="tarot-count"></b></div>
+        <div class="tarot-slots" id="tarot-slots"></div><div class="play-cards" id="tarot-cards"></div>
+        <p class="play-note" id="tarot-note"></p>
+        <div class="play-actions"><button id="tarot-pause">先暂停</button><button id="tarot-feedback">补充我的情况</button><button id="tarot-finish">收好，继续聊天 →</button><button id="tarot-cancel">结束本轮</button></div>
+      </section>
+      <section class="play-panel drawing-panel" id="drawing-panel" aria-label="Z 的绘画看板" hidden>
+        <div class="play-heading"><span class="eyebrow">A LITTLE DRAWING BY Z</span><button id="drawing-hide" aria-label="收起绘画看板">收起 ↘</button></div>
+        <h2 id="drawing-title"></h2><p class="play-note" id="drawing-owner"></p>
+        <div class="drawing-canvas" id="drawing-canvas"></div>
+        <div class="drawing-steps" id="drawing-steps"><span>01 轮廓</span><span>02 特征</span><span>03 完成</span></div>
+        <p class="play-status" id="drawing-status" role="status"></p>
+        <div class="play-actions"><button id="drawing-enlarge">查看大图 ↗</button><button id="drawing-edit">修改这幅画</button><button id="drawing-finish">收好画作 →</button><button id="drawing-cancel">结束绘画</button></div>
+      </section>
+      <section class="fortune-panel lottery-panel" id="lottery-panel" aria-label="幸运抽奖：月光来信" hidden>
+        <div class="fortune-heading"><div><p class="eyebrow">A LETTER FROM MOON ISLAND</p><h2 id="lottery-title">月光，给你捎来一封信</h2></div><span class="vote-timer" id="lottery-count">0 / 3</span></div>
+        <p class="lottery-intro">嘘，这是今晚的小惊喜。跟着直觉，把三份心意一张张翻开。</p>
+        <div class="lottery-choices" id="lottery-choices"></div>
+        <div class="lottery-result" id="lottery-result" role="status" aria-live="polite"><b id="lottery-reward-title">海风已经把信送到窗边</b><p id="lottery-reward-description">三张都属于你，先从最心动的那张开始吧。</p></div>
+        <div class="lottery-actions"><span id="lottery-note">月亮小岛 · 今晚的秘密来信</span><button id="lottery-close">稍后再拆 →</button></div>
+      </section>
+    </section>
+
+    <aside class="sidebar" aria-label="在线观众与弹幕">
+      <details class="audience" id="audience-panel" open><summary><span>在线观众</span><span class="audience-summary-right"><span id="audience-count">24,186</span> 人在线 <span class="fold-arrow">⌄</span></span></summary><div class="audience-body"><div class="leaderboard-header"><span>排名</span><span>用户 ID</span><span>相伴时光</span></div><div id="leaderboard"></div></div></details>
+      <section class="chat-section"><div class="section-title"><h2>月光弹幕</h2><button class="text-status" id="text-status" type="button">☾ 剧情模式</button></div><div class="chat-scroll" id="chat-scroll" role="log" aria-live="off" aria-label="弹幕记录"><div class="chat-welcome"><span>☾</span><p>欢迎来到 Z 的聊天小屋<br><small>让月亮替你保管一点烦恼。</small></p></div><div id="messages"></div></div><button class="new-messages" id="new-messages" hidden>有新弹幕 ↓</button><div class="chat-tip" id="reply-status" role="status" aria-live="polite"><span>✦</span><span id="reply-status-text">发一条弹幕，让 Z 认识你</span></div></section>
+
+    </aside>
+  </main>
+
+  <footer class="interaction-bar">
+    <form id="chat-form" class="chat-form"><button type="button" class="emoji-button" id="emoji" aria-label="选择表情">☺</button><input id="chat-input" maxlength="120" autocomplete="off" placeholder="和 Z 聊聊……" aria-label="输入弹幕"><span class="input-counter" id="input-counter"></span><button class="send-button" id="send-message" type="button" aria-label="发送弹幕">➤</button><div class="emoji-popover" id="emoji-popover" hidden></div></form>
+
+    <div class="quick-prompts"><button data-prompt="这张牌代表什么？">这张牌代表什么？</button><button data-prompt="你为什么开始占卜？">你为什么开始占卜？</button></div>
+    <div class="footer-spacer"></div>
+    <button class="footer-tool" id="today-start">☾ 塔罗</button><button class="footer-tool" id="drawing-start">✎ 点一幅画</button><button class="lottery-trigger footer-tool" id="lottery-trigger">✉ 幸运抽奖</button>
+    <div class="footer-actions"><button class="like-button" id="like" aria-label="给 Z 点赞"><span>♡</span><b id="likes">1,286</b></button><button class="share-button quiet" id="share" aria-label="分享直播间"></button></div>
+  </footer>
+  <div class="toast-stack" id="toasts" role="status" aria-live="polite"></div>
+  <dialog id="dialog"><button class="dialog-close" id="dialog-close" aria-label="关闭弹窗">×</button><div id="dialog-content"></div></dialog>
+  <script type="module" src="app.js?v=20261022-text"></script>
+</body>
+</html>

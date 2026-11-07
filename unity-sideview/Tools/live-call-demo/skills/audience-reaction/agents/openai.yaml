@@ -1,0 +1,4 @@
+interface:
+  display_name: "模拟弹幕"
+  short_description: "从观众立场生成有独立观看诉求的弹幕，选择性回应，并区分自然起哄与无意义复读"
+  default_prompt: "使用 $audience-reaction，结合公开内容、观众兴趣和近期弹幕，生成有观众立场及具体观看诉求的候选；按情境判断是否值得回应、是否构成无意义重复。"

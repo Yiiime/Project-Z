@@ -99,7 +99,7 @@ function ttsReserve(id, now) {
   let released = false;
   return () => { if (!released) { released = true; quota.active = Math.max(0, quota.active - 1); ttsActive = Math.max(0, ttsActive - 1); } };
 }
-function ttsPayload(value, userHash) {
+function ttsPayload(value, userHash, format) {
   const styles = {
     happy: '用自然、清亮、有活力的年轻女主播语气说话，轻松俏皮，不要夸张卖萌。',
     warm: '用自然温柔的年轻女主播语气说话，亲切放松，不要刻意拖长字音。',
@@ -108,7 +108,7 @@ function ttsPayload(value, userHash) {
   };
   return { user: { uid: `z_${userHash}` }, req_params: {
     text: value.text, speaker: TTS_SPEAKER,
-    audio_params: { format: 'mp3', sample_rate: 24000, enable_subtitle: true, speech_rate: value.mood === 'happy' ? 3 : value.mood === 'serious' ? -3 : 0 },
+    audio_params: { format: format || 'mp3', sample_rate: 24000, enable_subtitle: true, speech_rate: value.mood === 'happy' ? 3 : value.mood === 'serious' ? -3 : 0 },
     additions: JSON.stringify({ context_texts: [styles[value.mood]] }),
   } };
 }
@@ -171,7 +171,7 @@ function ttsStream(request, value, userHash, context, release) {
     }
     if (packet.data !== null && packet.data !== undefined) {
       limits.audio += ttsAudioSize(packet.data);
-      if (limits.audio > TTS_MAX_AUDIO) throw new TtsError(502, 'tts_audio_too_large', '这段语音过长，文字会继续显示。');
+      if (limits.audio > (context.format==='pcm'?4320000:TTS_MAX_AUDIO)) throw new TtsError(502, 'tts_audio_too_large', '这段语音过长，文字会继续显示。');
       await emit('audio', { index: limits.index++, data: packet.data });
     }
     if (packet.sentence !== undefined && packet.sentence !== null) await emit('sentence', { sentence: ttsSentence(packet.sentence, limits) });
@@ -181,7 +181,7 @@ function ttsStream(request, value, userHash, context, release) {
     try {
       response = await context.fetch(TTS_ENDPOINT, { method: 'POST', redirect: 'manual', signal: abort.signal,
         headers: { 'Content-Type': 'application/json', 'X-Api-Key': context.secret, 'X-Api-Resource-Id': TTS_RESOURCE, 'X-Api-Request-Id': value.requestId, 'X-Control-Require-Usage-Tokens-Return': '*' },
-        body: JSON.stringify(ttsPayload(value, userHash)) });
+        body: JSON.stringify(ttsPayload(value, userHash, context.format)) });
     } catch (error) {
       if (finished) return;
       ttsDiagnostic(context, /illegal invocation|incompatible receiver/i.test(String(error?.message || '')) ? 'fetch_receiver_error' : 'transport_error');
@@ -221,7 +221,7 @@ function ttsStream(request, value, userHash, context, release) {
   return new ReadableStream({
     start(controller) {
       sink = controller;
-      emitNow('start', { format: 'mp3', sampleRate: 24000, source: 'volcengine', speaker: TTS_SPEAKER });
+      emitNow('start', { format: context.format, sampleRate: 24000, source: 'volcengine', speaker: TTS_SPEAKER });
       timer = setTimeout(() => { ttsDiagnostic(context, 'timeout'); finish(ttsTimeout()); }, context.timeoutMs);
       request.signal.addEventListener('abort', onAbort, { once: true });
       if (request.signal.aborted) { onAbort(); return; }
@@ -234,7 +234,7 @@ function ttsStream(request, value, userHash, context, release) {
 
 /** Web APIs only; fetch/crypto/time are injectable for offline regression tests. */
 export async function handleTts(request, env = {}, options = {}) {
-  const context = { fetch: options.fetch || globalThis.fetch?.bind(globalThis), crypto: options.crypto || globalThis.crypto,
+  const context = { format: options.audioFormat === 'pcm' ? 'pcm' : 'mp3', fetch: options.fetch || globalThis.fetch?.bind(globalThis), crypto: options.crypto || globalThis.crypto,
     now: options.now || Date.now, timeoutMs: Math.min(TTS_TIMEOUT, Math.max(1, Number(options.timeoutMs) || TTS_TIMEOUT)), diagnostics: options.diagnostics,
     secret: typeof env.VOLC_TTS_API_KEY === 'string' ? env.VOLC_TTS_API_KEY.trim() : '' };
   try {

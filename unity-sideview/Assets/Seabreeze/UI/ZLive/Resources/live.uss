@@ -122,6 +122,15 @@ Button:disabled { opacity: 1; color: #687b82; }
 .short-room .speech-heading { margin-bottom: 5px; }
 .mood-label { font-size: 11px; color: #687b82; }
 .caption { font-size: 14px; }
+.normal-speech { flex-grow: 1; min-height: 0; }
+.call-active .speech-box { height: 166px; }
+.call-dialogue { flex-grow: 1; min-height: 0; }
+.call-bubble { flex-grow: 1; flex-basis: 0; min-height: 0; padding-bottom: 5px; }
+.call-bubble .speaker-z { width: 25px; height: 25px; flex-shrink: 0; }
+.call-player { align-items: flex-end; }
+.speaker-player { background-color: #dce8eb; }
+.call-line-scroll { flex-grow: 1; min-height: 0; max-height: 42px; width: 100%; margin-top: 3px; }
+.call-player .caption { -unity-text-align: upper-right; }
 .scene-bottom { left: 15px; right: 15px; bottom: 13px; }
 .location { font-size: 11px; color: #35434c; padding: 4px 8px; }
 .icon-button { font-size: 13px; }

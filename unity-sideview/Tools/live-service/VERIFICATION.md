@@ -122,3 +122,21 @@ PR 保持草稿，等待用户手工体验验收。
 - `node --test tests/*.test.mjs`：79/79；覆盖短编号在 handledIds、工具消息来源、议程证据中还原，未知引用仍拒绝；失败停止等待、连续重试上限、主动重试和新消息恢复。`git diff --check`、`tools/team/z check` 通过（248 个 C# 文件零语法错误）。
 - Unity 6000.3.27f1 `ZLive.EditorTools.ZLiveVerification.BuildWithInputChecks`：输入回归和 macOS 构建成功；新独立 Player 48/48 自动检查通过。Player 使用测试音，不代表已经在直播界面手工听完《青藏高原》。本轮真实模型诊断只检查结构和工具选择，不代表所有候选都通过语义审阅。
 - 本地试玩原位更新，旧应用备份保留在临时目录；连接文件、网易云登录态、歌曲库和存档保留。PR 始终为草稿，不合并 main。
+
+
+## 2026-11-07 · Web 连麦资产迁入 Unity 原生直播
+
+- `Tools/live-call-demo/` 保留原始 250 文件交付包及清单，SHA-256 校验通过；其 37 个默认离线脚本、10 项唱歌后台回归与声纹配置/传输回归已在本工作树通过。Unity 实际使用原生 UI、macOS RTC C ABI、原主 Agent 服务和 AudioSource。
+- 原生服务 `npm test`：107/107 通过。新增覆盖目标说话人逐轮验证、旧 callId 失效、重复结束事件、凭证不进入持久记录、owner/executor lease、真实适配器的精简审阅请求、短消息 ID 还原、逐句完整播放、打断保留已播前缀、拒绝不匹配字幕及空配置跨行读取。
+- `bash Tools/native-rtc/build-macos.sh`：ARM64 + x86_64 Universal 编译通过；SDK ZIP 按锁定 SHA-256 校验。桥接可在本机和独立 Player 中加载。SDK 二进制与生成目录不提交。
+- Unity 6000.3.27f1 `ZLive.EditorTools.ZLiveVerification.BuildWithInputChecks`：输入回归通过并生成独立 macOS 试玩包。导入器自动改写的模型、URP/连接设置和临时性能测试资源已还原，不纳入本任务。
+- 独立 Player 原生连麦验收 13/13：单麦克风、两条对话、14px 原字号、166px 面板上限、SDK 加载、PCM 首段起播、尾段补齐、仅一次完成回执、柔和淡出、取消不误报完成、音量恢复和停止。查看了实际 Player 截图。模拟器在首段后延迟 1.2 秒才发送尾段；最终检查中播放器约 26 ms 起播，仅代表本机测试音链路。
+- 现有独立 Player Live2D/音频恢复回归 48/48；沿用生成测试音，未新生成歌曲或做人工曲调听验。
+- 复用本机原配置，RTC `ListVoicePrint` HTTP 200；使用 `ApiKey` 的 MMPG `session.create` 成功。检查没有打开麦克风、发送录音或登记新声纹，不能等同于真实多人环境降噪效果。
+- 真实主 Agent → 审阅 → Vivi 测时使用一条合成文本，无真实玩家音频。最终一次：首句 1822 ms、主持最终结果 1838 ms、审阅通过 3032 ms、服务端首段 PCM 3790 ms、TTS 完成 4182 ms。首句、审阅、TTS 分别一次请求；不包含 RTC/ASR 上行和 Unity 出声时间，不能据单次结果声称普遍提速。前一诊断发现精简审阅请求层级错误，已修复并补回归。
+- 分支独立试玩服务在 4184 启动；健康检查主 Agent、Vivi 已配置，声纹配置完整，测试用暂停会话已关闭。配置通过忽略文件引用本机既有目录，密钥、声纹 ID、歌曲库和个人存档未提交。原 Web Demo 和其他 Unity 试玩服务保留。
+- `tools/team/z check` 通过：264 个 C# 文件零语法错误，资源与场景引用检查通过。供应商许可 HTML 原始快照按字节保留，其空白不规范通过专门的 `.gitattributes` 排除，避免修改交付清单哈希；业务代码与其他文件继续检查空白。
+
+复查入口：`node scripts/check-native-voice.mjs`（仅本地），追加 `--live` 才检查云端；`node scripts/measure-native-call.mjs --live` 最多一次主持、一次审阅、一次 TTS，可能产生供应商计费。两条诊断都不会打开麦克风。
+
+本地证据：`/tmp/z-native-call-qa/report.json`、`/tmp/z-native-call-qa/call-panel.png`、`/tmp/z-native-live2d-qa/report.json`、`/tmp/z-native-voice-permission.json`、`/tmp/z-native-call-latency.json`、`/tmp/z-call-unity-build.log`。现场待验：办公室旁人说话、扬声器回声、真实 RTC 发布/收音到 ASR 的完整链路与真人接话延迟；当前仅实现 macOS 原生桥接。

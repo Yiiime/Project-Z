@@ -1,0 +1,176 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Z · 表现预览</title>
+<style>*{box-sizing:border-box}body{margin:0;background:#eff1eb;color:#25332c;font:15px/1.6 system-ui}main{max-width:1200px;margin:auto;padding:24px}header{display:flex;justify-content:space-between;align-items:center}h1{font-size:26px;margin:0}small{color:#647267}.layout{display:grid;grid-template-columns:minmax(280px,1.5fr) minmax(270px,1fr);gap:24px;margin-top:20px}.stage{height:min(650px,calc(100dvh - 180px));min-height:480px;position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(#e0e8db,#c5d5bd)}#host{position:absolute;inset:0}#host canvas{width:100%;height:100%;display:block}.badge{position:absolute;top:16px;height:42px;left:20px;background:#fffC;padding:8px 16px;border-radius:30px;pointer-events:none}.panel{background:white;padding:24px;border-radius:24px}h2{font-size:17px;margin:20px 0 10px}textarea{font:inherit;width:100%;min-height:96px;resize:vertical;border:1px solid #c5d5bd;border-radius:12px;padding:12px;color:inherit;background:#fafcf8}.custom-controls{display:grid;grid-template-columns:1fr 1fr;gap:10px}.custom-controls label{margin:8px 0}.custom-controls select{width:100%}.stage-controls{display:flex;gap:8px;margin-bottom:10px}.line-options{display:grid;gap:8px}.line-option{text-align:left;width:100%;padding:12px 14px;line-height:1.55}.line-option strong{display:block;font-size:12px;margin-bottom:3px;opacity:.72}.line-option span{display:block}details{margin-top:22px;border-top:1px solid #e4e9e0;padding-top:16px}summary{cursor:pointer;font-weight:600}.choices{display:flex;flex-wrap:wrap;gap:8px}button,select{font:inherit;padding:8px 12px;background:#f2f5ef;border:1px solid #d4dfd0;border-radius:10px;cursor:pointer;color:inherit}button[aria-pressed=true]{background:#365640;color:white}button:disabled{opacity:.45}label{display:block;margin:12px 0}input[type=range]{width:100%}#metrics{white-space:pre-wrap;font:12px/1.7 monospace;background:#f2f5ef;padding:12px;border-radius:12px}.note{font-size:13px;color:#647267}.scene-line{position:absolute;bottom:20px;left:20px;right:20px;padding:14px 18px;border-radius:16px;background:#ffffffe8;color:#25332c;font-size:18px;pointer-events:none}.stage{position:sticky;top:16px;align-self:start}.status{color:#355d42}a{color:#355d42}@media(max-width:700px){main{padding:14px}.layout{grid-template-columns:1fr}.stage{height:430px;min-height:0;position:relative;top:0}.panel{padding:18px}header{display:block}}
+</style><main><header><div><small>MOON ISLAND · PERFORMANCE STUDY</small><h1>Z 的表现预览</h1></div><small>Haru 示例 · 使用现有绑定扩充表现</small></header><div class="stage-controls"><button id="framing" type="button">切换表情近景</button><button id="freeze" type="button">暂停画面</button><button id="hold-pose" type="button">定格手势</button><button id="open-library" type="button">浏览动作库</button><button id="open-scenes" type="button">连续调度</button></div><div class="layout"><section id="stage" class="stage"><div id="room"></div><div id="foreground"></div><div id="host"></div><div class="badge" id="status">正在准备模型…</div><div class="scene-line" id="scene-line">选一句台词，看看 Z 会怎样表达。</div></section><section class="panel"><p class="note">选一句台词，直接比较 Z 的表情、动作和语气是否匹配。当前为无声演出：字幕＋模拟口型。只有点击「DeepSeek 分析并演出」才会发送原句给 DeepSeek；本地演出不调用 AI，均不调用语音生成。</p><h2>自己写一句，让 Z 演出来</h2><form id="custom-form"><label for="custom-text">Z 要说的话</label><textarea id="custom-text" maxlength="160" required placeholder="例如：分享一个我的经验，先把难题拆成小步，再慢慢试。"></textarea><div class="choices"><button id="analyze-line" type="button" disabled>DeepSeek 分析并演出</button><button id="cancel-analysis" type="button" disabled>取消分析</button></div><p class="note" id="ai-status" aria-live="polite">正在检查 DeepSeek 配置…</p><h2>本地规则与手动对照</h2><div class="custom-controls"><label>情绪<select id="custom-mood"><option value="auto">自动匹配</option></select></label><label>动作<select id="custom-gesture"><option value="auto">跟随情绪</option></select></label></div><label>切换方式<select id="custom-transition"><option value="auto">自动：突发反应快速到位</option><option value="smooth">连贯：平滑进入</option><option value="sudden">突发：快速到位</option></select></label><div class="choices"><button id="play-custom" type="submit" disabled>按本地规则演出</button><button id="generate-custom" type="button">随机示例</button></div><p class="note" id="custom-result" aria-live="polite">自动匹配使用本地关键词规则；可手动指定情绪和动作。随机示例来自本地句库，无需联网。</p></form><section id="ai-report" hidden><h2>DeepSeek 资产匹配建议</h2><p class="note" id="ai-summary"></p><div class="line-options" id="ai-segments"></div><button id="replay-plan" type="button">重演这次编排（不再请求）</button><p class="note">“可表达 / 近似替代 / 缺少动作”是基于动作目录的模型建议，仍需结合画面判断；模型没有观看渲染效果。点击某一段可单独试播。</p></section><details open><summary>试试现成台词</summary><h2>选一句，让 Z 演给你看</h2><p class="note">已同步最新 17 种可调度动作（含待机）；挥手、掩嘴和突发反应都可直接比较。</p><div class="line-options" id="lines"></div></details><p class="note" id="line-status" aria-live="polite">模型准备好后即可选择；点击另一句可立即切换。</p><div class="choices"><button id="replay-line" disabled>再演一次</button><button id="stop-line" disabled>停止演出</button></div><details id="action-library"><summary>动作库：筛选、试播、导出</summary><p class="note" id="library-summary"></p><label>查看范围<select id="library-filter"><option value="calibrated">可调度</option><option value="candidate">待校准组合</option><option value="source">原始样例（手部）</option><option value="all">全部预设</option></select></label><div class="line-options" id="library-items"></div><button id="export-library" type="button">导出完整动作库 JSON</button><p class="note">连续参数有无限组合。这里保存动作预设与调度信息，另附 42 个待审校准样本；候选与原始样例不会由自动匹配选用。</p></details><details id="continuous-scenes"><summary>连续调度：观察动作与情绪转折</summary><h2>Z 的连续演出</h2><p class="note">上一段手势直接接到下一段，不在每句话之间回到抱臂。突发反应可快速打断；最后放下双臂时只收尾一次。</p><div class="choices" id="scenes"></div><button id="stop-scene" type="button" disabled>停止连续演出</button><p class="note" id="scene-status">情境演示使用预设台词；直播根据回应的 mood 驱动同一套表现。</p></details><details><summary>单独调试表情、动作与运行状态</summary><h2>单独比较情绪 · 8 种</h2><div class="choices" id="moods"></div><h2>动作 · 大幅手势与小动作</h2><div class="choices" id="gestures"></div><h2>交互状态</h2><div class="choices"><button id="wait">等待回复</button><button id="talk">模拟说话</button><button id="listen">倾听</button><button id="message">收到弹幕</button><button id="idle">回到待机</button><button id="camera">切换全身</button></div><h2>运行检查</h2><div class="choices"><button id="pause">暂停</button><button id="switch">切换原画占位</button><button id="audio">口型测试音</button><button id="soak">开始 30 分钟巡检</button></div><label>播放音量 <output id="volume-label">50%</output><input id="volume" type="range" min="0" max="100" value="50"></label><label><input id="reduced" type="checkbox">轻柔模式</label><p class="note">测试音使用本地合成音，不是 TTS。调低音量时，嘴型幅度应保持。低头看牌是替代表现，模型没有抽牌道具。</p><pre id="metrics"></pre><p class="note" id="soak-result">尚未运行长播巡检。</p></details><p class="note"><a href="/">打开直播页面 →</a></p></section></div></main>
+<script type="module">
+import {Live2DStage} from './live2d-stage.js';import {LIVE2D_CONFIG} from './live2d-config.js';
+import {HARU_ACTION_LIBRARY} from './live2d-actions.js';
+import {resolvePreviewIntent,generatePreviewLine} from './performance-intent.js';
+const $=id=>document.getElementById(id);const config=structuredClone(LIVE2D_CONFIG);config.layout={x:.5,top:-.02,height:2.2,maxWidth:1.75};config.performance.cooldownMs=0; // Preview repeats must be comparable; live cooldown is unchanged.
+const stage=new Live2DStage({stage:$('stage'),host:$('host'),room:$('room'),foreground:$('foreground'),loadRoom:async()=>{},config});
+let id=0,mood='neutral',gesture='none',timer,source,gain,context,analyser,meter,soak,soakAt=0,soakCount=0,frame=0,lastFrame=performance.now(),slow=0,maxGap=0,scenePlayback=null,cameraIndex=1,linePlayback=null,selectedLine=null,lastLine=null,freezeOnHold=false,transition='auto';
+let planning=null,planSerial=0,aiReady=false,lastPlan=null;
+function select(){for(const b of $('moods').children)b.setAttribute('aria-pressed',String(b.dataset.name===mood));for(const b of $('gestures').children)b.setAttribute('aria-pressed',String(b.dataset.name===gesture));}
+function stop(){cancelPlanRequest();freezeOnHold=false;if(linePlayback)$('line-status').textContent='已切换演出。可选择台词重新比较。';linePlayback=null;$('stop-line').disabled=true;clearTimeout(timer);source?.stop();source=null;cancelAnimationFrame(meter);stage.setActivity({id,speaking:false,level:0});}
+function prepare(phase='speaking',fromScene=false,gestureOptions={}){if(!fromScene)cancelScene();stop();id++;stage.setSpeech({id,mood,gesture,transition,...gestureOptions});stage.setPerformance({id,phase});select();}
+function cancelScene(){scenePlayback=null;$('stop-scene').disabled=true;for(const b of $('scenes').children)b.setAttribute('aria-pressed','false');$('scene-status').textContent='连续演出已停止；可以继续比较表情与动作。';}
+function talk(){prepare();stage.setActivity({id,speaking:true});timer=setTimeout(()=>{stage.setActivity({id,speaking:false,level:0});stage.setPerformance({id,phase:'listening'});},7000);}
+const lineOptions=[
+  {label:'分享经验 · 双手展开',mood:'warm',gesture:'openArms',text:'分享一个我的经验：先把最难的那一步拆小，再慢慢试。',look:'看双手展开、停留和收回，是否像在分享自己的经验。'},
+  {label:'举掌招呼 · 静态对照',mood:'happy',gesture:'wavePose',text:'你来啦！我在这里。',look:'举掌停留，不摆动手腕；可以与挥手版本比较。'},
+  {label:'挥手招呼 · 小幅挥动两次',mood:'happy',gesture:'handWave',text:'你来啦！走，我带你看个刚发现的好地方。',look:'看笑眼、抬头和招呼手势，是否有想拉你一起去的兴奋感。'},
+  {label:'温柔 · 接住疲惫',mood:'warm',gesture:'present',text:'今天累了就先歇一会儿。想说的话，我在听。',look:'看柔和眉眼、摊掌邀请和停留，是否让人感到被认真听见。'},
+  {label:'疑惑 · 想弄明白',mood:'thinking',gesture:'chin',text:'等一下，你说的是哪一次？让我想想。',look:'看抬手到下巴、侧头和视线移动，是否像在思考。'},
+  {label:'惊喜 · 突然发现',mood:'happy',gesture:'discover',text:'诶？那边居然还有一条路！快看！',look:'观察反应是否先于说话出现：快速转头和抬手，再转为开心。'},
+  {label:'害羞掩嘴 · 手背朝外',mood:'shy',gesture:'coverMouth',text:'你这么夸我……我都有点不好意思了。',look:'看手背朝外的弯指手型、脸红和收回动作，是否像害羞地掩嘴。'},
+  {label:'认真 · 收起玩笑',mood:'serious',gesture:'emphasis',text:'先别急着下结论。你看到的具体是什么？',look:'看眉眼收紧、正视和克制的强调，是否认真而不显得凶。'},
+  {label:'低落 · 承认失落',mood:'sad',gesture:'nod',text:'这件事没做好，我确实有点难过。让我缓一会儿。',look:'看垂眼、眉形和下沉姿态，是否与思考或困倦区分开。'},
+  {label:'突然惊讶 · 快速抬手',mood:'surprised',gesture:'startle',text:'哇！你怎么突然出现在这里！',look:'看快速睁眼和双手抬起，再自然收回。'},
+  {label:'认真考虑 · 抱臂停留',mood:'serious',gesture:'foldArms',text:'这件事，我还得认真想一想。',look:'看抱臂停留是否像在认真考虑。'},
+  {label:'放松下来 · 双臂放下',mood:'warm',gesture:'relaxArms',text:'好啦，说开就好了，放松一点。',look:'看双臂放下与情绪放松是否同步。'},
+  {label:'温柔倾听 · 倾身',mood:'warm',gesture:'lean',text:'嗯，我在听，你慢慢说。',look:'看轻微倾身是否体现关注。'},
+  {label:'温和否定 · 轻摇头',mood:'warm',gesture:'shake',text:'不是你的错，别把责任都揽下来。',look:'看摇头与安慰的表情是否协调。'},
+  {label:'好奇疑问 · 侧头',mood:'thinking',gesture:'tilt',text:'咦，你刚才说的是什么意思？',look:'看侧头疑问与抬手思考的区别。'},
+  {label:'低头查看 · 看牌替代',mood:'thinking',gesture:'draw',text:'让我低头看看，线索会在哪里呢？',look:'仅演示低头查看；现有模型没有拿牌道具。'},
+  {label:'自然 · 轻松闲聊',mood:'neutral',gesture:'none',text:'今晚海边风不大，我们坐这儿聊聊吧。',look:'作为对照：看自然眉眼和轻微呼吸，是否放松而不僵硬。'},
+];
+function playLine(index,customLine=null,fromScene=false){
+  if(stage.status!=='ready')return;
+  clearInterval(soak);soak=null;$('soak').textContent='开始 30 分钟巡检';
+  stage.setPaused(false);$('pause').textContent='暂停';$('freeze').textContent='暂停画面';
+  const line=customLine||lineOptions[index];lastLine={...line};selectedLine=index;mood=line.mood;gesture=line.gesture;transition=line.transition||'auto';
+  let elapsed=0;const characters=Array.from(line.text),timeline=characters.map(char=>elapsed+=/[，。！？…、；：]/.test(char)?320:120);
+  const duration=Math.max(elapsed+800,(config.gestures[gesture]?.durationMs||0)+600);
+  // Keep the authored pose until the next sentence takes over from the displayed
+  // arms. Head-only cues inherit those arms instead of resetting their artwork.
+  const gestureOptions=fromScene?{gestureHoldMs:Math.max(0,(line.advanceMs??duration)-(config.gestures[gesture]?.timing?.enterMs||0))+500,carryArms:!['arms','clip'].includes(config.gestures[gesture]?.kind)}:{};
+  prepare('speaking',fromScene,gestureOptions);
+  linePlayback={id,line,characters,timeline,elapsed:0,lastIndex:-1,duration};
+  $('scene-line').textContent='Z：';$('line-status').textContent='正在演出 · '+line.look;
+  $('replay-line').disabled=false;$('stop-line').disabled=false;
+  for(const [i,b]of Array.from($('lines').children).entries())b.setAttribute('aria-pressed',String(i===index));
+}
+for(const [index,line]of lineOptions.entries()){
+  const b=document.createElement('button');b.className='line-option';b.disabled=true;b.setAttribute('aria-pressed','false');
+  const label=document.createElement('strong'),text=document.createElement('span');label.textContent=line.label;text.textContent='“'+line.text+'”';b.append(label,text);b.onclick=()=>playLine(index);$('lines').append(b);
+}
+$('hold-pose').onclick=()=>{if(stage.status!=='ready')return;playLine(lastLine?selectedLine:0,lastLine);freezeOnHold=true;};
+$('replay-line').onclick=()=>{if(lastLine)playLine(selectedLine,lastLine);};
+for(const [value,preset]of Object.entries(config.moods)){const option=document.createElement('option');option.value=value;option.textContent=preset.label;$('custom-mood').append(option);}
+for(const [value,preset]of Object.entries(config.gestures)){const option=document.createElement('option');option.value=value;option.textContent=preset.label;if(preset.review!=='calibrated')option.textContent+='（'+(preset.review==='candidate'?'待校准':'原始样例')+'）';$('custom-gesture').append(option);}
+function playCustom(){
+  const text=$('custom-text').value.trim();if(!text){$('custom-result').textContent='先写一句 Z 要说的话。';$('custom-text').focus();return;}
+  const intent=resolvePreviewIntent(text,{mood:$('custom-mood').value,gesture:$('custom-gesture').value});
+  $('custom-result').textContent=`本次：${config.moods[intent.mood].label} · ${config.gestures[intent.gesture].label}。${intent.reason}；切换：${$('custom-transition').selectedOptions[0].textContent}。觉得不贴切可手动改选。`;
+  playLine(null,{...intent,text,transition:$('custom-transition').value,label:'自定义台词',look:'比较这句话与表情、手势是否匹配。'});
+}
+const fitNames={supported:'可表达',approximate:'近似替代',missing:'缺少动作'};
+function refreshAI(){ $('analyze-line').disabled=!aiReady||stage.status!=='ready'||Boolean(planning);$('cancel-analysis').disabled=!planning; }
+function cancelPlanRequest(){if(!planning)return;planning.abort();planning=null;planSerial++;$('ai-status').textContent='已取消分析，返回的旧结果不会播放。';refreshAI();}
+$('cancel-analysis').onclick=cancelPlanRequest;
+$('custom-text').addEventListener('input',cancelPlanRequest);
+function startAIPlan(plan){
+ cancelScene();scenePlayback={scene:{label:'DeepSeek 语义编排',steps:plan.segments.map(s=>({...s,label:config.gestures[s.gesture].label,look:`${fitNames[s.fit]}：${s.reason}${s.missingAction?'；缺口：'+s.missingAction:''}`}))},index:0};
+ $('stop-scene').disabled=false;advanceScene();
+}
+function showAIPlan(plan){
+ lastPlan=plan;$('ai-report').hidden=false;$('ai-segments').replaceChildren();
+ $('ai-summary').textContent=`原句：${plan.text} · ${plan.segments.length} 段 · ${plan.model}。点击重演不会再次请求模型。`;
+ for(const [i,s]of plan.segments.entries()){
+  const b=document.createElement('button');b.className='line-option';b.type='button';const title=document.createElement('strong'),detail=document.createElement('span');
+  title.textContent=`${i+1}. ${fitNames[s.fit]} · ${config.moods[s.mood].label} / ${config.gestures[s.gesture].label} · ${s.transition==='sudden'?'快速反应':'平滑衔接'}`;
+  detail.textContent=`“${s.text}” ${s.reason}${s.missingAction?'；缺少：'+s.missingAction:''}`;b.append(title,detail);
+  b.onclick=()=>playLine(null,{...s,look:s.reason});$('ai-segments').append(b);
+ }
+}
+$('replay-plan').onclick=()=>{if(lastPlan)startAIPlan(lastPlan);};
+$('analyze-line').onclick=async()=>{
+ const text=$('custom-text').value.trim();if(!text||text.length>160){$('ai-status').textContent='请输入 1–160 字的原句。';return;}
+ if(!aiReady||stage.status!=='ready')return;
+ cancelScene();stop();stage.setSpeech({id:null});
+ const serial=++planSerial,controller=new AbortController();planning=controller;refreshAI();$('ai-report').hidden=true;
+ $('ai-status').textContent='DeepSeek 正在理解原句、选择动作并检查资产缺口…';
+ let timedOut=false;const timeout=setTimeout(()=>{timedOut=true;controller.abort();},25000);
+ try{
+  const response=await fetch('/api/performance',{method:'POST',headers:{'Content-Type':'application/json'},signal:controller.signal,body:JSON.stringify({requestId:crypto.randomUUID(),message:text})});
+  const plan=await response.json();if(serial!==planSerial)return;
+  if(!response.ok)throw Error(plan.message||'DeepSeek 分析失败，请稍后重试。');
+  if(plan.source!=='deepseek'||plan.text!==text||!Array.isArray(plan.segments)||plan.segments.length<1||plan.segments.length>4||plan.segments.map(s=>s.text).join('')!==text||plan.segments.some(s=>!config.moods[s.mood]||config.gestures[s.gesture]?.review!=='calibrated'||!fitNames[s.fit]||!['smooth','sudden'].includes(s.transition)))throw Error('动作编排格式不正确，本次没有播放。');
+  planning=null;showAIPlan(plan);$('ai-status').textContent='DeepSeek 分析完成。下方展示本次编排与资产匹配建议，可重复试播。';startAIPlan(plan);
+ }catch(error){if(serial===planSerial)$('ai-status').textContent=timedOut?'DeepSeek 分析超时，本次没有播放；可手动重试。':error.name==='AbortError'?'分析已取消。':`${error.message} 未自动改用本地规则。`;}
+ finally{clearTimeout(timeout);if(serial===planSerial){planning=null;refreshAI();}}
+};
+async function loadAIConfig(){
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),5000);
+ try{const r=await fetch('/api/performance/config',{cache:'no-store',signal:controller.signal});if(!r.ok)throw Error();const c=await r.json();aiReady=Boolean(c.enabled);$('ai-status').textContent=aiReady?`DeepSeek 已配置（${c.model}）。点击分析才会调用 API，按供应商用量计费。`:'尚未配置 DeepSeek。请在服务端 DeepSeek配置.env 设置 DEEPSEEK_API_KEY 后刷新。';}
+ catch{$('ai-status').textContent='无法检查 DeepSeek 配置；请确认本地服务已启动并刷新。';}
+ finally{clearTimeout(timer);refreshAI();}
+}
+void loadAIConfig();
+$('custom-form').onsubmit=e=>{e.preventDefault();playCustom();};
+$('generate-custom').onclick=()=>{cancelPlanRequest();$('custom-text').value=generatePreviewLine($('custom-mood').value);$('custom-result').textContent='已填入一句本地示例，你可以修改后点击上方 DeepSeek 分析或本地演出。';};
+const reviewNames={calibrated:'可调度',candidate:'待校准',source:'原始样例'};
+const counts=Object.values(config.gestures).reduce((result,item)=>(result[item.review]=(result[item.review]||0)+1,result),{});
+$('library-summary').textContent=`已保存 ${Object.keys(config.gestures).length} 条预设：${counts.calibrated} 条可调度（含待机）、${counts.candidate} 条待校准、${counts.source} 段原始样例。`;
+function showLibrary(){
+  $('library-items').replaceChildren();
+  for(const [name,action]of Object.entries(config.gestures)){
+    if($('library-filter').value!=='all'&&action.review!==$('library-filter').value)continue;
+    const b=document.createElement('button');b.className='line-option';const title=document.createElement('strong'),detail=document.createElement('span');
+    title.textContent=action.label+' · '+reviewNames[action.review];detail.textContent=action.notes||`${action.category} · ${action.timing?`进入 ${action.timing.enterMs} ms / 停留 ${action.timing.holdMs} ms / 收尾 ${action.timing.exitMs} ms`:'保留原始时长'}。`;
+    b.append(title,detail);b.onclick=()=>playLine(null,{mood:action.defaultMood||'neutral',gesture:name,text:'现在展示：'+action.label+'。',look:action.notes||'观察进入、停留和收尾。',transition:'auto'});$('library-items').append(b);
+  }
+}
+$('library-filter').onchange=showLibrary;showLibrary();
+$('open-scenes').onclick=()=>{$('continuous-scenes').open=true;$('continuous-scenes').scrollIntoView({behavior:'smooth',block:'start'});};
+$('open-library').onclick=()=>{$('action-library').open=true;$('action-library').scrollIntoView({behavior:'smooth',block:'start'});};
+$('export-library').onclick=()=>{const blob=new Blob([JSON.stringify({...HARU_ACTION_LIBRARY,actions:config.gestures},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='haru-action-library-v1.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+$('stop-line').onclick=()=>{cancelScene();stop();stage.setSpeech({id:null});$('line-status').textContent='已停止。可以重演，或选择另一句比较过渡。';};
+function updateLine(dt){
+  const playing=linePlayback;if(!playing)return;playing.elapsed+=Math.min(dt,50);
+  let index=playing.timeline.findIndex(time=>time>playing.elapsed);if(index<0)index=playing.characters.length;
+  if(index!==playing.lastIndex){playing.lastIndex=index;$('scene-line').textContent='Z：'+playing.characters.slice(0,Math.min(index+1,playing.characters.length)).join('');
+    stage.setActivity({id:playing.id,speaking:index<playing.characters.length&&!/[，。！？…、；：]/.test(playing.characters[index])});}
+  if(freezeOnHold&&stage.getPerformanceState().gesturePhase==='hold'&&stage.getPerformanceState().gestureAgeMs>=(stage.getPerformanceState().enterMs||400)+100){freezeOnHold=false;stage.setPaused(true);$('pause').textContent='继续';$('freeze').textContent='继续演出';}
+  if(scenePlayback&&playing.elapsed>=(playing.line.advanceMs??playing.duration)){advanceScene();return;}
+  if(playing.elapsed>=playing.duration){stage.setActivity({id:playing.id,speaking:false,level:0});stage.setPerformance({id:playing.id,phase:'listening'});linePlayback=null;$('stop-line').disabled=true;$('line-status').textContent='演出结束 · '+playing.line.look+' 可点「再演一次」。';}
+}
+for(const [name,preset]of Object.entries(config.moods)){const b=document.createElement('button');b.textContent=preset.label;b.dataset.name=name;b.onclick=()=>{mood=name;gesture='none';transition='auto';prepare();$('scene-line').textContent='正在比较：'+preset.label+'。点击其他情绪观察过渡。';};$('moods').append(b);}
+for(const [name,preset]of Object.entries(config.gestures)){const b=document.createElement('button');b.textContent=preset.label;b.dataset.name=name;b.onclick=()=>{gesture=name;transition='auto';prepare();};$('gestures').append(b);}
+const cameras=[{x:.5,top:-.13,height:3,maxWidth:2.6},{x:.5,top:-.02,height:2.2,maxWidth:1.75},{x:.5,top:.02,height:1.15,maxWidth:.98}];
+function applyCamera(){Object.assign(config.layout,cameras[cameraIndex]);stage.resize();$('framing').textContent=cameraIndex===0?'切换动作半身':'切换表情近景';}
+$('framing').onclick=()=>{cameraIndex=cameraIndex===0?1:0;applyCamera();};
+$('camera').onclick=()=>{cameraIndex=(cameraIndex+1)%cameras.length;Object.assign(config.layout,cameras[cameraIndex]);stage.resize();$('framing').textContent=cameraIndex===0?'切换动作半身':'切换表情近景';$('camera').textContent=['切换半身','切换全身','切换近景'][cameraIndex];};
+// Reuse the same reviewed presets for single lines and continuous playback.
+const lineFor=gesture=>({...lineOptions.find(line=>line.gesture===gesture)});
+const scenes={
+  greeting:{label:'招呼 → 挥手 → 放松',steps:['wavePose','handWave','relaxArms'].map(lineFor)},
+  compliment:{label:'分享经验 → 被夸害羞 → 放松',steps:['openArms','coverMouth','relaxArms'].map(lineFor)},
+  discovery:{label:'思考中突然发现新路',steps:[{...lineFor('chin'),text:'让我想想……',advanceMs:1100},{...lineFor('discover'),transition:'sudden'},{...lineFor('handWave'),text:'快来，我们一起去看看！'},lineFor('relaxArms')]},
+  startle:{label:'抱臂 → 突然受惊 → 缓下来',steps:[{...lineFor('foldArms'),text:'我想想……',advanceMs:1100},lineFor('startle'),lineFor('relaxArms')]},
+  listen:{label:'好奇 → 倾听 → 安慰',steps:[lineFor('tilt'),lineFor('lean'),lineFor('present'),lineFor('shake')]},
+  rethink:{label:'被质疑后认真听',steps:[lineFor('handWave'),lineFor('foldArms'),lineFor('chin'),{...lineFor('nod'),mood:'warm',text:'嗯，刚才是我说得太快了。我们一起核实。'}]},
+  all:{label:'全部 17 种动作连续试看',steps:lineOptions.map(line=>({...line}))},
+};
+function advanceScene(){
+  const playback=scenePlayback;if(!playback)return;
+  if(playback.index>=playback.scene.steps.length){const settled=lastLine?.gesture==='relaxArms';cancelScene();stop();stage.setSpeech({id:null,carryArms:settled});$('scene-status').textContent=settled?'演示结束：保持放松姿势，情绪逐渐回到自然。':'演示结束：手势自然收尾，情绪逐渐回到自然。';$('line-status').textContent='连续演出已完成，可重演当前台词或选择其他情境。';return;}
+  const line=playback.scene.steps[playback.index++];playLine(null,line,true);
+  $('scene-status').textContent=`${playback.scene.label} · ${playback.index}/${playback.scene.steps.length} · ${config.moods[line.mood].label} / ${config.gestures[line.gesture].label}${line.advanceMs?' · 下一段将突然打断':''}`;
+}
+for(const scene of Object.values(scenes)){
+  const b=document.createElement('button');b.textContent=scene.label;b.disabled=true;b.setAttribute('aria-pressed','false');b.onclick=()=>{
+    if(stage.status!=='ready')return;cancelScene();scenePlayback={scene,index:0};b.setAttribute('aria-pressed','true');$('stop-scene').disabled=false;advanceScene();
+  };$('scenes').append(b);
+}
+$('stop-scene').onclick=()=>{cancelScene();stop();stage.setSpeech({id:null});$('line-status').textContent='连续演出已停止。';};
+$('wait').onclick=()=>prepare('thinking');$('listen').onclick=()=>prepare('listening');$('talk').onclick=talk;$('message').onclick=()=>stage.noticeMessage();$('idle').onclick=()=>{cancelScene();stop();stage.setSpeech({id:null});};
+$('pause').onclick=()=>{if(!stage.paused&&!linePlayback){cancelScene();stop();}stage.setPaused(!stage.paused);$('pause').textContent=stage.paused?'继续':'暂停';$('freeze').textContent=stage.paused?'继续演出':'暂停画面';};$('freeze').onclick=()=>$('pause').click();$('reduced').onchange=()=>stage.setReducedMotion($('reduced').checked);
+$('switch').onclick=async()=>{cancelScene();stop();const on=stage.preferred==='live2d';await stage.setMode(on?'manga':'live2d',{persist:false});$('switch').textContent=on?'恢复动态模型':'切换原画占位';};
+$('volume').oninput=()=>{if(gain)gain.gain.value=Number($('volume').value)/100;$('volume-label').textContent=$('volume').value+'%';};
+$('audio').onclick=async()=>{prepare();context??=new AudioContext();await context.resume();analyser=context.createAnalyser();gain=context.createGain();gain.gain.value=Number($('volume').value)/100;analyser.connect(gain);gain.connect(context.destination);source=context.createOscillator();const amplitude=context.createGain();amplitude.gain.value=.08;source.frequency.value=220;source.connect(amplitude);amplitude.connect(analyser);source.start();const a=new Float32Array(256);analyser.fftSize=256;function tick(){analyser.getFloatTimeDomainData(a);const level=Math.sqrt(a.reduce((s,x)=>s+x*x,0)/a.length);stage.setActivity({id,speaking:level>.006,level});meter=requestAnimationFrame(tick);}tick();timer=setTimeout(()=>{stop();amplitude.disconnect();analyser.disconnect();gain.disconnect();stage.setPerformance({id,phase:'listening'});},8000);};
+$('soak').onclick=()=>{if(soak){clearInterval(soak);soak=null;$('soak').textContent='开始 30 分钟巡检';return;}soakAt=performance.now();soakCount=0;const moods=Object.keys(config.moods),gestures=Object.keys(config.gestures);soak=setInterval(()=>{mood=moods[soakCount%moods.length];gesture=gestures[soakCount%gestures.length];soakCount++;talk();const seconds=Math.round((performance.now()-soakAt)/1000);$('soak-result').textContent=`已运行 ${seconds} 秒 / 1800 秒，${soakCount} 轮；模型状态：${stage.status}。`;if(seconds>=1800){clearInterval(soak);soak=null;$('soak').textContent='开始 30 分钟巡检';$('soak-result').textContent+=' 巡检结束，请结合画面与设备温度验收。';}},10000);$('soak').textContent='停止巡检';};
+stage.addEventListener('change',e=>{$('status').textContent=e.detail.message;for(const b of [...$('lines').children,...$('scenes').children])b.disabled=e.detail.status!=='ready';$('replay-line').disabled=e.detail.status!=='ready'||!lastLine;$('play-custom').disabled=e.detail.status!=='ready';refreshAI();});
+setInterval(()=>{const s=stage.getPerformanceState();$('metrics').textContent=JSON.stringify({status:stage.status,reason:stage.reason,...s,viewport:`${innerWidth}×${innerHeight}`,canvasCount:document.querySelectorAll('canvas').length,visibleFrames:frame,slowVisibleFrames:slow,maxVisibleGapMs:Math.round(maxGap)},null,2);$('status').textContent=stage.status==='ready'?`${config.moods[s.mood]?.label} · ${{idle:'待机',thinking:'思考',speaking:'回应',listening:'倾听'}[s.phase]} · ${{rest:'自然停留',enter:'进入动作',hold:'动作停留',recover:'动作收尾'}[s.gesturePhase]}`:stage.status==='off'?'模型已释放，当前为预览占位':stage.message;},500);
+function visibleTick(now){if(!document.hidden&&!stage.paused){const gap=now-lastFrame;updateLine(gap);frame++;if(gap>50)slow++;if(gap<2000)maxGap=Math.max(maxGap,gap);}lastFrame=now;requestAnimationFrame(visibleTick);}requestAnimationFrame(visibleTick);
+window.addEventListener('pagehide',()=>{cancelScene();stop();clearInterval(soak);context?.close();stage.destroy();});select();await stage.setMode('live2d',{persist:false});
+</script></html>

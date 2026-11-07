@@ -60,3 +60,5 @@
 ## Z 的原生直播
 
 按 Tab 打开手机，点击「Z 的直播 · 进入聊天小屋」。支持文字和语音连麦、Live2D 表情与口型、对话点歌与演唱；歌曲准备好后由主 Agent 安排演唱。返回或 Esc 恢复探索。先按 [直播服务说明](Tools/live-service/README.md) 启动服务；验证范围见 [原生接入验证](Tools/live-service/VERIFICATION.md)。
+
+原生连麦分支支持单麦克风上/下麦、最多两条对话、RTC/MMPG 声纹保护和 Vivi 流式播放。macOS 依赖安装、独立试玩入口及验收范围见 [原生连麦接入](Tools/live-service/NATIVE-CALL.md)。

@@ -1,0 +1,4 @@
+interface:
+  display_name: "简笔画"
+  short_description: "按观众主题、画风、复杂度和参考绘制简笔画，展示真实阶段并在画完后自然互动"
+  default_prompt: "使用 $simple-drawing 理解观众的绘画请求，按可用工具产生真实简笔画及阶段产物，依据实际展示结果接话，并在完成后自然互动。"
