@@ -50,6 +50,18 @@
       "sha256": "8b1425cf5c06a5498c2ce7314a4a28c215c4b1c078f9fb729806dce0b5c75beb"
     },
     {
+      "path": "live-session-control/SKILL.md",
+      "sha256": "4c25da6e76ae027026d5d1706570f8f6c954516fe3bf4d8efe0a5695ac5f60fd"
+    },
+    {
+      "path": "live-session-control/references/integration.md",
+      "sha256": "7a851567c14e5e6d88c7c856813b1de9ab3094ab74298c6e761185ba9518bc63"
+    },
+    {
+      "path": "live-session-control/references/runtime.md",
+      "sha256": "b59998fb88cc70aef8604b9a6dc33f2dcda3d1d76cb610429de577d481ae74ce"
+    },
+    {
       "path": "singing/SKILL.md",
       "sha256": "7781c6bc86dd86c29e996114e854c5d35f2dab3c524f6aca1657e03e9f787bcd"
     },

@@ -59,7 +59,7 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
         case "media.resume":locallyPaused=false;audioPlayer.Pause(false);pause.text="暂停";await Report(c,new JObject{{"status","completed"}});break;
         case "execution.cancel":if((bool?)p["all"]==true)CancelAll(id);else if(running.TryGetValue((string)p["targetCommandId"]??"",out var old))old.Cancel();await Report(c,new JObject{{"status","completed"}});break;
         case "activity.release":activity.text="和 Z 聊聊天";await Report(c,new JObject{{"status","completed"}});break;
-        case "session.ended":CancelAll(id);status.text="直播已结束";await Report(c,new JObject{{"status","completed"}});break;
+        case "session.ended":CancelAll(id);status.text="直播已结束";stopRequested=false;PlayerPrefs.DeleteKey(SessionKey);await Report(c,new JObject{{"status","completed"}});break;
         default:throw new Exception("unsupported_command");}
     }catch(OperationCanceledException){await TryFailure(c,"interrupted","execution_cancelled");}catch(Exception e){await TryFailure(c,"failed",e is LiveProtocolException||e.Message=="audio_output_unavailable"?e.Message:"execution_failed");Error(e);}finally{running.Remove(id);cancel.Dispose();}}
     async Task TryFailure(JObject c,string statusValue,string reason){try{await Report(c,new JObject{{"status",statusValue},{"reason",reason}});}catch(LiveProtocolException e)when(e.Message=="state_conflict"||e.Message=="stale_epoch"){}catch(Exception){status.text="执行回执待恢复";}}
@@ -77,7 +77,7 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     static string DrawingTitle(JToken art){string phase=(string)art["phase"];string label=phase=="completed"?"已完成":phase=="drawing"?$"绘制中 · 第 {(int?)art["stage"]+1}/{(int?)art["stageCount"]} 步":phase=="editing"?"正在修改":phase=="preparing"?"正在构思":phase=="failed"?"本次生成未完成":phase=="ready"?"画作已就绪":"画作";return (string)art["title"]+" · "+label;}
     static string NpcName(string id)=>id=="wind"?"晚风来信":id=="moon"?"月亮邮差":id=="salt"?"海盐汽水":"小岛来客";
     async void Send() {
-        if(sendingInput)return;
+        if(sendingInput||SessionInputBlocked)return;
         if(ChatInputComposing){Toast("请先选好汉字，再发送");return;}
         CancelMicrophone();
         if(transport==null){Toast("请先启动直播服务");return;}
@@ -99,13 +99,13 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
         }catch(Exception e){
             if(!accepted)RestoreFailedDraft(draft,clearedRevision);
             Error(e);Toast(FriendlyError(e));
-        }finally{sendingInput=false;if(!disposed)sendButton.SetEnabled(true);}
+        }finally{sendingInput=false;if(!disposed)RefreshSessionControls();}
     }
-    async void TogglePause(){try{if(transport==null)return;CancelMicrophone();bool resume=locallyPaused;if(!resume){locallyPaused=true;audioPlayer.Pause(true);}await transport.Control(resume?"resume":"pause");ApplyState(await transport.Request(transport.Route()));locallyPaused=!resume;audioPlayer.Pause(!resume);if(resume)await SyncAudioCapabilities();}catch(Exception e){Error(e);}}
+    async void TogglePause(){try{if(transport==null||SessionClosing||SessionPhase=="ended")return;CancelMicrophone();bool resume=locallyPaused;if(!resume){locallyPaused=true;audioPlayer.Pause(true);}await transport.Control(resume?"resume":"pause");ApplyState(await transport.Request(transport.Route()));locallyPaused=!resume;audioPlayer.Pause(!resume);if(resume)await SyncAudioCapabilities();}catch(Exception e){Error(e);}}
     async void StopActivity(){audioPlayer.Stop();try{var task=state?["activeTask"];if(task==null||task.Type==JTokenType.Null)return;bool drawingTask=(string)task["kind"]=="drawing";await transport.Control("stop_activity",(string)(task["taskId"]??task["id"]),drawingTask?((int?)state?["recentArtwork"]?["revision"]??0):0);}catch(Exception e){Error(e);}}
     public async Task Leave(){leaving=true;CancelCompanion();CancelAll();PlayerPrefs.DeleteKey(SessionKey);if(transport!=null)await transport.Control("end");}
     public void StopPlayback(){leaving=true;CancelCompanion();locallyPaused=true;CancelAll();audioPlayer?.Pause(true);}
-    void OnApplicationFocus(bool focus){if(!focus&&!requestingMicrophonePermission&&transport!=null&&!disposed&&!leaving){CancelCompanion();locallyPaused=true;audioPlayer.Pause(true);_=Observe(transport.Control("pause"));}}
+    void OnApplicationFocus(bool focus){if(!SessionClosing&&!stopRequested&&!focus&&!requestingMicrophonePermission&&transport!=null&&!disposed&&!leaving){CancelCompanion();locallyPaused=true;audioPlayer.Pause(true);_=Observe(transport.Control("pause"));}}
     void CancelAll(string except=null){foreach(var entry in new List<KeyValuePair<string,CancellationTokenSource>>(running))if(entry.Key!=except)entry.Value.Cancel();audioPlayer?.Stop();}
     static string FriendlyError(Exception error) {
         switch(error.Message) {

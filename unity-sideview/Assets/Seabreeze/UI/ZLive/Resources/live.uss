@@ -211,3 +211,7 @@ Button:disabled { opacity: 1; color: #adc6d2; }
 .dialog-paper, .call-story-card, .call-status, .companion-controls { border-radius: 14px; border-color: rgba(171,207,224,0.30); }
 .switch-thumb { background-color: #c2dce5; }
 .pause-title, .chat-text, .activity-panel .panel-title { color: #e8f2f7; }
+
+.end-live { margin-left: 10px; padding-left: 14px; padding-right: 14px; min-width: 100px; height: 38px; flex-shrink: 0; border-radius: 8px; background-color: rgb(59, 65, 89); color: rgb(242, 237, 247); font-size: 13px; }
+.end-live:hover { background-color: rgb(82, 73, 106); }
+.end-live:disabled { opacity: 0.6; }

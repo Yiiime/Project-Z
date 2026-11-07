@@ -87,6 +87,7 @@
     "Native durable singing host adapter: NetEase retrieval, shared technical-accepted library and main-agent scheduling; no singing review UI or persistent playback receipt API (2026-11-05).",
     "2026-11-06: Live ConversationEngine now uses chat/speech base directly; native talent and agent API expose singing only. Retired activities are cleared during restore. Singing/host/audience/call prompts rebuilt with scripts/build-agent-bundle.mjs; original import hashes above remain historical provenance.",
     "2026-11-07: Ready-song handoff accepts player messages addressed in the same turn; committed playback survives ordinary chat but respects lifecycle cancellation. Semantic review receives planned tool intent, with natural-language singing/host/review guidance; original hashes remain historical provenance.",
-    "2026-11-07: Request-local host message references restore exact canonical IDs before validation; bounded reply failures preserve pending questions and expose retry without endless thinking."
+    "2026-11-07: Request-local host message references restore exact canonical IDs before validation; bounded reply failures preserve pending questions and expose retry without endless thinking.",
+    "2026-11-07: Native live-session-control skill, validated host sessionDecision and separate semantic/farewell lane; P00 executor barrier, bounded close and one extension. Original import hashes remain historical provenance; runtime bundle regenerated from source lock."
   ]
 }

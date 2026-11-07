@@ -457,3 +457,16 @@ Z不获得第二套可长期刷的金币和成长资源。节点只声明该角�
 接口与运行说明见[岛民记忆接入说明](../unity-sideview/Docs/MemoryIntegration.md)和[Memory Lab 游戏服务](../unity-sideview/Tools/MemoryLab/README.md)。自然遗忘沿用可提取程度、细节清晰程度两个维度，不恢复六天强制清空。
 
 2026-11-06 接入 PR32 的 UI 外观与 Z 对话立绘；所有十人共用自由输入和记忆流程。旧七人快照按 personaRevision 2 定向迁移，原始数据先备份；移除撤销剧情及其派生反思，保留普通交流、时间、队列确认与主角动作。
+
+
+## 16. 直播进程管理与玩家收播（2026-11-07）
+
+本项目规则：玩家通过底部“结束直播”按钮或明确整场停止语义触发 P00。立刻冻结新内容，撤销未播候选，停止当前音轨并隔离后台晚到结果；Z 用一至三句承接已发生交流、向大家道别，实际完成后结束。停止不耗金币，不改关系或世界时间，不要求二次确认。
+
+权威阶段为 opening → live → closing → farewell → ended。主播自主提出 closing，以交流已有落点、关键事项有交代、继续价值降低为依据；时长仅作辅助，未设置固定整场上限。已有未处理真人问题或活动时不接受自主收播提议。模拟观众不能触发 P00 或消耗挽留额度。
+
+只有 host 来源的 closing、尚未开始 farewell、本场额度未用且有真实玩家挽留与可限定范围时，允许回到 live 一次；追加范围完成或固定 120 秒到期再次 closing。P00 永远优先，不能撤销；重复请求、暂停和重连都不重置额度/期限。收束保护初值为 host 45 秒、player 30 秒，音频准备最多 5 秒后转文字；这些是工程保护预算，待试玩调校，不是互动时长目标或延迟承诺。
+
+状态、版本、额度与期限由服务持久化。候选台词不等于实际发言，停止请求不等于音轨已停止；只有匹配执行回执允许后续播放和结束。异常到期仍会结束并记录原因，不能伪造成功。重启不重播旧告别；新场由玩家明确打开。当前跨场点歌任务保留，本场停止不声明远端生成已取消。
+
+实现与验证入口：[Skill](../unity-sideview/Tools/live-service/skills/live-session-control/SKILL.md)、[运行接线](../unity-sideview/Tools/live-service/skills/live-session-control/references/integration.md)、[会话控制器](../unity-sideview/Tools/live-service/server/session-control.mjs)、[回归测试](../unity-sideview/Tools/live-service/tests/session-control.test.mjs)、[Unity 按钮](../unity-sideview/Assets/Seabreeze/UI/ZLive/Runtime/LiveSessionControls.cs)。原返回/Esc 仍为直接离开，本轮新增按钮提供自然收尾。
