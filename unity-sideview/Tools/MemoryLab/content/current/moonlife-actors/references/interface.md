@@ -1,0 +1,45 @@
+# 当前输入输出协议 V1.2
+
+后端按项目根目录actor-registry.json加载当前角色，模型只返回dialogue/action/info。输入与输出分别见contract.schema.json中的input/output定义与lib/policy.mjs的角色约束；角色稿的元数据不由模型生成。
+
+interaction有四种来源：player、npc_message、world_event、agenda。source身份、事件ID与会话由服务器填写，客户端不能冒充其他NPC或引擎。兼容旧player.input要在后端显式适配；旧接口不能直接解析V1.2新增字段。
+
+玩家回合dialogue回答玩家，联系其他人先move/schedule_meeting，再在后续社会回合生成台词。NPC来信回合有台词就选择communicate；target为实际目标，parameters复制合法channel/conversation_id；非空台词不能搭配wait然后假装已经投递。世界/议程回合可以沉默行动，或真实渠道中说话。
+
+引擎调用必须提供合法动作清单，严格匹配id/type/target/parameters，且给wait。直接试聊缺引擎清单时仅模拟下一步意图，不视为可提交给后端的合法动作；不能捏造通信渠道。消息、移动、检查、拍摄与干预都是待执行，不等于结果。
+
+affinity/trust始终表示对玩家的0—100快照。NPC消息或世界事件也可能改变对玩家的认识，但只在内容确实与玩家有关时更新，不因为与NPC聊得开心就给玩家加分；peer_relation_changes表示本人对发件NPC的有向变化，最多一项，缺peer初值不猜。各项null必须列missing_state。初始范围由注册表initial_metric_policy限制：玩家好感/信任30—70，怀疑0—20，援助倾向0—30；默认50/50/0/0，周伯伯援助只0。宿主可在范围内给不同起点，模型不能补null。开局范围不限制后续快照，后续允许在0—100内依据经历变化。
+
+source=engine保持，模型更新必须有真实新事件ID与delta。默认不再设首轮或后续每轮小幅上限：变化可以大、小、为0或反向，只要求快照在0—100，delta与快照一致且有真实未计分来源。宿主显式给出的min_delta/max_delta或source=engine仍遵守。数值是当前态度的表达，不是刷满后触发服从的进度条。Z不输出NPC援助项；周伯伯援助persuasion只0/null、support_willingness=unwilling。
+
+communication的intent与shared_claim_ids是选择候选，须核对disclosure_by_recipient[target]和实际来源；旧eligible_share_ids必须通过share_scope_target_id绑定单一目标；并非模型提交后自动授权。后台将原话记录为claim，实际回执才验证世界事实。memory_updates/knowledge_updates继续[]；agenda_update只提出当前合法goal与next_action，不宣布任务完成。
+
+执行器必须核对角色、版本、消息可见范围、地点、设备/频道、权限与资源，再创建outbox/动作请求。外部世界成功/失败回执更新下轮，重复请求、过期输出和重复回执不再提交。角色人格限制要在动作目录和服务校验双重执行。
+
+隐私与语义不由JSON Schema保证。关键秘密宜结构化引用或允许摘要；普通自由对话仍需检查与行为评估。原始私聊只对参与者和真实听见者可见，是否允许重新转述独立配置。
+
+后端常驻提示，每轮只调用当前角色一次；后台消息唤醒其他角色。统一后端lib/engine.mjs已提供本地调度与当面消息投递；实际地图和物件执行仍由宿主实现，单独复制Skill不会自动运行A2A。API Key仅留后端。Unity可放StreamingAssets管理文件，Android/WebGL读取需适配，不把Skill当C#插件或把未执行动作当成功。
+
+本包只有一个Skill入口，模型调用时编译这五份共用规则与一份当前角色档案，不读其余七人档案。完整契约见[contract.schema.json](contract.schema.json)，角色特例由lib/policy.mjs合成，不复制八套Schema。单轮与社会循环在服务lib/，运行数据由数据库维护。
+
+NPC委托由tasks提供本人的定义和当前状态。玩家回合可选择offer_task向玩家提出委托，参数task_id必须复制合法选项，台词说清请玩家做什么；不能替玩家接受。玩家通过真实选择接受或拒绝，步骤完成由游戏任务回执确认。模型不写完成进度。确认completed后，本人可选give_task_reward说明并发放表中对应结果，不自动授予未配置资源。两类动作仍在action中，任务状态放输入tasks，不新增第四个输出字段。
+
+相遇判断仍用world_event，environment.social_opportunity说明当前实际可见的相遇对象。info可含social_decision；相遇回合必须填写，普通玩家回合不填写。它只是本次交流选择，不进入长期info快照，不新增第四个输出字段。运行时模拟时间步与剧情day分开：同一天可以多次相遇、等待和交流，NPC判断不依赖推进到下一天。
+
+服务器用set_player_focus(session, actor, owner)管理玩家当前对话对象；player_turn自动取得该角色的对话占用，切换或结束时释放。environment.player_conversation_active只描述本角色是否正在与玩家交谈。该状态必须由后端调度与提交校验执行，不能仅依赖提示词；在途后台结果返回时也要检查占用，暂停后不提交NPC通信。窗口owner用于避免旧窗口关闭误释放新窗口的对话，占用标记本身不是玩家身份认证。
+
+正式任务assignee固定player。offer_task与give_task_reward仅允许interaction.mode=player，action.target必须为player；只允许任务所有者操作。npc_message/world_event/agenda输入不携带可发布的任务清单，合法动作中也没有任务发布与领奖。NPC交流不能创建任务或代玩家接受，任务进度仍只由可信游戏回执确认。
+
+玩家接受任务后，可通过invite_cooperation邀请NPC参与。character_state.cooperation_requests只传本角色实际收到的玩家邀请；本人既有参与状态在cooperation_state，不读取其他人的私下决定。info.task_participation表达willing/declined/postponed、自己愿承担的step_ids、贡献说明和简短理由。NPC不是任务接取者，愿意协作不改变assignee，也不自动完成任务；实际回执只能确认它当前明确同意的部分。本人可根据后续实际事件改变协作意愿。
+
+玩家拒绝后，task_followup记录NPC选择reoffer/postpone/stop与理由。相同拒绝回合不能机械重发同一任务；后续新玩家交流可促成重新提出，仍需offer_task且目标为player。可提出已有相关委托，不自动新建目标或奖励。停止再提只是当前判断，不把人物永久锁成不能改变主意。
+
+公开职业与静态地图由registry.public_map维护，load_prompt会自动加载，不把别人的私有档案送给模型。character_state.public_identity明确本人职业、工作地点、住所；environment.map_context提供current_place、exits和asked_routes。asked_routes根据本轮提到的地点和宿主graph计算，path是候选路线，status=host_navigation_required表示宿主未提供连接。问路可以用共享地图回答全程，action仍只选本轮合法的下一段；地图知识不是已完成移动的回执。宿主若封路或补充入口，应更新graph，当前可选动作以宿主为准。职业和静态位置不进入情绪数值info，也不新增第四部分输出。
+
+## 统一运行协议 2
+
+角色内层输出继续使用V1.2的dialogue/action/info；HTTP外层包含runId、proposalId、事件确认序号和checkpoint。生成阶段只保存提案，实际呈现回执才提交台词、数值和任务发布；移动另等动作回执。
+
+Unity的utterance、story_event、clock、task_response、task_invite、task_receipt、action_result都进入同一个持久outbox，使用连续seq和稳定id。intent只是当前感知的规划上下文，不消费Unity事件序号。取消在途生成时，已经实际呈现但尚未同步的发言先完成同步，再取消未说出的提案。
+
+职业、公共地图、既有关系不参与遗忘。实际对话近期缓冲独立于长期召回；个人经历使用容易想起availability与细节清晰clarity两维。核实知情和进行中的事务独立延续，提取／反思在后台执行。

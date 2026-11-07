@@ -1,140 +1,86 @@
 {
-  "version": 2,
+  "version": 3,
   "actors": [
     {
-      "id": "c01",
-      "displayName": "留洋",
-      "occupation": "码头船长",
-      "appearance": 3,
+      "id": "z",
+      "displayName": "Z",
+      "occupation": "主播",
+      "appearance": 1,
       "place": "Street",
-      "x": 6,
-      "color": "#E4B972"
+      "locationId": "z_home",
+      "x": 3.4,
+      "color": "#C5AFD9",
+      "portrait": "Memory/Portraits/Z"
     },
     {
-      "id": "c02",
-      "displayName": "晴子",
-      "occupation": "花店老板",
-      "appearance": 2,
-      "place": "Street",
-      "x": -6,
-      "color": "#EDA6B4"
-    },
-    {
-      "id": "c03",
+      "id": "liyuan",
       "displayName": "梨园",
-      "occupation": "工程师",
+      "occupation": "地图绘制与路线勘察，经营地图业务",
       "appearance": 3,
       "place": "Lighthouse",
-      "x": 1,
+      "locationId": "liyuan_home",
+      "x": -4,
       "color": "#97BCCB"
     },
     {
-      "id": "c04",
-      "displayName": "伊停",
-      "occupation": "Z的同学／发小",
+      "id": "liting",
+      "displayName": "李庭",
+      "occupation": "咖啡店老板",
       "appearance": 1,
-      "place": "Street",
-      "x": 0,
+      "place": "Cafe",
+      "locationId": "cafe",
+      "x": -2,
       "color": "#A8CFAD"
     },
     {
-      "id": "c05",
-      "displayName": "周结",
-      "occupation": "照相馆老板",
+      "id": "axing",
+      "displayName": "阿星",
+      "occupation": "技术员，负责设备维护",
       "appearance": 3,
-      "place": "Cafe",
-      "x": -2,
-      "color": "#C5AFD9"
+      "place": "Lighthouse",
+      "locationId": "axing_lab",
+      "x": 2,
+      "color": "#9FD8CA"
     },
     {
-      "id": "c06",
+      "id": "zhengyi",
       "displayName": "正义",
-      "occupation": "岛上警察",
+      "occupation": "警察",
       "appearance": 1,
       "place": "Street",
+      "locationId": "visitor_center",
       "x": 12,
       "color": "#91BFE2"
     },
     {
-      "id": "c07",
-      "displayName": "星亮",
-      "occupation": "岛上医生",
-      "appearance": 3,
-      "place": "Cafe",
-      "x": 3,
-      "color": "#9FD8CA"
-    },
-    {
-      "id": "z_story",
-      "displayName": "Z",
-      "occupation": "喜欢摄影的岛民",
-      "appearance": 1,
-      "place": "Street",
-      "x": 3.4,
-      "color": "#C5AFD9",
-      "portrait": "Memory/Portraits/Z",
-      "schedule": [
-        {
-          "place": 0,
-          "from": 0,
-          "through": 1
-        },
-        {
-          "place": 2,
-          "from": 2,
-          "through": 3
-        }
-      ]
-    },
-    {
-      "id": "npc_aya",
-      "displayName": "阿遥",
-      "occupation": "潮汐咖啡馆店主",
+      "id": "xiaoxiaoqing",
+      "displayName": "小小晴",
+      "occupation": "花店老板，照顾植物与制作花束",
       "appearance": 2,
-      "place": "Cafe",
+      "place": "Street",
+      "locationId": "flower_shop",
       "x": -6,
-      "color": "#D6BE97",
-      "schedule": [
-        {
-          "place": 1,
-          "from": 0,
-          "through": 1
-        },
-        {
-          "place": 1,
-          "from": 2,
-          "through": 3,
-          "forbiddenFlag": "choice_invite"
-        },
-        {
-          "place": 2,
-          "from": 2,
-          "through": 3,
-          "requiredFlag": "choice_invite"
-        }
-      ]
+      "color": "#EDA6B4"
     },
     {
-      "id": "npc_chen",
-      "displayName": "陈伯",
-      "occupation": "退休邮递员",
+      "id": "linxu",
+      "displayName": "林序",
+      "occupation": "船长",
       "appearance": 3,
       "place": "Street",
-      "x": -11,
-      "color": "#B6C6BB",
-      "schedule": [
-        {
-          "place": 0,
-          "from": 0,
-          "through": 1
-        },
-        {
-          "place": 2,
-          "from": 2,
-          "through": 3,
-          "requiredFlag": "choice_invite"
-        }
-      ]
+      "locationId": "dock",
+      "x": 6,
+      "color": "#E4B972"
+    },
+    {
+      "id": "zhou_bobo",
+      "displayName": "周伯伯",
+      "occupation": "照相馆老板",
+      "appearance": 3,
+      "place": "Street",
+      "locationId": "photo_studio",
+      "x": -10,
+      "color": "#C5AFD9"
     }
   ]
 }

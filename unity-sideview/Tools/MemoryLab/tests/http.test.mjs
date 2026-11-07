@@ -1,41 +1,336 @@
-import test from 'node:test';
-import assert from 'node:assert/strict';
-import { mkdtempSync,rmSync,readFileSync,statSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import http from 'node:http';
-import { createMemoryServer } from '../server.mjs';
-import { ModelProvider,DEFAULT_CONFIG } from '../lib/provider.mjs';
-import { FixtureProvider } from './fixtures.mjs';
-async function listen(s){await new Promise(r=>s.listen(0,'127.0.0.1',r));return 'http://127.0.0.1:'+s.address().port;}
-async function close(s){s.closeAllConnections?.();await new Promise(r=>s.close(r));}
-async function call(url,path,data,headers={}){const r=await fetch(url+path,data?{method:'POST',headers:{'content-type':'application/json','x-z-memory':'1',...headers},body:JSON.stringify(data)}:{});return {status:r.status,data:await r.json()};}
-test('HTTP game endpoints persist independently, reject wrong origins and recover from invalid replies',async t=>{
- const dir=mkdtempSync(join(tmpdir(),'z-memory-http-'));const provider=new FixtureProvider();
- const app=createMemoryServer({dbPath:join(dir,'test.sqlite'),configPath:join(dir,'model.json'),providerFactory:()=>provider});const url=await listen(app.server);
- t.after(async()=>{await close(app.server);app.store.close();rmSync(dir,{recursive:true,force:true});});
- assert.equal((await call(url,'/api/health')).data.mode,'simulated');
- assert.equal((await call(url,'/api/game/open',{worldId:'world',runId:'run',day:1,period:0},{origin:'https://unrelated.example'})).status,403);
- const input={worldId:'world',runId:'run',day:1,period:0};assert.equal((await call(url,'/api/game/open',input)).status,200);
- const original=provider.call.bind(provider);provider.call=async()=>({text:'invalid json'});
- const broken=await call(url,'/api/game/utterance',{...input,requestId:'bad_reply',actorId:'c01',recipientId:'c02',conversationId:'convo',scene:'Street'});
- assert.equal(broken.status,500);assert.equal(app.engine.requests.size,0);
- provider.call=original;
- const good=await call(url,'/api/game/utterance',{...input,requestId:'good_reply',actorId:'c01',recipientId:'c02',conversationId:'convo',scene:'Street'});
- assert.equal(good.status,200);assert.ok(good.data.proposalId);
- assert.equal(JSON.parse(good.data.checkpoint).messages.length,0);
+import test from "node:test";
+import assert from "node:assert/strict";
+import { once } from "node:events";
+import { createServer } from "../server.mjs";
+function reply(c) {
+  let action = c.available_actions.find((a) => a.type === "wait");
+  if (c.interaction.mode === "npc_message" || c.environment.social_opportunity)
+    action =
+      c.available_actions.find((a) => a.type === "communicate") || action;
+  const info = structuredClone(c.character_state.info);
+  if (action.type === "communicate") {
+    info.communication = {
+      intent: "inform",
+      shared_claim_ids: [],
+      source_event_ids: [c.interaction.source_event_id],
+    };
+    info.social_decision = {
+      choice: "engage",
+      reason: "愿意交谈",
+      source_event_ids: [c.interaction.source_event_id],
+    };
+  }
+  if (c.character_state.cooperation_requests.length) {
+    const q = c.character_state.cooperation_requests[0];
+    info.task_participation = {
+      task_id: q.task_id,
+      choice: "declined",
+      contribution: "先做自己的事",
+      step_ids: [],
+      reason: "当前有别的安排",
+      source_event_ids: [c.interaction.source_event_id],
+    };
+  }
+  return {
+    dialogue:
+      action.type === "communicate" ? "可以聊聊。" : "认识，李庭是咖啡店老板。",
+    action: {
+      action_id: action.id,
+      type: action.type,
+      target: action.target,
+      parameters: action.parameters,
+      description: "回答当前问题",
+    },
+    info,
+  };
+}
+async function setup(t, decide = reply) {
+  const app = createServer({
+    dbPath: ":memory:",
+    providerFactory: () => ({
+      mode: "simulated-test",
+      publicConfig: () => ({ configured: true }),
+      config: { topK: 6 },
+    }),
+    decide,
+    backgroundEnabled: false,
+  });
+  app.server.listen(0, "127.0.0.1");
+  await once(app.server, "listening");
+  const base = "http://127.0.0.1:" + app.server.address().port;
+  t.after(async () => {
+    app.server.close();
+    await once(app.server, "close");
+    app.store.close();
+  });
+  const post = async (path, body = {}, native = false) => {
+    const r = await fetch(base + "/api/" + path, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(native ? { "X-Z-Memory": "1" } : { "X-Test-Token": app.token }),
+      },
+      body: JSON.stringify(body),
+    });
+    return { code: r.status, data: await r.json() };
+  };
+  return { app, post, base };
+}
+const base = { worldId: "native", runId: "r1", day: 1, period: 0 };
+const event = (id, seq, kind = "utterance") => ({
+  id,
+  seq,
+  kind,
+  day: 1,
+  period: 0,
+  speakerId: "player",
+  recipientId: "z",
+  conversationId: "c1",
+  text: "咖啡店老板是谁",
+  locationId: "z_home",
+  channel: "private_player_chat",
+  observers: ["z", "player"],
 });
-test('configuration is local-only, protected on disk, and never returned in status or provider errors',async t=>{
- const dir=mkdtempSync(join(tmpdir(),'z-memory-config-'));let responseCode=200;
- const upstream=http.createServer((req,res)=>{req.resume();req.on('end',()=>{res.writeHead(responseCode,{'content-type':'application/json'});res.end(responseCode===200?JSON.stringify({choices:[{message:{content:'OK'},finish_reason:'stop'}]}):JSON.stringify({error:'TEST_PRIVATE_CREDENTIAL'}));});});
- const endpoint=await listen(upstream);
- const configPath=join(dir,'private/model.json');const app=createMemoryServer({dbPath:join(dir,'test.sqlite'),configPath,providerFactory:s=>{const p=new ModelProvider(s,{allowTestEndpoint:true});p.keys.clear();p.config={...DEFAULT_CONFIG};return p;}});
- const url=await listen(app.server);t.after(async()=>{await close(app.server);await close(upstream);app.store.close();rmSync(dir,{recursive:true,force:true});});
- assert.equal((await call(url,'/api/health')).data.configured,false);
- const input={provider:'ark',baseUrl:endpoint,model:'test-model',apiKey:'TEST_PRIVATE_CREDENTIAL',apiType:'chat'};
- const saved=await call(url,'/api/config',input);assert.equal(saved.status,200);assert.ok(!JSON.stringify(saved.data).includes(input.apiKey));
- assert.equal(statSync(configPath).mode&0o777,0o600);assert.equal(JSON.parse(readFileSync(configPath,'utf8')).apiKey,input.apiKey);
- assert.equal((await call(url,'/api/config/test',{})).status,200);
- responseCode=429;const limited=await call(url,'/api/config/test',{});assert.equal(limited.status,502);assert.ok(!JSON.stringify(limited.data).includes(input.apiKey));
- assert.ok(!JSON.stringify(app.store.settings()).includes(input.apiKey));
+test("native open, focus, spoken input, proposed output and actual speech are separate", async (t) => {
+  const { app, post } = await setup(t);
+  assert.equal((await post("game/open", base, true)).code, 200);
+  await post("game/focus", { ...base, actorId: "z" }, true);
+  await post("game/sync", { ...base, eventData: event("p1", 1) }, true);
+  const generated = await post(
+    "game/utterance",
+    {
+      ...base,
+      actorId: "z",
+      recipientId: "player",
+      conversationId: "c1",
+      requestId: "q1",
+      scene: "Street",
+      locationId: "z_home",
+    },
+    true,
+  );
+  assert.equal(generated.code, 200, generated.data.error);
+  assert.equal(generated.data.result.dialogue, "认识，李庭是咖啡店老板。");
+  assert.equal(
+    app.engine.memory
+      .history(app.engine.world("native"), "z")
+      .filter((m) => m.speakerId === "z").length,
+    0,
+  );
+  const said = {
+    ...event("n1", 2),
+    speakerId: "z",
+    recipientId: "player",
+    text: generated.data.text,
+    proposalId: generated.data.proposalId,
+  };
+  const ack = await post("game/sync", { ...base, eventData: said }, true);
+  assert.equal(ack.code, 200, ack.data.error);
+  assert.equal(ack.data.seq, 2);
+  assert.equal(
+    app.engine.memory
+      .history(app.engine.world("native"), "z")
+      .filter((m) => m.speakerId === "z").length,
+    1,
+  );
+});
+test("event replay is idempotent and conflicting content is rejected", async (t) => {
+  const { post } = await setup(t);
+  await post("game/open", base, true);
+  const original = { ...base, eventData: event("same", 1) };
+  assert.equal((await post("game/sync", original, true)).data.seq, 1);
+  assert.equal((await post("game/sync", original, true)).data.seq, 1);
+  assert.equal(
+    (
+      await post(
+        "game/sync",
+        { ...base, eventData: { ...event("same", 1), text: "换成另一句话" } },
+        true,
+      )
+    ).code,
+    400,
+  );
+  assert.equal(
+    (await post("game/sync", { ...base, eventData: event("gap", 3) }, true))
+      .code,
+    400,
+  );
+});
+test("private player lines do not become nearby actors memories", async (t) => {
+  const { app, post } = await setup(t);
+  await post("game/open", base, true);
+  await post(
+    "game/sync",
+    {
+      ...base,
+      eventData: {
+        ...event("private", 1),
+        observers: ["z", "player", "linxu"],
+      },
+    },
+    true,
+  );
+  assert.equal(
+    app.engine.memory.history(app.engine.world("native"), "linxu").length,
+    0,
+  );
+});
+test("unsupported hardcoded Day4 and model world actions cannot change date or knowledge", async (t) => {
+  const { app, post } = await setup(t);
+  await post("game/open", base, true);
+  const r = await post(
+    "game/sync",
+    { ...base, day: 4, eventData: { ...event("day4", 1, "day4"), day: 4 } },
+    true,
+  );
+  assert.equal(r.code, 400);
+  assert.equal(app.engine.world("native").day, 1);
+  assert.equal(app.engine.world("native").seq, 0);
+});
+test("story events are delivered only to the supplied observers", async (t) => {
+  const { app, post } = await setup(t);
+  await post("game/open", base, true);
+  const r = await post(
+    "game/sync",
+    {
+      ...base,
+      eventData: {
+        ...event("story", 1, "story_event"),
+        text: "林序亲眼看见这件事",
+        observers: ["linxu"],
+        verified: true,
+      },
+    },
+    true,
+  );
+  assert.equal(r.code, 200, r.data.error);
+  assert.equal(
+    app.engine.memory.facts(app.engine.world("native"), "linxu").length,
+    1,
+  );
+  assert.equal(
+    app.engine.memory.facts(app.engine.world("native"), "z").length,
+    0,
+  );
+});
+test("restored outbox may replay previously approved actual speech, while old run requests fail", async (t) => {
+  const { post } = await setup(t);
+  await post("game/open", base, true);
+  await post("game/focus", { ...base, actorId: "z" }, true);
+  await post("game/sync", { ...base, eventData: event("p1", 1) }, true);
+  const generated = (
+    await post(
+      "game/utterance",
+      {
+        ...base,
+        actorId: "z",
+        recipientId: "player",
+        conversationId: "c1",
+        scene: "Street",
+      },
+      true,
+    )
+  ).data;
+  const cp = generated.checkpoint;
+  const b2 = { ...base, runId: "r2" };
+  assert.equal(
+    (await post("game/open", { ...b2, checkpoint: cp }, true)).code,
+    200,
+  );
+  assert.equal((await post("game/checkpoint", base, true)).code, 400);
+  const ack = await post(
+    "game/sync",
+    {
+      ...b2,
+      eventData: {
+        ...event("actual-after-restore", 2),
+        speakerId: "z",
+        recipientId: "player",
+        proposalId: generated.proposalId,
+        text: generated.text,
+      },
+    },
+    true,
+  );
+  assert.equal(ack.code, 200, ack.data.error);
+  assert.equal(ack.data.seq, 2);
+});
+test("browser receives dialogue only while the backend retains and commits all three parts", async (t) => {
+  const { app, post } = await setup(t);
+  const created = (await post("new", { actor: "z", client: "browser" })).data;
+  const r = await post("turn", {
+    session: created.session,
+    actor: "z",
+    client: "browser",
+    text: "老板是谁",
+  });
+  assert.equal(r.code, 200);
+  assert.equal(r.data.results[0].status, "proposed");
+  assert.deepEqual(Object.keys(r.data.results[0].output), ["dialogue"]);
+  assert.equal("actions" in r.data, false);
+  assert.equal("social_decisions" in r.data, false);
+  assert.ok(r.data.actors.every((a) => !("info" in a) && !("peer_relations" in a)));
+  const proposal = app.store.record(r.data.results[0].proposalId);
+  assert.deepEqual(Object.keys(proposal.output).sort(), ["action", "dialogue", "info"]);
+  assert.equal(proposal.status, "pending");
+  const ack = await post("proposal/commit", {
+    session: created.session,
+    proposalId: r.data.results[0].proposalId,
+  });
+  assert.equal(ack.code, 200, ack.data.error);
+  assert.equal(app.store.record(proposal.id).status, "committed");
+  assert.deepEqual(app.engine.world(created.session).actors.z.info, proposal.output.info);
+  assert.equal(
+    app.engine.memory
+      .history(app.engine.world(created.session), "z")
+      .filter((m) => m.speakerId === "z").length,
+    1,
+  );
+});
+test("model generation can reply without waiting for memory consolidation", async (t) => {
+  const { app, post } = await setup(t);
+  await post("game/open", base, true);
+  await post("game/focus", { ...base, actorId: "z" }, true);
+  await post("game/sync", { ...base, eventData: event("p1", 1) }, true);
+  let resolve;
+  app.engine.memory.consolidator.extract = () =>
+    new Promise((r) => (resolve = r));
+  const working = app.engine.memory.consolidate("world_native", 1);
+  await new Promise((r) => setImmediate(r));
+  const r = await post(
+    "game/utterance",
+    {
+      ...base,
+      actorId: "z",
+      recipientId: "player",
+      conversationId: "c1",
+      scene: "Street",
+    },
+    true,
+  );
+  assert.equal(r.code, 200, r.data.error);
+  resolve();
+  await working;
+});
+
+test('NPC planning does not consume Unity event sequence numbers',async t=>{
+  const {app,post}=await setup(t,c=>{const o=reply(c);if(c.environment.intent_only)o.dialogue='';return o;});
+  await post('game/open',base,true);
+  const planned=await post('game/intent',{...base,actorId:'linxu',candidates:['z'],conversationId:'planning_1',scene:'Street'},true);
+  assert.equal(planned.code,200,planned.data.error);
+  assert.equal(planned.data.seq,0);
+  assert.equal(app.engine.world('native').seq,0);
+  assert.equal((await post('game/sync',{...base,eventData:event('after_plan',1)},true)).data.seq,1);
+});
+
+test('task choices use the same durable Unity event queue as spoken lines',async t=>{
+  const {app,post}=await setup(t);
+  await post('game/open',base,true);await post('game/focus',{...base,actorId:'axing'},true);
+  app.engine.tasks.offer('native','tools','axing');
+  const accepted=await post('game/sync',{...base,eventData:{id:'accept',seq:1,kind:'task_response',day:1,period:0,taskId:'tools',accepted:true,responderId:'player',conversationId:'task-player'}},true);
+  assert.equal(accepted.code,200,accepted.data.error);assert.equal(accepted.data.seq,1);
+  assert.equal(app.engine.tasks.state('native','tools').status,'active');
+  const invited=await post('game/sync',{...base,eventData:{id:'invite',seq:2,kind:'task_invite',day:1,period:0,taskId:'tools',actorId:'z',text:'愿意陪我找工具吗？',conversationId:'task-player-z'}},true);
+  assert.equal(invited.code,200,invited.data.error);assert.equal(invited.data.seq,2);
+  assert.equal(app.engine.tasks.collaborators('native','tools')[0].status,'invited');
 });

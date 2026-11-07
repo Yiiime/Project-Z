@@ -1,1 +1,10 @@
-{"enabled":true,"serviceUrl":"http://127.0.0.1:4330","decisionInterval":8,"pairCooldown":90,"hearingDistance":5.5,"approachTimeout":20,"conversationTimeout":120,"maxLines":6}
+{
+  "enabled": true,
+  "serviceUrl": "http://127.0.0.1:4330",
+  "decisionInterval": 8,
+  "pairCooldown": 90,
+  "hearingDistance": 5.5,
+  "approachTimeout": 20,
+  "conversationTimeout": 120,
+  "maxLines": 6
+}

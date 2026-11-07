@@ -36,7 +36,7 @@ namespace Seabreeze
                 session.Memory = gameObject.AddComponent<MemoryGameController>();
                 session.Memory.Initialize(session, world);
                 if (System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-memorySmokeOutput") >= 0)
-                    gameObject.AddComponent<MemorySmokeRunner>();
+                    gameObject.AddComponent<UnifiedMemorySmokeRunner>();
             }
         }
 

@@ -8,7 +8,7 @@ namespace Seabreeze.Editor
 {
     public static class MemoryPlaytestBuild
     {
-        [MenuItem("Seabreeze/Build seven-character memory playtest")]
+        [MenuItem("Seabreeze/Build eight-role Skill and memory playtest")]
         public static void Build()
         {
             if(EditorApplication.isPlayingOrWillChangePlaymode)throw new InvalidOperationException("Build from Edit mode.");
@@ -17,7 +17,7 @@ namespace Seabreeze.Editor
             var report=BuildPipeline.BuildPlayer(new BuildPlayerOptions { scenes=EditorBuildSettings.scenes.Where(s=>s.enabled).Select(s=>s.path).ToArray(),locationPathName=destination,target=BuildTarget.StandaloneOSX,options=BuildOptions.None });
             var folder=Path.GetDirectoryName(destination);
             File.WriteAllText(Path.Combine(folder,"build-report.txt"),$"Result: {report.summary.result}\nUnity: {Application.unityVersion}\nErrors: {report.summary.totalErrors}\nWarnings: {report.summary.totalWarnings}\nSize: {report.summary.totalSize}\n");
-            if(report.summary.result!=BuildResult.Succeeded)throw new InvalidOperationException("Seven-memory build failed.");
+            if(report.summary.result!=BuildResult.Succeeded)throw new InvalidOperationException("Unified eight-role build failed.");
             string service=Path.GetFullPath("Tools/MemoryLab");
             foreach(string file in Directory.GetFiles(service,"*",SearchOption.AllDirectories))
             {
@@ -36,7 +36,7 @@ namespace Seabreeze.Editor
             File.WriteAllText(Path.Combine(folder,"启动七人记忆试玩.command"),"#!/bin/sh\nset -eu\ncd \"$(dirname \"$0\")\"\nif [ -x Runtime/node ]; then export Z_MEMORY_NODE=\"$PWD/Runtime/node\"; fi\nsh MemoryLab/start.sh --background\nopen ProjectZSevenMemory.app --args -memoryService \"http://127.0.0.1:${Z_MEMORY_PORT:-4330}\"\n");
             MakeExecutable(Path.Combine(folder,"启动七人记忆试玩.command"));
             if(File.Exists(Path.Combine(folder,"Runtime/node")))MakeExecutable(Path.Combine(folder,"Runtime/node"));
-            Debug.Log("Seven-memory playable built: "+destination);
+            Debug.Log("Unified eight-role playable built: "+destination);
         }
         static void MakeExecutable(string path)
         {
