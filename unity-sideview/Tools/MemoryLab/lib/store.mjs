@@ -13,6 +13,7 @@ export class Store {
       CREATE TABLE IF NOT EXISTS experiments (id TEXT PRIMARY KEY, payload TEXT NOT NULL);
       CREATE TABLE IF NOT EXISTS settings (id TEXT PRIMARY KEY, payload TEXT NOT NULL);
       CREATE TABLE IF NOT EXISTS team_sessions (token_hash TEXT PRIMARY KEY, payload TEXT NOT NULL);
+      CREATE TABLE IF NOT EXISTS game_archives (id TEXT PRIMARY KEY, payload TEXT NOT NULL);
       CREATE TABLE IF NOT EXISTS records (
         id TEXT PRIMARY KEY, experiment_id TEXT NOT NULL REFERENCES experiments(id),
         kind TEXT NOT NULL, seq INTEGER NOT NULL, payload TEXT NOT NULL);
@@ -47,6 +48,7 @@ export class Store {
   settings() { const r = this.db.prepare('SELECT payload FROM settings WHERE id=?').get('provider'); return r ? JSON.parse(r.payload) : {}; }
   saveSettings(value) { this.db.prepare('INSERT INTO settings VALUES (?,?) ON CONFLICT(id) DO UPDATE SET payload=excluded.payload').run('provider', JSON.stringify(value)); }
   clearRecords(expId) { this.db.prepare('DELETE FROM records WHERE experiment_id=?').run(expId); }
+  archiveSnapshot(id, snapshot) { this.db.prepare('INSERT OR IGNORE INTO game_archives VALUES (?, ?)').run(id, JSON.stringify(snapshot)); }
   teamSession(tokenHash) { const r = this.db.prepare('SELECT payload FROM team_sessions WHERE token_hash=?').get(tokenHash); return r && JSON.parse(r.payload); }
   saveTeamSession(tokenHash, session) { this.db.prepare('INSERT INTO team_sessions VALUES (?, ?)').run(tokenHash, JSON.stringify(session)); }
   close() { this.db.close(); }

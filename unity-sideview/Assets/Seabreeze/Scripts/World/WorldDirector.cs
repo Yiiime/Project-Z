@@ -108,7 +108,7 @@ namespace Seabreeze
             if (IsTransitioning)
                 return;
             if (GameUI.Instance != null)
-                GameUI.Instance.CloseOverlay();
+                GameUI.Instance.CloseOverlayImmediately();
             StartCoroutine(Transition(place));
         }
 

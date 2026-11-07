@@ -46,9 +46,9 @@ Player/NPC pass-through follows the existing exploration behavior; NPC bodies ca
 
 Verification: `Seabreeze/Verify NPC Movement` or `-executeMethod Seabreeze.Editor.NpcMovementVerification.Run`. Optional arguments: `-npc-save-root <absolute temporary directory>`, `-npcReport <json path>`, `-npcCaptureDir <directory>`. The editor-only `SaveRepository.VerificationDirectory` is established before Play mode and cleared after exit; standalone/default save paths are unchanged. The NPC suite writes its report and screenshots outside tracked content and does not invoke the original story walkthrough's save-reset workflow on a player's normal save.
 
-## Seven-character memory mode
+## Ten-islander memory mode
 
-`Resources/Memory/integration.json` enables the mode and supplies a local service URL without credentials. `-memoryDisabled` preserves the original story mode. Seven-mode saves use `seven-memory-save.json`; legacy saves keep their original name. Explicit QA save roots are isolated.
+`Resources/Memory/integration.json` enables the mode and supplies a local service URL without credentials. `-memoryDisabled` preserves the original story mode. Islander-mode saves use `seven-memory-save.json`; legacy saves keep their original name. Explicit QA save roots are isolated.
 
 | Owner | Contract |
 | --- | --- |
@@ -59,6 +59,14 @@ Verification: `Seabreeze/Verify NPC Movement` or `-executeMethod Seabreeze.Edito
 | `NpcMovementController` | `SetInteractionHold`, `CanReachConversationPoint` and `MoveForConversation` use engine-owned targets and existing collision checks. Only the participants receive holds. |
 | Memory Lab service | Public directory and private knowledge projection, source-attributed extraction/reflection, game-validated events, idempotent receipts and snapshot restoration. |
 
-`NonPlayerInputBlocked` retains existing global menus/legacy-dialogue semantics. A seven-mode player text box only adds player input blocking; it does not freeze unrelated NPC movement. Day4 is persisted independently of scene presence and model availability.
+`NonPlayerInputBlocked` retains existing global menus/legacy-dialogue semantics. An islander-mode player text box only adds player input blocking; it does not freeze unrelated NPC movement. Day4 is persisted independently of scene presence and model availability.
 
 API and model setup: `Tools/MemoryLab/README.md`. Full playtest guide: `Docs/MemoryIntegration.md`. Runtime tests distinguish real and simulated providers; gameplay does not silently switch to a fixed-response fallback.
+
+### PR32 presentation and persona revision 2
+
+The active roster is c01–c07, z_story, npc_aya, npc_chen. `SevenCharacterCatalog` / `SevenNpcSpawner` retain their historical class names. `SevenCharacter.portrait` is an optional Resources path to `Live2DModelProfile`; only Z is currently assigned. Schedules are applied to the three retained islanders without rebuilding scenes.
+
+`MemoryDialogueView.PlayerInputReady` gates free-text submission during presentation transitions; `Closing` keeps player input blocked until the reverse transition ends. This never adds a global NPC pause. `GameUI.IsOverlayTransitioning` and `CloseOverlayImmediately()` handle menu animation and external scene transitions.
+
+Day4 is public for all ten; retired staff/AI-identity lore is not in any persona. Checkpoints and new utterance events carry `personaRevision: 2`. Old snapshots are archived locally and migrated before restoration. The existing save filename, event IDs and sequence receipts remain compatible. The live-room backend and player locomotion are unchanged.

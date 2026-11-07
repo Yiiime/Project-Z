@@ -20,17 +20,17 @@ namespace Seabreeze
         void Spawn()
         {
             foreach(var old in stage.GetComponentsInChildren<NpcPresence>(true))old.gameObject.SetActive(false);
-            foreach(var definition in SevenCharacterCatalog.Actors.Where(a=>a.Place==stage.place))
+            foreach(var definition in SevenCharacterCatalog.Actors.Where(a=>a.schedule!=null&&a.schedule.Length>0?a.schedule.Any(s=>s.place==stage.place):a.Place==stage.place))
             {
-                var saved=session.State.memory.positions.Find(a=>a.actorId==definition.id&&a.place==definition.place&&a.day==session.State.day&&a.period==session.State.period);
+                var saved=session.State.memory.positions.Find(a=>a.actorId==definition.id&&a.place==stage.place.ToString()&&a.day==session.State.day&&a.period==session.State.period);
                 float x=saved!=null?saved.x:definition.x;
-                var root=new GameObject("七人NPC "+definition.displayName+"（形象占位）");root.transform.SetParent(stage.transform,false);
+                var root=new GameObject("岛民 "+definition.displayName);root.transform.SetParent(stage.transform,false);
                 root.transform.position=new Vector3(Mathf.Clamp(x,-stage.width/2+1,stage.width/2-1),0,0);
                 var interact=root.AddComponent<Interactable>();interact.id=definition.id;interact.label=definition.displayName;interact.npc=true;
                 var npc=root.AddComponent<NpcPresence>();npc.npcId=definition.id;npc.character=definition.appearance;npc.location=stage.place;
                 var runtime=ScriptableObject.CreateInstance<NpcData>();runtime.hideFlags=HideFlags.DontSave;
                 runtime.id=definition.id;runtime.displayName=definition.displayName;runtime.description=definition.occupation;runtime.accent=definition.Accent;
-                runtime.schedule=new[]{new NpcSchedule { place=stage.place,from=TimePeriod.Morning,through=TimePeriod.Night }};
+                runtime.schedule=definition.schedule!=null&&definition.schedule.Length>0?definition.schedule:new[]{new NpcSchedule { place=stage.place,from=TimePeriod.Morning,through=TimePeriod.Night }};
                 npc.RuntimeData=runtime;data.Add(runtime);actors.Add(npc);world.Interactables.Add(interact);
             }
         }

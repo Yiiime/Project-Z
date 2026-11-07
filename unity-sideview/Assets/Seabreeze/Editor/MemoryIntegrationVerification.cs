@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.Rendering;
@@ -89,12 +90,12 @@ namespace Seabreeze.Editor
         }
         static IEnumerator Verify()
         {
-            yield return Wait(()=>S!=null&&S.IsReady&&W!=null&&W.Stage!=null&&!W.IsTransitioning&&M!=null&&M.Spawner.Actors.Count==4,45,"Seven-person scene startup");
+            yield return Wait(()=>S!=null&&S.IsReady&&W!=null&&W.Stage!=null&&!W.IsTransitioning&&M!=null&&M.Spawner.Actors.Count==6,45,"Seven-person scene startup");
             Require(MemoryRuntimeConfig.Enabled,"Seven-person mode enabled.");
             Require(SaveRepository.PathOnDisk.StartsWith(Path.Combine(output,"saves")+Path.DirectorySeparatorChar,StringComparison.Ordinal),"Isolated save directory.");
-            Require(string.Join(",",SevenCharacterCatalog.Actors.Select(a=>a.displayName))=="留洋,晴子,梨园,伊停,周结,正义,星亮","Exact worldbook identities.");
+            Require(string.Join(",",SevenCharacterCatalog.Actors.Select(a=>a.displayName))=="留洋,晴子,梨园,伊停,周结,正义,星亮,Z,阿遥,陈伯","Exact worldbook identities.");
             Require(M.Spawner.Find("c07")==null,"Doctor begins outside the current scene.");
-            checks.Add("Seven worldbook IDs/names, independent player, placeholder figures and isolated game saves");
+            checks.Add("Ten islander IDs/names, independent player and isolated game saves");
             originalSettings=InputSystem.settings;oldFlags=originalSettings.hideFlags;originalSettings.hideFlags=HideFlags.DontSave;
             testSettings=Object.Instantiate(originalSettings);testSettings.backgroundBehavior=InputSettings.BackgroundBehavior.IgnoreFocus;
             testSettings.editorInputBehaviorInPlayMode=InputSettings.EditorInputBehaviorInPlayMode.AllDeviceInputAlwaysGoesToGameView;InputSystem.settings=testSettings;keyboard=InputSystem.AddDevice<Keyboard>();
@@ -102,19 +103,19 @@ namespace Seabreeze.Editor
             {yield return VerifyUnavailable();yield break;}
             yield return Wait(()=>M.Client.CanGenerate,35,"Configured isolated model connection");
             bool real=M.Client.Mode!="simulated";
-            if(!real)yield return VerifyReadback();
+            if(!real){yield return VerifyPresentation();yield return VerifyInput();yield return VerifyReadback();}
             yield return Wait(()=>M.Client.CanGenerate&&M.Spawner.Actors.All(a=>a.Movement!=null&&a.Movement.IsReady),30,"Restored scene ready");
             M.Conversations.Cancel("Verification setup");
             var player=W.Player.GetComponent<PlayerController>();player.Teleport(new Vector2(-2.8f,.1f));W.Follow.Snap();
             SetupCapture();recording=true;recordingStart=EditorApplication.timeSinceStartup;nextCapture=0;
             while(S.State.day<4){S.Clock.Advance();yield return null;}
-            yield return Wait(()=>S.State.memory.day4Shown&&M.Client.Synchronized,45,"Day4 notice and seven-person delivery");
+            yield return Wait(()=>S.State.memory.day4Shown&&M.Client.Synchronized,45,"Day4 notice and ten-person delivery");
             var checkpoint=ReadCheckpoint();
-            Require(checkpoint.memories.Count(m=>m.origin=="public_day4")==7,"One public Day4 memory per NPC.");
-            Require(checkpoint.memories.Count(m=>m.origin=="staff_day4")==7,"One internal Day4 notification per staff member.");
+            Require(checkpoint.memories.Count(m=>m.origin=="public_day4")==10,"One public Day4 memory per NPC.");
+            Require(checkpoint.memories.Count(m=>m.origin=="staff_day4")==0,"No retired internal plot memory.");
             Require(S.State.memory.publicDay4KnownBy.Contains("player")&&S.State.memory.publicDay4KnownBy.Contains("z_story"),"Player and story Z receive the public fact.");
             M.EnsureDay4();Require(S.State.memory.outbox.All(e=>e.kind!="day4"),"Repeated evaluation does not enqueue the event again.");
-            checks.Add("Game Day4 informs all seven, including absent NPCs; public/player/Z notice and staff-only knowledge remain separate");
+            checks.Add("Game Day4 informs all ten, including absent NPCs; no retired staff or AI-identity setup");
             int initialCompleted=M.Conversations.CompletedConversations;
             yield return Wait(()=>M.Conversations.Stage=="交谈",real?150:60,"Autonomous choice and approach");
             var first=M.Conversations.First;var second=M.Conversations.Second;
@@ -155,8 +156,8 @@ namespace Seabreeze.Editor
             M.Conversations.SendPlayer("你和"+SevenCharacterCatalog.Name(pair[1])+"刚才聊到了什么？你现在有什么打算？");
             yield return Wait(()=>M.Conversations.CommittedNpcLines>beforeReply,real?90:20,"Recall in a separate player conversation");
             Require(M.Conversations.LastRecalledMemoryIds.Any(id=>rememberedIds.Contains(id)),"The later reply receives memories from the previous NPC exchange.");
-            yield return Frames(30);M.Conversations.Cancel("Verification follow-up complete");
-            yield return Wait(()=>M.Client.Synchronized,45,"Follow-up memory settled");
+            yield return Frames(30);M.Conversations.Cancel("Verification follow-up complete");recording=false;
+            yield return Wait(()=>M.Client.Synchronized,real?90:45,"Follow-up memory settled");
             checks.Add("A separate player conversation recalls the preceding NPC exchange through the same memory path");
             observedNpcLines=M.Conversations.CommittedNpcLines;observedConversations=M.Conversations.CompletedConversations;
             recording=false;
@@ -165,7 +166,7 @@ namespace Seabreeze.Editor
             Require(ReadCheckpoint().memories.Any(m=>m.actorId=="c07"&&m.origin=="public_day4"),"Arriving NPC already knows Day4.");
             S.Save();S.LoadSavedGame();
             yield return Wait(()=>!W.IsTransitioning&&M.Client.Synchronized,35,"Post-Day4 load");
-            Require(ReadCheckpoint().memories.Count(m=>m.origin=="public_day4")==7,"Loading Day4 does not duplicate memories.");
+            Require(ReadCheckpoint().memories.Count(m=>m.origin=="public_day4")==10,"Loading Day4 does not duplicate memories.");
             Require(S.State.memory.day4Shown&&!M.View.Day4Visible,"Loading does not repeat the shown announcement.");
             checks.Add("Scene travel and loading preserve off-scene Day4 knowledge without repeat announcements or memory duplication");
         }
@@ -178,10 +179,107 @@ namespace Seabreeze.Editor
             M.Conversations.SendPlayer("这是读档后不应存在的未来测试句子。");
             yield return Frames(2);
             M.BeforeStateChange();File.WriteAllText(SaveRepository.PathOnDisk,old);S.LoadSavedGame();
-            yield return Wait(()=>!W.IsTransitioning&&M.Client.Synchronized&&M.Spawner.Actors.Count==4,30,"Earlier save restored");
+            yield return Wait(()=>!W.IsTransitioning&&M.Client.Synchronized&&M.Spawner.Actors.Count==6,30,"Earlier save restored");
             Require(!M.PlayerChatOpen&&string.IsNullOrEmpty(M.Conversations.ActiveId),"Loading releases the conversation.");
             Require(!ReadCheckpoint().messages.Any(m=>m.content.Contains("未来测试句子")),"Late player/model results do not enter the restored past.");
             checks.Add("Player E interaction uses the memory path; loading cancels participants and prevents future dialogue from entering the older save");
+        }
+        static IEnumerator VerifyPresentation()
+        {
+            M.Conversations.Cancel("Presentation verification setup");
+            yield return Wait(()=>!M.PlayerChatOpen,5,"Previous view closed");
+            var z=M.Spawner.Find("z_story");Require(z!=null,"Z is present alongside the other islanders.");
+            W.Player.GetComponent<PlayerController>().Teleport(z.transform.position+Vector3.left*1.2f);W.Follow.Snap();
+            M.BeginPlayerChat("z_story");yield return Wait(()=>M.View.PlayerInputReady,8,"PR32 Z view entering");yield return Frames(8);
+            var portrait=M.View.GetComponentInChildren<Live2DCharacterView>(true);
+            Require(portrait!=null&&portrait.IsVisible&&portrait.CurrentProfile.characterId=="z_story","Only Z has the configured Live2D portrait.");
+            var image=portrait.GetComponentInChildren<UnityEngine.UI.RawImage>();
+            Require(image!=null&&image.texture!=null,"Z is rendered into the dialogue portrait surface.");
+            SetupCapture();recordingStart=EditorApplication.timeSinceStartup;Capture();
+            File.Copy(Path.Combine(output,"frames",frames.Last().file),Path.Combine(output,"z-dialogue.png"),true);frames.Clear();frameIndex=0;
+            Press(UnityEngine.InputSystem.Key.Escape);yield return Frames(2);Press();
+            yield return Wait(()=>!M.PlayerChatOpen,8,"PR32 reverse transition releases player input");
+            Require(!S.InputBlocked,"Player input resumes after dialogue close.");
+            Press(UnityEngine.InputSystem.Key.M);yield return Frames(2);Press();
+            yield return Wait(()=>GameUI.Instance.HasOverlay&&!GameUI.Instance.IsOverlayTransitioning,5,"Map fade in");
+            Capture();File.Copy(Path.Combine(output,"frames",frames.Last().file),Path.Combine(output,"map.png"),true);frames.Clear();frameIndex=0;
+            Press(UnityEngine.InputSystem.Key.Escape);yield return Frames(2);Press();
+            yield return Wait(()=>!GameUI.Instance.HasOverlay&&!S.InputBlocked,5,"Map fade out");
+            Press(UnityEngine.InputSystem.Key.Tab);yield return Frames(2);Press();
+            yield return Wait(()=>GameUI.Instance.HasOverlay&&!GameUI.Instance.IsOverlayTransitioning,5,"Phone fade in");
+            Require(GameUI.Instance.GetComponentsInChildren<UnityEngine.UI.Button>().Any(b=>b.name=="Open Z Live"),"Existing live-room entry remains in the phone.");
+            Capture();File.Copy(Path.Combine(output,"frames",frames.Last().file),Path.Combine(output,"phone.png"),true);frames.Clear();frameIndex=0;
+            yield return VerifyLiveShell();
+            Press(UnityEngine.InputSystem.Key.Escape);yield return Frames(2);Press();
+            yield return Wait(()=>!GameUI.Instance.HasOverlay&&!S.InputBlocked,5,"Phone closes");
+            checks.Add("PR32 layout and transitions: Z portrait, player unlock, map/phone fades and retained live-room entry");
+        }
+        static IEnumerator VerifyLiveShell()
+        {
+            const string sessionKey="ZLive.LocalSession";
+            bool hadSession=PlayerPrefs.HasKey(sessionKey);string savedSession=PlayerPrefs.GetString(sessionKey,"");
+            NativeLiveHost host=null;RenderTexture liveTarget=null;UnityEngine.UIElements.PanelSettings settings=null;
+            try
+            {
+                PlayerPrefs.DeleteKey(sessionKey);
+                host=NativeLiveHost.Open(GameUI.Instance.transform,()=>{});
+                var feature=host.GetComponent<ZLive.LiveFeatureController>();
+                // Configure synchronously before Start, so no production connection file is read.
+                feature.Configure(MemoryRuntimeConfig.Settings.serviceUrl,"isolated-ui-check");
+                yield return Frames(12);
+                var document=host.GetComponent<UnityEngine.UIElements.UIDocument>();
+                Require(document!=null&&document.rootVisualElement!=null,"Existing live-room UI builds with its retained behavior.");
+                settings=document.panelSettings;
+                liveTarget=new RenderTexture(1920,1080,24,RenderTextureFormat.ARGB32);liveTarget.Create();settings.targetTexture=liveTarget;
+                yield return Frames(12);
+                var previous=RenderTexture.active;var pixels=new Texture2D(1920,1080,TextureFormat.RGBA32,false);
+                try{RenderTexture.active=liveTarget;pixels.ReadPixels(new Rect(0,0,1920,1080),0,0);pixels.Apply();File.WriteAllBytes(Path.Combine(output,"live-shell.png"),pixels.EncodeToPNG());}
+                finally{RenderTexture.active=previous;Object.Destroy(pixels);}
+            }
+            finally
+            {
+                if(settings!=null)settings.targetTexture=null;
+                if(host!=null)host.Close();
+                if(liveTarget!=null){liveTarget.Release();Object.Destroy(liveTarget);}
+                if(hadSession)PlayerPrefs.SetString(sessionKey,savedSession);else PlayerPrefs.DeleteKey(sessionKey);PlayerPrefs.Save();
+            }
+            yield return Wait(()=>Object.FindFirstObjectByType<NativeLiveHost>()==null,8,"Live shell releases its renderer/audio state");
+            checks.Add("Live-room shell renders and closes against an isolated unavailable endpoint; no real speech/singing request");
+        }
+        static IEnumerator VerifyInput()
+        {
+            M.Conversations.Cancel("IME verification setup");
+            var npc=M.Spawner.Find("c01");W.Player.GetComponent<PlayerController>().Teleport(npc.transform.position+Vector3.left*1.2f);
+            M.BeginPlayerChat("c01");yield return Wait(()=>M.View.PlayerInputReady,5,"Input view entered");
+            var field=M.View.GetComponentInChildren<TMPro.TMP_InputField>();
+            Require(field!=null&&M.PlayerChatOpen,"Player dialogue has an editable field.");
+            var module=EventSystem.current.currentInputModule;var previous=module.inputOverride;
+            var ime=module.gameObject.AddComponent<MemoryImeVerificationInput>();
+            string clipboard=GUIUtility.systemCopyBuffer;
+            try
+            {
+                module.inputOverride=ime;
+                field.text="嗯嗯嗯";field.MoveTextEnd(false);ime.Composition="e'e'e";field.ForceLabelUpdate();
+                Require(field.textComponent.text.Contains("e'e'e")&&!field.textComponent.text.Contains("<u>"),"IME composition renders without literal underline tags.");
+                Require(field.text=="嗯嗯嗯","Uncommitted composition is not stored as player text.");
+                SetupCapture();recordingStart=EditorApplication.timeSinceStartup;Capture();
+                File.Copy(Path.Combine(output,"frames",frames.Last().file),Path.Combine(output,"ime-composition.png"),true);
+                frames.Clear();frameIndex=0;
+                int before=S.State.memory.nextSeq;field.onSubmit.Invoke(field.text);yield return Frames(2);
+                Require(S.State.memory.nextSeq==before&&!M.Conversations.Sending,"IME candidate confirmation does not send a player message.");
+                ime.Composition="";field.text="测试ABC";field.MoveTextEnd(false);field.ForceLabelUpdate();
+                field.ProcessEvent(new Event{type=EventType.KeyDown,keyCode=KeyCode.Backspace});
+                Require(field.text=="测试AB","Backspace preserves mixed Chinese and English input.");
+                field.text="";GUIUtility.systemCopyBuffer="原样文本 <u>hello</u> 中文";
+                field.ProcessEvent(new Event{type=EventType.KeyDown,keyCode=KeyCode.V,modifiers=EventModifiers.Command});field.ForceLabelUpdate();
+                Require(field.text==GUIUtility.systemCopyBuffer&&field.textComponent.text.Contains("<u>hello</u>"),"User-pasted markup remains literal plain text.");
+                field.text="中文选字完成，可以发送。";field.onSubmit.Invoke(field.text);
+                yield return Wait(()=>ReadCheckpoint().messages.Any(m=>m.speakerId=="player"&&m.content=="中文选字完成，可以发送。"),20,"Committed plain-text player message");
+                Require(!ReadCheckpoint().messages.Any(m=>m.content.Contains("e'e'e")),"IME draft never enters dialogue memory.");
+            }
+            finally {module.inputOverride=previous;GUIUtility.systemCopyBuffer=clipboard;Object.Destroy(ime);M.Conversations.Cancel("IME verification complete");}
+            yield return Wait(()=>M.Client.Synchronized&&!M.PlayerChatOpen,30,"IME test memory settled");
+            checks.Add("Simulated Chinese IME composition, candidate-submit guard, mixed-text backspace and literal paste; only committed text enters memory");
         }
         static IEnumerator VerifyUnavailable()
         {
@@ -194,16 +292,17 @@ namespace Seabreeze.Editor
             SetupCapture();recording=true;recordingStart=EditorApplication.timeSinceStartup;nextCapture=0;
             while(S.State.day<4){S.Clock.Advance();yield return null;}
             yield return Wait(()=>S.State.memory.day4Shown,5,"Offline public notification");
-            if(!offline){yield return Wait(()=>M.Client.Synchronized,20,"Unconfigured Day4 delivery");Require(ReadCheckpoint().memories.Count(m=>m.origin=="public_day4")==7,"Day4 memory does not require model text.");}
+            if(!offline){yield return Wait(()=>M.Client.Synchronized,20,"Unconfigured Day4 delivery");Require(ReadCheckpoint().memories.Count(m=>m.origin=="public_day4")==10,"Day4 memory does not require model text.");}
             else Require(S.State.memory.outbox.Any(e=>e.kind=="day4"),"Offline notification remains in the durable outbox.");
             yield return Frames(30);
             Require(M.Conversations.CommittedNpcLines==0&&!M.Client.CanGenerate,"No fixed NPC replies stand in for a missing model.");
-            checks.Add(offline?"Disconnected service: playable scene, explicit status, durable Day4 notification and no invented NPC replies":"Unconfigured model: playable scene, seven-person Day4 delivery, explicit status and no invented NPC replies");
+            checks.Add(offline?"Disconnected service: playable scene, explicit status, durable Day4 notification and no invented NPC replies":"Unconfigured model: playable scene, ten-person Day4 delivery, explicit status and no invented NPC replies");
             recording=false;
         }
         static Checkpoint ReadCheckpoint(){return JsonUtility.FromJson<Checkpoint>(S.State.memory.checkpoint);}
         static void SetupCapture()
         {
+            if(render!=null)return;
             camera=W.Follow.GetComponent<Camera>();render=new RenderTexture(1920,1080,24,RenderTextureFormat.ARGB32);render.Create();camera.targetTexture=render;
             foreach(var canvas in Object.FindObjectsByType<Canvas>(FindObjectsInactive.Include,FindObjectsSortMode.None))
                 if(canvas.renderMode==RenderMode.ScreenSpaceOverlay){canvas.renderMode=RenderMode.ScreenSpaceCamera;canvas.worldCamera=camera;canvas.planeDistance=1;}
@@ -223,6 +322,7 @@ namespace Seabreeze.Editor
         static void Complete(string error)
         {
             if(ending)return;ending=true;recording=false;SessionState.SetBool(Key+".finished",true);
+            if(error!=null&&M?.Client!=null)error+="\nClient: "+M.Client.Status+"; queued="+S.State.memory.outbox.Count+"; lastError="+M.Client.LastError;
             EditorApplication.update-=Tick;Application.logMessageReceived-=Log;
             var report=new Report{passed=error==null,error=error??"",mode=M?.Client.Mode??"unknown",unityVersion=Application.unityVersion,savePath=SaveRepository.PathOnDisk,checks=checks.ToArray(),issues=issues.ToArray(),editorOnlyIssues=editorOnlyIssues.ToArray(),frames=frames.ToArray(),npcLines=Math.Max(observedNpcLines,M?.Conversations.CommittedNpcLines??0),completedConversations=Math.Max(observedConversations,M?.Conversations.CompletedConversations??0)};
             if(keyboard!=null)InputSystem.RemoveDevice(keyboard);
@@ -239,5 +339,10 @@ namespace Seabreeze.Editor
         static IEnumerator Wait(Func<bool> condition,float seconds,string label){double end=EditorApplication.timeSinceStartup+seconds;while(!condition()){Require(EditorApplication.timeSinceStartup<end,label+" timed out");yield return null;}}
         static void Require(bool condition,string message){if(!condition)throw new InvalidOperationException(message);}
         static string Arg(string name,string fallback){var a=Environment.GetCommandLineArgs();int n=Array.IndexOf(a,name);return n>=0&&n+1<a.Length?a[n+1]:fallback;}
+    }
+    public sealed class MemoryImeVerificationInput : BaseInput
+    {
+        public string Composition="";
+        public override string compositionString=>Composition;
     }
 }

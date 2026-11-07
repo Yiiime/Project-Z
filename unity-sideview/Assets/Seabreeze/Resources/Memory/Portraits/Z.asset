@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20658eea1de5e4e48acec160054bac1e, type: 3}
+  m_Name: Z
+  m_EditorClassIdentifier: Assembly-CSharp::Seabreeze.Live2DModelProfile
+  prefab: {fileID: 4263971582556020264, guid: 03a62ef9d33814bcfbda676a43d2dad9, type: 3}
+  characterId: z_story
+  rendererIndex: 1
+  renderLayer: 30
+  modelPosition: {x: 0, y: 0, z: 0}
+  modelScale: 1
+  cameraCenter: {x: 0, y: 0}
+  orthographicSize: 2
+  autoFrame: 1
+  visibleHeight: 0.78
+  verticalFocus: 0.62
+  uvRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  textureHeight: 1200
+  defaultEmotion: neutral
+  expressions:
+  - emotion: neutral
+    expression: {fileID: 0}
+  - emotion: happy
+    expression: {fileID: 11400000, guid: 0c086f1d40837448bbb385b7b9725e3b, type: 2}
+  - emotion: sad
+    expression: {fileID: 11400000, guid: b55cc15934c144e179b0b485cee51901, type: 2}
+  - emotion: serious
+    expression: {fileID: 11400000, guid: 17e064bad9aad46ecbf7e11fcc19bf3a, type: 2}
+  - emotion: shy
+    expression: {fileID: 11400000, guid: 4e85b0c28ced44dd5bf5eb0b6bb55af2, type: 2}
+  - emotion: happy_wave
+    expression: {fileID: 11400000, guid: b1747b22f77d243e580af6e9b71926e1, type: 2}
+  animatorController: {fileID: 0}
+  idleState: Idle
+  talkState: Talk
+  proceduralIdle: 1
+  proceduralTalk: 1
+  expressionFadeSeconds: 0.24
+  mouthParameter: ParamMouthOpenY
+  breathParameter: ParamBreath
+  leftEyeParameter: ParamEyeLOpen
+  rightEyeParameter: ParamEyeROpen
+  authoringNotes: Dialogue model imported from PR32 commit 70be1c747054dace87d1390314723e4770e5fa66.
+    Only Z is bound. Reuses the existing Cubism SDK and renderer index 1; does not
+    alter the live-room model. Text speaking drives procedural mouth motion, not
+    voice lip sync.
