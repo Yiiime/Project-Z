@@ -20,7 +20,7 @@ public static class LiveSessionVerification {
     static int stage;
     static double deadline,changedAt;
     static string output;
-    static bool returned;
+    static bool returned,sawFarewell;
     static LiveSessionVerification(){EditorApplication.update+=Tick;}
     public static void Run(){
         SessionState.SetBool(Key,true);
@@ -62,6 +62,10 @@ public static class LiveSessionVerification {
             if(stage==2){
                 if(EditorApplication.timeSinceStartup-changedAt<1||Field<bool>("sendingInput"))return;
                 Require(Field<JObject>("state")["room"]["messages"].ToString().Contains("晚霞"),"Input did not reach real session.");
+                Require(document.rootVisualElement.Q("session-progress")!=null,"Session progress is not visible.");
+                Require(Field<Label>("sessionProgressDetail").text.Contains("尚未确定结束时间"),"Live stage promises a fictitious end time.");
+                var background=document.rootVisualElement.resolvedStyle.backgroundColor;
+                Require(background.r>.75f&&background.g>.75f&&background.b>.75f,"Live room did not restore its light palette.");
                 Capture("before-stop.png");
                 Click(document.rootVisualElement.Q<Button>("end-live-button"));
                 Require(Field<bool>("stopRequested"),"Button submit did not invoke stop action.");
@@ -69,23 +73,38 @@ public static class LiveSessionVerification {
                 stage=3;return;
             }
             if(stage==3){
-                var state=Field<JObject>("state");if((string)state?["phase"]!="ended")return;
+                var state=Field<JObject>("state");
+                if(!sawFarewell&&(string)state?["sessionControl"]?["phase"]=="farewell"&&Field<Label>("sessionProgressDetail").text.Contains("道别")){sawFarewell=true;Capture("farewell.png");}
+                if((string)state?["phase"]!="ended")return;
+                Require(sawFarewell,"Progress did not reflect the real farewell phase.");
                 stage=4;changedAt=EditorApplication.timeSinceStartup;return;
             }
             if(stage==4){
                 if(EditorApplication.timeSinceStartup-changedAt<.3)return;
                 var button=document.rootVisualElement.Q<Button>("end-live-button");
                 Require(button.text=="返回游戏","Ended action did not switch to return.");
+                Require(Field<Label>("sessionProgressDetail").text=="本场直播已结束","Progress did not reach ended.");
                 Require(document.rootVisualElement.Q<Label>(className:"live-label").text.Contains("已结束"),"Ended header still advertises LIVE.");
                 Require(!Field<Label>("replyStatus").text.Contains("正在整理"),"Ended UI claims another reply is pending.");
                 Require(Field<VisualElement>("pausedOverlay").resolvedStyle.display==DisplayStyle.None,"Ended view still offers resume.");
                 Require(Field<Label>("caption").text.Contains("晚霞"),"Contextual farewell was not presented.");
                 Require(!Field<Button>("sidebarCallButton").enabledSelf,"Ended session permits joining a call.");
-                Capture("ended.png");Click(button);Require(returned,"Return action did not reach host.");
-                File.WriteAllText(Path.Combine(output,"result.txt"),"PASS: actual stop button submit, authenticated transport, real cancel barrier, contextual text farewell completion, ended UI without resume overlay, disabled input/microphone, return callback.\nProvider: deterministic local fixture; no paid model calls.\n");
+                Capture("ended.png");VerifyExtensionDisplay();Click(button);Require(returned,"Return action did not reach host.");
+                File.WriteAllText(Path.Combine(output,"result.txt"),"PASS: restored light palette and real live/farewell/ended stage display, actual stop button submit, authenticated transport, real cancel barrier, contextual text farewell completion, ended UI without resume overlay, disabled input/microphone, return callback.\nProvider: deterministic local fixture; no paid model calls.\n");
                 Finish(0);
             }
         }catch(Exception error){Debug.LogException(error);if(output!=null)File.WriteAllText(Path.Combine(output,"result.txt"),"FAIL: "+error);Finish(1);}
+    }
+    // Display-only fixture: verifies elapsed wall time and an honest upper bound.
+    static void VerifyExtensionDisplay(){
+        var original=Field<JObject>("state");var preview=(JObject)original.DeepClone();
+        preview["phase"]="live";preview["sessionControl"]=new JObject{{"phase","live"},{"extensionActive",true},{"extensionUsed",1},{"remainingMs",120000},{"extensionScope","把晚霞的话题讲完"}};
+        typeof(LiveFeatureController).GetField("state",Private).SetValue(feature,preview);
+        typeof(LiveFeatureController).GetField("sessionSnapshotAt",Private).SetValue(feature,Time.realtimeSinceStartupAsDouble-1.1);
+        Invoke("RefreshSessionProgress");
+        Require(Field<Label>("sessionProgressDetail").text.Contains("最多还剩 01:59"),"Extension countdown did not subtract elapsed wall time.");
+        Require(Field<Label>("sessionProgressHint").text.Contains("聊完可提前结束"),"Extension deadline is presented as an exact end time.");
+        typeof(LiveFeatureController).GetField("state",Private).SetValue(feature,original);Invoke("RefreshSessionProgress");
     }
     static void Capture(string name){
         var previous=RenderTexture.active;var pixels=new Texture2D(target.width,target.height,TextureFormat.RGBA32,false);
