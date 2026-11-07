@@ -48,3 +48,10 @@ Unity发言、观察、剧情消息、时钟、任务响应／协作邀请／任
 - Unity批处理编译；`Seabreeze.Editor.UnifiedRuntimeVerification.Begin`用临时存档运行Street场景，核对八人注册表、服务连接、Z真实回复和其他NPC活动。
 
 Unity验证使用`Z_MEMORY_SAVE_ROOT`和`-moonlifeVerificationOutput`指定临时位置，不能覆盖个人真实进度。模型替身测试、真实模型调用和Unity画面／手感验证分别报告。Git LFS指针不是Live2D模型内容，取得完整模型后才能宣称模型显示已验收。
+
+### 本轮验证记录（2026-11-07）
+
+- 当前PR工作目录的 `node --test tests/*.test.mjs`：35项通过，覆盖独立角色、提案提交、自然记忆视图、玩家占用、任务、连续事件序号与读档。
+- `tools/team/z check`：通过；259个C#文件无语法错误，资源Meta/GUID及三个场景引用检查通过。此检查不等于Unity API语义编译。
+- 整合开发的隔离Unity副本已经完成编辑器编译与Street场景真实模型调用：八人注册表、五名当前场景NPC、服务连接、玩家占用隔离通过；Z能回答李庭是咖啡店老板。
+- PR实际工作目录的编辑器验证未完成：Package Manager访问`packages.unity.com`反复ETIMEDOUT，等待阶段停止。仓库中的Z模型仍是Git LFS指针，本机尚无git-lfs命令；因此本轮不将PR目录的完整模型显示或Unity资源导入宣称为通过。后端与接线源码已推送，包连接和完整LFS资源具备后需补跑编辑器／试玩验收。
