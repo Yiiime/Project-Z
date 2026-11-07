@@ -1,0 +1,238 @@
+{
+  "sourceDirectory": "z地图",
+  "assetCount": 29,
+  "assets": [
+    {
+      "place": "ResidentialCenter",
+      "source": "居民街-街道长图.png",
+      "sha256": "a6ded00dedf91add509911f5fa72ab95ff008c49eda2fa2305c3945af9f8f32d",
+      "width": 7505,
+      "height": 1492,
+      "unityAsset": "Assets/Seabreeze/Art/Island/ResidentialCenter.png"
+    },
+    {
+      "place": "Forest",
+      "source": "居民街-森林入口.png",
+      "sha256": "03c8365ff79a713bdb4db543ef05cb4eb6124218499a218965bbd0d57dcb609d",
+      "width": 2675,
+      "height": 1492,
+      "unityAsset": "Assets/Seabreeze/Art/Island/Forest.png"
+    },
+    {
+      "place": "ForestPath1",
+      "source": "森林-森林中1.png",
+      "sha256": "3bee3753bd6e24da68cde97f16949d492b947fa40772a08515b38f5775445e8c",
+      "width": 2628,
+      "height": 1479,
+      "unityAsset": "Assets/Seabreeze/Art/Island/ForestPath1.png"
+    },
+    {
+      "place": "ForestPath2",
+      "source": "森林-森林中2.png",
+      "sha256": "53141c5c37abff379c503a2f811e6796518caf090e9bcd730ab75474a04ab42e",
+      "width": 2957,
+      "height": 1479,
+      "unityAsset": "Assets/Seabreeze/Art/Island/ForestPath2.png"
+    },
+    {
+      "place": "ForestCabin",
+      "source": "森林-梨园的木屋.png",
+      "sha256": "fbcfeb43388df5984447063cc35fb4905b42d26364e82a593cd613bedd7a2b66",
+      "width": 2629,
+      "height": 1479,
+      "unityAsset": "Assets/Seabreeze/Art/Island/ForestCabin.png"
+    },
+    {
+      "place": "CabinInterior",
+      "source": "森林-梨园的木屋-1.png",
+      "sha256": "992a71964d5218cb70d6df424d174d293dae3b8e6054cbbf79209b4c627084cb",
+      "width": 2628,
+      "height": 1478,
+      "unityAsset": "Assets/Seabreeze/Art/Island/CabinInterior.png"
+    },
+    {
+      "place": "Research",
+      "source": "山顶-研究所.png",
+      "sha256": "48f3f9c2442a283cdbf60f93226a6c941f62091e0c96242afc560d2a5b058ea2",
+      "width": 2628,
+      "height": 1478,
+      "unityAsset": "Assets/Seabreeze/Art/Island/Research.png"
+    },
+    {
+      "place": "ResearchInterior",
+      "source": "山顶-研究所室内.png",
+      "sha256": "0a161a9ba4a82299bef9bf729e95f3ae2d5724da3796eda6b913dbe9d361a181",
+      "width": 2628,
+      "height": 1478,
+      "unityAsset": "Assets/Seabreeze/Art/Island/ResearchInterior.png"
+    },
+    {
+      "place": "Summit",
+      "source": "山顶-观景台.png",
+      "sha256": "13f6e6c2a23a609d6c7a23b6fbac872b829dd461eb6741691798172f6d6bb842",
+      "width": 2624,
+      "height": 1476,
+      "unityAsset": "Assets/Seabreeze/Art/Island/Summit.png"
+    },
+    {
+      "place": "Harbor",
+      "source": "公共街-码头、游客中心.png",
+      "sha256": "9c3f17baf210f28edc4a0d803bf032aeb50fc0ccff5fda53db7e7e61fba30fe2",
+      "width": 4476,
+      "height": 1492,
+      "unityAsset": "Assets/Seabreeze/Art/Island/Harbor.png"
+    },
+    {
+      "place": "Street",
+      "source": "公共街-花店、咖啡店、照相馆.png",
+      "sha256": "6ff1bc249eccd6deb503d2ebce5b57740cb1bafe8c0ad3708ddc816c6d3516c7",
+      "width": 4501,
+      "height": 1492,
+      "unityAsset": "Assets/Seabreeze/Art/Island/Street.png"
+    },
+    {
+      "place": "Square",
+      "source": "公共街-市民广场.png",
+      "sha256": "3671c4053a217a988197207d3a4cb496cbbd88c116b89b3d8231cf256ec0acac",
+      "width": 2219,
+      "height": 1492,
+      "unityAsset": "Assets/Seabreeze/Art/Island/Square.png"
+    },
+    {
+      "place": "EastCrossing",
+      "source": "公共街-广场东口.png",
+      "sha256": "51d04bc4761bd25b489fbea7f6db4e252c9f8f28abf457ae794419166fbe5044",
+      "width": 2789,
+      "height": 1492,
+      "unityAsset": "Assets/Seabreeze/Art/Island/EastCrossing.png"
+    },
+    {
+      "place": "VisitorCenter",
+      "source": "公共街-游客中心室内.png",
+      "sha256": "7144d893740d4e61f94ab83233959d44f86ebb0b3e516d6f12659c02804c14ca",
+      "width": 2048,
+      "height": 1152,
+      "unityAsset": "Assets/Seabreeze/Art/Island/VisitorCenter.png"
+    },
+    {
+      "place": "FlowerShop",
+      "source": "公共街-花店室内.png",
+      "sha256": "95069a7c9bf48c96f8af96a120635f4759fb703a586fcc83db58718b5c00c364",
+      "width": 2048,
+      "height": 1152,
+      "unityAsset": "Assets/Seabreeze/Art/Island/FlowerShop.png"
+    },
+    {
+      "place": "Cafe",
+      "source": "公共街-咖啡店室内.png",
+      "sha256": "031c70cd14a7d4757ecda45b735998ebcf9bfa92c1f7bef1fd25734a839b9a3d",
+      "width": 2048,
+      "height": 1152,
+      "unityAsset": "Assets/Seabreeze/Art/Island/Cafe.png"
+    },
+    {
+      "place": "PhotoStudio",
+      "source": "公共街-照相馆室内.png",
+      "sha256": "3edbc754a1ceecaf8c5f0322b3c0fe05d4d0b72eca366d2e313325eb52f23b98",
+      "width": 2048,
+      "height": 1152,
+      "unityAsset": "Assets/Seabreeze/Art/Island/PhotoStudio.png"
+    },
+    {
+      "place": "Boardwalk",
+      "source": "海滨街-海滨步道.png",
+      "sha256": "2a10176cdc61cfb39647a648b702bcf0731e6ad5607147903204cd8704fd9853",
+      "width": 4476,
+      "height": 1492,
+      "unityAsset": "Assets/Seabreeze/Art/Island/Boardwalk.png"
+    },
+    {
+      "place": "Restaurant",
+      "source": "海滨街-餐厅.png",
+      "sha256": "81e88b713f6976652a60fba1fa0e574b2a4b57b999fc0a0e25ce69285be9018e",
+      "width": 2360,
+      "height": 1492,
+      "unityAsset": "Assets/Seabreeze/Art/Island/Restaurant.png"
+    },
+    {
+      "place": "Seafront",
+      "source": "海滨街-海风酒吧.png",
+      "sha256": "9638ec27758c3800d1650e2fdad7fce9b19376a52d3f5d378a58f0b098deebaa",
+      "width": 2175,
+      "height": 1492,
+      "unityAsset": "Assets/Seabreeze/Art/Island/Seafront.png"
+    },
+    {
+      "place": "BeachEntrance",
+      "source": "海滨街-沙滩入口.png",
+      "sha256": "da345d5588d3754ab94ad98b9e71ff8c5ba04876745d90e03bfc33d48c1829a3",
+      "width": 2653,
+      "height": 1492,
+      "unityAsset": "Assets/Seabreeze/Art/Island/BeachEntrance.png"
+    },
+    {
+      "place": "Beach",
+      "source": "海滨街-沙滩.png",
+      "sha256": "f91b3df18ba591a9bc5f1fdce2135a3a67b3a8335a47a21114d3cb2d62c97d2f",
+      "width": 2651,
+      "height": 1492,
+      "unityAsset": "Assets/Seabreeze/Art/Island/Beach.png"
+    },
+    {
+      "place": "RestaurantInterior",
+      "source": "海滨街-餐厅室内.png",
+      "sha256": "dd76a71cf43fcd2d6f4a029bf316b003948d968de64bc19b56a7ba019f9ac40d",
+      "width": 2179,
+      "height": 1226,
+      "unityAsset": "Assets/Seabreeze/Art/Island/RestaurantInterior.png"
+    },
+    {
+      "place": "BarInterior",
+      "source": "海滨街-酒吧室内.png",
+      "sha256": "c599312f8c63e184787c6a9a348dc99ec9c26e9926c0e369f1798be4458a6900",
+      "width": 2178,
+      "height": 1226,
+      "unityAsset": "Assets/Seabreeze/Art/Island/BarInterior.png"
+    },
+    {
+      "place": "CaptainHome",
+      "source": "居民街-船长室内.png",
+      "sha256": "e2d95811fe17f5293eb6cfddba9195765cd1122184767a361976898ef0a3a979",
+      "width": 2047,
+      "height": 1152,
+      "unityAsset": "Assets/Seabreeze/Art/Island/CaptainHome.png"
+    },
+    {
+      "place": "LiTingHome",
+      "source": "居民街-李庭家室内.png",
+      "sha256": "0c1a0011dd93776ec9ffbdcbc378fdb76282606402bd9c18497085b5cb4070c3",
+      "width": 2048,
+      "height": 1152,
+      "unityAsset": "Assets/Seabreeze/Art/Island/LiTingHome.png"
+    },
+    {
+      "place": "ZiqingHome",
+      "source": "居民街-子晴家室内.png",
+      "sha256": "1400d3502a303a40cef49778d1ba13e8a567da990e789c082fa051f7add2dd4e",
+      "width": 2048,
+      "height": 1152,
+      "unityAsset": "Assets/Seabreeze/Art/Island/ZiqingHome.png"
+    },
+    {
+      "place": "ZHome",
+      "source": "居民街-Z家室内.png",
+      "sha256": "4150fd3b309c59e4cdee24cb507da1399704e72a2231f26dd0b342e22802285f",
+      "width": 2048,
+      "height": 1152,
+      "unityAsset": "Assets/Seabreeze/Art/Island/ZHome.png"
+    },
+    {
+      "place": "ZhouHome",
+      "source": "居民姐-周伯伯家室内.png",
+      "sha256": "ea121e71d7a11b9aedd7625adf84796440e0d11d440e1a998e24447eaa807049",
+      "width": 2048,
+      "height": 1152,
+      "unityAsset": "Assets/Seabreeze/Art/Island/ZhouHome.png"
+    }
+  ]
+}

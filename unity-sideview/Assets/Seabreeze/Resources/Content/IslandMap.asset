@@ -1,0 +1,742 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fef9587fbaef410abdb7fe424a544d7, type: 3}
+  m_Name: IslandMap
+  m_EditorClassIdentifier: Assembly-CSharp::Seabreeze.IslandMapCatalog
+  locations:
+  - place: 4
+    mapId: ResidentialCenter
+    displayName: "\u5C45\u6C11\u8857"
+    sourceFile: "\u5C45\u6C11\u8857-\u8857\u9053\u957F\u56FE.png"
+    indoor: 0
+    row: 0
+    column: 0
+    width: 62.541668
+    groundPixelY: 1190
+  - place: 6
+    mapId: Forest
+    displayName: "\u5C45\u6C11\u8857 \xB7 \u68EE\u6797\u5165\u53E3"
+    sourceFile: "\u5C45\u6C11\u8857-\u68EE\u6797\u5165\u53E3.png"
+    indoor: 0
+    row: 0
+    column: 1
+    width: 22.291666
+    groundPixelY: 1175
+  - place: 19
+    mapId: ForestPath1
+    displayName: "\u68EE\u6797 \xB7 \u6797\u95F4\u6B65\u9053"
+    sourceFile: "\u68EE\u6797-\u68EE\u6797\u4E2D1.png"
+    indoor: 0
+    row: -1
+    column: 0
+    width: 21.9
+    groundPixelY: 1145
+  - place: 20
+    mapId: ForestPath2
+    displayName: "\u68EE\u6797 \xB7 \u6797\u6DF1\u5904"
+    sourceFile: "\u68EE\u6797-\u68EE\u6797\u4E2D2.png"
+    indoor: 0
+    row: -1
+    column: 1
+    width: 24.641666
+    groundPixelY: 1145
+  - place: 7
+    mapId: ForestCabin
+    displayName: "\u68A8\u56ED\u7684\u6728\u5C4B"
+    sourceFile: "\u68EE\u6797-\u68A8\u56ED\u7684\u6728\u5C4B.png"
+    indoor: 0
+    row: -1
+    column: 2
+    width: 21.908333
+    groundPixelY: 1148
+  - place: 8
+    mapId: Research
+    displayName: "\u963F\u91CC\u7684\u7814\u7A76\u6240"
+    sourceFile: "\u5C71\u9876-\u7814\u7A76\u6240.png"
+    indoor: 0
+    row: -2
+    column: 0
+    width: 21.9
+    groundPixelY: 1185
+  - place: 9
+    mapId: Summit
+    displayName: "\u5C71\u9876\u89C2\u666F\u53F0"
+    sourceFile: "\u5C71\u9876-\u89C2\u666F\u53F0.png"
+    indoor: 0
+    row: -2
+    column: 1
+    width: 21.866667
+    groundPixelY: 1175
+  - place: 10
+    mapId: Harbor
+    displayName: "\u7801\u5934 \xB7 \u6E38\u5BA2\u4E2D\u5FC3"
+    sourceFile: "\u516C\u5171\u8857-\u7801\u5934\u3001\u6E38\u5BA2\u4E2D\u5FC3.png"
+    indoor: 0
+    row: 1
+    column: 0
+    width: 37.3
+    groundPixelY: 1200
+  - place: 0
+    mapId: Street
+    displayName: "\u82B1\u5E97 \xB7 \u5496\u5561\u5E97 \xB7 \u7167\u76F8\u9986"
+    sourceFile: "\u516C\u5171\u8857-\u82B1\u5E97\u3001\u5496\u5561\u5E97\u3001\u7167\u76F8\u9986.png"
+    indoor: 0
+    row: 1
+    column: 1
+    width: 37.508335
+    groundPixelY: 1200
+  - place: 12
+    mapId: Square
+    displayName: "\u5E02\u6C11\u5E7F\u573A"
+    sourceFile: "\u516C\u5171\u8857-\u5E02\u6C11\u5E7F\u573A.png"
+    indoor: 0
+    row: 1
+    column: 2
+    width: 18.491667
+    groundPixelY: 1245
+  - place: 13
+    mapId: EastCrossing
+    displayName: "\u516C\u5171\u8857 \xB7 \u5E7F\u573A\u4E1C\u53E3"
+    sourceFile: "\u516C\u5171\u8857-\u5E7F\u573A\u4E1C\u53E3.png"
+    indoor: 0
+    row: 1
+    column: 3
+    width: 23.241667
+    groundPixelY: 1240
+  - place: 14
+    mapId: Boardwalk
+    displayName: "\u6D77\u6EE8\u6B65\u9053"
+    sourceFile: "\u6D77\u6EE8\u8857-\u6D77\u6EE8\u6B65\u9053.png"
+    indoor: 0
+    row: 2
+    column: 0
+    width: 37.3
+    groundPixelY: 1205
+  - place: 26
+    mapId: Restaurant
+    displayName: "\u6D77\u6EE8\u9910\u5385"
+    sourceFile: "\u6D77\u6EE8\u8857-\u9910\u5385.png"
+    indoor: 0
+    row: 2
+    column: 1
+    width: 19.666666
+    groundPixelY: 1265
+  - place: 17
+    mapId: Seafront
+    displayName: "\u6D77\u98CE\u9152\u5427"
+    sourceFile: "\u6D77\u6EE8\u8857-\u6D77\u98CE\u9152\u5427.png"
+    indoor: 0
+    row: 2
+    column: 2
+    width: 18.125
+    groundPixelY: 1265
+  - place: 27
+    mapId: BeachEntrance
+    displayName: "\u6C99\u6EE9\u5165\u53E3"
+    sourceFile: "\u6D77\u6EE8\u8857-\u6C99\u6EE9\u5165\u53E3.png"
+    indoor: 0
+    row: 2
+    column: 3
+    width: 22.108334
+    groundPixelY: 1170
+  - place: 18
+    mapId: Beach
+    displayName: "\u6C99\u6EE9"
+    sourceFile: "\u6D77\u6EE8\u8857-\u6C99\u6EE9.png"
+    indoor: 0
+    row: 2
+    column: 4
+    width: 22.091667
+    groundPixelY: 1230
+  - place: 30
+    mapId: CaptainHome
+    displayName: "\u8239\u957F\u7684\u5BB6"
+    sourceFile: "\u5C45\u6C11\u8857-\u8239\u957F\u5BA4\u5185.png"
+    indoor: 1
+    row: 3
+    column: 0
+    width: 12.40606
+    groundPixelY: 916
+  - place: 31
+    mapId: LiTingHome
+    displayName: "\u674E\u5EAD\u7684\u5BB6"
+    sourceFile: "\u5C45\u6C11\u8857-\u674E\u5EAD\u5BB6\u5BA4\u5185.png"
+    indoor: 1
+    row: 3
+    column: 1
+    width: 12.412121
+    groundPixelY: 895
+  - place: 32
+    mapId: ZiqingHome
+    displayName: "\u5B50\u6674\u7684\u5BB6"
+    sourceFile: "\u5C45\u6C11\u8857-\u5B50\u6674\u5BB6\u5BA4\u5185.png"
+    indoor: 1
+    row: 3
+    column: 2
+    width: 12.412121
+    groundPixelY: 899
+  - place: 33
+    mapId: ZHome
+    displayName: "Z \u7684\u5BB6"
+    sourceFile: "\u5C45\u6C11\u8857-Z\u5BB6\u5BA4\u5185.png"
+    indoor: 1
+    row: 3
+    column: 3
+    width: 12.412121
+    groundPixelY: 899
+  - place: 34
+    mapId: ZhouHome
+    displayName: "\u5468\u4F2F\u4F2F\u7684\u5BB6"
+    sourceFile: "\u5C45\u6C11\u59D0-\u5468\u4F2F\u4F2F\u5BB6\u5BA4\u5185.png"
+    indoor: 1
+    row: 3
+    column: 4
+    width: 12.412121
+    groundPixelY: 903
+  - place: 23
+    mapId: VisitorCenter
+    displayName: "\u6E38\u5BA2\u4E2D\u5FC3"
+    sourceFile: "\u516C\u5171\u8857-\u6E38\u5BA2\u4E2D\u5FC3\u5BA4\u5185.png"
+    indoor: 1
+    row: 3
+    column: 5
+    width: 12.412121
+    groundPixelY: 910
+  - place: 24
+    mapId: FlowerShop
+    displayName: "\u82B1\u5E97"
+    sourceFile: "\u516C\u5171\u8857-\u82B1\u5E97\u5BA4\u5185.png"
+    indoor: 1
+    row: 3
+    column: 6
+    width: 12.412121
+    groundPixelY: 942
+  - place: 1
+    mapId: Cafe
+    displayName: "\u5496\u5561\u5E97"
+    sourceFile: "\u516C\u5171\u8857-\u5496\u5561\u5E97\u5BA4\u5185.png"
+    indoor: 1
+    row: 3
+    column: 7
+    width: 12.412121
+    groundPixelY: 880
+  - place: 25
+    mapId: PhotoStudio
+    displayName: "\u7167\u76F8\u9986"
+    sourceFile: "\u516C\u5171\u8857-\u7167\u76F8\u9986\u5BA4\u5185.png"
+    indoor: 1
+    row: 3
+    column: 8
+    width: 12.412121
+    groundPixelY: 899
+  - place: 21
+    mapId: CabinInterior
+    displayName: "\u68A8\u56ED\u7684\u6728\u5C4B \xB7 \u5BA4\u5185"
+    sourceFile: "\u68EE\u6797-\u68A8\u56ED\u7684\u6728\u5C4B-1.png"
+    indoor: 1
+    row: 3
+    column: 9
+    width: 12.414221
+    groundPixelY: 1153
+  - place: 22
+    mapId: ResearchInterior
+    displayName: "\u7814\u7A76\u6240 \xB7 \u5BA4\u5185"
+    sourceFile: "\u5C71\u9876-\u7814\u7A76\u6240\u5BA4\u5185.png"
+    indoor: 1
+    row: 3
+    column: 10
+    width: 12.414221
+    groundPixelY: 1168
+  - place: 29
+    mapId: BarInterior
+    displayName: "\u6D77\u98CE\u9152\u5427 \xB7 \u5BA4\u5185"
+    sourceFile: "\u6D77\u6EE8\u8857-\u9152\u5427\u5BA4\u5185.png"
+    indoor: 1
+    row: 3
+    column: 11
+    width: 12.403263
+    groundPixelY: 1018
+  - place: 28
+    mapId: RestaurantInterior
+    displayName: "\u9910\u5385 \xB7 \u5BA4\u5185"
+    sourceFile: "\u6D77\u6EE8\u8857-\u9910\u5385\u5BA4\u5185.png"
+    indoor: 1
+    row: 3
+    column: 12
+    width: 12.4089575
+    groundPixelY: 1005
+  routes:
+  - id: ResidentialCenter_Forest_out
+    arrivalId: ResidentialCenter_Forest_in
+    label: "\u5411\u53F3\u7EE7\u7EED"
+    from: 4
+    to: 6
+    automatic: 1
+    x: 30.720835
+  - id: ResidentialCenter_Forest_back
+    arrivalId: ResidentialCenter_Forest_return
+    label: "\u5411\u5DE6\u7EE7\u7EED"
+    from: 6
+    to: 4
+    automatic: 1
+    x: -10.595833
+  - id: Harbor_Street_out
+    arrivalId: Harbor_Street_in
+    label: "\u5411\u53F3\u7EE7\u7EED"
+    from: 10
+    to: 0
+    automatic: 1
+    x: 18.1
+  - id: Harbor_Street_back
+    arrivalId: Harbor_Street_return
+    label: "\u5411\u5DE6\u7EE7\u7EED"
+    from: 0
+    to: 10
+    automatic: 1
+    x: -18.204168
+  - id: Street_Square_out
+    arrivalId: Street_Square_in
+    label: "\u5411\u53F3\u7EE7\u7EED"
+    from: 0
+    to: 12
+    automatic: 1
+    x: 18.204168
+  - id: Street_Square_back
+    arrivalId: Street_Square_return
+    label: "\u5411\u5DE6\u7EE7\u7EED"
+    from: 12
+    to: 0
+    automatic: 1
+    x: -8.695833
+  - id: Square_EastCrossing_out
+    arrivalId: Square_EastCrossing_in
+    label: "\u5411\u53F3\u7EE7\u7EED"
+    from: 12
+    to: 13
+    automatic: 1
+    x: 8.695833
+  - id: Square_EastCrossing_back
+    arrivalId: Square_EastCrossing_return
+    label: "\u5411\u5DE6\u7EE7\u7EED"
+    from: 13
+    to: 12
+    automatic: 1
+    x: -11.070833
+  - id: Boardwalk_Restaurant_out
+    arrivalId: Boardwalk_Restaurant_in
+    label: "\u5411\u53F3\u7EE7\u7EED"
+    from: 14
+    to: 26
+    automatic: 1
+    x: 18.1
+  - id: Boardwalk_Restaurant_back
+    arrivalId: Boardwalk_Restaurant_return
+    label: "\u5411\u5DE6\u7EE7\u7EED"
+    from: 26
+    to: 14
+    automatic: 1
+    x: -9.283333
+  - id: Restaurant_Seafront_out
+    arrivalId: Restaurant_Seafront_in
+    label: "\u5411\u53F3\u7EE7\u7EED"
+    from: 26
+    to: 17
+    automatic: 1
+    x: 9.283333
+  - id: Restaurant_Seafront_back
+    arrivalId: Restaurant_Seafront_return
+    label: "\u5411\u5DE6\u7EE7\u7EED"
+    from: 17
+    to: 26
+    automatic: 1
+    x: -8.5125
+  - id: Seafront_BeachEntrance_out
+    arrivalId: Seafront_BeachEntrance_in
+    label: "\u5411\u53F3\u7EE7\u7EED"
+    from: 17
+    to: 27
+    automatic: 1
+    x: 8.5125
+  - id: Seafront_BeachEntrance_back
+    arrivalId: Seafront_BeachEntrance_return
+    label: "\u5411\u5DE6\u7EE7\u7EED"
+    from: 27
+    to: 17
+    automatic: 1
+    x: -10.504167
+  - id: BeachEntrance_Beach_out
+    arrivalId: BeachEntrance_Beach_in
+    label: "\u5411\u53F3\u7EE7\u7EED"
+    from: 27
+    to: 18
+    automatic: 1
+    x: 10.504167
+  - id: BeachEntrance_Beach_back
+    arrivalId: BeachEntrance_Beach_return
+    label: "\u5411\u5DE6\u7EE7\u7EED"
+    from: 18
+    to: 27
+    automatic: 1
+    x: -10.495833
+  - id: ForestPath1_ForestPath2_out
+    arrivalId: ForestPath1_ForestPath2_in
+    label: "\u5411\u53F3\u7EE7\u7EED"
+    from: 19
+    to: 20
+    automatic: 1
+    x: 10.4
+  - id: ForestPath1_ForestPath2_back
+    arrivalId: ForestPath1_ForestPath2_return
+    label: "\u5411\u5DE6\u7EE7\u7EED"
+    from: 20
+    to: 19
+    automatic: 1
+    x: -11.770833
+  - id: ForestPath2_ForestCabin_out
+    arrivalId: ForestPath2_ForestCabin_in
+    label: "\u5411\u53F3\u7EE7\u7EED"
+    from: 20
+    to: 7
+    automatic: 1
+    x: 11.770833
+  - id: ForestPath2_ForestCabin_back
+    arrivalId: ForestPath2_ForestCabin_return
+    label: "\u5411\u5DE6\u7EE7\u7EED"
+    from: 7
+    to: 20
+    automatic: 1
+    x: -10.404166
+  - id: ResidentialCenter_Harbor_out
+    arrivalId: ResidentialCenter_Harbor_in
+    label: "\u4E0B\u884C \xB7 \u7801\u5934\u4E0E\u6E38\u5BA2\u4E2D\u5FC3"
+    from: 4
+    to: 10
+    automatic: 0
+    x: -27.520834
+  - id: ResidentialCenter_Harbor_back
+    arrivalId: ResidentialCenter_Harbor_return
+    label: "\u4E0A\u884C \xB7 \u5C45\u6C11\u8857\u897F\u6BB5"
+    from: 10
+    to: 4
+    automatic: 0
+    x: 16.1
+  - id: ResidentialCenter_Street_out
+    arrivalId: ResidentialCenter_Street_in
+    label: "\u4E0B\u884C \xB7 \u516C\u5171\u8857"
+    from: 4
+    to: 0
+    automatic: 0
+    x: -6.2708335
+  - id: ResidentialCenter_Street_back
+    arrivalId: ResidentialCenter_Street_return
+    label: "\u4E0A\u884C \xB7 \u5C45\u6C11\u8857"
+    from: 0
+    to: 4
+    automatic: 0
+    x: -5.2541666
+  - id: ResidentialCenter_EastCrossing_out
+    arrivalId: ResidentialCenter_EastCrossing_in
+    label: "\u4E0B\u884C \xB7 \u5E7F\u573A\u4E1C\u53E3"
+    from: 4
+    to: 13
+    automatic: 0
+    x: 17.3125
+  - id: ResidentialCenter_EastCrossing_back
+    arrivalId: ResidentialCenter_EastCrossing_return
+    label: "\u4E0A\u884C \xB7 \u5C45\u6C11\u8857\u4E1C\u6BB5"
+    from: 13
+    to: 4
+    automatic: 0
+    x: -4.1208334
+  - id: Harbor_Boardwalk_out
+    arrivalId: Harbor_Boardwalk_in
+    label: "\u4E0B\u884C \xB7 \u6D77\u6EE8\u6B65\u9053"
+    from: 10
+    to: 14
+    automatic: 0
+    x: 14.433333
+  - id: Harbor_Boardwalk_back
+    arrivalId: Harbor_Boardwalk_return
+    label: "\u4E0A\u884C \xB7 \u7801\u5934\u4E0E\u6E38\u5BA2\u4E2D\u5FC3"
+    from: 14
+    to: 10
+    automatic: 0
+    x: 11.308333
+  - id: EastCrossing_BeachEntrance_out
+    arrivalId: EastCrossing_BeachEntrance_in
+    label: "\u4E0B\u884C \xB7 \u6C99\u6EE9\u5165\u53E3"
+    from: 13
+    to: 27
+    automatic: 0
+    x: 6.6291666
+  - id: EastCrossing_BeachEntrance_back
+    arrivalId: EastCrossing_BeachEntrance_return
+    label: "\u4E0A\u884C \xB7 \u5E7F\u573A\u4E1C\u53E3"
+    from: 27
+    to: 13
+    automatic: 0
+    x: -5.1375
+  - id: Forest_ForestPath1_out
+    arrivalId: Forest_ForestPath1_in
+    label: "\u4E0A\u5C71 \xB7 \u6797\u95F4\u6B65\u9053"
+    from: 6
+    to: 19
+    automatic: 0
+    x: -1.3541666
+  - id: Forest_ForestPath1_back
+    arrivalId: Forest_ForestPath1_return
+    label: "\u4E0B\u5C71 \xB7 \u5C45\u6C11\u8857"
+    from: 19
+    to: 6
+    automatic: 0
+    x: -8.45
+  - id: ForestCabin_Research_out
+    arrivalId: ForestCabin_Research_in
+    label: "\u4E0A\u5C71 \xB7 \u7814\u7A76\u6240"
+    from: 7
+    to: 8
+    automatic: 0
+    x: -1.2875
+  - id: ForestCabin_Research_back
+    arrivalId: ForestCabin_Research_return
+    label: "\u4E0B\u5C71 \xB7 \u68A8\u56ED\u6728\u5C4B"
+    from: 8
+    to: 7
+    automatic: 0
+    x: 7.05
+  - id: ForestCabin_EastCrossing_out
+    arrivalId: ForestCabin_EastCrossing_in
+    label: "\u4E0B\u884C \xB7 \u5E7F\u573A\u4E1C\u53E3"
+    from: 7
+    to: 13
+    automatic: 0
+    x: 5.045833
+  - id: ForestCabin_EastCrossing_back
+    arrivalId: ForestCabin_EastCrossing_return
+    label: "\u4E0A\u5C71 \xB7 \u68A8\u56ED\u6728\u5C4B"
+    from: 13
+    to: 7
+    automatic: 0
+    x: 1.4625
+  - id: Research_Summit_out
+    arrivalId: Research_Summit_in
+    label: "\u4E0A\u884C \xB7 \u5C71\u9876\u5E73\u53F0"
+    from: 8
+    to: 9
+    automatic: 0
+    x: -8.533334
+  - id: Research_Summit_back
+    arrivalId: Research_Summit_return
+    label: "\u4E0B\u884C \xB7 \u7814\u7A76\u6240"
+    from: 9
+    to: 8
+    automatic: 0
+    x: 7.9
+  - id: ResidentialCenter_CaptainHome_out
+    arrivalId: ResidentialCenter_CaptainHome_in
+    label: "\u8FDB\u5165 \xB7 \u8239\u957F\u7684\u5BB6"
+    from: 4
+    to: 30
+    automatic: 0
+    x: -21.4375
+  - id: ResidentialCenter_CaptainHome_back
+    arrivalId: ResidentialCenter_CaptainHome_return
+    label: "\u79BB\u5F00 \xB7 \u8FD4\u56DE\u5C45\u6C11\u8857"
+    from: 30
+    to: 4
+    automatic: 0
+    x: 5.5545454
+  - id: ResidentialCenter_LiTingHome_out
+    arrivalId: ResidentialCenter_LiTingHome_in
+    label: "\u8FDB\u5165 \xB7 \u674E\u5EAD\u7684\u5BB6"
+    from: 4
+    to: 31
+    automatic: 0
+    x: -11.770833
+  - id: ResidentialCenter_LiTingHome_back
+    arrivalId: ResidentialCenter_LiTingHome_return
+    label: "\u79BB\u5F00 \xB7 \u8FD4\u56DE\u5C45\u6C11\u8857"
+    from: 31
+    to: 4
+    automatic: 0
+    x: 5.460606
+  - id: ResidentialCenter_ZiqingHome_out
+    arrivalId: ResidentialCenter_ZiqingHome_in
+    label: "\u8FDB\u5165 \xB7 \u5B50\u6674\u7684\u5BB6"
+    from: 4
+    to: 32
+    automatic: 0
+    x: -0.7708333
+  - id: ResidentialCenter_ZiqingHome_back
+    arrivalId: ResidentialCenter_ZiqingHome_return
+    label: "\u79BB\u5F00 \xB7 \u8FD4\u56DE\u5C45\u6C11\u8857"
+    from: 32
+    to: 4
+    automatic: 0
+    x: 5.551515
+  - id: ResidentialCenter_ZHome_out
+    arrivalId: ResidentialCenter_ZHome_in
+    label: "\u8FDB\u5165 \xB7 Z \u7684\u5BB6"
+    from: 4
+    to: 33
+    automatic: 0
+    x: 10.479167
+  - id: ResidentialCenter_ZHome_back
+    arrivalId: ResidentialCenter_ZHome_return
+    label: "\u79BB\u5F00 \xB7 \u8FD4\u56DE\u5C45\u6C11\u8857"
+    from: 33
+    to: 4
+    automatic: 0
+    x: 5.490909
+  - id: ResidentialCenter_ZhouHome_out
+    arrivalId: ResidentialCenter_ZhouHome_in
+    label: "\u8FDB\u5165 \xB7 \u5468\u4F2F\u4F2F\u7684\u5BB6"
+    from: 4
+    to: 34
+    automatic: 0
+    x: 20.729166
+  - id: ResidentialCenter_ZhouHome_back
+    arrivalId: ResidentialCenter_ZhouHome_return
+    label: "\u79BB\u5F00 \xB7 \u8FD4\u56DE\u5C45\u6C11\u8857"
+    from: 34
+    to: 4
+    automatic: 0
+    x: 5.490909
+  - id: Harbor_VisitorCenter_out
+    arrivalId: Harbor_VisitorCenter_in
+    label: "\u8FDB\u5165 \xB7 \u6E38\u5BA2\u4E2D\u5FC3"
+    from: 10
+    to: 23
+    automatic: 0
+    x: -1.4
+  - id: Harbor_VisitorCenter_back
+    arrivalId: Harbor_VisitorCenter_return
+    label: "\u79BB\u5F00 \xB7 \u8FD4\u56DE\u7801\u5934 \xB7 \u6E38\u5BA2\u4E2D\u5FC3"
+    from: 23
+    to: 10
+    automatic: 0
+    x: 3.612121
+  - id: Street_FlowerShop_out
+    arrivalId: Street_FlowerShop_in
+    label: "\u8FDB\u5165 \xB7 \u82B1\u5E97"
+    from: 0
+    to: 24
+    automatic: 0
+    x: -10.0875
+  - id: Street_FlowerShop_back
+    arrivalId: Street_FlowerShop_return
+    label: "\u79BB\u5F00 \xB7 \u8FD4\u56DE\u82B1\u5E97 \xB7 \u5496\u5561\u5E97 \xB7
+      \u7167\u76F8\u9986"
+    from: 24
+    to: 0
+    automatic: 0
+    x: 5.551515
+  - id: Street_Cafe_out
+    arrivalId: Street_Cafe_in
+    label: "\u8FDB\u5165 \xB7 \u5496\u5561\u5E97"
+    from: 0
+    to: 1
+    automatic: 0
+    x: 2.2458334
+  - id: Street_Cafe_back
+    arrivalId: Street_Cafe_return
+    label: "\u79BB\u5F00 \xB7 \u8FD4\u56DE\u82B1\u5E97 \xB7 \u5496\u5561\u5E97 \xB7
+      \u7167\u76F8\u9986"
+    from: 1
+    to: 0
+    automatic: 0
+    x: 5.551515
+  - id: Street_PhotoStudio_out
+    arrivalId: Street_PhotoStudio_in
+    label: "\u8FDB\u5165 \xB7 \u7167\u76F8\u9986"
+    from: 0
+    to: 25
+    automatic: 0
+    x: 13.6625
+  - id: Street_PhotoStudio_back
+    arrivalId: Street_PhotoStudio_return
+    label: "\u79BB\u5F00 \xB7 \u8FD4\u56DE\u82B1\u5E97 \xB7 \u5496\u5561\u5E97 \xB7
+      \u7167\u76F8\u9986"
+    from: 25
+    to: 0
+    automatic: 0
+    x: 5.672727
+  - id: ForestCabin_CabinInterior_out
+    arrivalId: ForestCabin_CabinInterior_in
+    label: "\u8FDB\u5165 \xB7 \u68A8\u56ED\u7684\u6728\u5C4B \xB7 \u5BA4\u5185"
+    from: 7
+    to: 21
+    automatic: 0
+    x: 1.7125
+  - id: ForestCabin_CabinInterior_back
+    arrivalId: ForestCabin_CabinInterior_return
+    label: "\u79BB\u5F00 \xB7 \u8FD4\u56DE\u68A8\u56ED\u7684\u6728\u5C4B"
+    from: 21
+    to: 7
+    automatic: 0
+    x: 5.555222
+  - id: Research_ResearchInterior_out
+    arrivalId: Research_ResearchInterior_in
+    label: "\u8FDB\u5165 \xB7 \u7814\u7A76\u6240 \xB7 \u5BA4\u5185"
+    from: 8
+    to: 22
+    automatic: 0
+    x: 0.96666664
+  - id: Research_ResearchInterior_back
+    arrivalId: Research_ResearchInterior_return
+    label: "\u79BB\u5F00 \xB7 \u8FD4\u56DE\u963F\u91CC\u7684\u7814\u7A76\u6240"
+    from: 22
+    to: 8
+    automatic: 0
+    x: 5.460746
+  - id: Seafront_BarInterior_out
+    arrivalId: Seafront_BarInterior_in
+    label: "\u8FDB\u5165 \xB7 \u6D77\u98CE\u9152\u5427 \xB7 \u5BA4\u5185"
+    from: 17
+    to: 29
+    automatic: 0
+    x: 0.7291667
+  - id: Seafront_BarInterior_back
+    arrivalId: Seafront_BarInterior_return
+    label: "\u79BB\u5F00 \xB7 \u8FD4\u56DE\u6D77\u98CE\u9152\u5427"
+    from: 29
+    to: 17
+    automatic: 0
+    x: -5.4043603
+  - id: Restaurant_RestaurantInterior_out
+    arrivalId: Restaurant_RestaurantInterior_in
+    label: "\u8FDB\u5165 \xB7 \u9910\u5385 \xB7 \u5BA4\u5185"
+    from: 26
+    to: 28
+    automatic: 0
+    x: -0.125
+  - id: Restaurant_RestaurantInterior_back
+    arrivalId: Restaurant_RestaurantInterior_return
+    label: "\u79BB\u5F00 \xB7 \u8FD4\u56DE\u6D77\u6EE8\u9910\u5385"
+    from: 28
+    to: 26
+    automatic: 0
+    x: -5.5211034
+  - id: Seafront_Lighthouse_out
+    arrivalId: Seafront_Lighthouse_in
+    label: "\u6CBF\u6D77\u5824 \xB7 \u706F\u5854"
+    from: 17
+    to: 2
+    automatic: 0
+    x: 6.9375
+  - id: Seafront_Lighthouse_back
+    arrivalId: Seafront_Lighthouse_return
+    label: "\u8FD4\u56DE \xB7 \u6D77\u98CE\u9152\u5427"
+    from: 2
+    to: 17
+    automatic: 0
+    x: -13.2
