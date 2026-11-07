@@ -36,6 +36,189 @@ namespace Seabreeze.Editor
             GameSession.Instance.gameObject.AddComponent<RuntimeVerification>();
         }
 
+        const string MapBatchKey = "Seabreeze.MapVerification.Active";
+        const string MapBatchOutput = "Seabreeze.MapVerification.Output";
+        bool mapOnly;
+        Mouse mapMouse;
+
+        // Uses the real scene/UI with isolated saves and synthetic keyboard/mouse input.
+        public static void RunMapBatch()
+        {
+            string[] args = Environment.GetCommandLineArgs();
+            int index = Array.IndexOf(args, "-zMapVerifyOutput");
+            if (index < 0 || index + 1 >= args.Length || !Path.IsPathRooted(args[index + 1]))
+                throw new ArgumentException("Supply an absolute -zMapVerifyOutput report path.");
+            string output = args[index + 1];
+            Directory.CreateDirectory(Path.GetDirectoryName(output));
+            Environment.SetEnvironmentVariable("Z_MEMORY_SAVE_ROOT", Path.Combine(Path.GetTempPath(), "z-map-" + Guid.NewGuid().ToString("N")));
+            SessionState.SetString(MapBatchOutput, output);
+            SessionState.SetBool(MapBatchKey, true);
+            SessionState.SetFloat(MapBatchKey + ".Deadline", (float)EditorApplication.timeSinceStartup + 150f);
+            InstallMapBatchHooks();
+            UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/Seabreeze/Scenes/Street.unity");
+            if (!Application.isBatchMode)
+            {
+                var gameViewType = typeof(EditorWindow).Assembly.GetType("UnityEditor.GameView");
+                var gameView = EditorWindow.GetWindow(gameViewType);
+                gameView.Show(); gameView.Focus();
+            }
+            EditorApplication.EnterPlaymode();
+        }
+
+        [InitializeOnLoadMethod]
+        static void InstallMapBatchHooks()
+        {
+            if (!SessionState.GetBool(MapBatchKey, false)) return;
+            EditorApplication.playModeStateChanged -= OnMapBatchPlayState;
+            EditorApplication.playModeStateChanged += OnMapBatchPlayState;
+            EditorApplication.update -= MapBatchWatchdog;
+            EditorApplication.update += MapBatchWatchdog;
+        }
+
+        static void OnMapBatchPlayState(PlayModeStateChange state)
+        {
+            if (state != PlayModeStateChange.EnteredPlayMode) return;
+            var runner = new GameObject("Isolated map verification").AddComponent<RuntimeVerification>();
+            runner.mapOnly = true;
+        }
+
+        static void MapBatchWatchdog()
+        {
+            if (EditorApplication.timeSinceStartup <= SessionState.GetFloat(MapBatchKey + ".Deadline", 0)) return;
+            FinishMapBatch(new Report { timestamp = DateTime.UtcNow.ToString("o"), failed = new List<string> { "Map verification timed out" } });
+        }
+
+        static void FinishMapBatch(Report result)
+        {
+            File.WriteAllText(SessionState.GetString(MapBatchOutput, ""), JsonUtility.ToJson(result, true));
+            SessionState.SetBool(MapBatchKey, false);
+            EditorApplication.update -= MapBatchWatchdog;
+            EditorApplication.playModeStateChanged -= OnMapBatchPlayState;
+            Debug.Log("MAP_VERIFICATION_COMPLETE: " + result.passed.Count + " passed, " + result.failed.Count + " failed");
+            EditorApplication.Exit(result.failed.Count == 0 ? 0 : 1);
+        }
+
+        IEnumerator VerifyMapSafely()
+        {
+            var steps = VerifyMap();
+            while (true)
+            {
+                object current;
+                try { if (!steps.MoveNext()) break; current = steps.Current; }
+                catch (Exception ex) { Check(false, ex.ToString()); break; }
+                yield return current;
+            }
+            OnDestroy();
+            FinishMapBatch(report);
+        }
+
+        void MoveMapMouse(Vector2 position, bool click = false)
+        {
+            mapMouse.MakeCurrent();
+            InputSystem.QueueStateEvent(mapMouse, new MouseState { position = position, buttons = click ? (ushort)1 : (ushort)0 });
+        }
+
+        Vector2 MapScreenPoint(IslandMapView view, Vector2 pixel)
+        {
+            Rect r = view.ImageRect.rect;
+            var local = new Vector2(r.xMin + r.width * pixel.x / 1672f, r.yMax - r.height * pixel.y / 941f);
+            return RectTransformUtility.WorldToScreenPoint(null, view.ImageRect.TransformPoint(local));
+        }
+
+        IEnumerator VerifyMap()
+        {
+            report.timestamp = DateTime.UtcNow.ToString("o");
+            originalInputSettings = InputSystem.settings;
+            originalSettingsFlags = originalInputSettings.hideFlags;
+            originalInputSettings.hideFlags = HideFlags.DontSave;
+            verificationInputSettings = Instantiate(originalInputSettings);
+            verificationInputSettings.backgroundBehavior = InputSettings.BackgroundBehavior.IgnoreFocus;
+            verificationInputSettings.editorInputBehaviorInPlayMode = InputSettings.EditorInputBehaviorInPlayMode.AllDeviceInputAlwaysGoesToGameView;
+            InputSystem.settings = verificationInputSettings;
+            keyboard = InputSystem.AddDevice<Keyboard>();
+            mapMouse = InputSystem.AddDevice<Mouse>();
+            while (WorldDirector.Instance == null || WorldDirector.Instance.IsTransitioning) yield return null;
+            yield return FinishDialogue();
+            var ui = GameUI.Instance;
+            var player = WorldDirector.Instance.Player.GetComponent<PlayerController>();
+            player.Teleport(new Vector2(-8, .1f));
+            yield return new WaitForSecondsRealtime(.2f);
+            Press(Key.M);
+            yield return null; yield return null;
+            Check(ui.HasOverlay && ui.CurrentMapView != null, "M opens the map in the actual Street scene");
+            yield return new WaitForSecondsRealtime(.2f);
+            Check(ui.HasOverlay && ui.CurrentMapView != null, "Holding M does not repeatedly toggle the map");
+            Press(); yield return null;
+            Check(Time.timeScale == 0 && S.InputBlocked, "Map pauses world time and blocks world input");
+            float x = player.transform.position.x;
+            Press(Key.D); yield return new WaitForSecondsRealtime(.2f); Press(); yield return null;
+            Check(Mathf.Abs(player.transform.position.x - x) < .02f, "Map blocks player movement");
+            yield return Tap(Key.M);
+            Check(!ui.HasOverlay && Time.timeScale == 1 && !S.InputBlocked, "M closes map and restores time and input");
+            Press(Key.D); yield return new WaitForSecondsRealtime(.2f); Press(); yield return null;
+            Check(player.transform.position.x > x + .05f, "Movement resumes after closing map");
+            yield return Tap(Key.M); yield return Tap(Key.Escape);
+            Check(!ui.HasOverlay && Time.timeScale == 1, "Escape closes map");
+            yield return Tap(Key.M);
+            var view = ui.CurrentMapView;
+            if (view == null) { Check(false, "Map view exists for hover verification"); yield break; }
+            var texture = Resources.Load<Texture2D>("Map/IslandMap");
+            Check(texture != null && texture.width == 1672 && texture.height == 941, "Original dark map texture imports without resampling");
+            Check(view.LocationCount == 22, "All 22 authored map labels have introductions");
+            // Independent coordinates sampled from the supplied artwork, not hotspot definitions.
+            string[] names = { "船长家", "咖啡店老板家", "花店老板家", "Z的家", "Z的父母家", "研究所", "山顶平台", "林间木屋", "游客中心", "街角花园", "花店", "咖啡店", "照相馆", "古树广场", "码头", "海边活动屋", "海景餐厅", "海风酒吧", "沙滩", "居住街", "主街", "滨海步道" };
+            Vector2[] pixels = { new Vector2(341,294), new Vector2(505,294), new Vector2(670,294), new Vector2(822,294), new Vector2(978,294), new Vector2(1159,214), new Vector2(1415,214), new Vector2(1207,429), new Vector2(357,595), new Vector2(553,595), new Vector2(690,595), new Vector2(825,595), new Vector2(958,595), new Vector2(1125,605), new Vector2(169,628), new Vector2(466,757), new Vector2(735,757), new Vector2(1008,757), new Vector2(1280,776), new Vector2(638,400), new Vector2(744,630), new Vector2(730,801) };
+            var viewport = (RectTransform)view.transform;
+            Vector2 originalSize = viewport.sizeDelta;
+            foreach (var size in new[] { originalSize, new Vector2(900, 800), new Vector2(1400, 550) })
+            {
+                viewport.sizeDelta = size;
+                Canvas.ForceUpdateCanvases(); yield return null;
+                Check(Mathf.Abs(view.ImageRect.rect.width / view.ImageRect.rect.height - 1672f / 941f) < .001f, "Map preserves aspect ratio in viewport " + size);
+                for (int i = 0; i < names.Length; i++)
+                {
+                    MoveMapMouse(MapScreenPoint(view, pixels[i]));
+                    yield return null; yield return null;
+                    Check(view.TooltipVisible && view.HoveredLocation == names[i] && !string.IsNullOrWhiteSpace(view.HoveredDescription), "Mouse hover " + names[i] + " in viewport " + size);
+                    Rect panel = ((RectTransform)view.TooltipRect.parent).rect;
+                    var corners = new Vector3[4]; view.TooltipRect.GetWorldCorners(corners);
+                    Check(corners.All(c => { Vector2 p = view.TooltipRect.parent.InverseTransformPoint(c); return p.x >= panel.xMin - 1 && p.x <= panel.xMax + 1 && p.y >= panel.yMin - 1 && p.y <= panel.yMax + 1; }), "Tooltip stays inside panel: " + names[i]);
+                }
+                MoveMapMouse(MapScreenPoint(view, new Vector2(30, 30)));
+                yield return null; yield return null;
+                Check(!view.TooltipVisible, "Ocean hover hides tooltip in viewport " + size);
+                Vector2 padding = RectTransformUtility.WorldToScreenPoint(null, viewport.TransformPoint(new Vector2(viewport.rect.xMin + 2, 0)));
+                MoveMapMouse(padding); yield return null; yield return null;
+                Check(!view.TooltipVisible, "Image padding does not trigger a place introduction");
+            }
+            viewport.sizeDelta = originalSize; Canvas.ForceUpdateCanvases(); yield return null;
+            PlaceId place = S.CurrentPlace;
+            Vector2 cafe = MapScreenPoint(view, new Vector2(825, 595));
+            MoveMapMouse(cafe, true); yield return null; yield return null;
+            MoveMapMouse(cafe); yield return null;
+            Check(S.CurrentPlace == place && !WorldDirector.Instance.IsTransitioning && ui.HasOverlay, "Clicking an illustrated place does not teleport or dismiss map");
+            foreach (Key key in new[] { Key.Tab, Key.J })
+            {
+                yield return Tap(key);
+                Check(ui.HasOverlay && ui.CurrentMapView == null, "Other overlay opens without a stale map view: " + key);
+                yield return Tap(Key.M);
+                view = ui.CurrentMapView;
+                MoveMapMouse(MapScreenPoint(view, new Vector2(30,30))); yield return null; yield return null;
+                Check(view != null && !view.TooltipVisible, "Map reopens without stale hover after " + key);
+            }
+            MoveMapMouse(MapScreenPoint(view, new Vector2(1125, 605))); yield return null; yield return null;
+            string screenshot = Path.Combine(Path.GetDirectoryName(SessionState.GetString(MapBatchOutput, "")), "map-hover.png");
+            ScreenCapture.CaptureScreenshot(screenshot, 2);
+            for (int i = 0; i < 10; i++) yield return null;
+            Debug.Log("MAP_SCREENSHOT: " + screenshot + "; Screen " + Screen.width + "x" + Screen.height);
+            yield return Tap(Key.Escape);
+            Check(!ui.HasOverlay && !view.TooltipVisible && Time.timeScale == 1, "Closing map hides tooltip and restores world");
+            yield return Tap(Key.Escape);
+            Check(ui.HasOverlay && ui.CurrentMapView == null, "Pause overlay remains available");
+            yield return Tap(Key.Escape);
+            Check(!ui.HasOverlay && Time.timeScale == 1, "Pause closes normally");
+        }
+
         void Check(bool ok, string name)
         {
             (ok ? report.passed : report.failed).Add(name);
@@ -94,6 +277,7 @@ namespace Seabreeze.Editor
 
         IEnumerator Start()
         {
+            if (mapOnly) { yield return VerifyMapSafely(); yield break; }
             report.timestamp = DateTime.UtcNow.ToString("o");
             // Route the synthetic keyboard to Play Mode even when tool calls return focus to Codex.
             // Clone rather than modify the project's actual Input System settings asset.
@@ -254,14 +438,15 @@ namespace Seabreeze.Editor
 
         void OnDestroy()
         {
-            if (keyboard != null)
-                InputSystem.RemoveDevice(keyboard);
+            if (mapMouse != null) { InputSystem.RemoveDevice(mapMouse); mapMouse = null; }
+            if (keyboard != null) { InputSystem.RemoveDevice(keyboard); keyboard = null; }
             if (originalInputSettings != null)
             {
                 InputSystem.settings = originalInputSettings;
                 originalInputSettings.hideFlags = originalSettingsFlags;
+                originalInputSettings = null;
             }
-            if (verificationInputSettings != null) Destroy(verificationInputSettings);
+            if (verificationInputSettings != null) { Destroy(verificationInputSettings); verificationInputSettings = null; }
         }
     }
 }

@@ -20,6 +20,7 @@ namespace Seabreeze
         NativeLiveHost nativeLive;
         RectTransform canvasRect, hud, bottomStrip, overlayRoot, dialogueRoot, promptRoot;
         Transform overlayContent;
+        IslandMapView mapView;
         TextMeshProUGUI dateText, timeText, weatherText, placeText, ambienceText, objectiveText;
         TextMeshProUGUI speakerText, dialogueText, nextText, promptText, toastText;
         RectTransform choiceRoot;
@@ -29,10 +30,15 @@ namespace Seabreeze
         bool initialized, hidden, interactionVisible;
         string overlayMode = "", observedEnding = "", pendingEnding = "";
         Vector3 interactionPosition;
+        Vector2 mapCanvasSize;
         float visibleCharacters, toastUntil;
         int dialogueFrame = -1;
         readonly List<Button> choiceButtons = new List<Button>();
         static readonly Vector2 TL = new Vector2(0,1), TC = new Vector2(.5f,1), C = new Vector2(.5f,.5f), BL = Vector2.zero;
+
+        // Exposed for runtime verification and accessibility tooling; the map remains
+        // an ordinary overlay owned by this UI, with no travel/navigation side effects.
+        public IslandMapView CurrentMapView => mapView;
 
         public void Initialize()
         {
@@ -268,6 +274,7 @@ namespace Seabreeze
         void LateUpdate()
         {
             if(!initialized)return;
+            ResizeMapOverlayIfNeeded();
             bool visible=interactionVisible&&!HasOverlay&&!session.Dialogue.IsOpen&&!hidden&&!IsTransitioning;
             promptRoot.gameObject.SetActive(visible);
             if(!visible||Camera.main==null)return;
@@ -283,10 +290,14 @@ namespace Seabreeze
         {
             if(!initialized||IsTransitioning)return;
             overlayMode=mode;Time.timeScale=0f;session.SetOverlay(true);HideInteraction();dialogueRoot.gameObject.SetActive(false);
+            mapView=null;
             Clear(overlayRoot);overlayRoot.gameObject.SetActive(true);
             var scrim=Stretch("Backdrop",overlayRoot,Vector2.zero,Vector2.zero).gameObject.AddComponent<Image>();scrim.color=new Color(.015f,.035f,.08f,.76f);scrim.raycastTarget=true;
             if(mode=="live"){canvas.enabled=false;nativeLive=NativeLiveHost.Open(transform,CloseOverlay);return;}
-            Vector2 size=mode=="pause"||mode=="restart"?new Vector2(760,730):mode=="ending"?new Vector2(1160,790):new Vector2(1280,790);
+            Vector2 size;
+            if(mode=="map")size=MapPanelSize();
+            else
+                size=mode=="pause"||mode=="restart"?new Vector2(760,730):mode=="ending"?new Vector2(1160,790):new Vector2(1280,790);
             var panel=Panel("Panel",overlayRoot,C,C,Vector2.zero,size,Ink,true);
             overlayContent=panel.transform;
             Line(panel.transform,TL,TL,Vector2.zero,new Vector2(size.x,2),new Color(.66f,.76f,.88f,.55f));
@@ -298,6 +309,7 @@ namespace Seabreeze
             if(!initialized)return;
             if(nativeLive!=null){nativeLive.Close();nativeLive=null;}
             canvas.enabled=true;
+            mapView=null;
             overlayMode="";Time.timeScale=1f;overlayRoot.gameObject.SetActive(false);session.SetOverlay(false);
             dialogueRoot.gameObject.SetActive(session.Dialogue.IsOpen);dialogueFrame=Time.frameCount;
             RefreshHUD();
@@ -311,27 +323,54 @@ namespace Seabreeze
         }
         void BuildMap()
         {
-            Header("TIDELINE  /  LOCAL MAP","在小镇，慢一点也没关系", "当前："+PlaceName(session.CurrentPlace)+"   ·   "+PeriodName(session.Clock.Period)+"   ·   选择地点前往，也可以从街道的出入口步行进入。" );
-            var area=Rect("Map drawing",overlayContent,TL,TL,new Vector2(46,-235),new Vector2(1188,335));
-            Panel("Sea",area,BL,BL,new Vector2(0,0),new Vector2(1188,127),new Color(.08f,.20f,.30f,.6f));
-            for(int i=0;i<4;i++)Line(area,BL,BL,new Vector2(50+i*140,27+i*20),new Vector2(430,1),new Color(.25f,.52f,.63f,.30f));
-            Label("Sea label",area,BL,BL,new Vector2(935,48),new Vector2(200,35),"海，向东展开",18,new Color(.52f,.73f,.81f,1));
-            Line(area,BL,BL,new Vector2(165,199),new Vector2(850,2),new Color(.67f,.75f,.82f,.45f));
-            MapNode(area,PlaceId.Cafe,180,"咖啡还热着","室内 · 阿遥的咖啡与旧相册");
-            MapNode(area,PlaceId.Street,580,"沿着海走一走","街道 · 明信片、旧邮差与海风");
-            MapNode(area,PlaceId.Lighthouse,1010,"等一盏灯亮起","海堤 · 观景台与蓝色信箱");
-            Label("Map note",overlayContent,TL,TL,new Vector2(46,-611),new Vector2(1180,90),"长椅与咖啡可以让时间向前。\n有人会在傍晚换个地方；错过一段时间，也可以在第二天再来。",22,Muted);
-            Label("Map shortcut",overlayContent,new Vector2(0,0),BL,new Vector2(46,27),new Vector2(1000,30),"M / Esc  收起地图",18,Muted);
+            var panelRect=(RectTransform)overlayContent;
+            float width=panelRect.sizeDelta.x;
+            float height=panelRect.sizeDelta.y;
+            Label("Map eyebrow",overlayContent,TL,TL,new Vector2(42,-26),new Vector2(width-84,28),"ISLAND MAP  /  位置图",17,Accent);
+            Label("Map title",overlayContent,TL,TL,new Vector2(40,-62),new Vector2(width-80,58),"岛屿地图",38,Paper);
+            Label("Map subtitle",overlayContent,TL,TL,new Vector2(42,-119),new Vector2(width-84,36),"把光标移到地点，查看简短介绍。",19,Muted);
+
+            float viewportWidth=Mathf.Max(1,width-72);
+            float viewportHeight=Mathf.Max(1,height-238);
+            var viewport=Rect("Island map viewport",overlayContent,C,C,new Vector2(0,-45),new Vector2(viewportWidth,viewportHeight));
+            mapView=viewport.gameObject.AddComponent<IslandMapView>();
+            mapView.Initialize(viewport,panelRect);
+            mapCanvasSize=canvasRect.rect.size;
+
+            Label("Map shortcut",overlayContent,BL,BL,new Vector2(42,22),new Vector2(width-84,30),"M / Esc  收起地图     ·     移动光标查看地点",18,Muted,TextAlignmentOptions.BottomLeft);
         }
-        void MapNode(Transform parent,PlaceId place,float x,string thought,string description)
+
+        Vector2 MapPanelSize()
         {
-            var rt=Rect(place.ToString(),parent,BL,C,new Vector2(x,200),new Vector2(62,62));
-            var icon=rt.gameObject.AddComponent<LineIcon>();icon.symbol=LineIcon.Symbol.Pin;icon.ring=true;icon.color=session.CurrentPlace==place?Accent:Paper;icon.raycastTarget=false;
-            Label("Place",parent,BL,C,new Vector2(x,266),new Vector2(270,40),PlaceName(place),26,session.CurrentPlace==place?Accent:Paper,TextAlignmentOptions.Midline);
-            Label("Thought",parent,BL,C,new Vector2(x,150),new Vector2(310,32),thought,19,Muted,TextAlignmentOptions.Midline);
-            var button=Button("Travel",parent,BL,C,new Vector2(x,102),new Vector2(240,40),session.CurrentPlace==place?"在这里继续探索":"前往  "+PlaceName(place),()=>{CloseOverlay();if(session.CurrentPlace!=place)session.Travel(place);},session.CurrentPlace==place,18);
-            button.GetComponentInChildren<TextMeshProUGUI>().alignment=TextAlignmentOptions.Midline;
+            Vector2 available=canvasRect.rect.size-new Vector2(32,32);
+            return new Vector2(Mathf.Min(1660,Mathf.Max(1,available.x)),Mathf.Min(1020,Mathf.Max(1,available.y)));
         }
+
+        void ResizeMapOverlayIfNeeded()
+        {
+            if(overlayMode!="map"||overlayContent==null||canvasRect==null)return;
+            Vector2 currentCanvasSize=canvasRect.rect.size;
+            if((currentCanvasSize-mapCanvasSize).sqrMagnitude<.25f)return;
+            mapCanvasSize=currentCanvasSize;
+            var panel=(RectTransform)overlayContent;
+            Vector2 size=MapPanelSize();
+            panel.sizeDelta=size;
+            var hairline=panel.Find("Hairline") as RectTransform;
+            if(hairline!=null)hairline.sizeDelta=new Vector2(size.x,2);
+            SetMapChildWidth(panel,"Map eyebrow",size.x-84,28);
+            SetMapChildWidth(panel,"Map title",size.x-80,58);
+            SetMapChildWidth(panel,"Map subtitle",size.x-84,36);
+            SetMapChildWidth(panel,"Map shortcut",size.x-84,30);
+            var viewport=panel.Find("Island map viewport") as RectTransform;
+            if(viewport!=null)viewport.sizeDelta=new Vector2(Mathf.Max(1,size.x-72),Mathf.Max(1,size.y-238));
+        }
+
+        static void SetMapChildWidth(Transform panel,string childName,float width,float height)
+        {
+            var child=panel.Find(childName) as RectTransform;
+            if(child!=null)child.sizeDelta=new Vector2(width,height);
+        }
+
         void BuildPhone()
         {
             Header("PHONE  /  A LITTLE CONNECTION","海风里收到的消息","几句话，也可以把两个地方变得近一点。" );
