@@ -86,7 +86,7 @@ export class CallConversationEngine extends ConversationEngine {
     if(!this._state.call?.active)return super._think();
     if(!this._canPresentMedia()||!this.callNeedsTurn||!this.enabled||!this._started||this.pending||this._active||this._queue.length||this._state.paused||this._destroyed||this._clock<this.nextWake)return;
     const version=this.callVersion,speechId=this._speechId;this.callNeedsTurn=false;const thinking=super._think();this._emitState();await thinking;
-    if(this._state.call.active&&version===this.callVersion){if(this.failureStreak)this.callNeedsTurn=true;else if(this._speechId===speechId&&this.inbox.some(m=>m.mine)&&!this._state.media&&this.callReviewRetries++<2)this.callNeedsTurn=true;}
+    if(this._state.call.active&&version===this.callVersion){if(this.failureStreak)this.callNeedsTurn=this.failureStreak<3;else if(this._speechId===speechId&&this.inbox.some(m=>m.mine)&&!this._state.media&&this.callReviewRetries++<2)this.callNeedsTurn=true;}
   }
   _wakeDelay(result){
     const delay=super._wakeDelay(result);

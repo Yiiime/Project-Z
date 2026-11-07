@@ -239,7 +239,7 @@ export function parseAgentReply(raw,value) {
     // A delayed song may refer back to its already-answered request. That is
     // provenance, not another pending message; do not re-mark it as handled.
     const handledIds=returnedIds.filter(id=>!(id===readySource&&!c.host.inbox.some(m=>m.id===id)&&c.host.session?.evidence.some(e=>e.id===id&&e.type==='player.message'&&e.speakerRole==='player')));
-    if(new Set(handledIds).size!==handledIds.length||handledIds.some(id=>!c.host.inbox.some(m=>m.id===id)&&!(c.host.turn?.mode==='prepare'&&c.host.pendingAudience?.messageId===id)))throw bad();
+    if(new Set(handledIds).size!==handledIds.length||handledIds.some(id=>!c.host.inbox.some(m=>m.id===id)&&!(c.host.turn?.mode==='prepare'&&c.host.pendingAudience?.messageId===id)))throw Object.assign(bad(),{validationReason:'unknown_handled_id'});
     if(reply.action==='wait'&&reply.speech!=='')throw bad();
     const gesture=reply.gesture??'none',transition=reply.transition??'smooth';
     if(!TALENT_GESTURES.includes(gesture)||!['smooth','sudden'].includes(transition)||reply.action==='wait'&&gesture!=='none')throw bad();
@@ -312,18 +312,35 @@ function reportInvalidReply(options,value,secret,content){
   const reply=String(content||'').split(secret).join('[redacted]').replace(/Bearer\s+\S+/gi,'Bearer [redacted]').replace(/\bsk-[A-Za-z0-9_-]{12,}/g,'[redacted]').replace(/[\u0000-\u001f\u007f]/g,' ').slice(0,6000);
   try{const pending=options.onInvalidReply({kind:value.kind,requestId:value.requestId,reply});if(pending?.catch)pending.catch(()=>{});}catch{}
 }
+// Short, request-local references avoid asking the model to copy UUIDs.
+// Only typed reference fields are mapped back; unknown IDs still fail validation.
+function hostReferences(value) {
+  if(value.kind!=='host')return {value,restore:raw=>raw};
+  const forward=new Map(value.context.host.inbox.map((m,i)=>[m.id,`inbox_${i+1}`]));
+  const reverse=new Map([...forward].map(([id,alias])=>[alias,id]));
+  const ref=v=>reverse.get(v)||v;
+  const mapInput=(v,key='')=>Array.isArray(v)?v.map(x=>mapInput(x,key)):object(v)?Object.fromEntries(Object.entries(v).map(([k,x])=>[k,mapInput(x,k)])):typeof v==='string'&&['id','sourceId','messageId','replyTo','evidenceIds','evidence_ids'].includes(key)?forward.get(v)||v:v;
+  return {value:mapInput(value),restore:raw=>{
+    const reply=typeof raw==='string'?JSON.parse(raw):structuredClone(raw);
+    if(!object(reply))return reply;
+    if(Array.isArray(reply.handledIds))reply.handledIds=reply.handledIds.map(ref);
+    if(object(reply.tool?.args)&&typeof reply.tool.args.messageId==='string')reply.tool.args.messageId=ref(reply.tool.args.messageId);
+    if(Array.isArray(reply.agendaUpdates))for(const item of reply.agendaUpdates)if(Array.isArray(item?.evidenceIds))item.evidenceIds=item.evidenceIds.map(ref);
+    return reply;
+  }};
+}
 async function generate(value,secret,options) {
   const controller=new AbortController(),timeout=value.kind==='topic'?3000:value.kind==='review'?4000:value.kind==='audience'?AGENT_BUNDLE.policy.audience.generationDeadlineMs:value.kind==='host'?(AGENT_BUNDLE.policy.host.toolPlanningTimeoutMs||20000):AGENT_BUNDLE.policy.host.providerTimeoutMs;
   let timer;const abort=()=>controller.abort();options.signal?.addEventListener('abort',abort,{once:true});
   try{return await Promise.race([(async()=>{
     if(options.signal?.aborted)throw error(499,'request_cancelled');
-    const generatedAt=options.now(),envelope=buildAgentRequest(value,generatedAt);
+    const generatedAt=options.now(),refs=hostReferences(value),envelope=buildAgentRequest(refs.value,generatedAt);
     const response=await options.fetch(ENDPOINT,{method:'POST',redirect:'manual',signal:controller.signal,headers:{'Content-Type':'application/json',Authorization:`Bearer ${secret}`},body:JSON.stringify({model:AGENT_BUNDLE.policy.host.model,thinking:{type:'disabled'},stream:false,max_tokens:value.kind==='topic'?400:value.kind==='review'?600:value.kind==='audience'?256:value.kind==='host'?2400:1200,temperature:0.55,response_format:{type:'json_object'},messages:[{role:'system',content:envelope.system},{role:'user',content:JSON.stringify(envelope.input)}]})});
     if(response.status===402)throw error(402,'agent_insufficient_balance','DeepSeek 余额不足，请补充额度后重新检查连接。');
     if(!response.ok)throw error(response.status===429?429:502,'agent_provider_unavailable');
     const data=JSON.parse(await readBounded(response.body,131072,controller.signal));
     if(data?.choices?.[0]?.finish_reason!=='stop')throw error(502,'agent_invalid_reply');
-    let parsed;try{const content=data.choices[0].message.content;parsed=parseAgentReply(value.kind==='audience'?adaptAudienceReply(content,value,generatedAt):content,value);}catch{reportInvalidReply(options,value,secret,data.choices[0].message.content);throw error(502,'agent_invalid_reply','主 Agent 提议未通过当前状态校验。');}
+    let parsed;try{const content=data.choices[0].message.content;parsed=parseAgentReply(value.kind==='audience'?adaptAudienceReply(content,value,generatedAt):refs.restore(content),value);}catch(cause){reportInvalidReply(options,value,secret,data.choices[0].message.content);throw Object.assign(error(502,'agent_invalid_reply','主 Agent 提议未通过当前状态校验。'),{validationReason:cause.validationReason||(/^invalid_agenda/.test(cause.message)?cause.message:'reply_schema')});}
     return {...parsed,requestId:value.requestId,source:'deepseek',model:AGENT_BUNDLE.policy.host.model};
   })(),new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(error(504,'agent_timeout','主 Agent 回复超时，保留当前互动。'));},Math.max(1,Math.min(timeout,options.timeoutMs||timeout)));})]);}
   finally{clearTimeout(timer);options.signal?.removeEventListener('abort',abort);}
@@ -360,7 +377,7 @@ export async function handleAgent(request,env={},options={}) {
       let quota=quotas.get(userHash);if(!quota){quota={start:now,count:0,backgroundCount:0,host:0,hostPrepare:0,topic:0,audience:0,hostReview:0,audienceReview:0};quotas.set(userHash,quota);}if(now-quota.start>=60000){quota.start=now;quota.count=0;quota.backgroundCount=0;}
       const lane=value.kind==='topic'?'topic':value.kind==='review'?(value.context.candidate.role==='host'?'hostReview':'audienceReview'):value.kind==='audience'?'audience':value.context.host?.turn?.mode==='prepare'?'hostPrepare':'host';const background=['audience','audienceReview','topic'].includes(lane);if(quota[lane]>=(lane==='audience'?2:1)||quota.count>=120||background&&quota.backgroundCount>=72)throw error(429,'agent_busy');quota[lane]++;quota.count++;if(background)quota.backgroundCount++;
       entry={fingerprint,expires:now+300000,done:false};
-      entry.promise=generate(value,secret,runtime).then(body=>({body,status:200})).catch(e=>({body:{error:e instanceof AgentError?e.code:'agent_unavailable',message:e instanceof AgentError?e.message:'主 Agent 暂时不可用，保留当前互动。'},status:e instanceof AgentError?e.status:502})).finally(()=>{quota[lane]--;entry.done=true;});
+      entry.promise=generate(value,secret,runtime).then(body=>({body,status:200})).catch(e=>({body:{error:e instanceof AgentError?e.code:'agent_unavailable',...(e.validationReason?{validationReason:e.validationReason}:{}),message:e instanceof AgentError?e.message:'主 Agent 暂时不可用，保留当前互动。'},status:e instanceof AgentError?e.status:502})).finally(()=>{quota[lane]--;entry.done=true;});
       cache.set(key,entry);
     }
     const result=await entry.promise;return json(result.body,result.status);

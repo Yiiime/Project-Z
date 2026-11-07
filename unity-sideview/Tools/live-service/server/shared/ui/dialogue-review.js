@@ -35,7 +35,7 @@ export class DialogueReview {
   snapshot() {return {revision:this.revision,publicEvents:clone(this.events),waiting_messages:clone(this.waiting)};}
   log(entry) {this.traces.push({at:this.now(),wallAt:Date.now(),...clone(entry)});this.traces=this.traces.slice(-120);}
   exportTrace() {return {version:this.version,revision:this.revision,records:clone(this.traces)};}
-  async inspect(candidate,{signal,generationContext=null,sessionEvents=[]}={}) {
+  async inspect(candidate,{signal,generationContext=null,sessionEvents=[],onFailure=()=>{}}={}) {
     const snapshot=this.snapshot(),session=this.session,controller=new AbortController(),abort=()=>controller.abort();
     const payload={requestId:newId(),kind:'review',eventId:candidate.id,message:'独立审阅待发布的直播发言',
       context:{...snapshot,...(candidate.role==='host'&&sessionEvents.length?{sessionEvents:clone(sessionEvents)}:{}),candidate:clone(candidate)}};
@@ -50,10 +50,10 @@ export class DialogueReview {
       const valid=!controller.signal.aborted&&reply?.decision==='allow'&&reply.candidateId===candidate.id&&reply.revision===snapshot.revision
         &&typeof reply.promptVersion==='string'&&(!this.version||reply.promptVersion===this.version)&&this.revision===snapshot.revision;
       if(session===this.session)this.log({stage:'review.result',requestId:payload.requestId,candidateId:candidate.id,reply,accepted:valid,currentRevision:this.revision});
-      if(!valid)return null;
+      if(!valid){onFailure(this.revision!==snapshot.revision?'stale':reply?.decision==='drop'?'rejected':'unavailable');return null;}
       const ticket={};this.tickets.set(ticket,{revision:snapshot.revision,candidate:clone(candidate),promptVersion:reply.promptVersion});
       return ticket;
-    }catch {if(session===this.session)this.log({stage:'review.unavailable',requestId:payload.requestId,candidateId:candidate.id});return null;}
+    }catch {onFailure(signal?.aborted?'stale':'unavailable');if(session===this.session)this.log({stage:'review.unavailable',requestId:payload.requestId,candidateId:candidate.id});return null;}
     finally{clearTimeout(timer);controller.signal.removeEventListener('abort',aborted);signal?.removeEventListener('abort',abort);this.controllers.delete(controller);}
   }
   commit(ticket, publish) {

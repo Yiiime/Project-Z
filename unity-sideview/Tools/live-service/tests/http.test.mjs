@@ -110,7 +110,7 @@ test('office identities isolate sessions, voice, event streams and singing opera
  assert.equal(raced.filter(r=>r.status===201).length,1);assert.equal(raced.filter(r=>r.status===429).length,3);
 });
 
-async function hostSongTurn(f,{emptyTool=false,deny=false}={}) {
+async function hostSongTurn(f,{emptyTool=false,deny=false,staleReview=false}={}) {
  const s=f.s,e=s.engine;
  const task=f.singing.submit({text:'晚安的副歌',sourceId:'original-order',sessionId:s.id,owner:'local-owner'});await f.singing.tick();
  e.enabled=true;e.nextWake=e._clock;
@@ -118,6 +118,7 @@ async function hostSongTurn(f,{emptyTool=false,deny=false}={}) {
  s.input(f.envelope({type:'viewer.message',payload:{text:'你快唱啊'}}));
  e.client.generate=async p=>{
   if(p.kind==='review'){
+   if(staleReview)e.audience.dialogue.record({id:'new-fact',type:'system.fact',text:'公开现场发生变化',speakerRole:'system',speakerId:'system'});
    const checked=normalizeAgentInput(p);assert.equal(checked.context.candidate.plannedTool?.name,emptyTool?undefined:'play_prepared_song');
    return {decision:deny?'reject':'allow',reason:'fixture',candidateId:p.context.candidate.id,revision:p.context.revision,promptVersion:e.audience.dialogue.version||'handoff-test'};
   }
@@ -156,4 +157,21 @@ test('pausing the committed introduction still revokes its pending playback',asy
 test('review rejection of a speech-only opening publishes neither promise nor playback',async t=>{
  const f=await fixture(t);await hostSongTurn(f,{emptyTool:true,deny:true});
  assert(!lastCommand(f.s,'host.present'));assert(!lastCommand(f.s,'media.prepare'));assert.equal(f.singing.context('local-owner').tasks[0].status,'ready');
+});
+
+test('invalid host decisions stop thinking, retain the question and retry only a bounded number',async t=>{
+ const f=await fixture(t),e=f.s.engine;e.enabled=true;e.nextWake=e._clock;
+ f.s.input(f.envelope({type:'viewer.message',payload:{text:'青藏高原能听了吗'}}));
+ let calls=0;e.client.generate=async()=>{calls++;throw Object.assign(Error('invalid'),{code:'agent_invalid_reply',validationReason:'unknown_handled_id'});};
+ for(let i=0;i<3;i++){e.nextWake=e._clock;await e._think();assert.equal(f.s.snapshot().performance.waiting,false);assert.equal(f.s.snapshot().room.messages.find(m=>m.mine).replyStatus,'failed');}
+ e.nextWake=e._clock;await e._think();assert.equal(calls,3);assert.equal(e.inbox.filter(m=>m.mine).length,1);
+ f.s.control(f.envelope({action:'retry_reply'}));await e._think();assert.equal(calls,4);
+ f.s.input(f.envelope({type:'viewer.message',payload:{text:'那先聊聊'}}));await e._think();assert.equal(calls,5);
+ assert(!lastCommand(f.s,'host.present'));assert.equal(e._state.agent.validationReason,'unknown_handled_id');
+});
+
+test('a review made stale by public context reschedules without consuming the failure budget',async t=>{
+ const f=await fixture(t);await hostSongTurn(f,{staleReview:true});
+ assert.equal(f.s.engine.failureStreak,0);assert(!lastCommand(f.s,'host.present'));assert.equal(f.s.engine._state.agent.errorCode,null);
+ assert(f.s.engine.inbox.some(m=>m.mine));
 });

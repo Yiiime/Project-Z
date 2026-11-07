@@ -153,7 +153,7 @@ export class ConversationEngine extends LiveEngine {
     this.inbox.push({id:m.id,name:m.name,text:m.text,mine});if(this.inbox.length>16){const old=this.inbox.shift();this._setReceipt(old.id,'seen');}
     this._public(mine?'player.message':'npc.message',m.text,{id:m.id,speakerRole:mine?'player':'audience',speakerId:speakerId||(mine?'player':m.name)});
     this.audience.dialogue.setWaiting(this.inbox);
-    if(mine){this.speechAudio?.dropWarmSpeech();this.epoch++;this.pending?.abort();this.pending=null;this.nextWake=this._clock;this._setReceipt(m.id,'pending');}
+    if(mine){this.failureStreak=0;this.speechAudio?.dropWarmSpeech();this.epoch++;this.pending?.abort();this.pending=null;this.nextWake=this._clock;this._setReceipt(m.id,'pending');}
     this.nextWake=this._clock;if(this.handoffEnabled)this._maybePrepare();this._emitState();}
   sendMessage(value){const text=String(value||'').trim();if(!text||text.length>120||this._destroyed||this._state.paused)return false;
     const m=this._message(text,{name:'小岛来客',mine:true,type:'chat'});this._receive(m,true);
@@ -181,7 +181,7 @@ export class ConversationEngine extends LiveEngine {
   }
   _maybePrepare(){
     const speech=this._active,plan=this.speechPlan,preview=this.audiencePreview?.status==='pending'?this.audiencePreview:null;
-    if(!this.enabled||!this._started||this.pending||this.preparing||this.prepared||this._state.paused||this._destroyed||this._mediaPlaying()||!speech&&!preview)return;
+    if(this.failureStreak>=3||!this.enabled||!this._started||this.pending||this.preparing||this.prepared||this._state.paused||this._destroyed||this._mediaPlaying()||!speech&&!preview)return;
     if(speech&&(!plan||plan.speechId!==speech.id))return;
     const owner=preview||plan;if(owner.attemptedVersion===this.preparationVersion)return;
     const inbox=this._unhandledInbox(),playerWaiting=inbox.some(m=>m.mine);
@@ -199,7 +199,7 @@ export class ConversationEngine extends LiveEngine {
     }).catch(()=>{if(!controller.signal.aborted)this.audience.dialogue.log({stage:'host.prepare.unavailable',requestId});})
       .finally(()=>{if(this.preparing===work)this.preparing=null;});
   }
-  async _think(){if(this.singingExecuting||!this.enabled||!this._started||this.pending||this._active||this._queue.length||this._state.paused||this._destroyed||this._clock<this.nextWake)return;
+  async _think(){if(this.failureStreak>=3||this.singingExecuting||!this.enabled||!this._started||this.pending||this._active||this._queue.length||this._state.paused||this._destroyed||this._clock<this.nextWake)return;
     if(this._mediaPlaying()&&!this.inbox.some(m=>m.mine))return;
     if(this.audiencePreview?.status==='pending'||this.preparing)return;
     let prepared=this.prepared;this.prepared=null;
@@ -210,6 +210,7 @@ export class ConversationEngine extends LiveEngine {
     const controller=new AbortController(),epoch=this.epoch;this.pending=controller;
     const inbox=this.inbox.map(m=>({...m})),requestId=prepared?.requestId||id(),context=prepared?.context||this._hostContext(inbox),generationContext={publicEvents:context.publicEvents,inbox:context.host.inbox,turn:context.host.turn};
     try{
+      this._waitingReceipts('pending',inbox);this._state.agent.source='pending';this._state.agent.errorCode=null;this._emitState();
       const result=prepared?.result||await this.client.generate({requestId,kind:'host',eventId:requestId,message:'请决定直播下一步。',context},{signal:controller.signal});
       if(epoch!==this.epoch||this._destroyed||this._state.paused)return;
       const allowed=new Set(inbox.map(m=>m.id));
@@ -227,9 +228,12 @@ export class ConversationEngine extends LiveEngine {
         if(!result.speech)throw Error('missing_speech');
         this._warmCandidate(requestId,result);
         const candidate={id:requestId,role:'host',speakerId:'Z',text:result.speech,intent:result.action,replyTo:result.handledIds,evidenceIds:[],...(result.action==='tool'?{plannedTool:{name:result.tool.name,targetId:result.tool.args?.taskId||result.tool.args?.songId||result.tool.args?.messageId||''}}:{})};
-        const ticket=await this.audience.dialogue.inspect(candidate,{signal:controller.signal,generationContext,sessionEvents:this.session.evidence()});
+        let reviewFailure=null;
+        const ticket=await this.audience.dialogue.inspect(candidate,{signal:controller.signal,generationContext,sessionEvents:this.session.evidence(),onFailure:reason=>{reviewFailure=reason;}});
         if(epoch!==this.epoch||controller.signal.aborted||this._destroyed||this._state.paused)return;
-        if(!ticket||this._active||this._queue.length){this.nextWake=this._clock+2000;return;}
+        if(!ticket&&reviewFailure==='stale'){this.nextWake=this._clock+350;return;}
+        if(!ticket)throw Object.assign(Error('reply_not_approved'),{code:'agent_reply_not_approved'});
+        if(this._active||this._queue.length){this.nextWake=this._clock+2000;return;}
         const committed=this.audience.dialogue.commit(ticket,()=>{
           if(this._mediaPlaying()){this._executeTool(result.tool);result.action='speak';}
           const handled=new Set(result.handledIds);for(const mid of handled)this._setReceipt(mid,'queued');
@@ -256,9 +260,19 @@ export class ConversationEngine extends LiveEngine {
         if(!committed){this.nextWake=this._clock+2000;return;}
       }else{if(this.audiencePreview?.status==='published')this.audiencePreview=null;for(const mid of result.handledIds)this._setReceipt(mid,'seen');this.inbox=this.inbox.filter(m=>!result.handledIds.includes(m.id));this.audience.dialogue.setWaiting(this.inbox);this.session.apply(agendaUpdates,context.host.session);this.memory=String(result.memory||'').slice(0,800);}
       this.nextWake=this._clock+this._wakeDelay(result);
-      this.failureStreak=0;this._state.agent.errorCode=null;this._state.agent.source='deepseek';this._state.textStatus='ready';
-    }catch(error){if(epoch===this.epoch&&!this._destroyed&&!controller.signal.aborted){this.failureStreak++;const retryMs=error.code==='agent_insufficient_balance'?60000:this.failureStreak<=3?1000*2**(this.failureStreak-1):15000;this.audience.dialogue.log({stage:'host.request.failed',code:error.code||'host_decision_unavailable',retryMs});this._state.agent.errorCode=error.code||null;this._state.agent.source='unavailable';this._state.textStatus='fallback';this.nextWake=this._clock+retryMs;}}
+      this.failureStreak=0;this._state.agent.errorCode=null;this._state.agent.validationReason=null;this._state.agent.source='deepseek';this._state.textStatus='ready';
+    }catch(error){if(epoch===this.epoch&&!this._destroyed&&!controller.signal.aborted){this.failureStreak++;const retryMs=error.code==='agent_insufficient_balance'?60000:this.failureStreak<=3?1000*2**(this.failureStreak-1):15000;this.audience.dialogue.log({stage:'host.request.failed',code:error.code||'host_decision_unavailable',retryMs});this._state.agent.errorCode=error.code||'host_decision_unavailable';this._state.agent.validationReason=error.validationReason||null;this._state.agent.source='unavailable';this._state.textStatus='fallback';this._waitingReceipts('failed',inbox);this.nextWake=this._clock+retryMs;}}
     finally{this.speechAudio?.dropWarmSpeech(requestId);if(this.pending===controller)this.pending=null;this._emitState();}
+  }
+  _waitingReceipts(status,messages=this.inbox){
+    const waiting=messages.filter(m=>m.mine&&this.inbox.some(x=>x.id===m.id));
+    for(const m of waiting)this._setReceipt(m.id,status);
+    if(waiting.length){this._state.replyTo=waiting.at(-1).id;this._state.replyStatus=status;}
+  }
+  retryReply(){
+    if(this._destroyed||this._state.paused||this.pending||this._active||this._queue.length)return false;
+    this.failureStreak=0;this.nextWake=this._clock;this._state.agent.errorCode=null;this._state.agent.validationReason=null;
+    this._waitingReceipts('pending');if(this._state.call?.active)this.callNeedsTurn=true;this._emitState();return true;
   }
   _sessionPlayers(){return this.session.evidence().filter(e=>e.type==='player.message'&&e.speakerRole==='player').map(e=>({id:e.id,name:'小岛来客',text:e.text,mine:true}));}
   _toolContext(){
