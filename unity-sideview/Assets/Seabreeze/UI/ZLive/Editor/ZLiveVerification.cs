@@ -21,6 +21,12 @@ namespace ZLive.EditorTools
             EditorApplication.isPlaying = true;
         }
 
+        public static void BuildWithInputChecks()
+        {
+            Seabreeze.Editor.LiveDraftVerification.Run();
+            Build();
+        }
+
         public static void Build()
         {
             ZLiveModelSetup.Prepare();

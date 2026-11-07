@@ -122,6 +122,27 @@ namespace ZLive
             var cache=(Dictionary<string,AudioClip>)typeof(LiveAudioPlayer).GetField("cache",BindingFlags.Instance|BindingFlags.NonPublic).GetValue(player);cache["qa-tone"]=clip;
             var command=new JObject {{"payload",new JObject{{"text","口型验证"},{"mood","happy"},{"gesture","wave"},{"modality","audio"},{"audioArtifactId","qa-tone"}}}};
             await SampleAudio("speech",player.Host(command,CancellationToken.None));
+            player.Source.volume=.15f;player.Source.mute=false;
+            var audible=player.Host(command,CancellationToken.None);
+            float outputPeak=0;var output=new float[1024];
+            while(!audible.IsCompleted){await Frame();AudioListener.GetOutputData(output,0);foreach(var value in output)outputPeak=Mathf.Max(outputPeak,Mathf.Abs(value));}
+            await audible;
+            Check("listener_output_nonzero",outputPeak>.00001f,"peak="+outputPeak+", listenerVolume="+AudioListener.volume+", listenerPause="+AudioListener.pause+", sampleRate="+AudioSettings.outputSampleRate);
+            var reconnect=player.Host(command,CancellationToken.None);await Wait(.4f);
+            AudioSettings.Reset(AudioSettings.GetConfiguration());
+            await reconnect;
+            Check("audio_device_reset_completes",!player.Source.isPlaying);
+            var stalled=player.Host(command,CancellationToken.None);await Wait(.4f);player.Source.Stop();
+            await stalled;
+            Check("stalled_source_recovers",!player.Source.isPlaying);
+            var stopped=player.Host(command,CancellationToken.None);await Wait(.3f);player.Stop();
+            bool stopCancelled=false;try{await stopped;}catch(OperationCanceledException){stopCancelled=true;}
+            Check("explicit_stop_does_not_recover",stopCancelled&&!player.Source.isPlaying);
+            var unavailable=player.Host(command,CancellationToken.None);await Wait(.3f);player.Source.Stop();
+            await Wait(1.1f);player.Source.Stop();bool outputFailed=false;
+            try{await unavailable;}catch(Exception e){outputFailed=e.Message=="audio_output_unavailable";}
+            Check("unavailable_output_does_not_complete",outputFailed&&!player.Source.isPlaying);
+            player.Source.volume=0;
             var song=new JObject{{"payload",new JObject{{"artifactId","qa-song"},{"kind","singing"},{"clips",new JArray(new JObject{{"artifactId","qa-tone"},{"text","测试唱段"},{"mood","warm"},{"gesture","explain"}})}}}};
             await player.Prepare(song,CancellationToken.None);
             await SampleAudio("singing",player.Play(song,CancellationToken.None));
