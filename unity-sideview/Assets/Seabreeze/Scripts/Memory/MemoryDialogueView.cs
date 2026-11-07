@@ -14,18 +14,20 @@ namespace Seabreeze
     public sealed class MemoryDialogueView : MonoBehaviour
     {
         MemoryGameController memory; GameSession session; WorldDirector world;
-        RectTransform root,statusPanel,speechPanel,playerPanel,day4Panel,portrait,column,content;
-        TextMeshProUGUI statusText,speechTitle,speechText,playerTitle,locationText,historyText,playerState;
-        TMP_InputField input; Button send; ScrollRect historyScroll;
+        RectTransform root,statusPanel,playerPanel,day4Panel,portrait,column,content;
+        TextMeshProUGUI statusText,playerTitle,locationText,historyText,playerState;
+        TMP_InputField input; Button send,retryOpening;
+        NpcSpeechBubble speechBubble; ScrollRect historyScroll;
         CanvasGroup playerGroup; Live2DCharacterView character; Coroutine transition;
         readonly List<string> history=new List<string>();
         readonly Dictionary<NpcPresence,TextMeshProUGUI> names=new Dictionary<NpcPresence,TextMeshProUGUI>();
-        string selectedActor,lastSpeaker; bool entering,typing; float revealed,speechUntil,day4Until;
+        string selectedActor,lastSpeaker; bool entering,typing; float revealed,day4Until;
         Action day4Shown; int day4Frame;
         public bool Closing {get;private set;}
         public bool PlayerInputReady => !entering&&!Closing&&playerPanel!=null&&playerPanel.gameObject.activeSelf;
         public bool Day4Visible => day4Panel!=null&&day4Panel.gameObject.activeSelf;
-        public string VisibleSpeech => speechText!=null&&speechPanel.gameObject.activeSelf?speechTitle.text+"："+speechText.text:"";
+        public string VisibleSpeech => speechBubble!=null?speechBubble.VisibleText:"";
+        public NpcSpeechBubble SpeechBubble => speechBubble;
         public void Initialize(MemoryGameController m,GameSession s,WorldDirector w)
         {
             memory=m;session=s;world=w;UIPrimitives.Font=Resources.Load<TMP_FontAsset>("Fonts/SeabreezeChinese");
@@ -39,10 +41,7 @@ namespace Seabreeze
             ButtonAt("记忆",statusPanel,new Vector2(123,-99),new Vector2(88,35),()=>Application.OpenURL(MemoryRuntimeConfig.Settings.serviceUrl+"/memories"));
             ButtonAt("保存",statusPanel,new Vector2(220,-99),new Vector2(88,35),()=>{if(session.Save())session.Story.Notify("小岛进度已保存。");});
             ButtonAt("读档",statusPanel,new Vector2(317,-99),new Vector2(98,35),()=>session.LoadSavedGame());
-            speechPanel=Panel("附近的交谈",root,new Vector2(.5f,0),new Vector2(.5f,0),new Vector2(0,30),new Vector2(1060,200),Style.PanelFill).rectTransform;
-            speechTitle=Label("说话者",speechPanel,Vector2.up,Vector2.up,new Vector2(26,-16),new Vector2(1008,35),"",25,Accent);
-            speechText=Label("台词",speechPanel,Vector2.up,Vector2.up,new Vector2(26,-60),new Vector2(1008,122),"",25,Paper);speechTitle.richText=speechText.richText=false;
-            speechText.enableAutoSizing=true;speechText.fontSizeMin=18;speechText.fontSizeMax=25;speechPanel.gameObject.SetActive(false);
+            speechBubble=gameObject.AddComponent<NpcSpeechBubble>();speechBubble.Initialize(root,memory,world);
             BuildPlayerView();
             day4Panel=Panel("Day4全岛公告",root,new Vector2(.5f,1),new Vector2(.5f,1),new Vector2(0,-160),new Vector2(790,156),Style.PanelFill).rectTransform;
             Label("公告标题",day4Panel,Vector2.up,Vector2.up,new Vector2(28,-20),new Vector2(734,34),"DAY 4 · 全岛公告",26,Accent);
@@ -83,7 +82,8 @@ namespace Seabreeze
             var hint=Label("Placeholder",area,Vector2.zero,Vector2.zero,Vector2.zero,Vector2.zero,"写下想说的话…",22,Muted);Fill(hint.rectTransform);hint.richText=false;input.placeholder=hint;
             input.onSubmit.AddListener(_=>Send());
             send=UIPrimitives.Button("发送",dock,Vector2.right,Vector2.right,Vector2.zero,new Vector2(108,60),"发送 →",Send,false,22);send.GetComponentInChildren<TextMeshProUGUI>().alignment=TextAlignmentOptions.Center;
-            playerState=Label("连接与等待状态",column,Vector2.zero,Vector2.zero,new Vector2(0,101),new Vector2(730,30),"",18,Muted);playerState.richText=false;playerState.rectTransform.anchorMax=Vector2.right;playerState.rectTransform.sizeDelta=new Vector2(0,30);
+            playerState=Label("连接与等待状态",column,Vector2.zero,Vector2.zero,new Vector2(0,101),new Vector2(730,30),"",18,Muted);playerState.richText=false;playerState.rectTransform.anchorMax=Vector2.right;playerState.rectTransform.sizeDelta=new Vector2(-135,30);
+            retryOpening=UIPrimitives.Button("重试开场",column,Vector2.right,Vector2.right,new Vector2(0,101),new Vector2(122,32),"重试开场",()=>memory.Conversations.RetryOpening(),false,17);retryOpening.gameObject.SetActive(false);
             var help=Label("输入提示",column,Vector2.zero,Vector2.zero,new Vector2(0,-24),new Vector2(730,32),"Enter 发送    ·    滚动查看    ·    Esc 返回",18,Muted);help.rectTransform.anchorMax=Vector2.right;help.rectTransform.sizeDelta=new Vector2(0,32);
             var close=UIPrimitives.Button("结束交谈",playerPanel,Vector2.one,Vector2.one,new Vector2(-42,-40),new Vector2(56,56),"",()=>memory.Conversations.Cancel("玩家结束交谈"));((RoundedPanel)close.targetGraphic).CornerRadius=28;
             var icon=Stretch("Close icon",close.transform,new Vector2(14,14),new Vector2(-14,-14)).gameObject.AddComponent<LineIcon>();icon.symbol=LineIcon.Symbol.Close;icon.color=Paper;icon.raycastTarget=false;
@@ -93,7 +93,7 @@ namespace Seabreeze
         static void Fill(RectTransform rect){rect.anchorMin=Vector2.zero;rect.anchorMax=Vector2.one;rect.offsetMin=rect.offsetMax=Vector2.zero;}
         Button ButtonAt(string caption,Transform parent,Vector2 position,Vector2 size,Action action)
         {
-            var b=UIPrimitives.Button(caption,parent,Vector2.up,Vector2.up,position,size,caption,action,false,18);b.GetComponentInChildren<TextMeshProUGUI>().alignment=TextAlignmentOptions.Center;return b;
+            var b=UIPrimitives.Button(caption,parent,Vector2.up,Vector2.up,position,size,caption,action,false,16);b.GetComponentInChildren<TextMeshProUGUI>().alignment=TextAlignmentOptions.Center;return b;
         }
         static bool IsComposing(){var system=EventSystem.current?.currentInputModule?.input;return !string.IsNullOrEmpty(system!=null?system.compositionString:Input.compositionString);}
         void Send()
@@ -106,9 +106,9 @@ namespace Seabreeze
         public void OpenPlayer(string actorId)
         {
             if(transition!=null)StopCoroutine(transition);Closing=false;entering=true;selectedActor=actorId;history.Clear();typing=false;
-            historyText.text="在下方输入，按 Enter 开始交谈。";historyText.maxVisibleCharacters=int.MaxValue;playerTitle.text=SevenCharacterCatalog.Name(actorId);
+            historyText.text="";historyText.maxVisibleCharacters=int.MaxValue;playerTitle.text=SevenCharacterCatalog.Name(actorId);
             locationText.text=GameUI.PlaceName(session.CurrentPlace)+"  ·  "+GameUI.PeriodName(session.Clock.Period);
-            playerPanel.gameObject.SetActive(true);speechPanel.gameObject.SetActive(false);playerGroup.alpha=0;playerGroup.interactable=false;input.text="";
+            playerPanel.gameObject.SetActive(true);speechBubble.Clear();playerGroup.alpha=0;playerGroup.interactable=false;input.text="";
             var definition=SevenCharacterCatalog.Find(actorId);var profile=!string.IsNullOrEmpty(definition?.portrait)?Resources.Load<Live2DModelProfile>(definition.portrait):null;
             portrait.gameObject.SetActive(profile!=null);if(profile!=null)character.Show(profile);else character.Hide();
             RefreshHistoryLayout();transition=StartCoroutine(AnimatePlayer(true));
@@ -138,13 +138,12 @@ namespace Seabreeze
                 historyText.text=string.Join("\n\n",history);lastSpeaker=speaker;revealed=prefix.Length;
                 typing=speaker!="player";historyText.maxVisibleCharacters=typing?Mathf.FloorToInt(revealed):int.MaxValue;RefreshHistoryLayout();return;
             }
-            speechTitle.text=SevenCharacterCatalog.Name(speaker);speechText.text=text;speechTitle.color=SevenCharacterCatalog.Find(speaker)?.Accent??Paper;
-            speechUntil=Time.unscaledTime+Mathf.Clamp(1.3f+text.Length*.05f,2.5f,6);speechPanel.gameObject.SetActive(true);
+            speechBubble.Show(speaker,text);
         }
         public void ShowDay4(Action shown){if(day4Shown!=null||Day4Visible)return;day4Panel.gameObject.SetActive(true);day4Until=Time.unscaledTime+9;day4Frame=Time.frameCount;day4Shown=shown;}
         public void ResetView()
         {
-            StopAllCoroutines();transition=null;Closing=entering=false;history.Clear();FinishTyping();playerPanel.gameObject.SetActive(false);playerGroup.alpha=0;character.Hide();speechPanel.gameObject.SetActive(false);day4Panel.gameObject.SetActive(false);day4Shown=null;
+            StopAllCoroutines();transition=null;Closing=entering=false;history.Clear();FinishTyping();playerPanel.gameObject.SetActive(false);playerGroup.alpha=0;character.Hide();speechBubble.Clear();day4Panel.gameObject.SetActive(false);day4Shown=null;
         }
         void Update()
         {
@@ -152,12 +151,13 @@ namespace Seabreeze
             bool fullView=playerPanel.gameObject.activeSelf,overlay=GameUI.Instance!=null&&(GameUI.Instance.HasOverlay||GameUI.Instance.IsOverlayTransitioning);
             statusPanel.gameObject.SetActive(!fullView&&!overlay);
             statusText.text="十名岛民 · 部分形象占位\n"+memory.Client.Status+(string.IsNullOrEmpty(memory.Client.LastError)?"":"\n"+memory.Client.LastError);
-            if(speechPanel.gameObject.activeSelf&&(Time.unscaledTime>speechUntil||fullView||overlay))speechPanel.gameObject.SetActive(false);
+            speechBubble.Tick(fullView||overlay);
             if(Day4Visible&&Time.unscaledTime>day4Until)day4Panel.gameObject.SetActive(false);
             if(day4Shown!=null&&Time.frameCount>day4Frame+1){var shown=day4Shown;day4Shown=null;shown();}
             if(PlayerInputReady&&GameInput.Pressed(Key.Escape))memory.Conversations.Cancel("玩家结束交谈");
             send.interactable=PlayerInputReady&&memory.PlayerChatOpen&&memory.Client.CanGenerate&&!memory.Conversations.Sending;
-            playerState.text=memory.Conversations.Sending?"正在等待对方回应…":memory.Client.Status;
+            retryOpening.gameObject.SetActive(PlayerInputReady&&memory.Conversations.CanRetryOpening);retryOpening.interactable=memory.Client.CanGenerate;
+            playerState.text=memory.Conversations.Opening?"正在等待对方开口…":memory.Conversations.Sending?"正在等待对方回应…":memory.Client.Status;
             if(!string.IsNullOrEmpty(memory.Client.LastError))playerState.text+=" · "+memory.Client.LastError;
             playerState.color=memory.Client.CanGenerate?Muted:Accent;
             if(typing&&PlayerInputReady){revealed+=Time.unscaledDeltaTime*Style.TypewriterSpeed;historyText.maxVisibleCharacters=Mathf.FloorToInt(revealed);if(historyText.maxVisibleCharacters>=historyText.textInfo.characterCount)FinishTyping();else character.SetState("neutral",lastSpeaker==selectedActor);}
@@ -173,7 +173,7 @@ namespace Seabreeze
                     label.outlineWidth=.16f;label.outlineColor=new Color(0,0,0,.9f);label.rectTransform.anchorMin=label.rectTransform.anchorMax=new Vector2(.5f,.5f);label.rectTransform.pivot=new Vector2(.5f,0);
                 }
                 var worldCamera=world.Follow.GetComponent<Camera>();var p=worldCamera.WorldToScreenPoint(npc.transform.position+Vector3.up*3.45f);
-                label.gameObject.SetActive(!fullView&&!overlay&&p.z>0&&worldCamera.pixelRect.Contains(p));var canvas=root.GetComponent<Canvas>();
+                label.gameObject.SetActive(!fullView&&!overlay&&!(speechBubble.Visible&&speechBubble.SpeakerId==npc.npcId)&&p.z>0&&worldCamera.pixelRect.Contains(p));var canvas=root.GetComponent<Canvas>();
                 if(RectTransformUtility.ScreenPointToLocalPointInRectangle(root,p,canvas.renderMode==RenderMode.ScreenSpaceOverlay?null:canvas.worldCamera,out var local))label.rectTransform.anchoredPosition=local;
             }
         }
