@@ -91,17 +91,44 @@ export function createServer({
     });
     res.end(body);
   };
-  const wrapper = (world, results = [], started = performance.now()) => ({
-    ...engine.snapshot(world),
-    results,
-    errors: results
-      .filter((r) => r.status === "failed")
-      .map((r) => ({
-        job: r.job,
-        message: r.validation_error || "本轮生成失败，未提交状态",
+  const wrapper = (world, results = [], started = performance.now()) => {
+    const snapshot = engine.snapshot(world);
+    return {
+      session: snapshot.session,
+      day: snapshot.day,
+      simulation_tick: snapshot.simulation_tick,
+      player_focus_actor: snapshot.player_focus_actor,
+      ready_jobs: snapshot.ready_jobs,
+      pending_jobs: snapshot.pending_jobs,
+      history: snapshot.history,
+      actors: snapshot.actors.map((a) => ({
+        id: a.id,
+        name: a.name,
+        scene: a.scene,
+        identity: a.identity,
+        talking_to_player: a.talking_to_player,
       })),
-    elapsed_ms: Math.round(performance.now() - started),
-  });
+      tasks: snapshot.tasks.map(({followup, collaborators, ...task}) => ({
+        ...task,
+        collaborators: (collaborators || []).map((helper) => ({
+          actor_id: helper.actor_id,
+          status: helper.status,
+          step_ids: helper.decision?.step_ids || [],
+        })),
+      })),
+      results: results.map(({output, ...result}) => ({
+        ...result,
+        ...(output ? {output: {dialogue: output.dialogue}} : {}),
+      })),
+      errors: results
+        .filter((r) => r.status === "failed")
+        .map((r) => ({
+          job: r.job,
+          message: r.validation_error || "本轮生成失败，未提交状态",
+        })),
+      elapsed_ms: Math.round(performance.now() - started),
+    };
+  };
   const gameResponse = (world, extra = {}) => {
     const w = engine.world(world);
     w.responseRevision++;

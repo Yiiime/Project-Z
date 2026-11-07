@@ -8,7 +8,7 @@
 
 ## 自动检查
 
-- `cd unity-sideview/Tools/MemoryLab && npm test`：35/35，通过。HTTP测试使用本机回环端口和显式模型替身。
+- `cd unity-sideview/Tools/MemoryLab && npm test`：35/35，通过。HTTP测试使用本机回环端口和显式模型替身，覆盖网页仅收到dialogue、后端仍保存并提交完整三部分结果。
 - `tools/team/z check`：团队规范与自动化通过；262个C#文件语法无错误，资源Meta/GUID和三个场景引用通过。
 - `git diff --check`：源码及交付文档无空白错误。
 
@@ -22,14 +22,14 @@
 | 注册表 | 八人，当前Street场景五人 |
 | 后端连接 | real模式 |
 | 玩家问题 | 你认识这个岛上的咖啡店老板吗？他是谁？ |
-| Z实际回复 | 认识，李庭，公共街那家咖啡店的老板。我们小时候一块儿长大的，后来闹过点别扭。 |
+| Z实际回复 | 认识啊，李庭。公共街那家咖啡店的老板，也是我发小——不过我俩闹过别扭，现在关系有点僵。 |
 | 玩家占用 | 对话期间Z被占用，仍有其他NPC未被占用 |
 | 结束交谈 | Z释放玩家占用 |
-| 三部分界面 | 对话与Action／Info分栏；信息内容可滚动 |
-| 布局 | RectTransform边界检查不重叠，且已检查实际截图 |
+| 玩家界面 | 只显示台词和正常任务交互，已移除Action／Info面板 |
+| 内部结果 | Unity内部仍保留action和info供执行，不通过界面打印 |
 | 立绘 | Z在可见Game窗口实际渲染 |
 
-![Unity实际Game窗口：Z对话与Action、Info](memory-pr42-dialogue.png)
+![Unity实际Game窗口：Z对话，Action与Info保留在后台](memory-pr42-dialogue.png)
 
 截图是本机编辑器Game视图的实际分辨率，不代表全部屏幕尺寸验收。验证脚本通过实际控制器发起对话和结束操作；未将这次自动试玩描述为人工按键与手感验收。
 
@@ -37,7 +37,9 @@
 
 先在 `Tools/MemoryLab/` 配置本机模型并启动后端。使用临时目录传入 `Z_MEMORY_SAVE_ROOT`，在Unity命令行执行 `-executeMethod Seabreeze.Editor.UnifiedRuntimeVerification.Begin`，通过 `-memoryService` 指定后端，通过 `-moonlifeVerificationOutput` 指定临时JSON文件。可见编辑器模式同时保存PNG；批处理模式可能没有渲染帧，报告会明确标记截图未生成。
 
-本次可见运行报告中，`passed`、`sceneReady`、`connected`、`playerFocusIsolated`、`focusReleased`、`panelsSeparated`、`screenshotCaptured`均为true。密钥、数据库、个人存档和Unity导入缓存不随证据提交。
+本次可见运行报告中，`passed`、`sceneReady`、`connected`、`playerFocusIsolated`、`focusReleased`、`internalStateHidden`、`backendResultRetained`、`screenshotCaptured`均为true。密钥、数据库、个人存档和Unity导入缓存不随证据提交。
+
+网页通过浏览器实际发送“你认识岛上的咖啡店老板吗？他叫什么？”，Z回复李庭与咖啡店的身份关系；页面仅呈现台词。点击结束对话后显示角色可自由交流。原始Action／Info、当前数值、关系和内部社交判断不再展示。
 
 ## 未验证范围
 

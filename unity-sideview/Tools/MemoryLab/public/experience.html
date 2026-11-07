@@ -34,7 +34,7 @@
       margin: 22px auto;
       padding: 0 22px;
       display: grid;
-      grid-template-columns: 270px minmax(300px, 1fr) minmax(300px, 1fr);
+      grid-template-columns: 270px minmax(300px, 1fr);
       gap: 18px;
     }
     .panel {
@@ -103,12 +103,6 @@
       align-items: center;
       flex-wrap: wrap;
     }
-    .metric {
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px solid #edf0ea;
-      padding: 6px 0;
-    }
     .history {
       height: 420px;
       overflow: auto;
@@ -154,24 +148,12 @@
     summary {
       cursor: pointer;
     }
-    .delta {
-      font-size: 12px;
-      color: #ac5747;
-    }
-    .initial {
-      display: grid;
-      grid-template-columns: 1fr 70px;
-      gap: 6px;
-    }
     .wide {
-      grid-column: 2/4;
+      grid-column: 2;
     }
     @media (max-width: 1050px) {
       .layout {
         grid-template-columns: 240px 1fr;
-      }
-      .inspector {
-        grid-column: 2;
       }
       .wide {
         grid-column: 1/3;
@@ -204,46 +186,9 @@
         <button id="next">推进一天</button><button id="reset">新开一局</button>
       </div>
       <p class="muted">日期只推进时间，不自动发撤离通知或让人物同意帮助。</p>
-      <h3>初始值</h3>
-      <div class="initial">
-        <label>好感 30—70</label
-        ><input
-          id="initialAffinity"
-          type="number"
-          min="30"
-          max="70"
-          value="50"
-        /><label>信任 30—70</label
-        ><input
-          id="initialTrust"
-          type="number"
-          min="30"
-          max="70"
-          value="50"
-        /><label>怀疑 0—20</label
-        ><input
-          id="initialSuspicion"
-          type="number"
-          min="0"
-          max="20"
-          value="0"
-        /><label>援助 0—30</label
-        ><input id="initialSupport" type="number" min="0" max="30" value="0" />
-      </div>
-      <p class="muted">
-        新开一局时应用到选中的角色。其他人使用默认值，周伯伯援助为0。
-      </p>
       <p><a href="/memories" target="_blank">查看个人记忆与原话来源</a></p>
       <h3>职业与所在地点</h3>
       <div id="identity" class="muted"></div>
-      <h3>当前状态</h3>
-      <div id="metrics"></div>
-      <h3>最近社交判断</h3>
-      <div id="socialDecisions" class="muted">尚无判断</div>
-      <details>
-        <summary>NPC关系</summary>
-        <pre id="peers">{}</pre>
-      </details>
       <details>
         <summary>测试位置</summary>
         <select id="scene"></select
@@ -270,17 +215,6 @@
       <p class="muted">
         切换角色仍在同一局，各人保留自己的记忆。Enter发送，Shift+Enter换行。
       </p>
-    </section>
-    <section class="panel inspector">
-      <h2 id="outputTitle">最近一次输出</h2>
-      <h3>Dialogue · 纯对话</h3>
-      <div id="dialogue" class="bubble">发送后显示</div>
-      <h3>Action · 下一步提议</h3>
-      <pre id="action">{}</pre>
-      <h3>Info · 数值与变化原因</h3>
-      <pre id="info">{}</pre>
-      <div id="receipts"></div>
-      <p class="muted">动作成功／失败需要你确认；“愿意帮”不等于已经完成。</p>
     </section>
     <section class="panel wide">
       <h2>本轮实际呈现的 NPC 台词</h2>
@@ -328,10 +262,6 @@
           />自动处理同场交流（每次最多6个判断）</label
         ><span id="queue" class="muted"></span>
       </div>
-      <details>
-        <summary>本批所有角色输出</summary>
-        <pre id="batch">[]</pre>
-      </details>
     </section>
   </main>
   <script>
@@ -343,15 +273,6 @@
       autoBudget = 0,
       autoTimer;
     const $ = (id) => document.getElementById(id);
-    const names = {
-      affinity: "对玩家好感",
-      trust: "对玩家信任",
-      world_suspicion: "世界怀疑",
-      persuasion: "援助倾向",
-      support_willingness: "援助态度",
-      emotion: "情绪",
-    };
-    const pretty = (x) => JSON.stringify(x, null, 2);
     const current = () => state?.actors.find((a) => a.id === $("actor").value);
     const actorName = (id) =>
       config.actors.find((a) => a.id === id)?.name || id;
@@ -389,22 +310,6 @@
         state = data;
         sessionStorage.setItem("moonlife-current-session", state.session);
         render();
-        if (path === "new") {
-          $("outputTitle").textContent = "最近一次输出";
-          $("dialogue").textContent = "发送后显示";
-          $("action").textContent = "{}";
-          $("info").textContent = "{}";
-        }
-        $("batch").textContent = pretty(data.results);
-        const last = data.results.filter((r) => r.output).at(-1);
-        if (last) {
-          $("outputTitle").textContent =
-            "最近一次输出 · " + actorName(last.actor);
-          $("dialogue").textContent =
-            last.output.dialogue || "（本轮没有发言）";
-          $("action").textContent = pretty(last.output.action);
-          $("info").textContent = pretty(last.output.info);
-        }
         $("presentedLines").replaceChildren();
         for (const r of data.results.filter((r) => r.status === "proposed")) {
           const line = document.createElement("div");
@@ -479,32 +384,6 @@
         state.player_focus_actor === a.id
           ? "正在与玩家交谈 · 该角色暂停NPC交流"
           : "未占用对话 · 该角色可自由交流";
-      $("metrics").replaceChildren();
-      for (const [k, label] of Object.entries(names)) {
-        if (a.info[k] === undefined) continue;
-        let row = document.createElement("div");
-        row.className = "metric";
-        let l = document.createElement("span"),
-          v = document.createElement("b");
-        l.textContent = label;
-        v.textContent = a.info[k];
-        row.append(l, v);
-        $("metrics").append(row);
-      }
-      $("socialDecisions").replaceChildren();
-      const choices = {
-        engage: "开口交流",
-        keep_to_self: "继续自己的事",
-        postpone: "暂缓交流",
-      };
-      const decisions = state.social_decisions?.[a.id] || [];
-      if (!decisions.length) $("socialDecisions").textContent = "尚无判断";
-      for (const decision of decisions) {
-        let item = document.createElement("p");
-        item.textContent = choices[decision.choice] + "：" + decision.reason;
-        $("socialDecisions").append(item);
-      }
-      $("peers").textContent = pretty(a.peer_relations);
       $("history").replaceChildren();
       for (const event of state.history[a.id]) {
         let box = document.createElement("div");
@@ -531,26 +410,6 @@
         state.simulation_tick +
         " · 待处理回合：" +
         state.pending_jobs;
-      $("receipts").replaceChildren();
-      for (const action of state.actions) {
-        let row = document.createElement("div");
-        row.className = "row";
-        let label = document.createElement("span");
-        label.textContent =
-          actorName(action.actor) +
-          " · " +
-          action.type +
-          " → " +
-          placeName(action.target);
-        row.append(label);
-        for (const success of [true, false]) {
-          let b = document.createElement("button");
-          b.textContent = success ? "确认成功" : "确认失败";
-          b.onclick = () => request("receipt", { action: action.id, success });
-          row.append(b);
-        }
-        $("receipts").append(row);
-      }
       renderTasks();
       renderCooperation();
     }
@@ -613,19 +472,6 @@
           );
         }
         if (task.status === "declined") {
-          let note = document.createElement("p");
-          const follow = {
-            postpone: "先放一放",
-            stop: "暂不再提",
-            reoffer: "重新提出",
-          };
-          note.textContent = task.followup
-            ? "NPC后续判断：" +
-              follow[task.followup.choice] +
-              " · " +
-              task.followup.reason
-            : "NPC尚未记录后续判断。";
-          card.append(note);
           button("和NPC继续聊这件事", () =>
             request("turn", {
               actor: task.owner,
@@ -692,7 +538,7 @@
             for (const helper of task.collaborators || []) {
               if (
                 helper.status === "willing" &&
-                helper.decision?.step_ids.includes(step.id) &&
+                helper.step_ids?.includes(step.id) &&
                 (step.performed_by.includes("player") ||
                   step.performed_by.includes(helper.actor_id))
               )
@@ -795,13 +641,7 @@
           line.textContent =
             actorName(helper.actor_id) +
             "：" +
-            states[helper.status] +
-            (helper.decision
-              ? " · " +
-                helper.decision.reason +
-                " · " +
-                helper.decision.contribution
-              : "");
+            states[helper.status];
           card.append(line);
         }
         let select = document.createElement("select");
@@ -911,18 +751,7 @@
         $("send").click();
       }
     };
-    $("reset").onclick = () => {
-      const actor = $("actor").value;
-      const values = {
-        affinity: Number($("initialAffinity").value),
-        trust: Number($("initialTrust").value),
-        world_suspicion: Number($("initialSuspicion").value),
-      };
-      if (actor !== "z")
-        values.persuasion =
-          actor === "zhou_bobo" ? 0 : Number($("initialSupport").value);
-      request("new", { initial_metrics: { [actor]: values } });
-    };
+    $("reset").onclick = () => request("new", {});
     $("next").onclick = () => request("day", {});
     $("place").onclick = () =>
       request("place", { actor: $("actor").value, scene: $("scene").value });
@@ -945,7 +774,7 @@
     (async () => {
       config = await (await fetch("/api/config")).json();
       $("version").textContent =
-        `角色包 ${config.version} · ${config.model} · 统一后端 · 8位角色 · 对话 / Action / Info`;
+        `月亮岛 · ${config.actors.length}位角色`;
       for (const a of config.actors) {
         let op = document.createElement("option");
         op.value = a.id;

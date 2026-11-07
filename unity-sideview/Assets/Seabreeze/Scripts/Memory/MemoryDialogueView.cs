@@ -14,14 +14,14 @@ namespace Seabreeze
     public sealed class MemoryDialogueView : MonoBehaviour
     {
         MemoryGameController memory; GameSession session; WorldDirector world;
-        RectTransform root,statusPanel,speechPanel,playerPanel,inspectorPanel,portrait,column,content;
+        RectTransform root,statusPanel,speechPanel,playerPanel,taskPanel,portrait,column,content;
         TextMeshProUGUI statusText,speechTitle,speechText,playerTitle,locationText,historyText,playerState;
-        TMP_InputField input; Button send; ScrollRect historyScroll,infoScroll;
+        TMP_InputField input; Button send; ScrollRect historyScroll;
         CanvasGroup playerGroup; Live2DCharacterView character; Coroutine transition;
         readonly List<string> history=new List<string>();
         readonly Dictionary<NpcPresence,TextMeshProUGUI> names=new Dictionary<NpcPresence,TextMeshProUGUI>();
-        string selectedActor,lastSpeaker; bool entering,typing; float revealed,speechUntil;
-        TextMeshProUGUI actionInfoText,taskTitle;Button acceptTask,declineTask,inviteTask,executeAction;string offeredTask,lastCheckpoint;readonly List<string> activeTasks=new List<string>();int selectedTask;
+        string selectedActor,lastSpeaker; bool entering,typing,taskLayoutVisible; float revealed,speechUntil;
+        TextMeshProUGUI taskTitle;Button acceptTask,declineTask,inviteTask;string offeredTask,lastCheckpoint;readonly List<string> activeTasks=new List<string>();int selectedTask;
         public bool Closing {get;private set;}
         public bool PlayerInputReady => !entering&&!Closing&&playerPanel!=null&&playerPanel.gameObject.activeSelf;
         public string VisibleSpeech => speechText!=null&&speechPanel.gameObject.activeSelf?speechTitle.text+"："+speechText.text:"";
@@ -43,21 +43,14 @@ namespace Seabreeze
             speechText=Label("台词",speechPanel,Vector2.up,Vector2.up,new Vector2(26,-60),new Vector2(1008,122),"",25,Paper);speechTitle.richText=speechText.richText=false;
             speechText.enableAutoSizing=true;speechText.fontSizeMin=18;speechText.fontSizeMax=25;speechPanel.gameObject.SetActive(false);
             BuildPlayerView();
-            inspectorPanel=Panel("Action与Info",root,Vector2.one,Vector2.one,new Vector2(-26,0),new Vector2(430,438),Style.PanelFill).rectTransform;
-            inspectorPanel.anchorMin=new Vector2(1,.11f);inspectorPanel.anchorMax=new Vector2(1,.87f);inspectorPanel.pivot=new Vector2(1,.5f);inspectorPanel.sizeDelta=new Vector2(430,0);
-            var infoViewport=Stretch("Action Info scroll viewport",inspectorPanel,new Vector2(18,196),new Vector2(-18,-14));infoViewport.gameObject.AddComponent<RectMask2D>();
-            var infoHit=infoViewport.gameObject.AddComponent<Image>();infoHit.color=Color.clear;infoHit.raycastTarget=true;
-            infoScroll=infoViewport.gameObject.AddComponent<ScrollRect>();infoScroll.horizontal=false;infoScroll.movementType=ScrollRect.MovementType.Clamped;infoScroll.scrollSensitivity=34;infoScroll.viewport=infoViewport;
-            actionInfoText=Label("行动与数值",infoViewport,Vector2.up,Vector2.up,Vector2.zero,Vector2.zero,"",18,Paper);actionInfoText.richText=false;actionInfoText.rectTransform.anchorMax=Vector2.one;
-            actionInfoText.gameObject.AddComponent<ContentSizeFitter>().verticalFit=ContentSizeFitter.FitMode.PreferredSize;infoScroll.content=actionInfoText.rectTransform;
-            var taskControls=Rect("Task controls",inspectorPanel,Vector2.zero,Vector2.zero,Vector2.zero,new Vector2(430,184));
+            taskPanel=Panel("玩家任务",root,Vector2.one,Vector2.one,new Vector2(-26,-150),new Vector2(430,152),Style.PanelFill).rectTransform;
+            var taskControls=Rect("Task controls",taskPanel,Vector2.zero,Vector2.zero,Vector2.zero,new Vector2(430,152));
             taskTitle=Label("当前玩家任务",taskControls,Vector2.up,Vector2.up,new Vector2(18,-8),new Vector2(394,32),"",17,Accent);taskTitle.richText=false;taskTitle.overflowMode=TextOverflowModes.Ellipsis;
             acceptTask=ButtonAt("接受任务",taskControls,new Vector2(16,-50),new Vector2(125,36),()=>memory.RespondTask(offeredTask,true));
             declineTask=ButtonAt("暂不接受",taskControls,new Vector2(154,-50),new Vector2(125,36),()=>memory.RespondTask(offeredTask,false));
             ButtonAt("切换任务",taskControls,new Vector2(292,-50),new Vector2(122,36),()=>{if(activeTasks.Count>0)selectedTask=(selectedTask+1)%activeTasks.Count;});
             inviteTask=ButtonAt("邀请当前NPC协作",taskControls,new Vector2(16,-96),new Vector2(240,36),()=>{if(activeTasks.Count>0)memory.InviteTask(activeTasks[selectedTask],selectedActor,"我接受了这项委托。你愿意和我一起做吗？只帮一部分或者另约也可以。");});
-            executeAction=ButtonAt("结束交谈并执行下一步",taskControls,new Vector2(16,-142),new Vector2(395,36),()=>memory.Conversations.Cancel("执行已提出的下一步"));
-            inspectorPanel.gameObject.SetActive(false);
+            taskPanel.gameObject.SetActive(false);
         }
         static RectTransform Region(string name,Transform parent,Vector2 min,Vector2 max)
         {
@@ -67,9 +60,9 @@ namespace Seabreeze
         {
             playerPanel=Stretch("玩家交谈",root,Vector2.zero,Vector2.zero);playerGroup=playerPanel.gameObject.AddComponent<CanvasGroup>();
             var shade=Stretch("Scene dim",playerPanel,Vector2.zero,Vector2.zero).gameObject.AddComponent<Image>();shade.color=Style.Scrim;shade.raycastTarget=true;
-            portrait=Region("Live2D portrait viewport",playerPanel,new Vector2(.025f,.015f),new Vector2(.36f,.95f));portrait.gameObject.AddComponent<RectMask2D>();
+            portrait=Region("Live2D portrait viewport",playerPanel,new Vector2(.025f,.015f),new Vector2(.51f,.95f));portrait.gameObject.AddComponent<RectMask2D>();
             character=portrait.gameObject.AddComponent<Live2DCharacterView>();character.Initialize(portrait);
-            column=Region("Conversation column",playerPanel,new Vector2(.385f,.11f),new Vector2(1,.87f));column.offsetMax=new Vector2(-488,0);
+            column=Region("Conversation column",playerPanel,new Vector2(.545f,.11f),new Vector2(.925f,.87f));
             playerTitle=Label("交谈对象",column,Vector2.up,Vector2.up,Vector2.zero,new Vector2(690,58),"",42,Paper);
             locationText=Label("地点时段",column,Vector2.up,Vector2.up,new Vector2(0,-68),new Vector2(690,36),"",20,Muted);
             foreach(var label in new[]{playerTitle,locationText}){label.richText=false;label.rectTransform.anchorMax=Vector2.one;label.rectTransform.sizeDelta=new Vector2(0,label.rectTransform.sizeDelta.y);}
@@ -115,7 +108,7 @@ namespace Seabreeze
         IEnumerator ResumeInput(){yield return null;if(PlayerInputReady&&memory.PlayerChatOpen)input.ActivateInputField();}
         public void OpenPlayer(string actorId)
         {
-            if(transition!=null)StopCoroutine(transition);Closing=false;entering=true;selectedActor=actorId;history.Clear();typing=false;
+            if(transition!=null)StopCoroutine(transition);Closing=false;entering=true;selectedActor=actorId;lastCheckpoint=null;history.Clear();typing=false;
             historyText.text="在下方输入，按 Enter 开始交谈。";historyText.maxVisibleCharacters=int.MaxValue;playerTitle.text=SevenCharacterCatalog.Name(actorId);
             locationText.text=GameUI.PlaceName(session.CurrentPlace)+"  ·  "+GameUI.PeriodName(session.Clock.Period);
             playerPanel.gameObject.SetActive(true);speechPanel.gameObject.SetActive(false);playerGroup.alpha=0;playerGroup.interactable=false;input.text="";
@@ -151,14 +144,6 @@ namespace Seabreeze
             speechTitle.text=SevenCharacterCatalog.Name(speaker);speechText.text=text;speechTitle.color=SevenCharacterCatalog.Find(speaker)?.Accent??Paper;
             speechUntil=Time.unscaledTime+Mathf.Clamp(1.3f+text.Length*.05f,2.5f,6);speechPanel.gameObject.SetActive(true);
         }
-        public void ShowResult(MemoryReply reply)
-        {
-            if(reply?.result==null)return;
-            var result=reply.result;
-            actionInfoText.text="ACTION · "+result.action.type+" → "+(result.action.target??"原地")+"\n"+result.action.description+"\n\nINFO\n"+result.info.ToString(Newtonsoft.Json.Formatting.Indented);
-            inspectorPanel.gameObject.SetActive(true);
-            Canvas.ForceUpdateCanvases();infoScroll.verticalNormalizedPosition=1;
-        }
         void RefreshTasks()
         {
             string checkpoint=session.State.memory.checkpoint;if(checkpoint==lastCheckpoint)return;lastCheckpoint=checkpoint;activeTasks.Clear();offeredTask=null;
@@ -168,7 +153,7 @@ namespace Seabreeze
         }
         public void ResetView()
         {
-            StopAllCoroutines();transition=null;Closing=entering=false;history.Clear();FinishTyping();playerPanel.gameObject.SetActive(false);playerGroup.alpha=0;character.Hide();speechPanel.gameObject.SetActive(false);inspectorPanel.gameObject.SetActive(false);lastCheckpoint=null;
+            StopAllCoroutines();transition=null;Closing=entering=false;history.Clear();FinishTyping();playerPanel.gameObject.SetActive(false);playerGroup.alpha=0;character.Hide();speechPanel.gameObject.SetActive(false);taskPanel.gameObject.SetActive(false);lastCheckpoint=null;
         }
         void Update()
         {
@@ -179,7 +164,17 @@ namespace Seabreeze
             if(speechPanel.gameObject.activeSelf&&(Time.unscaledTime>speechUntil||fullView||overlay))speechPanel.gameObject.SetActive(false);
             if(PlayerInputReady&&GameInput.Pressed(Key.Escape))memory.Conversations.Cancel("玩家结束交谈");
             RefreshTasks();
-            if(actionInfoText!=null){inspectorPanel.gameObject.SetActive(memory.LastReply!=null&&!overlay);acceptTask.interactable=declineTask.interactable=fullView&&offeredTask!=null&&memory.Client.CanGenerate;inviteTask.interactable=fullView&&activeTasks.Count>0&&memory.Client.CanGenerate;executeAction.interactable=fullView&&memory.LastReply?.result?.action?.type=="move";taskTitle.text=offeredTask!=null?"NPC已提出："+offeredTask:activeTasks.Count>0?"玩家进行中："+activeTasks[selectedTask]:"暂无玩家进行中的任务";}
+            bool showTasks=fullView&&!overlay&&(offeredTask!=null||activeTasks.Count>0);
+            if(taskPanel.gameObject.activeSelf!=showTasks||taskLayoutVisible!=showTasks)
+            {
+                taskLayoutVisible=showTasks;
+                taskPanel.gameObject.SetActive(showTasks);
+                portrait.anchorMax=new Vector2(showTasks ? .36f : .51f,.95f);
+                column.anchorMin=new Vector2(showTasks ? .385f : .545f,.11f);column.anchorMax=new Vector2(showTasks ? 1 : .925f,.87f);column.offsetMin=Vector2.zero;column.offsetMax=new Vector2(showTasks ? -488 : 0,0);
+                RefreshHistoryLayout();
+            }
+            acceptTask.interactable=declineTask.interactable=fullView&&offeredTask!=null&&memory.Client.CanGenerate;inviteTask.interactable=fullView&&activeTasks.Count>0&&memory.Client.CanGenerate;
+            taskTitle.text=offeredTask!=null?"NPC已提出："+offeredTask:activeTasks.Count>0?"玩家进行中："+activeTasks[selectedTask]:"";
             send.interactable=PlayerInputReady&&memory.PlayerChatOpen&&memory.Client.CanGenerate&&!memory.Conversations.Sending;
             playerState.text=memory.Conversations.Sending?"正在等待对方回应…":memory.Client.Status;
             if(!string.IsNullOrEmpty(memory.Client.LastError))playerState.text+=" · "+memory.Client.LastError;

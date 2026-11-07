@@ -10,7 +10,7 @@ namespace Seabreeze.Editor
     public static class UnifiedRuntimeVerification
     {
         static string output;static double deadline,changedAt;static int phase;static Result result;
-        [Serializable] sealed class Result {public bool passed,sceneReady,connected,playerFocusIsolated,focusReleased,panelsSeparated,screenshotCaptured;public int rosterCount,visibleActors;public string identities,dialogue,error,mode,screenshot;}
+        [Serializable] sealed class Result {public bool passed,sceneReady,connected,playerFocusIsolated,focusReleased,internalStateHidden,backendResultRetained,screenshotCaptured;public int rosterCount,visibleActors;public string identities,dialogue,error,mode,screenshot;}
         public static void Begin()
         {
             var args=Environment.GetCommandLineArgs();int index=Array.IndexOf(args,"-moonlifeVerificationOutput");if(index<0||index+1>=args.Length)throw new Exception("Verification output argument required");output=args[index+1];
@@ -44,10 +44,9 @@ namespace Seabreeze.Editor
                 {
                     Canvas.ForceUpdateCanvases();
                     var rects=memory.View.GetComponentsInChildren<RectTransform>();
-                    var dialogue=rects.First(r=>r.name=="Conversation column");var inspector=rects.First(r=>r.name=="Action与Info");
-                    var left=new Vector3[4];var right=new Vector3[4];dialogue.GetWorldCorners(left);inspector.GetWorldCorners(right);
-                    result.panelsSeparated=left[2].x<right[0].x;
-                    result.passed=result.passed&&result.panelsSeparated;
+                    result.internalStateHidden=!rects.Any(r=>r.name=="Action与Info"||r.name=="行动与数值");
+                    result.backendResultRetained=memory.LastReply.result.action!=null&&memory.LastReply.result.info!=null;
+                    result.passed=result.passed&&result.internalStateHidden&&result.backendResultRetained;
                     result.screenshot=Path.ChangeExtension(output,"png");ScreenCapture.CaptureScreenshot(result.screenshot);
                     changedAt=EditorApplication.timeSinceStartup;phase=4;return;
                 }

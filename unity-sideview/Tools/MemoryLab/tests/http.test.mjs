@@ -255,7 +255,7 @@ test("restored outbox may replay previously approved actual speech, while old ru
   assert.equal(ack.code, 200, ack.data.error);
   assert.equal(ack.data.seq, 2);
 });
-test("browser lab keeps the three-part output and requires presentation acknowledgment", async (t) => {
+test("browser receives dialogue only while the backend retains and commits all three parts", async (t) => {
   const { app, post } = await setup(t);
   const created = (await post("new", { actor: "z", client: "browser" })).data;
   const r = await post("turn", {
@@ -266,11 +266,20 @@ test("browser lab keeps the three-part output and requires presentation acknowle
   });
   assert.equal(r.code, 200);
   assert.equal(r.data.results[0].status, "proposed");
+  assert.deepEqual(Object.keys(r.data.results[0].output), ["dialogue"]);
+  assert.equal("actions" in r.data, false);
+  assert.equal("social_decisions" in r.data, false);
+  assert.ok(r.data.actors.every((a) => !("info" in a) && !("peer_relations" in a)));
+  const proposal = app.store.record(r.data.results[0].proposalId);
+  assert.deepEqual(Object.keys(proposal.output).sort(), ["action", "dialogue", "info"]);
+  assert.equal(proposal.status, "pending");
   const ack = await post("proposal/commit", {
     session: created.session,
     proposalId: r.data.results[0].proposalId,
   });
   assert.equal(ack.code, 200, ack.data.error);
+  assert.equal(app.store.record(proposal.id).status, "committed");
+  assert.deepEqual(app.engine.world(created.session).actors.z.info, proposal.output.info);
   assert.equal(
     app.engine.memory
       .history(app.engine.world(created.session), "z")
