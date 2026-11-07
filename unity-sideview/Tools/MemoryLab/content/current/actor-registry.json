@@ -1,0 +1,324 @@
+{
+  "protocol_version": "1.2.0",
+  "skill_pack": "moonlife-actors",
+  "pack_version": "2.0",
+  "contract_schema": "moonlife-actors/references/contract.schema.json",
+  "common_documents": [
+    "moonlife-actors/references/world.md",
+    "moonlife-actors/references/behavior.md",
+    "moonlife-actors/references/social.md",
+    "moonlife-actors/references/memory.md",
+    "moonlife-actors/references/interface.md"
+  ],
+  "actors": [
+    {
+      "actor_id": "z",
+      "name": "Z",
+      "kind": "protagonist",
+      "version": "2.0",
+      "default_location": "z_home",
+      "location_status": "map_named",
+      "capability_policy": {
+        "escape_assistance": "character_decision",
+        "remote_channels": []
+      },
+      "profile": "moonlife-actors/references/characters/z.md",
+      "daily_goals": [
+        {
+          "id": "z_work",
+          "label": "安排直播、探索和自己的未完事项"
+        },
+        {
+          "id": "z_social",
+          "label": "按兴趣与关系找人交谈、独立决定去留"
+        },
+        {
+          "id": "z_rest",
+          "label": "休息并消化真实的新经历"
+        }
+      ]
+    },
+    {
+      "actor_id": "liyuan",
+      "name": "梨园",
+      "kind": "npc",
+      "version": "2.0",
+      "default_location": "liyuan_home",
+      "location_status": "map_named",
+      "capability_policy": {
+        "escape_assistance": "character_decision",
+        "remote_channels": []
+      },
+      "profile": "moonlife-actors/references/characters/liyuan.md",
+      "daily_goals": [
+        {
+          "id": "liyuan_work",
+          "label": "绘图、勘察与核对真实路线"
+        },
+        {
+          "id": "liyuan_social",
+          "label": "听取别人对地点的解释、协商自己的选择"
+        },
+        {
+          "id": "liyuan_rest",
+          "label": "整理地图或休息"
+        }
+      ],
+      "provenance": {
+        "url": "https://bytedance.larkoffice.com/share/base/view/shrcnWA9TnkCKLBM2JvXypbELpc",
+        "submission_number": 4,
+        "submitter": "杨力源",
+        "record_id": "reczz28W2ZAf0OxG"
+      }
+    },
+    {
+      "actor_id": "liting",
+      "name": "李庭",
+      "kind": "npc",
+      "version": "2.0",
+      "default_location": "cafe",
+      "location_status": "map_named",
+      "capability_policy": {
+        "escape_assistance": "character_decision",
+        "remote_channels": []
+      },
+      "profile": "moonlife-actors/references/characters/liting.md",
+      "daily_goals": [
+        {
+          "id": "liting_work",
+          "label": "经营咖啡店、研究饮品与修理已有小设备"
+        },
+        {
+          "id": "liting_social",
+          "label": "用自己习惯的方式关心Z、处理未说清的关系"
+        },
+        {
+          "id": "liting_rest",
+          "label": "关店、听旧卡带或休息"
+        }
+      ],
+      "provenance": {
+        "url": "https://bytedance.larkoffice.com/share/base/view/shrcnWA9TnkCKLBM2JvXypbELpc",
+        "submission_number": 6,
+        "submitter": "李霆懿",
+        "record_id": "reczz28W2eWxW2UA"
+      }
+    },
+    {
+      "actor_id": "axing",
+      "name": "阿星",
+      "kind": "npc",
+      "version": "2.0",
+      "default_location": "axing_lab",
+      "location_status": "map_named",
+      "capability_policy": {
+        "escape_assistance": "character_decision",
+        "remote_channels": []
+      },
+      "profile": "moonlife-actors/references/characters/axing.md",
+      "daily_goals": [
+        {
+          "id": "axing_work",
+          "label": "处理维护、发电机与已有工具事项"
+        },
+        {
+          "id": "axing_social",
+          "label": "核实消息、协商自己的工作与关系"
+        },
+        {
+          "id": "axing_rest",
+          "label": "暂停维护并休息"
+        }
+      ],
+      "provenance": {
+        "url": "https://bytedance.larkoffice.com/share/base/view/shrcnWA9TnkCKLBM2JvXypbELpc",
+        "submission_number": 7,
+        "submitter": "余星亮",
+        "record_id": "reczz28W2eZIAUPy"
+      }
+    },
+    {
+      "actor_id": "zhengyi",
+      "name": "正义",
+      "kind": "npc",
+      "version": "2.0",
+      "default_location": "visitor_center",
+      "location_status": "map_named",
+      "capability_policy": {
+        "escape_assistance": "character_decision",
+        "remote_channels": []
+      },
+      "profile": "moonlife-actors/references/characters/zhengyi.md",
+      "daily_goals": [
+        {
+          "id": "zhengyi_work",
+          "label": "巡逻、找人并了解真实发生的事"
+        },
+        {
+          "id": "zhengyi_social",
+          "label": "与熟人打招呼、邀请Z吃宵夜"
+        },
+        {
+          "id": "zhengyi_rest",
+          "label": "下班后休息"
+        }
+      ],
+      "provenance": {
+        "url": "https://bytedance.larkoffice.com/share/base/view/shrcnWA9TnkCKLBM2JvXypbELpc",
+        "submission_number": 1,
+        "submitter": "郑绎",
+        "record_id": "reczz28W1RjvhJMG"
+      }
+    },
+    {
+      "actor_id": "xiaoxiaoqing",
+      "name": "小小晴",
+      "kind": "npc",
+      "version": "2.0",
+      "default_location": "flower_shop",
+      "location_status": "map_named",
+      "capability_policy": {
+        "escape_assistance": "character_decision",
+        "remote_channels": []
+      },
+      "profile": "moonlife-actors/references/characters/xiaoxiaoqing.md",
+      "daily_goals": [
+        {
+          "id": "xiaoxiaoqing_work",
+          "label": "养护花店植被、准备已有花材"
+        },
+        {
+          "id": "xiaoxiaoqing_social",
+          "label": "分享花束故事、维护朋友关系和自己的边界"
+        },
+        {
+          "id": "xiaoxiaoqing_rest",
+          "label": "照顾自己并休息"
+        }
+      ],
+      "provenance": {
+        "url": "https://bytedance.larkoffice.com/share/base/view/shrcnWA9TnkCKLBM2JvXypbELpc",
+        "submission_number": 9,
+        "submitter": "代子晴",
+        "record_id": "reczz28W2kjyyrCS",
+        "source_character_name": "晴野（同条正文称小小晴，运行沿用小小晴）"
+      }
+    },
+    {
+      "actor_id": "linxu",
+      "name": "林序",
+      "kind": "npc",
+      "version": "2.0",
+      "default_location": "dock",
+      "location_status": "map_named",
+      "capability_policy": {
+        "escape_assistance": "character_decision",
+        "remote_channels": []
+      },
+      "profile": "moonlife-actors/references/characters/linxu.md",
+      "daily_goals": [
+        {
+          "id": "linxu_work",
+          "label": "整理码头、检查真实船况与准备用品"
+        },
+        {
+          "id": "linxu_social",
+          "label": "协商出航条件、倾听并尊重Z的决定"
+        },
+        {
+          "id": "linxu_rest",
+          "label": "收工、休息或调整安排"
+        }
+      ],
+      "provenance": {
+        "url": "https://bytedance.larkoffice.com/share/base/view/shrcnWA9TnkCKLBM2JvXypbELpc",
+        "submission_number": 11,
+        "submitter": "刘洋",
+        "record_id": "reczz28WLo4igh3K"
+      }
+    },
+    {
+      "actor_id": "zhou_bobo",
+      "name": "周伯伯",
+      "kind": "npc",
+      "version": "2.0",
+      "default_location": "photo_studio",
+      "location_status": "map_named",
+      "capability_policy": {
+        "escape_assistance": "forbidden",
+        "remote_channels": []
+      },
+      "profile": "moonlife-actors/references/characters/zhou_bobo.md",
+      "daily_goals": [
+        {
+          "id": "zhou_bobo_work",
+          "label": "经营照相馆、安排自愿的合照"
+        },
+        {
+          "id": "zhou_bobo_social",
+          "label": "了解熟人的近况、选择性提供背景信息"
+        },
+        {
+          "id": "zhou_bobo_rest",
+          "label": "整理照片并在实际知情后调整自己的安排"
+        }
+      ],
+      "provenance": {
+        "url": "https://bytedance.larkoffice.com/share/base/view/shrcnWA9TnkCKLBM2JvXypbELpc",
+        "submission_number": 12,
+        "submitter": "周泓杰",
+        "record_id": "reczz28WhzvholPg"
+      }
+    }
+  ],
+  "legacy_aliases": {
+    "laozhou": "linxu"
+  },
+  "runtime_status": "unified Node runtime; Unity presentation and executor receipts; natural memory outside dialogue critical path",
+  "source_review": {
+    "url": "https://bytedance.larkoffice.com/share/base/view/shrcnWA9TnkCKLBM2JvXypbELpc",
+    "table_id": "tblgMOpDri5m2t2M",
+    "revision": 146,
+    "reviewed_on": "2026-11-07",
+    "selection": "按编号降序读取全表，同一提交人采用最大编号",
+    "selected_submission_numbers": [
+      1,
+      4,
+      6,
+      7,
+      9,
+      11,
+      12
+    ]
+  },
+  "initial_metric_policy": {
+    "affinity": {
+      "min": 30,
+      "max": 70,
+      "default": 50
+    },
+    "trust": {
+      "min": 30,
+      "max": 70,
+      "default": 50
+    },
+    "world_suspicion": {
+      "min": 0,
+      "max": 20,
+      "default": 0
+    },
+    "persuasion": {
+      "min": 0,
+      "max": 30,
+      "default": 0
+    }
+  },
+  "task_catalog": "moonlife-actors/references/tasks.json",
+  "encounter_policy": {
+    "enabled": true,
+    "idle_cooldown_ticks": 2,
+    "max_pairs_per_scan": 2,
+    "max_initial_decisions_per_actor_per_tick": 1
+  },
+  "public_map": "moonlife-actors/references/island-map.json"
+}
