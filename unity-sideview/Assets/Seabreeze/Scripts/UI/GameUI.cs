@@ -155,7 +155,7 @@ namespace Seabreeze
             objectiveText.text=session.Story.Objective;
             ambienceText.text=session.CurrentPlace==PlaceId.Cafe?"杯碟轻响。烘焙的香气，藏在海风够不到的地方。":session.CurrentPlace==PlaceId.Lighthouse?"灯塔静静转身。海浪替那些没说完的话，停顿了一下。":"海风，和远处的浪。街角有人把今天的第一杯咖啡放在窗边。";
         }
-        public static string PlaceName(PlaceId id)=>id==PlaceId.Cafe?"潮汐咖啡馆":id==PlaceId.Lighthouse?"灯塔海堤":"海边小街";
+        public static string PlaceName(PlaceId id)=>MemoryRuntimeConfig.Enabled?(id==PlaceId.Cafe?"李庭的咖啡店":id==PlaceId.Lighthouse?"森林研究所 · 测试场景":"月亮岛公共街 · 测试场景"):(id==PlaceId.Cafe?"潮汐咖啡馆":id==PlaceId.Lighthouse?"灯塔海堤":"海边小街");
         public static string PeriodName(TimePeriod period)=>period==TimePeriod.Morning?"上午":period==TimePeriod.Afternoon?"午后":period==TimePeriod.Evening?"傍晚":"夜晚";
         void OnDialogueChanged()
         {

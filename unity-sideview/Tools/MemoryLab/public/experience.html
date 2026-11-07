@@ -1,0 +1,983 @@
+<!doctype html>
+<html lang="zh-CN">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>月亮岛 · 最新Skill测试</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      background: #f4f5f1;
+      color: #23342d;
+      font:
+        15px/1.6 system-ui,
+        sans-serif;
+    }
+    header {
+      background: #173e31;
+      color: #fff;
+      padding: 22px 5vw;
+    }
+    h1 {
+      font-size: 24px;
+      margin: 0;
+    }
+    header p {
+      margin: 4px 0;
+      color: #c5dbce;
+    }
+    .layout {
+      max-width: 1450px;
+      margin: 22px auto;
+      padding: 0 22px;
+      display: grid;
+      grid-template-columns: 270px minmax(300px, 1fr) minmax(300px, 1fr);
+      gap: 18px;
+    }
+    .panel {
+      background: white;
+      border: 1px solid #dce2d9;
+      border-radius: 14px;
+      padding: 20px;
+    }
+    h2 {
+      font-size: 18px;
+      margin: 0 0 14px;
+    }
+    h3 {
+      font-size: 14px;
+      margin: 18px 0 8px;
+    }
+    button,
+    select,
+    input,
+    textarea {
+      font: inherit;
+      border: 1px solid #c9d5cd;
+      border-radius: 8px;
+      padding: 9px;
+      max-width: 100%;
+    }
+    button {
+      cursor: pointer;
+      background: #edf2eb;
+      color: #244334;
+    }
+    button.primary {
+      background: #247452;
+      color: white;
+    }
+    button:disabled {
+      opacity: 0.45;
+      cursor: wait;
+    }
+    textarea {
+      width: 100%;
+      resize: vertical;
+    }
+    select {
+      width: 100%;
+      background: white;
+    }
+    pre {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      font:
+        13px/1.6 ui-monospace,
+        monospace;
+      background: #f4f6f2;
+      padding: 12px;
+      border-radius: 9px;
+      margin: 8px 0;
+    }
+    .muted {
+      color: #6f7b73;
+      font-size: 12px;
+    }
+    .row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .metric {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #edf0ea;
+      padding: 6px 0;
+    }
+    .history {
+      height: 420px;
+      overflow: auto;
+      padding: 8px;
+      background: #f7f8f4;
+      border-radius: 10px;
+    }
+    .bubble {
+      padding: 10px 12px;
+      margin: 8px 0;
+      border-radius: 9px;
+      background: #e7efe7;
+    }
+    .bubble.player {
+      background: #e9eefa;
+    }
+    .bubble small {
+      display: block;
+      color: #6c776f;
+    }
+    .empty {
+      color: #8a938c;
+      padding: 20px;
+      text-align: center;
+    }
+    .status {
+      padding: 12px 22px;
+      max-width: 1450px;
+      margin: auto;
+    }
+    .error {
+      color: #a83737;
+    }
+    label.check {
+      display: inline-flex;
+      gap: 5px;
+      align-items: center;
+      margin: 3px 8px 3px 0;
+    }
+    details {
+      margin-top: 14px;
+    }
+    summary {
+      cursor: pointer;
+    }
+    .delta {
+      font-size: 12px;
+      color: #ac5747;
+    }
+    .initial {
+      display: grid;
+      grid-template-columns: 1fr 70px;
+      gap: 6px;
+    }
+    .wide {
+      grid-column: 2/4;
+    }
+    @media (max-width: 1050px) {
+      .layout {
+        grid-template-columns: 240px 1fr;
+      }
+      .inspector {
+        grid-column: 2;
+      }
+      .wide {
+        grid-column: 1/3;
+      }
+    }
+    @media (max-width: 680px) {
+      .layout {
+        display: block;
+        padding: 0 10px;
+      }
+      .panel {
+        margin-bottom: 12px;
+      }
+      .history {
+        height: 300px;
+      }
+    }
+  </style>
+  <header>
+    <h1>月亮岛 · 最新 Skill 测试</h1>
+    <p id="version">正在连接桌面角色包…</p>
+  </header>
+  <div id="status" class="status">加载中</div>
+  <main class="layout">
+    <aside class="panel">
+      <h2>当前角色</h2>
+      <select id="actor"></select>
+      <h3 id="day">Day1</h3>
+      <div class="row">
+        <button id="next">推进一天</button><button id="reset">新开一局</button>
+      </div>
+      <p class="muted">日期只推进时间，不自动发撤离通知或让人物同意帮助。</p>
+      <h3>初始值</h3>
+      <div class="initial">
+        <label>好感 30—70</label
+        ><input
+          id="initialAffinity"
+          type="number"
+          min="30"
+          max="70"
+          value="50"
+        /><label>信任 30—70</label
+        ><input
+          id="initialTrust"
+          type="number"
+          min="30"
+          max="70"
+          value="50"
+        /><label>怀疑 0—20</label
+        ><input
+          id="initialSuspicion"
+          type="number"
+          min="0"
+          max="20"
+          value="0"
+        /><label>援助 0—30</label
+        ><input id="initialSupport" type="number" min="0" max="30" value="0" />
+      </div>
+      <p class="muted">
+        新开一局时应用到选中的角色。其他人使用默认值，周伯伯援助为0。
+      </p>
+      <p><a href="/memories" target="_blank">查看个人记忆与原话来源</a></p>
+      <h3>职业与所在地点</h3>
+      <div id="identity" class="muted"></div>
+      <h3>当前状态</h3>
+      <div id="metrics"></div>
+      <h3>最近社交判断</h3>
+      <div id="socialDecisions" class="muted">尚无判断</div>
+      <details>
+        <summary>NPC关系</summary>
+        <pre id="peers">{}</pre>
+      </details>
+      <details>
+        <summary>测试位置</summary>
+        <select id="scene"></select
+        ><button id="place">确认放置到此处</button>
+        <p class="muted">
+          地点和道路已按共享地图接入。此按钮是主持人放置角色，不代表走完路线；NPC移动只能选择当前相邻出口。入内和沙滩入口仍需实际场景导航。当面消息只送给目标，默认不会全场旁听。
+        </p>
+      </details>
+    </aside>
+    <section class="panel">
+      <h2 id="chatTitle">与角色对话</h2>
+      <div id="chatFocus" class="muted"></div>
+      <button id="endChat">结束对话，让角色自由活动</button>
+      <div class="history" id="history"></div>
+      <textarea
+        id="text"
+        rows="3"
+        placeholder="输入你想对这个角色说的话…"
+      ></textarea>
+      <div class="row">
+        <button class="primary" id="send">发送对话</button
+        ><span class="muted" id="latency"></span>
+      </div>
+      <p class="muted">
+        切换角色仍在同一局，各人保留自己的记忆。Enter发送，Shift+Enter换行。
+      </p>
+    </section>
+    <section class="panel inspector">
+      <h2 id="outputTitle">最近一次输出</h2>
+      <h3>Dialogue · 纯对话</h3>
+      <div id="dialogue" class="bubble">发送后显示</div>
+      <h3>Action · 下一步提议</h3>
+      <pre id="action">{}</pre>
+      <h3>Info · 数值与变化原因</h3>
+      <pre id="info">{}</pre>
+      <div id="receipts"></div>
+      <p class="muted">动作成功／失败需要你确认；“愿意帮”不等于已经完成。</p>
+    </section>
+    <section class="panel wide">
+      <h2>本轮实际呈现的 NPC 台词</h2>
+      <div id="presentedLines"></div>
+      <p class="muted">
+        先生成并校验提案，界面呈现后提交实际发言；动作完成仍需回执。
+      </p>
+    </section>
+    <section class="panel wide">
+      <h2>NPC交给玩家的任务</h2>
+      <p class="muted">
+        先和NPC谈任务。NPC提出后你再接受；进度由游戏回执确认。这里用主持人按钮模拟完成，不是模型说一句就算完成。
+      </p>
+      <div id="tasks"></div>
+    </section>
+    <section class="panel wide">
+      <h2>邀请NPC协作玩家的任务</h2>
+      <p class="muted">
+        任务仍由你接取。这里向NPC说明希望它帮什么，让模型自己选择参与、拒绝、改期或只帮一部分。
+      </p>
+      <div id="cooperationTasks"></div>
+    </section>
+    <section class="panel wide">
+      <h2>剧情与NPC交流测试</h2>
+      <p class="muted">
+        主持人可以输入剧情消息，明确谁知道。默认作为观察；勾选核实后才作为引擎确认事实。每批后台最多处理3个判断。同场相遇只提供交流机会，NPC可不开口；自动续处理最多6个判断。真实模型选择可能不同。
+      </p>
+      <textarea
+        id="event"
+        rows="2"
+        placeholder="例如：你亲眼看到一份记录，其内容是……（请明确实际发生了什么）"
+      ></textarea>
+      <div id="observers"></div>
+      <label class="check"
+        ><input id="verified" type="checkbox" />引擎已核实</label
+      >
+      <div class="row">
+        <button id="inject">投递剧情消息</button
+        ><button id="background">推进一个交流时间步</button
+        ><label class="check"
+          ><input
+            id="autoSocial"
+            type="checkbox"
+            checked
+          />自动处理同场交流（每次最多6个判断）</label
+        ><span id="queue" class="muted"></span>
+      </div>
+      <details>
+        <summary>本批所有角色输出</summary>
+        <pre id="batch">[]</pre>
+      </details>
+    </section>
+  </main>
+  <script>
+    const token = "__TOKEN__";
+    const clientId = crypto.randomUUID();
+    let config,
+      state,
+      busy = false,
+      autoBudget = 0,
+      autoTimer;
+    const $ = (id) => document.getElementById(id);
+    const names = {
+      affinity: "对玩家好感",
+      trust: "对玩家信任",
+      world_suspicion: "世界怀疑",
+      persuasion: "援助倾向",
+      support_willingness: "援助态度",
+      emotion: "情绪",
+    };
+    const pretty = (x) => JSON.stringify(x, null, 2);
+    const current = () => state?.actors.find((a) => a.id === $("actor").value);
+    const actorName = (id) =>
+      config.actors.find((a) => a.id === id)?.name || id;
+    const placeName = (id) => config.places?.[id] || id;
+    function status(text, error = false) {
+      $("status").textContent = text;
+      $("status").className = "status" + (error ? " error" : "");
+    }
+    async function request(path, payload) {
+      if (busy) return;
+      clearTimeout(autoTimer);
+      if (!(path === "background" && payload?.advance === false))
+        autoBudget = 6;
+      busy = true;
+      document
+        .querySelectorAll("button")
+        .forEach((b) => (b.disabled = b.id !== "endChat"));
+      status("角色正在判断，请稍等…");
+      try {
+        const res = await fetch("/api/" + path, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Test-Token": token,
+          },
+          body: JSON.stringify({
+            session: state?.session,
+            client: clientId,
+            actor: $("actor").value,
+            ...payload,
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw Error(data.error);
+        state = data;
+        sessionStorage.setItem("moonlife-current-session", state.session);
+        render();
+        if (path === "new") {
+          $("outputTitle").textContent = "最近一次输出";
+          $("dialogue").textContent = "发送后显示";
+          $("action").textContent = "{}";
+          $("info").textContent = "{}";
+        }
+        $("batch").textContent = pretty(data.results);
+        const last = data.results.filter((r) => r.output).at(-1);
+        if (last) {
+          $("outputTitle").textContent =
+            "最近一次输出 · " + actorName(last.actor);
+          $("dialogue").textContent =
+            last.output.dialogue || "（本轮没有发言）";
+          $("action").textContent = pretty(last.output.action);
+          $("info").textContent = pretty(last.output.info);
+        }
+        $("presentedLines").replaceChildren();
+        for (const r of data.results.filter((r) => r.status === "proposed")) {
+          const line = document.createElement("div");
+          line.className = "bubble";
+          line.textContent =
+            actorName(r.actor) +
+            "：" +
+            (r.output.dialogue || "（本轮选择沉默或等待）");
+          $("presentedLines").append(line);
+          const ack = await fetch("/api/proposal/commit", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Test-Token": token,
+            },
+            body: JSON.stringify({
+              session: state.session,
+              proposalId: r.proposalId,
+            }),
+          });
+          const committed = await ack.json();
+          if (!ack.ok) throw Error(committed.error);
+          state = committed;
+          render();
+        }
+        $("latency").textContent = `本次 ${data.elapsed_ms / 1000} 秒`;
+        if (path === "background") autoBudget -= data.results.length;
+        status(
+          data.errors.length
+            ? data.errors.map((e) => e.message).join("；")
+            : data.results.length
+              ? "已完成 · 最新桌面Skill，真实模型调用"
+              : "已就绪 · 尚未调用模型",
+          data.errors.length > 0,
+        );
+        return data;
+      } catch (e) {
+        status(e.message, true);
+      } finally {
+        busy = false;
+        document
+          .querySelectorAll("button")
+          .forEach((b) => (b.disabled = false));
+        if (
+          $("autoSocial").checked &&
+          state?.ready_jobs > 0 &&
+          autoBudget > 0 &&
+          !state?.errors?.length
+        )
+          autoTimer = setTimeout(
+            () =>
+              request("background", {
+                advance: false,
+                limit: Math.min(3, autoBudget),
+              }),
+            700,
+          );
+      }
+    }
+    function render() {
+      const a = current();
+      $("identity").textContent =
+        (a.identity?.occupation || "") +
+        " · 当前在" +
+        placeName(a.scene) +
+        (a.identity?.workplace_name
+          ? " · 工作地点：" + a.identity.workplace_name
+          : "");
+      $("day").textContent = "Day" + state.day;
+      $("chatTitle").textContent = "与" + a.name + "对话";
+      $("chatFocus").textContent =
+        state.player_focus_actor === a.id
+          ? "正在与玩家交谈 · 该角色暂停NPC交流"
+          : "未占用对话 · 该角色可自由交流";
+      $("metrics").replaceChildren();
+      for (const [k, label] of Object.entries(names)) {
+        if (a.info[k] === undefined) continue;
+        let row = document.createElement("div");
+        row.className = "metric";
+        let l = document.createElement("span"),
+          v = document.createElement("b");
+        l.textContent = label;
+        v.textContent = a.info[k];
+        row.append(l, v);
+        $("metrics").append(row);
+      }
+      $("socialDecisions").replaceChildren();
+      const choices = {
+        engage: "开口交流",
+        keep_to_self: "继续自己的事",
+        postpone: "暂缓交流",
+      };
+      const decisions = state.social_decisions?.[a.id] || [];
+      if (!decisions.length) $("socialDecisions").textContent = "尚无判断";
+      for (const decision of decisions) {
+        let item = document.createElement("p");
+        item.textContent = choices[decision.choice] + "：" + decision.reason;
+        $("socialDecisions").append(item);
+      }
+      $("peers").textContent = pretty(a.peer_relations);
+      $("history").replaceChildren();
+      for (const event of state.history[a.id]) {
+        let box = document.createElement("div");
+        box.className =
+          "bubble" + (event.speaker === "player" ? " player" : "");
+        let label = document.createElement("small");
+        label.textContent =
+          event.speaker === "engine"
+            ? "引擎观测"
+            : event.speaker === "player"
+              ? "你"
+              : actorName(event.speaker);
+        let content = document.createElement("div");
+        content.textContent = event.text;
+        box.append(label, content);
+        $("history").append(box);
+      }
+      $("history").scrollTop = $("history").scrollHeight;
+      $("scene").value = config.scenes.includes(a.scene)
+        ? a.scene
+        : "main_street";
+      $("queue").textContent =
+        "模拟时间步：" +
+        state.simulation_tick +
+        " · 待处理回合：" +
+        state.pending_jobs;
+      $("receipts").replaceChildren();
+      for (const action of state.actions) {
+        let row = document.createElement("div");
+        row.className = "row";
+        let label = document.createElement("span");
+        label.textContent =
+          actorName(action.actor) +
+          " · " +
+          action.type +
+          " → " +
+          placeName(action.target);
+        row.append(label);
+        for (const success of [true, false]) {
+          let b = document.createElement("button");
+          b.textContent = success ? "确认成功" : "确认失败";
+          b.onclick = () => request("receipt", { action: action.id, success });
+          row.append(b);
+        }
+        $("receipts").append(row);
+      }
+      renderTasks();
+      renderCooperation();
+    }
+    function renderTasks() {
+      const container = $("tasks");
+      container.replaceChildren();
+      const tasks = (state.tasks || []).filter(
+        (t) => t.owner === $("actor").value,
+      );
+      if (!tasks.length) {
+        let note = document.createElement("p");
+        note.textContent = "原表没有给这位角色具体的玩家委托，暂不新增。";
+        container.append(note);
+        return;
+      }
+      const states = {
+        available: "还未提出",
+        offered: "NPC已提出，等你回应",
+        active: "进行中",
+        declined: "玩家已拒绝",
+        completed: "已完成",
+      };
+      for (const task of tasks) {
+        let card = document.createElement("div");
+        card.className = "panel";
+        card.style.marginBottom = "12px";
+        let title = document.createElement("h3");
+        title.textContent =
+          task.title +
+          " · 玩家任务 · " +
+          (task.enabled ? states[task.status] : "相关局面尚未确认");
+        let desc = document.createElement("p");
+        desc.textContent = task.description;
+        card.append(title, desc);
+        function button(text, fn) {
+          let b = document.createElement("button");
+          b.textContent = text;
+          b.onclick = fn;
+          card.append(b);
+          card.append(document.createTextNode(" "));
+          return b;
+        }
+        if (!task.enabled) {
+          button("确认相关局面已满足（主持人）", () =>
+            request("task/enable", { task: task.id }),
+          );
+        } else if (task.status === "available") {
+          button("向NPC问这项任务", () =>
+            request("turn", {
+              actor: task.owner,
+              text: "你有什么想请我帮忙的？可以说说“" + task.title + "”吗？",
+            }),
+          );
+        } else if (task.status === "offered") {
+          button("接受委托", () =>
+            request("task/respond", { task: task.id, accept: true }),
+          );
+          button("暂不接受", () =>
+            request("task/respond", { task: task.id, accept: false }),
+          );
+        }
+        if (task.status === "declined") {
+          let note = document.createElement("p");
+          const follow = {
+            postpone: "先放一放",
+            stop: "暂不再提",
+            reoffer: "重新提出",
+          };
+          note.textContent = task.followup
+            ? "NPC后续判断：" +
+              follow[task.followup.choice] +
+              " · " +
+              task.followup.reason
+            : "NPC尚未记录后续判断。";
+          card.append(note);
+          button("和NPC继续聊这件事", () =>
+            request("turn", {
+              actor: task.owner,
+              text:
+                "上次我没有接“" +
+                task.title +
+                "”。我们现在怎么安排？你可以说说自己的想法，不用默认我已经答应。",
+            }),
+          );
+        }
+        if (task.status === "active") {
+          let participantSelectors = [],
+            consentChecks = [];
+          if (task.id === "two_friends_photo") {
+            const prior = task.progress.invite?.details?.participants || [];
+            let label = document.createElement("p");
+            label.textContent =
+              "邀请的两位熟人（换人后需重新确认邀请、同意和到场）：";
+            card.append(label);
+            for (let n = 0; n < 2; n++) {
+              let select = document.createElement("select");
+              let empty = document.createElement("option");
+              empty.value = "";
+              empty.textContent = "选择第" + (n + 1) + "位";
+              select.append(empty);
+              for (const a of config.actors.filter(
+                (a) => !["z", "zhou_bobo"].includes(a.id),
+              )) {
+                let op = document.createElement("option");
+                op.value = a.id;
+                op.textContent = a.name;
+                select.append(op);
+              }
+              select.value = prior[n] || "";
+              card.append(select);
+              participantSelectors.push(select);
+              let l = document.createElement("label");
+              l.className = "check";
+              let cb = document.createElement("input");
+              cb.type = "checkbox";
+              l.append(cb, document.createTextNode("确认这位本人自愿同意"));
+              card.append(l);
+              consentChecks.push(cb);
+            }
+          }
+          for (const step of task.steps) {
+            let row = document.createElement("div");
+            row.className = "row";
+            row.style.marginTop = "8px";
+            let text = document.createElement("span");
+            let done = task.progress[step.id]?.succeeded;
+            text.textContent =
+              (done ? "✓ " : "○ ") +
+              step.label +
+              "（" +
+              step.performed_by
+                .map((x) => (x === "player" ? "玩家" : actorName(x)))
+                .join("/") +
+              "负责）";
+            row.append(text);
+            let evidence;
+            let performer = document.createElement("select");
+            const people = new Set(step.performed_by);
+            for (const helper of task.collaborators || []) {
+              if (
+                helper.status === "willing" &&
+                helper.decision?.step_ids.includes(step.id) &&
+                (step.performed_by.includes("player") ||
+                  step.performed_by.includes(helper.actor_id))
+              )
+                people.add(helper.actor_id);
+            }
+            for (const who of people) {
+              let op = document.createElement("option");
+              op.value = who;
+              op.textContent =
+                "实际完成者：" + (who === "player" ? "玩家" : actorName(who));
+              performer.append(op);
+            }
+            row.append(performer);
+            if (task.id === "departure_prep" && step.id === "notify") {
+              evidence = document.createElement("select");
+              for (const event of state.history.z || []) {
+                let op = document.createElement("option");
+                op.value = event.id;
+                op.textContent = event.text.slice(0, 90);
+                evidence.append(op);
+              }
+              row.append(evidence);
+            }
+            if (
+              !done ||
+              (task.id === "two_friends_photo" && step.id === "invite")
+            ) {
+              let b = document.createElement("button");
+              b.textContent = done
+                ? "重新确认邀请（换人）"
+                : "确认完成（主持人）";
+              b.onclick = () => {
+                let details = {};
+                if (participantSelectors.length) {
+                  details.participants = participantSelectors.map(
+                    (x) => x.value,
+                  );
+                  details.voluntary_consents = participantSelectors
+                    .filter((x, n) => consentChecks[n].checked)
+                    .map((x) => x.value);
+                }
+                if (evidence) details.message_event_id = evidence.value;
+                request("task/receipt", {
+                  task: task.id,
+                  step: step.id,
+                  receipt: crypto.randomUUID(),
+                  success: true,
+                  performed_by: performer.value,
+                  details,
+                });
+              };
+              row.append(b);
+            }
+            card.append(row);
+          }
+        }
+        if (task.status === "completed") {
+          let reward = document.createElement("p");
+          reward.textContent = task.reward_claimed
+            ? "NPC已给出结果：" + task.reward.summary
+            : "回去和NPC谈，领取这项委托对应的结果。完成任务不代表已经出航或全体同意。";
+          card.append(reward);
+          if (!task.reward_claimed)
+            button("回去告诉NPC已经完成", () =>
+              request("turn", {
+                actor: task.owner,
+                text:
+                  "你交给我的“" +
+                  task.title +
+                  "”已经完成了，游戏回执也确认了。我们接下来怎么说？",
+              }),
+            );
+        }
+        container.append(card);
+      }
+    }
+    function renderCooperation() {
+      const box = $("cooperationTasks");
+      box.replaceChildren();
+      const active = (state.tasks || []).filter((t) => t.status === "active");
+      if (!active.length) {
+        box.textContent = "先接受一项NPC交给玩家的任务，再邀请协作者。";
+        return;
+      }
+      const states = {
+        invited: "等待NPC回应",
+        willing: "愿意协作",
+        declined: "不参加",
+        postponed: "暂缓或改期",
+      };
+      for (const task of active) {
+        let card = document.createElement("div");
+        card.className = "panel";
+        card.style.marginBottom = "10px";
+        let title = document.createElement("h3");
+        title.textContent = task.title + " · 接取者：玩家";
+        card.append(title);
+        for (const helper of task.collaborators || []) {
+          let line = document.createElement("p");
+          line.textContent =
+            actorName(helper.actor_id) +
+            "：" +
+            states[helper.status] +
+            (helper.decision
+              ? " · " +
+                helper.decision.reason +
+                " · " +
+                helper.decision.contribution
+              : "");
+          card.append(line);
+        }
+        let select = document.createElement("select");
+        for (const a of config.actors) {
+          let op = document.createElement("option");
+          op.value = a.id;
+          op.textContent = a.name;
+          select.append(op);
+        }
+        card.append(select);
+        let text = document.createElement("textarea");
+        text.rows = 2;
+        text.value =
+          "我接了“" +
+          task.title +
+          "”：" +
+          task.description +
+          " 你愿意和我一起做吗？你自己决定，可以说说能帮哪一部分。";
+        card.append(text);
+        let button = document.createElement("button");
+        button.textContent = "去邀请这位NPC，让它自己判断";
+        button.onclick = () => {
+          if (busy) return;
+          clearTimeout(autoTimer);
+          $("actor").value = select.value;
+          request("task/invite", {
+            task: task.id,
+            helper: select.value,
+            request: text.value,
+          });
+        };
+        card.append(button);
+        box.append(card);
+      }
+    }
+    async function focusChat(actor) {
+      if (!state) return;
+      clearTimeout(autoTimer);
+      sessionStorage.setItem("moonlife-current-actor", $("actor").value);
+      try {
+        const res = await fetch("/api/focus", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Test-Token": token,
+          },
+          body: JSON.stringify({
+            session: state.session,
+            client: clientId,
+            actor,
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw Error(data.error);
+        state = data;
+        render();
+        if (!busy && $("autoSocial").checked && state.ready_jobs > 0) {
+          autoBudget = 6;
+          autoTimer = setTimeout(
+            () => request("background", { advance: false, limit: 3 }),
+            700,
+          );
+        }
+      } catch (e) {
+        status(e.message, true);
+      }
+    }
+    $("actor").onchange = () => {
+      if (state) {
+        render();
+        focusChat($("actor").value);
+      }
+    };
+    $("endChat").onclick = () => focusChat(null);
+    window.addEventListener("pagehide", () => {
+      if (state)
+        fetch("/api/focus", {
+          method: "POST",
+          keepalive: true,
+          headers: {
+            "Content-Type": "application/json",
+            "X-Test-Token": token,
+          },
+          body: JSON.stringify({
+            session: state.session,
+            client: clientId,
+            actor: null,
+          }),
+        }).catch(() => {});
+    });
+    $("send").onclick = async () => {
+      const text = $("text").value.trim(),
+        actor = $("actor").value;
+      if (!text) return;
+      let result = await request("turn", { actor, text });
+      if (
+        result &&
+        !result.errors.length &&
+        $("actor").value === actor &&
+        $("text").value.trim() === text
+      )
+        $("text").value = "";
+    };
+    $("text").onkeydown = (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        $("send").click();
+      }
+    };
+    $("reset").onclick = () => {
+      const actor = $("actor").value;
+      const values = {
+        affinity: Number($("initialAffinity").value),
+        trust: Number($("initialTrust").value),
+        world_suspicion: Number($("initialSuspicion").value),
+      };
+      if (actor !== "z")
+        values.persuasion =
+          actor === "zhou_bobo" ? 0 : Number($("initialSupport").value);
+      request("new", { initial_metrics: { [actor]: values } });
+    };
+    $("next").onclick = () => request("day", {});
+    $("place").onclick = () =>
+      request("place", { actor: $("actor").value, scene: $("scene").value });
+    $("background").onclick = () => request("background", { advance: true });
+    $("autoSocial").onchange = () => {
+      if (!$("autoSocial").checked) clearTimeout(autoTimer);
+      else if (state?.ready_jobs > 0) {
+        autoBudget = 6;
+        request("background", { advance: false });
+      }
+    };
+    $("inject").onclick = () =>
+      request("event", {
+        text: $("event").value,
+        visible: Array.from(
+          document.querySelectorAll("#observers input:checked"),
+        ).map((x) => x.value),
+        verified: $("verified").checked,
+      });
+    (async () => {
+      config = await (await fetch("/api/config")).json();
+      $("version").textContent =
+        `角色包 ${config.version} · ${config.model} · 统一后端 · 8位角色 · 对话 / Action / Info`;
+      for (const a of config.actors) {
+        let op = document.createElement("option");
+        op.value = a.id;
+        op.textContent = a.name;
+        $("actor").append(op);
+        let label = document.createElement("label");
+        label.className = "check";
+        let input = document.createElement("input");
+        input.type = "checkbox";
+        input.value = a.id;
+        label.append(input, document.createTextNode(a.name));
+        $("observers").append(label);
+      }
+      for (const scene of config.scenes) {
+        let op = document.createElement("option");
+        op.value = scene;
+        op.textContent = placeName(scene);
+        $("scene").append(op);
+      }
+      if (!config.configured) {
+        status("服务器尚未配置模型Key", true);
+        return;
+      }
+      const previousActor = sessionStorage.getItem("moonlife-current-actor");
+      if (config.actors.some((a) => a.id === previousActor))
+        $("actor").value = previousActor;
+      const saved = sessionStorage.getItem("moonlife-current-session");
+      if (saved) {
+        state = { session: saved };
+        const restored = await request("state", {});
+        if (!restored) await request("new", {});
+      } else await request("new", {});
+    })();
+  </script>
+</html>

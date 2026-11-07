@@ -1,0 +1,216 @@
+{
+  "version": 1,
+  "note": "测试场景导航锚点，与共享地图的静态知识分开。未绑定节点不提供移动动作。",
+  "anchors": [
+    {
+      "id": "z_home",
+      "place": "Street",
+      "x": 3.4
+    },
+    {
+      "id": "liyuan_home",
+      "place": "Lighthouse",
+      "x": -4
+    },
+    {
+      "id": "cafe",
+      "place": "Cafe",
+      "x": -2
+    },
+    {
+      "id": "axing_lab",
+      "place": "Lighthouse",
+      "x": 2
+    },
+    {
+      "id": "visitor_center",
+      "place": "Street",
+      "x": 12
+    },
+    {
+      "id": "flower_shop",
+      "place": "Street",
+      "x": -6
+    },
+    {
+      "id": "dock",
+      "place": "Street",
+      "x": 6
+    },
+    {
+      "id": "photo_studio",
+      "place": "Street",
+      "x": -10
+    },
+    {
+      "id": "residential_middle",
+      "place": "Street",
+      "x": 1
+    },
+    {
+      "id": "main_street",
+      "place": "Street",
+      "x": 0
+    },
+    {
+      "id": "public_middle",
+      "place": "Street",
+      "x": -3
+    },
+    {
+      "id": "public_east",
+      "place": "Street",
+      "x": 14
+    },
+    {
+      "id": "visitor_center",
+      "place": "Street",
+      "x": 10
+    },
+    {
+      "id": "corner_garden",
+      "place": "Street",
+      "x": -4
+    },
+    {
+      "id": "ancient_tree_square",
+      "place": "Street",
+      "x": 15
+    },
+    {
+      "id": "hilltop_platform",
+      "place": "Lighthouse",
+      "x": 6
+    }
+  ],
+  "edges": [
+    [
+      "residential_west",
+      "residential_west_junction"
+    ],
+    [
+      "residential_west_junction",
+      "residential_middle"
+    ],
+    [
+      "residential_middle",
+      "residential_east"
+    ],
+    [
+      "dock",
+      "visitor_center"
+    ],
+    [
+      "visitor_center",
+      "main_street"
+    ],
+    [
+      "main_street",
+      "corner_garden"
+    ],
+    [
+      "corner_garden",
+      "flower_shop"
+    ],
+    [
+      "flower_shop",
+      "public_middle"
+    ],
+    [
+      "public_middle",
+      "cafe"
+    ],
+    [
+      "cafe",
+      "photo_studio"
+    ],
+    [
+      "photo_studio",
+      "public_east"
+    ],
+    [
+      "residential_west_junction",
+      "main_street"
+    ],
+    [
+      "main_street",
+      "seafront_west"
+    ],
+    [
+      "residential_middle",
+      "public_middle"
+    ],
+    [
+      "residential_east",
+      "ancient_tree_square"
+    ],
+    [
+      "ancient_tree_square",
+      "public_east"
+    ],
+    [
+      "public_east",
+      "seafront_east"
+    ],
+    [
+      "seafront_west",
+      "grocery"
+    ],
+    [
+      "grocery",
+      "old_bookshop"
+    ],
+    [
+      "old_bookshop",
+      "seafront_rest"
+    ],
+    [
+      "seafront_rest",
+      "sea_breeze_bar"
+    ],
+    [
+      "sea_breeze_bar",
+      "seafront_east"
+    ],
+    [
+      "seafront_west",
+      "boardwalk"
+    ],
+    [
+      "boardwalk",
+      "boardwalk_bench"
+    ],
+    [
+      "residential_east",
+      "liyuan_home"
+    ],
+    [
+      "liyuan_home",
+      "axing_lab"
+    ],
+    [
+      "axing_lab",
+      "hilltop_platform"
+    ],
+    [
+      "linxu_home",
+      "residential_west"
+    ],
+    [
+      "liting_home",
+      "residential_west_junction"
+    ],
+    [
+      "xiaoxiaoqing_home",
+      "residential_middle"
+    ],
+    [
+      "z_home",
+      "residential_middle"
+    ],
+    [
+      "zhou_bobo_home",
+      "residential_east"
+    ]
+  ]
+}

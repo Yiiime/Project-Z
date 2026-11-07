@@ -1,77 +1,58 @@
-# 岛民记忆服务 · Memory Lab
+# 月亮岛 · Skill、自然记忆与 A2A 统一后端
 
-这是现有自然记忆实验台的游戏适配版本。游戏控制日期、实际发言和知情范围；服务负责模型调用、个人记忆提取、召回与反思。
+NPC 身份以当前角色包为准：Z、梨园、李庭、阿星、正义、小小晴、林序、周伯伯。角色输出始终是 `dialogue / action / info`。旧十人名单、固定 Day4 全岛公告和按公司／AI关键词清除剧情的迁移规则不再进入此运行入口。
 
-## 启动与模型配置
+## 启动
+
+需要 Node 22.13+（支持 `node:sqlite`）。在此目录执行：
 
 ```sh
 sh start.sh --background
 ```
 
-打开 `http://127.0.0.1:4330/settings`，填写 API Key、Base URL、Model／接入点 ID，保存并测试连接。支持现有方舟／豆包、内部方舟 Responses 和 DeepSeek 适配器。内部方舟地址填写后会自动选择 Responses。
+默认端口 4330。对话体验页 `http://127.0.0.1:4330/`，模型设置页 `/settings`，个人记忆观察室 `/memories`。现有本机 `.local/model.json` 可以继续使用；也可通过环境变量或 `--env-file` 配置 `GAME_MODEL_API_KEY`、`GAME_MODEL_NAME`。配置不会进入角色上下文、状态接口或 Git。
 
-配置在本机 `.local/model.json`，权限为 `0600`；密钥不进入数据库、游戏存档、状态接口或日志。换电脑或首次使用独立试玩包时需重新配置。配置页不回显已有密钥。
+默认数据库为 `.data/unified.sqlite`，与旧 `.data/game.sqlite` 分开。旧十人角色快照不会被自动解释成新八人人设，请使用新的体验进度。需要迁移历史进度时，要明确角色映射与原话来源，不能只按名字或关键词搬记忆。
 
-| 环境变量 | 用途 |
+环境变量：`Z_MEMORY_NODE` 指定 Node 路径，`Z_MEMORY_PORT` 指定端口，`Z_MEMORY_DB` 指定数据库，`Z_MEMORY_CONFIG` 指定本机模型配置文件。缺少 Ajv 依赖时启动脚本会执行 `npm ci --ignore-scripts`。
+
+## 内容和代码
+
+- `content/current/actor-registry.json`：唯一角色注册表。
+- `content/current/moonlife-actors/`：当前八份人设、共用规则、地图、任务与单份契约。
+- `lib/catalog.mjs`：加载当前人设，编译公开职业／地图，提供路线候选。
+- `lib/policy.mjs`：角色特化 Schema、合法动作、来源、数值、信息分享与玩家任务校验。
+- `lib/engine.mjs`：独立角色状态、按NPC对话占用、提案、实际发言、动作与存档。
+- `lib/tasks.mjs`：正式玩家任务、各 NPC 的协作范围、拒绝后续和幂等回执。
+- `lib/natural-memory.mjs`、`memory.mjs`、`consolidator.mjs`：大意／细节衰减、召回、原话证据、后台提取与可修正反思。
+- `server.mjs`：唯一 HTTP 入口；`public/` 提供体验与观察室。
+
+自然记忆沿用原实验台的双轴模型，属于可调试的演示模型，关键词召回不等于向量检索。职业、地图、已确认的既有关系是稳定常识；核实知情与任务事务不随普通记忆遗忘。台词生成只调用当前角色一次，记忆提取与反思在后台进行。
+
+## Unity 协议
+
+`X-Z-Memory: 1` 用于本机 Unity 接入，HTTP 外层协议为 2。核心接口：
+
+| 接口 | 用途 |
 |---|---|
-| `Z_MEMORY_NODE` | 支持 `node:sqlite` 的 Node 22.13+ 路径；启动器也会检查本机已有运行时 |
-| `Z_MEMORY_PORT` | 本机端口，默认 4330 |
-| `Z_MEMORY_CONFIG` | 自定义本机模型配置文件路径 |
-| `Z_MEMORY_DB` | 数据库路径；默认新建 `.data/game.sqlite` |
+| `game/open` | 从当前八人 checkpoint 打开时间线，更新 runId |
+| `game/focus` | 按 NPC 取得、切换、释放玩家对话占用 |
+| `game/sync` | 按稳定 id 和连续 seq 提交实际事件 |
+| `game/intent` | 低频选择是否见面、对象与话题；不消费 Unity 事件序号 |
+| `game/utterance` | 返回带 proposalId 的三部分提案；尚不写成实际发言 |
+| `game/commit` | 提交无台词的实际等待／决定 |
+| `game/cancel` | 取消未说出的会话结果 |
+| `game/checkpoint` | 一致的角色、任务、记忆与待处理事务快照 |
 
-原实验台的 `.data/natural.sqlite`、`.data/lab.sqlite` 和手动实验均不读取或修改。只监听回环地址。模型未连接时可接受游戏的 Day4 通知，不产生伪造的 NPC 回复。
+`sync.eventData.kind` 支持 `utterance / observation / story_event / clock / task_response / task_invite / task_receipt / action_result`。剧情事件由引擎给实际观察者名单，不固定哪一天让所有人知情。玩家和 NPC 对话默认私聊；NPC 互聊由 Unity 的实际距离、遮挡和频道决定听众。
 
-## 查看 NPC 记忆
-
-打开 `http://127.0.0.1:4330/memories`，或从模型设置页进入“查看十名 NPC 的记忆”。选择游戏进度和角色，搜索或按类型筛选；右侧显示原文、游戏日期、容易想起／细节清晰、原话来源和反思依据。
-
-这是包含剧透的本机调试页面。查看只读取当前时间线，不触发模型、回忆强化或数据库写入。默认最近载入进度，每 3 秒刷新；关闭游戏后仍可查看最后确认的记录。原文与当前可回忆内容分开展示，开发者能看到原文不代表 NPC 此刻还能想起全部细节。
-
-## 游戏接口
-
-POST 请求使用 JSON，并携带 `X-Z-Memory: 1`。核心字段是 `worldId`、本次载入生成的 `runId`、游戏 `day/period`。公开配置中没有 API Key。
-
-| 接口 | 作用 |
-|---|---|
-| `GET /api/health` | 服务、模型与真实／模拟模式状态 |
-| `GET /api/debug/memories?worldId=…&actorId=c01` | 本机只读观察室；需要 `X-Z-Memory: 1`，可省略进度以选择最近载入的一份；不返回密钥或模型请求原文 |
-| `POST /api/game/open` | 从游戏的记忆快照打开时间线，取消旧运行结果 |
-| `POST /api/game/sync` | 按序提交真实事件，返回新的快照与确认序号 |
-| `POST /api/game/intent` | 当前 NPC 根据自己的知识、记忆和可见名单选择对象与话题 |
-| `POST /api/game/utterance` | 为指定发言者生成一条提案；此时尚不写入交谈记忆 |
-| `POST /api/game/cancel` | 取消未说出的生成结果；已实际说出的事件仍可整理 |
-| `POST /api/game/checkpoint` | 获取当前快照 |
-
-`sync.eventData` 支持 `clock`、`day4`、`observation`、`utterance`。事件必须有稳定 `id`、连续 `seq` 与游戏时间。游戏决定实际参与者和旁听者；模型没有发布世界事件或完成任务的接口。
-
-## 时间与存档边界
-
-游戏日期和上午／午后／傍晚／夜晚映射为逻辑小时；模型等待不推进游戏时间。公开 Day4 事件使用固定 ID，十名 NPC 每人只接收一次；没有工作人员内部通知。
-
-游戏存档包含最近已确认的记忆快照和待提交事件队列。读档先恢复该快照，再重放队列；不会直接采用服务端可能较新的状态。`runId`、版本检查和取消令牌阻止旧请求写回，响应序号阻止迟到响应覆盖新快照。恢复时拒绝未来记忆。
-
-自然记忆沿用容易想起／细节清晰两个独立维度，没有六天强制清空。对话内容先作为有说话人和原话证据的陈述；自己的反思保留主观标记，不能仅靠旧反思自证。口头声称履约不能把约定标为已兑现，只有游戏确认的在场结果能够兑现。
+生成、实际发言、送达、相信、答应与完成分别记录。取消／读档后旧生成不得写回；已经实际说出而排在 outbox 中的原话可按批准的提案及连续事件重放。NPC正式任务只发给玩家，协作由NPC逐个决定，不自动计作完成。
 
 ## 验证
 
 ```sh
-node --test tests/*.test.mjs
+npm ci --ignore-scripts
+npm test
 ```
 
-测试只使用临时 SQLite 与本机替身端点。Unity 模拟验收服务必须显式运行 `tests/fixture-server.mjs`，并指定 `/tmp/` 下的数据库；界面会标注“模拟模型验收”。它不会被普通启动器或可分享试玩包自动启用。
-
-来源与适配说明见 `UPSTREAM.md`。Node 运行时许可位于 `licenses/NODE-LICENSE.txt`。
-
-## 十人普通岛民版本（2026-11-06）
-
-稳定名单为 `c01`–`c07`、`z_story`、`npc_aya`、`npc_chen`。人设文件沿用 `content/seven-characters.json` 名称，内容已升级；Z 是普通岛民，旧公司／演员／AI 身份剧情撤销。原有回忆、取证与反思能力保留。
-
-旧快照由 `roster-migration.mjs` 定向升级到 `personaRevision: 2`。原始快照保存在本机 `game_archives` 表；有效普通记忆继续使用，撤销设定和相关派生反思退出当前上下文。旧发言队列被确认后不会恢复撤销剧情；当前版本发言不做同样的关键词过滤。
-
-观察室对未升级进度作只读投影；加载游戏后才写入迁移结果。新增角色不会获得未发生的 Day4 记忆。公开消息若已发布，会补齐新增角色一次，保留事件序号和旧角色已有记忆。
-
-## 记忆驱动的开场
-
-玩家按 E 后以 `opening: true` 请求 `/api/game/utterance`，NPC 先生成一句开场。上下文提供本人可回忆的经历、与玩家实际达成的约定，以及本时段的简短实际交流；没有相关记忆时允许简单招呼，不编共同过去或新任务。
-
-开场仍是提案，游戏实际说出后才通过 `sync` 记入交流。非空会话不能再生成第二次开场；取消／读档后迟到结果不提交。开场中的约定状态只来自现有记忆与游戏确认，不是新的任务系统。
+测试使用内存 SQLite 和显式模型替身，普通启动不会启用替身。覆盖身份、知情隔离、遗忘、提案确认、玩家占用、独立互聊、任务协作、取消、事件序号和读档重放。Unity 编译与实际场景验证另见 `../../Docs/MemoryIntegration.md`，不能以 Node 测试代替 Unity 运行结果。

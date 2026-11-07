@@ -1,25 +1,173 @@
 <!doctype html>
 <html lang="zh-CN">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>岛民记忆 · 观察室</title><link rel="stylesheet" href="/memories.css"></head>
-<body>
-<header class="top"><div><p class="eyebrow">PROJECT Z · MEMORY LAB</p><h1>岛民的记忆</h1><p class="intro">看看他们经历了什么，又怎样记住彼此。</p></div><a href="/settings">模型设置 ↗</a></header>
-<main>
-  <section class="toolbar" aria-label="游戏进度">
-    <label class="world-label">正在查看的进度<select id="world"><option value="">等待游戏连接</option></select></label>
-    <div class="refresh"><label><input id="auto" type="checkbox" checked>自动刷新</label><button id="refresh" type="button">刷新</button><span id="status" role="status">正在连接…</span></div>
-  </section>
-  <p class="notice">本机开发视角 · 包含私有记忆与剧情剧透。查看不会让 NPC 多知道什么，也不会强化或修改记忆。页面显示服务最近确认的进度。</p>
-  <nav id="actors" aria-label="选择 NPC"></nav>
-  <section class="workspace">
-    <div class="collection">
-      <div class="collection-title"><div><p class="eyebrow">MEMORY COLLECTION</p><h2 id="actor-name">等待角色记忆</h2></div><span id="total" class="count">0 条</span></div>
-      <p id="pending" class="pending" hidden></p>
-      <div class="filters"><label class="search"><span class="sr-only">搜索记忆</span><input id="search" type="search" placeholder="搜索内容、人物或来源"></label><label><span class="sr-only">记忆类型</span><select id="kind"><option value="">全部类型</option><option value="experience">亲身经历</option><option value="hearsay">听别人说</option><option value="commitment">约定</option><option value="reflection">自己的看法</option></select></label></div>
-      <div id="memory-list" aria-label="记忆列表"></div>
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>月亮岛 · 个人记忆观察室</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font: 15px/1.7 system-ui;
+      background: #f4f5f1;
+      color: #23342d;
+      margin: 0;
+    }
+    header {
+      padding: 20px 5vw;
+      background: #173e31;
+      color: white;
+    }
+    main {
+      max-width: 1150px;
+      padding: 24px;
+      margin: auto;
+    }
+    select,
+    input,
+    button {
+      font: inherit;
+      padding: 8px;
+      border: 1px solid #c9d5cd;
+      border-radius: 8px;
+    }
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      border: 1px solid #dce2d9;
+      border-radius: 12px;
+      margin: 14px 0;
+    }
+    pre {
+      white-space: pre-wrap;
+      background: #f4f6f2;
+      padding: 10px;
+      overflow-wrap: anywhere;
+    }
+    .muted {
+      color: #718177;
+      font-size: 13px;
+    }
+    h1 {
+      font-size: 22px;
+    }
+    h3 {
+      margin: 0 0 10px;
+    }
+    a {
+      color: inherit;
+    }
+    .axes {
+      color: #247452;
+      font-weight: 600;
+    }
+  </style>
+  <header>
+    <h1>月亮岛 · 个人记忆观察室</h1>
+    <p>原始经历、此刻能回忆的内容和已核实知情分别查看。查看不会强化回忆。</p>
+  </header>
+  <main>
+    <div class="row">
+      <select id="world"></select
+      ><select id="actor"></select
+      ><input id="search" placeholder="搜索记忆内容" /><button id="refresh">
+        刷新</button
+      ><a href="/">返回对话体验</a>
     </div>
-    <article id="detail" aria-label="记忆详情"><div class="empty">在左侧选择一条记忆，查看原文与来源。</div></article>
-  </section>
-</main>
-<footer>容易想起 ≠ 细节清晰 · 数值随游戏时间变化，不随网页打开时长变化。</footer>
-<script src="/memories.js"></script>
-</body></html>
+    <p id="status"></p>
+    <h3>已核实知情</h3>
+    <div id="facts"></div>
+    <h3>个人记忆</h3>
+    <div id="memories"></div>
+  </main>
+  <script>
+    const token = "__TOKEN__";
+    const $ = (id) => document.getElementById(id);
+    let data;
+    const node = (tag, text, cls) => {
+      const n = document.createElement(tag);
+      n.textContent = text;
+      if (cls) n.className = cls;
+      return n;
+    };
+    function draw() {
+      const query = $("search").value;
+      $("facts").replaceChildren(
+        ...data.known_facts
+          .filter((m) => m.summary.includes(query))
+          .map((m) => node("div", m.summary, "card")),
+      );
+      $("memories").replaceChildren();
+      for (const m of data.memories.filter((m) =>
+        (m.content + " " + m.gist).includes(query),
+      )) {
+        const c = node("article", "", "card");
+        c.append(
+          node("h3", m.gist || m.content),
+          node(
+            "p",
+            "容易想起 " +
+              m.availability +
+              " / 100 · 细节清晰 " +
+              m.clarity +
+              " / 100",
+            "axes",
+          ),
+          node("p", m.state.label + " · " + m.sourceLabel, "muted"),
+          node("p", "NPC 此刻能回忆：" + m.recallView.content),
+          node("p", "完整原文（调试查看）：" + m.content, "muted"),
+        );
+        for (const e of m.evidence || [])
+          c.append(node("pre", "来源 " + e.messageId + "\n原话：" + e.quote));
+        if (m.dependencies?.length)
+          c.append(
+            node("p", "反思依据：" + m.dependencies.join("、"), "muted"),
+          );
+        $("memories").append(c);
+      }
+    }
+    async function load() {
+      try {
+        const url =
+          "/api/debug/memories?actorId=" +
+          encodeURIComponent($("actor").value || "z") +
+          ($("world").value
+            ? "&worldId=" + encodeURIComponent($("world").value)
+            : "");
+        const r = await fetch(url, { headers: { "X-Test-Token": token } });
+        data = await r.json();
+        if (!r.ok) throw Error(data.error);
+        if (!$("actor").options.length)
+          for (const a of data.actors) {
+            const op = node("option", a.name);
+            op.value = a.id;
+            $("actor").append(op);
+          }
+        if (!$("world").options.length)
+          for (const w of data.worlds) {
+            const op = node("option", w.worldId + " · Day" + w.day);
+            op.value = w.worldId;
+            $("world").append(op);
+          }
+        $("status").textContent =
+          "后台待整理 " +
+          data.pending +
+          " 条；角色身份、职业、地图不参与遗忘。";
+        draw();
+      } catch (e) {
+        $("status").textContent = e.message;
+      }
+    }
+    $("refresh").onclick = load;
+    $("world").onchange = load;
+    $("actor").onchange = load;
+    $("search").oninput = draw;
+    load();
+  </script>
+</html>
