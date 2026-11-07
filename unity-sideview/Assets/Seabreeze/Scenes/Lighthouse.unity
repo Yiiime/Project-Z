@@ -362,6 +362,7 @@ MonoBehaviour:
   npcId: npc_chen
   character: 3
   location: 2
+  movementDestinations: []
 --- !u!114 &175392525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -482,6 +483,7 @@ MonoBehaviour:
   npcId: npc_aya
   character: 2
   location: 2
+  movementDestinations: []
 --- !u!114 &209963553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -667,6 +669,7 @@ Transform:
   - {fileID: 232430955}
   - {fileID: 442386351}
   - {fileID: 1616692648}
+  - {fileID: 1678385238}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &422770171
@@ -1059,7 +1062,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5549576733301818422, guid: bccb2691fc29d4abdb652a9cab9d3418, type: 3}
       propertyPath: label
-      value: "\u56DE\u5230\u6D77\u8FB9\u5C0F\u8857"
+      value: "\u8FD4\u56DE \xB7 \u6D77\u98CE\u9152\u5427"
       objectReference: {fileID: 0}
     - target: {fileID: 5549576733301818422, guid: bccb2691fc29d4abdb652a9cab9d3418, type: 3}
       propertyPath: isDoor
@@ -1068,6 +1071,14 @@ PrefabInstance:
     - target: {fileID: 5549576733301818422, guid: bccb2691fc29d4abdb652a9cab9d3418, type: 3}
       propertyPath: radius
       value: 1.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 5549576733301818422, guid: bccb2691fc29d4abdb652a9cab9d3418, type: 3}
+      propertyPath: arrivalId
+      value: Seafront_Lighthouse_return
+      objectReference: {fileID: 0}
+    - target: {fileID: 5549576733301818422, guid: bccb2691fc29d4abdb652a9cab9d3418, type: 3}
+      propertyPath: destination
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 5549576733301818422, guid: bccb2691fc29d4abdb652a9cab9d3418, type: 3}
       propertyPath: promptOffset.y
@@ -1309,6 +1320,7 @@ MonoBehaviour:
   npcId: npc_mio
   character: 1
   location: 2
+  movementDestinations: []
 --- !u!114 &1678282520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1321,6 +1333,83 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85e341332a9b949bc856a04fb3d3a201, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Seabreeze.WorldProp
+--- !u!1 &1678385237
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1678385238}
+  m_Layer: 0
+  m_Name: Island legacy arrival
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1678385238
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1678385237}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1690747057}
+  m_Father: {fileID: 360987547}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1690747056
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1690747057}
+  - component: {fileID: 1690747058}
+  m_Layer: 0
+  m_Name: Arrival Seafront_Lighthouse_in
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1690747057
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1690747056}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -12, y: 0.08, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1678385238}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1690747058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1690747056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fefa10092efd4e46ae82693686d7bd26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Seabreeze.IslandArrival
+  id: Seafront_Lighthouse_in
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

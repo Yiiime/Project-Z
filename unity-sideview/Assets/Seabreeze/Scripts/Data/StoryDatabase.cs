@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Seabreeze
 {
     public enum TimePeriod { Morning, Afternoon, Evening, Night }
-    public enum PlaceId { Street, Cafe, Lighthouse }
+    public enum PlaceId { Street, Cafe, Lighthouse, ResidentialWest, ResidentialCenter, ResidentialEast, Forest, ForestCabin, Research, Summit, Harbor, Garden, Square, EastCrossing, Boardwalk, GeneralStore, Bookshop, Seafront, Beach, ForestPath1, ForestPath2, CabinInterior, ResearchInterior, VisitorCenter, FlowerShop, PhotoStudio, Restaurant, BeachEntrance, RestaurantInterior, BarInterior, CaptainHome, LiTingHome, ZiqingHome, ZHome, ZhouHome }
 
     [Serializable]
     public sealed class StoryEffect

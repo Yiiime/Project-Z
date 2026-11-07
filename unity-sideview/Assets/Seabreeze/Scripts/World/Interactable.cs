@@ -9,6 +9,7 @@ namespace Seabreeze
         public float radius = 1.7f;
         public bool isDoor;
         public PlaceId destination;
+        public string arrivalId;
         public bool npc;
         public Vector3 promptOffset = new Vector3(0, 2.8f, 0);
         public bool Available => isDoor || (GameSession.Instance != null && GameSession.Instance.Story.IsAvailable(id));
@@ -17,7 +18,12 @@ namespace Seabreeze
             if (!Available)
                 return;
             if (isDoor)
-                GameSession.Instance.Travel(destination);
+            {
+                if (!string.IsNullOrEmpty(arrivalId) && WorldDirector.Instance != null)
+                    WorldDirector.Instance.TravelTo(destination, arrivalId);
+                else
+                    GameSession.Instance.Travel(destination);
+            }
             else
                 GameSession.Instance.Story.Interact(id);
         }
