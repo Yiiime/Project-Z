@@ -4,6 +4,8 @@ import { Store } from "../lib/store.mjs";
 import { Catalog, clone } from "../lib/catalog.mjs";
 import { Engine } from "../lib/engine.mjs";
 
+import { portraitExpression } from "../lib/portrait-expression.mjs";
+
 class FixtureProvider {
   constructor(scenario = "default") {
     this.scenario = scenario;
@@ -169,4 +171,10 @@ test("real-runtime prompt documents denial-safe Z expression selection", async (
   assert.match(prompt, /否定/);
   assert.match(prompt, /纠正/);
   assert.match(prompt, /最终生成的台词/);
+});
+
+test("an affirmative line from the standalone yields a smile, including when metadata is absent", () => {
+  assert.equal(portraitExpression("z", null, "行，那就笑一个——不过你这要求也太突然了吧。"), "happy");
+  assert.equal(portraitExpression("z", null, "她说：“哈哈，我笑一个。”"), null);
+  assert.equal(portraitExpression("z", "happy", "不了，我不想笑。"), null);
 });

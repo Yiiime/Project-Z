@@ -54,6 +54,7 @@ const CRY_CUES = [
 ];
 
 const DIRECT_LAUGH_CUES = [
+  "(?:^|[，,。.!！?？、\\s])(?:那(?:我)?就|我这就|那我来|这就)(?:给你)?笑(?:一下|一个|给你看)",
   "^(?:哈哈+|呵呵+|嘿嘿+|嘻嘻+)(?:[，,。.!！?？、\\s]|$)",
   "(?:^|[，,。.!！?？、\\s])(?:好|好吧|可以|行|那我|我来|我先)[，,。.!！?？、\\s]{0,2}(?:我?[来先]?)?笑(?:一下|一个|给你看)?",
   "(?:^|[，,。.!！?？、\\s])我(?:来|先)?笑(?:一下|一个|给你看)?",
@@ -65,7 +66,7 @@ const DIRECT_LAUGH_CUES = [
  * cannot force a portrait state.
  */
 export function inferPortraitExpression(value) {
-  const line = typeof value === "string" ? value.trim().toLowerCase() : "";
+  const line = typeof value === "string" ? value.trim().toLowerCase().replace(/“[^”]*”|「[^」]*」|‘[^’]*’|"[^"]*"/g, "") : "";
   if (!line) return null;
   if (!negatedCue(line, ["笑"]) && hasCue(line, DIRECT_LAUGH_CUES))
     return "happy";
@@ -86,6 +87,7 @@ export function portraitExpression(actorId, value, line = "") {
   if (!normalized || normalized === "neutral") return fallback();
   const canonical = Z_PORTRAIT_EXPRESSION_ALIASES[normalized] || normalized;
   if (!EXPRESSION_SET.has(canonical)) return fallback();
+  if (canonical === "happy" && negatedCue(String(line), ["笑"])) return null;
   if (
     (canonical === "cry" || canonical === "bawl") &&
     negatedCue(String(line).toLowerCase(), CRY_CUES)
