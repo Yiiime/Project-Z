@@ -19,7 +19,8 @@ namespace Seabreeze.Editor
             File.WriteAllText(Path.Combine(folder,"build-report.txt"),$"Result: {report.summary.result}\nUnity: {Application.unityVersion}\nErrors: {report.summary.totalErrors}\nWarnings: {report.summary.totalWarnings}\nSize: {report.summary.totalSize}\n");
             if(report.summary.result!=BuildResult.Succeeded)throw new InvalidOperationException("Unified eight-role build failed.");
             string service=Path.GetFullPath("Tools/MemoryLab");
-            bool portraitDemo = Environment.GetCommandLineArgs().Contains("-zPortraitDemo");
+            bool dualPortraitDemo = Environment.GetCommandLineArgs().Contains("-litingZPortraitDemo");
+            bool portraitDemo = dualPortraitDemo || Environment.GetCommandLineArgs().Contains("-zPortraitDemo");
             var serviceFiles = new[] { "server.mjs", "launcher.mjs", "start.sh", "package.json", "package-lock.json", "lib", "public", "content", "licenses" };
             foreach(string file in Directory.GetFiles(service,"*",SearchOption.AllDirectories))
             {
@@ -40,10 +41,10 @@ namespace Seabreeze.Editor
             MakeExecutable(Path.Combine(folder,"启动七人记忆试玩.command"));
             if(File.Exists(Path.Combine(folder,"Runtime/node")))MakeExecutable(Path.Combine(folder,"Runtime/node"));
             if (portraitDemo)
-                PackagePortraitDemo(folder);
+                PackagePortraitDemo(folder, dualPortraitDemo);
             Debug.Log("Unified eight-role playable built: "+destination);
         }
-        static void PackagePortraitDemo(string folder)
+        static void PackagePortraitDemo(string folder, bool dualPortraitDemo)
         {
             if (!File.Exists(Path.Combine(folder, "Runtime/node")))
                 throw new InvalidOperationException("Supply a standalone Node executable with -memoryNode.");
@@ -56,9 +57,12 @@ namespace Seabreeze.Editor
                 install.WaitForExit();
                 if (install.ExitCode != 0) throw new IOException("Could not package the locked MemoryLab dependencies.");
             }
-            foreach (var file in new[] { "portrait-playtest.mjs", "直接试玩Z.command" })
+            var launcher = dualPortraitDemo ? "直接与李庭和Z聊天.command" : "直接试玩Z.command";
+            foreach (var file in new[] { "portrait-playtest.mjs", launcher })
                 File.Copy(Path.Combine("Tools/PortraitDemo", file), Path.Combine(folder, file), true);
-            MakeExecutable(Path.Combine(folder, "直接试玩Z.command"));
+            MakeExecutable(Path.Combine(folder, launcher));
+            if (dualPortraitDemo)
+                File.Copy(Path.Combine("Tools/PortraitDemo", "李庭与Z试玩说明.md"), Path.Combine(folder, "试玩说明.md"), true);
         }
         static void MakeExecutable(string path)
         {

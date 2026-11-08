@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "actorId": "liting",
+  "portrait": "Memory/Portraits/Liting",
+  "profile": {
+    "path": "Assets/Seabreeze/Resources/Memory/Portraits/Liting.asset",
+    "guid": "15f85cd9afea84c9ab686a62b7187557"
+  },
+  "prefab": {
+    "path": "Assets/Seabreeze/Live2D/Models/Liting/Model.prefab",
+    "guid": "d53a7c55416b44c089ffd3107971fefc"
+  },
+  "model3": {
+    "path": "Assets/Seabreeze/Live2D/Models/Liting/Model.model3.json",
+    "guid": "e142a182ee6e446a78cc171d216cd193"
+  },
+  "modelFiles": [
+    "Assets/Seabreeze/Live2D/Models/Liting/Model.moc3",
+    "Assets/Seabreeze/Live2D/Models/Liting/Model.physics3.json",
+    "Assets/Seabreeze/Live2D/Models/Liting/Model.cdi3.json",
+    "Assets/Seabreeze/Live2D/Models/Liting/texture_00.png",
+    "Assets/Seabreeze/Live2D/Models/Liting/neutral.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Liting/smile.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Liting/surprise.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Liting/starry_curious.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Liting/curious.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Liting/blush.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Liting/angry.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Liting/disappointed.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Liting/cry.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Liting/bawl_dry.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Liting/bawl.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Liting/gloom.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Liting/sigh_in.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Liting/sigh.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Liting/wink.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Liting/laugh.exp3.json"
+  ],
+  "defaultEmotion": "neutral",
+  "expressions": {
+    "neutral": {
+      "path": "Assets/Seabreeze/Live2D/Models/Liting/neutral.exp3.asset",
+      "guid": "cbfacd69260ad47d7916381987b0fe02"
+    },
+    "smile": {
+      "path": "Assets/Seabreeze/Live2D/Models/Liting/smile.exp3.asset",
+      "guid": "db480f1c65e8e42978cdbe1a8c31f7fe"
+    },
+    "surprise": {
+      "path": "Assets/Seabreeze/Live2D/Models/Liting/surprise.exp3.asset",
+      "guid": "d5e644a01fee148009755d701259485a"
+    },
+    "starry_curious": {
+      "path": "Assets/Seabreeze/Live2D/Models/Liting/starry_curious.exp3.asset",
+      "guid": "4bb7faa2ef87e43a5b18da164bd1ab44"
+    },
+    "curious": {
+      "path": "Assets/Seabreeze/Live2D/Models/Liting/curious.exp3.asset",
+      "guid": "cdd66bc17cf6d4ed786cf52f7cf69b64"
+    },
+    "blush": {
+      "path": "Assets/Seabreeze/Live2D/Models/Liting/blush.exp3.asset",
+      "guid": "e87ab13199bf9431ea9a2d772bf5490b"
+    },
+    "angry": {
+      "path": "Assets/Seabreeze/Live2D/Models/Liting/angry.exp3.asset",
+      "guid": "8ad0e31a41d1f40dca4b1ef41e6ec82a"
+    },
+    "disappointed": {
+      "path": "Assets/Seabreeze/Live2D/Models/Liting/disappointed.exp3.asset",
+      "guid": "4c10f24332905468e9d15a21d58bcdac"
+    },
+    "cry": {
+      "path": "Assets/Seabreeze/Live2D/Models/Liting/cry.exp3.asset",
+      "guid": "69ebedc7dc6a9431f91d3b0121f364d8"
+    },
+    "bawl_dry": {
+      "path": "Assets/Seabreeze/Live2D/Models/Liting/bawl_dry.exp3.asset",
+      "guid": "ff1732de9ba78474397f0687aad60c7f"
+    },
+    "bawl": {
+      "path": "Assets/Seabreeze/Live2D/Models/Liting/bawl.exp3.asset",
+      "guid": "a04c3c80ae6d24009b0dd5189d6e725f"
+    },
+    "gloom": {
+      "path": "Assets/Seabreeze/Live2D/Models/Liting/gloom.exp3.asset",
+      "guid": "023b046049d7043c18a4771a9ac7b409"
+    },
+    "sigh_in": {
+      "path": "Assets/Seabreeze/Live2D/Models/Liting/sigh_in.exp3.asset",
+      "guid": "57c723e522839483da653f78719a89ea"
+    },
+    "sigh": {
+      "path": "Assets/Seabreeze/Live2D/Models/Liting/sigh.exp3.asset",
+      "guid": "36d97a406315a4dc992705242ecdbe29"
+    },
+    "wink": {
+      "path": "Assets/Seabreeze/Live2D/Models/Liting/wink.exp3.asset",
+      "guid": "b17a7de5c0be544fbac3f3fdda1c4617"
+    },
+    "laugh": {
+      "path": "Assets/Seabreeze/Live2D/Models/Liting/laugh.exp3.asset",
+      "guid": "abe87fedbe5da4be4807a3b442fbb8e4"
+    },
+    "happy": {
+      "path": "Assets/Seabreeze/Live2D/Models/Liting/smile.exp3.asset",
+      "guid": "db480f1c65e8e42978cdbe1a8c31f7fe"
+    },
+    "sad": {
+      "path": "Assets/Seabreeze/Live2D/Models/Liting/disappointed.exp3.asset",
+      "guid": "4c10f24332905468e9d15a21d58bcdac"
+    },
+    "shy": {
+      "path": "Assets/Seabreeze/Live2D/Models/Liting/blush.exp3.asset",
+      "guid": "e87ab13199bf9431ea9a2d772bf5490b"
+    },
+    "troubled": {
+      "path": "Assets/Seabreeze/Live2D/Models/Liting/curious.exp3.asset",
+      "guid": "cdd66bc17cf6d4ed786cf52f7cf69b64"
+    },
+    "bawling": {
+      "path": "Assets/Seabreeze/Live2D/Models/Liting/bawl.exp3.asset",
+      "guid": "a04c3c80ae6d24009b0dd5189d6e725f"
+    }
+  },
+  "animator": null,
+  "parameters": {
+    "mouthParameter": "ParamMouthOpenY",
+    "breathParameter": "ParamBreath",
+    "leftEyeParameter": "ParamEyeLOpen",
+    "rightEyeParameter": "ParamEyeROpen"
+  },
+  "rendererIndex": 1,
+  "renderLayer": 30,
+  "textureHeight": 1200
+}

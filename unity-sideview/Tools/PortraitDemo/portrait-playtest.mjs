@@ -10,7 +10,9 @@ const root = dirname(fileURLToPath(import.meta.url));
 const bundle = join(root, "ProjectZSevenMemory.app", "Contents");
 const executable = execFileSync("/usr/libexec/PlistBuddy",
   ["-c", "Print :CFBundleExecutable", join(bundle, "Info.plist")], {encoding: "utf8"}).trim();
-const session = mkdtempSync(join(tmpdir(), "project-z-dialogue-"));
+const args = process.argv.slice(2);
+const duo = args.includes("-litingZPortraitPreview");
+const session = mkdtempSync(join(tmpdir(), duo ? "project-liting-z-dialogue-" : "project-z-dialogue-"));
 const saveRoot = process.env.Z_MEMORY_SAVE_ROOT || join(session, "save");
 mkdirSync(saveRoot, {recursive: true});
 const configPath = process.env.Z_MEMORY_CONFIG ||
@@ -25,8 +27,8 @@ if (!service.status().configured) {
   console.log("首次试玩请先在浏览器配置聊天模型：" + url + "/settings");
   spawn("/usr/bin/open", [url + "/settings"], {stdio: "ignore"}).unref();
 }
-const args = process.argv.slice(2);
-const player = spawn(join(bundle, "MacOS", executable), ["-zPortraitPreview", "-memoryService", url,
+const previewArgs = duo ? [] : ["-zPortraitPreview"];
+const player = spawn(join(bundle, "MacOS", executable), [...previewArgs, "-memoryService", url,
   "-screen-fullscreen", "0", "-screen-width", "1440", "-screen-height", "900",
   "-logFile", join(session, "player.log"), ...args],
   {env: {...process.env, Z_MEMORY_SAVE_ROOT: saveRoot}, stdio: "inherit"});
