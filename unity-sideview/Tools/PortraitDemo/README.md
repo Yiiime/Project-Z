@@ -14,6 +14,8 @@ bash unity-sideview/Tools/native-rtc/build-macos.sh
   -memoryBuild "$PWD/unity-sideview/Builds/ZDialogue/ProjectZSevenMemory.app" \
   -memoryNode "$NODE_STANDALONE" -zPortraitDemo \
   -logFile "$TMPDIR/z-dialogue-build.log"
+codesign --force --sign - "$PWD/unity-sideview/Builds/ZDialogue/ProjectZSevenMemory.app"
+codesign --verify --strict "$PWD/unity-sideview/Builds/ZDialogue/ProjectZSevenMemory.app"
 ```
 
 **复核真实聊天。** 在已配置模型的机器上，在试玩目录运行下行命令。它会通过游戏的输入框发送台词，并把说话、表情保持、恢复待机的画面与检测结果写入指定目录。
