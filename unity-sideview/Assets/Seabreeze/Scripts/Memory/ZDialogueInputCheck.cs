@@ -235,7 +235,10 @@ namespace Seabreeze
             report.finalEyeSmile = finalEye; report.finalSpeech = finalSpeech; report.reply = ExtractReply(history.text); report.transcript = history.text; report.committedReplies = memory.Conversations.CommittedNpcLines - before;
             if (ended)
             {
-                yield return new WaitForSecondsRealtime(.5f); report.finalEyeSmile = eye.Value; report.finalSpeech = speech.Value;
+                yield return new WaitForSecondsRealtime(.5f);
+                // The Animator restores its baseline before Cubism applies the visible face in LateUpdate.
+                yield return new WaitForEndOfFrame();
+                report.finalEyeSmile = eye.Value; report.finalSpeech = speech.Value;
                 report.smileHeldAtEnd = report.finalEyeSmile >= report.neutralEyeSmile + SmileDelta;
                 report.endedDrawables = ReadDrawableSamples(model);
                 report.smileDrawableChanged = HasDrawableChange(report.neutralDrawables, report.smileDrawables);

@@ -169,8 +169,11 @@ namespace Seabreeze
             while (Time.unscaledTime < until)
             {
                 peak = Mathf.Max(peak, speech.Value);
-                if (speech.Value > .25f && !report.speechObserved) yield return SaveFrame("02-speaking.png");
-                report.speechObserved |= speech.Value > .25f;
+                if (speech.Value > .25f && !report.speechObserved)
+                {
+                    report.speechObserved = true;
+                    yield return SaveFrame("02-speaking.png");
+                }
                 yield return new WaitForEndOfFrame();
             }
             report.speechPeak = peak; report.speechFinal = speech.Value; report.speechReturnedIdle = speech.Value < .08f;
