@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Project Z 岛内对话角色接入 v1",
+  "description": "从角色目录、Unity Profile 和 Cubism 模型描述生成的单角色交接记录。每位作者在 Unity 配置自己的 Profile 后导出。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "actorId", "portrait", "profile", "prefab", "model3", "modelFiles", "defaultEmotion", "expressions", "animator", "parameters", "rendererIndex", "renderLayer", "textureHeight"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "actorId": {"type": "string", "minLength": 1, "description": "沿用角色目录的 id，须与 Profile.characterId 一致。"},
+    "portrait": {"type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.{1,2}(?:/|$))(?!.*\\.asset$)[^\\\\]+$", "description": "Resources 相对加载键，省略扩展名。"},
+    "profile": {"$ref": "#/$defs/reference"},
+    "prefab": {"$ref": "#/$defs/reference"},
+    "model3": {"$ref": "#/$defs/reference"},
+    "modelFiles": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"$ref": "#/$defs/path"}, "description": "模型描述引用的 MOC3、图集和按需附带的文件。"},
+    "defaultEmotion": {"type": "string", "minLength": 1},
+    "expressions": {"type": "object", "propertyNames": {"minLength": 1}, "additionalProperties": {"$ref": "#/$defs/optionalReference"}, "description": "角色的表情键对应 Unity 表情资产。中性基准可以为 null。"},
+    "animator": {"$ref": "#/$defs/optionalReference"},
+    "parameters": {
+      "type": "object", "additionalProperties": false,
+      "required": ["mouthParameter", "breathParameter", "leftEyeParameter", "rightEyeParameter"],
+      "properties": {
+        "mouthParameter": {"$ref": "#/$defs/parameter"}, "breathParameter": {"$ref": "#/$defs/parameter"},
+        "leftEyeParameter": {"$ref": "#/$defs/parameter"}, "rightEyeParameter": {"$ref": "#/$defs/parameter"}
+      },
+      "description": "Profile 声明的模型参数 ID。归档时应在目标模型上另验绑定与效果。"
+    },
+    "rendererIndex": {"type": "integer", "minimum": 0},
+    "renderLayer": {"type": "integer", "minimum": 8, "maximum": 31},
+    "textureHeight": {"type": "integer", "minimum": 256, "maximum": 2048, "description": "对话肖像 RenderTexture 的高度；主图集导入上限由纹理 .meta 控制。"}
+  },
+  "$defs": {
+    "path": {"type": "string", "pattern": "^Assets/(?!.*(?:^|/)\\.{1,2}(?:/|$))(?!\\.{1,2}(?:/|$))[^\\\\]+$"},
+    "reference": {
+      "type": "object", "additionalProperties": false, "required": ["path", "guid"],
+      "properties": {"path": {"$ref": "#/$defs/path"}, "guid": {"type": "string", "pattern": "^[0-9a-f]{32}$"}}
+    },
+    "optionalReference": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/reference"}]},
+    "parameter": {"type": ["string", "null"], "minLength": 1}
+  }
+}
