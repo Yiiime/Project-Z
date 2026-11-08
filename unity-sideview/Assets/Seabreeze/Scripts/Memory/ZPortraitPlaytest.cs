@@ -88,7 +88,7 @@ namespace Seabreeze
 
         void Update()
         {
-            if (output != null && Time.realtimeSinceStartup > deadline)
+            if (deadline > 0 && output != null && Time.realtimeSinceStartup > deadline)
             {
                 File.WriteAllText(Path.Combine(output, "result.txt"), "TIMEOUT\n");
                 Debug.LogError("Z portrait capture timed out.");
@@ -181,7 +181,7 @@ namespace Seabreeze
                 bool started = portrait.PlayPortraitMotion(pair.Key); bool reached = false; float end = Time.unscaledTime + 4;
                 while (Time.unscaledTime < end)
                 {
-                    if (parameters[pair.Value].Value > .8f) { reached = true; yield return SaveFrame(pair.Key + ".png"); }
+                    if (!reached && parameters[pair.Value].Value > .8f) { reached = true; yield return SaveFrame(pair.Key + ".png"); }
                     yield return null;
                 }
                 bool reset = parameters[pair.Value].Value < .1f;

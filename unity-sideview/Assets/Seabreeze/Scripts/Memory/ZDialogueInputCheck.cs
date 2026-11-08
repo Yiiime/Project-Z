@@ -195,6 +195,7 @@ namespace Seabreeze
             report.neutralEyeSmile = eye.Value;
             report.neutralDrawables = ReadDrawableSamples(model);
             report.missingDrawables = report.neutralDrawables.Where(s => s == null || !s.found).Select(s => s?.id ?? "unknown").ToArray();
+            yield return SaveFrame("neutral.png");
             int before = memory.Conversations.CommittedNpcLines;
             input.text = report.prompt; input.ActivateInputField(); input.onSubmit.Invoke(input.text);
             report.inputSubmitted = input.text.Length == 0 && history.text.Contains(report.prompt);
@@ -261,6 +262,7 @@ namespace Seabreeze
                     if (revealed && !memory.Conversations.Sending)
                     {
                         report.secondReplyObserved = true;
+                        report.secondReply = ExtractReply(history.text);
                         report.secondStayedNeutral = maxSob < .08f && maxQuiet < .08f;
                         break;
                     }
