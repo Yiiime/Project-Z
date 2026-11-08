@@ -29,6 +29,13 @@ namespace Seabreeze
         public bool proceduralIdle = true;
         public bool proceduralTalk = true;
         public float expressionFadeSeconds = .24f;
+        [Tooltip("Clear authored expression parameters to their model defaults when this profile changes expression state.")]
+        public bool clearExpressionOnInterrupt;
+        [Tooltip("Write the expression index and mix parameters directly instead of interpolating through other faces.")]
+        public bool discreteExpressionParameters;
+        public string expressionIndexParameter = "ParamExpression";
+        public string expressionMixParameter = "ParamExpressionMix";
+        public ExpressionTransition[] expressionTransitions = Array.Empty<ExpressionTransition>();
         public string mouthParameter = "ParamMouthOpenY";
         public string breathParameter = "ParamBreath";
         public string leftEyeParameter = "ParamEyeLOpen";
@@ -41,11 +48,28 @@ namespace Seabreeze
             public string emotion;
             public CubismExpressionData expression;
         }
+
+        [Serializable]
+        public sealed class ExpressionTransition
+        {
+            public string finalEmotion;
+            public string introEmotion;
+            [Min(.01f)] public float introSeconds = .18f;
+        }
+
         public CubismExpressionData FindExpression(string emotion)
         {
-            foreach (var binding in expressions)
+            foreach (var binding in expressions ?? Array.Empty<ExpressionBinding>())
                 if (binding != null && string.Equals(binding.emotion, emotion, StringComparison.OrdinalIgnoreCase))
                     return binding.expression;
+            return null;
+        }
+
+        public ExpressionTransition FindExpressionTransition(string finalEmotion)
+        {
+            foreach (var transition in expressionTransitions ?? Array.Empty<ExpressionTransition>())
+                if (transition != null && string.Equals(transition.finalEmotion, finalEmotion, StringComparison.OrdinalIgnoreCase))
+                    return transition;
             return null;
         }
     }

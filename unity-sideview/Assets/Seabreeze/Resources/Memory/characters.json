@@ -30,7 +30,8 @@
       "place": "Cafe",
       "locationId": "cafe",
       "x": -2,
-      "color": "#A8CFAD"
+      "color": "#A8CFAD",
+      "portrait": "Memory/Portraits/Liting"
     },
     {
       "id": "axing",

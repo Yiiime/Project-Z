@@ -12,6 +12,8 @@ namespace Seabreeze.Editor
         public static void Build()
         {
             if(EditorApplication.isPlayingOrWillChangePlaymode)throw new InvalidOperationException("Build from Edit mode.");
+            bool dualPortraitDemo = Environment.GetCommandLineArgs().Contains("-litingZPortraitDemo");
+            if (dualPortraitDemo) LitingR5ImportSetup.ValidateBatch();
             string destination=Path.GetFullPath(Arg("-memoryBuild","Builds/SevenMemory/ProjectZSevenMemory.app"));
             Directory.CreateDirectory(Path.GetDirectoryName(destination));
             var report=BuildPipeline.BuildPlayer(new BuildPlayerOptions { scenes=EditorBuildSettings.scenes.Where(s=>s.enabled).Select(s=>s.path).ToArray(),locationPathName=destination,target=BuildTarget.StandaloneOSX,options=BuildOptions.None });
@@ -19,7 +21,6 @@ namespace Seabreeze.Editor
             File.WriteAllText(Path.Combine(folder,"build-report.txt"),$"Result: {report.summary.result}\nUnity: {Application.unityVersion}\nErrors: {report.summary.totalErrors}\nWarnings: {report.summary.totalWarnings}\nSize: {report.summary.totalSize}\n");
             if(report.summary.result!=BuildResult.Succeeded)throw new InvalidOperationException("Unified eight-role build failed.");
             string service=Path.GetFullPath("Tools/MemoryLab");
-            bool dualPortraitDemo = Environment.GetCommandLineArgs().Contains("-litingZPortraitDemo");
             bool portraitDemo = dualPortraitDemo || Environment.GetCommandLineArgs().Contains("-zPortraitDemo");
             var serviceFiles = new[] { "server.mjs", "launcher.mjs", "start.sh", "package.json", "package-lock.json", "lib", "public", "content", "licenses" };
             foreach(string file in Directory.GetFiles(service,"*",SearchOption.AllDirectories))

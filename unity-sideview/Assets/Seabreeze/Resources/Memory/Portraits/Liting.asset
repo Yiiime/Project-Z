@@ -1,0 +1,104 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20658eea1de5e4e48acec160054bac1e, type: 3}
+  m_Name: Liting
+  m_EditorClassIdentifier: Assembly-CSharp::Seabreeze.Live2DModelProfile
+  prefab: {fileID: 8293077782411158446, guid: d53a7c55416b44c089ffd3107971fefc, type: 3}
+  characterId: liting
+  rendererIndex: 1
+  renderLayer: 30
+  modelPosition: {x: 0, y: 0, z: 0}
+  modelScale: 1
+  cameraCenter: {x: 0, y: 0}
+  orthographicSize: 2
+  autoFrame: 1
+  visibleHeight: 0.78
+  verticalFocus: 0.62
+  uvRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  textureHeight: 1200
+  defaultEmotion: neutral
+  expressions:
+  - emotion: neutral
+    expression: {fileID: 11400000, guid: cbfacd69260ad47d7916381987b0fe02, type: 2}
+  - emotion: smile
+    expression: {fileID: 11400000, guid: db480f1c65e8e42978cdbe1a8c31f7fe, type: 2}
+  - emotion: surprise
+    expression: {fileID: 11400000, guid: d5e644a01fee148009755d701259485a, type: 2}
+  - emotion: starry_curious
+    expression: {fileID: 11400000, guid: 4bb7faa2ef87e43a5b18da164bd1ab44, type: 2}
+  - emotion: curious
+    expression: {fileID: 11400000, guid: cdd66bc17cf6d4ed786cf52f7cf69b64, type: 2}
+  - emotion: blush
+    expression: {fileID: 11400000, guid: e87ab13199bf9431ea9a2d772bf5490b, type: 2}
+  - emotion: angry
+    expression: {fileID: 11400000, guid: 8ad0e31a41d1f40dca4b1ef41e6ec82a, type: 2}
+  - emotion: disappointed
+    expression: {fileID: 11400000, guid: 4c10f24332905468e9d15a21d58bcdac, type: 2}
+  - emotion: cry
+    expression: {fileID: 11400000, guid: 69ebedc7dc6a9431f91d3b0121f364d8, type: 2}
+  - emotion: bawl_dry
+    expression: {fileID: 11400000, guid: ff1732de9ba78474397f0687aad60c7f, type: 2}
+  - emotion: bawl
+    expression: {fileID: 11400000, guid: a04c3c80ae6d24009b0dd5189d6e725f, type: 2}
+  - emotion: gloom
+    expression: {fileID: 11400000, guid: 023b046049d7043c18a4771a9ac7b409, type: 2}
+  - emotion: sigh_in
+    expression: {fileID: 11400000, guid: 57c723e522839483da653f78719a89ea, type: 2}
+  - emotion: sigh
+    expression: {fileID: 11400000, guid: 36d97a406315a4dc992705242ecdbe29, type: 2}
+  - emotion: wink
+    expression: {fileID: 11400000, guid: b17a7de5c0be544fbac3f3fdda1c4617, type: 2}
+  - emotion: laugh
+    expression: {fileID: 11400000, guid: abe87fedbe5da4be4807a3b442fbb8e4, type: 2}
+  - emotion: happy
+    expression: {fileID: 11400000, guid: db480f1c65e8e42978cdbe1a8c31f7fe, type: 2}
+  - emotion: sad
+    expression: {fileID: 11400000, guid: 4c10f24332905468e9d15a21d58bcdac, type: 2}
+  - emotion: shy
+    expression: {fileID: 11400000, guid: e87ab13199bf9431ea9a2d772bf5490b, type: 2}
+  - emotion: troubled
+    expression: {fileID: 11400000, guid: cdd66bc17cf6d4ed786cf52f7cf69b64, type: 2}
+  - emotion: bawling
+    expression: {fileID: 11400000, guid: a04c3c80ae6d24009b0dd5189d6e725f, type: 2}
+  animatorController: {fileID: 0}
+  idleState: Idle
+  talkState: Talk
+  proceduralIdle: 1
+  proceduralTalk: 1
+  expressionFadeSeconds: 0.24
+  clearExpressionOnInterrupt: 1
+  discreteExpressionParameters: 1
+  expressionIndexParameter: ParamExpression
+  expressionMixParameter: ParamExpressionMix
+  expressionTransitions:
+  - finalEmotion: bawl
+    introEmotion: bawl_dry
+    introSeconds: 0.18
+  - finalEmotion: sigh
+    introEmotion: sigh_in
+    introSeconds: 0.18
+  mouthParameter: ParamMouthOpenY
+  breathParameter: ParamBreath
+  leftEyeParameter: ParamEyeLOpen
+  rightEyeParameter: ParamEyeROpen
+  authoringNotes: "\u674E\u5EAD v02-r5 \u539F\u751F\u6B63\u5F0F\u8FD0\u884C\u5305\uFF1B\u8868\u60C5\u79BB\u6563\u76F4\u5199
+    ParamExpression \u4E0E ParamExpressionMix\uFF0C\u53E3\u578B\u53EA\u9A71\u52A8
+    ParamMouthOpenY\u3002\u670D\u52A1\u7AEF\u5355\u952E bawl \u81EA\u52A8\u77ED\u64AD
+    bawl_dry\u2192bawl\uFF0C\u5355\u952E sigh \u81EA\u52A8\u77ED\u64AD sigh_in\u2192sigh\uFF1B\u540C\u60C5\u7EEA
+    \u8BF4\u8BDD/\u505C\u5634\u4E0D\u91CD\u542F\uFF0C\u6362\u8868\u60C5\u5148\u6E05\u7406\uFF1Btroubled \u517C\u5BB9 curious
+    \u522B\u540D\u3002Mask \u4F7F\u7528 Cubism \u539F\u751F Eye_Mask_L/Eye_Mask_R \u4E0E
+    CubismMaskTextureController\uFF0CrendererIndex=1 \u6307\u5411\u9879\u76EE Cubism URP renderer\u3002"

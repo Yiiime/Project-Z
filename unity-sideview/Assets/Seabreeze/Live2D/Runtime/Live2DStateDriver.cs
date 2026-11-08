@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Live2D.Cubism.Core;
 using Live2D.Cubism.Framework;
+using Live2D.Cubism.Framework.Expression;
 using UnityEngine;
 
 namespace Seabreeze
@@ -26,6 +27,11 @@ namespace Seabreeze
         readonly Dictionary<string, float> currentValues = new Dictionary<string, float>();
         readonly HashSet<string> expressionParameters = new HashSet<string>();
         Live2DModelProfile profile;
+        CubismExpressionData activeExpression;
+        CubismExpressionData appliedExpression;
+        Live2DModelProfile.ExpressionTransition activeTransition;
+        float transitionElapsed;
+        bool transitionRunning;
         bool talking;
         bool portraitMotionActive;
         float phase;
@@ -42,6 +48,11 @@ namespace Seabreeze
             targets.Clear();
             currentValues.Clear();
             expressionParameters.Clear();
+            activeExpression = null;
+            appliedExpression = null;
+            activeTransition = null;
+            transitionElapsed = 0f;
+            transitionRunning = false;
 
             var model = GetComponent<CubismModel>();
             if (model == null || profile == null) return;
@@ -72,27 +83,37 @@ namespace Seabreeze
             if (profile == null) return;
             portraitMotionActive = false;
             talking = isTalking;
-            targets.Clear();
-            // Keep the current authored face as the smoothing source when only
-            // the speaking flag changes. Resetting ParamMouthForm here would
-            // flash a smile back to neutral for one frame before its target
-            // returns to the same expression.
+            // Liting's profile maps the server's single bawl/sigh key to the
+            // short authored intro bawl_dry/sigh_in before the final state.
+            var expression = profile.FindExpression(emotion);
+            // MemoryDialogueView submits the same emotion repeatedly while text types.
+            // Do not restart a timed intro just because only the talking flag changed.
+            if (activeExpression == expression) return;
+
+            if (profile.clearExpressionOnInterrupt && (activeExpression != null || appliedExpression != null))
+                ClearExpressionParametersImmediate();
+            activeExpression = expression;
             ResetNativeMotionParameters(false);
-            foreach (var id in expressionParameters)
+            activeTransition = null;
+            transitionElapsed = 0f;
+            transitionRunning = false;
+
+            if (expression != null)
             {
-                if (parameters.TryGetValue(id, out var p)) targets[id] = p.DefaultValue;
+                var transition = profile.FindExpressionTransition(emotion);
+                var intro = transition == null ? null : profile.FindExpression(transition.introEmotion);
+                if (intro != null && intro != expression && transition.introSeconds > .001f)
+                {
+                    activeTransition = transition;
+                    transitionRunning = true;
+                    appliedExpression = intro;
+                    ApplyExpression(intro);
+                    return;
+                }
             }
 
-            var expression = profile.FindExpression(emotion);
-            if (expression == null) return;
-            foreach (var entry in expression.Parameters)
-            {
-                if (!parameters.TryGetValue(entry.Id, out var p)) continue;
-                float value = entry.Value;
-                if (entry.Blend == CubismParameterBlendMode.Additive) value += p.DefaultValue;
-                else if (entry.Blend == CubismParameterBlendMode.Multiply) value *= p.DefaultValue;
-                targets[entry.Id] = value;
-            }
+            appliedExpression = expression;
+            ApplyExpression(expression);
         }
 
         /// <summary>
@@ -106,7 +127,12 @@ namespace Seabreeze
 
             portraitMotionActive = true;
             talking = false;
+            activeExpression = null;
+            appliedExpression = null;
             targets.Clear();
+            activeTransition = null;
+            transitionElapsed = 0f;
+            transitionRunning = false;
             ResetNativeMotionParameters(true);
             return true;
         }
@@ -115,14 +141,45 @@ namespace Seabreeze
         public void ClearPortraitMotion()
         {
             portraitMotionActive = false;
+            activeExpression = null;
+            appliedExpression = null;
             ResetNativeMotionParameters(true);
         }
 
         public void OnLateUpdate()
         {
+            StepInternal(Time.unscaledDeltaTime, true);
+        }
+
+        /// <summary>
+        /// Advances the driver with an explicit unscaled delta. The Editor batch
+        /// validator uses this to exercise timed expression transitions without
+        /// entering Play mode; runtime uses OnLateUpdate above.
+        /// </summary>
+        public void StepForValidation(float unscaledDeltaSeconds)
+        {
+            StepInternal(unscaledDeltaSeconds, false);
+        }
+
+        void StepInternal(float unscaledDeltaSeconds, bool capDelta)
+        {
             if (!enabled || profile == null) return;
-            float dt = Mathf.Min(Mathf.Max(0f, Time.unscaledDeltaTime), .1f);
+            float dt = Mathf.Max(0f, unscaledDeltaSeconds);
+            if (capDelta) dt = Mathf.Min(dt, .1f);
             phase += dt;
+
+            if (transitionRunning && activeTransition != null)
+            {
+                transitionElapsed += dt;
+                if (transitionElapsed >= activeTransition.introSeconds)
+                {
+                    transitionRunning = false;
+                    activeTransition = null;
+                    transitionElapsed = 0f;
+                    appliedExpression = activeExpression;
+                    ApplyExpression(activeExpression);
+                }
+            }
 
             if (!portraitMotionActive)
             {
@@ -130,6 +187,7 @@ namespace Seabreeze
                 foreach (var pair in targets)
                 {
                     if (!parameters.TryGetValue(pair.Key, out var p)) continue;
+                    if (IsDiscreteExpressionParameter(pair.Key)) continue;
                     float current = currentValues.TryGetValue(pair.Key, out var value) ? value : p.DefaultValue;
                     current = Mathf.Lerp(current, Mathf.Clamp(pair.Value, p.MinimumValue, p.MaximumValue), ease);
                     currentValues[pair.Key] = current;
@@ -138,19 +196,64 @@ namespace Seabreeze
 
                 if (profile.proceduralIdle)
                 {
-                    Assign(profile.breathParameter, .5f + .42f * Mathf.Sin(phase * 1.65f));
+                    // Do not overwrite an authored expression parameter while it is held.
+                    // Liting's curious state owns ParamAngleZ=22; the other native
+                    // expressions may resume the gentle idle tilt at their default value.
+                    AssignIdle(profile.breathParameter, .5f + .42f * Mathf.Sin(phase * 1.65f));
                     float blinkPhase = phase % 4.3f;
                     float openness = blinkPhase < .16f ? Mathf.Abs(blinkPhase / .08f - 1) : 1;
-                    Assign(profile.leftEyeParameter, openness);
-                    Assign(profile.rightEyeParameter, openness);
-                    Assign("ParamAngleZ", Mathf.Sin(phase * .73f) * 1.2f);
-                    Assign("ParamBodyAngleZ", Mathf.Sin(phase * .57f) * .7f);
+                    AssignIdle(profile.leftEyeParameter, openness);
+                    AssignIdle(profile.rightEyeParameter, openness);
+                    AssignIdle("ParamAngleZ", Mathf.Sin(phase * .73f) * 1.2f);
+                    AssignIdle("ParamBodyAngleZ", Mathf.Sin(phase * .57f) * .7f);
                 }
 
             }
             // The native speech layer can articulate Z's lines over the authored expression.
             if (profile.proceduralTalk && (!portraitMotionActive || talking))
                 ApplySpeech(dt);
+        }
+
+        void ApplyExpression(CubismExpressionData expression)
+        {
+            targets.Clear();
+            foreach (var id in expressionParameters)
+            {
+                if (parameters.TryGetValue(id, out var parameter))
+                    targets[id] = parameter.DefaultValue;
+            }
+
+            if (expression == null) return;
+            foreach (var entry in expression.Parameters)
+            {
+                if (!parameters.TryGetValue(entry.Id, out var parameter)) continue;
+                float value = entry.Value;
+                if (entry.Blend == CubismParameterBlendMode.Additive) value += parameter.DefaultValue;
+                else if (entry.Blend == CubismParameterBlendMode.Multiply) value *= parameter.DefaultValue;
+
+                if (IsDiscreteExpressionParameter(entry.Id))
+                    SetDiscreteExpressionParameter(entry.Id, value);
+                targets[entry.Id] = value;
+            }
+        }
+
+        bool IsDiscreteExpressionParameter(string id)
+        {
+            if (profile == null || !profile.discreteExpressionParameters || string.IsNullOrEmpty(id)) return false;
+            return string.Equals(id, profile.expressionIndexParameter, StringComparison.Ordinal) ||
+                string.Equals(id, profile.expressionMixParameter, StringComparison.Ordinal);
+        }
+
+        void SetDiscreteExpressionParameter(string id, float value)
+        {
+            if (!parameters.TryGetValue(id, out var parameter)) return;
+            if (string.Equals(id, profile.expressionIndexParameter, StringComparison.Ordinal))
+                value = Mathf.Round(value);
+            else if (string.Equals(id, profile.expressionMixParameter, StringComparison.Ordinal))
+                value = Mathf.Clamp01(value);
+            value = Mathf.Clamp(value, parameter.MinimumValue, parameter.MaximumValue);
+            currentValues[id] = value;
+            parameter.Value = value;
         }
 
         public void SetTalkingDuringMotion(bool value)
@@ -208,6 +311,17 @@ namespace Seabreeze
             p.Value = value;
         }
 
+        void ClearExpressionParametersImmediate()
+        {
+            foreach (var id in expressionParameters)
+            {
+                if (!parameters.TryGetValue(id, out var parameter)) continue;
+                float value = parameter.DefaultValue;
+                currentValues[id] = value;
+                parameter.Value = value;
+            }
+        }
+
         float DefaultValue(string id)
         {
             return HasParameter(id) ? parameters[id].DefaultValue : 0f;
@@ -223,6 +337,16 @@ namespace Seabreeze
             if (!HasParameter(id)) return;
             var p = parameters[id];
             p.Value = Mathf.Clamp(value, p.MinimumValue, p.MaximumValue);
+        }
+
+        void AssignIdle(string id, float value)
+        {
+            if (!HasParameter(id)) return;
+            // An expression target different from the parameter default is authored
+            // pose data. Let it win over procedural idle until SetState clears it.
+            if (targets.TryGetValue(id, out var target) &&
+                !Mathf.Approximately(target, parameters[id].DefaultValue)) return;
+            Assign(id, value);
         }
 
         static string NormalizePortraitMotion(string key)

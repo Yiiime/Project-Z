@@ -1,0 +1,94 @@
+{
+  "Version": 3,
+  "FileReferences": {
+    "Moc": "Model.moc3",
+    "Textures": [
+      "texture_00.png"
+    ],
+    "DisplayInfo": "Model.cdi3.json",
+    "Expressions": [
+      {
+        "Name": "neutral",
+        "File": "neutral.exp3.json"
+      },
+      {
+        "Name": "smile",
+        "File": "smile.exp3.json"
+      },
+      {
+        "Name": "surprise",
+        "File": "surprise.exp3.json"
+      },
+      {
+        "Name": "starry_curious",
+        "File": "starry_curious.exp3.json"
+      },
+      {
+        "Name": "curious",
+        "File": "curious.exp3.json"
+      },
+      {
+        "Name": "blush",
+        "File": "blush.exp3.json"
+      },
+      {
+        "Name": "angry",
+        "File": "angry.exp3.json"
+      },
+      {
+        "Name": "disappointed",
+        "File": "disappointed.exp3.json"
+      },
+      {
+        "Name": "cry",
+        "File": "cry.exp3.json"
+      },
+      {
+        "Name": "bawl_dry",
+        "File": "bawl_dry.exp3.json"
+      },
+      {
+        "Name": "bawl",
+        "File": "bawl.exp3.json"
+      },
+      {
+        "Name": "gloom",
+        "File": "gloom.exp3.json"
+      },
+      {
+        "Name": "sigh_in",
+        "File": "sigh_in.exp3.json"
+      },
+      {
+        "Name": "sigh",
+        "File": "sigh.exp3.json"
+      },
+      {
+        "Name": "wink",
+        "File": "wink.exp3.json"
+      },
+      {
+        "Name": "laugh",
+        "File": "laugh.exp3.json"
+      }
+    ],
+    "Physics": "Model.physics3.json"
+  },
+  "Groups": [
+    {
+      "Target": "Parameter",
+      "Name": "EyeBlink",
+      "Ids": [
+        "ParamEyeLOpen",
+        "ParamEyeROpen"
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Name": "LipSync",
+      "Ids": [
+        "ParamMouthOpenY"
+      ]
+    }
+  ]
+}
