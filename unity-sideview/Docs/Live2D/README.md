@@ -13,3 +13,24 @@ python3 unity-sideview/Tools/Live2D/validate_portrait.py --project-root . --acto
 ```
 
 其他角色将 `--actor` 换成自己的 ID，用 `--print-json` 导出交接记录。静态校验覆盖资源声明与引用。表情表现和自然复位请用实际玩家输入框在构建包里验收。
+
+## 对话 UI 如何接立绘
+
+1. 在 `MemoryDialogueView.BuildPlayerView()` 中给人物留一个矩形容器（`RectTransform`），在容器上保留 `RectMask2D`。将容器传给 `Live2DCharacterView.Initialize(viewport)`。组件会创建铺满容器、允许鼠标点击穿过的 `RawImage`。UI 负责决定容器位置和大小。
+2. 保留对话事件。`OpenPlayer(actorId)` 从当前角色名册加载 Profile。`ShowLine` 根据回复的说话人和表情键驱动立绘，`FinishTyping` 在文字显示完后停止口型并短暂保持表情。退出、换人时沿用 `HidePlayer` 和下一次 `OpenPlayer` 的清理与加载顺序，避免把上一位的脸留在新对话里。
+3. `Live2DCharacterView.ResizeTarget()` 按容器宽高比调整渲染目标和摄像机。移动或等比例缩放容器可沿用取景。框变窄时，两侧可见范围也会缩小。请用目标角色检查头顶、肩膀、挥手和脸旁特效。需要调整时，到该角色 Profile 修改 `visibleHeight`（取景高度）、`verticalFocus`（上下焦点）或 `cameraCenter`（偏移）。`textureHeight` 单独控制立绘渲染清晰度。
+
+### 普通聊天和任务栏布局
+
+锚点以父容器左下角为 `(0,0)`，右上角为 `(1,1)`。下列尺寸使用 Canvas 参考单位。当前参考分辨率为 1920 × 1080。
+
+| 状态 | 立绘框 | 对话列 | 玩家任务面板 |
+| --- | --- | --- | --- |
+| 普通聊天 | 从 `(.025,.015)` 到 `(.51,.95)` | 从 `(.545,.11)` 到 `(.925,.87)`，两端偏移归零 | 隐藏 |
+| 任务栏展开 | 左下锚点不动，右上改为 `(.36,.95)` | 从 `(.385,.11)` 到 `(1,.87)`，右边缘内收 488 | 锚定右上，尺寸 430 × 152，偏移 `(-26,-150)` |
+
+在 `BuildPlayerView()` 设置初始布局，并同步更新 `MemoryDialogueView.Update()` 中 `showTasks` 的两个状态。已有待处理任务或进行中的任务时，界面会切换布局。任务栏收起时恢复普通锚点与偏移。每次切换后保留 `RefreshHistoryLayout()`，让文本重新换行、滚动区保持在最近一条消息。若把入场动画与新布局放在同一节点，还要核对 `SetPose()` 写入的 `anchoredPosition` 和 `localScale`。
+
+**改版验收。** 在普通窗口和较窄窗口中，各走一次普通聊天 → 展开任务栏 → 收起任务栏。核对脸部、动作、文字和发送按钮的边界，确认对话记录可滚动。用正常输入框分别与两位角色聊一句，检查回复时动嘴、说完回待机。再切回首位角色并退出，检查标题、历史记录和立绘都对应当前对话。PR 附上普通布局、任务栏布局的分辨率与实机截图。
+
+参见[对话面板和布局切换](../../Assets/Seabreeze/Scripts/Memory/MemoryDialogueView.cs)、[角色渲染与取景](../../Assets/Seabreeze/Live2D/Runtime/Live2DCharacterView.cs)。
