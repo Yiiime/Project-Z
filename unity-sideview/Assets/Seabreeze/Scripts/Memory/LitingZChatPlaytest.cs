@@ -236,7 +236,7 @@ namespace Seabreeze
             // Panel children use the panel's bottom-left origin. Keep both
             // buttons inside the visible panel; the old negative Y positions
             // rendered them below an empty blue frame.
-            litingButton = UIPrimitives.Button("试玩-李庭", panel.transform, Vector2.zero, Vector2.zero, new Vector2(12, 6), new Vector2(96, 36), "李庭", () => RequestSwitch(LitingId), true, 17);
+            litingButton = UIPrimitives.Button("试玩-李庭", panel.transform, Vector2.zero, Vector2.zero, new Vector2(12, 6), new Vector2(96, 36), "李庭", () => RequestSwitch(LitingId), false, 17);
             zButton = UIPrimitives.Button("试玩-Z", panel.transform, Vector2.zero, Vector2.zero, new Vector2(122, 6), new Vector2(96, 36), "Z", () => RequestSwitch(ZId), false, 17);
         }
 
@@ -311,6 +311,8 @@ namespace Seabreeze
                 yield return WaitForPlayerInput();
                 if (!string.IsNullOrEmpty(setupFailure)) yield break;
                 activeActor = actorId;
+                litingButton.GetComponentInChildren<TextMeshProUGUI>().color = actorId == LitingId ? UIPrimitives.Accent : UIPrimitives.Paper;
+                zButton.GetComponentInChildren<TextMeshProUGUI>().color = actorId == ZId ? UIPrimitives.Accent : UIPrimitives.Paper;
             }
             finally
             {
