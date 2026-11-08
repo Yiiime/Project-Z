@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { Store } from "../lib/store.mjs";
 import { Catalog, clone } from "../lib/catalog.mjs";
 import { Engine } from "../lib/engine.mjs";
+import { portraitExpression } from "../lib/portrait-expression.mjs";
 
 class FixtureProvider {
   constructor(scenario = "default") {
@@ -44,6 +45,12 @@ class FixtureProvider {
       } else {
         expression = this.expression;
       }
+    } else if (context.actor_id === "liting") {
+      if (this.scenario === "smile") {
+        dialogue = "哈哈，今天的豆子还不错。";
+      } else {
+        expression = this.expression;
+      }
     }
     return {
       text: JSON.stringify({
@@ -63,12 +70,12 @@ class FixtureProvider {
   }
 }
 
-function setup(t, scenario = "default") {
+function setup(t, scenario = "default", actor = "z") {
   const store = new Store();
   const provider = new FixtureProvider(scenario);
   const engine = new Engine(store, new Catalog(), provider);
   engine.create("w");
-  engine.focus("w", "z", "player");
+  engine.focus("w", actor, "player");
   t.after(() => store.close());
   return { engine, provider };
 }
@@ -169,4 +176,101 @@ test("real-runtime prompt documents denial-safe Z expression selection", async (
   assert.match(prompt, /否定/);
   assert.match(prompt, /纠正/);
   assert.match(prompt, /最终生成的台词/);
+});
+
+test("Liting r5 maps the complete playable vocabulary and leaves entry phases to Unity", async (t) => {
+  const { engine, provider } = setup(t, "default", "liting");
+  for (const [raw, expected] of [
+    ["neutral", "neutral"],
+    ["smile", "smile"],
+    ["happy", "smile"],
+    ["surprise", "surprise"],
+    ["starry_curious", "starry_curious"],
+    ["curious", "troubled"],
+    ["troubled", "troubled"],
+    ["blush", "blush"],
+    ["angry", "angry"],
+    ["disappointed", "disappointed"],
+    ["cry", "cry"],
+    ["bawl_dry", "bawl"],
+    ["bawling", "bawl"],
+    ["bawl", "bawl"],
+    ["gloom", "gloom"],
+    ["sigh_in", "sigh"],
+    ["sigh", "sigh"],
+    ["wink", "wink"],
+    ["laugh", "laugh"],
+  ]) {
+    provider.expression = raw;
+    const result = await playerReply(engine, "liting", "继续聊聊");
+    assert.equal(result.expression, expected, raw);
+    assert.deepEqual(Object.keys(result.output).sort(), ["action", "dialogue", "info"]);
+    engine.commit("w", result.proposalId);
+  }
+});
+
+test("real-runtime prompt documents Liting semantic keys and Unity-owned entry phases", async (t) => {
+  const { engine, provider } = setup(t, "default", "liting");
+  const job = engine.player("w", "liting", "咖啡还好吗？");
+  const result = (await engine.run("w", 1, job.id))[0];
+  assert.equal(result.status, "proposed", result.validation_error);
+  const prompt = provider.calls.at(-1).messages[0].content;
+  const encodedContract = prompt.slice(
+    prompt.lastIndexOf("输出JSON契约：") + "输出JSON契约：".length,
+  );
+  const contract = JSON.parse(encodedContract);
+  assert.deepEqual(contract.$defs.output.properties.expression.enum, [
+    "neutral",
+    "smile",
+    "surprise",
+    "starry_curious",
+    "troubled",
+    "blush",
+    "angry",
+    "disappointed",
+    "cry",
+    "bawl",
+    "gloom",
+    "sigh",
+    "wink",
+    "laugh",
+  ]);
+  for (const label of [
+    "neutral",
+    "smile",
+    "surprise",
+    "starry_curious",
+    "troubled",
+    "blush",
+    "angry",
+    "disappointed",
+    "cry",
+    "bawl",
+    "gloom",
+    "sigh",
+    "wink",
+    "laugh",
+  ])
+    assert.match(prompt, new RegExp(label));
+  assert.match(prompt, /bawl_dry/);
+  assert.match(prompt, /sigh_in/);
+  assert.match(prompt, /Unity/);
+  assert.match(prompt, /否定/);
+  assert.match(prompt, /最终生成的台词/);
+});
+
+test("Liting direct laughter fallback is denial-safe", async (t) => {
+  const { engine } = setup(t, "smile", "liting");
+  const result = await playerReply(engine, "liting", "你笑一下");
+  assert.equal(result.expression, "smile");
+  assert.equal(portraitExpression("liting", null, "我不想笑。"), null);
+});
+
+test("an affirmative line from the standalone yields a smile, including when metadata is absent", () => {
+  assert.equal(
+    portraitExpression("z", null, "行，那就笑一个——不过你这要求也太突然了吧。"),
+    "happy",
+  );
+  assert.equal(portraitExpression("z", null, "她说：“哈哈，我笑一个。”"), null);
+  assert.equal(portraitExpression("z", "happy", "不了，我不想笑。"), null);
 });

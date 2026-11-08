@@ -49,6 +49,11 @@ function zReply(c) {
   if (c.actor_id === "z") output.expression = "smile";
   return output;
 }
+function litingReply(c) {
+  const output = reply(c);
+  if (c.actor_id === "liting") output.expression = "curious";
+  return output;
+}
 async function setup(t, decide = reply) {
   const app = createServer({
     dbPath: ":memory:",
@@ -187,6 +192,58 @@ test("player reply exposes normalized Z expression and keeps it across event rep
   const replay = await post("game/sync", { ...base, eventData: said }, true);
   assert.equal(replay.code, 200, replay.data.error);
   assert.equal(replay.data.expression, "happy");
+});
+test("native Liting reply exposes r5 semantic expression and keeps it across event replay", async (t) => {
+  const { app, post } = await setup(t, litingReply);
+  const litingBase = { ...base, runId: "liting-r1" };
+  const litingEvent = {
+    ...event("liting-player", 1),
+    recipientId: "liting",
+    conversationId: "liting-c1",
+    text: "咖啡店老板今天在吗？",
+    locationId: "cafe",
+  };
+  await post("game/open", litingBase, true);
+  await post("game/focus", { ...litingBase, actorId: "liting" }, true);
+  await post("game/sync", { ...litingBase, eventData: litingEvent }, true);
+  const generated = await post(
+    "game/utterance",
+    {
+      ...litingBase,
+      actorId: "liting",
+      recipientId: "player",
+      conversationId: "liting-c1",
+      requestId: "liting-expression-q",
+      scene: "Street",
+      locationId: "cafe",
+    },
+    true,
+  );
+  assert.equal(generated.code, 200, generated.data.error);
+  assert.equal(generated.data.expression, "troubled");
+  assert.deepEqual(Object.keys(generated.data.result).sort(), [
+    "action",
+    "dialogue",
+    "info",
+  ]);
+  const proposal = app.store.record(generated.data.proposalId);
+  assert.equal(proposal.portrait_expression, "troubled");
+  const said = {
+    ...litingEvent,
+    id: "liting-npc",
+    seq: 2,
+    speakerId: "liting",
+    recipientId: "player",
+    text: generated.data.text,
+    proposalId: generated.data.proposalId,
+    observers: ["liting", "player"],
+  };
+  const ack = await post("game/sync", { ...litingBase, eventData: said }, true);
+  assert.equal(ack.code, 200, ack.data.error);
+  assert.equal(ack.data.expression, "troubled");
+  const replay = await post("game/sync", { ...litingBase, eventData: said }, true);
+  assert.equal(replay.code, 200, replay.data.error);
+  assert.equal(replay.data.expression, "troubled");
 });
 test("event replay is idempotent and conflicting content is rejected", async (t) => {
   const { post } = await setup(t);
