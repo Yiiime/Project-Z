@@ -160,6 +160,46 @@
       "Id": "ParamDangle1",
       "GroupId": "",
       "Name": "ParamDangle1"
+    },
+    {
+      "Id": "ParamZQuietMouth",
+      "Name": "ParamZQuietMouth",
+      "GroupId": ""
+    },
+    {
+      "Id": "ParamZSobMouth",
+      "Name": "ParamZSobMouth",
+      "GroupId": ""
+    },
+    {
+      "Id": "ParamZRoundMouth",
+      "Name": "ParamZRoundMouth",
+      "GroupId": ""
+    },
+    {
+      "Id": "ParamZStarry",
+      "Name": "ParamZStarry",
+      "GroupId": ""
+    },
+    {
+      "Id": "ParamZTearQuiet",
+      "Name": "ParamZTearQuiet",
+      "GroupId": ""
+    },
+    {
+      "Id": "ParamZTearSob",
+      "Name": "ParamZTearSob",
+      "GroupId": ""
+    },
+    {
+      "Id": "ParamZSpeech",
+      "Name": "ParamZSpeech",
+      "GroupId": ""
+    },
+    {
+      "Id": "ParamZSobSighMouth",
+      "Name": "ParamZSobSighMouth",
+      "GroupId": ""
     }
   ],
   "ParameterGroups": [],

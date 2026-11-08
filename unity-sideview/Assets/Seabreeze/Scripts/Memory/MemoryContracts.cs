@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 namespace Seabreeze
 {
     [Serializable] public sealed class ActorAction { public string type,target,description,action_id; public JObject parameters; }
-    [Serializable] public sealed class ActorTurn { public string dialogue; public ActorAction action; public JObject info; }
+    [Serializable] public sealed class ActorTurn { public string dialogue,expression; public ActorAction action; public JObject info; }
     [Serializable] public sealed class MemoryEvent
     {
         public string id,kind,conversationId,speakerId,recipientId,text,proposalId,location,locationId,title,gist,fulfilledId,channel,actionId,taskId,actorId,responderId,stepId,performerId,receiptId,messageEventId;
@@ -21,7 +21,7 @@ namespace Seabreeze
     [Serializable] public sealed class MemoryReply
     {
         public bool ok,configured,verified,endConversation;
-        public string error,warning,app,mode,model,runId,requestId,actorId,targetId,reason,topic,proposalId,text,checkpoint;
+        public string error,warning,app,mode,model,runId,requestId,actorId,targetId,reason,topic,proposalId,text,expression,checkpoint;
         public int seq,configurationRevision,responseRevision;
         public ActorTurn result;public JObject state;
         public string[] recalledMemoryIds=Array.Empty<string>();

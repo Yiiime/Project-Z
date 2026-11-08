@@ -19,3 +19,6 @@ MonoBehaviour:
   - Id: ParamEyeSmile
     Value: 1
     Blend: 0
+  - Id: ParamMouthForm
+    Value: 0.6
+    Blend: 0
