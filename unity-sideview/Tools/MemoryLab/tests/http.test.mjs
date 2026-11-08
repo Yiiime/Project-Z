@@ -447,3 +447,55 @@ test('task choices use the same durable Unity event queue as spoken lines',async
   assert.equal(invited.code,200,invited.data.error);assert.equal(invited.data.seq,2);
   assert.equal(app.engine.tasks.collaborators('native','tools')[0].status,'invited');
 });
+
+test("switching between Z and Liting keeps private chat history and portrait replies with their speaker", async (t) => {
+  const seen = [];
+  const { app, post } = await setup(t, (context) => {
+    seen.push(context);
+    return context.actor_id === "z" ? zReply(context) : litingReply(context);
+  });
+  const world = { ...base, worldId: "two-portraits" };
+  const turns = [
+    { actor: "z", location: "z_home", marker: "Z_PRIVATE_741", expression: "happy" },
+    { actor: "liting", location: "cafe", marker: "LITING_PRIVATE_219", expression: "troubled" },
+    { actor: "z", location: "z_home", marker: "Z_RETURN_806", expression: "happy" },
+  ];
+  const native = async (endpoint, payload) => {
+    const response = await post("game/" + endpoint, { ...world, ...payload }, true);
+    assert.equal(response.code, 200, response.data.error);
+    return response.data;
+  };
+  await native("open", {});
+  for (const [index, turn] of turns.entries()) {
+    const conversationId = "player-session-" + index;
+    await native("focus", { actorId: turn.actor });
+    const input = {
+      ...event("input-" + index, index * 2 + 1),
+      conversationId, recipientId: turn.actor, locationId: turn.location, text: turn.marker,
+      observers: ["z", "liting", "player"],
+    };
+    await native("sync", { eventData: input });
+    const line = await native("utterance", {
+      actorId: turn.actor, recipientId: "player", conversationId, locationId: turn.location,
+      scene: turn.actor === "z" ? "Street" : "Cafe", channel: input.channel,
+    });
+    assert.equal(line.actorId, turn.actor);
+    assert.equal(line.expression, turn.expression);
+    const context = seen.at(-1);
+    assert.equal(context.actor_id, turn.actor);
+    assert.equal(context.interaction.conversation_id, conversationId);
+    assert.ok(context.character_state.recent_conversation.some((m) => m.text === turn.marker));
+    for (const other of turns.filter((candidate) => candidate.actor !== turn.actor))
+      assert.ok(!JSON.stringify(context).includes(other.marker), "private text leaked to " + turn.actor);
+    await native("sync", { eventData: {
+      ...input, id: "reply-" + index, seq: input.seq + 1,
+      speakerId: turn.actor, recipientId: "player", text: line.text, proposalId: line.proposalId,
+    } });
+  }
+  assert.equal(seen.length, turns.length);
+  for (const actor of ["z", "liting"]) {
+    const history = app.engine.memory.history(app.engine.world(world.worldId), actor);
+    for (const turn of turns)
+      assert.equal(history.some((m) => m.text === turn.marker), turn.actor === actor);
+  }
+});
