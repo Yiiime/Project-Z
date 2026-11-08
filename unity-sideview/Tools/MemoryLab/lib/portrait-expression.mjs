@@ -113,6 +113,20 @@ const DIRECT_LAUGH_CUES = [
   "(?:^|[，,。.!！?？、\\s])我(?:来|先)?笑(?:一下|一个|给你看)?",
 ];
 
+function agreesToSmileNow(value) {
+  if (typeof value !== "string") return false;
+  const ownWords = value.replace(/“[^”]*”|「[^」]*」|‘[^’]*’|"[^"]*"/g, "");
+  // Keep an explicit refusal. Only a limit on duration or future occasions
+  // can follow a present agreement without cancelling it.
+  const present = ownWords
+    .replace(/(?:不过|但是|但)?(?:别|不要)让我(?:一直|始终)笑/g, "")
+    .replace(/(?:不过|但是|但)?(?:可)?不是(?:每回|每次)都(?:白)?笑/g, "");
+  if (negatedCue(present, ["笑"]) || /(?:算了|我收回|我反悔|逗你的)/.test(present))
+    return false;
+  const agreement = /(?:^|[。！？!?\n])\s*(?:(?:笑一下|笑一个)[？?]\s*(?:好|行|可以)[啊呀吧]?[，,、\s]*给你|(?:我(?:就|来|先)?)?笑给你看)(?=$|[。，,、！!；;—…\s])/;
+  return agreement.test(present);
+}
+
 /**
  * Infer only from Z's own generated line. Player wording is deliberately not
  * passed here, so a request, denial, correction, or quoted third-party word
@@ -168,6 +182,9 @@ export function portraitExpression(actorId, value, line = "") {
     typeof value === "string"
       ? value.trim().toLowerCase().replace(/[\s-]+/g, "_")
       : "";
+  if (!liting && (!normalized || normalized === "neutral" ||
+      (Z_PORTRAIT_EXPRESSION_ALIASES[normalized] || normalized) === "happy") &&
+      agreesToSmileNow(line)) return "happy";
   if (!normalized) return fallback();
   if (!liting && normalized === "neutral") return fallback();
   const aliases = liting
