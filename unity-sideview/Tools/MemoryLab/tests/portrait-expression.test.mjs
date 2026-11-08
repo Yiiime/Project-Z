@@ -70,9 +70,30 @@ class FixtureProvider {
   }
 }
 
-function setup(t, scenario = "default", actor = "z") {
+class InvalidEmotionProvider extends FixtureProvider {
+  constructor(invalidCalls = 1) {
+    super("default");
+    this.invalidCalls = invalidCalls;
+  }
+  async call(request, options) {
+    const response = await super.call(request, options);
+    if (this.invalidCalls > 0) {
+      this.invalidCalls--;
+      const output = JSON.parse(response.text);
+      output.info.emotion = "smile";
+      return { ...response, text: JSON.stringify(output) };
+    }
+    return response;
+  }
+}
+
+function setup(
+  t,
+  scenario = "default",
+  actor = "z",
+  provider = new FixtureProvider(scenario),
+) {
   const store = new Store();
-  const provider = new FixtureProvider(scenario);
   const engine = new Engine(store, new Catalog(), provider);
   engine.create("w");
   engine.focus("w", actor, "player");
@@ -257,6 +278,49 @@ test("real-runtime prompt documents Liting semantic keys and Unity-owned entry p
   assert.match(prompt, /Unity/);
   assert.match(prompt, /否定/);
   assert.match(prompt, /最终生成的台词/);
+});
+
+test("player portrait actors repair one invalid info emotion and return one real proposal", async (t) => {
+  const provider = new InvalidEmotionProvider(1);
+  const { engine } = setup(t, "default", "z", provider);
+  const job = engine.player("w", "z", "你笑一下");
+  const result = (await engine.run("w", 1, job.id))[0];
+  assert.equal(result.status, "proposed", result.validation_error);
+  assert.equal(provider.calls.length, 2);
+  assert.equal(engine.records(engine.world("w"), "proposal").length, 1);
+  assert.equal(
+    engine.records(engine.world("w"), "event").filter((event) => event.speaker === "z")
+      .length,
+    0,
+  );
+  assert.match(provider.calls[1].messages[0].content, /\/info\/emotion/);
+  assert.match(provider.calls[1].messages[0].content, /顶层 expression/);
+});
+
+test("a persistent invalid player output fails after one bounded repair without proposing speech", async (t) => {
+  const provider = new InvalidEmotionProvider(2);
+  const { engine } = setup(t, "default", "liting", provider);
+  const job = engine.player("w", "liting", "你笑一下");
+  const result = (await engine.run("w", 1, job.id))[0];
+  assert.equal(result.status, "failed");
+  assert.equal(provider.calls.length, 2);
+  assert.match(result.validation_error, /输出格式错误：\/info\/emotion/);
+  assert.equal(engine.records(engine.world("w"), "proposal").length, 0);
+  assert.equal(
+    engine.records(engine.world("w"), "event").filter((event) => event.speaker === "liting")
+      .length,
+    0,
+  );
+});
+
+test("other player actors keep the single-attempt path", async (t) => {
+  const provider = new InvalidEmotionProvider(2);
+  const { engine } = setup(t, "default", "liyuan", provider);
+  const job = engine.player("w", "liyuan", "你笑一下");
+  const result = (await engine.run("w", 1, job.id))[0];
+  assert.equal(result.status, "failed");
+  assert.equal(provider.calls.length, 1);
+  assert.match(result.validation_error, /输出格式错误：\/info\/emotion/);
 });
 
 test("Liting direct laughter fallback is denial-safe", async (t) => {
