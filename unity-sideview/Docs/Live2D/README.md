@@ -34,3 +34,13 @@ python3 unity-sideview/Tools/Live2D/validate_portrait.py --project-root . --acto
 **改版验收。** 在普通窗口和较窄窗口中，各走一次普通聊天 → 展开任务栏 → 收起任务栏。核对脸部、动作、文字和发送按钮的边界，确认对话记录可滚动。用正常输入框分别与两位角色聊一句，检查回复时动嘴、说完回待机。再切回首位角色并退出，检查标题、历史记录和立绘都对应当前对话。PR 附上普通布局、任务栏布局的分辨率与实机截图。
 
 参见[对话面板和布局切换](../../Assets/Seabreeze/Scripts/Memory/MemoryDialogueView.cs)、[角色渲染与取景](../../Assets/Seabreeze/Live2D/Runtime/Live2DCharacterView.cs)。
+
+### 复现双角色试玩
+
+按 [macOS 构建步骤](../../Tools/PortraitDemo/README.md)准备环境。构建双角色版本时，把命令里的 `-zPortraitDemo` 换成 `-litingZPortraitDemo`，并为这次构建指定新的空目录。打包后，在 `.app` 同级目录双击 `直接与李庭和Z聊天.command`。角色切换和输入方法见[双角色试玩说明](../../Tools/PortraitDemo/李庭与Z试玩说明.md)。
+
+要复测李庭 → Z → 李庭，从打包目录运行以下命令。它使用本机配置的聊天模型，通过游戏输入框发送三句话，并将截图和 `liting-z-chat-report.json` 写入临时目录。
+
+```sh
+./直接与李庭和Z聊天.command -litingZChatCheck "$TMPDIR/liting-z-chat"
+```
