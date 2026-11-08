@@ -84,9 +84,10 @@ namespace Seabreeze
                 // The model planned for the submitted audience. A new listener
                 // changes what may be said; discard before presentation/receipt.
                 if(memory.Listeners(speaker.transform.position,speaker.npcId,recipient.npcId).Except(request.observers).Any()){Finish(c,false);yield break;}
-                if(string.IsNullOrEmpty(line.result?.dialogue)){memory.Client.CommitDecision(line,speaker.npcId,request.observers,request.locationId);break;}
-                memory.ShowResult(line);memory.CommitLine(c.id,speaker.npcId,recipient.npcId,line.result.dialogue,line.proposalId,"face_to_face");LastRecalledMemoryIds=line.recalledMemoryIds??Array.Empty<string>();CommittedNpcLines++;
-                float visibleUntil=Time.unscaledTime+Mathf.Clamp(1.3f+line.result.dialogue.Length*.05f,2.5f,6);
+                string dialogue=line.result?.dialogue??line.text;string expression=line.result?.expression??line.expression;
+                if(string.IsNullOrEmpty(dialogue)){memory.Client.CommitDecision(line,speaker.npcId,request.observers,request.locationId);break;}
+                memory.ShowResult(line);memory.CommitLine(c.id,speaker.npcId,recipient.npcId,dialogue,line.proposalId,"face_to_face",expression);LastRecalledMemoryIds=line.recalledMemoryIds??Array.Empty<string>();CommittedNpcLines++;
+                float visibleUntil=Time.unscaledTime+Mathf.Clamp(1.3f+dialogue.Length*.05f,2.5f,6);
                 while(!c.cancelled&&Time.unscaledTime<visibleUntil)yield return null;
                 if(c.cancelled)yield break;
                 if(line.endConversation)break;
@@ -115,7 +116,8 @@ namespace Seabreeze
             if(error==null&&line!=null&&Valid(c))
             {
                 memory.ShowResult(line);
-                if(!string.IsNullOrEmpty(line.result?.dialogue)){memory.CommitLine(c.id,c.first.npcId,"player",line.result.dialogue,line.proposalId,"private_player_chat");CommittedNpcLines++;}
+                string dialogue=line.result?.dialogue??line.text;string expression=line.result?.expression??line.expression;
+                if(!string.IsNullOrEmpty(dialogue)){memory.CommitLine(c.id,c.first.npcId,"player",dialogue,line.proposalId,"private_player_chat",expression);CommittedNpcLines++;}
                 else memory.Client.CommitDecision(line,c.first.npcId,new[]{c.first.npcId,"player"},request.locationId);
                 LastRecalledMemoryIds=line.recalledMemoryIds??Array.Empty<string>();
             }

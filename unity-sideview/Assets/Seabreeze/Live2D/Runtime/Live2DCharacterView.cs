@@ -1,9 +1,11 @@
 using System;
+using System.Collections;
 using Live2D.Cubism.Core;
 using Live2D.Cubism.Framework;
 using Live2D.Cubism.Framework.Expression;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Seabreeze
@@ -23,8 +25,16 @@ namespace Seabreeze
         string lastEmotion, lastMotion;
         bool lastTalking;
         int lastWidth, lastHeight;
+        Coroutine portraitMotionReset;
+        int portraitMotionGeneration;
+        string activePortraitMotion;
+
+        const float PortraitMotionDuration = 3f;
+
         public bool IsVisible => stage != null && stage.activeSelf;
         public Live2DModelProfile CurrentProfile => profile;
+        internal Camera PortraitCamera => modelCamera;
+        public CubismModel CurrentModel => modelObject != null ? modelObject.GetComponent<CubismModel>() : null;
 
         public void Initialize(RectTransform viewport)
         {
@@ -51,7 +61,9 @@ namespace Seabreeze
             ReleaseStage();
             profile = next;
             stage = new GameObject("Live2D Portrait Stage - " + next.characterId);
-            stage.transform.SetParent(transform, false);
+            // Keep model and camera in world units. The canvas scales only the resulting RawImage.
+            if (stage.scene != gameObject.scene)
+                SceneManager.MoveGameObjectToScene(stage, gameObject.scene);
             stage.transform.position = new Vector3(10000, 10000, 0);
             stage.SetActive(false);
             modelObject = Instantiate(next.prefab, stage.transform);
@@ -68,10 +80,8 @@ namespace Seabreeze
                 animator.updateMode = AnimatorUpdateMode.UnscaledTime;
             }
             driver = modelObject.AddComponent<Live2DStateDriver>();
-            driver.Configure(next);
             var updater = modelObject.GetComponent<CubismUpdateController>();
             if (updater == null) updater = modelObject.AddComponent<CubismUpdateController>();
-            updater.Refresh();
             var cameraGo = new GameObject("Live2D Portrait Camera", typeof(Camera));
             cameraGo.transform.SetParent(stage.transform, false);
             cameraGo.layer = next.renderLayer;
@@ -95,6 +105,9 @@ namespace Seabreeze
             stage.SetActive(true);
             var model = modelObject.GetComponent<CubismModel>();
             if (model != null) { model.ForceUpdateNow(); FrameModel(model); }
+            driver.Configure(next);
+            driver.HasUpdateController = true;
+            updater.Refresh();
             ResizeTarget();
             image.enabled = true;
             lastEmotion = null; lastMotion = null;
@@ -128,6 +141,20 @@ namespace Seabreeze
         {
             if (driver == null || profile == null) return;
             emotion = string.IsNullOrEmpty(emotion) ? profile.defaultEmotion : emotion;
+
+            if (!string.IsNullOrEmpty(activePortraitMotion))
+            {
+                // MemoryDialogueView keeps submitting neutral/talking while text types.
+                // Let an explicit portrait clip finish instead of cancelling it next frame.
+                if (string.IsNullOrEmpty(motion))
+                {
+                    lastEmotion = emotion;
+                    lastTalking = talking;
+                    driver.SetTalkingDuringMotion(talking);
+                    return;
+                }
+                CancelPortraitMotion();
+            }
             if (emotion == lastEmotion && talking == lastTalking && motion == lastMotion) return;
             driver.SetState(emotion, talking);
             if (animator != null && animator.enabled)
@@ -138,8 +165,49 @@ namespace Seabreeze
             }
             lastEmotion = emotion; lastTalking = talking; lastMotion = motion;
         }
+
+        /// <summary>
+        /// Plays one of Z's authored portrait motions without inferring emotion from dialogue text.
+        /// The matching Animator state is expected to use the imported 3-second motion3 clip.
+        /// </summary>
+        public bool PlayPortraitMotion(string key)
+        {
+            if (!IsVisible || driver == null || profile == null || !IsZProfile(profile)) return false;
+            key = NormalizePortraitMotion(key);
+            if (key == null) return false;
+
+            // Each state uses the clip imported from the corresponding motion3 file.
+            if (animator == null || !animator.enabled || !animator.HasState(0, Animator.StringToHash(key))) return false;
+
+            CancelPortraitMotion();
+            if (!driver.SetPortraitMotion(key)) return false;
+
+            activePortraitMotion = key;
+            portraitMotionGeneration++;
+            lastMotion = key;
+            animator.CrossFadeInFixedTime(key, 0f);
+            portraitMotionReset = StartCoroutine(ResetPortraitMotionAfterDelay(portraitMotionGeneration));
+            return true;
+        }
+
+        /// <summary>Explicitly cancels an active portrait clip and restores the prior dialogue state.</summary>
+        public void StopPortraitMotion()
+        {
+            if (string.IsNullOrEmpty(activePortraitMotion)) return;
+            CancelPortraitMotion();
+            if (driver == null || profile == null) return;
+            driver.SetState(lastEmotion, lastTalking);
+            if (animator != null && animator.enabled)
+            {
+                string state = lastTalking ? profile.talkState : profile.idleState;
+                if (!string.IsNullOrEmpty(state) && animator.HasState(0, Animator.StringToHash(state)))
+                    animator.CrossFadeInFixedTime(state, .18f);
+            }
+        }
+
         public void Hide()
         {
+            CancelPortraitMotion();
             if (image != null) image.enabled = false;
             if (stage != null) stage.SetActive(false);
         }
@@ -162,8 +230,56 @@ namespace Seabreeze
             node.gameObject.layer = layer;
             foreach (Transform child in node) SetLayer(child, layer);
         }
+
+        static bool IsZProfile(Live2DModelProfile value)
+        {
+            return value != null && string.Equals(value.characterId, "z", StringComparison.OrdinalIgnoreCase);
+        }
+
+        static string NormalizePortraitMotion(string key)
+        {
+            if (string.IsNullOrEmpty(key)) return null;
+            key = key.Trim().ToLowerInvariant();
+            if (key == "cry" || key == "bawl" || key == "surprise" || key == "starry_curious") return key;
+            return null;
+        }
+
+        void CancelPortraitMotion()
+        {
+            if (portraitMotionReset != null)
+            {
+                StopCoroutine(portraitMotionReset);
+                portraitMotionReset = null;
+            }
+            portraitMotionGeneration++;
+            activePortraitMotion = null;
+            lastMotion = null;
+            if (driver != null) driver.ClearPortraitMotion();
+        }
+
+        IEnumerator ResetPortraitMotionAfterDelay(int generation)
+        {
+            yield return new WaitForSecondsRealtime(PortraitMotionDuration);
+            if (generation != portraitMotionGeneration || string.IsNullOrEmpty(activePortraitMotion)) yield break;
+
+            activePortraitMotion = null;
+            portraitMotionReset = null;
+            lastMotion = null;
+            if (driver == null || profile == null) yield break;
+
+            driver.ClearPortraitMotion();
+            driver.SetState(lastEmotion, lastTalking);
+            if (animator != null && animator.enabled)
+            {
+                string state = lastTalking ? profile.talkState : profile.idleState;
+                if (!string.IsNullOrEmpty(state) && animator.HasState(0, Animator.StringToHash(state)))
+                    animator.CrossFadeInFixedTime(state, .18f);
+            }
+        }
+
         void ReleaseStage()
         {
+            CancelPortraitMotion();
             if (modelCamera != null) modelCamera.targetTexture = null;
             if (target != null) { target.Release(); Destroy(target); target = null; }
             if (stage != null) { stage.SetActive(false); Destroy(stage); }

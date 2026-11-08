@@ -13,9 +13,51 @@ MonoBehaviour:
   m_Name: surprise.exp3
   m_EditorClassIdentifier: Live2D.Cubism::Live2D.Cubism.Framework.Expression.CubismExpressionData
   Type: Live2D Expression
-  FadeInTime: 0.15
-  FadeOutTime: 0.15
+  FadeInTime: 0.18
+  FadeOutTime: 0.14
   Parameters:
-  - Id: ParamMouthVariant
+  - Id: ParamZQuietMouth
+    Value: 0
+    Blend: 0
+  - Id: ParamZSobMouth
+    Value: 0
+    Blend: 0
+  - Id: ParamZRoundMouth
     Value: 1
+    Blend: 0
+  - Id: ParamZStarry
+    Value: 0
+    Blend: 0
+  - Id: ParamZTearQuiet
+    Value: 0
+    Blend: 0
+  - Id: ParamZTearSob
+    Value: 0
+    Blend: 0
+  - Id: ParamZSpeech
+    Value: 0
+    Blend: 0
+  - Id: ParamZSobSighMouth
+    Value: 0
+    Blend: 0
+  - Id: ParamEyeLOpen
+    Value: 1
+    Blend: 0
+  - Id: ParamEyeROpen
+    Value: 1
+    Blend: 0
+  - Id: ParamMouthOpenY
+    Value: 0
+    Blend: 0
+  - Id: ParamMouthForm
+    Value: 0
+    Blend: 0
+  - Id: ParamMouthVariant
+    Value: 0
+    Blend: 0
+  - Id: ParamEyeSmile
+    Value: 0
+    Blend: 0
+  - Id: ParamBrowForm
+    Value: 0.36
     Blend: 0

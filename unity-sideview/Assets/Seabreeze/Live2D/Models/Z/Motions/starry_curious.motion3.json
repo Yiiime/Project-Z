@@ -1,0 +1,318 @@
+{
+  "Version": 3,
+  "Meta": {
+    "Duration": 3.0,
+    "Fps": 30,
+    "Loop": false,
+    "AreBeziersRestricted": true,
+    "FadeInTime": 0,
+    "FadeOutTime": 0,
+    "CurveCount": 15,
+    "TotalSegmentCount": 60,
+    "TotalPointCount": 75,
+    "UserDataCount": 0,
+    "TotalUserDataSize": 0
+  },
+  "Curves": [
+    {
+      "Target": "Parameter",
+      "Id": "ParamZQuietMouth",
+      "Segments": [
+        0,
+        0,
+        0,
+        0.32,
+        0,
+        0,
+        2.45,
+        0,
+        0,
+        2.8,
+        0,
+        0,
+        3.0,
+        0
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Id": "ParamZSobMouth",
+      "Segments": [
+        0,
+        0,
+        0,
+        0.32,
+        0,
+        0,
+        2.45,
+        0,
+        0,
+        2.8,
+        0,
+        0,
+        3.0,
+        0
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Id": "ParamZRoundMouth",
+      "Segments": [
+        0,
+        0,
+        0,
+        0.32,
+        1,
+        0,
+        2.45,
+        1,
+        0,
+        2.8,
+        0,
+        0,
+        3.0,
+        0
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Id": "ParamZStarry",
+      "Segments": [
+        0,
+        0,
+        0,
+        0.32,
+        1,
+        0,
+        2.45,
+        1,
+        0,
+        2.8,
+        0,
+        0,
+        3.0,
+        0
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Id": "ParamZTearQuiet",
+      "Segments": [
+        0,
+        0,
+        0,
+        0.32,
+        0,
+        0,
+        2.45,
+        0,
+        0,
+        2.8,
+        0,
+        0,
+        3.0,
+        0
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Id": "ParamZTearSob",
+      "Segments": [
+        0,
+        0,
+        0,
+        0.32,
+        0,
+        0,
+        2.45,
+        0,
+        0,
+        2.8,
+        0,
+        0,
+        3.0,
+        0
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Id": "ParamZSpeech",
+      "Segments": [
+        0,
+        0,
+        0,
+        0.32,
+        0,
+        0,
+        2.45,
+        0,
+        0,
+        2.8,
+        0,
+        0,
+        3.0,
+        0
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Id": "ParamZSobSighMouth",
+      "Segments": [
+        0,
+        0,
+        0,
+        0.32,
+        0,
+        0,
+        2.45,
+        0,
+        0,
+        2.8,
+        0,
+        0,
+        3.0,
+        0
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Id": "ParamEyeLOpen",
+      "Segments": [
+        0,
+        1,
+        0,
+        0.32,
+        1,
+        0,
+        2.45,
+        1,
+        0,
+        2.8,
+        1,
+        0,
+        3.0,
+        1
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Id": "ParamEyeROpen",
+      "Segments": [
+        0,
+        1,
+        0,
+        0.32,
+        1,
+        0,
+        2.45,
+        1,
+        0,
+        2.8,
+        1,
+        0,
+        3.0,
+        1
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Id": "ParamMouthOpenY",
+      "Segments": [
+        0,
+        0,
+        0,
+        0.32,
+        0,
+        0,
+        2.45,
+        0,
+        0,
+        2.8,
+        0,
+        0,
+        3.0,
+        0
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Id": "ParamMouthForm",
+      "Segments": [
+        0,
+        0,
+        0,
+        0.32,
+        0,
+        0,
+        2.45,
+        0,
+        0,
+        2.8,
+        0,
+        0,
+        3.0,
+        0
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Id": "ParamMouthVariant",
+      "Segments": [
+        0,
+        0,
+        0,
+        0.32,
+        0,
+        0,
+        2.45,
+        0,
+        0,
+        2.8,
+        0,
+        0,
+        3.0,
+        0
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Id": "ParamEyeSmile",
+      "Segments": [
+        0,
+        0,
+        0,
+        0.32,
+        0,
+        0,
+        2.45,
+        0,
+        0,
+        2.8,
+        0,
+        0,
+        3.0,
+        0
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Id": "ParamBrowForm",
+      "Segments": [
+        0,
+        0,
+        0,
+        0.32,
+        0.12,
+        0,
+        2.45,
+        0.12,
+        0,
+        2.8,
+        0,
+        0,
+        3.0,
+        0
+      ]
+    }
+  ]
+}

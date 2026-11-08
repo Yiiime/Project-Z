@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "actorId": "z",
+  "portrait": "Memory/Portraits/Z",
+  "profile": {
+    "path": "Assets/Seabreeze/Resources/Memory/Portraits/Z.asset",
+    "guid": "dd7d451aeb4d4406689e7750aca6c243"
+  },
+  "prefab": {
+    "path": "Assets/Seabreeze/Live2D/Models/Z/Model.prefab",
+    "guid": "03a62ef9d33814bcfbda676a43d2dad9"
+  },
+  "model3": {
+    "path": "Assets/Seabreeze/Live2D/Models/Z/Model.model3.json",
+    "guid": "6bf5974f5d9e84f1181012382c2ced2e"
+  },
+  "modelFiles": [
+    "Assets/Seabreeze/Live2D/Models/Z/Model.moc3",
+    "Assets/Seabreeze/Live2D/Models/Z/Model.physics3.json",
+    "Assets/Seabreeze/Live2D/Models/Z/Model.cdi3.json",
+    "Assets/Seabreeze/Live2D/Models/Z/texture_00.png",
+    "Assets/Seabreeze/Live2D/Models/Z/expression_atlas.png",
+    "Assets/Seabreeze/Live2D/Models/Z/smile.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Z/surprise.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Z/angry.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Z/troubled.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Z/wave.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Z/explain.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Z/point.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Z/blush.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Z/cry_closed.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Z/bawl_closed.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Z/starry_curious.exp3.json",
+    "Assets/Seabreeze/Live2D/Models/Z/Motions/cry.motion3.json",
+    "Assets/Seabreeze/Live2D/Models/Z/Motions/bawl.motion3.json",
+    "Assets/Seabreeze/Live2D/Models/Z/Motions/surprise.motion3.json",
+    "Assets/Seabreeze/Live2D/Models/Z/Motions/starry_curious.motion3.json"
+  ],
+  "defaultEmotion": "neutral",
+  "expressions": {
+    "neutral": null,
+    "happy": {
+      "path": "Assets/Seabreeze/Live2D/Models/Z/smile.exp3.asset",
+      "guid": "0c086f1d40837448bbb385b7b9725e3b"
+    },
+    "sad": {
+      "path": "Assets/Seabreeze/Live2D/Models/Z/z_aggrieved.exp3.asset",
+      "guid": "b55cc15934c144e179b0b485cee51901"
+    },
+    "serious": {
+      "path": "Assets/Seabreeze/Live2D/Models/Z/z_serious.exp3.asset",
+      "guid": "17e064bad9aad46ecbf7e11fcc19bf3a"
+    },
+    "shy": {
+      "path": "Assets/Seabreeze/Live2D/Models/Z/z_shy.exp3.asset",
+      "guid": "4e85b0c28ced44dd5bf5eb0b6bb55af2"
+    },
+    "happy_wave": {
+      "path": "Assets/Seabreeze/Live2D/Models/Z/z_happy_wave.exp3.asset",
+      "guid": "b1747b22f77d243e580af6e9b71926e1"
+    }
+  },
+  "animator": {
+    "path": "Assets/Seabreeze/Live2D/Models/Z/Model.controller",
+    "guid": "c89e950ac0aff4d02a1fcdfd580f028a"
+  },
+  "parameters": {
+    "mouthParameter": "ParamZSpeech",
+    "breathParameter": "ParamBreath",
+    "leftEyeParameter": "ParamEyeLOpen",
+    "rightEyeParameter": "ParamEyeROpen"
+  },
+  "rendererIndex": 1,
+  "renderLayer": 30,
+  "textureHeight": 1200
+}

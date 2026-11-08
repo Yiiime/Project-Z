@@ -44,6 +44,16 @@ function reply(c) {
     info,
   };
 }
+function zReply(c) {
+  const output = reply(c);
+  if (c.actor_id === "z") output.expression = "smile";
+  return output;
+}
+function litingReply(c) {
+  const output = reply(c);
+  if (c.actor_id === "liting") output.expression = "curious";
+  return output;
+}
 async function setup(t, decide = reply) {
   const app = createServer({
     dbPath: ":memory:",
@@ -142,6 +152,99 @@ test("native open, focus, spoken input, proposed output and actual speech are se
     1,
   );
 });
+test("player reply exposes normalized Z expression and keeps it across event replay", async (t) => {
+  const { app, post } = await setup(t, zReply);
+  await post("game/open", base, true);
+  await post("game/focus", { ...base, actorId: "z" }, true);
+  await post("game/sync", { ...base, eventData: event("p1", 1) }, true);
+  const generated = await post(
+    "game/utterance",
+    {
+      ...base,
+      actorId: "z",
+      recipientId: "player",
+      conversationId: "c1",
+      requestId: "expression-q",
+      scene: "Street",
+      locationId: "z_home",
+    },
+    true,
+  );
+  assert.equal(generated.code, 200, generated.data.error);
+  assert.equal(generated.data.expression, "happy");
+  assert.deepEqual(Object.keys(generated.data.result).sort(), [
+    "action",
+    "dialogue",
+    "info",
+  ]);
+  const proposal = app.store.record(generated.data.proposalId);
+  assert.equal(proposal.portrait_expression, "happy");
+  const said = {
+    ...event("n-expression", 2),
+    speakerId: "z",
+    recipientId: "player",
+    text: generated.data.text,
+    proposalId: generated.data.proposalId,
+  };
+  const ack = await post("game/sync", { ...base, eventData: said }, true);
+  assert.equal(ack.code, 200, ack.data.error);
+  assert.equal(ack.data.expression, "happy");
+  const replay = await post("game/sync", { ...base, eventData: said }, true);
+  assert.equal(replay.code, 200, replay.data.error);
+  assert.equal(replay.data.expression, "happy");
+});
+test("native Liting reply exposes r5 semantic expression and keeps it across event replay", async (t) => {
+  const { app, post } = await setup(t, litingReply);
+  const litingBase = { ...base, runId: "liting-r1" };
+  const litingEvent = {
+    ...event("liting-player", 1),
+    recipientId: "liting",
+    conversationId: "liting-c1",
+    text: "咖啡店老板今天在吗？",
+    locationId: "cafe",
+  };
+  await post("game/open", litingBase, true);
+  await post("game/focus", { ...litingBase, actorId: "liting" }, true);
+  await post("game/sync", { ...litingBase, eventData: litingEvent }, true);
+  const generated = await post(
+    "game/utterance",
+    {
+      ...litingBase,
+      actorId: "liting",
+      recipientId: "player",
+      conversationId: "liting-c1",
+      requestId: "liting-expression-q",
+      scene: "Street",
+      locationId: "cafe",
+    },
+    true,
+  );
+  assert.equal(generated.code, 200, generated.data.error);
+  assert.equal(generated.data.expression, "troubled");
+  assert.deepEqual(Object.keys(generated.data.result).sort(), [
+    "action",
+    "dialogue",
+    "info",
+  ]);
+  const proposal = app.store.record(generated.data.proposalId);
+  assert.equal(proposal.portrait_expression, "troubled");
+  const said = {
+    ...litingEvent,
+    id: "liting-npc",
+    seq: 2,
+    speakerId: "liting",
+    recipientId: "player",
+    text: generated.data.text,
+    proposalId: generated.data.proposalId,
+    observers: ["liting", "player"],
+  };
+  const ack = await post("game/sync", { ...litingBase, eventData: said }, true);
+  assert.equal(ack.code, 200, ack.data.error);
+  assert.equal(ack.data.expression, "troubled");
+  const replay = await post("game/sync", { ...litingBase, eventData: said }, true);
+  assert.equal(replay.code, 200, replay.data.error);
+  assert.equal(replay.data.expression, "troubled");
+});
 test("event replay is idempotent and conflicting content is rejected", async (t) => {
   const { post } = await setup(t);
   await post("game/open", base, true);
@@ -222,7 +325,7 @@ test("story events are delivered only to the supplied observers", async (t) => {
   );
 });
 test("restored outbox may replay previously approved actual speech, while old run requests fail", async (t) => {
-  const { post } = await setup(t);
+  const { post } = await setup(t, zReply);
   await post("game/open", base, true);
   await post("game/focus", { ...base, actorId: "z" }, true);
   await post("game/sync", { ...base, eventData: event("p1", 1) }, true);
@@ -239,6 +342,7 @@ test("restored outbox may replay previously approved actual speech, while old ru
       true,
     )
   ).data;
+  assert.equal(generated.expression, "happy");
   const cp = generated.checkpoint;
   const b2 = { ...base, runId: "r2" };
   assert.equal(
@@ -261,6 +365,7 @@ test("restored outbox may replay previously approved actual speech, while old ru
     true,
   );
   assert.equal(ack.code, 200, ack.data.error);
+  assert.equal(ack.data.expression, "happy");
   assert.equal(ack.data.seq, 2);
 });
 test("browser receives dialogue only while the backend retains and commits all three parts", async (t) => {
@@ -341,4 +446,56 @@ test('task choices use the same durable Unity event queue as spoken lines',async
   const invited=await post('game/sync',{...base,eventData:{id:'invite',seq:2,kind:'task_invite',day:1,period:0,taskId:'tools',actorId:'z',text:'愿意陪我找工具吗？',conversationId:'task-player-z'}},true);
   assert.equal(invited.code,200,invited.data.error);assert.equal(invited.data.seq,2);
   assert.equal(app.engine.tasks.collaborators('native','tools')[0].status,'invited');
+});
+
+test("switching between Z and Liting keeps private chat history and portrait replies with their speaker", async (t) => {
+  const seen = [];
+  const { app, post } = await setup(t, (context) => {
+    seen.push(context);
+    return context.actor_id === "z" ? zReply(context) : litingReply(context);
+  });
+  const world = { ...base, worldId: "two-portraits" };
+  const turns = [
+    { actor: "z", location: "z_home", marker: "Z_PRIVATE_741", expression: "happy" },
+    { actor: "liting", location: "cafe", marker: "LITING_PRIVATE_219", expression: "troubled" },
+    { actor: "z", location: "z_home", marker: "Z_RETURN_806", expression: "happy" },
+  ];
+  const native = async (endpoint, payload) => {
+    const response = await post("game/" + endpoint, { ...world, ...payload }, true);
+    assert.equal(response.code, 200, response.data.error);
+    return response.data;
+  };
+  await native("open", {});
+  for (const [index, turn] of turns.entries()) {
+    const conversationId = "player-session-" + index;
+    await native("focus", { actorId: turn.actor });
+    const input = {
+      ...event("input-" + index, index * 2 + 1),
+      conversationId, recipientId: turn.actor, locationId: turn.location, text: turn.marker,
+      observers: ["z", "liting", "player"],
+    };
+    await native("sync", { eventData: input });
+    const line = await native("utterance", {
+      actorId: turn.actor, recipientId: "player", conversationId, locationId: turn.location,
+      scene: turn.actor === "z" ? "Street" : "Cafe", channel: input.channel,
+    });
+    assert.equal(line.actorId, turn.actor);
+    assert.equal(line.expression, turn.expression);
+    const context = seen.at(-1);
+    assert.equal(context.actor_id, turn.actor);
+    assert.equal(context.interaction.conversation_id, conversationId);
+    assert.ok(context.character_state.recent_conversation.some((m) => m.text === turn.marker));
+    for (const other of turns.filter((candidate) => candidate.actor !== turn.actor))
+      assert.ok(!JSON.stringify(context).includes(other.marker), "private text leaked to " + turn.actor);
+    await native("sync", { eventData: {
+      ...input, id: "reply-" + index, seq: input.seq + 1,
+      speakerId: turn.actor, recipientId: "player", text: line.text, proposalId: line.proposalId,
+    } });
+  }
+  assert.equal(seen.length, turns.length);
+  for (const actor of ["z", "liting"]) {
+    const history = app.engine.memory.history(app.engine.world(world.worldId), actor);
+    for (const turn of turns)
+      assert.equal(history.some((m) => m.text === turn.marker), turn.actor === actor);
+  }
 });

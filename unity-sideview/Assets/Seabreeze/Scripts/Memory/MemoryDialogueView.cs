@@ -20,10 +20,14 @@ namespace Seabreeze
         CanvasGroup playerGroup; Live2DCharacterView character; Coroutine transition;
         readonly List<string> history=new List<string>();
         readonly Dictionary<NpcPresence,TextMeshProUGUI> names=new Dictionary<NpcPresence,TextMeshProUGUI>();
-        string selectedActor,lastSpeaker; bool entering,typing,taskLayoutVisible; float revealed,speechUntil;
+        const float ExpressionHoldSeconds=1.2f;
+        string selectedActor,lastSpeaker,portraitEmotion; bool entering,typing,taskLayoutVisible; float revealed,speechUntil,expressionEndsAt;
         TextMeshProUGUI taskTitle;Button acceptTask,declineTask,inviteTask;string offeredTask,lastCheckpoint;readonly List<string> activeTasks=new List<string>();int selectedTask;
         public bool Closing {get;private set;}
         public bool PlayerInputReady => !entering&&!Closing&&playerPanel!=null&&playerPanel.gameObject.activeSelf;
+        internal TMP_InputField DialogueInput => input;
+        internal Button DialogueSend => send;
+        internal TextMeshProUGUI DialogueHistory => historyText;
         public string VisibleSpeech => speechText!=null&&speechPanel.gameObject.activeSelf?speechTitle.text+"："+speechText.text:"";
         public void Initialize(MemoryGameController m,GameSession s,WorldDirector w)
         {
@@ -103,17 +107,18 @@ namespace Seabreeze
         {
             if(IsComposing()){StartCoroutine(ResumeInput());return;}
             if(!PlayerInputReady||memory.Conversations==null||!memory.Client.CanGenerate||memory.Conversations.Sending||string.IsNullOrWhiteSpace(input.text))return;
-            FinishTyping();string value=input.text;input.text="";memory.Conversations.SendPlayer(value);input.ActivateInputField();
+            FinishTyping();ResetPortraitIdle();string value=input.text;input.text="";memory.Conversations.SendPlayer(value);input.ActivateInputField();
         }
         IEnumerator ResumeInput(){yield return null;if(PlayerInputReady&&memory.PlayerChatOpen)input.ActivateInputField();}
         public void OpenPlayer(string actorId)
         {
-            if(transition!=null)StopCoroutine(transition);Closing=false;entering=true;selectedActor=actorId;lastCheckpoint=null;history.Clear();typing=false;
+            if(transition!=null)StopCoroutine(transition);Closing=false;entering=true;selectedActor=actorId;lastCheckpoint=null;history.Clear();typing=false;portraitEmotion=null;expressionEndsAt=0;
             historyText.text="在下方输入，按 Enter 开始交谈。";historyText.maxVisibleCharacters=int.MaxValue;playerTitle.text=SevenCharacterCatalog.Name(actorId);
             locationText.text=GameUI.PlaceName(session.CurrentPlace)+"  ·  "+GameUI.PeriodName(session.Clock.Period);
             playerPanel.gameObject.SetActive(true);speechPanel.gameObject.SetActive(false);playerGroup.alpha=0;playerGroup.interactable=false;input.text="";
             var definition=SevenCharacterCatalog.Find(actorId);var profile=!string.IsNullOrEmpty(definition?.portrait)?Resources.Load<Live2DModelProfile>(definition.portrait):null;
             portrait.gameObject.SetActive(profile!=null);if(profile!=null)character.Show(profile);else character.Hide();
+            BeginPortraitLine(null,null);
             RefreshHistoryLayout();transition=StartCoroutine(AnimatePlayer(true));
         }
         IEnumerator AnimatePlayer(bool opening)
@@ -131,15 +136,37 @@ namespace Seabreeze
             if(transition!=null)StopCoroutine(transition);Closing=true;entering=false;playerGroup.interactable=false;input.DeactivateInputField();FinishTyping();transition=StartCoroutine(AnimatePlayer(false));
         }
         void RefreshHistoryLayout(){Canvas.ForceUpdateCanvases();LayoutRebuilder.ForceRebuildLayoutImmediate(content);historyText.ForceMeshUpdate();historyScroll.verticalNormalizedPosition=0;}
-        void FinishTyping(){typing=false;if(historyText!=null)historyText.maxVisibleCharacters=int.MaxValue;if(character!=null)character.SetState("neutral",false);}
-        public void ShowLine(string speaker,string text,Vector3 position,bool playerConversation)
+        void FinishTyping()
+        {
+            if(typing&&!string.IsNullOrEmpty(portraitEmotion))expressionEndsAt=Time.unscaledTime+ExpressionHoldSeconds;
+            typing=false;
+            if(historyText!=null)historyText.maxVisibleCharacters=int.MaxValue;
+            if(character!=null)character.SetState(portraitEmotion,false);
+        }
+        void BeginPortraitLine(string speaker,string expression)
+        {
+            expressionEndsAt=0;portraitEmotion=null;
+            if(character==null)return;
+            character?.StopPortraitMotion();
+            bool speaking=speaker!=null&&speaker==selectedActor;
+            string key=expression?.Trim();
+            if(speaking&&!string.IsNullOrEmpty(key)&&character.CurrentProfile?.FindExpression(key)!=null)portraitEmotion=key;
+            character.SetState(portraitEmotion,speaking);
+            if(speaking&&!string.IsNullOrEmpty(key)&&portraitEmotion==null)character.PlayPortraitMotion(key);
+        }
+        void ResetPortraitIdle()
+        {
+            expressionEndsAt=0;portraitEmotion=null;character?.StopPortraitMotion();if(character!=null)character.SetState(null,false);
+        }
+
+        public void ShowLine(string speaker,string text,Vector3 position,bool playerConversation,string expression=null)
         {
             if(playerConversation)
             {
-                FinishTyping();history.Add(SevenCharacterCatalog.Name(speaker)+"：\n"+text);while(history.Count>12)history.RemoveAt(0);
+                history.Add(SevenCharacterCatalog.Name(speaker)+"：\n"+text);while(history.Count>12)history.RemoveAt(0);
                 string prefix=history.Count>1?string.Join("\n\n",history.Take(history.Count-1))+"\n\n":"";
                 historyText.text=string.Join("\n\n",history);lastSpeaker=speaker;revealed=prefix.Length;
-                typing=speaker!="player";historyText.maxVisibleCharacters=typing?Mathf.FloorToInt(revealed):int.MaxValue;RefreshHistoryLayout();return;
+                typing=speaker!="player";BeginPortraitLine(speaker,expression);historyText.maxVisibleCharacters=typing?Mathf.FloorToInt(revealed):int.MaxValue;RefreshHistoryLayout();return;
             }
             speechTitle.text=SevenCharacterCatalog.Name(speaker);speechText.text=text;speechTitle.color=SevenCharacterCatalog.Find(speaker)?.Accent??Paper;
             speechUntil=Time.unscaledTime+Mathf.Clamp(1.3f+text.Length*.05f,2.5f,6);speechPanel.gameObject.SetActive(true);
@@ -153,11 +180,12 @@ namespace Seabreeze
         }
         public void ResetView()
         {
-            StopAllCoroutines();transition=null;Closing=entering=false;history.Clear();FinishTyping();playerPanel.gameObject.SetActive(false);playerGroup.alpha=0;character.Hide();speechPanel.gameObject.SetActive(false);taskPanel.gameObject.SetActive(false);lastCheckpoint=null;
+            StopAllCoroutines();transition=null;Closing=entering=false;history.Clear();FinishTyping();ResetPortraitIdle();playerPanel.gameObject.SetActive(false);playerGroup.alpha=0;character.Hide();speechPanel.gameObject.SetActive(false);taskPanel.gameObject.SetActive(false);lastCheckpoint=null;
         }
         void Update()
         {
             if(memory?.Client==null||root==null)return;
+            if(expressionEndsAt>0&&Time.unscaledTime>=expressionEndsAt){expressionEndsAt=0;portraitEmotion=null;if(character!=null)character.SetState(null,false);}
             bool fullView=playerPanel.gameObject.activeSelf,overlay=GameUI.Instance!=null&&(GameUI.Instance.HasOverlay||GameUI.Instance.IsOverlayTransitioning);
             statusPanel.gameObject.SetActive(!fullView&&!overlay);
             statusText.text="Z与七位岛民 · 统一Skill与自然记忆\n"+memory.Client.Status+(string.IsNullOrEmpty(memory.Client.LastError)?"":"\n"+memory.Client.LastError);
@@ -179,7 +207,7 @@ namespace Seabreeze
             playerState.text=memory.Conversations.Sending?"正在等待对方回应…":memory.Client.Status;
             if(!string.IsNullOrEmpty(memory.Client.LastError))playerState.text+=" · "+memory.Client.LastError;
             playerState.color=memory.Client.CanGenerate?Muted:Accent;
-            if(typing&&PlayerInputReady){revealed+=Time.unscaledDeltaTime*Style.TypewriterSpeed;historyText.maxVisibleCharacters=Mathf.FloorToInt(revealed);if(historyText.maxVisibleCharacters>=historyText.textInfo.characterCount)FinishTyping();else character.SetState("neutral",lastSpeaker==selectedActor);}
+            if(typing&&PlayerInputReady){revealed+=Time.unscaledDeltaTime*Style.TypewriterSpeed;historyText.maxVisibleCharacters=Mathf.FloorToInt(revealed);if(historyText.maxVisibleCharacters>=historyText.textInfo.characterCount)FinishTyping();else character.SetState(portraitEmotion,lastSpeaker==selectedActor);}
             foreach(var dead in names.Keys.Where(n=>n==null).ToArray()){if(names[dead]!=null)Destroy(names[dead].gameObject);names.Remove(dead);}
             foreach(var npc in memory.Spawner.Actors)
             {
