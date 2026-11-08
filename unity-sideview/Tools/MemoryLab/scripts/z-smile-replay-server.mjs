@@ -66,6 +66,10 @@ function validReply(context) {
 
 function replay(context) {
   const output = validReply(context);
+  if (context.environment.intent_only) {
+    output.dialogue = "";
+    return output;
+  }
   if (context.actor_id !== "z" || context.interaction.mode !== "player")
     return output;
 
