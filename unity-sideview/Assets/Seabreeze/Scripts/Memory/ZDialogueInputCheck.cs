@@ -196,8 +196,16 @@ namespace Seabreeze
             report.neutralDrawables = ReadDrawableSamples(model);
             report.missingDrawables = report.neutralDrawables.Where(s => s == null || !s.found).Select(s => s?.id ?? "unknown").ToArray();
             yield return SaveFrame("neutral.png");
+            float readyUntil = Time.realtimeSinceStartup + 20;
+            while ((!memory.Client.CanGenerate || !send.IsInteractable()) && Time.realtimeSinceStartup < readyUntil)
+                yield return null;
+            if (!memory.View.PlayerInputReady || !memory.Client.CanGenerate || !send.IsInteractable())
+            {
+                report.failure = "对话输入尚未就绪。" + memory.Client.Status + " " + memory.Client.LastError;
+                Finish(report); yield break;
+            }
             int before = memory.Conversations.CommittedNpcLines;
-            input.text = report.prompt; input.ActivateInputField(); input.onSubmit.Invoke(input.text);
+            input.text = report.prompt; send.onClick.Invoke();
             report.inputSubmitted = input.text.Length == 0 && history.text.Contains(report.prompt);
             float maxEye = report.neutralEyeSmile, maxSpeech = 0, finalEye = eye.Value, finalSpeech = speech.Value;
             bool responseSeen = false, ended = false, speechSeen = false, smileSeen = false, speakingFrameSaved = false;
@@ -281,9 +289,9 @@ namespace Seabreeze
             Finish(report);
         }
 
-        TMP_InputField FindInput() => memory?.View?.GetComponentInChildren<TMP_InputField>(true);
-        TextMeshProUGUI FindHistory() => memory?.View?.GetComponentsInChildren<TextMeshProUGUI>(true).FirstOrDefault(t => t.name == "交谈记录");
-        Button FindSend() => memory?.View?.GetComponentsInChildren<Button>(true).FirstOrDefault(b => b.name == "发送");
+        TMP_InputField FindInput() => memory?.View?.DialogueInput;
+        TextMeshProUGUI FindHistory() => memory?.View?.DialogueHistory;
+        Button FindSend() => memory?.View?.DialogueSend;
 
         static bool ControlsReady(TMP_InputField input, TextMeshProUGUI history, Button send, out string failure)
         {

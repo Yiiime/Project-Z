@@ -7,6 +7,7 @@
 **复现构建。** 用 Git LFS 检出模型。准备 Unity 6000.3.27f1、npm、可独立运行的 macOS Node.js（22.13 或更高）。从游戏仓库根目录运行，目标目录应为空。随包 Node 需匹配试玩机器的架构。
 
 ```sh
+bash unity-sideview/Tools/native-rtc/build-macos.sh
 "$UNITY_EDITOR" -batchmode -quit -buildTarget StandaloneOSX \
   -projectPath "$PWD/unity-sideview" \
   -executeMethod Seabreeze.Editor.MemoryPlaytestBuild.Build \

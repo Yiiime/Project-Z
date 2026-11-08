@@ -25,6 +25,9 @@ namespace Seabreeze
         TextMeshProUGUI taskTitle;Button acceptTask,declineTask,inviteTask;string offeredTask,lastCheckpoint;readonly List<string> activeTasks=new List<string>();int selectedTask;
         public bool Closing {get;private set;}
         public bool PlayerInputReady => !entering&&!Closing&&playerPanel!=null&&playerPanel.gameObject.activeSelf;
+        internal TMP_InputField DialogueInput => input;
+        internal Button DialogueSend => send;
+        internal TextMeshProUGUI DialogueHistory => historyText;
         public string VisibleSpeech => speechText!=null&&speechPanel.gameObject.activeSelf?speechTitle.text+"："+speechText.text:"";
         public void Initialize(MemoryGameController m,GameSession s,WorldDirector w)
         {

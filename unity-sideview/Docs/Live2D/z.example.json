@@ -31,10 +31,10 @@
     "Assets/Seabreeze/Live2D/Models/Z/cry_closed.exp3.json",
     "Assets/Seabreeze/Live2D/Models/Z/bawl_closed.exp3.json",
     "Assets/Seabreeze/Live2D/Models/Z/starry_curious.exp3.json",
-    "Assets/Seabreeze/Live2D/Models/Z/cry.motion3.json",
-    "Assets/Seabreeze/Live2D/Models/Z/bawl.motion3.json",
-    "Assets/Seabreeze/Live2D/Models/Z/surprise.motion3.json",
-    "Assets/Seabreeze/Live2D/Models/Z/starry_curious.motion3.json"
+    "Assets/Seabreeze/Live2D/Models/Z/Motions/cry.motion3.json",
+    "Assets/Seabreeze/Live2D/Models/Z/Motions/bawl.motion3.json",
+    "Assets/Seabreeze/Live2D/Models/Z/Motions/surprise.motion3.json",
+    "Assets/Seabreeze/Live2D/Models/Z/Motions/starry_curious.motion3.json"
   ],
   "defaultEmotion": "neutral",
   "expressions": {

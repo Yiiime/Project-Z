@@ -57,28 +57,28 @@
     "Motions": {
       "cry": [
         {
-          "File": "cry.motion3.json",
+          "File": "Motions/cry.motion3.json",
           "FadeInTime": 0,
           "FadeOutTime": 0
         }
       ],
       "bawl": [
         {
-          "File": "bawl.motion3.json",
+          "File": "Motions/bawl.motion3.json",
           "FadeInTime": 0,
           "FadeOutTime": 0
         }
       ],
       "surprise": [
         {
-          "File": "surprise.motion3.json",
+          "File": "Motions/surprise.motion3.json",
           "FadeInTime": 0,
           "FadeOutTime": 0
         }
       ],
       "starry_curious": [
         {
-          "File": "starry_curious.motion3.json",
+          "File": "Motions/starry_curious.motion3.json",
           "FadeInTime": 0,
           "FadeOutTime": 0
         }
