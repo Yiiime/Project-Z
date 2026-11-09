@@ -22,16 +22,28 @@
       "sha256": "80018d44abd1eacc385c488b80647f343ea9f3b8dffd18018de333b6755c226a"
     },
     {
+      "path": "audience-reaction/references/host-release-review.md",
+      "sha256": "d99466edbc11fa9617080a48658b576d48bec47ee895d07486eee88d458cfeed"
+    },
+    {
+      "path": "audience-reaction/references/host-sentence-repair.md",
+      "sha256": "37eeae2be63b2b41b673184680635872f39e102620aef9fb83cf02b42ab400d2"
+    },
+    {
+      "path": "audience-reaction/references/host-turn-quality.md",
+      "sha256": "db9d1b720fb292c1341c50f33ecace9a631cf136609c3ce39d07f2968d94921b"
+    },
+    {
       "path": "call-companion/SKILL.md",
-      "sha256": "62ae1e13c1ff4b91f4749a5bbf5f144f954afd3aeb2ab39c2a696953ca25a3c9"
+      "sha256": "1bf7febb823d3f69a2fd10ec86cdcdb9d79bc5a970e8154eb0f8721ad1af8a49"
     },
     {
       "path": "call-companion/references/audience.md",
-      "sha256": "19339821be3a2ec108e96769df50544b79c9072e60dfbf28d0041edc2a0720a0"
+      "sha256": "356d18f70ad0e5e0881b898e5186570597208bdbbbed36ace6937197fea1a6e5"
     },
     {
       "path": "call-companion/references/companionship.md",
-      "sha256": "ed7562e0bf2550a6a00b3fb588387437e7c242d47bc60c79c505cd80b9617549"
+      "sha256": "140105a5cf119f78fac64282cc0a982ba6901cc01f526a21c10e089860c96472"
     },
     {
       "path": "call-companion/references/contract.md",
@@ -39,7 +51,7 @@
     },
     {
       "path": "call-companion/references/examples.md",
-      "sha256": "2168d8fb2cd35e1dbe0141c2394421034ae4ec708e583b4f2a01f17bd10f76d5"
+      "sha256": "2d83790bd55f32d8f99c61285be08e3a8abdbb3e7b8438da865e53a8e1c4e7a1"
     },
     {
       "path": "call-companion/references/story.md",
@@ -48,6 +60,22 @@
     {
       "path": "call-companion/references/talents.md",
       "sha256": "8b1425cf5c06a5498c2ce7314a4a28c215c4b1c078f9fb729806dce0b5c75beb"
+    },
+    {
+      "path": "call-companion/references/zz-native-adapter.md",
+      "sha256": "2e43a1c322b854e7a333eca926631e8e6c3882050677acc4263a3ba84deff0ab"
+    },
+    {
+      "path": "live-session-control/SKILL.md",
+      "sha256": "4622fa425d12e74c5709400f4dee29bc8358046faaeae1a895cf9b3a967290fd"
+    },
+    {
+      "path": "live-session-control/references/integration.md",
+      "sha256": "573b9e9d6c5aed0cbd6da4683963f282c908d2901b7c50dce0f0a7ce2f1380bf"
+    },
+    {
+      "path": "live-session-control/references/runtime.md",
+      "sha256": "0903d42a95cd641a85c0cbfdc2b3e8cab2eeb7474e3799c1c7a4f28326b6ecd5"
     },
     {
       "path": "singing/SKILL.md",

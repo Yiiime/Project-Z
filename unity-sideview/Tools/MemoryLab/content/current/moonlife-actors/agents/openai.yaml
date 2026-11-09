@@ -1,0 +1,4 @@
+interface:
+  display_name: "月亮岛角色"
+  short_description: "统一管理Z与七位NPC的独立人格、记忆、对话和社会交流"
+  default_prompt: "使用 $moonlife-actors，在当前场景与周伯伯聊一会儿。"

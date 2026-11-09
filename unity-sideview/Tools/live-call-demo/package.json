@@ -1,0 +1,37 @@
+{
+  "name": "z-call-local",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-site.mjs",
+    "dev": "node scripts/build-site.mjs && node scripts/preview-server.mjs",
+    "test": "node tests/z-persona-regression.mjs && node tests/chat-regression.mjs && node tests/fortune-regression.mjs && node tests/lottery-regression.mjs && node tests/text-director-regression.mjs && node tests/deepseek-chat-regression.mjs && node tests/performance-director-regression.mjs && node tests/performance-preview-regression.mjs && node tests/worker-fetch-regression.mjs && node tests/volc-tts-regression.mjs && node tests/speech-director-regression.mjs && node tests/voice-integration-regression.mjs && node tests/live2d-stage-regression.mjs && node tests/live2d-assets-regression.mjs && node tests/turn-taking-regression.mjs && node tests/play-regression.mjs && node tests/agent-api-regression.mjs && node tests/audience-director-regression.mjs && node tests/agent-engine-regression.mjs && node tests/agent-client-regression.mjs && node tests/conversation-regression.mjs && node tests/autonomous-tools-regression.mjs && node tests/talent-regression.mjs && node tests/chat-expression-regression.mjs && node tests/drawing-regression.mjs && node tests/dialogue-review-regression.mjs && node tests/dialogue-transport-regression.mjs && node tests/session-scheduling-regression.mjs && node tests/background-pipeline-regression.mjs && node tests/text-handoff-regression.mjs && node tests/public-demo-regression.mjs && node tests/call-regression.mjs && node tests/call-input-regression.mjs && node tests/asr-regression.mjs && node tests/call-multiparty-regression.mjs && node tests/sentence-stream-regression.mjs && node tests/environment-regression.mjs",
+    "start": "node scripts/preview-server.mjs",
+    "export": "node scripts/export-demo.mjs",
+    "test:singing-cloud": "node --test tests/singing-cloud.test.mjs",
+    "test:singing-local": "node --test tests/singing-background.test.mjs",
+    "test:asr-bridge": "node tests/asr-bridge-regression.mjs",
+    "test:voiceprint": "node tests/voiceprint-regression.mjs && node tests/voiceprint-transport-regression.mjs",
+    "test:voiceprint-bridge": "node tests/voiceprint-bridge-regression.mjs",
+    "test:streaming-browser": "node tests/streaming-audio-browser.mjs",
+    "measure:call-latency": "node scripts/measure-call-latency.mjs",
+    "measure:call-e2e": "node scripts/measure-call-e2e.mjs",
+    "verify:voiceprint": "node scripts/verify-voiceprint-live.mjs",
+    "check:voiceprint": "node scripts/check-voiceprint-config.mjs",
+    "test:sentence-browser": "node tests/sentence-turn-browser.mjs",
+    "test:compact-review-cloud": "node tests/compact-review-cloud.mjs",
+    "test:thinking-browser": "node tests/thinking-feedback-browser.mjs",
+    "verify:package": "node scripts/verify-package.mjs"
+  },
+  "description": "Z 直播：聊天、连麦、弹幕与唱歌；Vivi 2.0 和 Live2D",
+  "version": "2.3.0",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@volcengine/openapi": "1.36.2",
+    "@volcengine/rtc": "4.69.4",
+    "ws": "8.22.1"
+  }
+}

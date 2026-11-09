@@ -7,138 +7,132 @@ namespace Seabreeze
 {
     public sealed class NpcConversationCoordinator : MonoBehaviour
     {
-        MemoryGameController memory;GameSession session;WorldDirector world;
-        readonly Dictionary<string,float> pairCooldown=new Dictionary<string,float>();
-        readonly Dictionary<NpcPresence,bool> oldSimulation=new Dictionary<NpcPresence,bool>();
-        string conversation="",stage="等待";NpcPresence first,second;int plannerIndex,operation;
-        float nextDecision,startedAt;bool running,playerSending,shuttingDown;
-        public NpcPresence PlayerActor {get;private set;}
-        public int CompletedConversations {get;private set;}
-        public int CommittedNpcLines {get;private set;}
-        public string LastIntentReason {get;private set;}="";
-        public string[] LastRecalledMemoryIds {get;private set;}=Array.Empty<string>();
-        public string Stage => stage;
-        public string ActiveId => conversation;
-        public NpcPresence First => first;
-        public NpcPresence Second => second;
-        public bool Sending => playerSending;
-        public void Initialize(MemoryGameController m,GameSession s,WorldDirector w){memory=m;session=s;world=w;nextDecision=Time.unscaledTime+4;}
-        bool WorldReady=>session!=null&&session.IsReady&&world!=null&&world.Stage!=null&&!world.IsTransitioning&&!session.NonPlayerInputBlocked&&Time.timeScale>0;
-        bool Present(NpcPresence a)=>a!=null&&a.IsPresent&&a.isActiveAndEnabled&&a.Movement!=null&&a.Movement.IsReady&&world.Stage!=null&&a.gameObject.scene==world.Stage.gameObject.scene;
-        bool Eligible(NpcPresence a)=>Present(a)&&!a.Movement.InteractionHeld;
-        static string Pair(string a,string b)=>string.CompareOrdinal(a,b)<0?a+"_"+b:b+"_"+a;
-        bool Cooling(string a,string b)=>pairCooldown.TryGetValue(Pair(a,b),out float until)&&until>Time.unscaledTime;
-        Vector2 MeetingPoint(NpcPresence a,NpcPresence b)
+        sealed class Conversation
         {
-            float side=a.transform.position.x<=b.transform.position.x?-1:1;
-            return new Vector2(b.transform.position.x+side*1.45f,b.transform.position.y);
+            public string id,stage;
+            public NpcPresence first,second;
+            public bool player,cancelled,sending;
+            public float started;
+            public readonly Dictionary<NpcPresence,bool> previous = new Dictionary<NpcPresence,bool>();
         }
+        MemoryGameController memory; GameSession session; WorldDirector world;
+        readonly Dictionary<string,Conversation> sessions = new Dictionary<string,Conversation>();
+        readonly Dictionary<NpcPresence,Conversation> held = new Dictionary<NpcPresence,Conversation>();
+        readonly Dictionary<string,float> cooldown = new Dictionary<string,float>();
+        Conversation player; float nextDecision; int planner;
+        public NpcPresence PlayerActor => player?.first;
+        public NpcPresence First => sessions.Values.FirstOrDefault(c=>!c.player)?.first;
+        public NpcPresence Second => sessions.Values.FirstOrDefault(c=>!c.player)?.second;
+        public string ActiveId => player?.id ?? sessions.Values.FirstOrDefault()?.id ?? "";
+        public string Stage => player?.stage ?? sessions.Values.FirstOrDefault()?.stage ?? "等待";
+        public bool Sending => player?.sending ?? false;
+        public int CompletedConversations {get; private set;}
+        public int CommittedNpcLines {get; private set;}
+        public string LastIntentReason {get; private set;}="";
+        public string[] LastRecalledMemoryIds {get; private set;}=Array.Empty<string>();
+        bool WorldReady => session!=null&&session.IsReady&&world?.Stage!=null&&!world.IsTransitioning&&!session.NonPlayerInputBlocked&&Time.timeScale>0;
+        bool Present(NpcPresence a)=>a!=null&&a.IsPresent&&a.isActiveAndEnabled&&a.Movement!=null&&a.Movement.IsReady&&a.gameObject.scene==world.Stage.gameObject.scene;
+        bool Eligible(NpcPresence a)=>Present(a)&&!held.ContainsKey(a)&&!a.Movement.InteractionHeld;
+        static string Pair(string a,string b)=>string.CompareOrdinal(a,b)<0?a+"_"+b:b+"_"+a;
+        bool Cooling(NpcPresence a,NpcPresence b)=>cooldown.TryGetValue(Pair(a.npcId,b.npcId),out float until)&&until>Time.unscaledTime;
+        Vector2 Point(NpcPresence a,NpcPresence b)=>new Vector2(b.transform.position.x+(a.transform.position.x<=b.transform.position.x?-1.45f:1.45f),b.transform.position.y);
+        public void Initialize(MemoryGameController m,GameSession s,WorldDirector w){memory=m;session=s;world=w;nextDecision=Time.unscaledTime+4;}
         void Update()
         {
-            if(running&&(!WorldReady||!Present(first)||(PlayerActor==null&&!Present(second))||Time.unscaledTime-startedAt>MemoryRuntimeConfig.Settings.conversationTimeout))
-            {Cancel("参与者离开或等待超时");return;}
-            if(running||!WorldReady||!memory.Client.CanGenerate||Time.unscaledTime<nextDecision)return;
+            foreach(var c in sessions.Values.ToArray())if(!WorldReady||!Present(c.first)||(!c.player&&c.stage!="选择是否交谈"&&!Present(c.second))||Time.unscaledTime-c.started>MemoryRuntimeConfig.Settings.conversationTimeout)Finish(c,false);
+            if(!WorldReady||!memory.Client.CanGenerate||Time.unscaledTime<nextDecision||sessions.Values.Any(c=>!c.player))return;
             nextDecision=Time.unscaledTime+MemoryRuntimeConfig.Settings.decisionInterval;
-            var available=memory.Spawner.Actors.Where(Eligible).ToArray();if(available.Length<2)return;
-            for(int n=0;n<available.Length;n++)
+            var actors=memory.Spawner.Actors.Where(Eligible).ToArray();if(actors.Length<2)return;
+            for(int n=0;n<actors.Length;n++)
             {
-                var actor=available[(plannerIndex++)%available.Length];
-                var candidates=available.Where(b=>b!=actor&&!Cooling(actor.npcId,b.npcId)&&actor.Movement.CanReachConversationPoint(MeetingPoint(actor,b))).ToArray();
+                var first=actors[(planner++)%actors.Length];
+                var candidates=actors.Where(a=>a!=first&&!Cooling(first,a)&&MemoryGameController.CanHear(first.transform.position,a.transform.position)&&first.Movement.CanReachConversationPoint(Point(first,a))).ToArray();
                 if(candidates.Length==0)continue;
-                first=actor;second=candidates[0];running=true;stage="选择交谈对象";startedAt=Time.unscaledTime;
-                int token=++operation;StartCoroutine(Autonomous(actor,candidates,token));break;
+                var c=new Conversation{id="npc_"+Guid.NewGuid().ToString("N"),first=first,stage="选择是否交谈",started=Time.unscaledTime};sessions[c.id]=c;Hold(c,first);StartCoroutine(Autonomous(c,candidates));break;
             }
         }
-        IEnumerator Autonomous(NpcPresence actor,NpcPresence[] candidates,int token)
+        void Hold(Conversation c,NpcPresence a){c.previous[a]=a.Movement.SimulateDecisions;held[a]=c;a.Movement.SimulateDecisions=false;a.Movement.SetInteractionHold(true);}
+        bool Valid(Conversation c)=>!c.cancelled&&sessions.ContainsKey(c.id)&&WorldReady&&Present(c.first)&&(c.player||Present(c.second));
+        IEnumerator Autonomous(Conversation c,NpcPresence[] candidates)
         {
-            MemoryReply decision=null;bool done=false;string error=null;
-            var request=memory.Client.RequestBase();request.actorId=actor.npcId;request.scene=session.CurrentPlace.ToString();request.candidates=candidates.Select(a=>a.npcId).ToArray();
+            bool done=false;MemoryReply decision=null;string error=null;
+            var request=memory.Client.RequestBase();request.actorId=c.first.npcId;request.conversationId=c.id;request.scene=session.CurrentPlace.ToString();request.locationId=memory.Location(c.first);request.candidates=candidates.Select(a=>a.npcId).ToArray();
             memory.Client.Generate("/api/game/intent",request,r=>{decision=r;done=true;},e=>{error=e;done=true;});
-            while(!done&&token==operation)yield return null;
-            if(token!=operation)yield break;
-            if(error!=null||decision==null||string.IsNullOrEmpty(decision.targetId)){Finish(false);yield break;}
-            second=candidates.FirstOrDefault(a=>Eligible(a)&&a.npcId==decision.targetId);
-            if(!Eligible(actor)||second==null||Cooling(actor.npcId,second.npcId)){Finish(false);yield break;}
-            LastIntentReason=decision.reason;conversation="talk_"+Guid.NewGuid().ToString("N");
-            Hold(actor);Hold(second);first.ConversationPartner=second.transform;second.ConversationPartner=first.transform;
-            stage="走近";var target=MeetingPoint(first,second);first.Movement.SetInteractionHold(false);
-            if(!first.Movement.MoveForConversation(target,second.transform.position.x>first.transform.position.x?1:-1)){Finish(false);yield break;}
-            float timeout=Time.unscaledTime+MemoryRuntimeConfig.Settings.approachTimeout;
-            while(token==operation&&Present(first)&&Present(second)&&first.Movement.IsMoving&&Time.unscaledTime<timeout)yield return null;
-            if(token!=operation)yield break;
-            if(!Present(first)||!Present(second)||Vector2.Distance(first.transform.position,second.transform.position)>1.75f){Finish(false);yield break;}
-            first.Movement.SetInteractionHold(true);stage="交谈";memory.RecordMeeting(first,second);
+            while(!done&&!c.cancelled)yield return null;
+            if(c.cancelled)yield break;
+            c.second=candidates.FirstOrDefault(a=>Eligible(a)&&a.npcId==decision?.targetId);
+            if(error!=null||c.second==null){Finish(c,false);yield break;}
+            LastIntentReason=decision.reason;Hold(c,c.second);c.first.ConversationPartner=c.second.transform;c.second.ConversationPartner=c.first.transform;c.stage="走近";
+            c.first.Movement.SetInteractionHold(false);
+            if(!c.first.Movement.MoveForConversation(Point(c.first,c.second),c.second.transform.position.x>c.first.transform.position.x?1:-1)){Finish(c,false);yield break;}
+            float until=Time.unscaledTime+MemoryRuntimeConfig.Settings.approachTimeout;
+            while(!c.cancelled&&Present(c.first)&&Present(c.second)&&c.first.Movement.IsMoving&&Time.unscaledTime<until)yield return null;
+            if(c.cancelled)yield break;
+            if(!Valid(c)||Vector2.Distance(c.first.transform.position,c.second.transform.position)>1.75f){Finish(c,false);yield break;}
+            c.first.Movement.SetInteractionHold(true);c.stage="交谈";memory.RecordMeeting(c.first,c.second,c.id);
             for(int turn=0;turn<MemoryRuntimeConfig.Settings.maxLines;turn++)
             {
-                while(token==operation&&WorldReady&&!memory.Client.CanGenerate&&Time.unscaledTime-startedAt<MemoryRuntimeConfig.Settings.conversationTimeout)yield return null;
-                if(token!=operation)yield break;
-                if(!WorldReady||!memory.Client.CanGenerate||!Present(first)||!Present(second)){Finish(false);yield break;}
-                var speaker=turn%2==0?first:second;var recipient=turn%2==0?second:first;
-                MemoryReply line=null;done=false;error=null;
-                request=memory.Client.RequestBase();request.actorId=speaker.npcId;request.recipientId=recipient.npcId;request.scene=session.CurrentPlace.ToString();request.conversationId=conversation;request.topic=decision.topic;request.turn=turn;
+                while(Valid(c)&&!memory.Client.CanGenerate)yield return null;
+                if(!Valid(c)){Finish(c,false);yield break;}
+                var speaker=turn%2==0?c.first:c.second;var recipient=turn%2==0?c.second:c.first;done=false;MemoryReply line=null;error=null;
+                request=memory.Client.RequestBase();request.actorId=speaker.npcId;request.recipientId=recipient.npcId;request.conversationId=c.id;request.scene=session.CurrentPlace.ToString();request.locationId=memory.Location(speaker);request.topic=decision.topic;request.turn=turn;request.channel="face_to_face";request.reachableLocations=SevenCharacterCatalog.Reachable(session.CurrentPlace,request.locationId);
                 request.observers=memory.Listeners(speaker.transform.position,speaker.npcId,recipient.npcId);
                 memory.Client.Generate("/api/game/utterance",request,r=>{line=r;done=true;},e=>{error=e;done=true;});
-                while(!done&&token==operation)yield return null;
-                if(token!=operation)yield break;
-                if(error!=null||line==null||!Present(first)||!Present(second)||!WorldReady||Vector2.Distance(first.transform.position,second.transform.position)>2){Finish(false);yield break;}
-                memory.CommitLine(conversation,speaker.npcId,recipient.npcId,line.text,line.proposalId);LastRecalledMemoryIds=line.recalledMemoryIds??Array.Empty<string>();CommittedNpcLines++;
-                float displayUntil=Time.unscaledTime+Mathf.Clamp(1.3f+line.text.Length*.05f,2.5f,6);
-                while(token==operation&&Time.unscaledTime<displayUntil)yield return null;
-                if(token!=operation)yield break;
+                while(!done&&!c.cancelled)yield return null;
+                if(c.cancelled)yield break;
+                if(error!=null||line==null||!Valid(c)||Vector2.Distance(speaker.transform.position,recipient.transform.position)>2){Finish(c,false);yield break;}
+                // The model planned for the submitted audience. A new listener
+                // changes what may be said; discard before presentation/receipt.
+                if(memory.Listeners(speaker.transform.position,speaker.npcId,recipient.npcId).Except(request.observers).Any()){Finish(c,false);yield break;}
+                if(string.IsNullOrEmpty(line.result?.dialogue)){memory.Client.CommitDecision(line,speaker.npcId,request.observers,request.locationId);break;}
+                memory.ShowResult(line);memory.CommitLine(c.id,speaker.npcId,recipient.npcId,line.result.dialogue,line.proposalId,"face_to_face");LastRecalledMemoryIds=line.recalledMemoryIds??Array.Empty<string>();CommittedNpcLines++;
+                float visibleUntil=Time.unscaledTime+Mathf.Clamp(1.3f+line.result.dialogue.Length*.05f,2.5f,6);
+                while(!c.cancelled&&Time.unscaledTime<visibleUntil)yield return null;
+                if(c.cancelled)yield break;
                 if(line.endConversation)break;
-                // Finish on a complete exchange when model round-trips have
-                // consumed the budget, instead of cutting off the other side.
-                if(turn%2==1&&Time.unscaledTime-startedAt>MemoryRuntimeConfig.Settings.conversationTimeout*.45f)break;
             }
-            Finish(true);
-        }
-        void Hold(NpcPresence actor)
-        {
-            oldSimulation[actor]=actor.Movement.SimulateDecisions;actor.Movement.SimulateDecisions=false;actor.Movement.SetInteractionHold(true);
+            Finish(c,true);
         }
         public void BeginPlayer(NpcPresence npc)
         {
-            Cancel("玩家介入");if(!Present(npc))return;
-            PlayerActor=first=npc;second=null;running=true;stage="玩家交谈";startedAt=Time.unscaledTime;conversation="player_"+Guid.NewGuid().ToString("N");
-            Hold(npc);npc.ConversationPartner=world.Player;memory.View.OpenPlayer(npc.npcId);
+            if(!Present(npc))return;
+            if(player!=null)Finish(player,false);
+            if(held.TryGetValue(npc,out var previous))Finish(previous,false);
+            var c=new Conversation{id="player_"+Guid.NewGuid().ToString("N"),first=npc,player=true,stage="玩家交谈",started=Time.unscaledTime};player=c;sessions[c.id]=c;Hold(c,npc);npc.ConversationPartner=world.Player;
+            memory.Client.Focus(npc.npcId);memory.View.OpenPlayer(npc.npcId);
         }
         public void SendPlayer(string message)
         {
-            if(PlayerActor==null||playerSending||!memory.Client.CanGenerate||string.IsNullOrWhiteSpace(message))return;
-            playerSending=true;startedAt=Time.unscaledTime;
-            memory.CommitLine(conversation,"player",PlayerActor.npcId,message.Trim(),"");
-            StartCoroutine(PlayerReply(operation));
+            var c=player;if(c==null||c.sending||!memory.Client.CanGenerate||string.IsNullOrWhiteSpace(message))return;
+            c.sending=true;c.started=Time.unscaledTime;memory.CommitLine(c.id,"player",c.first.npcId,message.Trim(),"","private_player_chat");StartCoroutine(PlayerReply(c));
         }
-        IEnumerator PlayerReply(int token)
+        IEnumerator PlayerReply(Conversation c)
         {
-            while(token==operation&&PlayerActor!=null&&!memory.Client.CanGenerate&&Time.unscaledTime-startedAt<MemoryRuntimeConfig.Settings.conversationTimeout)yield return null;
-            if(token!=operation||PlayerActor==null)yield break;
-            if(!memory.Client.CanGenerate){playerSending=false;yield break;}
-            bool done=false;MemoryReply line=null;string error=null;
-            var request=memory.Client.RequestBase();request.actorId=PlayerActor.npcId;request.recipientId="player";request.conversationId=conversation;request.scene=session.CurrentPlace.ToString();request.topic="与玩家的交流";
-            request.observers=memory.Listeners(PlayerActor.transform.position,PlayerActor.npcId,"player");
+            while(Valid(c)&&!memory.Client.CanGenerate)yield return null;if(!Valid(c))yield break;
+            bool done=false;MemoryReply line=null;string error=null;var request=memory.Client.RequestBase();request.actorId=c.first.npcId;request.recipientId="player";request.conversationId=c.id;request.scene=session.CurrentPlace.ToString();request.locationId=memory.Location(c.first);request.channel="private_player_chat";request.reachableLocations=SevenCharacterCatalog.Reachable(session.CurrentPlace,request.locationId);
             memory.Client.Generate("/api/game/utterance",request,r=>{line=r;done=true;},e=>{error=e;done=true;});
-            while(!done&&token==operation)yield return null;
-            if(token!=operation)yield break;
-            if(error==null&&line!=null&&Present(PlayerActor)&&WorldReady){memory.CommitLine(conversation,PlayerActor.npcId,"player",line.text,line.proposalId);LastRecalledMemoryIds=line.recalledMemoryIds??Array.Empty<string>();CommittedNpcLines++;}
-            playerSending=false;
-            if(line!=null&&line.endConversation){yield return new WaitForSecondsRealtime(3);if(token==operation)Finish(true);}
-        }
-        public void Cancel(string reason="会话取消") {operation++;StopAllCoroutines();Finish(false);}
-        public void ResetTimeline(){Cancel("载入时间线");pairCooldown.Clear();plannerIndex=0;LastIntentReason="";LastRecalledMemoryIds=Array.Empty<string>();CompletedConversations=CommittedNpcLines=0;}
-        void Finish(bool completed)
-        {
-            if(!shuttingDown&&!string.IsNullOrEmpty(conversation)&&memory.Client!=null)memory.Client.CancelConversation(conversation);
-            if(first!=null&&second!=null)pairCooldown[Pair(first.npcId,second.npcId)]=Time.unscaledTime+MemoryRuntimeConfig.Settings.pairCooldown;
-            foreach(var entry in oldSimulation)if(entry.Key!=null&&entry.Key.Movement!=null)
+            while(!done&&!c.cancelled)yield return null;if(c.cancelled)yield break;
+            if(error==null&&line!=null&&Valid(c))
             {
-                entry.Key.ConversationPartner=null;entry.Key.Movement.Interrupt("conversation_finished");entry.Key.Movement.SetInteractionHold(false);entry.Key.Movement.SimulateDecisions=entry.Value;
+                memory.ShowResult(line);
+                if(!string.IsNullOrEmpty(line.result?.dialogue)){memory.CommitLine(c.id,c.first.npcId,"player",line.result.dialogue,line.proposalId,"private_player_chat");CommittedNpcLines++;}
+                else memory.Client.CommitDecision(line,c.first.npcId,new[]{c.first.npcId,"player"},request.locationId);
+                LastRecalledMemoryIds=line.recalledMemoryIds??Array.Empty<string>();
             }
-            oldSimulation.Clear();if(completed)CompletedConversations++;
-            first=second=PlayerActor=null;running=playerSending=false;conversation="";stage="等待";
-            nextDecision=Time.unscaledTime+MemoryRuntimeConfig.Settings.decisionInterval;
-            if(memory.View!=null)memory.View.HidePlayer();
+            c.sending=false;
         }
-        void OnDestroy(){shuttingDown=true;if(memory!=null)Cancel("退出");}
+        public void RequestPlayerReply(){if(player!=null&&!player.sending){player.sending=true;StartCoroutine(PlayerReply(player));}}
+        public void Cancel(string reason="玩家结束交谈"){if(player!=null)Finish(player,false);else foreach(var c in sessions.Values.ToArray())Finish(c,false);}
+        public void CancelAll(string reason="世界状态变化"){foreach(var c in sessions.Values.ToArray())Finish(c,false);}
+        public void ResetTimeline(){CancelAll();cooldown.Clear();planner=0;LastIntentReason="";LastRecalledMemoryIds=Array.Empty<string>();CompletedConversations=CommittedNpcLines=0;}
+        void Finish(Conversation c,bool completed)
+        {
+            if(c==null||c.cancelled)return;c.cancelled=true;memory.Client?.CancelConversation(c.id);
+            if(c.second!=null)cooldown[Pair(c.first.npcId,c.second.npcId)]=Time.unscaledTime+MemoryRuntimeConfig.Settings.pairCooldown;
+            foreach(var old in c.previous)if(old.Key!=null&&old.Key.Movement!=null){held.Remove(old.Key);old.Key.ConversationPartner=null;old.Key.Movement.Interrupt("conversation_finished");old.Key.Movement.SetInteractionHold(false);old.Key.Movement.SimulateDecisions=old.Value;}
+            sessions.Remove(c.id);if(completed)CompletedConversations++;
+            if(player==c){player=null;memory.Client.Focus(null);memory.View.HidePlayer();}
+        }
+        void OnDestroy(){CancelAll();}
     }
 }

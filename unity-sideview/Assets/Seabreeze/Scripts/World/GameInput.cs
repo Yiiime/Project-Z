@@ -16,7 +16,6 @@ namespace Seabreeze
             }
         }
 
-        public static bool JumpPressed => Pressed(Key.Space) || Pressed(Key.W) || Pressed(Key.UpArrow);
         public static bool InteractPressed => Pressed(Key.E);
         public static bool Pressed(Key key) => Keyboard.current != null && Keyboard.current[key].wasPressedThisFrame;
     }

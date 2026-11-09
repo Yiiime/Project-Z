@@ -8,3 +8,5 @@
 *.png binary
 *.otf binary
 *.ttf binary
+# Preserve the imported supplier license snapshots byte-for-byte for MANIFEST.json.
+Tools/live-call-demo/ui/live2d/licenses/*.source.html.txt -text -whitespace

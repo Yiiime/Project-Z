@@ -8,7 +8,7 @@ import {hash} from './providers.mjs';
 import {transcribePcm} from './voice/index.mjs';
 import {singingRequest} from './singing/index.mjs';
 const json=(res,status,body)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});res.end(JSON.stringify(body));};
-export async function createLiveServer({root,providers,artifacts,songRoot,token,tokens,tls,library,transcribe=transcribePcm}){
+export async function createLiveServer({root,providers,artifacts,songRoot,token,tokens,tls,library,transcribe=transcribePcm,voice=null}){
  const identities=tokens||{'local-owner':token};
  if(Object.values(identities).some(value=>typeof value!=='string'||!value.length))throw Error('invalid_access_tokens');
  const pendingCreations=new Map();
@@ -19,11 +19,34 @@ export async function createLiveServer({root,providers,artifacts,songRoot,token,
   const auth=Buffer.from(req.headers.authorization||'');const owner=Object.keys(identities).find(id=>{const expected=Buffer.from('Bearer '+identities[id]);return auth.length===expected.length&&timingSafeEqual(auth,expected);});if(!owner)return json(res,401,{error:'unauthorized'});
   const currentProviders=providerFor(owner);
   const url=new URL(req.url,'http://localhost');if(req.method==='GET'&&url.pathname==='/health')return json(res,200,{ok:true,protocolVersion:1,agentConfigured:!!providers.env.DEEPSEEK_API_KEY,ttsConfigured:!!providers.env.VOLC_TTS_API_KEY});
+  const pcmRoute=url.pathname.match(/^\/v1\/live\/sessions\/([a-f0-9-]+)\/audio-stream\/([a-f0-9-]+)$/);
+  if(pcmRoute&&req.method==='GET'){const s=sessions.get(pcmRoute[1]);if(!s||s.owner!==owner)return json(res,404,{error:'not_found'});const stream=s.speech.streams.get(pcmRoute[2]);if(!stream||s.phase!=='live')return json(res,404,{error:'stale_audio_stream'});stream.response(res);return;}
+  const rtcRoute=url.pathname.match(/^\/v1\/live\/sessions\/([a-f0-9-]+)\/voice\/(config|start|joined|stop|enroll)$/);
+  if(rtcRoute){
+   const s=sessions.get(rtcRoute[1]);if(!s||s.owner!==owner)return json(res,404,{error:'not_found'});if(!voice)return json(res,503,{error:'voiceprint_not_configured'});
+   const action=rtcRoute[2];
+   if(action==='config'&&req.method==='GET'){s.voiceConfig=await voice.publicConfig(owner);return json(res,200,s.voiceConfig);}
+   if(req.method!=='POST')return json(res,405,{error:'method_not_allowed'});
+   if(action==='enroll'){
+    if(s.engine._state.call.active)return json(res,409,{error:'voiceprint_leave_call_first'});
+    if(req.headers['content-type']!=='audio/wav')return json(res,415,{error:'wav_required'});
+    s.check({protocolVersion:1,sessionId:s.id,epoch:Number(req.headers['x-live-epoch']),executorLeaseId:req.headers['x-live-executor-lease']},true);
+    const chunks=[];let size=0;for await(const chunk of req){size+=chunk.length;if(size>1000000)return json(res,413,{error:'body_too_large'});chunks.push(chunk);}
+    const c=new AbortController(),abort=()=>c.abort();res.once('close',abort);
+    try{return json(res,200,await voice.enroll(owner,Buffer.concat(chunks),c.signal));}finally{res.off('close',abort);}
+   }
+   if(!req.headers['content-type']?.startsWith('application/json'))return json(res,415,{error:'json_required'});
+   const chunks=[];let size=0;for await(const chunk of req){size+=chunk.length;if(size>2048)return json(res,413,{error:'body_too_large'});chunks.push(chunk);}
+   let b;try{b=JSON.parse(Buffer.concat(chunks));}catch{return json(res,400,{error:'invalid_json'});}s.check(b,true);
+   if(action==='start')return json(res,200,await voice.start(s));
+   if(action==='joined')return json(res,200,voice.joined(s,b.callId));
+   if(action==='stop'){if(b.callId!==s.engine._state.call.id)return json(res,409,{error:'stale_voice_turn'});return json(res,200,voice.stop(s));}
+  }
   const voiceRoute=url.pathname.match(/^\/v1\/live\/sessions\/([a-f0-9-]+)\/(asr|dictation)$/);
   if(voiceRoute&&req.method==='POST'){
    const session=sessions.get(voiceRoute[1]);if(!session||session.owner!==owner)return json(res,404,{error:'not_found'});const version=Number(req.headers['x-live-call-version']);
    const dictation=voiceRoute[2]==='dictation',phase=session?.phase;
-   const current=()=>session&&!session.closed&&session.phase===phase&&phase!=='ended'&&version===session.engine.callVersion&&(dictation?!session.engine._state.call.active:phase==='live'&&session.engine._state.call.active&&session.engine._state.call.input==='listening');
+   const current=()=>session&&!session.closed&&session.sessionControl.normal&&session.phase===phase&&phase!=='ended'&&version===session.engine.callVersion&&(dictation?!session.engine._state.call.active:phase==='live'&&session.engine._state.call.active&&session.engine._state.call.input==='listening');
    if(!current())return json(res,409,{error:'stale_voice_turn'});
    if(voiceRequests.has(session.id))return json(res,409,{error:'asr_busy'});
    if(req.headers['content-type']!=='audio/pcm')return json(res,415,{error:'pcm_required'});
@@ -65,5 +88,5 @@ export async function createLiveServer({root,providers,artifacts,songRoot,token,
  }catch(e){const code=/^[a-z_]{1,80}$/.test(e.message)?e.message:'server_error';if(!res.headersSent)json(res,code==='server_error'?500:409,{error:code});else res.destroy();}};
  const server=tls?https.createServer(tls,handler):http.createServer(handler);
  const maintenance=setInterval(()=>{for(const s of sessions.values())s.maintenance();},1000);maintenance.unref();
- server.on('close',()=>{for(const c of voiceRequests.values())c.abort();clearInterval(maintenance);for(const s of sessions.values())s.close();});return {server,sessions};
+ server.on('close',()=>{voice?.close();for(const c of voiceRequests.values())c.abort();clearInterval(maintenance);for(const s of sessions.values())s.close();});return {server,sessions};
 }

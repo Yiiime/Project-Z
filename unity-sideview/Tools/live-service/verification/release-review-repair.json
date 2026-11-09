@@ -1,0 +1,30 @@
+{
+  "synthetic": true,
+  "audio": false,
+  "player": "我纠正一下，我没有辞职，只是请了一天假。",
+  "candidate": "既然你已经辞职了，我们就聊下一份工作吧。",
+  "calls": [
+    {
+      "kind": "review",
+      "elapsedMs": 1259,
+      "decision": "drop",
+      "issue": "contradiction",
+      "reason": "玩家已明确纠正未辞职，仅请一天假，此句与最新事实冲突"
+    },
+    {
+      "kind": "repair",
+      "elapsedMs": 841,
+      "speech": "啊，是我记岔了——就请一天假，那这一天打算怎么过？"
+    },
+    {
+      "kind": "review",
+      "elapsedMs": 701,
+      "decision": "allow",
+      "reason": ""
+    }
+  ],
+  "approvedText": "啊，是我记岔了——就请一天假，那这一天打算怎么过？",
+  "approved": true,
+  "repaired": true,
+  "elapsedMs": 2803
+}

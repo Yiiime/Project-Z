@@ -92,6 +92,7 @@ namespace Seabreeze
             phoneBadge=MakeBadge(phone.transform,new Vector2(-2,2));
             foreach(var label in new[]{dateText,timeText,weatherText,placeText,ambienceText})
             {label.outlineColor=new Color(.10f,.14f,.22f,.6f);label.outlineWidth=.08f;}
+
         }
 
         void RightShortcut(string label,string key,LineIcon.Symbol symbol,float y,Action action)
@@ -162,6 +163,7 @@ namespace Seabreeze
             if(placeCatalog!=null)foreach(var location in placeCatalog.locations)if(location.place==id)return location.displayName;
             return id==PlaceId.Cafe?"潮汐咖啡馆":id==PlaceId.Lighthouse?"灯塔海堤":"海边小街";
         }
+
         public static string PeriodName(TimePeriod period)=>period==TimePeriod.Morning?"上午":period==TimePeriod.Afternoon?"午后":period==TimePeriod.Evening?"傍晚":"夜晚";
         void OnDialogueChanged()
         {
@@ -293,7 +295,10 @@ namespace Seabreeze
             }
             if(mode=="live")
             {
-                canvas.enabled=false;nativeLive=NativeLiveHost.Open(transform,CloseOverlay);overlayBusy=false;overlayRoutine=null;yield break;
+                canvas.enabled=false;
+                var owner=session.State;NativeLiveHost opened=null;
+                opened=NativeLiveHost.Open(transform,CloseOverlay,id=>CompleteLiveSession(opened,owner,id));
+                nativeLive=opened;overlayBusy=false;overlayRoutine=null;yield break;
             }
             if(IsPhonePage(mode))
             {
@@ -314,6 +319,12 @@ namespace Seabreeze
             for(float t=0;t<1;t+=Time.unscaledDeltaTime/Mathf.Max(.01f,duration))
             {overlayGroup.alpha=Mathf.Lerp(start,target,t*t*(3-2*t));yield return null;}
             overlayGroup.alpha=target;overlayGroup.interactable=target>0;overlayGroup.blocksRaycasts=target>0;
+        }
+        void CompleteLiveSession(NativeLiveHost source,SaveData owner,string sessionId)
+        {
+            // A late callback from a closed room or a replaced save cannot advance a new day.
+            if(source==null||source!=nativeLive||overlayMode!="live"||session.State!=owner)return;
+            CloseOverlayThen(()=>session.Clock.CompleteLiveSession(sessionId));
         }
         public void CloseOverlay(){CloseOverlayThen(null);}
         public void CloseOverlayImmediately()
@@ -416,7 +427,7 @@ namespace Seabreeze
             var handle=Panel("Handle",track.transform,new Vector2(0,.5f),C,Vector2.zero,new Vector2(18,24),Accent,true);
             slider.handleRect=handle.rectTransform;slider.targetGraphic=handle;slider.direction=Slider.Direction.LeftToRight;slider.navigation=new Navigation{mode=Navigation.Mode.None};
             slider.onValueChanged.AddListener(value=>{AudioListener.volume=value;volumeLabel.text=Mathf.RoundToInt(value*100)+"%";});
-            Label("Pause help",overlayContent,BL,BL,new Vector2(46,51),new Vector2(670,56),"Esc  返回游戏\n移动 A / D  ·  跳跃 空格  ·  交互 E",18,Muted);
+            Label("Pause help",overlayContent,BL,BL,new Vector2(46,51),new Vector2(670,56),"Esc  返回游戏\n移动 A / D  ·  交互 E",18,Muted);
         }
         void BuildRestart()
         {

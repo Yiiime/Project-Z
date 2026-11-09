@@ -21,6 +21,15 @@
       "outputDiscriminator": "decision",
       "implementationStatus": "spec_only",
       "executionEnabledByDefault": false
+    },
+    {
+      "id": "live-session-control",
+      "caller": "host",
+      "entry": "skills/live-session-control/SKILL.md",
+      "contract": "skills/live-session-control/references/runtime.md",
+      "outputDiscriminator": "sessionDecision",
+      "implementationStatus": "native_runtime",
+      "executionEnabledByDefault": true
     }
   ],
   "excludedLegacyCapabilities": [

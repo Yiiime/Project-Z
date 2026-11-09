@@ -1,0 +1,429 @@
+{
+  "tasks": [
+    {
+      "id": "map_blank",
+      "owner": "liyuan",
+      "title": "地图上的空白 · 一起探索",
+      "description": "请玩家带Z和梨园去一个地图没标、Z觉得值得留下的地方。Z说明为什么，梨园负责补图。",
+      "enabled_on_start": true,
+      "steps": [
+        {
+          "id": "visit",
+          "label": "玩家带Z和梨园实际去看一个未标地点",
+          "performed_by": [
+            "player"
+          ],
+          "depends_on": []
+        },
+        {
+          "id": "explain",
+          "label": "Z说明为什么在意这里",
+          "performed_by": [
+            "z"
+          ],
+          "depends_on": [
+            "visit"
+          ]
+        },
+        {
+          "id": "draw",
+          "label": "梨园实际补好地图",
+          "performed_by": [
+            "liyuan"
+          ],
+          "depends_on": [
+            "explain"
+          ]
+        }
+      ],
+      "reward": {
+        "kind": "relationship_experience",
+        "summary": "留下共同探索与补图的真实经历，不自动增加好感或解锁船。"
+      },
+      "source_submission": 4,
+      "assignee": "player",
+      "effect_class": "ordinary"
+    },
+    {
+      "id": "map_trial",
+      "owner": "liyuan",
+      "title": "地图上的空白 · 核对与试航",
+      "description": "进入相关危机局面后，玩家、Z和梨园一起核对路线并做近岸试航。",
+      "enabled_on_start": false,
+      "steps": [
+        {
+          "id": "route",
+          "label": "玩家与两人实地核对地图铺到勘测艇路线",
+          "performed_by": [
+            "player"
+          ],
+          "depends_on": []
+        },
+        {
+          "id": "trial",
+          "label": "梨园驾驶完成近岸试航，核对船况、载重和耗时",
+          "performed_by": [
+            "liyuan"
+          ],
+          "depends_on": [
+            "route"
+          ]
+        }
+      ],
+      "reward": {
+        "kind": "verified_preparation",
+        "summary": "本次实地核对和试航已完成；这只确认本次准备，不保证后续海况或Z愿意出发。"
+      },
+      "source_submission": 4,
+      "assignee": "player",
+      "effect_class": "escape_assistance"
+    },
+    {
+      "id": "map_packing",
+      "owner": "liyuan",
+      "title": "地图上的空白 · 留下什么",
+      "description": "临行装载超限时，玩家可以劝梨园取舍旧地图，梨园自己决定留下哪些，Z决定是否同行。",
+      "enabled_on_start": false,
+      "steps": [
+        {
+          "id": "discuss",
+          "label": "玩家和梨园讨论装载与地图取舍",
+          "performed_by": [
+            "player"
+          ],
+          "depends_on": []
+        },
+        {
+          "id": "choose",
+          "label": "梨园亲手留下部分地图，实际腾出空间",
+          "performed_by": [
+            "liyuan"
+          ],
+          "depends_on": [
+            "discuss"
+          ]
+        },
+        {
+          "id": "z_choice",
+          "label": "Z自己表达去留与要带的东西",
+          "performed_by": [
+            "z"
+          ],
+          "depends_on": []
+        }
+      ],
+      "reward": {
+        "kind": "offer_help",
+        "summary": "完成取舍准备后，梨园愿承担驾驶与同行；实际资源、Z同意和出航仍须另行确认。"
+      },
+      "source_submission": 4,
+      "assignee": "player",
+      "effect_class": "escape_assistance"
+    },
+    {
+      "id": "bar_box",
+      "owner": "liting",
+      "title": "吧台最里面的盒子",
+      "description": "李庭请玩家和Z整理旧储物间、取回送修的收音机零件，并把旧船棚钥匙归还。过去由物件和当事人自愿讲述呈现。",
+      "enabled_on_start": true,
+      "steps": [
+        {
+          "id": "storage",
+          "label": "整理旧储物间，实际找到饼干盒与旧出行清单",
+          "performed_by": [
+            "player"
+          ],
+          "depends_on": []
+        },
+        {
+          "id": "parts",
+          "label": "实际取回送修的收音机零件",
+          "performed_by": [
+            "player"
+          ],
+          "depends_on": []
+        },
+        {
+          "id": "key",
+          "label": "把旧钥匙实际归还给游戏中已确认的持有人",
+          "performed_by": [
+            "player"
+          ],
+          "depends_on": []
+        }
+      ],
+      "reward": {
+        "kind": "background_and_route",
+        "summary": "李庭愿讲已启用的旧事，并交出已确认可用的路线；不以Z原谅为条件，不凭此授予船或保证出航。"
+      },
+      "source_submission": 6,
+      "assignee": "player",
+      "effect_class": "ordinary"
+    },
+    {
+      "id": "generator",
+      "owner": "axing",
+      "title": "阿星的委托 · 备用发电机",
+      "description": "请玩家修好地下二层的备用发电机。",
+      "enabled_on_start": true,
+      "steps": [
+        {
+          "id": "repair",
+          "label": "备用发电机经实际维修与检查恢复可用",
+          "performed_by": [
+            "player"
+          ],
+          "depends_on": []
+        }
+      ],
+      "reward": {
+        "kind": "clue",
+        "summary": "阿星提供一条路线线索：入口在监控室机柜背后的检修门。线索不等于设备、权限已可用。"
+      },
+      "source_submission": 7,
+      "assignee": "player",
+      "effect_class": "ordinary"
+    },
+    {
+      "id": "tools",
+      "owner": "axing",
+      "title": "阿星的委托 · 扳手和手册",
+      "description": "请玩家从仓库找回阿星弄丢的旧扳手和维护手册。",
+      "enabled_on_start": true,
+      "steps": [
+        {
+          "id": "wrench",
+          "label": "找到并实际交回旧扳手",
+          "performed_by": [
+            "player"
+          ],
+          "depends_on": []
+        },
+        {
+          "id": "manual",
+          "label": "找到并实际交回维护手册",
+          "performed_by": [
+            "player"
+          ],
+          "depends_on": []
+        }
+      ],
+      "reward": {
+        "kind": "clue",
+        "summary": "阿星提供一条路线线索：维修通道经过通风管道与地下管线，通向码头旧货运电梯。"
+      },
+      "source_submission": 7,
+      "assignee": "player",
+      "effect_class": "ordinary"
+    },
+    {
+      "id": "letter",
+      "owner": "axing",
+      "title": "阿星的委托 · 一封信",
+      "description": "请玩家把阿星不想亲自送的信，实际送到码头杂货铺；任务不要求偷读信件。",
+      "enabled_on_start": true,
+      "steps": [
+        {
+          "id": "deliver",
+          "label": "信件实际送到码头杂货铺",
+          "performed_by": [
+            "player"
+          ],
+          "depends_on": []
+        }
+      ],
+      "reward": {
+        "kind": "clue",
+        "summary": "阿星提供一条路线线索：出口钥匙由他保管，旧货运电梯需要两人配合启动。获得线索不等于获得钥匙或启动成功。"
+      },
+      "source_submission": 7,
+      "assignee": "player",
+      "effect_class": "ordinary"
+    },
+    {
+      "id": "flowers",
+      "owner": "xiaoxiaoqing",
+      "title": "今日份花花",
+      "description": "小小晴请玩家向实际收件人送花，转达今天的祝福。",
+      "enabled_on_start": true,
+      "steps": [
+        {
+          "id": "deliver",
+          "label": "向实际收件人交付花束",
+          "performed_by": [
+            "player"
+          ],
+          "depends_on": []
+        },
+        {
+          "id": "blessing",
+          "label": "实际转达小小晴的祝福",
+          "performed_by": [
+            "player"
+          ],
+          "depends_on": []
+        }
+      ],
+      "reward": {
+        "kind": "social_opportunity",
+        "summary": "留下真实送花与祝福的经历，可以顺便询问愿意公开的信息；收件人自己回应，不自动增加全岛好感。"
+      },
+      "source_submission": 9,
+      "assignee": "player",
+      "effect_class": "ordinary"
+    },
+    {
+      "id": "dock_sort",
+      "owner": "linxu",
+      "title": "码头的日常",
+      "description": "林序请玩家负责整理码头物资、清点船上用品。",
+      "enabled_on_start": true,
+      "steps": [
+        {
+          "id": "sort",
+          "label": "实际整理码头物资",
+          "performed_by": [
+            "player"
+          ],
+          "depends_on": []
+        },
+        {
+          "id": "count",
+          "label": "实际清点船上用品",
+          "performed_by": [
+            "player"
+          ],
+          "depends_on": []
+        }
+      ],
+      "reward": {
+        "kind": "relationship_experience",
+        "summary": "留下共同整理码头的经历，建立熟悉；不自动让船可用或触发撤离。"
+      },
+      "source_submission": 11,
+      "assignee": "player",
+      "effect_class": "ordinary"
+    },
+    {
+      "id": "departure_prep",
+      "owner": "linxu",
+      "title": "一次真正的出航准备",
+      "description": "相关出航局面发生后，林序请玩家取齐物资、协助检查并将时间地点实际传给Z。林序负责船况、海况与掌舵。",
+      "enabled_on_start": false,
+      "steps": [
+        {
+          "id": "fuel",
+          "label": "实际取齐燃料",
+          "performed_by": [
+            "player"
+          ],
+          "depends_on": []
+        },
+        {
+          "id": "water",
+          "label": "实际取齐淡水",
+          "performed_by": [
+            "player"
+          ],
+          "depends_on": []
+        },
+        {
+          "id": "spares",
+          "label": "实际取齐备用零件",
+          "performed_by": [
+            "player"
+          ],
+          "depends_on": []
+        },
+        {
+          "id": "safety",
+          "label": "协助检查救生衣与通信设备",
+          "performed_by": [
+            "player"
+          ],
+          "depends_on": []
+        },
+        {
+          "id": "boat",
+          "label": "林序实际检查船况并判断当前海况",
+          "performed_by": [
+            "linxu"
+          ],
+          "depends_on": []
+        },
+        {
+          "id": "notify",
+          "label": "玩家通过真实渠道让Z收到出发时间与集合位置",
+          "performed_by": [
+            "player"
+          ],
+          "depends_on": []
+        }
+      ],
+      "reward": {
+        "kind": "offer_help",
+        "summary": "林序愿承担自己的船务与掌舵责任；这只说明准备委托完成，Z是否愿走、限制是否解除与实际离岛仍另行判断。"
+      },
+      "source_submission": 11,
+      "assignee": "player",
+      "effect_class": "escape_assistance"
+    },
+    {
+      "id": "two_friends_photo",
+      "owner": "zhou_bobo",
+      "title": "两位熟人的合照",
+      "description": "周伯伯请玩家找两位既有熟人，先问愿不愿意来照相馆一起拍照。拒绝可以另约或换人。",
+      "enabled_on_start": true,
+      "steps": [
+        {
+          "id": "invite",
+          "label": "玩家实际向两位熟人提出邀请",
+          "performed_by": [
+            "player"
+          ],
+          "depends_on": []
+        },
+        {
+          "id": "consent",
+          "label": "两位熟人各自明确、自愿同意",
+          "performed_by": [
+            "player"
+          ],
+          "depends_on": [
+            "invite"
+          ]
+        },
+        {
+          "id": "arrive",
+          "label": "两位同意的熟人实际到照相馆",
+          "performed_by": [
+            "player"
+          ],
+          "depends_on": [
+            "consent"
+          ]
+        },
+        {
+          "id": "photo",
+          "label": "周伯伯为自愿到场的人实际完成拍摄",
+          "performed_by": [
+            "zhou_bobo"
+          ],
+          "depends_on": [
+            "arrive"
+          ]
+        }
+      ],
+      "reward": {
+        "kind": "background_only",
+        "summary": "周伯伯提供参与熟人的已启用、可公开背景；不奖励船、钥匙、权限、路线解锁、接应或逃离承诺。"
+      },
+      "source_submission": 12,
+      "assignee": "player",
+      "effect_class": "ordinary"
+    }
+  ],
+  "notes": {
+    "zhengyi": "原表任务栏只有“不希望Z被代替”的态度，未给具体玩家委托，因此不新增任务。"
+  }
+}

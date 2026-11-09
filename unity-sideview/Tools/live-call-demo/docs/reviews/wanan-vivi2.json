@@ -1,0 +1,14 @@
+{
+  "songId": "wanan-yanrenzhong-vivi2-chorus",
+  "sourceCandidate": "../output/singing-candidates/vivi-wanan-2026-11-02T09-33-07-640Z.wav",
+  "sha256": "24b598acd511e50c0dc434ee1405d1fd4abacb45bfe5bddaf1b67e1e065b03df",
+  "durationSeconds": 32.28479166666666,
+  "voiceIdentity": "z-vivi",
+  "voiceVersion": 1,
+  "approvalSource": "当前对话，用户试听后明确接受并要求加入曲库",
+  "approvalText": "这版可以，帮我把它接进 demo 的曲库，只保留这首《晚安》",
+  "approved": true,
+  "scope": "本次试听的原文件，不替换录音、不裁切；作为第一段完整副歌清唱的 demo 验收版本。人工整体接受，不声称独立自动验证旋律、歌词或声纹。",
+  "providerTtsType": "sing",
+  "reviewedOn": "2026-11-02"
+}

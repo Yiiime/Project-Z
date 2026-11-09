@@ -122,7 +122,7 @@ test('host tool contract and advertised capabilities only expose singing',async 
  for(const name of retiredTools)assert.throws(()=>parseAgentReply({...reply,tool:{name,args:{}}},{kind:'host',context}));
  for(const kind of ['artwork','talent','decision'])assert.throws(()=>normalizeAgentInput({requestId:crypto.randomUUID(),eventId:'test',kind,context:{phase:'chat'}}));
  const host=buildAgentRequest({kind:'host',context});
- assert.deepEqual(host.input.capabilities.map(c=>c.id).sort(),['audience-reaction','singing']);
+ assert.deepEqual(host.input.capabilities.map(c=>c.id).sort(),['audience-reaction','live-session-control','singing']);
  assert(!retiredTools.some(name=>host.system.includes(name)));
  const audience=buildAgentRequest(normalizeAgentInput({requestId:crypto.randomUUID(),eventId:'event',kind:'audience',context:{phase:'chat',publicEvents:[]}}));
  assert.deepEqual(audience.input.capabilities.map(c=>c.id),['singing']);
