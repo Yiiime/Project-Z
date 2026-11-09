@@ -1,7 +1,7 @@
+using System.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,31 +13,35 @@ namespace Seabreeze
     // PR32 presentation, driven by the existing model conversation and memory events.
     public sealed class MemoryDialogueView : MonoBehaviour
     {
-        MemoryGameController memory; GameSession session; WorldDirector world;
-        RectTransform root,statusPanel,speechPanel,playerPanel,taskPanel,portrait,column,content;
-        TextMeshProUGUI statusText,speechTitle,speechText,playerTitle,locationText,historyText,playerState;
+        MemoryGameController memory; GameSession session;
+        RectTransform taskPanel;bool taskLayoutVisible;
+        TextMeshProUGUI taskTitle;Button acceptTask,declineTask,inviteTask;string offeredTask,lastCheckpoint;readonly List<string> activeTasks=new List<string>();int selectedTask;
+        RectTransform root,speechPanel,playerPanel,portrait,column,content;
+        TextMeshProUGUI speechTitle,speechText,playerTitle,locationText,historyText,playerState,emptyPrompt;
         TMP_InputField input; Button send; ScrollRect historyScroll;
         CanvasGroup playerGroup; Live2DCharacterView character; Coroutine transition;
-        readonly List<string> history=new List<string>();
-        readonly Dictionary<NpcPresence,TextMeshProUGUI> names=new Dictionary<NpcPresence,TextMeshProUGUI>();
-        string selectedActor,lastSpeaker; bool entering,typing,taskLayoutVisible; float revealed,speechUntil;
-        TextMeshProUGUI taskTitle;Button acceptTask,declineTask,inviteTask;string offeredTask,lastCheckpoint;readonly List<string> activeTasks=new List<string>();int selectedTask;
+        sealed class ChatBubble
+        {
+            public RectTransform Row,Panel;
+            public TextMeshProUGUI Text;
+        }
+        readonly List<ChatBubble> history=new List<ChatBubble>();
+        DialogueSceneBackdrop backdrop;
+        float previousColumnWidth;
+        static readonly Color BubbleInk=new Color(.145f,.149f,.208f,1);
+        string selectedActor,lastSpeaker; bool entering,typing; float revealed,speechUntil;
+
         public bool Closing {get;private set;}
         public bool PlayerInputReady => !entering&&!Closing&&playerPanel!=null&&playerPanel.gameObject.activeSelf;
         public string VisibleSpeech => speechText!=null&&speechPanel.gameObject.activeSelf?speechTitle.text+"："+speechText.text:"";
         public void Initialize(MemoryGameController m,GameSession s,WorldDirector w)
         {
-            memory=m;session=s;world=w;UIPrimitives.Font=Resources.Load<TMP_FontAsset>("Fonts/SeabreezeChinese");
+            memory=m;session=s;UIPrimitives.Font=Resources.Load<TMP_FontAsset>("Fonts/SeabreezeChinese");
             var canvas=new GameObject("岛民对话界面",typeof(RectTransform),typeof(Canvas),typeof(CanvasScaler),typeof(GraphicRaycaster));
             canvas.transform.SetParent(transform,false);canvas.GetComponent<Canvas>().renderMode=RenderMode.ScreenSpaceOverlay;canvas.GetComponent<Canvas>().sortingOrder=150;
             var scaler=canvas.GetComponent<CanvasScaler>();scaler.uiScaleMode=CanvasScaler.ScaleMode.ScaleWithScreenSize;scaler.referenceResolution=Style.ReferenceResolution;scaler.matchWidthOrHeight=.5f;
             root=canvas.GetComponent<RectTransform>();
-            statusPanel=Panel("记忆状态",root,Vector2.one,Vector2.one,new Vector2(-26,-136),new Vector2(430,148),Style.HudFill).rectTransform;
-            statusText=Label("状态",statusPanel,Vector2.up,Vector2.up,new Vector2(18,-14),new Vector2(394,62),"",20,Paper);statusText.richText=false;statusText.enableAutoSizing=true;statusText.fontSizeMin=14;statusText.fontSizeMax=20;
-            ButtonAt("模型设置",statusPanel,new Vector2(14,-99),new Vector2(100,35),()=>Application.OpenURL(MemoryRuntimeConfig.Settings.serviceUrl+"/"));
-            ButtonAt("记忆",statusPanel,new Vector2(123,-99),new Vector2(88,35),()=>Application.OpenURL(MemoryRuntimeConfig.Settings.serviceUrl+"/memories"));
-            ButtonAt("保存",statusPanel,new Vector2(220,-99),new Vector2(88,35),()=>{if(session.Save())session.Story.Notify("小岛进度已保存。");});
-            ButtonAt("读档",statusPanel,new Vector2(317,-99),new Vector2(98,35),()=>session.LoadSavedGame());
+
             speechPanel=Panel("附近的交谈",root,new Vector2(.5f,0),new Vector2(.5f,0),new Vector2(0,30),new Vector2(1060,200),Style.PanelFill).rectTransform;
             speechTitle=Label("说话者",speechPanel,Vector2.up,Vector2.up,new Vector2(26,-16),new Vector2(1008,35),"",25,Accent);
             speechText=Label("台词",speechPanel,Vector2.up,Vector2.up,new Vector2(26,-60),new Vector2(1008,122),"",25,Paper);speechTitle.richText=speechText.richText=false;
@@ -59,46 +63,69 @@ namespace Seabreeze
         void BuildPlayerView()
         {
             playerPanel=Stretch("玩家交谈",root,Vector2.zero,Vector2.zero);playerGroup=playerPanel.gameObject.AddComponent<CanvasGroup>();
-            var shade=Stretch("Scene dim",playerPanel,Vector2.zero,Vector2.zero).gameObject.AddComponent<Image>();shade.color=Style.Scrim;shade.raycastTarget=true;
-            portrait=Region("Live2D portrait viewport",playerPanel,new Vector2(.025f,.015f),new Vector2(.51f,.95f));portrait.gameObject.AddComponent<RectMask2D>();
+            backdrop=gameObject.AddComponent<DialogueSceneBackdrop>();backdrop.Initialize(playerPanel);
+            var shade=Stretch("Scene dim",playerPanel,Vector2.zero,Vector2.zero).gameObject.AddComponent<Image>();shade.color=new Color(.08f,.12f,.22f,.19f);shade.raycastTarget=true;
+            portrait=Region("Live2D portrait viewport",playerPanel,new Vector2(.015f,.025f),new Vector2(.445f,.84f));portrait.gameObject.AddComponent<RectMask2D>();
             character=portrait.gameObject.AddComponent<Live2DCharacterView>();character.Initialize(portrait);
-            column=Region("Conversation column",playerPanel,new Vector2(.545f,.11f),new Vector2(.925f,.87f));
-            playerTitle=Label("交谈对象",column,Vector2.up,Vector2.up,Vector2.zero,new Vector2(690,58),"",42,Paper);
-            locationText=Label("地点时段",column,Vector2.up,Vector2.up,new Vector2(0,-68),new Vector2(690,36),"",20,Muted);
-            foreach(var label in new[]{playerTitle,locationText}){label.richText=false;label.rectTransform.anchorMax=Vector2.one;label.rectTransform.sizeDelta=new Vector2(0,label.rectTransform.sizeDelta.y);}
-            var separator=Stretch("Conversation separator",column,Vector2.zero,Vector2.zero);separator.anchorMin=Vector2.up;separator.anchorMax=Vector2.one;separator.pivot=new Vector2(.5f,1);separator.anchoredPosition=new Vector2(0,-120);separator.sizeDelta=new Vector2(0,1);separator.gameObject.AddComponent<Image>().color=Style.PanelBorder;
-            var viewport=Stretch("Conversation scroll viewport",column,new Vector2(-5,148),new Vector2(5,-145));viewport.gameObject.AddComponent<RectMask2D>();
+            column=Region("Conversation column",playerPanel,new Vector2(.455f,.12f),new Vector2(.95f,.87f));
+            playerTitle=Label("交谈对象",column,Vector2.up,Vector2.up,Vector2.zero,new Vector2(690,58),"",44,Paper);
+            locationText=Label("地点时段",column,Vector2.up,Vector2.up,new Vector2(0,-64),new Vector2(690,36),"",18,Paper);
+            foreach(var label in new[]{playerTitle,locationText}){label.richText=false;label.rectTransform.anchorMax=Vector2.one;label.rectTransform.sizeDelta=new Vector2(-160,label.rectTransform.sizeDelta.y);}
+            var viewport=Stretch("Conversation scroll viewport",column,new Vector2(-5,138),new Vector2(5,-156));viewport.gameObject.AddComponent<RectMask2D>();
             var hit=viewport.gameObject.AddComponent<Image>();hit.color=Color.clear;hit.raycastTarget=true;
             historyScroll=viewport.gameObject.AddComponent<ScrollRect>();historyScroll.horizontal=false;historyScroll.movementType=ScrollRect.MovementType.Clamped;historyScroll.scrollSensitivity=34;historyScroll.viewport=viewport;
-            content=Region("Conversation content",viewport,Vector2.up,Vector2.one);content.pivot=new Vector2(.5f,1);
-            var layout=content.gameObject.AddComponent<VerticalLayoutGroup>();layout.padding=new RectOffset(5,5,5,5);layout.childControlWidth=true;layout.childControlHeight=true;layout.childForceExpandWidth=true;layout.childForceExpandHeight=false;
-            content.gameObject.AddComponent<ContentSizeFitter>().verticalFit=ContentSizeFitter.FitMode.PreferredSize;historyScroll.content=content;
-            var bubble=Panel("Dialogue bubble",content,Vector2.zero,Vector2.up,Vector2.zero,new Vector2(690,220),Style.PanelFill,true);
-            var bubbleLayout=bubble.gameObject.AddComponent<VerticalLayoutGroup>();bubbleLayout.padding=new RectOffset(28,28,24,24);bubbleLayout.childControlWidth=true;bubbleLayout.childControlHeight=true;bubbleLayout.childForceExpandHeight=false;
-            historyText=Label("交谈记录",bubble.transform,Vector2.zero,Vector2.zero,Vector2.zero,Vector2.zero,"",Style.DialogueBodySize,Paper);historyText.richText=false;historyText.lineSpacing=12;historyText.gameObject.AddComponent<LayoutElement>().minHeight=90;
-            var reveal=bubble.gameObject.AddComponent<Button>();reveal.transition=Selectable.Transition.None;reveal.onClick.AddListener(FinishTyping);reveal.navigation=new Navigation{mode=Navigation.Mode.None};
-            var dock=Rect("回复",column,Vector2.zero,Vector2.zero,new Vector2(0,27),new Vector2(0,60));dock.anchorMax=Vector2.right;
-            var field=Panel("输入",dock,Vector2.zero,Vector2.zero,Vector2.zero,new Vector2(-122,60),Style.PanelFill,true);field.rectTransform.anchorMax=Vector2.right;
-            input=field.gameObject.AddComponent<TMP_InputField>();input.characterLimit=300;input.lineType=TMP_InputField.LineType.SingleLine;
-            var area=Stretch("Text Area",field.transform,new Vector2(14,11),new Vector2(-14,-11));area.gameObject.AddComponent<RectMask2D>();
-            var entered=Label("Text",area,Vector2.zero,Vector2.zero,Vector2.zero,Vector2.zero,"",23,Paper);Fill(entered.rectTransform);entered.textWrappingMode=TextWrappingModes.NoWrap;
-            input.textViewport=area;input.textComponent=entered;input.richText=false;
-            var hint=Label("Placeholder",area,Vector2.zero,Vector2.zero,Vector2.zero,Vector2.zero,"写下想说的话…",22,Muted);Fill(hint.rectTransform);hint.richText=false;input.placeholder=hint;
+            content=Region("Conversation content",viewport,Vector2.up,Vector2.one);content.pivot=new Vector2(.5f,1);historyScroll.content=content;
+            emptyPrompt=Label("Conversation invitation",content,Vector2.up,Vector2.up,new Vector2(12,-26),new Vector2(630,64),"想说什么，就从这里开始吧。",23,new Color(.95f,.95f,1,.8f));
+            var dock=Panel("回复",column,Vector2.zero,Vector2.zero,Vector2.zero,new Vector2(0,72),new Color(.94f,.95f,1,.64f),true);dock.rectTransform.anchorMax=Vector2.right;
+            ((RoundedPanel)dock).CornerRadius=36;((RoundedPanel)dock).SetBorder(new Color(1,1,1,.28f),1);
+            input=dock.gameObject.AddComponent<TMP_InputField>();input.characterLimit=300;input.lineType=TMP_InputField.LineType.SingleLine;
+            var area=Stretch("Text Area",dock.transform,new Vector2(26,18),new Vector2(-128,-18));area.gameObject.AddComponent<RectMask2D>();
+            var entered=Label("Text",area,Vector2.zero,Vector2.zero,Vector2.zero,Vector2.zero,"",23,BubbleInk);Fill(entered.rectTransform);entered.textWrappingMode=TextWrappingModes.NoWrap;
+            input.textViewport=area;input.textComponent=entered;input.richText=false;input.caretColor=BubbleInk;input.customCaretColor=true;
+            var hint=Label("Placeholder",area,Vector2.zero,Vector2.zero,Vector2.zero,Vector2.zero,"写下想说的话…",23,new Color(.2f,.23f,.30f,.63f));Fill(hint.rectTransform);hint.richText=false;input.placeholder=hint;
             input.onSubmit.AddListener(_=>Send());
-            send=UIPrimitives.Button("发送",dock,Vector2.right,Vector2.right,Vector2.zero,new Vector2(108,60),"发送 →",Send,false,22);send.GetComponentInChildren<TextMeshProUGUI>().alignment=TextAlignmentOptions.Center;
-            playerState=Label("连接与等待状态",column,Vector2.zero,Vector2.zero,new Vector2(0,101),new Vector2(730,30),"",18,Muted);playerState.richText=false;playerState.rectTransform.anchorMax=Vector2.right;playerState.rectTransform.sizeDelta=new Vector2(0,30);
-            var help=Label("输入提示",column,Vector2.zero,Vector2.zero,new Vector2(0,-24),new Vector2(730,32),"Enter 发送    ·    滚动查看    ·    Esc 返回",18,Muted);help.rectTransform.anchorMax=Vector2.right;help.rectTransform.sizeDelta=new Vector2(0,32);
-            var close=UIPrimitives.Button("结束交谈",playerPanel,Vector2.one,Vector2.one,new Vector2(-42,-40),new Vector2(56,56),"",()=>memory.Conversations.Cancel("玩家结束交谈"));((RoundedPanel)close.targetGraphic).CornerRadius=28;
-            var icon=Stretch("Close icon",close.transform,new Vector2(14,14),new Vector2(-14,-14)).gameObject.AddComponent<LineIcon>();icon.symbol=LineIcon.Symbol.Close;icon.color=Paper;icon.raycastTarget=false;
-            Label("Return hint",close.transform,new Vector2(.5f,0),new Vector2(.5f,1),new Vector2(0,-12),new Vector2(130,30),"Esc 返回",16,Muted,TextAlignmentOptions.Top);
+            var sendPanel=Panel("发送",dock.transform,new Vector2(1,.5f),new Vector2(1,.5f),new Vector2(-12,0),new Vector2(98,48),new Color(1,1,1,.28f),true);
+            ((RoundedPanel)sendPanel).CornerRadius=24;((RoundedPanel)sendPanel).SetBorder(new Color(1,1,1,.4f),1);
+            send=sendPanel.gameObject.AddComponent<Button>();send.targetGraphic=sendPanel;send.navigation=new Navigation{mode=Navigation.Mode.None};send.onClick.AddListener(Send);
+            var sendColors=send.colors;sendColors.highlightedColor=new Color(.86f,.86f,1,1);sendColors.pressedColor=new Color(.7f,.75f,.9f,1);send.colors=sendColors;
+            Label("Send caption",sendPanel.transform,new Vector2(.5f,.5f),new Vector2(.5f,.5f),Vector2.zero,new Vector2(90,35),"发送 →",21,BubbleInk,TextAlignmentOptions.Center);
+            playerState=Label("连接与等待状态",column,Vector2.zero,Vector2.zero,new Vector2(5,88),new Vector2(730,32),"",18,Paper);playerState.richText=false;playerState.rectTransform.anchorMax=Vector2.right;playerState.rectTransform.sizeDelta=new Vector2(0,32);
+            var help=Label("输入提示",column,Vector2.zero,Vector2.zero,new Vector2(5,-36),new Vector2(730,28),"Enter 发送    ·    点击气泡显示全文    ·    Esc 返回",16,new Color(.9f,.92f,1,.7f));help.rectTransform.anchorMax=Vector2.right;help.rectTransform.sizeDelta=new Vector2(0,28);
+            DialogueControl("声音",-76,"sound",()=>{AudioListener.volume=AudioListener.volume>.01f?0:1;});
+            DialogueControl("结束交谈",-8,"close",()=>memory.Conversations.Cancel("玩家结束交谈"));
             playerGroup.alpha=0;playerPanel.gameObject.SetActive(false);
         }
+        void DialogueControl(string name,float x,string symbol,Action action)
+        {
+            var p=Panel(name,column,Vector2.one,Vector2.one,new Vector2(x,-12),new Vector2(49,49),new Color(.92f,.94f,1,.45f),true);
+            ((RoundedPanel)p).CornerRadius=25;((RoundedPanel)p).SetBorder(new Color(1,1,1,.28f));
+            var button=p.gameObject.AddComponent<Button>();button.targetGraphic=p;button.navigation=new Navigation{mode=Navigation.Mode.None};button.onClick.AddListener(()=>{if(PlayerInputReady)action();});
+            FinalKitAssets.Icon(symbol,p.transform,new Vector2(.5f,.5f),new Vector2(.5f,.5f),Vector2.zero,new Vector2(21,21));
+        }
+        void ClearHistory()
+        {
+            foreach(var bubble in history)Destroy(bubble.Row.gameObject);history.Clear();historyText=null;
+            if(emptyPrompt!=null)emptyPrompt.gameObject.SetActive(true);
+        }
+        void AddBubble(string message,bool isPlayer)
+        {
+            emptyPrompt.gameObject.SetActive(false);
+            var row=Rect(isPlayer?"Player message":"NPC message",content,Vector2.up,Vector2.up,Vector2.zero,Vector2.zero);row.anchorMax=Vector2.one;
+            var anchor=isPlayer?Vector2.one:Vector2.up;
+            var panel=FinalKitAssets.Bubble(isPlayer?"bubble-player":"bubble-npc",row,anchor,anchor,Vector2.zero,new Vector2(334,86));panel.raycastTarget=true;
+            var text=Label("Message",panel.transform,Vector2.up,Vector2.up,new Vector2(34,-22),new Vector2(260,36),message,24,BubbleInk);text.richText=false;text.lineSpacing=5;
+            var reveal=panel.gameObject.AddComponent<Button>();reveal.targetGraphic=panel;reveal.transition=Selectable.Transition.None;reveal.navigation=new Navigation{mode=Navigation.Mode.None};reveal.onClick.AddListener(FinishTyping);
+            history.Add(new ChatBubble{Row=row,Panel=panel.rectTransform,Text=text});historyText=text;
+            if(history.Count>12){Destroy(history[0].Row.gameObject);history.RemoveAt(0);}
+            RefreshHistoryLayout();
+        }
         static void Fill(RectTransform rect){rect.anchorMin=Vector2.zero;rect.anchorMax=Vector2.one;rect.offsetMin=rect.offsetMax=Vector2.zero;}
+        static bool IsComposing(){var system=EventSystem.current?.currentInputModule?.input;return !string.IsNullOrEmpty(system!=null?system.compositionString:Input.compositionString);}
         Button ButtonAt(string caption,Transform parent,Vector2 position,Vector2 size,Action action)
         {
-            var b=UIPrimitives.Button(caption,parent,Vector2.up,Vector2.up,position,size,caption,action,false,18);b.GetComponentInChildren<TextMeshProUGUI>().alignment=TextAlignmentOptions.Center;return b;
+            var b=UIPrimitives.Button(caption,parent,Vector2.up,Vector2.up,position,size,caption,action,false,18);
+            b.GetComponentInChildren<TextMeshProUGUI>().alignment=TextAlignmentOptions.Center;return b;
         }
-        static bool IsComposing(){var system=EventSystem.current?.currentInputModule?.input;return !string.IsNullOrEmpty(system!=null?system.compositionString:Input.compositionString);}
         void Send()
         {
             if(IsComposing()){StartCoroutine(ResumeInput());return;}
@@ -108,8 +135,9 @@ namespace Seabreeze
         IEnumerator ResumeInput(){yield return null;if(PlayerInputReady&&memory.PlayerChatOpen)input.ActivateInputField();}
         public void OpenPlayer(string actorId)
         {
-            if(transition!=null)StopCoroutine(transition);Closing=false;entering=true;selectedActor=actorId;lastCheckpoint=null;history.Clear();typing=false;
-            historyText.text="在下方输入，按 Enter 开始交谈。";historyText.maxVisibleCharacters=int.MaxValue;playerTitle.text=SevenCharacterCatalog.Name(actorId);
+            if(transition!=null)StopCoroutine(transition);Closing=false;entering=true;selectedActor=actorId;lastCheckpoint=null;ClearHistory();typing=false;
+            playerTitle.text=SevenCharacterCatalog.Name(actorId);
+
             locationText.text=GameUI.PlaceName(session.CurrentPlace)+"  ·  "+GameUI.PeriodName(session.Clock.Period);
             playerPanel.gameObject.SetActive(true);speechPanel.gameObject.SetActive(false);playerGroup.alpha=0;playerGroup.interactable=false;input.text="";
             var definition=SevenCharacterCatalog.Find(actorId);var profile=!string.IsNullOrEmpty(definition?.portrait)?Resources.Load<Live2DModelProfile>(definition.portrait):null;
@@ -118,11 +146,12 @@ namespace Seabreeze
         }
         IEnumerator AnimatePlayer(bool opening)
         {
+            if(opening)yield return backdrop.Capture();
             float start=playerGroup.alpha,end=opening?1:0,duration=opening?Style.DialogueEnterDuration:Style.DialogueExitDuration;
             for(float t=0;t<1;t+=Time.unscaledDeltaTime/Mathf.Max(.01f,duration)){SetPose(Mathf.Lerp(start,end,t*t*(3-2*t)));yield return null;}
             SetPose(end);transition=null;entering=false;Closing=false;
             if(opening){playerGroup.interactable=true;input.ActivateInputField();}
-            else{playerPanel.gameObject.SetActive(false);character.Hide();}
+            else{playerPanel.gameObject.SetActive(false);character.Hide();backdrop.Release();}
         }
         void SetPose(float alpha){playerGroup.alpha=alpha;portrait.anchoredPosition=Vector2.left*(1-alpha)*34;portrait.localScale=Vector3.one*Mathf.Lerp(.975f,1,alpha);column.anchoredPosition=Vector2.right*(1-alpha)*18;}
         public void HidePlayer()
@@ -130,16 +159,28 @@ namespace Seabreeze
             if(playerPanel==null||!playerPanel.gameObject.activeSelf)return;
             if(transition!=null)StopCoroutine(transition);Closing=true;entering=false;playerGroup.interactable=false;input.DeactivateInputField();FinishTyping();transition=StartCoroutine(AnimatePlayer(false));
         }
-        void RefreshHistoryLayout(){Canvas.ForceUpdateCanvases();LayoutRebuilder.ForceRebuildLayoutImmediate(content);historyText.ForceMeshUpdate();historyScroll.verticalNormalizedPosition=0;}
+        void RefreshHistoryLayout()
+        {
+            Canvas.ForceUpdateCanvases();float width=Mathf.Max(160,historyScroll.viewport.rect.width-16),y=16;
+            previousColumnWidth=column.rect.width;
+            foreach(var bubble in history)
+            {
+                float maxWidth=Mathf.Min(594,width*.88f);
+                float bubbleWidth=Mathf.Clamp(bubble.Text.GetPreferredValues(bubble.Text.text).x+68,128,maxWidth);
+                float textHeight=Mathf.Max(34,bubble.Text.GetPreferredValues(bubble.Text.text,bubbleWidth-68,0).y);
+                bubble.Row.anchoredPosition=new Vector2(8,-y);bubble.Row.sizeDelta=new Vector2(-16,textHeight+52);
+                bubble.Panel.sizeDelta=new Vector2(bubbleWidth,textHeight+52);bubble.Text.rectTransform.sizeDelta=new Vector2(bubbleWidth-68,textHeight);
+                bubble.Text.ForceMeshUpdate();y+=textHeight+62;
+            }
+            content.sizeDelta=new Vector2(0,Mathf.Max(historyScroll.viewport.rect.height,y+8));historyScroll.verticalNormalizedPosition=0;
+        }
         void FinishTyping(){typing=false;if(historyText!=null)historyText.maxVisibleCharacters=int.MaxValue;if(character!=null)character.SetState("neutral",false);}
         public void ShowLine(string speaker,string text,Vector3 position,bool playerConversation)
         {
             if(playerConversation)
             {
-                FinishTyping();history.Add(SevenCharacterCatalog.Name(speaker)+"：\n"+text);while(history.Count>12)history.RemoveAt(0);
-                string prefix=history.Count>1?string.Join("\n\n",history.Take(history.Count-1))+"\n\n":"";
-                historyText.text=string.Join("\n\n",history);lastSpeaker=speaker;revealed=prefix.Length;
-                typing=speaker!="player";historyText.maxVisibleCharacters=typing?Mathf.FloorToInt(revealed):int.MaxValue;RefreshHistoryLayout();return;
+                FinishTyping();AddBubble(text,speaker=="player");lastSpeaker=speaker;revealed=0;
+                typing=speaker!="player";historyText.maxVisibleCharacters=typing?0:int.MaxValue;return;
             }
             speechTitle.text=SevenCharacterCatalog.Name(speaker);speechText.text=text;speechTitle.color=SevenCharacterCatalog.Find(speaker)?.Accent??Paper;
             speechUntil=Time.unscaledTime+Mathf.Clamp(1.3f+text.Length*.05f,2.5f,6);speechPanel.gameObject.SetActive(true);
@@ -153,14 +194,15 @@ namespace Seabreeze
         }
         public void ResetView()
         {
-            StopAllCoroutines();transition=null;Closing=entering=false;history.Clear();FinishTyping();playerPanel.gameObject.SetActive(false);playerGroup.alpha=0;character.Hide();speechPanel.gameObject.SetActive(false);taskPanel.gameObject.SetActive(false);lastCheckpoint=null;
+            StopAllCoroutines();transition=null;Closing=entering=false;ClearHistory();FinishTyping();backdrop.Release();playerPanel.gameObject.SetActive(false);playerGroup.alpha=0;character.Hide();speechPanel.gameObject.SetActive(false);taskPanel.gameObject.SetActive(false);lastCheckpoint=null;
+
         }
         void Update()
         {
             if(memory?.Client==null||root==null)return;
             bool fullView=playerPanel.gameObject.activeSelf,overlay=GameUI.Instance!=null&&(GameUI.Instance.HasOverlay||GameUI.Instance.IsOverlayTransitioning);
-            statusPanel.gameObject.SetActive(!fullView&&!overlay);
-            statusText.text="Z与七位岛民 · 统一Skill与自然记忆\n"+memory.Client.Status+(string.IsNullOrEmpty(memory.Client.LastError)?"":"\n"+memory.Client.LastError);
+            if(fullView&&!Mathf.Approximately(previousColumnWidth,column.rect.width))RefreshHistoryLayout();
+
             if(speechPanel.gameObject.activeSelf&&(Time.unscaledTime>speechUntil||fullView||overlay))speechPanel.gameObject.SetActive(false);
             if(PlayerInputReady&&GameInput.Pressed(Key.Escape))memory.Conversations.Cancel("玩家结束交谈");
             RefreshTasks();
@@ -169,32 +211,17 @@ namespace Seabreeze
             {
                 taskLayoutVisible=showTasks;
                 taskPanel.gameObject.SetActive(showTasks);
-                portrait.anchorMax=new Vector2(showTasks ? .36f : .51f,.95f);
-                column.anchorMin=new Vector2(showTasks ? .385f : .545f,.11f);column.anchorMax=new Vector2(showTasks ? 1 : .925f,.87f);column.offsetMin=Vector2.zero;column.offsetMax=new Vector2(showTasks ? -488 : 0,0);
+                portrait.anchorMax=new Vector2(showTasks ? .36f : .445f,.95f);
+                column.anchorMin=new Vector2(showTasks ? .385f : .455f,.11f);column.anchorMax=new Vector2(showTasks ? 1 : .95f,.87f);column.offsetMin=Vector2.zero;column.offsetMax=new Vector2(showTasks ? -488 : 0,0);
                 RefreshHistoryLayout();
             }
             acceptTask.interactable=declineTask.interactable=fullView&&offeredTask!=null&&memory.Client.CanGenerate;inviteTask.interactable=fullView&&activeTasks.Count>0&&memory.Client.CanGenerate;
             taskTitle.text=offeredTask!=null?"NPC已提出："+offeredTask:activeTasks.Count>0?"玩家进行中："+activeTasks[selectedTask]:"";
             send.interactable=PlayerInputReady&&memory.PlayerChatOpen&&memory.Client.CanGenerate&&!memory.Conversations.Sending;
-            playerState.text=memory.Conversations.Sending?"正在等待对方回应…":memory.Client.Status;
-            if(!string.IsNullOrEmpty(memory.Client.LastError))playerState.text+=" · "+memory.Client.LastError;
-            playerState.color=memory.Client.CanGenerate?Muted:Accent;
+            playerState.text=memory.Conversations.Sending?"对方正在想怎么说…":memory.Client.CanGenerate?"":"暂时无法连接。Esc 返回后，可在暂停菜单设置对话服务。";
+            playerState.color=new Color(.94f,.94f,1,.82f);
             if(typing&&PlayerInputReady){revealed+=Time.unscaledDeltaTime*Style.TypewriterSpeed;historyText.maxVisibleCharacters=Mathf.FloorToInt(revealed);if(historyText.maxVisibleCharacters>=historyText.textInfo.characterCount)FinishTyping();else character.SetState("neutral",lastSpeaker==selectedActor);}
-            foreach(var dead in names.Keys.Where(n=>n==null).ToArray()){if(names[dead]!=null)Destroy(names[dead].gameObject);names.Remove(dead);}
-            foreach(var npc in memory.Spawner.Actors)
-            {
-                if(npc==null)continue;
-                if(!npc.IsPresent||world.Follow==null){if(names.TryGetValue(npc,out var hidden))hidden.gameObject.SetActive(false);continue;}
-                if(!names.TryGetValue(npc,out var label))
-                {
-                    label=Label("NPC姓名",root,Vector2.zero,Vector2.zero,Vector2.zero,new Vector2(240,52),"",18,Paper,TextAlignmentOptions.Center);label.richText=false;
-                    label.text=SevenCharacterCatalog.Name(npc.npcId)+"\n"+(SevenCharacterCatalog.Find(npc.npcId)?.occupation??"");label.color=SevenCharacterCatalog.Find(npc.npcId)?.Accent??Paper;names[npc]=label;
-                    label.outlineWidth=.16f;label.outlineColor=new Color(0,0,0,.9f);label.rectTransform.anchorMin=label.rectTransform.anchorMax=new Vector2(.5f,.5f);label.rectTransform.pivot=new Vector2(.5f,0);
-                }
-                var worldCamera=world.Follow.GetComponent<Camera>();var p=worldCamera.WorldToScreenPoint(npc.transform.position+Vector3.up*3.45f);
-                label.gameObject.SetActive(!fullView&&!overlay&&p.z>0&&worldCamera.pixelRect.Contains(p));var canvas=root.GetComponent<Canvas>();
-                if(RectTransformUtility.ScreenPointToLocalPointInRectangle(root,p,canvas.renderMode==RenderMode.ScreenSpaceOverlay?null:canvas.worldCamera,out var local))label.rectTransform.anchoredPosition=local;
-            }
+
         }
     }
 }

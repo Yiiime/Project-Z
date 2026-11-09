@@ -28,9 +28,10 @@ namespace Seabreeze.Editor
             StoryContentBuilder.Build();
             SetupRenderPipeline();
             SetupPlayer();
-            foreach (PlaceId p in Enum.GetValues(typeof(PlaceId)))
+            foreach (PlaceId p in new[] {PlaceId.Street, PlaceId.Cafe, PlaceId.Lighthouse})
                 BuildScene(p);
-            EditorBuildSettings.scenes = Enum.GetValues(typeof(PlaceId)).Cast<PlaceId>().Select(p => new EditorBuildSettingsScene(Root + "Scenes/" + p + ".unity", true)).ToArray();
+            EditorBuildSettings.scenes = new[] {PlaceId.Street, PlaceId.Cafe, PlaceId.Lighthouse}.Select(p => new EditorBuildSettingsScene(Root + "Scenes/" + p + ".unity", true)).ToArray();
+            if (AssetDatabase.LoadAssetAtPath<IslandMapCatalog>(Root + "Resources/Content/IslandMap.asset") != null) IslandMapBuilder.Build();
             PlayerSettings.companyName = "Seabreeze Studio";
             PlayerSettings.bundleVersion = "0.1.0";
             PlayerSettings.SetApplicationIdentifier(UnityEditor.Build.NamedBuildTarget.Standalone, "com.seabreezestudio.letter");

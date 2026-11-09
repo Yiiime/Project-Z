@@ -1,0 +1,14 @@
+check,result,details
+cross_map_load,PASS,Beach x=3
+same_map_load,PASS,Beach x=3
+normal_travel_default_spawn,PASS,Street x=0
+continuous_walk_three_boundaries,PASS,sequence=Harbor>Street>Square>EastCrossing timeScale=1
+pause_open,PASS,overlay=True
+paused_boundary_blocked,PASS,stage=BeachEntrance
+resume_boundary_stay,PASS,stage=Beach
+dialogue_boundary_blocked,PASS,dialogue=True
+dialogue_release_boundary,PASS,stage=Beach
+jump_boundary,PASS,maxY=1.404368 stage=Restaurant
+closed_endpoint_barrier,PASS,x=10.84084 width=22.09167
+final_input_and_physics,PASS,ready
+temporary_input_restored,PASS,original input settings restored

@@ -14,6 +14,87 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Seabreeze/Scenes/Lighthouse.unity
     guid: c5b6aaad7fd384bf592679e6a18cebaa
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/ResidentialCenter.unity
+    guid: 8ebbd233b2099409ba1392a139684711
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/Forest.unity
+    guid: da2fc86f28fbe470c9c0fdec74e004fa
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/ForestCabin.unity
+    guid: afd565fc28fe54a2681d27925201d23a
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/Research.unity
+    guid: 1111e30b4058f44aea4a5385e8db02ce
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/Summit.unity
+    guid: cae7631ae4e124341a7bd38137292a32
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/Harbor.unity
+    guid: 8c41c50b4651c48fc8a0cf3ba7038b37
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/Square.unity
+    guid: 17eda2221cc6c451c822d4211b26ba67
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/EastCrossing.unity
+    guid: bddb08b86287b4a5694db1f41be01df1
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/Boardwalk.unity
+    guid: 55cd4324414f54111b5a1cfbfb7c42be
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/Seafront.unity
+    guid: f4d54f9bf728148ae9ff9fc9d8e2839a
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/Beach.unity
+    guid: 0030e8568cb774cc79851cfa0d0fe677
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/ForestPath1.unity
+    guid: e17dab81172064842af929cbcf50f06d
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/ForestPath2.unity
+    guid: 48e368882093149a694a2788a8d4a32d
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/Restaurant.unity
+    guid: e92ad9b6faa404a11ab4a57ed63c5cf9
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/BeachEntrance.unity
+    guid: 7be15d845cb264febbbdd6dfdad40a4b
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/CaptainHome.unity
+    guid: 087e32247247a4be18eb0c419786772e
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/LiTingHome.unity
+    guid: c92d188c8f8c648eda0a0c5fbc066cde
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/ZiqingHome.unity
+    guid: ad1e717dfb5a947bb9f9250213c26834
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/ZHome.unity
+    guid: 02f1ffbe8b6c54b6497b200e22115956
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/ZhouHome.unity
+    guid: aa0826012303e4a849995e12b5ccef5f
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/VisitorCenter.unity
+    guid: 625ffda3678394d4bb74a39a6a0c6a8c
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/FlowerShop.unity
+    guid: 47c5e59031c8c43d5ac19dc531661b20
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/PhotoStudio.unity
+    guid: 03ee67dd0a98a4bebadd6fd74506ff03
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/CabinInterior.unity
+    guid: 35135c709ca7c4f7ba2bb19f2a891e7a
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/ResearchInterior.unity
+    guid: 82297a5d3d3684935b9d03bf9d36eaf3
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/BarInterior.unity
+    guid: bae65250bd571499698d130ac4fa6726
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/RestaurantInterior.unity
+    guid: 8b7dc3d61dd1f4fc6ac22ffdc35a2129
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

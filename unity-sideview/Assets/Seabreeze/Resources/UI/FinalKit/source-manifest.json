@@ -1,0 +1,238 @@
+{
+  "figmaFile": "GQsDhP4EXFWLJYimH44zQ9",
+  "page": "437:2 UI Kit · 终稿",
+  "date": "2026-11-09",
+  "rasterizer": "resvg-py 0.5.0, 3x, transparent; no SVG path modification",
+  "assets": [
+    {
+      "asset": "album",
+      "sourceSize": [
+        48.0,
+        48.0
+      ],
+      "pngSize": [
+        144.0,
+        144.0
+      ],
+      "source": "https://www.figma.com/api/mcp/asset/aa3fd5e7-0166-4864-b664-9ea580bdf042.svg"
+    },
+    {
+      "asset": "bubble-current",
+      "sourceSize": [
+        266.0,
+        120.0
+      ],
+      "pngSize": [
+        798.0,
+        360.0
+      ],
+      "source": "https://www.figma.com/api/mcp/asset/91803cbc-16d6-4fd6-b410-e20ca4213560.svg"
+    },
+    {
+      "asset": "bubble-npc",
+      "sourceSize": [
+        410.0,
+        86.0
+      ],
+      "pngSize": [
+        1230.0,
+        258.0
+      ],
+      "source": "https://www.figma.com/api/mcp/asset/bf6b30aa-bb0c-4c12-842f-6be7c8883fa9.svg"
+    },
+    {
+      "asset": "bubble-player",
+      "sourceSize": [
+        338.0,
+        86.0
+      ],
+      "pngSize": [
+        1014.0,
+        258.0
+      ],
+      "source": "https://www.figma.com/api/mcp/asset/10a698bd-d008-4dbe-ac21-b0c9c43ec70b.svg"
+    },
+    {
+      "asset": "close",
+      "sourceSize": [
+        21.0,
+        21.0
+      ],
+      "pngSize": [
+        63.0,
+        63.0
+      ],
+      "source": "https://www.figma.com/api/mcp/asset/758920aa-9f46-436b-b167-c1bd9883419d.svg"
+    },
+    {
+      "asset": "inner-ring",
+      "sourceSize": [
+        88.0,
+        88.0
+      ],
+      "pngSize": [
+        264.0,
+        264.0
+      ],
+      "source": "https://www.figma.com/api/mcp/asset/1bd003af-5f31-48ae-b1eb-ef5233d848a3.svg"
+    },
+    {
+      "asset": "live",
+      "sourceSize": [
+        48.0,
+        48.0
+      ],
+      "pngSize": [
+        144.0,
+        144.0
+      ],
+      "source": "https://www.figma.com/api/mcp/asset/efc3b59c-741a-4b7b-8bd7-b3cfa6cd20f6.svg"
+    },
+    {
+      "asset": "map",
+      "sourceSize": [
+        48.0,
+        48.0
+      ],
+      "pngSize": [
+        144.0,
+        144.0
+      ],
+      "source": "https://www.figma.com/api/mcp/asset/5a47d0ad-4c46-4e71-890f-6186c5c99a7a.svg"
+    },
+    {
+      "asset": "messages",
+      "sourceSize": [
+        48.0,
+        48.0
+      ],
+      "pngSize": [
+        144.0,
+        144.0
+      ],
+      "source": "https://www.figma.com/api/mcp/asset/cc9c66ee-a530-4465-9b9f-66a8f6c23987.svg"
+    },
+    {
+      "asset": "outer-ring",
+      "sourceSize": [
+        104.0,
+        104.0
+      ],
+      "pngSize": [
+        312.0,
+        312.0
+      ],
+      "source": "https://www.figma.com/api/mcp/asset/b29fa8ab-ac5a-4643-befd-8b9dce38e827.svg"
+    },
+    {
+      "asset": "people",
+      "sourceSize": [
+        48.0,
+        48.0
+      ],
+      "pngSize": [
+        144.0,
+        144.0
+      ],
+      "source": "https://www.figma.com/api/mcp/asset/c9dc5380-4e4a-4baf-bc40-a531c5d96374.svg"
+    },
+    {
+      "asset": "phone",
+      "sourceSize": [
+        24.0,
+        24.0
+      ],
+      "pngSize": [
+        72.0,
+        72.0
+      ],
+      "source": "https://www.figma.com/api/mcp/asset/761a7dd6-3214-421a-88b3-a945cf6bddb2.svg"
+    },
+    {
+      "asset": "pin",
+      "sourceSize": [
+        18.0,
+        20.0
+      ],
+      "pngSize": [
+        54.0,
+        60.0
+      ],
+      "source": "https://www.figma.com/api/mcp/asset/9760004f-47bd-4aa8-9906-d8b94ec2c721.svg"
+    },
+    {
+      "asset": "prompt-tail",
+      "sourceSize": [
+        16.0,
+        9.0
+      ],
+      "pngSize": [
+        48.0,
+        27.0
+      ],
+      "source": "https://www.figma.com/api/mcp/asset/44d1a460-1fd5-4adf-92d8-077b2c027dbc.svg"
+    },
+    {
+      "asset": "sound",
+      "sourceSize": [
+        21.0,
+        21.0
+      ],
+      "pngSize": [
+        63.0,
+        63.0
+      ],
+      "source": "https://www.figma.com/api/mcp/asset/d838690a-f4fe-494e-8c7c-34d4868879f6.svg"
+    },
+    {
+      "asset": "sunset",
+      "sourceSize": [
+        24.0,
+        24.0
+      ],
+      "pngSize": [
+        72.0,
+        72.0
+      ],
+      "source": "https://www.figma.com/api/mcp/asset/0f344805-2e09-4c31-a7ba-10966f52a9e2.svg"
+    },
+    {
+      "asset": "task-check",
+      "sourceSize": [
+        22.0,
+        22.0
+      ],
+      "pngSize": [
+        66.0,
+        66.0
+      ],
+      "source": "https://www.figma.com/api/mcp/asset/bc01d403-00e6-4a3d-b91e-6d479ecc7670.svg"
+    },
+    {
+      "asset": "tasks",
+      "sourceSize": [
+        48.0,
+        48.0
+      ],
+      "pngSize": [
+        144.0,
+        144.0
+      ],
+      "source": "https://www.figma.com/api/mcp/asset/8a444b75-6687-4889-87d6-a5fb4bb198b0.svg"
+    },
+    {
+      "asset": "waveform",
+      "sourceSize": [
+        24.0,
+        24.0
+      ],
+      "pngSize": [
+        72.0,
+        72.0
+      ],
+      "source": "https://www.figma.com/api/mcp/asset/d731c31b-e535-4fef-a8af-d829eec6b12a.svg"
+    }
+  ],
+  "font": "https://github.com/google/fonts/tree/main/ofl/bodonimoda",
+  "notes": "Downloaded original exports; rasterized unmodified at 3x outside Unity. Runtime uses only local PNG resources. SVG sources preserved in ArtSource/UIFinalKit. resvg-py is a local production tool, not a Unity dependency."
+}
