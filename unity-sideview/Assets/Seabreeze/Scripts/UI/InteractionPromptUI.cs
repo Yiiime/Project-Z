@@ -19,15 +19,16 @@ namespace Seabreeze
         public void Initialize(RectTransform canvas)
         {
             canvasRect=canvas;
-            root=Rect("Interaction prompt",canvas,new Vector2(.5f,.5f),new Vector2(.5f,.5f),Vector2.zero,new Vector2(148,52));
-            var body=Panel("Prompt glass",root,Vector2.zero,Vector2.zero,Vector2.zero,root.sizeDelta,Style.HudFill);
-            ((RoundedPanel)body).CornerRadius=23;
-            ((RoundedPanel)body).SetBorder(Style.PanelBorder,.9f);
-            var key=Panel("Key badge",root,new Vector2(0,.5f),new Vector2(0,.5f),new Vector2(9,0),new Vector2(34,34),new Color(.78f,.87f,.91f,.94f));
-            ((RoundedPanel)key).CornerRadius=9;
+            root=Rect("Interaction prompt",canvas,new Vector2(.5f,.5f),new Vector2(.5f,.5f),Vector2.zero,new Vector2(119,56));
+            var body=Panel("Prompt glass",root,Vector2.zero,Vector2.zero,Vector2.zero,root.sizeDelta,new Color(.188f,.173f,.314f,.64f));
+            ((RoundedPanel)body).CornerRadius=28;
+            ((RoundedPanel)body).SetBorder(new Color(.914f,.894f,.96f,.55f),1);
+            var key=Panel("Key badge",root,new Vector2(0,.5f),new Vector2(0,.5f),new Vector2(12,0),new Vector2(26,28),new Color(.937f,.918f,.957f,1));
+            ((RoundedPanel)key).CornerRadius=5;
             ((RoundedPanel)key).SetBorder(Color.clear,0);
-            Label("Key",key.transform,new Vector2(.5f,.5f),new Vector2(.5f,.5f),Vector2.zero,new Vector2(34,34),"E",19,new Color(.07f,.13f,.22f),TextAlignmentOptions.Midline);
-            captionText=Label("Action",root,new Vector2(0,.5f),new Vector2(0,.5f),new Vector2(56,0),new Vector2(88,36),"交谈",21,Paper,TextAlignmentOptions.MidlineLeft);
+            Label("Key",key.transform,new Vector2(.5f,.5f),new Vector2(.5f,.5f),Vector2.zero,new Vector2(26,28),"E",18,new Color(.07f,.13f,.22f),TextAlignmentOptions.Midline);
+            captionText=Label("Action",root,new Vector2(0,.5f),new Vector2(0,.5f),new Vector2(50,0),new Vector2(88,36),"交谈",24,Paper,TextAlignmentOptions.MidlineLeft);
+            FinalKitAssets.Icon("prompt-tail",root,new Vector2(.5f,0),new Vector2(.5f,1),Vector2.zero,new Vector2(16,9));
             group=root.gameObject.AddComponent<CanvasGroup>();
             group.alpha=0;group.blocksRaycasts=false;group.interactable=false;
         }
@@ -39,10 +40,10 @@ namespace Seabreeze
             string value=npc?"交谈":Normalize(caption);
             if(value==currentCaption)return;
             currentCaption=value;captionText.text=value;
-            float width=Mathf.Clamp(captionText.GetPreferredValues(value).x+82,142,520);
-            root.sizeDelta=new Vector2(width,52);
+            float width=Mathf.Clamp(captionText.GetPreferredValues(value).x+70,119,520);
+            root.sizeDelta=new Vector2(width,56);
             ((RectTransform)root.GetChild(0)).sizeDelta=root.sizeDelta;
-            captionText.rectTransform.sizeDelta=new Vector2(width-68,36);
+            captionText.rectTransform.sizeDelta=new Vector2(width-58,36);
         }
         static string Normalize(string value)
         {

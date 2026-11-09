@@ -12,7 +12,7 @@ using static Seabreeze.UIPrimitives;
 namespace Seabreeze
 {
     [DefaultExecutionOrder(80)]
-    public sealed class GameUI : MonoBehaviour
+    public sealed partial class GameUI : MonoBehaviour
     {
         public static GameUI Instance { get; private set; }
         public bool HasOverlay => !string.IsNullOrEmpty(overlayMode);
@@ -76,25 +76,24 @@ namespace Seabreeze
         void BuildHUD()
         {
             hud=Stretch("Exploration HUD",canvasRect,Vector2.zero,Vector2.zero);
-            Panel("Environment information glass",hud,TL,TL,new Vector2(0,-97),new Vector2(460,132),new Color(.025f,.065f,.14f,.56f));
-            Panel("Date backing",hud,TL,TL,new Vector2(0,-52),new Vector2(310,45),new Color(.035f,.085f,.18f,.55f));
-            dateText=Label("Day",hud,TL,TL,new Vector2(60,-57),new Vector2(270,40),"第 1 天",26,Paper);
-            timeText=Label("Time period",hud,TL,TL,new Vector2(60,-104),new Vector2(195,65),"上午",46,Paper);
-            var weather=Rect("Weather icon",hud,TL,TL,new Vector2(250,-124),new Vector2(25,25));var wi=weather.gameObject.AddComponent<LineIcon>();wi.symbol=LineIcon.Symbol.Sun;wi.color=Paper;wi.raycastTarget=false;
-            weatherText=Label("Weather",hud,TL,TL,new Vector2(286,-122),new Vector2(350,40),"晴",22,Muted);
-            var pin=Rect("Place pin",hud,TL,TL,new Vector2(59,-181),new Vector2(22,25));var pi=pin.gameObject.AddComponent<LineIcon>();pi.symbol=LineIcon.Symbol.Pin;pi.color=Paper;pi.raycastTarget=false;
-            placeText=Label("Place",hud,TL,TL,new Vector2(92,-181),new Vector2(350,40),"海边小街",24,Paper);
-            RightShortcut("地图", "M", LineIcon.Symbol.Map, 105, ()=>ToggleOverlay("map"));
-            RightShortcut("手机", "Tab", LineIcon.Symbol.Phone, -9, ()=>ToggleOverlay("phone"));
-            RightShortcut("日志", "J", LineIcon.Symbol.Journal, -123, ()=>ToggleOverlay("journal"));
-            bottomStrip=Rect("Exploration footer",hud,BL,BL,Vector2.zero,new Vector2(1920,140));
-            Panel("Bottom atmosphere",bottomStrip,BL,BL,Vector2.zero,new Vector2(5000,140),new Color(.025f,.065f,.13f,.65f));
-            Line(bottomStrip,BL,BL,new Vector2(60,133),new Vector2(1800,1),new Color(.65f,.77f,.86f,.13f));
-            ambienceText=Label("Ambience",bottomStrip,BL,BL,new Vector2(60,83),new Vector2(1400,32),"海风，和远处的浪。",21,Muted,TextAlignmentOptions.BottomLeft);
-            Label("Controls",bottomStrip,BL,BL,new Vector2(60,35),new Vector2(1450,32),"A / D  移动     空格  跳跃     E  交互     M  地图     J  日志     Esc  暂停",20,Paper,TextAlignmentOptions.BottomLeft);
-            objectiveText=Label("Current thought",hud,new Vector2(1,1),new Vector2(1,1),new Vector2(-60,-56),new Vector2(650,90),"",21,Muted,TextAlignmentOptions.TopRight);
-            var sound=CircleButton("Sound",hud,new Vector2(1,0),new Vector2(1,0),new Vector2(-54,30),LineIcon.Symbol.Sound,()=>{AudioListener.volume=AudioListener.volume>.01f?0:1;ShowToast(AudioListener.volume<.01f?"声音已关闭":"海风回来了");});
+            dateText=Label("Day",hud,TL,TL,new Vector2(44,-52),new Vector2(270,36),"",26,Paper);
+            timeText=Label("Time period",hud,TL,TL,new Vector2(44,-96),new Vector2(98,60),"",44,Paper);
+            FinalKitAssets.Icon("sunset",hud,TL,TL,new Vector2(152,-116),new Vector2(24,24));
+            weatherText=Label("Weather",hud,TL,TL,new Vector2(188,-113),new Vector2(150,32),"",18,Paper);
+            FinalKitAssets.Icon("pin",hud,TL,TL,new Vector2(44,-169),new Vector2(18,20));
+            placeText=Label("Place",hud,TL,TL,new Vector2(72,-165),new Vector2(420,32),"",20,Paper);
+            bottomStrip=Stretch("Exploration footer",hud,Vector2.zero,Vector2.zero);
+            FinalKitAssets.Icon("waveform",bottomStrip,BL,BL,new Vector2(44,28),new Vector2(20,24));
+            ambienceText=Label("Ambience",bottomStrip,BL,BL,new Vector2(76,26),new Vector2(1120,30),"",18,new Color(.79f,.78f,.86f),TextAlignmentOptions.MidlineLeft);
+            objectiveText=Label("Current thought",hud,TL,TL,Vector2.zero,Vector2.zero,"",18,Muted);
+            objectiveText.gameObject.SetActive(false);
+            var phone=KitCircle("Phone",hud,new Vector2(1,0),new Vector2(1,0),new Vector2(-34,54),64,"phone",()=>ToggleOverlay("phone"));
+            Label("Key",phone.transform,new Vector2(.5f,0),TC,new Vector2(0,-6),new Vector2(92,24),"Tab",14,Muted,TextAlignmentOptions.Top);
+            phoneBadge=MakeBadge(phone.transform,new Vector2(-2,2));
+            foreach(var label in new[]{dateText,timeText,weatherText,placeText,ambienceText})
+            {label.outlineColor=new Color(.10f,.14f,.22f,.6f);label.outlineWidth=.08f;}
         }
+
         void RightShortcut(string label,string key,LineIcon.Symbol symbol,float y,Action action)
         {
             var button=CircleButton(label,hud,new Vector2(1,.5f),C,new Vector2(-77,y),symbol,action);
@@ -150,12 +149,19 @@ namespace Seabreeze
             int clockStart=clock.IndexOfAny("0123456789".ToCharArray());
             if(clockStart>=0)clock=clock.Substring(clockStart);
             string weather=session.Clock.WeatherLabel.Split('·')[0].Trim();
-            weatherText.text=clock+"  ·  "+weather;
+            weatherText.text=weather;
+            RefreshPhoneBadge();
             placeText.text=PlaceName(session.CurrentPlace);
             objectiveText.text=session.Story.Objective;
-            ambienceText.text=session.CurrentPlace==PlaceId.Cafe?"杯碟轻响。烘焙的香气，藏在海风够不到的地方。":session.CurrentPlace==PlaceId.Lighthouse?"灯塔静静转身。海浪替那些没说完的话，停顿了一下。":"海风，和远处的浪。街角有人把今天的第一杯咖啡放在窗边。";
+            ambienceText.text=session.CurrentPlace==PlaceId.Cafe?"杯碟轻响。烘焙的香气，藏在海风够不到的地方。":session.CurrentPlace==PlaceId.Lighthouse?"灯塔静静转身。海浪替那些没说完的话，停顿了一下。":"海风，和远处的浪";
         }
-        public static string PlaceName(PlaceId id)=>id==PlaceId.Cafe?"潮汐咖啡馆":id==PlaceId.Lighthouse?"灯塔海堤":"海边小街";
+        static IslandMapCatalog placeCatalog;
+        public static string PlaceName(PlaceId id)
+        {
+            if(placeCatalog==null)placeCatalog=Resources.Load<IslandMapCatalog>("Content/IslandMap");
+            if(placeCatalog!=null)foreach(var location in placeCatalog.locations)if(location.place==id)return location.displayName;
+            return id==PlaceId.Cafe?"潮汐咖啡馆":id==PlaceId.Lighthouse?"灯塔海堤":"海边小街";
+        }
         public static string PeriodName(TimePeriod period)=>period==TimePeriod.Morning?"上午":period==TimePeriod.Afternoon?"午后":period==TimePeriod.Evening?"傍晚":"夜晚";
         void OnDialogueChanged()
         {
@@ -246,11 +252,11 @@ namespace Seabreeze
                     if(GameInput.Pressed(Key.Digit3)&&choiceButtons.Count>2)Choose(2);
                 }
             }
-            if(GameInput.Pressed(Key.Escape)) {if(HasOverlay)CloseOverlay();else OpenOverlay("pause");}
+            if(GameInput.Pressed(Key.Escape)) {if(IsPhonePage(overlayMode)&&overlayMode!="phone")OpenOverlay("phone");else if(HasOverlay)CloseOverlay();else OpenOverlay("pause");}
             else if(!session.Dialogue.IsOpen)
             {
                 if(GameInput.Pressed(Key.M))ToggleOverlay("map");
-                if(GameInput.Pressed(Key.Tab))ToggleOverlay("phone");
+                if(GameInput.Pressed(Key.Tab)){if(IsPhonePage(overlayMode))CloseOverlay();else ToggleOverlay("phone");}
                 if(GameInput.Pressed(Key.J))ToggleOverlay("journal");
                 if(GameInput.Pressed(Key.H)){hidden=!hidden;hud.gameObject.SetActive(!hidden);}
             }
@@ -279,15 +285,26 @@ namespace Seabreeze
         {
             if(HasOverlay)yield return FadeOverlay(0,Style.FadeOutDuration);
             overlayMode=mode;Clear(overlayRoot);overlayRoot.gameObject.SetActive(true);overlayGroup.alpha=0;
-            var scrim=Stretch("Backdrop",overlayRoot,Vector2.zero,Vector2.zero).gameObject.AddComponent<Image>();scrim.color=Style.Scrim;scrim.raycastTarget=true;
+            var scrim=Stretch("Backdrop",overlayRoot,Vector2.zero,Vector2.zero).gameObject.AddComponent<Image>();scrim.color=IsPhonePage(mode)?Color.clear:Style.Scrim;scrim.raycastTarget=true;
+            if(IsPhonePage(mode))
+            {
+                var dismiss=scrim.gameObject.AddComponent<Button>();dismiss.transition=Selectable.Transition.None;
+                dismiss.navigation=new Navigation{mode=Navigation.Mode.None};dismiss.onClick.AddListener(CloseOverlay);
+            }
             if(mode=="live")
             {
                 canvas.enabled=false;nativeLive=NativeLiveHost.Open(transform,CloseOverlay);overlayBusy=false;overlayRoutine=null;yield break;
             }
+            if(IsPhonePage(mode))
+            {
+                BuildPhoneShell(mode);
+                yield return overlayContent.gameObject.AddComponent<PhoneSceneGlass>().Capture((RectTransform)overlayContent);
+                yield return FadeOverlay(1,Style.FadeInDuration);overlayBusy=false;overlayRoutine=null;yield break;
+            }
             Vector2 size=mode=="pause"||mode=="restart"?new Vector2(760,730):mode=="ending"?new Vector2(1160,790):new Vector2(1280,790);
             var panel=Panel("Panel",overlayRoot,C,C,Vector2.zero,size,Ink,true);overlayContent=panel.transform;
             CircleButton("Close",panel.transform,new Vector2(1,1),new Vector2(1,1),new Vector2(-24,-24),LineIcon.Symbol.Close,CloseOverlay);
-            if(mode=="map")BuildMap();else if(mode=="phone")BuildPhone();else if(mode=="journal")BuildJournal();else if(mode=="pause")BuildPause();else if(mode=="restart")BuildRestart();else if(mode=="ending")BuildEnding();
+            if(mode=="map")BuildMap();else if(mode=="journal")BuildJournal();else if(mode=="pause")BuildPause();else if(mode=="restart")BuildRestart();else if(mode=="ending")BuildEnding();
             yield return FadeOverlay(1,Style.FadeInDuration);overlayBusy=false;overlayRoutine=null;
         }
         IEnumerator FadeOverlay(float target,float duration)
@@ -353,20 +370,6 @@ namespace Seabreeze
             var button=Button("Travel",parent,BL,C,new Vector2(x,102),new Vector2(240,40),session.CurrentPlace==place?"在这里继续探索":"前往  "+PlaceName(place),()=>CloseOverlayThen(()=>{if(session.CurrentPlace!=place)session.Travel(place);}),session.CurrentPlace==place,18);
             button.GetComponentInChildren<TextMeshProUGUI>().alignment=TextAlignmentOptions.Midline;
         }
-        void BuildPhone()
-        {
-            Header("PHONE  /  A LITTLE CONNECTION","海风里收到的消息","几句话，也可以把两个地方变得近一点。" );
-            Button("Open Z Live",overlayContent,TL,TL,new Vector2(46,-220),new Vector2(1188,60),"Z 的直播 · 进入聊天小屋",()=>OpenOverlay("live"),false,24);
-            var scroll=MakeScroll(new Vector2(46,-300),new Vector2(1188,380));
-            float y=0;
-            foreach(string message in session.Story.PhoneMessages)
-            {
-                y=TextEntry(scroll,y,message,22,new Color(.12f,.19f,.29f,.95f));
-            }
-            if(y==0)y=TextEntry(scroll,0,"暂时没有新消息。\n先去街上走走吧，故事会从遇见的人那里开始。",24,new Color(.12f,.19f,.29f,.95f));
-            SetContentHeight(scroll,y);
-            Label("Phone hint",overlayContent,BL,BL,new Vector2(46,28),new Vector2(1100,35),"Tab / Esc  收起手机     ·     消息随今天的经历更新",18,Muted);
-        }
         void BuildJournal()
         {
             Header("JOURNAL  /  THINGS TO REMEMBER","今天，值得留下的事",session.Story.Objective);
@@ -404,6 +407,8 @@ namespace Seabreeze
             Button("Resume",overlayContent,TL,TL,new Vector2(46,-230),new Vector2(668,64),"继续散步",CloseOverlay,true,25);
             Button("Save",overlayContent,TL,TL,new Vector2(46,-308),new Vector2(668,56),"保存此刻",()=>{if(session.Save())ShowToast("已保存。下次会从这里继续。");},false,23);
             Button("Restart",overlayContent,TL,TL,new Vector2(46,-378),new Vector2(668,56),"重新开始这一天",()=>OpenOverlay("restart"),false,23);
+            Button("Model settings",overlayContent,TL,TL,new Vector2(46,-444),new Vector2(310,32),"对话服务设置",()=>Application.OpenURL(MemoryRuntimeConfig.Settings.serviceUrl+"/settings"),false,18);
+            Button("Load save",overlayContent,TL,TL,new Vector2(380,-444),new Vector2(330,32),"读取上次存档",()=>CloseOverlayThen(()=>session.LoadSavedGame()),false,18);
             Label("Volume",overlayContent,TL,TL,new Vector2(46,-477),new Vector2(260,35),"环境声音",22,Muted);
             var volumeLabel=Label("Volume value",overlayContent,TL,TL,new Vector2(610,-477),new Vector2(100,35),Mathf.RoundToInt(AudioListener.volume*100)+"%",22,Paper,TextAlignmentOptions.TopRight);
             var track=Panel("Volume slider",overlayContent,TL,TL,new Vector2(48,-540),new Vector2(660,7),new Color(.24f,.32f,.42f,1),true);
