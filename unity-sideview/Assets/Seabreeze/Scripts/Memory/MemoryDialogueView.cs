@@ -1,3 +1,4 @@
+using System.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace Seabreeze
         MemoryGameController memory; GameSession session;
         RectTransform taskPanel;bool taskLayoutVisible;
         TextMeshProUGUI taskTitle;Button acceptTask,declineTask,inviteTask;string offeredTask,lastCheckpoint;readonly List<string> activeTasks=new List<string>();int selectedTask;
-        RectTransform root,speechPanel,playerPanel,day4Panel,portrait,column,content;
+        RectTransform root,speechPanel,playerPanel,portrait,column,content;
         TextMeshProUGUI speechTitle,speechText,playerTitle,locationText,historyText,playerState,emptyPrompt;
         TMP_InputField input; Button send; ScrollRect historyScroll;
         CanvasGroup playerGroup; Live2DCharacterView character; Coroutine transition;
@@ -28,8 +29,7 @@ namespace Seabreeze
         DialogueSceneBackdrop backdrop;
         float previousColumnWidth;
         static readonly Color BubbleInk=new Color(.145f,.149f,.208f,1);
-        string selectedActor,lastSpeaker; bool entering,typing; float revealed,speechUntil,day4Until;
-        Action day4Shown; int day4Frame;
+        string selectedActor,lastSpeaker; bool entering,typing; float revealed,speechUntil;
 
         public bool Closing {get;private set;}
         public bool PlayerInputReady => !entering&&!Closing&&playerPanel!=null&&playerPanel.gameObject.activeSelf;
@@ -121,6 +121,11 @@ namespace Seabreeze
         }
         static void Fill(RectTransform rect){rect.anchorMin=Vector2.zero;rect.anchorMax=Vector2.one;rect.offsetMin=rect.offsetMax=Vector2.zero;}
         static bool IsComposing(){var system=EventSystem.current?.currentInputModule?.input;return !string.IsNullOrEmpty(system!=null?system.compositionString:Input.compositionString);}
+        Button ButtonAt(string caption,Transform parent,Vector2 position,Vector2 size,Action action)
+        {
+            var b=UIPrimitives.Button(caption,parent,Vector2.up,Vector2.up,position,size,caption,action,false,18);
+            b.GetComponentInChildren<TextMeshProUGUI>().alignment=TextAlignmentOptions.Center;return b;
+        }
         void Send()
         {
             if(IsComposing()){StartCoroutine(ResumeInput());return;}
