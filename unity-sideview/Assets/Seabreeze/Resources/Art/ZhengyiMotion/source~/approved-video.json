@@ -1,0 +1,1102 @@
+{
+  "status": "review_only_not_imported",
+  "characterId": "c06",
+  "characterName": "正义",
+  "source": {
+    "path": "source/source-video.mp4",
+    "size": [
+      1920,
+      1080
+    ],
+    "pixelAspect": [
+      1,
+      1
+    ],
+    "orientation": "landscape",
+    "timeBase": [
+      1,
+      15360
+    ],
+    "decodedFrameCount": 121,
+    "videoDurationSeconds": 5.016666666666667,
+    "averageFrameRate": 24.119601328903656,
+    "variableFrameDurations": true,
+    "sha256": "2acd5d88db90a4df87974aa4a538cb11ac5ede38163ea84e1ff9cb748a5a3603"
+  },
+  "selection": {
+    "startFrameInclusive": 45,
+    "endBoundaryFrameExclusive": 77,
+    "startPts": 28928,
+    "endPts": 49408,
+    "startSeconds": 1.8833333333333333,
+    "endSeconds": 3.216666666666667,
+    "frameCount": 32,
+    "cycleTicks": 20480,
+    "cycleSeconds": 1.3333333333333333,
+    "cycleSecondsFraction": [
+      4,
+      3
+    ],
+    "phaseDescription": "起止均为近侧脚前伸落地、近侧手臂后摆；F61为另一侧脚前伸的半周期。",
+    "phaseCheckFrames": [
+      45,
+      53,
+      61,
+      69,
+      77
+    ],
+    "endBoundaryUsedForComparisonOnly": true,
+    "endBoundaryIsPixelIdentical": false,
+    "loopBlendOrInterpolation": false
+  },
+  "canvas": {
+    "size": [
+      600,
+      1056
+    ],
+    "sourceCropTopLeft": [
+      674,
+      12,
+      600,
+      1056
+    ],
+    "cropBasedOn": "maximum foreground extent across the entire source clip plus fixed padding",
+    "pixelScale": 1,
+    "perFrameResize": false,
+    "perFrameTranslation": false,
+    "perFrameFootAlignment": false,
+    "sourceForegroundUnion": [
+      706,
+      36,
+      1240,
+      1040
+    ],
+    "footAnchorSource": [
+      960.0,
+      1035
+    ],
+    "footAnchorTopLeft": [
+      286.0,
+      1023
+    ],
+    "footAnchorMethod": "one median of native contact-sole rows, checked against source; metadata only, no per-frame position correction",
+    "unityPivotNormalizedBottomLeft": [
+      0.4766666666666667,
+      0.03125
+    ]
+  },
+  "atlas": [
+    {
+      "file": "atlas/zhengyi_walk_00.png",
+      "size": [
+        3600,
+        3168
+      ],
+      "columns": 6,
+      "rows": 3
+    },
+    {
+      "file": "atlas/zhengyi_walk_01.png",
+      "size": [
+        3600,
+        3168
+      ],
+      "columns": 6,
+      "rows": 3
+    }
+  ],
+  "frames": [
+    {
+      "index": 0,
+      "file": "frames/zhengyi_walk_000.png",
+      "sourceFrameIndexZeroBased": 45,
+      "sourcePtsTicks": 28928,
+      "sourceTimeSeconds": 1.8833333333333333,
+      "offsetTicks": 0,
+      "durationTicks": 512,
+      "durationSeconds": 0.03333333333333333,
+      "sha256": "6d3312f41aa937ed44cd85b668fc3d0a70efef13200f97a7ac45542484d9efb7",
+      "solidBounds": [
+        49,
+        36,
+        513,
+        1024
+      ],
+      "opaqueInteriorPixels": 166099,
+      "edgeRecoveryPixels": 17039,
+      "shadowClassifiedPixels": 78945,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 0,
+        "rectTopLeft": [
+          0,
+          0,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 1,
+      "file": "frames/zhengyi_walk_001.png",
+      "sourceFrameIndexZeroBased": 46,
+      "sourcePtsTicks": 29440,
+      "sourceTimeSeconds": 1.9166666666666667,
+      "offsetTicks": 512,
+      "durationTicks": 768,
+      "durationSeconds": 0.05,
+      "sha256": "e44ec36b3a432e33a2db2f31ea75902480914d75d79bea8fd180e1105f04f6cf",
+      "solidBounds": [
+        40,
+        34,
+        494,
+        1025
+      ],
+      "opaqueInteriorPixels": 164748,
+      "edgeRecoveryPixels": 16876,
+      "shadowClassifiedPixels": 79534,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 0,
+        "rectTopLeft": [
+          600,
+          0,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 2,
+      "file": "frames/zhengyi_walk_002.png",
+      "sourceFrameIndexZeroBased": 47,
+      "sourcePtsTicks": 30208,
+      "sourceTimeSeconds": 1.9666666666666666,
+      "offsetTicks": 1280,
+      "durationTicks": 512,
+      "durationSeconds": 0.03333333333333333,
+      "sha256": "52a2fc043f68f3c5da146a8e637aac8d04d29459c37f0f0324a46ff523028a61",
+      "solidBounds": [
+        40,
+        32,
+        473,
+        1026
+      ],
+      "opaqueInteriorPixels": 160755,
+      "edgeRecoveryPixels": 16881,
+      "shadowClassifiedPixels": 80398,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 0,
+        "rectTopLeft": [
+          1200,
+          0,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 3,
+      "file": "frames/zhengyi_walk_003.png",
+      "sourceFrameIndexZeroBased": 48,
+      "sourcePtsTicks": 30720,
+      "sourceTimeSeconds": 2.0,
+      "offsetTicks": 1792,
+      "durationTicks": 768,
+      "durationSeconds": 0.05,
+      "sha256": "df66625180dcc13e72f4639ca21d4e289a117c94f4c7afaefec0fb361f8d4db8",
+      "solidBounds": [
+        55,
+        30,
+        452,
+        1027
+      ],
+      "opaqueInteriorPixels": 155305,
+      "edgeRecoveryPixels": 15519,
+      "shadowClassifiedPixels": 81568,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 0,
+        "rectTopLeft": [
+          1800,
+          0,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 4,
+      "file": "frames/zhengyi_walk_004.png",
+      "sourceFrameIndexZeroBased": 49,
+      "sourcePtsTicks": 31488,
+      "sourceTimeSeconds": 2.05,
+      "offsetTicks": 2560,
+      "durationTicks": 512,
+      "durationSeconds": 0.03333333333333333,
+      "sha256": "d0423ea68e48f0ad9c41c64bb3730205028602b5a23dd6384cf0de5befa30b9c",
+      "solidBounds": [
+        83,
+        29,
+        431,
+        1027
+      ],
+      "opaqueInteriorPixels": 146292,
+      "edgeRecoveryPixels": 17505,
+      "shadowClassifiedPixels": 82901,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 0,
+        "rectTopLeft": [
+          2400,
+          0,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 5,
+      "file": "frames/zhengyi_walk_005.png",
+      "sourceFrameIndexZeroBased": 50,
+      "sourcePtsTicks": 32000,
+      "sourceTimeSeconds": 2.0833333333333335,
+      "offsetTicks": 3072,
+      "durationTicks": 768,
+      "durationSeconds": 0.05,
+      "sha256": "b096089183f42932a04e55e607df743b3cbf4ddfe4cf00d098d57b5efce7915d",
+      "solidBounds": [
+        105,
+        27,
+        409,
+        1027
+      ],
+      "opaqueInteriorPixels": 143888,
+      "edgeRecoveryPixels": 16772,
+      "shadowClassifiedPixels": 82834,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 0,
+        "rectTopLeft": [
+          3000,
+          0,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 6,
+      "file": "frames/zhengyi_walk_006.png",
+      "sourceFrameIndexZeroBased": 51,
+      "sourcePtsTicks": 32768,
+      "sourceTimeSeconds": 2.1333333333333333,
+      "offsetTicks": 3840,
+      "durationTicks": 512,
+      "durationSeconds": 0.03333333333333333,
+      "sha256": "78b85dfd7d960a03b6172fc69fa8f0807494d03c2c6d84196f7ec4097242491c",
+      "solidBounds": [
+        108,
+        25,
+        405,
+        1027
+      ],
+      "opaqueInteriorPixels": 143948,
+      "edgeRecoveryPixels": 15592,
+      "shadowClassifiedPixels": 82736,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 0,
+        "rectTopLeft": [
+          0,
+          1056,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 7,
+      "file": "frames/zhengyi_walk_007.png",
+      "sourceFrameIndexZeroBased": 52,
+      "sourcePtsTicks": 33280,
+      "sourceTimeSeconds": 2.1666666666666665,
+      "offsetTicks": 4352,
+      "durationTicks": 768,
+      "durationSeconds": 0.05,
+      "sha256": "893e2a5697fa64d196ed16e0e3f382ac9bcd44e2e4b02ea7fb5d36344eacb401",
+      "solidBounds": [
+        109,
+        25,
+        419,
+        1027
+      ],
+      "opaqueInteriorPixels": 146903,
+      "edgeRecoveryPixels": 13135,
+      "shadowClassifiedPixels": 87535,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 0,
+        "rectTopLeft": [
+          600,
+          1056,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 8,
+      "file": "frames/zhengyi_walk_008.png",
+      "sourceFrameIndexZeroBased": 53,
+      "sourcePtsTicks": 34048,
+      "sourceTimeSeconds": 2.216666666666667,
+      "offsetTicks": 5120,
+      "durationTicks": 512,
+      "durationSeconds": 0.03333333333333333,
+      "sha256": "c81416f2c46254e1bae9f6008e5b71da73a4ca11dfe72bb12b760b3c1214ede4",
+      "solidBounds": [
+        108,
+        25,
+        428,
+        1027
+      ],
+      "opaqueInteriorPixels": 151918,
+      "edgeRecoveryPixels": 19572,
+      "shadowClassifiedPixels": 81392,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 0,
+        "rectTopLeft": [
+          1200,
+          1056,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 9,
+      "file": "frames/zhengyi_walk_009.png",
+      "sourceFrameIndexZeroBased": 54,
+      "sourcePtsTicks": 34560,
+      "sourceTimeSeconds": 2.25,
+      "offsetTicks": 5632,
+      "durationTicks": 768,
+      "durationSeconds": 0.05,
+      "sha256": "5385ab63d81dc058f332ac10aa8b870f24889e3a6e020a7068c719192cb7b7ce",
+      "solidBounds": [
+        106,
+        26,
+        439,
+        1026
+      ],
+      "opaqueInteriorPixels": 155570,
+      "edgeRecoveryPixels": 17861,
+      "shadowClassifiedPixels": 80127,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 0,
+        "rectTopLeft": [
+          1800,
+          1056,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 10,
+      "file": "frames/zhengyi_walk_010.png",
+      "sourceFrameIndexZeroBased": 55,
+      "sourcePtsTicks": 35328,
+      "sourceTimeSeconds": 2.3,
+      "offsetTicks": 6400,
+      "durationTicks": 512,
+      "durationSeconds": 0.03333333333333333,
+      "sha256": "f2c09d226a1949437cd379fc030e92535b24257c0150e26732f19f02f566408a",
+      "solidBounds": [
+        102,
+        27,
+        487,
+        1027
+      ],
+      "opaqueInteriorPixels": 158267,
+      "edgeRecoveryPixels": 16495,
+      "shadowClassifiedPixels": 79795,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 0,
+        "rectTopLeft": [
+          2400,
+          1056,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 11,
+      "file": "frames/zhengyi_walk_011.png",
+      "sourceFrameIndexZeroBased": 56,
+      "sourcePtsTicks": 35840,
+      "sourceTimeSeconds": 2.3333333333333335,
+      "offsetTicks": 6912,
+      "durationTicks": 768,
+      "durationSeconds": 0.05,
+      "sha256": "be0aef120875aaf612f4381bd616a92e88edea904ea9ebd48e192a3e21d2c63c",
+      "solidBounds": [
+        98,
+        29,
+        529,
+        1027
+      ],
+      "opaqueInteriorPixels": 160422,
+      "edgeRecoveryPixels": 16555,
+      "shadowClassifiedPixels": 79246,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 0,
+        "rectTopLeft": [
+          3000,
+          1056,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 12,
+      "file": "frames/zhengyi_walk_012.png",
+      "sourceFrameIndexZeroBased": 57,
+      "sourcePtsTicks": 36608,
+      "sourceTimeSeconds": 2.3833333333333333,
+      "offsetTicks": 7680,
+      "durationTicks": 512,
+      "durationSeconds": 0.03333333333333333,
+      "sha256": "6497064dfb53f85b78c786fc72ad6a1e8722497e00bd690459fb0f284a6b6336",
+      "solidBounds": [
+        93,
+        32,
+        556,
+        1026
+      ],
+      "opaqueInteriorPixels": 161370,
+      "edgeRecoveryPixels": 16865,
+      "shadowClassifiedPixels": 79117,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 0,
+        "rectTopLeft": [
+          0,
+          2112,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 13,
+      "file": "frames/zhengyi_walk_013.png",
+      "sourceFrameIndexZeroBased": 58,
+      "sourcePtsTicks": 37120,
+      "sourceTimeSeconds": 2.4166666666666665,
+      "offsetTicks": 8192,
+      "durationTicks": 768,
+      "durationSeconds": 0.05,
+      "sha256": "b9dfb5851661b0b87c4437ffde6fd0b86745ae0a90e8b922f137bc2edc13971e",
+      "solidBounds": [
+        89,
+        35,
+        564,
+        1026
+      ],
+      "opaqueInteriorPixels": 162711,
+      "edgeRecoveryPixels": 16510,
+      "shadowClassifiedPixels": 78868,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 0,
+        "rectTopLeft": [
+          600,
+          2112,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 14,
+      "file": "frames/zhengyi_walk_014.png",
+      "sourceFrameIndexZeroBased": 59,
+      "sourcePtsTicks": 37888,
+      "sourceTimeSeconds": 2.466666666666667,
+      "offsetTicks": 8960,
+      "durationTicks": 512,
+      "durationSeconds": 0.03333333333333333,
+      "sha256": "ae9260fd5a1cc4a3942fc9d7e0cb1dbcced27742744fe3c178891fa3b8760224",
+      "solidBounds": [
+        77,
+        37,
+        551,
+        1026
+      ],
+      "opaqueInteriorPixels": 163660,
+      "edgeRecoveryPixels": 16112,
+      "shadowClassifiedPixels": 78718,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 0,
+        "rectTopLeft": [
+          1200,
+          2112,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 15,
+      "file": "frames/zhengyi_walk_015.png",
+      "sourceFrameIndexZeroBased": 60,
+      "sourcePtsTicks": 38400,
+      "sourceTimeSeconds": 2.5,
+      "offsetTicks": 9472,
+      "durationTicks": 768,
+      "durationSeconds": 0.05,
+      "sha256": "c2fd8c28f8da0a2254a4301806b77be12e5ebb7f928345cd8c0abc57b3fcc677",
+      "solidBounds": [
+        59,
+        37,
+        537,
+        1025
+      ],
+      "opaqueInteriorPixels": 164003,
+      "edgeRecoveryPixels": 16318,
+      "shadowClassifiedPixels": 78510,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 0,
+        "rectTopLeft": [
+          1800,
+          2112,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 16,
+      "file": "frames/zhengyi_walk_016.png",
+      "sourceFrameIndexZeroBased": 61,
+      "sourcePtsTicks": 39168,
+      "sourceTimeSeconds": 2.55,
+      "offsetTicks": 10240,
+      "durationTicks": 512,
+      "durationSeconds": 0.03333333333333333,
+      "sha256": "03e9fe16ae7df81964ba506e895a562d27b8f54924f3745e2c38719b9c47d4fc",
+      "solidBounds": [
+        42,
+        36,
+        520,
+        1024
+      ],
+      "opaqueInteriorPixels": 162112,
+      "edgeRecoveryPixels": 16843,
+      "shadowClassifiedPixels": 78884,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 0,
+        "rectTopLeft": [
+          2400,
+          2112,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 17,
+      "file": "frames/zhengyi_walk_017.png",
+      "sourceFrameIndexZeroBased": 62,
+      "sourcePtsTicks": 39680,
+      "sourceTimeSeconds": 2.5833333333333335,
+      "offsetTicks": 10752,
+      "durationTicks": 768,
+      "durationSeconds": 0.05,
+      "sha256": "2c1462bac85c60c543e8ab4e540aca1ccf1aef6a181fd89f20e52d83898f982b",
+      "solidBounds": [
+        31,
+        34,
+        499,
+        1023
+      ],
+      "opaqueInteriorPixels": 160367,
+      "edgeRecoveryPixels": 16782,
+      "shadowClassifiedPixels": 79470,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 0,
+        "rectTopLeft": [
+          3000,
+          2112,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 18,
+      "file": "frames/zhengyi_walk_018.png",
+      "sourceFrameIndexZeroBased": 63,
+      "sourcePtsTicks": 40448,
+      "sourceTimeSeconds": 2.6333333333333333,
+      "offsetTicks": 11520,
+      "durationTicks": 512,
+      "durationSeconds": 0.03333333333333333,
+      "sha256": "9d7edd212e22c78cefdb56204dbc86464b30261fb09377d064b3e57e02862cac",
+      "solidBounds": [
+        33,
+        32,
+        477,
+        1023
+      ],
+      "opaqueInteriorPixels": 157531,
+      "edgeRecoveryPixels": 16615,
+      "shadowClassifiedPixels": 80443,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 1,
+        "rectTopLeft": [
+          0,
+          0,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 19,
+      "file": "frames/zhengyi_walk_019.png",
+      "sourceFrameIndexZeroBased": 64,
+      "sourcePtsTicks": 40960,
+      "sourceTimeSeconds": 2.6666666666666665,
+      "offsetTicks": 12032,
+      "durationTicks": 768,
+      "durationSeconds": 0.05,
+      "sha256": "ca053ac852013f5b1ff5f5b073e5f3ab525e544a4a2763c6ed30d07f2a366754",
+      "solidBounds": [
+        45,
+        30,
+        455,
+        1024
+      ],
+      "opaqueInteriorPixels": 154168,
+      "edgeRecoveryPixels": 14945,
+      "shadowClassifiedPixels": 81487,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 1,
+        "rectTopLeft": [
+          600,
+          0,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 20,
+      "file": "frames/zhengyi_walk_020.png",
+      "sourceFrameIndexZeroBased": 65,
+      "sourcePtsTicks": 41728,
+      "sourceTimeSeconds": 2.716666666666667,
+      "offsetTicks": 12800,
+      "durationTicks": 512,
+      "durationSeconds": 0.03333333333333333,
+      "sha256": "94bdfb3a9d5b84c6b662b0c9b0bc51e6d3f59d58fdd644a560c4f9c3ec0b057e",
+      "solidBounds": [
+        75,
+        29,
+        429,
+        1023
+      ],
+      "opaqueInteriorPixels": 143079,
+      "edgeRecoveryPixels": 16755,
+      "shadowClassifiedPixels": 82859,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 1,
+        "rectTopLeft": [
+          1200,
+          0,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 21,
+      "file": "frames/zhengyi_walk_021.png",
+      "sourceFrameIndexZeroBased": 66,
+      "sourcePtsTicks": 42240,
+      "sourceTimeSeconds": 2.75,
+      "offsetTicks": 13312,
+      "durationTicks": 768,
+      "durationSeconds": 0.05,
+      "sha256": "44d561a8f7547ba478f59c0c891d953f91d1da23d54709fe4d75b3e99baf4904",
+      "solidBounds": [
+        107,
+        27,
+        404,
+        1023
+      ],
+      "opaqueInteriorPixels": 137082,
+      "edgeRecoveryPixels": 17753,
+      "shadowClassifiedPixels": 82662,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 1,
+        "rectTopLeft": [
+          1800,
+          0,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 22,
+      "file": "frames/zhengyi_walk_022.png",
+      "sourceFrameIndexZeroBased": 67,
+      "sourcePtsTicks": 43008,
+      "sourceTimeSeconds": 2.8,
+      "offsetTicks": 14080,
+      "durationTicks": 512,
+      "durationSeconds": 0.03333333333333333,
+      "sha256": "ade6d64e147916a90eba9e691e66bef8c4490821f5aa4c7132f4535d34ad3fb1",
+      "solidBounds": [
+        109,
+        24,
+        405,
+        1023
+      ],
+      "opaqueInteriorPixels": 138452,
+      "edgeRecoveryPixels": 16168,
+      "shadowClassifiedPixels": 85127,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 1,
+        "rectTopLeft": [
+          2400,
+          0,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 23,
+      "file": "frames/zhengyi_walk_023.png",
+      "sourceFrameIndexZeroBased": 68,
+      "sourcePtsTicks": 43520,
+      "sourceTimeSeconds": 2.8333333333333335,
+      "offsetTicks": 14592,
+      "durationTicks": 768,
+      "durationSeconds": 0.05,
+      "sha256": "38857b651c7d9d8c9fab6da1353a448537d33e334127facd20bab6560f5e6465",
+      "solidBounds": [
+        109,
+        25,
+        417,
+        1024
+      ],
+      "opaqueInteriorPixels": 151204,
+      "edgeRecoveryPixels": 13277,
+      "shadowClassifiedPixels": 86489,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 1,
+        "rectTopLeft": [
+          3000,
+          0,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 24,
+      "file": "frames/zhengyi_walk_024.png",
+      "sourceFrameIndexZeroBased": 69,
+      "sourcePtsTicks": 44288,
+      "sourceTimeSeconds": 2.8833333333333333,
+      "offsetTicks": 15360,
+      "durationTicks": 512,
+      "durationSeconds": 0.03333333333333333,
+      "sha256": "dd60c4c455c28ee1506053302046bba347b10e8ce39a9e27768717406ce357a7",
+      "solidBounds": [
+        107,
+        25,
+        423,
+        1023
+      ],
+      "opaqueInteriorPixels": 158515,
+      "edgeRecoveryPixels": 17895,
+      "shadowClassifiedPixels": 80796,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 1,
+        "rectTopLeft": [
+          0,
+          1056,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 25,
+      "file": "frames/zhengyi_walk_025.png",
+      "sourceFrameIndexZeroBased": 70,
+      "sourcePtsTicks": 44800,
+      "sourceTimeSeconds": 2.9166666666666665,
+      "offsetTicks": 15872,
+      "durationTicks": 768,
+      "durationSeconds": 0.05,
+      "sha256": "75ae409c1ea31a0e225b4b2ba82a3fc13023d38f94139c7a29f4377ea8d6c21c",
+      "solidBounds": [
+        103,
+        27,
+        452,
+        1023
+      ],
+      "opaqueInteriorPixels": 161629,
+      "edgeRecoveryPixels": 17682,
+      "shadowClassifiedPixels": 80430,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 1,
+        "rectTopLeft": [
+          600,
+          1056,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 26,
+      "file": "frames/zhengyi_walk_026.png",
+      "sourceFrameIndexZeroBased": 71,
+      "sourcePtsTicks": 45568,
+      "sourceTimeSeconds": 2.966666666666667,
+      "offsetTicks": 16640,
+      "durationTicks": 512,
+      "durationSeconds": 0.03333333333333333,
+      "sha256": "190ec64855546bda1ef7dd1056d2f1a91fe0d1067dd719be55c1e41e881c660a",
+      "solidBounds": [
+        98,
+        28,
+        497,
+        1023
+      ],
+      "opaqueInteriorPixels": 164340,
+      "edgeRecoveryPixels": 16908,
+      "shadowClassifiedPixels": 80139,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 1,
+        "rectTopLeft": [
+          1200,
+          1056,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 27,
+      "file": "frames/zhengyi_walk_027.png",
+      "sourceFrameIndexZeroBased": 72,
+      "sourcePtsTicks": 46080,
+      "sourceTimeSeconds": 3.0,
+      "offsetTicks": 17152,
+      "durationTicks": 768,
+      "durationSeconds": 0.05,
+      "sha256": "80f9a6466b05acc6f7cd1ca01f4209add1da8c57513b3577d8e5fd9ee0d707df",
+      "solidBounds": [
+        95,
+        30,
+        531,
+        1023
+      ],
+      "opaqueInteriorPixels": 165727,
+      "edgeRecoveryPixels": 17056,
+      "shadowClassifiedPixels": 79631,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 1,
+        "rectTopLeft": [
+          1800,
+          1056,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 28,
+      "file": "frames/zhengyi_walk_028.png",
+      "sourceFrameIndexZeroBased": 73,
+      "sourcePtsTicks": 46848,
+      "sourceTimeSeconds": 3.05,
+      "offsetTicks": 17920,
+      "durationTicks": 512,
+      "durationSeconds": 0.03333333333333333,
+      "sha256": "30751e4ae98b09efaf59a511a5da81c94fe29b411930b2ae02d2c34b26e5a574",
+      "solidBounds": [
+        90,
+        33,
+        554,
+        1023
+      ],
+      "opaqueInteriorPixels": 165748,
+      "edgeRecoveryPixels": 17051,
+      "shadowClassifiedPixels": 79518,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 1,
+        "rectTopLeft": [
+          2400,
+          1056,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 29,
+      "file": "frames/zhengyi_walk_029.png",
+      "sourceFrameIndexZeroBased": 74,
+      "sourcePtsTicks": 47360,
+      "sourceTimeSeconds": 3.0833333333333335,
+      "offsetTicks": 18432,
+      "durationTicks": 768,
+      "durationSeconds": 0.05,
+      "sha256": "307608e63ef58b749b0680653f449bf276f616e3802dee4e6cfe109bdd38f795",
+      "solidBounds": [
+        85,
+        36,
+        558,
+        1023
+      ],
+      "opaqueInteriorPixels": 165538,
+      "edgeRecoveryPixels": 17469,
+      "shadowClassifiedPixels": 79274,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 1,
+        "rectTopLeft": [
+          3000,
+          1056,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 30,
+      "file": "frames/zhengyi_walk_030.png",
+      "sourceFrameIndexZeroBased": 75,
+      "sourcePtsTicks": 48128,
+      "sourceTimeSeconds": 3.1333333333333333,
+      "offsetTicks": 19200,
+      "durationTicks": 512,
+      "durationSeconds": 0.03333333333333333,
+      "sha256": "853ee353ea4de3f289a6f0d7b6567bddfdcedf8b99143757d43e36ad00b4d873",
+      "solidBounds": [
+        72,
+        37,
+        545,
+        1023
+      ],
+      "opaqueInteriorPixels": 166562,
+      "edgeRecoveryPixels": 16821,
+      "shadowClassifiedPixels": 79073,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 1,
+        "rectTopLeft": [
+          0,
+          2112,
+          600,
+          1056
+        ]
+      }
+    },
+    {
+      "index": 31,
+      "file": "frames/zhengyi_walk_031.png",
+      "sourceFrameIndexZeroBased": 76,
+      "sourcePtsTicks": 48640,
+      "sourceTimeSeconds": 3.1666666666666665,
+      "offsetTicks": 19712,
+      "durationTicks": 768,
+      "durationSeconds": 0.05,
+      "sha256": "381181f8113f8e8e073da5566c33a0bb030120084bd67f2f9ee80412d3fd62d3",
+      "solidBounds": [
+        57,
+        37,
+        531,
+        1023
+      ],
+      "opaqueInteriorPixels": 166953,
+      "edgeRecoveryPixels": 16863,
+      "shadowClassifiedPixels": 78914,
+      "opaqueInteriorRgbChanged": 0,
+      "atlas": {
+        "page": 1,
+        "rectTopLeft": [
+          600,
+          2112,
+          600,
+          1056
+        ]
+      }
+    }
+  ],
+  "processing": {
+    "decoder": "FFmpeg -vsync 0; native RGB PNG frames",
+    "matte": "FFmpeg YUV chromakey alpha; local chromatic floor rejection, foreground-guided edge colour recovery and disconnected-speckle removal",
+    "ffmpegChromaFilter": "format=yuva444p,chromakey=0x66ee3c:0.12:0.07,format=rgba",
+    "interiorRgbPolicy": "Opaque foreground interior remains byte-identical to decoded video RGB",
+    "redrawing": false,
+    "boneRig": false,
+    "opticalFlow": false,
+    "generatedFrames": false
+  },
+  "idle": {
+    "videoContainsStableIdle": false,
+    "candidate": "candidate-idle/reference-original.png",
+    "candidateStatus": "reference_only_not_matched_or_import_ready",
+    "doNotUseRaisedFootAsIdle": true
+  },
+  "integrationNotes": [
+    "Current NPC driver accepts 2–64 images, but advances frame indices uniformly. Integration must honour these per-frame timings.",
+    "Actual-motion playback, stop/turn/chat holds and idle matching are deferred until user approval."
+  ],
+  "previews": {
+    "normal": "previews/normal.mp4",
+    "slow": "previews/slow.mp4",
+    "synchronousComparison": "previews/source-vs-rgba.mp4",
+    "timing": "60 Hz display holds exactly represent 33.333/50 ms source durations; no interpolated poses; source PNG frame count remains 32",
+    "colourSpace": "BT.709; encoding colour conversion only, no spatial resize"
+  },
+  "candidateInspection": {
+    "standingFrameFoundInVideo": false,
+    "candidateExistingImageHasBakedCheckerboard": true,
+    "candidateNotReadyForDirectUnityIdle": true
+  }
+}

@@ -37,6 +37,8 @@ namespace Seabreeze
         int simulatedIndex;
         bool initialized, available, wasBlocked = true;
         bool interactionHold;
+        float previousVisualX;
+        bool hasVisualPosition;
 
         public string ActorId => presence != null ? presence.npcId : "";
         public bool IsReady => initialized;
@@ -75,6 +77,7 @@ namespace Seabreeze
             if (initialized) throw new InvalidOperationException("Configure movement before initialization.");
             presence = owner;
             visual = artwork;
+            if (artwork != null && artwork.NpcWalkSpeed > 0) maxSpeed = artwork.NpcWalkSpeed;
             authoredPoints = points;
         }
 
@@ -153,7 +156,15 @@ namespace Seabreeze
         {
             available = value;
             if (!value) Interrupt("not_present");
-            if (body != null) body.simulated = value && initialized && isActiveAndEnabled;
+            SetBodySimulated(value && initialized && isActiveAndEnabled);
+        }
+
+        void SetBodySimulated(bool value)
+        {
+            if (body == null) return;
+            // Reassigning simulated=true can resync an interpolated body's pose.
+            // Use state transitions for authored motion; legacy NPCs retain their path.
+            if (visual == null || !visual.UsesNpcMotion || body.simulated != value) body.simulated = value;
         }
 
         void OnContextChanged()
@@ -176,9 +187,9 @@ namespace Seabreeze
             if (!InCurrentWorld)
             {
                 if (activeRequest != null || pendingRequest != null) Interrupt("not_present");
-                body.simulated = false;
+                SetBodySimulated(false);
             }
-            else body.simulated = true;
+            else SetBodySimulated(true);
             bool blocked = !CanAct;
             if (blocked && !wasBlocked) Suspend();
             if (!blocked && wasBlocked) nextDecisionTime = Time.time + simulatedWait + presence.character * .3f;
@@ -434,12 +445,20 @@ namespace Seabreeze
 
         void LateUpdate()
         {
-            if (initialized && visual != null && visual.isActiveAndEnabled)
-                visual.Animate(ActualSpeed * FacingSign, true, 0, Time.deltaTime);
+            if (!initialized || visual == null || !visual.isActiveAndEnabled) { hasVisualPosition = false; return; }
+            if (!visual.UsesNpcMotion) { visual.Animate(ActualSpeed * FacingSign, true, 0, Time.deltaTime); return; }
+            float x = transform.position.x;
+            float dx = hasVisualPosition ? x - previousVisualX : 0;
+            previousVisualX = x; hasVisualPosition = true;
+            // Spawn/teleport/reload is not a walking stride. Interpolated render
+            // displacement, rather than the requested physics velocity, drives art.
+            if (!CanAct || Mathf.Abs(dx) > Mathf.Max(.25f, maxSpeed * Time.deltaTime * 2)) dx = 0;
+            visual.AnimateNpcDisplacement(dx, CanAct ? ActualSpeed * FacingSign : 0, Time.deltaTime);
         }
 
         void OnDisable()
         {
+            hasVisualPosition = false;
             Interrupt("disabled");
             if (body != null) body.simulated = false;
             if (visual != null && visual.isActiveAndEnabled) visual.Animate(0, true, 0, 0);

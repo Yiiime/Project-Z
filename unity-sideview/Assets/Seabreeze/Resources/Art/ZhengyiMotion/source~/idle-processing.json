@@ -1,0 +1,33 @@
+{
+  "sourceImageSize": [
+    2048,
+    2048
+  ],
+  "sourceImageSha256": "f9d79daeb5527dd163af9dab71846510690be6aaff1c1ce0485e3e62e461d9b9",
+  "wholeImageScale": 0.5251189846641988,
+  "offset": [
+    -258.8498149127446,
+    -9.383923849814892
+  ],
+  "targetVisibleHeight": 993.0,
+  "sourceBeltCenter": 1049.0,
+  "targetBeltCenter": 292.0,
+  "canvas": [
+    600,
+    1056
+  ],
+  "footAnchorTopLeft": [
+    286.0,
+    1023.0
+  ],
+  "pivotBottomLeft": {
+    "x": 0.4766666666666667,
+    "y": 0.03125
+  },
+  "method": "reviewed green-screen still; whole-image uniform alignment and material colour matching; publish approved pixels without regeneration",
+  "redrawing": false,
+  "assembledParts": false,
+  "approvedImageSha256": "fc9b41cb6cf38b4db47178ab37e256d0b265dc017d938784c47bac9d11ba2c10",
+  "alignmentAlreadyBaked": true,
+  "colourMatchParameters": "idle-colour-match.json"
+}

@@ -6,6 +6,7 @@ namespace Seabreeze
     {
         public string npcId;
         public int character;
+        public string motionResource;
         public PlaceId location;
         public NpcDestination[] movementDestinations = System.Array.Empty<NpcDestination>();
         public NpcMovementController Movement { get; private set; }
@@ -22,7 +23,7 @@ namespace Seabreeze
             visual = new GameObject("Independent character sprite");
             visual.transform.SetParent(transform, false);
             var v = visual.AddComponent<CharacterVisual>();
-            v.Build(character);
+            v.Build(character, motionResource);
             Visual = v;
             visual.transform.localScale = Vector3.one * 1.17f;
             Movement = GetComponent<NpcMovementController>();

@@ -6,6 +6,7 @@ namespace Seabreeze
     // Replaceable sprite puppet: transforms supply idle, walk and airborne poses.
     public class CharacterVisual : MonoBehaviour
     {
+        public const float DefaultNpcCycleSeconds = 1.2f;
         public int character;
         public bool walking;
         Transform rig, leftLeg, rightLeg, leftArm, rightArm, head;
@@ -17,8 +18,22 @@ namespace Seabreeze
         float playerDistance, playerSettleTime;
         int playerFrame = -1;
         bool playerWasWalking, playerWasAirborne;
+        NpcMotionDefinition npcMotion;
+        float npcDistance, npcSettleTime;
+        float npcCycleSeconds;
+        float[] npcFrameEnds;
+        int[] npcStopFrames;
+        bool npcWasWalking;
+        int npcFrame = -1;
         public bool UsesPlayerMotion => playerMotion != null;
         public float PlayerMotionPhase => playerMotion != null ? playerDistance / playerMotion.strideLength : 0;
+        public bool UsesNpcMotion => npcMotion != null;
+        public float NpcWalkSpeed => npcMotion != null ? npcMotion.walkSpeed : 0;
+        public float NpcCycleSeconds => npcMotion != null ? npcCycleSeconds : DefaultNpcCycleSeconds;
+        public bool UsesVariableNpcTiming => npcFrameEnds != null;
+        public float NpcCycleDistance => NpcWalkSpeed * NpcCycleSeconds;
+        public float NpcMotionPhase => npcMotion != null ? npcDistance / NpcCycleDistance : 0;
+        public int NpcMotionFrame => npcFrame;
         public string Pose { get; private set; } = "Idle";
 
         [System.Serializable]
@@ -30,12 +45,23 @@ namespace Seabreeze
             public string[] walk;
             public int[] stopFrames;
         }
-        public void Build(int kind)
+        [System.Serializable]
+        sealed class NpcMotionDefinition
+        {
+            public int version, startFrame;
+            public float canvasHeightUnits, walkSpeed, cycleSeconds;
+            public string idle;
+            public string[] walk;
+            public float[] frameDurations;
+            public int[] stopFrames;
+        }
+        public void Build(int kind, string motionResource = null)
         {
             character = kind;
             rig = new GameObject("Painted character rig").transform;
             rig.SetParent(transform, false);
             if (kind == 0 && BuildPlayerMotion()) return;
+            if (kind != 0 && !string.IsNullOrWhiteSpace(motionResource) && BuildNpcMotion(motionResource)) return;
             string[] names = {"player", "mio", "aya", "chen"};
             var sprite = Resources.Load<Sprite>("Art/" + names[Mathf.Clamp(kind, 0, 3)]);
             if (sprite == null)
@@ -132,6 +158,11 @@ namespace Seabreeze
         {
             if (rig == null)
                 return;
+            if (npcMotion != null)
+            {
+                AnimateNpc(vx, deltaTime < 0 ? Time.fixedDeltaTime : deltaTime);
+                return;
+            }
             if (playerMotion != null)
             {
                 AnimatePlayer(vx, grounded, deltaTime < 0 ? Time.fixedDeltaTime : deltaTime);
@@ -165,6 +196,174 @@ namespace Seabreeze
             rightLeg.localEulerAngles = new Vector3(0, 0, -swing);
             leftArm.localEulerAngles = new Vector3(0, 0, -swing * .6f);
             rightArm.localEulerAngles = new Vector3(0, 0, swing * .6f);
+        }
+
+        bool BuildNpcMotion(string root)
+        {
+            root = root.TrimEnd('/') + "/";
+            var config = Resources.Load<TextAsset>(root + "motion");
+            NpcMotionDefinition definition = null;
+            try { if (config != null) definition = JsonUtility.FromJson<NpcMotionDefinition>(config.text); }
+            catch (System.ArgumentException) { }
+            if (definition == null || definition.version != 1 || definition.walk == null
+                || definition.walk.Length < 2 || definition.walk.Length > 64
+                || definition.walk.Any(string.IsNullOrWhiteSpace) || definition.walk.Distinct().Count() != definition.walk.Length
+                || string.IsNullOrWhiteSpace(definition.idle)
+                || !PositiveFinite(definition.canvasHeightUnits)
+                || (definition.cycleSeconds != 0 && !PositiveFinite(definition.cycleSeconds))
+                || !PositiveFinite(definition.walkSpeed * (definition.cycleSeconds > 0 ? definition.cycleSeconds : DefaultNpcCycleSeconds))
+                || !PositiveFinite(definition.walkSpeed) || definition.startFrame < 0 || definition.startFrame >= definition.walk.Length
+                || (definition.stopFrames != null && definition.stopFrames.Any(i => i < 0 || i >= definition.walk.Length)))
+            {
+                Debug.LogError("NPC motion manifest is missing or invalid: " + root, this);
+                return false;
+            }
+            float cycle = definition.cycleSeconds > 0 ? definition.cycleSeconds : DefaultNpcCycleSeconds;
+            float[] ends = null;
+            if (definition.frameDurations != null && definition.frameDurations.Length > 0)
+            {
+                if (definition.frameDurations.Length != definition.walk.Length || definition.frameDurations.Any(value => !PositiveFinite(value)))
+                {
+                    Debug.LogError("NPC frame durations must match the walk frames and be positive finite seconds: " + root, this);
+                    return false;
+                }
+                double total = definition.frameDurations.Sum(value => (double)value);
+                if (double.IsNaN(total) || double.IsInfinity(total) || total > float.MaxValue
+                    || (definition.cycleSeconds > 0 && System.Math.Abs(total - definition.cycleSeconds) > System.Math.Max(.0001, total * .0001)))
+                {
+                    Debug.LogError("NPC frame durations must sum to the configured cycle: " + root, this);
+                    return false;
+                }
+                cycle = (float)total;
+                ends = new float[definition.walk.Length];
+                double elapsed = 0;
+                for (int i = 0; i < ends.Length; i++) ends[i] = (float)(elapsed += definition.frameDurations[i]);
+                ends[ends.Length - 1] = cycle;
+            }
+            if (!PositiveFinite(cycle * definition.walkSpeed))
+            {
+                Debug.LogError("NPC cycle distance is invalid: " + root, this);
+                return false;
+            }
+            var idle = Resources.Load<Sprite>(root + definition.idle);
+            var frames = definition.walk.Select(name => Resources.Load<Sprite>(root + name)).ToArray();
+            if (idle == null || frames.Any(sprite => sprite == null)
+                || frames.Concat(new[] { idle }).Any(sprite =>
+                    Mathf.Abs(sprite.rect.height / sprite.pixelsPerUnit - definition.canvasHeightUnits) > .002f
+                    || sprite.rect.size != idle.rect.size || (sprite.pivot - idle.pivot).sqrMagnitude > .001f))
+            {
+                Debug.LogError("NPC motion requires matching canvas sizes, scales and foot pivots: " + root, this);
+                return false;
+            }
+            npcMotion = definition;
+            npcCycleSeconds = cycle;
+            npcFrameEnds = ends;
+            npcStopFrames = definition.stopFrames != null && definition.stopFrames.Length > 0 ? definition.stopFrames : null;
+            idleSprite = idle;
+            walkFrames = frames;
+            fullSprite = Part("Character artwork", idle, Vector2.zero, Vector2.one, Color.white, 25, rig);
+            fullSprite.transform.localScale = Vector3.one;
+            fullSprite.transform.localPosition = Vector3.zero;
+            npcDistance = NpcStartDistance();
+            return true;
+        }
+
+        float NpcStartDistance() => npcFrameEnds == null
+            ? NpcCycleDistance * npcMotion.startFrame / walkFrames.Length
+            : NpcCycleDistance * NpcFrameStartSeconds(npcMotion.startFrame) / NpcCycleSeconds;
+
+        public float NpcFrameStartSeconds(int index)
+        {
+            if (npcMotion == null || index < 0 || index >= walkFrames.Length) throw new System.ArgumentOutOfRangeException(nameof(index));
+            return npcFrameEnds == null ? NpcCycleSeconds * index / walkFrames.Length : index == 0 ? 0 : npcFrameEnds[index - 1];
+        }
+
+        int NpcFrameAtPhase(float normalizedPhase)
+        {
+            if (npcFrameEnds == null) return Mathf.Min(walkFrames.Length - 1, Mathf.FloorToInt(normalizedPhase * walkFrames.Length));
+            float seconds = normalizedPhase * NpcCycleSeconds;
+            int low = 0, high = npcFrameEnds.Length - 1;
+            while (low < high)
+            {
+                int middle = (low + high) / 2;
+                if (seconds < npcFrameEnds[middle]) high = middle;
+                else low = middle + 1;
+            }
+            return low;
+        }
+
+        int NpcStopFrame()
+        {
+            if (npcStopFrames == null)
+            {
+                // Preserve the previously accepted equal-frame stop behavior.
+                int other = (npcMotion.startFrame + walkFrames.Length / 2) % walkFrames.Length;
+                int a = Mathf.Abs(npcFrame - npcMotion.startFrame), b = Mathf.Abs(npcFrame - other);
+                return Mathf.Min(a, walkFrames.Length - a) <= Mathf.Min(b, walkFrames.Length - b) ? npcMotion.startFrame : other;
+            }
+            int result = npcStopFrames[0];float nearest = float.PositiveInfinity;
+            float at = NpcMotionPhase * NpcCycleSeconds;
+            foreach (int index in npcStopFrames)
+            {
+                float gap = Mathf.Abs(NpcFrameStartSeconds(index) - at);
+                gap = Mathf.Min(gap, NpcCycleSeconds - gap);
+                if (gap < nearest) { nearest = gap; result = index; }
+            }
+            return result;
+        }
+
+        static bool PositiveFinite(float value) => value > 0 && !float.IsNaN(value) && !float.IsInfinity(value);
+
+        void AnimateNpc(float vx, float dt)
+        {
+            UpdateNpcMotion(Mathf.Abs(vx) * dt, vx, Mathf.Abs(vx) > (npcWasWalking ? .015f : .04f), dt);
+        }
+
+        public void AnimateNpcDisplacement(float dx, float intendedVelocity, float dt)
+        {
+            if (npcMotion == null) return;
+            bool moving = Mathf.Abs(intendedVelocity) > .015f || Mathf.Abs(dx) > .00001f;
+            UpdateNpcMotion(Mathf.Abs(dx), Mathf.Abs(dx) > .00001f ? dx : intendedVelocity, moving, dt);
+        }
+
+        void UpdateNpcMotion(float distance, float direction, bool moving, float dt)
+        {
+            if (dt <= 0) return;
+            walking = moving;
+            rig.localPosition = Vector3.zero;
+            rig.localRotation = Quaternion.identity;
+            if (moving)
+            {
+                var scale = transform.localScale;
+                scale.x = Mathf.Abs(scale.x) * Mathf.Sign(direction);
+                transform.localScale = scale;
+                if (!npcWasWalking)
+                    npcDistance = NpcStartDistance();
+                // World displacement drives the common player. A character only
+                // supplies its normal speed and, optionally, a cycle duration.
+                npcDistance = Mathf.Repeat(npcDistance + distance, NpcCycleDistance);
+                npcFrame = NpcFrameAtPhase(NpcMotionPhase);
+                npcSettleTime = 0;
+                Pose = "Walk";
+            }
+            else
+            {
+                Pose = "Idle";
+                if (npcWasWalking)
+                {
+                    // Explicit contact poses are transition-only; idle always
+                    // returns to its own standing sprite after the short settle.
+                    npcFrame = NpcStopFrame();
+                    npcSettleTime = .08f;
+                }
+                else
+                {
+                    npcSettleTime = Mathf.Max(0, npcSettleTime - dt);
+                    if (npcSettleTime == 0) npcFrame = -1;
+                }
+            }
+            fullSprite.sprite = npcFrame < 0 ? idleSprite : walkFrames[npcFrame];
+            npcWasWalking = moving;
         }
 
         bool BuildPlayerMotion()

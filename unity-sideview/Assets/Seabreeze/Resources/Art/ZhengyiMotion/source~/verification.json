@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-10",
+  "baseMain": "37ed92444e932eb7bfc535fa32579b2c00302ba7",
+  "actorId": "zhengyi",
+  "unityVersion": "6000.3.27f1",
+  "passed": true,
+  "mode": "simulated",
+  "checks": [
+    "zhengyi alone binds the video; eight-role identities, other NPC artwork and player motion remain intact",
+    "Original 33.333/50ms intervals, cycle wrap and distance-driven timing at 30/60/120 FPS; no per-frame scaling or lifted-foot final idle",
+    "Actual left/right movement displays all 32 frames with fixed scale, turns and returns to aligned idle",
+    "Current A2A generates both participants, holds only them on idle, preserves speech receipts and lets another NPC move",
+    "E uses current dialogue UI with planted idle; isolated save/load retains history IDs and visual binding",
+    "Scene travel safely cancels chat and restores Zhengyi's timing without stale holds"
+  ],
+  "memoryServiceTests": 42,
+  "editorIssues": [
+    "ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.\nParameter name: index"
+  ],
+  "realModelRetested": false,
+  "approved33PngUnchanged": true,
+  "scope": "Zhengyi art and motion binding only; current eight-role content and memory backend unchanged",
+  "notes": [
+    "The test provider uses the current schedule_meeting intent before speech.",
+    "Full dialogue verification uses a visible Game view because the upstream frosted backdrop waits for end of frame.",
+    "Temporary game saves and an isolated test database were used."
+  ]
+}
