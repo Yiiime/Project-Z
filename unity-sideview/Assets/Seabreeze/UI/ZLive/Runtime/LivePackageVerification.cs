@@ -42,14 +42,17 @@ namespace ZLive {
             string folder = Path.GetDirectoryName(SaveRepository.PathOnDisk);
             var draft = root.Q<TextField>(className:"chat-input");
             var chat = root.Q<ScrollView>(className:"chat");
-            var send = typeof(LiveFeatureController).GetMethod("Send",Member);
+            var send = (Button)typeof(LiveFeatureController).GetField("sendButton",Member).GetValue(feature);
             var lines = new[]{"晚上的海风好舒服。","想听你唱一首歌。"};
             foreach (string line in lines) {
                 draft.value = line;
-                send.Invoke(feature,null);
+                deadline = Time.realtimeSinceStartupAsDouble + 10;
+                while (!send.enabledInHierarchy && Time.realtimeSinceStartupAsDouble < deadline) yield return null;
+                if (!send.enabledInHierarchy) { Fail("send button"); yield break; }
+                Submit(send);
                 deadline = Time.realtimeSinceStartupAsDouble + 10;
                 while (!HasMessage(chat,line) && Time.realtimeSinceStartupAsDouble < deadline) yield return null;
-                if (!HasMessage(chat,line)) { Fail("sent chat message"); yield break; }
+                if (!HasMessage(chat,line)) { Fail("sent chat message: "+line); yield break; }
             }
             // Rebuild the visible list from the real session snapshot, as on room entry.
             var type = typeof(LiveFeatureController);
