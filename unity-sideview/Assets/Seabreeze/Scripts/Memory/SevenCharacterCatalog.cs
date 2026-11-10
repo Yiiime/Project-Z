@@ -5,7 +5,7 @@ namespace Seabreeze
 {
     [Serializable] public sealed class SevenCharacter
     {
-        public string id,displayName,occupation,place,color,portrait,locationId;
+        public string id,displayName,occupation,place,color,portrait,locationId,motion;
         public int appearance;
         public float x;
         public NpcSchedule[] schedule = Array.Empty<NpcSchedule>();
