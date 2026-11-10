@@ -45,6 +45,7 @@ namespace ZLive {
                 ((e.speakerId=="player" && e.recipientId=="z") || (e.speakerId=="z" && e.recipientId=="player")));
             return new JObject {
                 ["today"] = today?.Count>0 ? today.DeepClone() : localTalk ? new JArray("和岛上的朋友说了会儿话") : new JArray(),
+                ["songs"] = (int?)projection?["day"]==owner.day ? projection?["songs"]?.DeepClone() ?? new JArray() : new JArray(),
                 ["recapSpoken"] = owner.flags.Contains(RecapFlag),
                 ["worldId"] = owner.memory.worldId, ["runId"] = run, ["day"] = owner.day,
                 ["stage"] = (string)projection?["stage"] ?? "island_daily",

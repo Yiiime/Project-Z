@@ -21,12 +21,11 @@ class NativeConversationEngine extends CallConversationEngine {
  }
  _think(){
    if(!this.sessionControl?.normal)return;
-   const line=this._recapTurn() && this.broadcast.opening();
-   if(!line)return super._think();
+   if(!this._recapTurn())return super._think();
    if(this._state.paused||!this._started||this._active||this.pending||this._queue.length||this._destroyed)return;
    if((this.recapRetryAt||0)>this._clock)return;
    this._cancelPreparation('daytime_recap');
-   this._say(line,'warm','wave',{source:'daytime_recap',priority:12,scope:'story'});
+   this._say(this.broadcast.opening(),'warm','wave',{source:'daytime_recap',priority:12,scope:'story'});
  }
  _maybePrepare(){if(!this._recapTurn()&&(!this.sessionControl||this.sessionControl.normal))return super._maybePrepare();}
  _maybeAssessTopic(){if(!this.sessionControl||this.sessionControl.normal)return super._maybeAssessTopic();}
@@ -43,6 +42,7 @@ export class LiveSession extends EventEmitter {
   this.engine=new NativeConversationEngine();
   const binding=saved?.broadcast?.binding||memory;
   this.broadcast=binding?new BroadcastMemory(binding,saved?.broadcast):null;
+  if(this.broadcast)this.broadcast.songTasks=()=>this.providers.singing?.daytimeTasks?.(this.owner,this.broadcast.binding) || [];
   this.engine.broadcast=this.broadcast;this.engine.setSpeechDriven(true);this.speech=new RemoteSpeech(this,providers);this.talent=new RemoteTalent(this,this.speech);this.engine.configureSpeech(this.speech);this.engine.configureTalent(this.talent);
   this.engine.addEventListener('speak',({detail})=>{if(!detail.resume){if(detail.source==="daytime_recap")this.broadcast.recapSpeech=String(detail.id);void this.presentHost(detail);}});
   this.engine.addEventListener('state',()=>this.changed());
@@ -56,7 +56,7 @@ export class LiveSession extends EventEmitter {
  async initialize(){const config=await this.providers.config(this.id);this.engine.configureAgent({sentenceStreaming:true,generate:async(p,o)=>{
     const hostSide=p.kind==='host'||p.kind==='repair'||(p.kind==='review'&&p.context.candidate?.role==='host');
     const memory=hostSide?this.broadcast?.recall():null;
-    const reply=await this.providers.generate(this.id,p,{...o,broadcastContext:memory,songSession:memory?this.engine.session.id:null});
+    const reply=await this.providers.generate(this.id,p,{...o,daytimeTasks:hostSide?this.broadcast?.songTasks():[],broadcastContext:memory,songSession:memory?this.engine.session.id:null});
       const proposal=reply.z_state_update?.memories?.[0];
       if(p.kind==='host' && proposal && this.broadcast?.offer?.id===proposal.id &&
          this.broadcast.offer.step===proposal.step && this.broadcast.offer.source===this.broadcast.lastTopic?.id)

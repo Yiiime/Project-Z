@@ -29,6 +29,34 @@ namespace ZLive {
             var ui = FindFirstObjectByType<GameUI>();
             var game = GameSession.Instance;
             bool verifyDay=Array.IndexOf(Environment.GetCommandLineArgs(),"--verify-daytime-recap")>=0;
+            bool verifySong=Array.IndexOf(Environment.GetCommandLineArgs(),"--verify-daytime-song")>=0;
+            if(verifySong && game && game.State.day==1 && game.State.period==0) {
+                var memory=game.Memory;
+                float until=Time.realtimeSinceStartup+50;
+                while(!memory.Client.CanGenerate && Time.realtimeSinceStartup<until)yield return null;
+                var z=memory.Spawner.Find("z");
+                if(!z || !memory.Client.CanGenerate){Fail("daytime conversation unavailable");yield break;}
+                WorldDirector.Instance.Player.GetComponent<PlayerController>().Teleport(new Vector2(z.transform.position.x-.9f,z.transform.position.y));
+                memory.BeginPlayerChat("z");yield return new WaitForSecondsRealtime(1);
+                memory.Conversations.SendPlayer("我想听《夏夜最后的烟火》，能帮我学这首，晚上直播唱吗？");
+                until=Time.realtimeSinceStartup+60;
+                while((memory.Conversations.Sending || !memory.Client.Synchronized) && Time.realtimeSinceStartup<until)yield return null;
+                var songs=JObject.Parse(game.State.memory.checkpoint)["broadcast"]?["songs"] as JArray;
+                if(songs==null || !System.Linq.Enumerable.Any(songs,x=>(string)x["title"]=="夏夜最后的烟火" && x["sourceId"]!=null)){
+                    Fail("day song not accepted");yield break;
+                }
+                memory.Conversations.Cancel();
+                until=Time.realtimeSinceStartup+8;
+                while(memory.PlayerChatOpen && Time.realtimeSinceStartup<until)yield return null;
+                if(Array.IndexOf(Environment.GetCommandLineArgs(),"--verify-prepared-day-song")>=0){
+                    // An external observer writes this only after checking the real worker's ready receipt.
+                    string ready=Path.Combine(Path.GetDirectoryName(SaveRepository.PathOnDisk),"song-ready");
+                    until=Time.realtimeSinceStartup+195;
+                    while(!File.Exists(ready) && Time.realtimeSinceStartup<until)yield return null;
+                    if(!File.Exists(ready)){Fail("daytime singing job not ready");yield break;}
+                }
+                for(int i=0;i<3;i++)game.Clock.Advance();
+            }
             if(verifyDay && game && game.State.day==1 && game.State.period==0) {
                 game.Memory.CommitLine("verify-daytime","player","z","测试私话：蓝信封不能在直播里说。","","private_player_chat");
                 for(int i=0;i<3;i++)game.Clock.Advance();
@@ -50,22 +78,23 @@ namespace ZLive {
             var draft = root.Q<TextField>(className:"chat-input");
             var chat = root.Q<ScrollView>(className:"chat");
             var send = (Button)typeof(LiveFeatureController).GetField("sendButton",Member).GetValue(feature);
-            if(verifyDay) {
-                deadline=Time.realtimeSinceStartupAsDouble+35;
+            if(verifyDay || verifySong) {
+                deadline=Time.realtimeSinceStartupAsDouble+65;
                 bool heard=false;
                 while(!heard && Time.realtimeSinceStartupAsDouble<deadline) {
                     var current=(JObject)typeof(LiveFeatureController).GetField("state",Member).GetValue(feature);
                     foreach(var ev in (JArray)current["publicEvents"]) {
                         string kind=(string)ev["type"], text=(string)ev["text"];
-                        if(text.Contains("蓝信封") || (!heard && (kind=="npc.message" || kind=="player.message"))) { Fail("recap privacy or ordering"); yield break; }
+                        if(text.Contains("失眠") || text.Contains("蓝信封") || (!heard && (kind=="npc.message" || kind=="player.message"))) { Fail("recap privacy or ordering"); yield break; }
                         if(kind=="speech.completed" && !heard) {
-                            if(!text.Contains("上午") || !text.Contains("朋友")) { Fail("missing daytime opening"); yield break; }
+                            if(verifySong ? !text.Contains("夏夜最后的烟火") || (Array.IndexOf(Environment.GetCommandLineArgs(),"--verify-prepared-day-song")>=0 && !text.Contains("准备好了")) : !text.Contains("上午") || !text.Contains("朋友")) { Fail("missing daytime opening"); yield break; }
                             heard=true;
                         }
                     }
                     yield return null;
                 }
                 if(!heard) { Fail("no unprompted host speech"); yield break; }
+                if(verifySong){Debug.Log("LIVE_PACKAGE_DAYTIME_SONG_PASS");Application.Quit(0);yield break;}
                 Debug.Log("LIVE_PACKAGE_DAYTIME_RECAP_PASS");
             }
             var lines = new[]{"晚上的海风好舒服。","想听你唱一首歌。"};

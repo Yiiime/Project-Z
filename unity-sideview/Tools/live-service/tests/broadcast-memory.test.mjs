@@ -34,3 +34,12 @@ test('yesterday’s player quotes outrank host recap, farewell and the current q
  assert.deepEqual(m.recall().entries.slice(0,2).map(e=>e.speaker),['player','player']);
  assert(m.recall().entries.every(e=>e.day===1));
 });
+test('daytime song opening and follow-up use the current task receipt, independent of live chat',()=>{
+ const m=new BroadcastMemory({...binding,today:['上午和岛上的朋友说了会儿话'],songs:[{title:'夏夜最后的烟火',sourceId:'p'}]});
+ assert.match(m.opening(),/夏夜最后的烟火.*答应/);
+ let status='generating';m.songTasks=()=>[{sourceId:'p',status,plan:{segment:{description:'第一段完整副歌'}}}];
+ assert.match(m.opening(),/夏夜最后的烟火.*准备中/);
+ status='failed';assert.match(m.opening(),/没准备好/);
+ status='ready';assert.match(m.opening(),/第一段完整副歌准备好了/);assert.equal(m.recall().daySongs[0].status,'ready');
+ m.refresh({...binding,today:['聊到了海边的潮汐']});assert(!m.opening().includes('夏夜'));assert.match(m.opening(),/潮汐/);
+});

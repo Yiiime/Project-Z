@@ -23,7 +23,10 @@ function publicBinding(b) {
     s.topics.length>16||!s.topics.every(v=>text(v,32))||!Number.isInteger(s.count)||s.count<0||s.count>s.steps.length)throw Error('invalid_memory_story');
   const today=b.today??[];
   if(!Array.isArray(today)||today.length>128||!today.every(v=>text(v,90)))throw Error('invalid_daily_recap');
-  return {today:[...new Set(today)],recapSpoken:b.recapSpoken===true,worldId:b.worldId,runId:b.runId,day:b.day,stage:b.stage==="verified_clue"?"verified_clue":"island_daily",entries:entries.map(({id,text,day,speaker,layer})=>({id,text,day,speaker,layer})),
+  const songs=b.songs??[];
+  if(!Array.isArray(songs)||songs.length>32||songs.some(s=>!s || !text(s.title,48) ||
+    (s.sourceId!=null&&!text(s.sourceId,100))))throw Error('invalid_day_songs');
+  return {songs:songs.map(({title,sourceId})=>({title,sourceId})),today:[...new Set(today)],recapSpoken:b.recapSpoken===true,worldId:b.worldId,runId:b.runId,day:b.day,stage:b.stage==="verified_clue"?"verified_clue":"island_daily",entries:entries.map(({id,text,day,speaker,layer})=>({id,text,day,speaker,layer})),
     stories:stories.map(({id,layer,topics,steps,aliases,count})=>({id,layer,topics:[...topics],steps:[...steps],
       aliases:steps.map((_,i)=>Array.isArray(aliases?.[i])?aliases[i].filter(v=>text(v,60)).slice(0,6):[]),count}))};
 }
@@ -45,15 +48,29 @@ export class BroadcastMemory {
       throw Error('invalid_memory_binding');
     this.binding=publicBinding(binding);
   }
-  get needsRecap(){return this.binding.today.length>0 && !this.binding.recapSpoken && !this.recapSpoken;}
+  get needsRecap(){return (this.binding.today.length>0 || this.binding.songs.length>0) && !this.binding.recapSpoken && !this.recapSpoken;}
   opening(){
     if(!this.needsRecap)return null;
     const {today}=this.binding;
     // Keep the greeting short; the full list remains in recall for follow-up questions.
     const outings=today.filter(v=>!v.endsWith('说了会儿话'));
     const chats=today.filter(v=>v.endsWith('说了会儿话'));
-    const lines=[...chats.slice(0,Math.max(1,4-outings.length)),...outings.slice(0,3)];
-    return '晚上好呀！今天'+lines.join('，还')+'。';
+    const lines=outings.length ? outings.slice(-2) : chats.slice(0,2);
+    const song=this.binding.songs.findLast(s=>s.sourceId) || this.binding.songs.at(-1);
+    if(!song)return '晚上好呀！今天'+lines.join('，还')+'。';
+    const task=this.songTasks?.().find(t=>t.sourceId===song.sourceId);
+    const title='《'+song.title+'》';
+    const lead=lines.find(line=>!line.endsWith('说了会儿话'));
+    const greeting=lead?'晚上好！今天'+lead+'。':'晚上好呀！';
+    if(!song.sourceId)return greeting+'今天聊到一首歌，'+title+'。你们也听过吗？';
+    const state=task?.status;
+    if(state==='ready')return greeting+'白天有人点了'+title+'，我已经把'+(task.plan?.segment?.description || '这段')+'准备好了。';
+    if(state==='scheduled'||state==='completed')return greeting+'白天点的'+title+'，我准备的那个片段已经交给播放器了。';
+    if(state==='needs_input')return greeting+'白天聊到想唱'+title+'，我还得确认一下要准备哪个版本。';
+    if(['failed','cancelled','rejected'].includes(state))return greeting+'白天有人想听'+title+'，这次还没准备好。';
+    if(state)return greeting+'白天答应了要唱'+title+'，这首还在准备中。';
+    return greeting+'白天聊到了'+title+'，我答应要学这首。';
+
   }
   save(){return {recapSpoken:this.recapSpoken,binding:this.binding,pending:this.pending,last:this.last,lastTopic:this.lastTopic,offer:this.offer,spoken:this.spoken};}
   acknowledge(n){if(Number.isSafeInteger(n)&&n>=0&&n<=this.last)this.pending=this.pending.filter(row=>row.seq>n);}
@@ -107,7 +124,8 @@ export class BroadcastMemory {
       }
       if(count)entries.unshift({id:story.id,layer:story.layer,status:['hinted','unfolding','unfolded'][count-1],text:story.steps.slice(0,count).join('。')});
     }
-    return {day,today:this.binding.today,stage:this.binding.stage,entries:entries.slice(0,3),next:next?{id:next.id,layer:next.layer,step:next.step,line:next.line}:null};
+    const tasks=this.songTasks?.() || [];
+    return {day,daySongs:this.binding.songs.map(song=>({title:song.title,status:tasks.find(t=>t.sourceId===song.sourceId)?.status || (song.sourceId?"promised":"discussed")})),today:this.binding.today,stage:this.binding.stage,entries:entries.slice(0,3),next:next?{id:next.id,layer:next.layer,step:next.step,line:next.line}:null};
   }
 }
 

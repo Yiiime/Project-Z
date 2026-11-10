@@ -890,6 +890,7 @@ export class Engine {
             ![
               "communication",
               "peer_relation_changes",
+              "day_song_reply",
               "agenda_update",
               "social_decision",
               "task_participation",
@@ -945,6 +946,11 @@ export class Engine {
         hour,
         selected: p.context.character_state.memories,
       });
+    if(event && p.actor==="z" && mode==="player" && output.info.day_song_reply){
+      event.daySongReply=output.info.day_song_reply;
+      event.daySongSource=p.context.interaction.source_event_id;
+      this.store.put("event",event);
+    }
     if(event && p.actor==="z" && mode==="player" && p.context.z_story){
       const current=this.world(world);
       const offered=p.context.z_story;
