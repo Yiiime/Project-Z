@@ -12,9 +12,9 @@ test('only the accepted, delivered request can dispatch; only public facts cross
   const rows=dialogue('因为最近失眠，想听《夏夜最后的烟火》，原因别讲。','好呀，今晚唱给你听。',
     '明天想学咖啡拉花，具体住址是蓝信封巷。','拉花可以先试试。');
   const result=dayConversation(rows,1);
-  assert.deepEqual(result,{songs:[{title,sourceId:'line-0',dispatch:true}],subjects:['咖啡拉花']});
+  assert.deepEqual(result,{highlights:[],songs:[{title,sourceId:'line-0',dispatch:true}],subjects:['咖啡拉花']});
   assert(!JSON.stringify(result).match(/失眠|蓝信封/));
-  assert.deepEqual(dayConversation(rows,2),{songs:[],subjects:[]});
+  assert.deepEqual(dayConversation(rows,2),{highlights:[],songs:[],subjects:[]});
   assert.deepEqual(dayConversation(dialogue('想听《夏夜最后的烟火》。'),1).songs,[]);
   for(const [p,z] of [['喜欢听《夏夜最后的烟火》。','我也喜欢听。'],['想听《夏夜最后的烟火》。','这首我不能答应。']])
     assert.deepEqual(dayConversation(dialogue(p,z),1).songs,[{title}]);
@@ -36,4 +36,13 @@ test('an accepted practice plan is distinct from guaranteed performance; veto in
  assert.equal(dayConversation(rows,1).songs[0].sourceId,'line-0');
  rows.push({...rows[0],id:'later',seq:3,conversationId:'another',text:'那首歌别在直播里说。'});
  assert.deepEqual(dayConversation(rows,1).songs,[]);
+});
+
+test('only a specific public subject Z chooses to share becomes a highlight',()=>{
+ const reply='咖啡拉花这个话题，我想在直播里聊聊。';
+ const project=(...lines)=>dayConversation(dialogue('今天想聊咖啡拉花。',...lines),1).highlights;
+ assert.deepEqual(project(reply),['咖啡拉花']);
+ assert.deepEqual(project(reply,'咖啡拉花别在直播说。'),[]);
+ assert.deepEqual(project('咖啡拉花挺好看。'),[]);
+ assert.deepEqual(project('今晚我想在直播里聊聊灯塔。'),[]);
 });

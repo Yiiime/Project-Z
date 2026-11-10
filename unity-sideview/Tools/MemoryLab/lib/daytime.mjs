@@ -23,7 +23,7 @@ export function dayConversation(events, day) {
   const clauses=text=>text.split(/[，。！？；,;!?]/u);
   const withheld=clause=>privateOnly.test(clause) && !/^(?:原因|理由|我(?:的)?(?:私事|病情|地址)|我失眠的事).{0,5}(?:别|不用|不要)/u.test(clause);
   const blocked=new Set(rows.filter(e=>clauses(e.text).some(withheld)).map(e=>e.conversationId));
-  const blockedTitles=new Set(), blockedTopics=new Set(), subjects=new Set(), songs=new Map(), previous=new Map(), lastTitle=new Map();
+  const blockedTitles=new Set(), blockedTopics=new Set(), subjects=new Set(), highlights=new Set(), songs=new Map(), previous=new Map(), lastTitle=new Map();
   // A later privacy request also retracts the topic from an earlier conversation that day.
   let lastNamed;
   for(const e of rows){
@@ -46,6 +46,13 @@ export function dayConversation(events, day) {
     const player=previous.get(e.conversationId);
     if(!player)continue;
     previous.delete(e.conversationId);
+    // Publish the subject label only when Z herself wants to share this particular topic.
+    for(const sentence of e.text.split(/[。！？!?]/u)){
+      if(!/(?:我想|我想要|我也想|我打算|我特别想|我好想).{0,10}(?:在直播.{0,4}(?:聊|讲|说)|(?:讲|聊|说)给(?:直播间|大家)听)/u.test(sentence) ||
+         /不想|不能|不该|不要|不打算|要是|如果|你想|你说/u.test(sentence))continue;
+      const named=topics.filter(([pattern])=>pattern.test(sentence));
+      if(named.length===1 && named[0][0].test(player.text) && subjects.has(named[0][1]) && !blockedTopics.has(named[0][1]))highlights.add(named[0][1]);
+    }
     // Without book-title brackets, require the two speakers to agree on the name.
     const named=titleOf(player.text), echoed=titleOf(e.text);
     const title=(named && (player.text.includes('《'+named+'》') || e.text.includes(named)) ? named : null) ||
@@ -60,5 +67,5 @@ export function dayConversation(events, day) {
     if(!songRequest.test(player.text)||/(?:别|不要|不想|不必|不用)(?:再)?(?:听|唱|学|练)/u.test(player.text)||!agreed)continue;
     if(!songs.get(title).sourceId || (!songs.get(title).dispatch && e.daySongBridge))songs.set(title,{title,sourceId:player.id,dispatch:e.daySongBridge===true});
   }
-  return {subjects:[...subjects],songs:[...songs.values()]};
+  return {subjects:[...subjects],highlights:[...highlights],songs:[...songs.values()]};
 }

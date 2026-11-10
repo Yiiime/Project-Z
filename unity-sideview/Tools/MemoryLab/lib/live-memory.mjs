@@ -66,10 +66,10 @@ export function memoryProjection(world, events, {privateChat=false}={}) {
     ...eligible.filter(e=>e.speaker==='player').slice(-8),...eligible.slice(-16)]);
   const entries=eligible.filter(e=>retained.has(e)).map(e=>({id:e.id,day:1+Math.floor(e.hour/24),speaker:e.speaker,
       layer:(e.channel==='private_player_chat'||e.subject==='player_and_z')?'shared':'daily',text:e.text.slice(0,240)}));
-  const {subjects,songs}=dayConversation(events,world.day);
+  const {subjects,songs,highlights}=dayConversation(events,world.day);
   const today=dayActivities(world,events);
   const specific=subjects.map(t=>'聊到了'+t);
-  return {songs:songs.slice(-32),day:world.day,stage:evidence?"verified_clue":"island_daily",entries,stories,today:[...today,...specific].slice(-64)};
+  return {highlights,songs:songs.slice(-32),day:world.day,stage:evidence?"verified_clue":"island_daily",entries,stories,today:[...today,...specific].slice(-64)};
 }
 export function narrativeChange(offer,text) {
   if (!offer || offer.count>=offer.steps.length || ![offer.steps[offer.count],...(offer.aliases?.[offer.count]||[])].some(s=>matchesStep(text,s))) return null;

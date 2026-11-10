@@ -34,6 +34,7 @@ namespace ZLive {
             for (int i=0; i<20 && Current && !game.Memory.Client.Synchronized; i++) await Task.Delay(100);
         }
         string RecapFlag => "z_live_day_recap_" + owner.day;
+        string TopicPrefix => RecapFlag + "_topic_";
         public JObject Binding() {
             if (!Current) return null;
             if (checkpoint != owner.memory.checkpoint || projection == null) {
@@ -45,7 +46,9 @@ namespace ZLive {
                 ((e.speakerId=="player" && e.recipientId=="z") || (e.speakerId=="z" && e.recipientId=="player")));
             return new JObject {
                 ["today"] = today?.Count>0 ? today.DeepClone() : localTalk ? new JArray("和岛上的朋友说了会儿话") : new JArray(),
+                ["highlights"] = (int?)projection?["day"]==owner.day ? projection?["highlights"]?.DeepClone() ?? new JArray() : new JArray(),
                 ["songs"] = (int?)projection?["day"]==owner.day ? projection?["songs"]?.DeepClone() ?? new JArray() : new JArray(),
+                ["toldItems"] = new JArray(owner.flags.Where(f => f.StartsWith(TopicPrefix, StringComparison.Ordinal)).Select(f => f.Substring(TopicPrefix.Length))),
                 ["recapSpoken"] = owner.flags.Contains(RecapFlag),
                 ["worldId"] = owner.memory.worldId, ["runId"] = run, ["day"] = owner.day,
                 ["stage"] = (string)projection?["stage"] ?? "island_daily",
@@ -67,6 +70,10 @@ namespace ZLive {
                 if (seq <= cursor) continue;
                 if (seq != cursor + 1) break;
                 if ((int?)row["recapDay"] == owner.day && !owner.flags.Contains(RecapFlag)) owner.flags.Add(RecapFlag);
+                if ((int?)row["recapDay"] == owner.day && row["item"]?.Type == JTokenType.String) {
+                    string flag = TopicPrefix + (string)row["item"];
+                    if (!owner.flags.Contains(flag)) owner.flags.Add(flag);
+                }
                 state.outbox.Add(new MemoryEvent {
                     id = prefix + seq, seq = ++state.nextSeq, day = owner.day, period = owner.period,
                     accepted = (bool?)row["shared"] == true, kind = "live_memory", channel = "livestream", speakerId = (string)row["speaker"],

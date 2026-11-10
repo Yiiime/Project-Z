@@ -16,7 +16,7 @@ class NativeConversationEngine extends CallConversationEngine {
  }
  _hostContext(...args){const context=super._hostContext(...args);if(this.sessionControl)context.host.sessionControl=this.sessionControl.snapshot();return context;}
  _recapTurn(){
-   return this.sessionControl?.normal && this.broadcast?.needsRecap && !this._state.call.active &&
+   return this.sessionControl?.normal && this.broadcast?.nextItem() && !this._state.call.active &&
      !this._hasPendingPlayerChat() && !this._mediaPlaying() && !this.singingExecuting;
  }
  _think(){
@@ -25,7 +25,8 @@ class NativeConversationEngine extends CallConversationEngine {
    if(this._state.paused||!this._started||this._active||this.pending||this._queue.length||this._destroyed)return;
    if((this.recapRetryAt||0)>this._clock)return;
    this._cancelPreparation('daytime_recap');
-   this._say(this.broadcast.opening(),'warm','wave',{source:'daytime_recap',priority:12,scope:'story'});
+   this.broadcast.recapItem=this.broadcast.nextItem();
+   this._say(this.broadcast.opening(this.broadcast.recapItem),'warm','wave',{source:'daytime_recap',priority:12,scope:'story'});
  }
  _maybePrepare(){if(!this._recapTurn()&&(!this.sessionControl||this.sessionControl.normal))return super._maybePrepare();}
  _maybeAssessTopic(){if(!this.sessionControl||this.sessionControl.normal)return super._maybeAssessTopic();}
@@ -43,8 +44,10 @@ export class LiveSession extends EventEmitter {
   const binding=saved?.broadcast?.binding||memory;
   this.broadcast=binding?new BroadcastMemory(binding,saved?.broadcast):null;
   if(this.broadcast)this.broadcast.songTasks=()=>this.providers.singing?.daytimeTasks?.(this.owner,this.broadcast.binding) || [];
+  if(this.broadcast)this.broadcast.clock=()=>this.engine._clock;
   this.engine.broadcast=this.broadcast;this.engine.setSpeechDriven(true);this.speech=new RemoteSpeech(this,providers);this.talent=new RemoteTalent(this,this.speech);this.engine.configureSpeech(this.speech);this.engine.configureTalent(this.talent);
-  this.engine.addEventListener('speak',({detail})=>{if(!detail.resume){if(detail.source==="daytime_recap")this.broadcast.recapSpeech=String(detail.id);void this.presentHost(detail);}});
+  this.engine.addEventListener('speak',({detail})=>{if(!detail.resume){if(this.broadcast)this.broadcast.cueAtStart=this.broadcast.cueId;
+    if(detail.source==="daytime_recap")this.broadcast.recapSpeech=String(detail.id);void this.presentHost(detail);}});
   this.engine.addEventListener('state',()=>this.changed());
   this.sessionControl=new SessionControl(this,saved?.sessionControl);this.engine.sessionControl=this.sessionControl;
   this.engine.commitSessionDecision=(result,context)=>this.sessionControl.decision(result,context);
@@ -55,8 +58,11 @@ export class LiveSession extends EventEmitter {
  }
  async initialize(){const config=await this.providers.config(this.id);this.engine.configureAgent({sentenceStreaming:true,generate:async(p,o)=>{
     const hostSide=p.kind==='host'||p.kind==='repair'||(p.kind==='review'&&p.context.candidate?.role==='host');
-    const memory=hostSide?this.broadcast?.recall():null;
-    const reply=await this.providers.generate(this.id,p,{...o,daytimeTasks:hostSide?this.broadcast?.songTasks():[],broadcastContext:memory,songSession:memory?this.engine.session.id:null});
+    const cue=p.context?.host?.inbox?.findLast(m=>m.mine)?.text;
+    const memory=hostSide?this.broadcast?.recall(cue):null;
+    const daytimeTasks=memory?.daySongs.length?this.broadcast.songTasks().filter(t=>
+      this.broadcast.visibleSongs(cue).some(s=>s.sourceId===t.sourceId)):[];
+    const reply=await this.providers.generate(this.id,p,{...o,daytimeTasks,broadcastContext:memory,songSession:memory?this.engine.session.id:null});
       const proposal=reply.z_state_update?.memories?.[0];
       if(p.kind==='host' && proposal && this.broadcast?.offer?.id===proposal.id &&
          this.broadcast.offer.step===proposal.step && this.broadcast.offer.source===this.broadcast.lastTopic?.id)

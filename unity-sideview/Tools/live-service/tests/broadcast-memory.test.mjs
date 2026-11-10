@@ -34,12 +34,35 @@ test('yesterday’s player quotes outrank host recap, farewell and the current q
  assert.deepEqual(m.recall().entries.slice(0,2).map(e=>e.speaker),['player','player']);
  assert(m.recall().entries.every(e=>e.day===1));
 });
-test('daytime song opening and follow-up use the current task receipt, independent of live chat',()=>{
- const m=new BroadcastMemory({...binding,today:['上午和岛上的朋友说了会儿话'],songs:[{title:'夏夜最后的烟火',sourceId:'p'}]});
- assert.match(m.opening(),/夏夜最后的烟火.*答应/);
- let status='generating';m.songTasks=()=>[{sourceId:'p',status,plan:{segment:{description:'第一段完整副歌'}}}];
- assert.match(m.opening(),/夏夜最后的烟火.*准备中/);
+test('song title follows its setup and uses the receipt available at the next turn',()=>{
+ const m=new BroadcastMemory({...binding,songs:[{title:'夏夜最后的烟火',sourceId:'p'}]});
+ let now=0,status='generating';m.clock=()=>now;
+ m.songTasks=()=>[{sourceId:'p',status,plan:{segment:{description:'第一段完整副歌'}}}];
+ assert.match(m.opening(),/能不能学首歌/);assert(!m.opening().includes('夏夜'));
+ assert.deepEqual(m.recall().daySongs,[]);
+ m.recapSpeech='1';m.recapItem=m.nextItem();m.record('speech.completed',m.opening(),{speechId:'1'});
+ assert.equal(m.opening(),null);now+=7000;
+ assert.match(m.opening(),/夏夜最后的烟火.*还在准备/);
  status='failed';assert.match(m.opening(),/没准备好/);
- status='ready';assert.match(m.opening(),/第一段完整副歌准备好了/);assert.equal(m.recall().daySongs[0].status,'ready');
- m.refresh({...binding,today:['聊到了海边的潮汐']});assert(!m.opening().includes('夏夜'));assert.match(m.opening(),/潮汐/);
+ status='ready';assert.match(m.opening(),/第一段完整副歌准备好了/);
+ m.recapItem=m.nextItem();m.recapSpeech='2';m.record('speech.completed',m.opening(),{speechId:'2'});
+ assert.equal(m.recall().daySongs[0].status,'ready');now+=30000;assert.equal(m.opening(),null);
+ const checkpoint={...m.binding,toldItems:[...m.told],recapSpoken:true};
+ assert.equal(new BroadcastMemory(checkpoint).opening(),null);
+});
+test('only public small talk matching a displayed audience or player message is offered',()=>{
+ const m=new BroadcastMemory({...binding,today:['聊到了咖啡拉花','聊到了海边的潮汐']});
+ assert.deepEqual(m.recall().today,[]);
+ for(const type of ['npc.message','player.message']){
+   m.record(type,'你也喜欢拉花吗？',{id:'q'});assert.deepEqual(m.recall().today,['聊到了咖啡拉花']);
+   m.record('speech.completed','是啊。',{speechId:'5',replyTo:['q']});assert.deepEqual(m.recall().today,[]);
+ }
+});
+
+test('a public topic Z chose to share gets a separate turn before the song',()=>{
+ const m=new BroadcastMemory({...binding,today:['聊到了咖啡拉花'],highlights:['咖啡拉花'],songs:[{sourceId:'p',title:'夏夜最后的烟火'}]});
+ let now=0;m.clock=()=>now;
+ assert.match(m.opening(),/咖啡拉花/);assert.doesNotMatch(m.opening(),/歌/);
+ m.recapItem=m.nextItem();m.recapSpeech='1';m.record('speech.completed',m.opening(),{speechId:'1'});
+ now+=14000;assert.match(m.opening(),/还答应学一首歌.*夏夜最后的烟火/);
 });

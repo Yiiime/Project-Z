@@ -185,7 +185,7 @@ test('five minutes of audience display receipts follow room, call and singing pa
 test('daytime recap opens on a host turn with no chat, is saved only on delivery and survives refresh/restart',async t=>{
  const memory={worldId:'a'.repeat(32),runId:'b'.repeat(32),day:2,today:['上午在咖啡店附近和岛上的朋友说了会儿话']};
  const s=await fixture(t,memory);s.engine._tick();await frame();
- const first=latest(s,'host.present');assert.match(first.payload.text,/上午在咖啡店/);
+ const first=latest(s,'host.present');assert.match(first.payload.text,/晚上好/);assert.doesNotMatch(first.payload.text,/咖啡店|朋友/);
  assert(!s.engine.facts.some(e=>['player.message','npc.message'].includes(e.type)));
  assert(!s.broadcast.recapSpoken);receipt(s,first,'interrupted',{reason:'aborted'});
  assert(s.broadcast.opening());s.engine._clock+=5000;s.engine._tick();await frame();
@@ -200,5 +200,18 @@ test('an empty day stays quiet; a late daytime checkpoint schedules its own host
  const m={worldId:'a'.repeat(32),runId:'b'.repeat(32),day:1};
  const s=await fixture(t,m);s.engine._tick();assert(!latest(s,'host.present'));
  s.heartbeat(envelope(s,{executorLeaseId:s.lease,memory:{...m,today:['和岛上的朋友说了会儿话']}}));
- s.engine._tick();await frame();assert.match(latest(s,'host.present').payload.text,/朋友/);
+ s.engine._tick();await frame();assert.match(latest(s,'host.present').payload.text,/晚上好/);
+});
+
+test('a verified outing leaves a quiet beat before the host brings up her song without chat',async t=>{
+ const memory={worldId:'a'.repeat(32),runId:'b'.repeat(32),day:1,
+   today:['和岛上的朋友一起去看了地图上还没有标出来的地方','聊到了咖啡拉花'],songs:[{title:'夏夜最后的烟火',sourceId:'p'}]};
+ const s=await fixture(t,memory);await frame();
+ const e=s.engine,first=latest(s,'host.present');
+ assert.match(first.payload.text,/地图/);assert.doesNotMatch(first.payload.text,/咖啡|歌/);
+ receipt(s,first,'started',{durationMs:2000,positionMs:0});receipt(s,first,'completed',{positionMs:2000});
+ e._clock+=10000;e._tick();await frame();assert.equal(latest(s,'host.present'),first);
+ e._clock+=4500;e._tick();await frame();const song=latest(s,'host.present');
+ assert.match(song.payload.text,/还答应学一首歌.*夏夜最后的烟火/);
+ assert(!e.facts.some(f=>['npc.message','player.message'].includes(f.type)));
 });

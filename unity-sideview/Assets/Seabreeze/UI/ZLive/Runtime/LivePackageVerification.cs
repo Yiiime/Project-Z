@@ -78,6 +78,24 @@ namespace ZLive {
             var draft = root.Q<TextField>(className:"chat-input");
             var chat = root.Q<ScrollView>(className:"chat");
             var send = (Button)typeof(LiveFeatureController).GetField("sendButton",Member).GetValue(feature);
+            if (Array.IndexOf(Environment.GetCommandLineArgs(), "--verify-quiet-room") >= 0) {
+                var linesSeen = new HashSet<string>();
+                deadline = Time.realtimeSinceStartupAsDouble + 55;
+                while (Time.realtimeSinceStartupAsDouble < deadline) {
+                    var current = (JObject)typeof(LiveFeatureController).GetField("state", Member).GetValue(feature);
+                    foreach (var ev in (JArray)current["publicEvents"]) {
+                        string kind = (string)ev["type"];
+                        if (kind == "player.message" || kind == "npc.message") { Fail("unexpected chat"); yield break; }
+                        if (kind == "speech.completed" && linesSeen.Add((string)ev["id"]))
+                            Debug.Log("LIVE_QUIET_LINE " + (string)ev["text"]);
+                    }
+                    yield return new WaitForSecondsRealtime(.2f);
+                }
+                if (linesSeen.Count == 0) { Fail("no delivered opening"); yield break; }
+                Debug.Log("LIVE_QUIET_PASS");
+                Application.Quit(0);
+                yield break;
+            }
             if(verifyDay || verifySong) {
                 deadline=Time.realtimeSinceStartupAsDouble+65;
                 bool heard=false;
@@ -85,9 +103,10 @@ namespace ZLive {
                     var current=(JObject)typeof(LiveFeatureController).GetField("state",Member).GetValue(feature);
                     foreach(var ev in (JArray)current["publicEvents"]) {
                         string kind=(string)ev["type"], text=(string)ev["text"];
-                        if(text.Contains("失眠") || text.Contains("蓝信封") || (!heard && (kind=="npc.message" || kind=="player.message"))) { Fail("recap privacy or ordering"); yield break; }
+                        if(text.Contains("失眠") || text.Contains("蓝信封") || (!heard && kind=="player.message")) { Fail("recap privacy or ordering"); yield break; }
                         if(kind=="speech.completed" && !heard) {
-                            if(verifySong ? !text.Contains("夏夜最后的烟火") || (Array.IndexOf(Environment.GetCommandLineArgs(),"--verify-prepared-day-song")>=0 && !text.Contains("准备好了")) : !text.Contains("上午") || !text.Contains("朋友")) { Fail("missing daytime opening"); yield break; }
+                            if (verifySong && !text.Contains("夏夜最后的烟火")) continue;
+                            if(verifySong ? Array.IndexOf(Environment.GetCommandLineArgs(),"--verify-prepared-day-song")>=0 && !text.Contains("准备好了") : text.Contains("朋友") || text.Contains("上午")) { Fail("missing daytime opening"); yield break; }
                             heard=true;
                         }
                     }
