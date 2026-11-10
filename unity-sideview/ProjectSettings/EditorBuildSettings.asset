@@ -54,9 +54,6 @@ EditorBuildSettings:
     path: Assets/Seabreeze/Scenes/ForestPath2.unity
     guid: 48e368882093149a694a2788a8d4a32d
   - enabled: 1
-    path: Assets/Seabreeze/Scenes/Restaurant.unity
-    guid: e92ad9b6faa404a11ab4a57ed63c5cf9
-  - enabled: 1
     path: Assets/Seabreeze/Scenes/BeachEntrance.unity
     guid: 7be15d845cb264febbbdd6dfdad40a4b
   - enabled: 1
@@ -95,6 +92,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Seabreeze/Scenes/RestaurantInterior.unity
     guid: 8b7dc3d61dd1f4fc6ac22ffdc35a2129
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/ZBedroom.unity
+    guid: 4e65fa5343ecf4a53b27bbdb2be2fe24
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

@@ -39,6 +39,12 @@ namespace Seabreeze
             if (relationships == null) relationships = new List<RelationshipValue>();
             if (!Enum.TryParse(place, out PlaceId _)) place = "Street";
             if (float.IsNaN(playerX) || float.IsInfinity(playerX)) playerX = -8f;
+            if (place == nameof(PlaceId.Restaurant))
+            {
+                // The old standalone restaurant exterior is now the east half of Seafront.
+                place = nameof(PlaceId.Seafront);
+                playerX += 9.0750f;
+            }
             if (ending == null) ending = "";
             if (weather == null) weather = "晴 · 海风轻柔";
         }
