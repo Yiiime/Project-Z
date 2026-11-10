@@ -1,0 +1,105 @@
+{
+  "Version": 3,
+  "FileReferences": {
+    "Moc": "Model.moc3",
+    "Textures": [
+      "texture_00.png",
+      "expression_atlas.png"
+    ],
+    "DisplayInfo": "Model.cdi3.json",
+    "Physics": "Model.physics3.json",
+    "Expressions": [
+      {
+        "Name": "smile",
+        "File": "smile.exp3.json"
+      },
+      {
+        "Name": "surprise",
+        "File": "surprise.exp3.json"
+      },
+      {
+        "Name": "angry",
+        "File": "angry.exp3.json"
+      },
+      {
+        "Name": "troubled",
+        "File": "troubled.exp3.json"
+      },
+      {
+        "Name": "wave",
+        "File": "wave.exp3.json"
+      },
+      {
+        "Name": "explain",
+        "File": "explain.exp3.json"
+      },
+      {
+        "Name": "point",
+        "File": "point.exp3.json"
+      },
+      {
+        "Name": "blush",
+        "File": "blush.exp3.json"
+      },
+      {
+        "Name": "cry_closed",
+        "File": "cry_closed.exp3.json"
+      },
+      {
+        "Name": "bawl_closed",
+        "File": "bawl_closed.exp3.json"
+      },
+      {
+        "Name": "starry_curious",
+        "File": "starry_curious.exp3.json"
+      }
+    ],
+    "Motions": {
+      "cry": [
+        {
+          "File": "Motions/cry.motion3.json",
+          "FadeInTime": 0,
+          "FadeOutTime": 0
+        }
+      ],
+      "bawl": [
+        {
+          "File": "Motions/bawl.motion3.json",
+          "FadeInTime": 0,
+          "FadeOutTime": 0
+        }
+      ],
+      "surprise": [
+        {
+          "File": "Motions/surprise.motion3.json",
+          "FadeInTime": 0,
+          "FadeOutTime": 0
+        }
+      ],
+      "starry_curious": [
+        {
+          "File": "Motions/starry_curious.motion3.json",
+          "FadeInTime": 0,
+          "FadeOutTime": 0
+        }
+      ]
+    }
+  },
+  "Groups": [
+    {
+      "Target": "Parameter",
+      "Name": "EyeBlink",
+      "Ids": [
+        "ParamEyeLOpen",
+        "ParamEyeROpen"
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Name": "LipSync",
+      "Ids": [
+        "ParamMouthOpenY"
+      ]
+    }
+  ]
+}

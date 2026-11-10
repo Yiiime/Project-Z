@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58229d41c24a7fb4aafd097ab43bcc2a, type: 3}
+  m_Name: qingye_starry_curious_r6.exp3
+  m_EditorClassIdentifier: Live2D.Cubism::Live2D.Cubism.Framework.Expression.CubismExpressionData
+  Type: Live2D Expression
+  FadeInTime: 0.2
+  FadeOutTime: 0.2
+  Parameters:
+  - Id: ParamQYR6Curiosity
+    Value: 1
+    Blend: 0
+  - Id: ParamBrowForm
+    Value: 0.18
+    Blend: 0
+  - Id: ParamMouthVariant
+    Value: 1
+    Blend: 0
+  - Id: ParamQingyeFxIrisStarL
+    Value: 1
+    Blend: 0
+  - Id: ParamQingyeFxIrisStarR
+    Value: 1
+    Blend: 0
+  - Id: ParamQingyeFxStarLeftBig
+    Value: 1
+    Blend: 0
+  - Id: ParamQingyeFxStarLeftSmall
+    Value: 1
+    Blend: 0
+  - Id: ParamQingyeFxStarRightBig
+    Value: 1
+    Blend: 0
+  - Id: ParamQingyeFxStarRightSmall
+    Value: 1
+    Blend: 0

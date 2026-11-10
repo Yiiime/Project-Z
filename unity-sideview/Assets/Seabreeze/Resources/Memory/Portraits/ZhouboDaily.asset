@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20658eea1de5e4e48acec160054bac1e, type: 3}
+  m_Name: ZhouboDaily
+  m_EditorClassIdentifier: Assembly-CSharp::Seabreeze.Live2DModelProfile
+  prefab: {fileID: 4492710872501440566, guid: 8d770b1579b9e4a42b5198c7a6e386ce, type: 3}
+  characterId: zhou_bobo_daily
+  rendererIndex: 1
+  renderLayer: 30
+  modelPosition: {x: 0, y: 0, z: 0}
+  modelScale: 1
+  cameraCenter: {x: 0, y: 0}
+  orthographicSize: 2
+  autoFrame: 1
+  visibleHeight: 0.78
+  verticalFocus: 0.62
+  uvRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  textureHeight: 1200
+  defaultEmotion: neutral
+  expressions: []
+  animatorController: {fileID: 0}
+  idleState: 
+  talkState: 
+  proceduralIdle: 1
+  proceduralTalk: 1
+  expressionFadeSeconds: 0.24
+  mouthParameter: ParamMouthOpenY
+  talkMouthAmplitude: 1.8
+  breathParameter: ParamBreath
+  leftEyeParameter: ParamEyeLOpen
+  rightEyeParameter: ParamEyeROpen
+  authoringNotes: "\u5468\u4F2F\u4F2F\u65E5\u5E38\u8001\u5E74\u5F62\u8C61\uFF0C\u4F7F\u7528\u7528\u6237\u5728
+    VTube Studio \u786E\u8BA4\u7684 V05 \u5BBD\u8896\u3001\u52A0\u5BBD\u8BF4\u8BDD\u53E3\u578B\u57FA\u7840\u5305\u3002Unity
+    \u9002\u914D\u4E0D\u5E26\u672A\u786E\u8BA4\u8868\u60C5\u6587\u4EF6\uFF0C\u4FDD\u7559\u539F\u6A21\u578B\u53C2\u6570\uFF1B\u4F7F\u7528
+    proceduralIdle \u505A\u547C\u5438\u3001\u7728\u773C\u3001\u8F7B\u5FAE\u6446\u52A8\uFF0C\u4F7F\u7528
+    proceduralTalk \u901A\u8FC7 ParamMouthOpenY \u9A71\u52A8\u8BF4\u8BDD\u3002\u6E90\u5305\u540D\u4E3A
+    Zhoubo_V05_TalkWide_Mouth\uFF0C\u5BFC\u5165\u8DEF\u5F84\u4E3A Live2D/Models/ZhouboDaily\uFF0CModel.moc3
+    SHA-256 \u4E3A 7862879a5c8b5fa5578095529c22150e553a1ca0624fab7c846e5acb920a4670\u3002"

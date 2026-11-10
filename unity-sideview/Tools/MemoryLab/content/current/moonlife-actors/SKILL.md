@@ -15,7 +15,7 @@ description: 扮演《来自月亮的Z》的Z或七位既有NPC，处理玩家�
 | 阿星 | `axing` | [axing.md](references/characters/axing.md) |
 | 正义 | `zhengyi` | [zhengyi.md](references/characters/zhengyi.md) |
 | 小小晴 | `xiaoxiaoqing` | [xiaoxiaoqing.md](references/characters/xiaoxiaoqing.md) |
-| 林序 | `linxu` | [linxu.md](references/characters/linxu.md) |
+| 留洋 | `linxu` | [linxu.md](references/characters/linxu.md) |
 | 周伯伯 | `zhou_bobo` | [zhou_bobo.md](references/characters/zhou_bobo.md) |
 
 读取[公共世界](references/world.md)、[行为与计划](references/behavior.md)、[社会交流](references/social.md)、[私有记忆](references/memory.md)、[接口](references/interface.md)，加上[共享地图与公开职业](references/island-map.json)及选定角色档案。地图是开局生活常识，runtime会自动编入提示。公共世界没有幕后真相；不要把所有characters文件一起加载。

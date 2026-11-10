@@ -10,7 +10,7 @@
       "locationId": "z_home",
       "x": 3.4,
       "color": "#C5AFD9",
-      "portrait": "Memory/Portraits/Z"
+      "portrait": "Memory/Portraits/ZFinal-v03"
     },
     {
       "id": "liyuan",
@@ -20,7 +20,8 @@
       "place": "Lighthouse",
       "locationId": "liyuan_home",
       "x": -4,
-      "color": "#97BCCB"
+      "color": "#97BCCB",
+      "portrait": "Memory/Portraits/Liyuan"
     },
     {
       "id": "liting",
@@ -30,7 +31,8 @@
       "place": "Cafe",
       "locationId": "cafe",
       "x": -2,
-      "color": "#A8CFAD"
+      "color": "#A8CFAD",
+      "portrait": "Memory/Portraits/Liting"
     },
     {
       "id": "axing",
@@ -40,7 +42,8 @@
       "place": "Lighthouse",
       "locationId": "axing_lab",
       "x": 2,
-      "color": "#9FD8CA"
+      "color": "#9FD8CA",
+      "portrait": "Memory/Portraits/Axing"
     },
     {
       "id": "zhengyi",
@@ -51,7 +54,8 @@
       "place": "Street",
       "locationId": "visitor_center",
       "x": 12,
-      "color": "#91BFE2"
+      "color": "#91BFE2",
+      "portrait": "Memory/Portraits/Zhengyi"
     },
     {
       "id": "xiaoxiaoqing",
@@ -61,17 +65,20 @@
       "place": "Street",
       "locationId": "flower_shop",
       "x": -6,
-      "color": "#EDA6B4"
+      "color": "#EDA6B4",
+      "portrait": "Memory/Portraits/Qingye",
+      "dialogueCharactersPerSecond": 13
     },
     {
       "id": "linxu",
-      "displayName": "林序",
+      "displayName": "留洋",
       "occupation": "船长",
       "appearance": 3,
       "place": "Street",
       "locationId": "dock",
       "x": 6,
-      "color": "#E4B972"
+      "color": "#E4B972",
+      "portrait": "Memory/Portraits/Liuyang"
     },
     {
       "id": "zhou_bobo",
@@ -81,7 +88,9 @@
       "place": "Street",
       "locationId": "photo_studio",
       "x": -10,
-      "color": "#C5AFD9"
+      "color": "#C5AFD9",
+      "portrait": "Memory/Portraits/ZhouboDaily",
+      "previewPortrait": "Memory/Portraits/ZhouboFinal-v03"
     }
   ]
 }

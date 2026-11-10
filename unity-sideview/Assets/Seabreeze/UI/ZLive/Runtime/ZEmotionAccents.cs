@@ -125,7 +125,7 @@ namespace ZLive.ModelPerformance
             overlay.worldCamera = camera;
             overlay.planeDistance = 1;
             overlay.sortingOrder = 500;
-            var accentsObject = new GameObject(AccentsName, typeof(RectTransform));
+            var accentsObject = new GameObject(AccentsName, typeof(RectTransform), typeof(CanvasRenderer));
             accentsObject.transform.SetParent(canvasObject.transform, false);
             accentsObject.layer = 30;
             var rect = (RectTransform)accentsObject.transform;
@@ -268,6 +268,8 @@ namespace ZLive.ModelPerformance
 
         private void EnsureGraphic()
         {
+            if (GetComponent<CanvasRenderer>() == null)
+                gameObject.AddComponent<CanvasRenderer>();
             if (graphic == null)
                 graphic = GetComponent<ZEmotionAccentGraphic>();
             if (graphic == null)

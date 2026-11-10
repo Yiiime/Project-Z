@@ -276,7 +276,7 @@
       "id": "dock_sort",
       "owner": "linxu",
       "title": "码头的日常",
-      "description": "林序请玩家负责整理码头物资、清点船上用品。",
+      "description": "留洋请玩家负责整理码头物资、清点船上用品。",
       "enabled_on_start": true,
       "steps": [
         {
@@ -308,7 +308,7 @@
       "id": "departure_prep",
       "owner": "linxu",
       "title": "一次真正的出航准备",
-      "description": "相关出航局面发生后，林序请玩家取齐物资、协助检查并将时间地点实际传给Z。林序负责船况、海况与掌舵。",
+      "description": "相关出航局面发生后，留洋请玩家取齐物资、协助检查并将时间地点实际传给Z。留洋负责船况、海况与掌舵。",
       "enabled_on_start": false,
       "steps": [
         {
@@ -345,7 +345,7 @@
         },
         {
           "id": "boat",
-          "label": "林序实际检查船况并判断当前海况",
+          "label": "留洋实际检查船况并判断当前海况",
           "performed_by": [
             "linxu"
           ],
@@ -362,7 +362,7 @@
       ],
       "reward": {
         "kind": "offer_help",
-        "summary": "林序愿承担自己的船务与掌舵责任；这只说明准备委托完成，Z是否愿走、限制是否解除与实际离岛仍另行判断。"
+        "summary": "留洋愿承担自己的船务与掌舵责任；这只说明准备委托完成，Z是否愿走、限制是否解除与实际离岛仍另行判断。"
       },
       "source_submission": 11,
       "assignee": "player",

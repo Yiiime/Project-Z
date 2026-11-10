@@ -5,8 +5,9 @@ namespace Seabreeze
 {
     [Serializable] public sealed class SevenCharacter
     {
-        public string id,displayName,occupation,place,color,portrait,locationId,motion;
+        public string id,displayName,occupation,place,color,portrait,previewPortrait,locationId,motion;
         public int appearance;
+        public float dialogueCharactersPerSecond;
         public float x;
         public NpcSchedule[] schedule = Array.Empty<NpcSchedule>();
         public PlaceId Place => Enum.TryParse(place,out PlaceId p)?p:PlaceId.Street;

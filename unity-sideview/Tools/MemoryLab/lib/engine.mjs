@@ -5,6 +5,7 @@ import { Policy, TurnError, canonical } from "./policy.mjs";
 import { TaskEngine } from "./tasks.mjs";
 import { MemoryBank } from "./memory.mjs";
 import { ActorRuntime } from "./actor-runtime.mjs";
+import { portraitExpression } from "./portrait-expression.mjs";
 const encode = (v) => JSON.stringify(canonical(v));
 const metrics = ["affinity", "trust", "world_suspicion"];
 export class Engine {
@@ -741,8 +742,31 @@ export class Engine {
       const context = this.context(job),
         w = this.world(world);
       try {
-        const output = await this.decide(clone(context));
+        const generated = await this.decide(clone(context));
+        const requestedExpression =
+          generated && typeof generated === "object"
+            ? generated.portraitExpression ??
+              generated.expression ??
+              generated.portrait_expression
+            : null;
+        // Keep the shared V1.2 output contract at exactly
+        // dialogue/action/info. Expression is a presentation-side adapter
+        // field and is stored on the proposal separately.
+        const output =
+          generated && typeof generated === "object"
+            ? { ...generated }
+            : generated;
+        if (output && typeof output === "object") {
+          delete output.expression;
+          delete output.portraitExpression;
+          delete output.portrait_expression;
+        }
         this.policy.validate(context, output);
+        const expression = portraitExpression(
+          job.actor,
+          requestedExpression,
+          output.dialogue,
+        );
         const current = this.world(world);
         if (
           current.runId !== w.runId ||
@@ -765,6 +789,7 @@ export class Engine {
             status: "pending",
             context,
             output,
+            portrait_expression: expression,
             job: job.id,
             conversation: job.conversation,
             root: job.root,
@@ -778,6 +803,7 @@ export class Engine {
             status: "proposed",
             proposalId: proposal.id,
             output,
+            expression,
           });
         }
       } catch (e) {

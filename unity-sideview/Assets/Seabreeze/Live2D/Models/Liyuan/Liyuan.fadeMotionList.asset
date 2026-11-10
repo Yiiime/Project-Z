@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 403ae2dd693bb1d4b924f6b8d206b053, type: 3}
+  m_Name: Liyuan.fadeMotionList
+  m_EditorClassIdentifier: Live2D.Cubism::Live2D.Cubism.Framework.MotionFade.CubismFadeMotionList
+  MotionInstanceIds: 50faffff26faffff0afaffffeef9ffff
+  CubismFadeMotionObjects:
+  - {fileID: 11400000, guid: 0ae8bb6b79f384512bfd7cda3571e656, type: 2}
+  - {fileID: 11400000, guid: 0b3ed30e87c68454689a35d030fbd868, type: 2}
+  - {fileID: 11400000, guid: 6971d678158bd4ad996ca1bdfce7bb7b, type: 2}
+  - {fileID: 11400000, guid: 8499fc6c6acf14a7b964a132f887d4d1, type: 2}

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f401bb1c5c52514eba33c0c2ffdc8ff, type: 3}
+  m_Name: Liuyang.expressionList
+  m_EditorClassIdentifier: Live2D.Cubism::Live2D.Cubism.Framework.Expression.CubismExpressionList
+  CubismExpressionObjects:
+  - {fileID: 11400000, guid: 07d0c0091737a4bfc89ec6a30ee5b4c2, type: 2}
+  - {fileID: 11400000, guid: 19bbe6cf25b65479bba3b7af6f03079f, type: 2}
+  - {fileID: 11400000, guid: c33f81e3f76a24ce1a53b3df792b08ab, type: 2}
+  - {fileID: 11400000, guid: 419974a34de9e4777a45bef9a5ccdb91, type: 2}
+  - {fileID: 11400000, guid: ec535f2e995f742b78ea579b3c421b7b, type: 2}
+  - {fileID: 11400000, guid: 49a74f4ace3e44e3391568632c881ad7, type: 2}
+  - {fileID: 11400000, guid: db356fcd3c6b04d3b9e7200bf89750f7, type: 2}
+  - {fileID: 11400000, guid: c208dec2e1d894f2ca49609f00a3715e, type: 2}

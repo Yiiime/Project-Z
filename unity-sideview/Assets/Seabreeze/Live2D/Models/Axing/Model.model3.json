@@ -1,0 +1,97 @@
+{
+  "Version": 3,
+  "FileReferences": {
+    "Moc": "Model.moc3",
+    "Textures": [
+      "texture_00.png"
+    ],
+    "DisplayInfo": "Model.cdi3.json",
+    "Physics": "Model.physics3.json",
+    "Motions": {
+      "Idle": [
+        {
+          "File": "idle.motion3.json",
+          "FadeInTime": 0.4,
+          "FadeOutTime": 0.4
+        }
+      ],
+      "AxingActions": [
+        {"File":"axing_focus_repair.motion3.json","FadeInTime":0.0,"FadeOutTime":0.0},
+        {"File":"axing_curious_side.motion3.json","FadeInTime":0.2,"FadeOutTime":0.3},
+        {"File":"axing_angry_stop.motion3.json","FadeInTime":0.18,"FadeOutTime":0.3},
+        {"File":"axing_alert_micro_open.motion3.json","FadeInTime":0.15,"FadeOutTime":0.25},
+        {"File":"axing_sigh.motion3.json","FadeInTime":0.12,"FadeOutTime":0.35},
+        {"File":"axing_relieved_smile.motion3.json","FadeInTime":0.3,"FadeOutTime":0.35}
+      ]
+    },
+    "Expressions": [
+      {
+        "Name": "smile",
+        "File": "smile.exp3.json"
+      },
+      {
+        "Name": "surprise",
+        "File": "surprise.exp3.json"
+      },
+      {
+        "Name": "angry",
+        "File": "angry.exp3.json"
+      },
+      {
+        "Name": "troubled",
+        "File": "troubled.exp3.json"
+      },
+      {
+        "Name": "blush",
+        "File": "blush.exp3.json"
+      },
+      {
+        "Name": "wave",
+        "File": "wave.exp3.json"
+      },
+      {
+        "Name": "explain",
+        "File": "explain.exp3.json"
+      },
+      {
+        "Name": "point",
+        "File": "point.exp3.json"
+      },
+      {
+        "Name": "inspect",
+        "File": "inspect.exp3.json"
+      },
+      {
+        "Name": "mouth_line",
+        "File": "mouth_line.exp3.json"
+      },
+      {
+        "Name": "mouth_frown",
+        "File": "mouth_frown.exp3.json"
+      },
+      {"Name":"focus_repair","File":"focus_repair.exp3.json"},
+      {"Name":"curious_side","File":"curious_side.exp3.json"},
+      {"Name":"angry_stop","File":"angry_stop.exp3.json"},
+      {"Name":"alert_micro_open","File":"alert_micro_open.exp3.json"},
+      {"Name":"relieved_smile","File":"relieved_smile.exp3.json"},
+      {"Name":"sigh","File":"sigh.exp3.json"}
+    ]
+  },
+  "Groups": [
+    {
+      "Target": "Parameter",
+      "Name": "EyeBlink",
+      "Ids": [
+        "ParamEyeLOpen",
+        "ParamEyeROpen"
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Name": "LipSync",
+      "Ids": [
+        "ParamMouthOpenY"
+      ]
+    }
+  ]
+}

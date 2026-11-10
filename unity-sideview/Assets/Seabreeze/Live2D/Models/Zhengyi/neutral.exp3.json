@@ -1,0 +1,10 @@
+{
+  "Type": "Live2D Expression",
+  "FadeInTime": 0.24,
+  "FadeOutTime": 0.24,
+  "Parameters": [
+    {"Id": "ParamEyeSmile", "Value": 0.0, "Blend": "Overwrite"},
+    {"Id": "ParamBawl", "Value": 0.0, "Blend": "Overwrite"},
+    {"Id": "ParamTear", "Value": 0.0, "Blend": "Overwrite"}
+  ]
+}
