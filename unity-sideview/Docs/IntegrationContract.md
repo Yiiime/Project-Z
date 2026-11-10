@@ -80,3 +80,22 @@ Day4 is public for all ten; retired staff/AI-identity lore is not in any persona
 `NpcSpeechBubble` displays already-committed speech from on-screen NPCs regardless of player distance, follows the speaking NPC, and never enables raycasts. `ReadDuration` is shared with turn timing so automatic pagination finishes before the next turn. `MemoryGameController.PlayerCanHear` still applies distance and occlusion to memory witness selection; screen presentation does not broaden that list.
 
 PlayerController keeps horizontal locomotion and gravity; jump impulse, buffer and jump input mappings have been removed. Legacy references to jumping above describe the earlier prototype.
+
+## Zhengyi video motion on the current eight-role roster (2026-11-10)
+
+Only `zhengyi` binds `Art/ZhengyiMotion` through the optional `SevenCharacter.motion` field. The spawner passes it to `NpcPresence`, which loads the sequence before configuring movement. An absent binding keeps the existing actor artwork and movement path. The player retains its accepted animation driver.
+
+| Asset / API | Contract |
+| --- | --- |
+| Approved artwork | 32 original video frames and the approved colour-matched standing image; all PNG bytes match the local review. |
+| Shared geometry | 600×1056 RGBA, 381.9230769 pixels/unit, pivot (0.476666667, 0.03125); top-left foot anchor (286, 1023). No per-frame fitting or scaling. |
+| `walkSpeed` / `cycleSeconds` | 1.55 world units/s and 4/3 s per cycle. Actual rendered displacement drives playback; stopping, teleporting and blocked movement do not advance it. |
+| `frameDurations` | Optional positive finite seconds per frame, matching `walk` length and summing to the cycle. Zhengyi keeps the original alternating 33.333/50 ms intervals. Omission uses equal intervals. |
+| `stopFrames` | Optional contact-pose indices for the existing 0.08 s settle, followed by the separate planted idle. Facing uses mirroring. |
+| `source~/prepare_assets.py` | Publishes the approved standing PNG without re-matting or fitting; checks alpha, hash, canvas, pivot and preserved walk bytes. `sourceReviewCharacterId: c06` is historical provenance, not a runtime identity or save migration. |
+
+Current eight-role names, IDs, personas, relationships, memory protocol, dialogue UI and story delivery remain on the upstream version. Qingye artwork is not included in this integration. Source review artifacts do not create or migrate characters.
+
+Import: `Seabreeze/Import Zhengyi approved video motion` supports batch mode. For a test service, run `node Assets/Seabreeze/Resources/Art/ZhengyiMotion/source~/verification-server.mjs --data /tmp/zhengyi-service-<unique-name>` after installing the existing Memory Lab dependencies. It prints a local simulated service URL and refuses non-temporary data roots.
+
+Scene validation: run Unity with `-executeMethod Seabreeze.Editor.ZhengyiMotionVerification.Run -zhengyiOutput <temporary directory> -memoryService <test URL> -zhengyiExit 1`, without `-batchmode`. The current frosted dialogue background requires a visible Game view and end-of-frame capture. The verifier checks the current roster, original timestamps, left/right travel, planted conversation idle, actual speech receipts, save/load and scene cancellation. It requires an explicit test URL; it does not require or read a real model key. The checked result is in `source~/verification.json`.

@@ -45,6 +45,7 @@
     {
       "id": "zhengyi",
       "displayName": "正义",
+      "motion": "Art/ZhengyiMotion",
       "occupation": "警察",
       "appearance": 1,
       "place": "Street",
