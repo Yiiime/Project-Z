@@ -144,3 +144,39 @@ test('old activities and unfinished voice performances never resume after restar
   assert(!state.pendingCommands.some(c=>['drawing.present','tarot.present','media.prepare','media.play'].includes(c.type)));
  }
 });
+
+test('five minutes of audience display receipts follow room, call and singing pace',async t=>{
+ const s=await fixture(t),e=s.engine,a=e.audience,frameTime=160;
+ const policy=await new Providers({DEEPSEEK_API_KEY:'fixture-only'}).config(s.id);
+ let serial=0,showing=null;
+ const displays=[],phases=new Set();
+ const client={generate:async p=>{
+   normalizeAgentInput(p);
+   if(p.kind==='review')return {decision:'allow',candidateId:p.context.candidate.id,revision:p.context.revision,promptVersion:policy.review.version};
+   assert.equal(p.kind,'audience');phases.add(p.context.phase);
+   const npc=p.context.audience.eligibleNpcIds[0];
+   return {status:'ready',items:[{npc_id:npc,text:'今晚的歌单 '+(++serial),intent:'atmosphere',evidence_refs:[p.eventId]}]};
+ },cancel(){}};
+ e.configureAgent(client,{...policy,singingBackground:false});a.random=()=>0.5;
+ s.on('event',event=>{if(event.type==='audience.present'){assert.equal(showing,null);showing=s.commands.get(event.commandId);}});
+ for(let ms=0;ms<300000;ms+=frameTime){
+   e._clock=ms;
+   if(ms===120000)assert(e.joinCall());
+   if(ms===180000){e._state.media={kind:'singing',phase:'playing'};e._public('talent.playing','点的歌开始播放了。');}
+   if(ms===216000){e._state.media=null;e._public('talent.completed','这首歌唱完了。');assert(e.endCall());}
+   if(showing){
+     assert(!e.facts.some(f=>f.id===showing.payload.messageId),'generation alone is not public');
+     receipt(s,showing,'displayed');displays.push([ms,showing.payload.npcId]);showing=null;
+   }
+   a.tick();await frame();
+ }
+ const period=(a,b)=>displays.filter(([t])=>a<=t&&t<b),count=(a,b)=>period(a,b).length;
+ const since=new Map();for(const [when,npc] of displays){assert(when-(since.get(npc)??-Infinity)>=20000);since.set(npc,when);}
+ const sample={opening:count(0,15000),chatMinute:count(60000,120000),callMinute:count(120000,180000),song36s:count(180000,216000),total:displays.length,names:since.size};
+ t.diagnostic(JSON.stringify(sample));assert.deepEqual([...phases].sort(),['call','chat','opening','performing']);
+ assert(sample.opening>=3&&sample.opening<=4);assert(sample.chatMinute>=12&&sample.chatMinute<=18);
+ assert(sample.callMinute>=8&&sample.callMinute<=12);assert(sample.song36s>=8&&sample.song36s<=12);
+ assert.equal(sample.names,8);assert(new Set(period(60000,120000).map(x=>x[1])).size>=5);
+ assert(!e.inbox.some(m=>!m.mine));
+ const before=serial;s.control(envelope(s,{action:'end'}));e._clock+=30000;a.tick();await frame();assert.equal(serial,before);
+});

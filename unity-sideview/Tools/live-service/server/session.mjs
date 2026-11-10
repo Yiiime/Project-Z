@@ -46,11 +46,11 @@ export class LiveSession extends EventEmitter {
   if(x.activeSpeech)e._public('speech.interrupted','服务端重启，上一句是否播完未确认。');
  }
  installAudience(){const a=this.engine.audience,original=a.publish;
-  a.publish=item=>{const c=this.command('audience.present',{messageId:item.messageId||uid(),npcId:item.npc_id,text:item.text,replyTo:item.evidence_refs});return new Promise((resolve,reject)=>this.waiters.set(c.commandId,{resolve:()=>{original({...item,messageId:c.payload.messageId});resolve();},reject}));};
+  a.publish=item=>{const c=this.command('audience.present',{messageId:item.messageId||uid(),npcId:item.npc_id,text:item.text,replyTo:item.evidence_refs});return new Promise((resolve,reject)=>this.waiters.set(c.commandId,{resolve:()=>{if(!this.sessionControl.normal){reject(Error('session_closing'));return;}original({...item,messageId:c.payload.messageId});resolve();},reject}));};
   a._publishOne=async now=>{
    if(a.publishing)return;while(a.candidates.length){const n=a.candidates[0];if(n.token!==a.generation||now>=n.expiresAt||now-(a.cooldowns.get(n.item.npc_id)??-Infinity)<a.config.npcPublishCooldownMs||n.item.intent==='advance'&&!a._advanceAllowed()){a.candidates.shift();a._endSelection(n.work,'expired_or_ineligible');continue;}
-    if(now<n.notBefore)return;if(!a._allowed()){a._cancel();return;}a.candidates.shift();if(!a.canCommit()){a._endSelection(n.work,'host_priority');return;}
-    a.publishing=true;try{let completion;const committed=a.dialogue.commit(n.ticket,()=>{completion=a.publish({...n.item,...(a.config.handoff?{messageId:n.work.messageId}:{}),evidence_refs:[...n.item.evidence_refs]});});if(!committed){a._endSelection(n.work,'stale_review');return;}await completion;a._endSelection(n.work,'published');a.cooldowns.set(n.item.npc_id,a.now());a.nextPublishAt=a.now()+a.config.publishGapMs;a.recentMessages.push({npcId:n.item.npc_id,text:n.item.text});a.recentMessages=a.recentMessages.slice(-6);}catch{a._endSelection(n.work,'publication_failed');}finally{a.publishing=false;}return;
+    if(now<Math.max(n.notBefore,a.nextPublishAt))return;if(!a._allowed()){a._cancel();return;}a.candidates.shift();if(!a.canCommit()){a._endSelection(n.work,'host_priority');return;}
+    a.publishing=true;try{let completion;const committed=a.dialogue.commit(n.ticket,()=>{completion=a.publish({...n.item,...(a.config.handoff?{messageId:n.work.messageId}:{}),evidence_refs:[...n.item.evidence_refs]});});if(!committed){a._endSelection(n.work,'stale_review');return;}await completion;a._endSelection(n.work,'published');a.displayed(n.item,a.now());}catch{a._endSelection(n.work,'publication_failed');}finally{a.publishing=false;}return;
    }
   };
  }

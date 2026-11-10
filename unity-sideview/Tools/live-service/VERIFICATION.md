@@ -171,3 +171,9 @@ PR 保持草稿，等待用户手工体验验收。
 - 玩家明确“没辞职，只是请一天假”。给真实审阅器预置了相反的首句。初审拦截 1259 ms，主 Agent 修复该句 841 ms，复审 701 ms，合计约 2803 ms（无 TTS）。修复结果正确回到了“请一天假”，仍带有“我记岔了”的口头表达。
 - 服务测试 116/116，通过片段修复、打断取消、保留已播内容、后台质量取消、两次请求上下文时关闭放行，以及修复失败不自动重生成等回归。独立 Unity Player 本地测试音验收 13/13，覆盖单麦克风、两条对话、等待尾段、安静让话和不误报完成。`tools/team/z check` 通过，264 个 C# 文件语法检查无错误。
 - 逐项数据在 `verification/native-call-review-optimized.json`、`verification/release-review-ab.json`、`verification/release-review-historical.json` 和 `verification/release-review-repair.json`。
+
+### 2026-11-10 · Mac 八位观众弹幕试玩
+
+- 用同一份公开话题、立即返回的测试模型、160 ms 时钟和客户端显示回执跑五分钟。仅计 `audience.present → displayed`，不计生成、审阅通过或仅下发。旧包：50 条，3 位观众；新包：72 条，8 位观众。新包前 15 秒 4 条，普通聊天 60 秒 15 条，连麦 60 秒 10 条，播放歌曲 36 秒 11 条。测试覆盖同一人至少间隔 20 秒、切场取消旧候选、普通气氛弹幕不进入主播待处理消息、停止后不再生成。复跑：`node --test --test-name-pattern='five minutes' tests/session.test.mjs`。
+- 另用真实模型对虚构通勤歌单话题运行 75 秒，只测生成、审阅和发布回调：开场 15 秒发布 4 条，随后 60 秒发布 16 条，共 8 位发言人。这是一次样本，不是 Unity 回执或线上吞吐保证。
+- Unity 6000.3.27f1 Universal Mac 客户端连接隔离回环服务（`Z_VERIFY_AUDIENCE=1 node scripts/verify-session-ui.mjs`）。用独立第一天夜间存档，以 `--verify-live-exit --verify-live-audience` 启动 Player。客户端通过 `LIVE_PACKAGE_EIGHT_VIEWERS_PASS` 和 `LIVE_PACKAGE_EXIT_PASS`：聊天栏呈现八个昵称及五个新头像，快照恢复、继续观看、退出并保存第二天早晨通过。本轮不使用真人声纹或生成付费歌曲。

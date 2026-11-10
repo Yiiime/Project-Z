@@ -3,7 +3,7 @@
   "files": [
     {
       "path": "audience-reaction/SKILL.md",
-      "sha256": "867c3868c13f9dfd375a904b0016307594e9d329eccba7b41fcac9aef12e08c0"
+      "sha256": "4e0106bf557f624cf37fe9149b163ae80d5ccf4cb059d814f27ca43d5b4ba17f"
     },
     {
       "path": "audience-reaction/agents/openai.yaml",

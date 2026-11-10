@@ -85,7 +85,7 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
         foreach(JObject message in (JArray)(snapshot["room"]?["messages"]??new JArray())){string id="message:"+(string)message["id"];if(messageIds.Add(id)&&(string)message["type"]!="z")AddChat((string)message["name"]??"小屋通知",(string)message["text"],(bool?)message["mine"]==true,(string)message["type"]=="system");}
         if((string)snapshot["phase"]=="paused"){locallyPaused=true;audioPlayer.Pause(true);}
     }
-    static string NpcName(string id)=>id=="wind"?"晚风来信":id=="moon"?"月亮邮差":id=="salt"?"海盐汽水":"小岛来客";
+    static string NpcName(string id)=>id=="wind"?"晚风来信":id=="moon"?"月亮邮差":id=="salt"?"海盐汽水":id=="buoy"?"橘子浮标":id=="tape"?"倒带一格":id=="bean"?"困困豆":id=="rain"?"听雨同学":id=="toast"?"烤面包边":"小岛来客";
     async void Send() {
         if(sendingInput||SessionInputBlocked)return;
         if(ChatInputComposing){Toast("请先选好汉字，再发送");return;}

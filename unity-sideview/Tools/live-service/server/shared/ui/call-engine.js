@@ -2,13 +2,14 @@ import {approveCallCandidate} from './call-review.js';
 import {ConversationEngine} from './conversation-engine.js';
 
 // One host, one speech owner. Call mode only changes scheduling and context.
+import {AUDIENCE_NAMES} from '../audience-roster.js';
 export class CallConversationEngine extends ConversationEngine {
   constructor(){super();const mayCommit=this.audience.canCommit,mayAdvance=this.audience.canAdvance;this.callContinuationBudget=0;this.audience.canCommit=()=>this._state.call?.active||mayCommit();this.audience.canAdvance=()=>mayAdvance()&&(!this._state.call?.active||this._state.call.input==='idle'&&this._state.call.audienceUntil>this._clock);this.callVersion=0;this.callNeedsTurn=false;this.callReviewRetries=0;this.callAudience=[];this._state.call=this._emptyCall();}
   _emptyCall(){return {active:false,id:null,input:'idle',joinedAt:null,story:null,audienceUntil:0,turns:0};}
   joinCall(){
     if(this._destroyed||this._state.paused||!this.enabled||this._state.call.active)return false;
     this.interruptCall('join');this._cancelCallActivity();
-    this.savedCallPolicy={handoff:this.handoffEnabled,topic:this.topicEnabled,audience:{...this.audience.config}};this.audience.setConfig({...this.audience.config,handoff:false,intervalMs:5000,publishGapMs:5000,maxConcurrent:1});this.audience.dialogue.setConcurrent(true);this.handoffEnabled=false;this.topicEnabled=false;
+    this.savedCallPolicy={handoff:this.handoffEnabled,topic:this.topicEnabled,audience:{...this.audience.config}};this.audience.setConfig({...this.audience.config,handoff:false});this.audience.dialogue.setConcurrent(true);this.handoffEnabled=false;this.topicEnabled=false;
     this.inbox=this.inbox.filter(m=>m.mine);this.audience.dialogue.setWaiting(this.inbox);
     this.callAudience=[];this.callAudienceUsed=new Set();this.callAudienceSpeech=new Map();this.callAudienceNextAt=this._clock+20000;this.callAudienceLastTurn=0;this._state.call={...this._emptyCall(),active:true,id:crypto.randomUUID(),joinedAt:Date.now()};
     this._public('call.joined','一位来客进入了连麦席，当前尚未提供语音；先打招呼，陪伴聊天为主。');
@@ -52,7 +53,7 @@ export class CallConversationEngine extends ConversationEngine {
   _cancelCallActivity(){if(this._state.media){this.talent?.cancel('call_boundary');this.talent?.finish(true);}if(this._state.play.active)this.finishActivity(true);}
   endCall(){
     if(!this._state.call.active)return false;
-    this.interruptCall('hangup');this._cancelCallActivity();this._state.call=this._emptyCall();this.callAudience=[];this.audience.dialogue.setConcurrent(false);
+    this.interruptCall('hangup');this._cancelCallActivity();this._state.call=this._emptyCall();this.callAudience=[];this.audience.dialogue.setConcurrent(!!this.savedCallPolicy?.audience?.phases);
     if(this.savedCallPolicy?.audience)this.audience.setConfig(this.savedCallPolicy.audience);this.handoffEnabled=this.savedCallPolicy?.handoff??false;this.topicEnabled=this.savedCallPolicy?.topic??false;
     // Never answer an abandoned guest turn after hangup.
     for(const m of this.inbox)this._setReceipt(m.id,'seen');this.inbox=[];this.audience.dialogue.setWaiting([]);
@@ -90,7 +91,7 @@ export class CallConversationEngine extends ConversationEngine {
   _callAudienceEligible(){const c=this._state.call;return this.enabled&&!this._destroyed&&!this._state.paused&&c?.active&&c.input==='idle'&&!this.callYield&&!this._mediaPlaying()&&(c.audienceUntil>this._clock||(c.turns-this.callAudienceLastTurn>=2&&this._clock>=this.callAudienceNextAt));}
   _callAudienceCandidates(context){
     if(!this._callAudienceEligible())return [];
-    const evidence=[...context.publicEvents,...(context.host.session?.evidence||[])],seen=new Set(),names={wind:'晚风来信',moon:'月亮邮差',salt:'海盐汽水'};
+    const evidence=[...context.publicEvents,...(context.host.session?.evidence||[])],seen=new Set(),names=AUDIENCE_NAMES;
     const topic=context.host.inbox.filter(m=>m.mine).map(m=>m.text).join(' ')+(context.host.session?.evidence||[]).filter(e=>e.type==='player.message').slice(-2).map(e=>e.text).join(' ');
     const pairs=text=>new Set(Array.from({length:Math.max(0,text.length-1)},(_,i)=>text.slice(i,i+2)));const terms=pairs(topic);
     return this.callAudience.filter(m=>{if(this._clock-m.at>60000||this.callAudienceUsed.has(m.id)||!names[m.speakerId]||!evidence.some(e=>e.type==='npc.message'&&e.id===m.id&&e.text===m.text&&e.speakerId===m.speakerId))return false;const text=m.text.replace(/\s|[，。！？]/g,'');if(seen.has(text))return false;seen.add(text);return true;})

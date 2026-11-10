@@ -1,6 +1,7 @@
 import {DialogueReview} from './dialogue-review.js';
 /** Continuous audience cadence. Public facts and one explicitly marked committed host preview stay separate. */
-const NPC_IDS = new Set(['wind', 'moon', 'salt']);
+import {AUDIENCE_NAMES} from '../audience-roster.js';
+const NPC_IDS = new Set(Object.keys(AUDIENCE_NAMES));
 const INTENTS = new Set(['reaction', 'atmosphere', 'advance']);
 const DEFAULTS = Object.freeze({intervalMs: 6000, generationDeadlineMs: 1500, firstPublishDelayMs: 0,
   candidateTtlMs: 6000, npcPublishCooldownMs: 15000, maxChars: 36, maxConcurrent: 1, maxPoolSize: 1, publishGapMs: 0, handoff: false});
@@ -10,8 +11,9 @@ const uuid = () => globalThis.crypto?.randomUUID?.() || 'xxxxxxxx-xxxx-4xxx-yxxx
 const copyEvent = event => JSON.parse(JSON.stringify(event));
 
 export class AudienceDirector {
-  constructor({request, publish, now = () => Date.now(), config = {}, canPublish = () => true, canAdvance = () => true, canCommit = () => true, canPreview = () => true, onSelected = () => {}, onSelectionEnd = () => {}} = {}) {
+  constructor({request, publish, now = () => Date.now(), phase = () => 'chat', random = Math.random, config = {}, canPublish = () => true, canAdvance = () => true, canCommit = () => true, canPreview = () => true, onSelected = () => {}, onSelectionEnd = () => {}} = {}) {
     if (typeof request !== 'function' || typeof publish !== 'function') throw new TypeError('AudienceDirector requires request and publish callbacks');
+    this.phase=phase;this.random=random;this.attempted=new Map();this.currentPhase=null;
     this.request = request; this.publish = publish; this.now = now;
     this.canPublish = canPublish; this.canAdvance = canAdvance; this.canCommit=canCommit;this.canPreview=canPreview;this.onSelected=onSelected;this.onSelectionEnd=onSelectionEnd;this.selected=null;this.hostPreview=null;
     this.dialogue=new DialogueReview({request,now}); this.reviewPending=null;
@@ -31,10 +33,17 @@ export class AudienceDirector {
       for(const key of ['maxConcurrent','maxPoolSize'])if(Number.isInteger(policyAudience[key]))config[key]=Math.max(1,Math.min(key==='maxConcurrent'?2:3,policyAudience[key]));
       if (Number.isFinite(policyAudience.maxChars)) config.maxChars = Math.max(1, Math.min(36, Math.floor(policyAudience.maxChars)));
     }
-    // Stage-specific budgets deliberately have no effect: every phase uses one cadence.
+    if(policyAudience?.phases?.chat?.publishGapMs>0)config.phases=policyAudience.phases;
     this.config = config;
     this._cancel();
     this.nextRequestAt = Math.max(this.now(), this.lastRequestAt + config.intervalMs);
+  }
+  pacing() {return this.config.phases?.[this.currentPhase]||this.config;}
+  displayed(item,now) {
+    const pace=this.pacing();
+    this.cooldowns.set(item.npc_id,now);
+    this.nextPublishAt=now+pace.publishGapMs+Math.floor(this.random()*(pace.jitterMs||0));
+    this.recentMessages.push({npcId:item.npc_id,text:item.text});this.recentMessages=this.recentMessages.slice(-6);
   }
   get inflight() {return this.requests.values().next().value || null;}
   _allowed() {try {return this.canPublish() === true;} catch {return false;}}
@@ -63,7 +72,7 @@ export class AudienceDirector {
   }
   invalidate() {
     this._cancel(); this.dialogue.reset(); this.events = []; this.seenEvents = [];
-    this.cooldowns.clear(); this.recentTexts = []; this.recentMessages = [];
+    this.currentPhase=null;this.attempted.clear();this.cooldowns.clear(); this.recentTexts = []; this.recentMessages = [];
     this.lastRequestAt = -Infinity; this.nextRequestAt = this.now(); this.nextPublishAt=0;
   }
   getPublicEvents() {return this.events.map(copyEvent);}
@@ -88,6 +97,8 @@ export class AudienceDirector {
   tick() {
     const now = this.now();
     if (!this._allowed()) {this._cancel(); return;}
+    const phase=this.config.phases?this.phase():'chat';
+    if(phase!==this.currentPhase){if(this.currentPhase!==null)this.clearPreparation('phase_changed');this.currentPhase=phase;}
     if(this.hostPreview&&now>=this.hostPreview.expiresAt)this._cancel('host_preview_expired');
     if(this.selected&&now>=this.selected.expiresAt){this.selected.controller.abort();this._endSelection(this.selected,'expired');this.reviewPending=null;this.candidates=[];}
     for(const [key,work] of this.requests)if(now>=work.deadline){work.controller.abort();this.requests.delete(key);}
@@ -96,23 +107,26 @@ export class AudienceDirector {
     this._publishOne(now);this._reviewNext();
     if (!this.events.length || now < this.nextRequestAt) return;
     const occupied=this.requests.size+this.pool.length+(this.selected?1:0);
-    const slots=Math.min(this.config.maxConcurrent-this.requests.size,this.config.maxPoolSize-occupied);
+    const slots=Math.min(this.config.maxConcurrent-this.requests.size,(this.pacing().maxPoolSize||this.config.maxPoolSize)-occupied);
     if(slots<=0)return;
     const reserved=new Set([...this.requests.values(),...this.pool,...(this.selected?[this.selected]:[])].flatMap(w=>w.eligibleNpcIds||[w.item.npc_id]));
-    const eligibleNpcIds = [...NPC_IDS].filter(npc => !reserved.has(npc)&&now - (this.cooldowns.get(npc) ?? -Infinity) >= this.config.npcPublishCooldownMs);
+    const eligibleNpcIds = [...NPC_IDS].filter(npc => !reserved.has(npc)&&now - (this.cooldowns.get(npc) ?? -Infinity) >= this.config.npcPublishCooldownMs)
+      .sort((a,b)=>(this.attempted.get(a)??-Infinity)-(this.attempted.get(b)??-Infinity));
     this.lastRequestAt=now;this.nextRequestAt=now+this.config.intervalMs;
     if(!eligibleNpcIds.length)return;
     // Parallel requests use distinct viewers; drafts never see each other's text.
     const groups=this.config.maxConcurrent===1?[eligibleNpcIds]:eligibleNpcIds.slice(0,slots).map(npc=>[npc]);
-    for(const group of groups)this._generate(group,now);
+    for(const group of groups){if(group.length===1)this.attempted.set(group[0],now);this._generate(group,now);}
   }
   _generate(eligibleNpcIds,now) {
     const controller = new AbortController(), token = this.generation;
-    const publicEvents = this.getPublicEvents(), allowAdvance = this._advanceAllowed();
+    const publicEvents = this.getPublicEvents().filter(e=>!e.type.startsWith('talent.')||['talent.playing','talent.completed','talent.segment.started'].includes(e.type));
+    if(!publicEvents.length)return;
+    const allowAdvance = this._advanceAllowed()&&this.pacing().maxAdvances!==0;
     const sourcePreview=this.hostPreview?.status==='committed'?{...this.hostPreview}:null;
     const hostPreview=sourcePreview?(({expiresAt,...view})=>view)(sourcePreview):null;
     const payload = {requestId: uuid(), kind: 'audience', message: '结合公开现场与自己的观看兴趣，选择一条值得发的弹幕，无需逐句回应', eventId: publicEvents.at(-1).id,
-      context: {phase: 'chat', publicEvents, audience: {eligibleNpcIds,...(hostPreview?{hostPreview}:{}),
+      context: {phase: this.currentPhase||'chat', publicEvents, audience: {eligibleNpcIds,...(hostPreview?{hostPreview}:{}),
         waitingMessages:this.dialogue.snapshot().waiting_messages, recentMessages: this.recentMessages.map(item => ({...item})), allowAdvance}}};
     const request = {token, controller, deadline: now + this.config.generationDeadlineMs,
       expiresAt: sourcePreview?sourcePreview.expiresAt:now + this.config.candidateTtlMs, sourcePreview, publicEvents, eligibleNpcIds, allowAdvance, payload};
@@ -144,8 +158,8 @@ export class AudienceDirector {
     this._reviewNext();
   }
   async _reviewNext() {
-    if(this.reviewPending||this.candidates.length||!this.canCommit()||!this._allowed())return;
-    if(!this.config.handoff&&this.now()<this.nextPublishAt)return;
+    if(this.publishing||this.reviewPending||this.candidates.length||!this.canCommit()||!this._allowed())return;
+    if(!this.config.phases&&!this.config.handoff&&this.now()<this.nextPublishAt)return;
     let work=this.selected;
     while(!work&&this.pool.length){
       const next=this.pool.shift();
@@ -157,7 +171,8 @@ export class AudienceDirector {
         this.dialogue.log({stage:'handoff.audience.selected',candidateId:work.payload.requestId,messageId:work.messageId});
       }
     }
-    if(!work||!this._dependencyReady(work)||this.now()<this.nextPublishAt)return;
+    if(!work||!this._dependencyReady(work)||!this.config.phases&&this.now()<this.nextPublishAt)return;
+    if(this.recentMessages.some(m=>m.text===work.item.text)){this._endSelection(work,'repeated_text');return;}
     this.reviewPending=work;
     const refs=work.item.evidence_refs.map(ref=>ref===work.sourcePreview?.id?work.sourcePreview.publicEventId:ref);
     const candidate={id:work.payload.requestId,role:'audience',speakerId:work.item.npc_id,text:work.item.text,intent:work.item.intent,replyTo:[],evidenceIds:refs};
@@ -175,17 +190,16 @@ export class AudienceDirector {
         || next.item.intent === 'advance' && !this._advanceAllowed()) {
         this.candidates.shift();this._endSelection(next.work,'expired_or_ineligible');continue;
       }
-      if (now < next.notBefore) return;
+      if (now < Math.max(next.notBefore,this.nextPublishAt)) return;
       if (!this._allowed()) {this._cancel(); return;}
       this.candidates.shift();
       if(!this.canCommit()){this._endSelection(next.work,'host_priority');return;}
       const beforePublish=this.dialogue.events.at(-1)?.sequence;
       try {if(!this.dialogue.commit(next.ticket,()=>this.publish({...next.item,...(this.config.handoff?{messageId:next.work.messageId}:{}), evidence_refs: [...next.item.evidence_refs]}))){this._endSelection(next.work,'stale_review');return;}} catch {this._endSelection(next.work,'publication_failed');return;}
       this._endSelection(next.work,'published');
-      this.cooldowns.set(next.item.npc_id, now);this.nextPublishAt=now+this.config.publishGapMs;
+      this.displayed(next.item,now);
       // Main host records publication synchronously; legacy callbacks may not.
       if(this.dialogue.events.at(-1)?.sequence===beforePublish)this.dialogue.record({id:`npc-${next.item.npc_id}-${uuid()}`,type:'npc.message',text:next.item.text,speakerRole:'audience',speakerId:next.item.npc_id});
-      this.recentMessages.push({npcId: next.item.npc_id, text: next.item.text}); this.recentMessages = this.recentMessages.slice(-6);
       // History helps avoid repetitions, but publication neither adds facts nor starts a request.
       return;
     }

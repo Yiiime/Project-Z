@@ -7,11 +7,11 @@
     },
     {
       "path": "main-agent/config/skills-scheduling.json",
-      "sha256": "81d8e216b12b429153249a7c0ae2cfe3c09de64fd9e5fff5c1c8ab4fd562601b"
+      "sha256": "a19adbd773a22cf911c2bff20ca2a55d08d384468926a6154d7ce6b3a40f80c3"
     },
     {
       "path": "main-agent/config/skills-source-lock.json",
-      "sha256": "72ab2a0c4e6734800817ba0486f3a4d4db8fe04d32c2648e90dbb169900aa458"
+      "sha256": "ec55432295701d670233c28370aeddec8ee3771c91d569c280023f697e7125c4"
     },
     {
       "path": "main-agent/prompts/conversation-host.txt",
@@ -27,7 +27,7 @@
     },
     {
       "path": "skills/audience-reaction/SKILL.md",
-      "sha256": "867c3868c13f9dfd375a904b0016307594e9d329eccba7b41fcac9aef12e08c0"
+      "sha256": "4e0106bf557f624cf37fe9149b163ae80d5ccf4cb059d814f27ca43d5b4ba17f"
     },
     {
       "path": "skills/audience-reaction/agents/openai.yaml",
