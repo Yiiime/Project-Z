@@ -26,6 +26,7 @@ export function environmentFromFile(path) {
       process.env[found[1]] = found[2].trim().replace(/^(['"])(.*)\1$/, "$2");
   }
 }
+import {memoryProjection, narrativeChange, rememberNarration} from "./lib/live-memory.mjs";
 const logicalHour = (day, period) => {
   if (
     !Number.isInteger(day) ||
@@ -343,6 +344,22 @@ export function createServer({
                   seq: event.seq,
                   hour: when,
                 });
+              } else if (event.kind === "live_memory") {
+                if(event.channel!=="livestream" || !["player","z","engine"].includes(event.speakerId) ||
+                   typeof event.text!=="string" || !event.text.length || event.text.length>360)
+                  throw new TurnError("直播记忆回执无效");
+                const actual=engine.addEvent(world,{id:event.id,seq:event.seq,hour:when,text:event.text,
+                  kind:event.speakerId==="engine"?"fact":"claim",speaker:event.speakerId,channel:"livestream",
+                  location:"live_room",subject:event.accepted===true && event.speakerId==="z"?"player_and_z":undefined,visible:["z","player"],conversationId:event.conversationId});
+                if(event.speakerId==="z" && event.stepId){
+                  const current=engine.world(world);
+                  const card=memoryProjection(current,engine.records(current,"event")).stories.find(s=>s.id===event.stepId);
+                  const change=narrativeChange(card,event.text);
+                  if(change && change.step===Number(event.receiptId)){
+                    rememberNarration(current,change,"livestream",actual.id);
+                    engine.save(current);
+                  }
+                }
               } else if (event.kind === "utterance") {
                 const audience =
                   event.channel === "private_player_chat" ||

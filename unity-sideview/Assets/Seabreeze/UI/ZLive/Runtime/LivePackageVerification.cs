@@ -16,7 +16,9 @@ namespace ZLive {
         static void Bootstrap() {
             if (Application.isEditor || Array.IndexOf(Environment.GetCommandLineArgs(),"--verify-live-exit") < 0) return;
             if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("Z_MEMORY_SAVE_ROOT"))) return;
-            new GameObject("Packaged exit verification").AddComponent<LivePackageVerification>();
+            var runner = new GameObject("Packaged exit verification");
+            DontDestroyOnLoad(runner);
+            runner.AddComponent<LivePackageVerification>();
         }
         static void Submit(Button button) {
             button.Focus();
@@ -94,6 +96,41 @@ namespace ZLive {
             if (ui.HasOverlay || SaveRepository.Load().day != 2 || game.State.period != 0) { Fail("next morning save"); yield break; }
             ScreenCapture.CaptureScreenshot(Path.Combine(folder,"next-morning.png"));
             yield return new WaitForSecondsRealtime(.3f);
+            if (Array.IndexOf(Environment.GetCommandLineArgs(),"--verify-live-memory") >= 0) {
+                deadline=Time.realtimeSinceStartupAsDouble+25;
+                while(!game.Memory.Client.Synchronized && Time.realtimeSinceStartupAsDouble<deadline) yield return null;
+                var saved=SaveRepository.Load();
+                var cp=JObject.Parse(saved.memory.checkpoint);
+                var publicRows=(JArray)cp["broadcast"]["entries"];
+                foreach(string line in lines) if(!System.Linq.Enumerable.Any(publicRows,e=>(string)e["text"]==line&&(int)e["day"]==1)) {
+                    Fail("missing first-night memory");yield break;
+                }
+                game.LoadSavedGame();
+                yield return null;
+                deadline=Time.realtimeSinceStartupAsDouble+25;
+                while((!game.Memory.Client.Synchronized || WorldDirector.Instance.IsTransitioning) && Time.realtimeSinceStartupAsDouble<deadline) yield return null;
+                typeof(GameUI).GetMethod("ToggleOverlay",Member).Invoke(ui,new object[]{"phone"});
+                yield return new WaitForSecondsRealtime(1);
+                GameObject.Find("Phone app live").GetComponent<UnityEngine.UI.Button>().onClick.Invoke();
+                yield return new WaitForSecondsRealtime(1);
+                feature=FindFirstObjectByType<LiveFeatureController>();
+                deadline=Time.realtimeSinceStartupAsDouble+20;
+                while(feature && !(bool)connected.GetValue(feature) && Time.realtimeSinceStartupAsDouble<deadline)yield return null;
+                if(!feature || !(bool)connected.GetValue(feature)){Fail("second room");yield break;}
+                root=feature.GetComponent<UIDocument>().rootVisualElement;
+                root.Q<TextField>(className:"chat-input").value="昨天我在直播间说了什么？";
+                Submit((Button)type.GetField("sendButton",Member).GetValue(feature));
+                deadline=Time.realtimeSinceStartupAsDouble+25;
+                bool recalled=false;
+                while(!recalled && Time.realtimeSinceStartupAsDouble<deadline){
+                    var current=(JObject)type.GetField("state",Member).GetValue(feature);
+                    foreach(var ev in (JArray)current["publicEvents"])
+                        if((string)ev["type"]=="speech.completed" && ((string)ev["text"]).Contains(lines[0]))recalled=true;
+                    yield return null;
+                }
+                if(!recalled){Fail("broadcast recall after reload");yield break;}
+                Debug.Log("LIVE_PACKAGE_MEMORY_PASS");
+            }
             Debug.Log("LIVE_PACKAGE_EXIT_PASS");
             Application.Quit(0);
         }

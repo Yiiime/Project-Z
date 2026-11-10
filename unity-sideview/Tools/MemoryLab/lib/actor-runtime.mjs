@@ -42,7 +42,7 @@ export class ActorRuntime {
           content:
             this.catalog.prompt(context.actor_id) +
             "\n\n" +
-            rules +
+            rules + (context.z_story ? "\n如果自然聊到这段回忆，可以使用 z_story.line 中的原话，只展开这一个新细节，给玩家留出追问空间。" : "") +
             "\n本轮阶段规则（优先于通用相遇规则）：" + phaseRules +
             "\n输出JSON契约：" +
             JSON.stringify(contract),

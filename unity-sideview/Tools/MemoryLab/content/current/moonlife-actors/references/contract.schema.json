@@ -738,6 +738,16 @@
         "available_actions"
       ],
       "properties": {
+        "z_story": {
+          "type": "object",
+          "required": ["id", "count", "line"],
+          "properties": {
+            "id": {"type": "string"},
+            "count": {"type": "integer", "minimum": 0, "maximum": 2},
+            "line": {"type": "string", "maxLength": 100}
+          },
+          "additionalProperties": false
+        },
         "protocol_version": {
           "const": "1.2.0"
         },

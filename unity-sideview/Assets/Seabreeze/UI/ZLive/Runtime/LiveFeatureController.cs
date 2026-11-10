@@ -14,7 +14,8 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     Label status,caption;ScrollView chat;TextField input;JObject state;
     readonly ConcurrentQueue<JObject> events=new ConcurrentQueue<JObject>();readonly ConcurrentQueue<string> connections=new ConcurrentQueue<string>();
     readonly Dictionary<string,CancellationTokenSource> running=new Dictionary<string,CancellationTokenSource>();readonly Dictionary<string,JObject> outcomes=new Dictionary<string,JObject>();readonly HashSet<string> messageIds=new HashSet<string>();
-    readonly CancellationTokenSource life=new CancellationTokenSource();readonly HashSet<TaskCompletionSource<bool>> frameWaiters=new HashSet<TaskCompletionSource<bool>>();float heartbeatAt;bool connected,locallyPaused=true,disposed,leaving;string pendingBase,pendingToken,pendingPin;string SessionKey {get {using(var sha=System.Security.Cryptography.SHA256.Create())return "ZLive.Session."+BitConverter.ToString(sha.ComputeHash(System.Text.Encoding.UTF8.GetBytes(pendingBase+"|"+pendingToken))).Replace("-","");}}
+    readonly CancellationTokenSource life=new CancellationTokenSource();readonly HashSet<TaskCompletionSource<bool>> frameWaiters=new HashSet<TaskCompletionSource<bool>>();float heartbeatAt;bool connected,locallyPaused=true,disposed,leaving;string pendingBase,pendingToken,pendingPin;string SessionKey {get {using(var sha=System.Security.Cryptography.SHA256.Create())return "ZLive.Session."+BitConverter.ToString(sha.ComputeHash(System.Text.Encoding.UTF8.GetBytes(pendingBase+"|"+pendingToken+(liveMemory==null?"":"|"+liveMemory.Key)))).Replace("-","");}}
+    LiveMemoryBridge liveMemory;
     public Action ExitRequested;
     public Action<string> SessionEnded;
     bool sessionEndNotified;
@@ -38,7 +39,8 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     }catch(Exception e){Error(e);}}
     void ReadConnection(string file){if(!File.Exists(file))return;var c=JObject.Parse(File.ReadAllText(file));pendingBase=(string)c["baseUrl"];pendingToken=(string)c["token"];pendingPin=(string)c["certificateSha256"];}
     public async Task Enter(){transport=new LiveTransport(pendingBase,pendingToken,pendingPin);transport.Event+=e=>events.Enqueue(e);transport.Connection+=s=>connections.Enqueue(s);audioPlayer.Transport=transport;
-        state=await transport.Enter(PlayerPrefs.GetString(SessionKey,""),!muted&&audioPlayer.Source.volume>0,character.Ready);if(leaving||disposed){await transport.Control("end");return;}PlayerPrefs.SetString(SessionKey,transport.SessionId);PlayerPrefs.Save();ApplyState(state);await transport.Control("resume");
+        liveMemory=LiveMemoryBridge.Open();
+        state=await transport.Enter(PlayerPrefs.GetString(SessionKey,""),!muted&&audioPlayer.Source.volume>0,character.Ready,liveMemory?.Binding());if(leaving||disposed){await transport.Control("end");return;}PlayerPrefs.SetString(SessionKey,transport.SessionId);PlayerPrefs.Save();ApplyState(state);await transport.Control("resume");
         // A new Unity process cannot prove an old audio instance completed. Never replay it silently.
         foreach(JObject c in (JArray)state["pendingCommands"]){if((string)c["type"]=="host.present"||(string)c["type"]=="media.play"||(string)c["type"]=="audience.present")await Report(c,new JObject{{"status","interrupted"},{"reason","client_restarted"}});else Queue(c);}
         connected=true;_=Observe(transport.Subscribe());locallyPaused=false;audioPlayer.Pause(false);await SyncAudioCapabilities();UpdateCallView();
@@ -46,11 +48,12 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     async Task Observe(Task task){try{await task;}catch(OperationCanceledException){}catch(ObjectDisposedException){}catch(Exception e){if(!disposed)Error(e);}}
     void Update(){if(disposed||leaving)return;UpdateView();UpdateCompanion();while(connections.TryDequeue(out var c)){if(c=="disconnected"){connected=false;locallyPaused=true;CancelCompanion();audioPlayer.Pause(true);status.text="连接中断 · 已暂停播放";}else{connected=true;if(locallyPaused&&Application.isFocused)_=ResumeRoom();}}
         if(transport==null)return;int budget=30;while(budget-->0&&events.TryDequeue(out var e)){if((int)e["epoch"]!=transport.Epoch){CancelAll();status.text="会话版本已更新 · 请重新进入直播";connected=false;continue;}long seq=(long)e["serverSeq"];if(seq<=transport.Cursor)continue;if(seq!=transport.Cursor+1){locallyPaused=true;audioPlayer.Pause(true);status.text="同步缺口 · 请重新进入直播";continue;}Queue(e);transport.Cursor=seq;}
-        if(transport!=null&&connected&&Time.unscaledTime>=heartbeatAt){heartbeatAt=Time.unscaledTime+10;_=Observe(transport.Heartbeat());}
+        if(transport!=null&&connected&&Time.unscaledTime>=heartbeatAt){heartbeatAt=Time.unscaledTime+10;_=Observe(transport.Heartbeat(liveMemory?.Ack??0,liveMemory?.Binding()));}
         NotifySessionEnded();
     }
     void NotifySessionEnded(){
         if(sessionEndNotified||leaving||disposed||SessionPhase!="ended"||SessionEnded==null||string.IsNullOrEmpty(transport?.SessionId))return;
+        if(liveMemory!=null && (!liveMemory.Current || liveMemory.Ack < ((int?)state["memoryLast"]??0)))return;
         sessionEndNotified=true;
         SessionEnded.Invoke(transport.SessionId);
         PlayerPrefs.DeleteKey(SessionKey);PlayerPrefs.Save();
@@ -80,7 +83,7 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     async Task VisibleFrame(VisualElement element,CancellationToken cancel){await NextFrame();await NextFrame();cancel.ThrowIfCancellationRequested();if(!(Application.isFocused||(Application.isBatchMode&&document.panelSettings.targetTexture!=null))||!element.visible||element.resolvedStyle.display==DisplayStyle.None||element.worldBound.width<=0||element.worldBound.height<=0)throw new Exception("not_visible");}
     Task NextFrame(){var tcs=new TaskCompletionSource<bool>();if(disposed){tcs.SetCanceled();return tcs.Task;}frameWaiters.Add(tcs);StartCoroutine(EndFrame(tcs));return tcs.Task;}
     IEnumerator EndFrame(TaskCompletionSource<bool> tcs){yield return null;frameWaiters.Remove(tcs);if(disposed||leaving)tcs.TrySetCanceled();else tcs.TrySetResult(true);}
-    void ApplyState(JObject snapshot){state=snapshot;UpdateCallView();character.SetWaiting((bool?)snapshot["performance"]?["waiting"]??false);
+    void ApplyState(JObject snapshot){liveMemory?.Receive((string)snapshot["sessionId"],snapshot["memoryEvents"] as JArray);state=snapshot;UpdateCallView();character.SetWaiting((bool?)snapshot["performance"]?["waiting"]??false);
         foreach(JObject e in (JArray)(snapshot["publicEvents"]??new JArray())){string id=(string)e["id"],type=(string)e["type"];if(messageIds.Contains(id)||!(type=="player.message"||type=="npc.message"||type=="speech.completed"))continue;messageIds.Add(id);if(snapshot["room"]?["messages"]==null)AddChat(type=="speech.completed"?"Z":type=="player.message"?"你":NpcName((string)e["speakerId"]),(string)e["text"],type=="player.message");}
         foreach(JObject message in (JArray)(snapshot["room"]?["messages"]??new JArray())){string id="message:"+(string)message["id"];if(messageIds.Add(id)&&(string)message["type"]!="z")AddChat((string)message["name"]??"小屋通知",(string)message["text"],(bool?)message["mine"]==true,(string)message["type"]=="system");}
         if((string)snapshot["phase"]=="paused"){locallyPaused=true;audioPlayer.Pause(true);}

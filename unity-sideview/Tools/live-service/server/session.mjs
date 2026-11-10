@@ -1,3 +1,4 @@
+import {BroadcastMemory} from './broadcast-memory.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import {EventEmitter} from 'node:events';
@@ -9,6 +10,10 @@ import {SessionControl} from './session-control.mjs';
 const terminal=new Set(['completed','displayed','ready','failed','skipped','interrupted','cancelled']);
 const copy=v=>structuredClone(v);
 class NativeConversationEngine extends CallConversationEngine {
+ _public(type,text,metadata={}){
+   this.broadcast?.record(type,text,metadata,this._state.media);
+   return super._public(type,text,metadata);
+ }
  _hostContext(...args){const context=super._hostContext(...args);if(this.sessionControl)context.host.sessionControl=this.sessionControl.snapshot();return context;}
  _think(){if(!this.sessionControl||this.sessionControl.normal)return super._think();}
  _maybePrepare(){if(!this.sessionControl||this.sessionControl.normal)return super._maybePrepare();}
@@ -20,10 +25,13 @@ class NativeConversationEngine extends CallConversationEngine {
  _message(text,options={}){return super._message(text,{...options,...(options.mine&&this._state.call?.active?{type:'call'}:{})});}
 }
 export class LiveSession extends EventEmitter {
- constructor({id=uid(),owner='local-owner',root,providers,artifacts,songRoot,capabilities={},saved=null}){
+ constructor({id=uid(),owner='local-owner',root,providers,artifacts,songRoot,capabilities={},memory=null,saved=null}){
   super();Object.assign(this,{id,owner,root,providers,artifacts,songRoot});this.capabilities={audioEnabled:capabilities.audioEnabled===true,characterReady:capabilities.characterReady===true};
   this.epoch=saved?saved.epoch+1:1;this.lease=uid();this.leaseUntil=Date.now()+30000;this.phase='paused';this.seq=saved?.seq||0;this.revision=saved?.revision||0;this.events=saved?.events||[];this.commands=new Map(saved?.commands||[]);this.idempotency=new Map(saved?.idempotency||[]);this.artifactIds=new Set(saved?.artifactIds||[]);this.waiters=new Map();this.sent={};this.initializing=true;
-  this.engine=new NativeConversationEngine();this.engine.setSpeechDriven(true);this.speech=new RemoteSpeech(this,providers);this.talent=new RemoteTalent(this,this.speech);this.engine.configureSpeech(this.speech);this.engine.configureTalent(this.talent);
+  this.engine=new NativeConversationEngine();
+  const binding=saved?.broadcast?.binding||memory;
+  this.broadcast=binding?new BroadcastMemory(binding,saved?.broadcast):null;
+  this.engine.broadcast=this.broadcast;this.engine.setSpeechDriven(true);this.speech=new RemoteSpeech(this,providers);this.talent=new RemoteTalent(this,this.speech);this.engine.configureSpeech(this.speech);this.engine.configureTalent(this.talent);
   this.engine.addEventListener('speak',({detail})=>{if(!detail.resume)void this.presentHost(detail);});
   this.engine.addEventListener('state',()=>this.changed());
   this.sessionControl=new SessionControl(this,saved?.sessionControl);this.engine.sessionControl=this.sessionControl;
@@ -33,7 +41,16 @@ export class LiveSession extends EventEmitter {
   if(saved)this.restore(saved);
   this.initializing=false;this.flush();
  }
- async initialize(){const config=await this.providers.config(this.id);this.engine.configureAgent({sentenceStreaming:true,generate:(p,o)=>this.providers.generate(this.id,p,o),fetch:(route,options)=>this.providers.singingFetch(route,options),cancel(){}},config);this.engine.setPaused(true);this.engine.start();this.phase='paused';if(this.sessionControl.data.phase==='ended'){this.phase='ended';this.sessionControl.dispose();}else if(!this.sessionControl.normal)this.sessionControl.end('server_restarted_during_close');this.sessionControl.tick();this.flush();return this;}
+ async initialize(){const config=await this.providers.config(this.id);this.engine.configureAgent({sentenceStreaming:true,generate:async(p,o)=>{
+    const hostSide=p.kind==='host'||p.kind==='repair'||(p.kind==='review'&&p.context.candidate?.role==='host');
+    const memory=hostSide?this.broadcast?.recall():null;
+    const reply=await this.providers.generate(this.id,p,{...o,broadcastContext:memory,songSession:memory?this.engine.session.id:null});
+      const proposal=reply.z_state_update?.memories?.[0];
+      if(p.kind==='host' && proposal && this.broadcast?.offer?.id===proposal.id &&
+         this.broadcast.offer.step===proposal.step && this.broadcast.offer.source===this.broadcast.lastTopic?.id)
+        this.broadcast.offer.quote=proposal.quote;
+      return reply;
+  },fetch:(route,options)=>this.providers.singingFetch(route,options),cancel(){}},config);this.engine.setPaused(true);this.engine.start();this.phase='paused';if(this.sessionControl.data.phase==='ended'){this.phase='ended';this.sessionControl.dispose();}else if(!this.sessionControl.normal)this.sessionControl.end('server_restarted_during_close');this.sessionControl.tick();this.flush();return this;}
  restore(saved){const e=this.engine,x=saved.engine;Object.assign(e,{_state:x.state,_clock:x.clock,_speechId:x.speechId,_messageId:x.messageId,inbox:x.inbox,facts:x.facts,memory:x.memory});Object.assign(e.session,x.session);e._state.call=e._emptyCall();e._state.paused=true;e._state.currentSpeech=null;e._state.speaking=false;e._state.media=null;
   e.audience.events=copy(x.facts);for(const fact of x.facts)e.audience.dialogue.record(fact);
   // Retire unfinished activities from older sessions without replaying them.
@@ -54,11 +71,11 @@ export class LiveSession extends EventEmitter {
    }
   };
  }
- persistData(){const e=this.engine;return {sessionControl:this.sessionControl.data,id:this.id,owner:this.owner,epoch:this.epoch,seq:this.seq,revision:this.revision,capabilities:this.capabilities,phase:this.phase,commands:[...this.commands],events:this.events,idempotency:[...this.idempotency].slice(-2000),artifactIds:[...this.artifactIds],engine:{state:e._state,clock:e._clock,speechId:e._speechId,messageId:e._messageId,inbox:e.inbox,facts:e.facts,memory:e.memory,session:{id:e.session.id,events:e.session.events,items:e.session.items,recentInitiatives:e.session.recentInitiatives},media:this.talent.snapshot(),activeSpeech:e._active?{id:e._active.id}:null}};}
+ persistData(){const e=this.engine;return {broadcast:this.broadcast?.save(),sessionControl:this.sessionControl.data,id:this.id,owner:this.owner,epoch:this.epoch,seq:this.seq,revision:this.revision,capabilities:this.capabilities,phase:this.phase,commands:[...this.commands],events:this.events,idempotency:[...this.idempotency].slice(-2000),artifactIds:[...this.artifactIds],engine:{state:e._state,clock:e._clock,speechId:e._speechId,messageId:e._messageId,inbox:e.inbox,facts:e.facts,memory:e.memory,session:{id:e.session.id,events:e.session.events,items:e.session.items,recentInitiatives:e.session.recentInitiatives},media:this.talent.snapshot(),activeSpeech:e._active?{id:e._active.id}:null}};}
  flush(){if(this.initializing)return;fs.mkdirSync(this.root,{recursive:true,mode:0o700});const target=path.join(this.root,this.id+'.json');fs.writeFileSync(target+'.tmp',JSON.stringify(this.persistData()),{mode:0o600});fs.renameSync(target+'.tmp',target);}
  event(type,payload,extra={}){const event={protocolVersion:1,eventId:uid(),sessionId:this.id,epoch:this.epoch,serverSeq:++this.seq,type,payload,...extra};this.events.push(event);this.events=this.events.slice(-1000);this.flush();this.emit('event',event);return event;}
  command(type,payload,taskId=null,resourceRevision=null){const command={commandId:uid(),type,taskId,resourceRevision,payload,epoch:this.epoch,status:'sent',issuedAt:new Date().toISOString(),expiresAt:new Date(Date.now()+120000).toISOString()};this.commands.set(command.commandId,command);if(this.commands.size>1200)for(const [id,c] of this.commands){if(terminal.has(c.status))this.commands.delete(id);if(this.commands.size<=1000)break;}const event=this.event(type,payload,{commandId:command.commandId,taskId,resourceRevision,issuedAt:command.issuedAt,expiresAt:command.expiresAt});Object.assign(command,{event});this.flush();return command;}
- snapshot(){const e=this.engine,p=e._state.play,t=p.tarot,d=p.drawing;return {protocolVersion:1,sessionId:this.id,epoch:this.epoch,executorLeaseId:this.lease,lastServerSeq:this.seq,sessionRevision:this.revision,phase:this.phase,sessionControl:this.sessionControl.snapshot(),capabilities:this.capabilities,call:{...copy(e._state.call),story:null,version:e.callVersion,busy:!!(e._state.currentSpeech||e.pending||e.callNeedsTurn||e._queue.length||e._continuations.length||["preparing","ready","starting","playing","paused"].includes(e._state.media?.phase)),voiceAvailable:!!this.providers.env.VOLC_ASR_API_KEY,thinkingAudio:this.thinkingAudio||null},room:{viewers:e._state.viewers,stageLabel:e._state.stageLabel,replyStatus:e._state.replyStatus,messages:copy(e._state.messages.filter(m=>m.type!=='call'&&!(m.mine&&m.name==='连麦来客'))),voiceAvailable:this.speech.available,voiceError:this.providers.voiceError||null},performance:{waiting:e._state.agent.source!=='unavailable'&&['pending','queued'].includes(e._state.replyStatus)},agent:{enabled:e.enabled,status:e._state.agent.source,errorCode:e._state.agent.errorCode},publicEvents:copy(e.facts),activeTask:p.active?{kind:p.active,taskId:p[p.active].id}:this.talent.snapshot(),voiceOwner:e._active?{speechId:String(e._active.id)}:this.talent.snapshot(),panels:{tarot:!!t?.open,drawing:!!d?.open},tarot:t?{id:t.id,revision:0,origin:t.origin,owner:t.owner,spread:t.spread,paused:t.paused,activeIndex:t.activeIndex,phase:t.phase,question:t.question,round:t.round,slots:copy(t.slots),candidates:copy(t.candidates),cards:['revealing','interpreting','completed'].includes(t.phase)?copy(t.cards):[]}:null,recentArtwork:d?{id:d.id,revision:d.revision,title:d.title,phase:d.phase,stage:d.stage,stageCount:d.stageCount,stages:copy(d.stages),owner:d.owner,reason:d.reason,artifactId:this.sent.drawingArtifact||null}:null,pendingCommands:[...this.commands.values()].filter(c=>c.epoch===this.epoch&&!terminal.has(c.status)).map(c=>c.event).filter(Boolean),recentCommandOutcomes:[...this.commands.values()].filter(c=>terminal.has(c.status)).slice(-30).map(c=>({commandId:c.commandId,status:c.status}))};}
+ snapshot(){const e=this.engine,p=e._state.play,t=p.tarot,d=p.drawing;return {memoryLast:this.broadcast?.last,memoryEvents:this.broadcast?.pending,protocolVersion:1,sessionId:this.id,epoch:this.epoch,executorLeaseId:this.lease,lastServerSeq:this.seq,sessionRevision:this.revision,phase:this.phase,sessionControl:this.sessionControl.snapshot(),capabilities:this.capabilities,call:{...copy(e._state.call),story:null,version:e.callVersion,busy:!!(e._state.currentSpeech||e.pending||e.callNeedsTurn||e._queue.length||e._continuations.length||["preparing","ready","starting","playing","paused"].includes(e._state.media?.phase)),voiceAvailable:!!this.providers.env.VOLC_ASR_API_KEY,thinkingAudio:this.thinkingAudio||null},room:{viewers:e._state.viewers,stageLabel:e._state.stageLabel,replyStatus:e._state.replyStatus,messages:copy(e._state.messages.filter(m=>m.type!=='call'&&!(m.mine&&m.name==='连麦来客'))),voiceAvailable:this.speech.available,voiceError:this.providers.voiceError||null},performance:{waiting:e._state.agent.source!=='unavailable'&&['pending','queued'].includes(e._state.replyStatus)},agent:{enabled:e.enabled,status:e._state.agent.source,errorCode:e._state.agent.errorCode},publicEvents:copy(e.facts),activeTask:p.active?{kind:p.active,taskId:p[p.active].id}:this.talent.snapshot(),voiceOwner:e._active?{speechId:String(e._active.id)}:this.talent.snapshot(),panels:{tarot:!!t?.open,drawing:!!d?.open},tarot:t?{id:t.id,revision:0,origin:t.origin,owner:t.owner,spread:t.spread,paused:t.paused,activeIndex:t.activeIndex,phase:t.phase,question:t.question,round:t.round,slots:copy(t.slots),candidates:copy(t.candidates),cards:['revealing','interpreting','completed'].includes(t.phase)?copy(t.cards):[]}:null,recentArtwork:d?{id:d.id,revision:d.revision,title:d.title,phase:d.phase,stage:d.stage,stageCount:d.stageCount,stages:copy(d.stages),owner:d.owner,reason:d.reason,artifactId:this.sent.drawingArtifact||null}:null,pendingCommands:[...this.commands.values()].filter(c=>c.epoch===this.epoch&&!terminal.has(c.status)).map(c=>c.event).filter(Boolean),recentCommandOutcomes:[...this.commands.values()].filter(c=>terminal.has(c.status)).slice(-30).map(c=>({commandId:c.commandId,status:c.status}))};}
  changed(){if(this.initializing||this.closed)return;this.revision++;if(this.phase==='live')this.syncPresentation();this.flush();if(!this.stateTimer)this.stateTimer=setTimeout(()=>{this.stateTimer=null;if(!this.closed)this.event('session.state',this.snapshot());},50);}
  syncPresentation(){}
  async prepareThinking(){if(this.thinkingAudio||this.thinkingPending||!this.speech.enabled||!this.speech.available)return;this.thinkingPending=true;try{this.thinkingAudio=await this.speech.prepareAudio('我想想啊…','thinking',{});if(!this.closed)this.changed();}catch{}finally{this.thinkingPending=false;}}
@@ -137,7 +154,10 @@ export class LiveSession extends EventEmitter {
   if(c.payload.audioStreamId&&terminal.has(p.status)){this.speech.streams.get(c.payload.audioStreamId)?.close();this.speech.streams.delete(c.payload.audioStreamId);}
   c.status=p.status==='progress'?'started':p.status;c.positionMs=p.positionMs??c.positionMs;c.durationMs=p.durationMs??c.durationMs;c.lastReceipt=copy(p);this.sessionControl.receipt(c,p);this.changed();return {accepted:true};
  }
- heartbeat(body){this.check(body,true);this.leaseUntil=Date.now()+30000;return {epoch:this.epoch,serverTime:new Date().toISOString(),leaseUntil:this.leaseUntil};}
+ heartbeat(body){this.check(body,true);if(this.broadcast&&body.memory){
+    this.broadcast.refresh(body.memory);
+    this.broadcast.acknowledge(body.memoryAck);
+  }this.leaseUntil=Date.now()+30000;return {epoch:this.epoch,serverTime:new Date().toISOString(),leaseUntil:this.leaseUntil};}
  maintenance(){if(this.closed)return;this.sessionControl.tick();if(this.sessionControl.normal&&this.phase==='live'&&Date.now()>this.leaseUntil){this.phase='paused';this.engine.setPaused(true);this.cancelHost('executor_disconnected');this.talent.cancel('executor_disconnected');for(const c of [...this.commands.values()])if(c.type==='audience.present'&&!terminal.has(c.status)){c.status='interrupted';this.waiters.get(c.commandId)?.reject(Error('disconnected'));this.waiters.delete(c.commandId);}this.event('session.state',this.snapshot());}for(const c of [...this.commands.values()])if(c.status==='sent'&&Date.parse(c.expiresAt)<Date.now()){c.status='interrupted';this.waiters.get(c.commandId)?.reject(Error('expired'));this.waiters.delete(c.commandId);if(c.type==='host.present')this.interruptSpeech('execution_timeout');if(c.type.startsWith('media.')&&c.taskId===this.talent.current?.id)this.talent.cancel('execution_timeout');this.flush();}}
  close(){if(this.closed)return;this.flush();this.closed=true;this.sessionControl.dispose();clearTimeout(this.stateTimer);this.hostController?.abort();for(const w of this.waiters.values())w.reject(Error('closed'));this.waiters.clear();this.engine.destroy();}
 }

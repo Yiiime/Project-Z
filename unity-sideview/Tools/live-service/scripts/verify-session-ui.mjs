@@ -11,7 +11,13 @@ const directory=fs.mkdtempSync(path.join(os.tmpdir(),'z-live-ui-'));
 const configProvider=new Providers({DEEPSEEK_API_KEY:'fixture-only'});
 let audienceSequence=0;
 const advanced=new Set(),extensionTurns=new Set();
-const providers={env:{},config:identity=>configProvider.config(identity),generate:async(_identity,p)=>{
+const providers={env:{},config:identity=>configProvider.config(identity),generate:async(_identity,p,options)=>{
+ if(process.env.Z_VERIFY_MEMORY==='1' && p.kind==='host' && options?.broadcastContext?.day===2){
+   const memory=options.broadcastContext.entries.find(e=>e.day===1&&e.text==='晚上的海风好舒服。');
+   if(memory && p.context.host.inbox.some(m=>m.mine))return {action:'speak',speech:'你昨天说过：'+memory.text,
+     mood:'warm',gesture:'none',transition:'smooth',handledIds:p.context.host.inbox.filter(m=>m.mine).map(m=>m.id),
+     wakeAfterMs:120000,continuation:'await_event',agendaUpdates:[]};
+ }
  if(process.env.Z_VERIFY_TIMED==='1'&&p.kind==='session'&&p.context.mode==='inspect'&&!advanced.has(_identity)){advanced.add(_identity);setTimeout(()=>{const s=sessions.get(_identity);if(s){s.sessionControl.now=()=>Date.now()+480000;s.sessionControl.tick();}},2500);}
  if(process.env.Z_VERIFY_DAY==='1'&&p.kind==='session'&&p.context.mode==='inspect'&&p.context.message?.text.startsWith('验收:挽留'))return {intent:'extend',scope:'把晚霞的颜色说完',speech:''};
  if(p.kind==='session')return p.context.mode==='farewell'?{intent:'farewell',scope:'',speech:'刚才的晚霞就聊到这里。谢谢大家陪我，晚安。'}:{intent:'keep',scope:'',speech:''};
