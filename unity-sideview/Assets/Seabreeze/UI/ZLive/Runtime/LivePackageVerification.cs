@@ -24,6 +24,62 @@ namespace ZLive {
             button.Focus();
             using (var evt = NavigationSubmitEvent.GetPooled()) button.SendEvent(evt);
         }
+        // Use a reproducible spoken sample in place of the tester's physical microphone.
+        sealed class SampleMicrophone : CallMicrophone {
+            readonly float start=Time.realtimeSinceStartup;
+            public SampleMicrophone(byte[] pcm) : base(AudioClip.Create("call sample", 16000*20, 1, 16000, false)){
+                var samples=new float[pcm.Length/2];
+                for(int i=0;i<samples.Length;i++)samples[i]=BitConverter.ToInt16(pcm,i*2)/32768f;
+                clip.SetData(samples,16000);
+            }
+            protected override int Position=>(int)((Time.realtimeSinceStartup-start)*16000)%clip.samples;
+        }
+        IEnumerator VerifyCallRequest(LiveFeatureController feature,VisualElement root,string folder){
+            var button=root.Q<Button>(className:"mic-control");
+            var label=root.Q<Label>(className:"mic-label");
+            var hangup=root.Q<Button>(className:"leave-mic");
+            var pcm=File.ReadAllBytes(Path.Combine(folder,"call-input.pcm"));
+            int opened=0;
+            feature.OpenCallMicrophone=()=>{opened++;return new SampleMicrophone(pcm);};
+            feature.AuthorizeMicrophone=token=>System.Threading.Tasks.Task.CompletedTask;
+            for(int join=0; join<2; join++){
+                float readyBy=Time.realtimeSinceStartup+8;
+                while(!button.enabledInHierarchy && Time.realtimeSinceStartup<readyBy)yield return null;
+                Submit(button);
+                yield return new WaitForSecondsRealtime(.15f);
+                if(label.text!="请求中…" || button.enabledInHierarchy ||
+                    root.Q<Label>(className:"caption").text!="诶？有人连麦了，快来和我唠唠嗑"){
+                    Fail("invitation state "+label.text+" enabled="+button.enabledInHierarchy+" caption="+root.Q<Label>(className:"caption").text);yield break;
+                }
+                int before=opened;
+                Submit(button);
+                yield return new WaitForSecondsRealtime(2.7f);
+                if(opened!=before || label.text!="请求中…"){Fail("early microphone");yield break;}
+                float until=Time.realtimeSinceStartup+15;
+                while(label.text!="连麦中" && Time.realtimeSinceStartup<until)yield return null;
+                if(label.text!="连麦中" || opened!=before+1){Fail("call join");yield break;}
+                if(join==0){
+                    until=Time.realtimeSinceStartup+25;
+                    var transcript=root.Q<Label>(className:"transcript");
+                    while(!transcript.text.Contains("烟火") && Time.realtimeSinceStartup<until)yield return null;
+                    if(!transcript.text.Contains("烟火")){Fail("microphone transcription");yield break;}
+                    Debug.Log("CALL_REQUEST_TRANSCRIPT "+transcript.text);
+                    Submit(button);
+                    yield return new WaitForSecondsRealtime(.15f);
+                    if(label.text!="已静音"){Fail("mute");yield break;}
+                    Submit(button);
+                    yield return new WaitForSecondsRealtime(.15f);
+                    if(label.text!="连麦中"){Fail("unmute");yield break;}
+                }
+                Submit(hangup);
+                yield return new WaitForSecondsRealtime(.15f);
+                until=Time.realtimeSinceStartup+8;
+                while(!button.enabledInHierarchy && Time.realtimeSinceStartup<until)yield return null;
+                if(label.text!="连麦" || !button.enabledInHierarchy){Fail("hangup");yield break;}
+            }
+            Debug.Log("LIVE_CALL_REQUEST_PASS");
+            Application.Quit(0);
+        }
         IEnumerator Start() {
             yield return new WaitForSecondsRealtime(1);
             var ui = FindFirstObjectByType<GameUI>();
@@ -78,6 +134,10 @@ namespace ZLive {
             var draft = root.Q<TextField>(className:"chat-input");
             var chat = root.Q<ScrollView>(className:"chat");
             var send = (Button)typeof(LiveFeatureController).GetField("sendButton",Member).GetValue(feature);
+            if (Array.IndexOf(Environment.GetCommandLineArgs(), "--verify-call-request") >= 0) {
+                yield return VerifyCallRequest(feature, root, folder);
+                yield break;
+            }
             if (Array.IndexOf(Environment.GetCommandLineArgs(), "--verify-quiet-room") >= 0) {
                 var linesSeen = new HashSet<string>();
                 deadline = Time.realtimeSinceStartupAsDouble + 55;

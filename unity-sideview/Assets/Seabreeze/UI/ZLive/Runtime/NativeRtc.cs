@@ -52,9 +52,10 @@ public static class NativeRtc {
     public static void Reference(float[] data,int channels,int rate,float gain){if(active)reference?.Invoke(data,data.Length,channels,rate,gain);}
 }
 public sealed class NativeRtcAudioReference:MonoBehaviour {
+    internal readonly CallOutputReference Output=new CallOutputReference();
     int rate;float gain=1;AudioSource source;
     void Awake(){source=GetComponent<AudioSource>();rate=AudioSettings.outputSampleRate;}
     void Update(){rate=AudioSettings.outputSampleRate;gain=source!=null&&!source.mute?source.volume:0;}
-    void OnAudioFilterRead(float[] data,int channels){NativeRtc.Reference(data,channels,rate,gain);}
+    void OnAudioFilterRead(float[] data,int channels){if(gain>0)Output.Write(data,channels,rate);NativeRtc.Reference(data,channels,rate,gain);}
 }
 }
