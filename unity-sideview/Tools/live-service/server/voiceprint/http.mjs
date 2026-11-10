@@ -17,7 +17,19 @@ export function validateEnrollmentWav(audio) {
   }
   if (!format || !data || format.readUInt16LE(0) !== 1 || format.readUInt16LE(2) !== 1 || format.readUInt32LE(4) !== 16000 || format.readUInt16LE(14) !== 16 || data.length % 2) throw Error('voiceprint_invalid_wav');
   const seconds = data.length / 32000;
-  if (seconds < 15 || seconds > 30) throw Error('voiceprint_invalid_duration');
+  if (seconds < 5 || seconds > 30) throw Error('voiceprint_invalid_duration');
+  // Match the client capture window so leading silence cannot satisfy enrollment.
+  const samplesPerWindow = 320;
+  let voicedWindows = 0;
+  for (let offset = 0; offset + samplesPerWindow * 2 <= data.length; offset += samplesPerWindow * 2) {
+    let power = 0;
+    for (let i = 0; i < samplesPerWindow; i++) {
+      const sample = data.readInt16LE(offset + i * 2) / 32768;
+      power += sample * sample;
+    }
+    if (power / samplesPerWindow > 0.000064) voicedWindows++;
+  }
+  if (voicedWindows < 200) throw Error('voiceprint_invalid_speech');
   return seconds;
 }
 

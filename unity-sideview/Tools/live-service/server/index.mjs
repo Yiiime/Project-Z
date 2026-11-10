@@ -20,7 +20,7 @@ const env=loadEnvironment(configRoot);
 const voice=new NativeVoiceService({configRoot:process.env.Z_LIVE_VOICE_CONFIG_DIR||configRoot,profileRoot:path.join(runtime,'voiceprint')});
 const singing=await SingingService.open({root,directory:path.join(runtime,'singing'),libraryDirectory:path.join(runtime,'library'),environment:()=>env,sources:[new NeteaseSource(),...(env.Z_SONG_CATALOG?[new CatalogSource({id:'configured',file:env.Z_SONG_CATALOG})]:[])],autoRenew:env.Z_NETEASE_AUTO_RENEW!=='0',onSessionStatus:status=>console.log('NetEase session:',status.status,status.renewal||'')});
 const library=new LiveSongLibrary({root,directory:path.join(runtime,'library'),singing});
-const providers=new Providers(env,{singing,singingContext:()=>singing.context('local-owner')});
+const providers=new Providers(env,{singing,singingContext:()=>singing.context('local-owner',{publicRoom:true})});
 const {server}=await createLiveServer({root:path.join(runtime,'sessions'),providers,artifacts:new ArtifactStore(path.join(runtime,'artifacts')),songRoot:path.join(root,'server/assets/songs'),token,library,voice,...(office?{tokens:office.tokens,tls:{key:fs.readFileSync(path.join(runtime,'key.pem')),cert:fs.readFileSync(path.join(runtime,'cert.pem'))}}:{})});
 // Editor-only loopback credential: outside Assets, never included in a Player build.
 if(!office){const configDir=path.resolve(root,'../../UserSettings/ZLive');fs.mkdirSync(configDir,{recursive:true});fs.writeFileSync(path.join(configDir,'local-connection.json'),JSON.stringify({baseUrl:`http://127.0.0.1:${port}`,token}),{mode:0o600});}

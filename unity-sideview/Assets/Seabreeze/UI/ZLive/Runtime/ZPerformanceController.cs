@@ -426,6 +426,9 @@ namespace ZLive.ModelPerformance
         public bool LiveSpeechMouth { get; set; }
         public float Elapsed { get; private set; }
 
+        private Live2D.Cubism.Framework.Expression.CubismExpressionData portraitExpression;
+        public void SetPortraitExpression(Live2D.Cubism.Framework.Expression.CubismExpressionData expression) => portraitExpression=expression;
+
         public void SetExpression(string expression)
         {
             SetExpression(ParseExpression(expression));
@@ -433,6 +436,7 @@ namespace ZLive.ModelPerformance
 
         public void SetExpression(ZFaceExpression expression)
         {
+            portraitExpression=null;
             currentExpression = expression;
             expressionElapsed = 0f;
             foreach (var binding in s_expressionBindings)
@@ -770,6 +774,20 @@ namespace ZLive.ModelPerformance
             // own their eye channel and their face remains after the body curve
             // returns to idle. Manual previews keep their existing curves.
             ApplyChatExpressionOverrides();
+            // The game portrait authors face shape. Live gesture timing, blinking,
+            // physics and audio lip sync keep ownership of their own channels.
+            if(!previewPresentationActive && portraitExpression!=null){
+                foreach(var entry in portraitExpression.Parameters){
+                    switch(entry.Id){
+                        case "ParamEyeSmile": case "ParamMouthForm": case "ParamMouthVariant":
+                        case "ParamBrowForm": case "ParamCheek":
+                            var value=entry.Value;
+                            if(entry.Blend==CubismParameterBlendMode.Additive)value+=GetDefaultValue(entry.Id);
+                            if(entry.Blend==CubismParameterBlendMode.Multiply)value*=GetDefaultValue(entry.Id);
+                            SetTarget(entry.Id,value);break;
+                    }
+                }
+            }
             foreach (var id in activeWriters)
             {
                 if (!parameters.TryGetValue(id, out var parameter))

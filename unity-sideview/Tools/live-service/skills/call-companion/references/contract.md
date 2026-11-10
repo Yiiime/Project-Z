@@ -2,7 +2,7 @@
 
 ## 输入
 
-`turnId/eventId` 由宿主生成；context 含 sessionId、callId、guest、persona、memories、event、history、task、storyCards、allowedActions、capabilities、muted。
+`turnId/eventId` 由宿主生成；context 含 sessionId、callId、guest、persona、memories、event、history、task、allowedActions、capabilities、muted。
 
 event.source 为 guest/audience/system，来源不可由模型更改。history 只含真实玩家消息、已播前缀与已确认结果；task 的就绪产物内容在展示前被隐藏。memories 仅为 public+confirmed+当前 guest 的条目。
 
@@ -32,7 +32,6 @@ event.source 为 guest/audience/system，来源不可由模型更改。history �
 | wait | speech=null，不额外发声；此轮事件已处理，不自动重复生成 |
 | request_skill | 只能回应 guest；skill 是已启用规范 ID，args 为对象，resumePoint 必填；speech 不宣称成功 |
 | present_skill | taskId 必须是 ready 的当前任务；speech=null，由真实播放器/展示器完成后触发收尾 |
-| offer_story | storyId 来自可用卡；speech 只作邀请，世界尚未改变 |
 
 mood 为 warm/happy/thinking/serious。所有不使用的字段填 null。memoryIds 只引用当前输入条目。args 是内部业务协议，不直接等同供应商 API：singing 可用 query/range；simple-drawing 用 theme/mustInclude/mustAvoid/style；entertainment-tarot 用 question/spread。
 

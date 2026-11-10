@@ -84,6 +84,20 @@ namespace ZLive
         {
             await Open();
             Time.timeScale = 0; // The phone pauses the world; character and audio must keep updating.
+            Check("main_Z_portrait_loaded",character.UsingStoryPortrait);
+            var profile=Resources.Load<Seabreeze.Live2DModelProfile>("Memory/Portraits/Z");
+            foreach(var mood in new[]{"sad","shy","serious","happy"}){
+                string key=mood=="happy"?"happy_wave":mood;
+                character.Cue(mood,mood=="happy"?"wave":"none","smooth");character.BeginSpeaking(true);
+                await Wait(.8f);
+                var expression=profile?.FindExpression(key);
+                bool matches=expression!=null;
+                if(matches)foreach(var entry in expression.Parameters)
+                    if(entry.Id=="ParamBrowForm"||entry.Id=="ParamMouthForm"||entry.Id=="ParamCheek"||entry.Id=="ParamMouthVariant")
+                        matches &= Mathf.Abs(character.ParameterValue(entry.Id)-entry.Value)<.12f;
+                Check("main_profile_"+key,matches);
+                character.EndCue();
+            }
             float clock = character.ZPerformance.Elapsed;
             await Wait(.25f);
             Check("unscaled_live_animation", character.ZPerformance.Elapsed > clock);

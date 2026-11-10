@@ -60,6 +60,8 @@ public static class LiveDayVerification {
             if(stage==2){
                 if(EditorApplication.timeSinceStartup-changedAt<.8||Field<bool>(feature,"sendingInput"))return;
                 if(scenario==0){
+                    Require(feature.HandleBack(),"Return did not open confirmation.");
+                    Require(!Field<bool>(feature,"stopRequested") && !Field<bool>(feature,"locallyPaused"),"Opening confirmation interrupted conversation.");
                     var button=feature.GetComponent<UIDocument>().rootVisualElement.Q<Button>("end-live-button");
                     button.Focus();using(var evt=NavigationSubmitEvent.GetPooled())button.SendEvent(evt);
                     Require(Field<bool>(feature,"stopRequested"),"Stop button was not submitted.");

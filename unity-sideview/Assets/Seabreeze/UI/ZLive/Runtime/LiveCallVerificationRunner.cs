@@ -26,12 +26,14 @@ public sealed class LiveCallVerificationRunner:MonoBehaviour {
         const BindingFlags flags=BindingFlags.Instance|BindingFlags.NonPublic;var type=typeof(LiveFeatureController);
         type.GetField("state",flags).SetValue(controller,JObject.Parse("{\"phase\":\"live\",\"call\":{\"active\":true,\"id\":\"qa\",\"input\":\"idle\"}}"));
         type.GetField("locallyPaused",flags).SetValue(controller,false);type.GetField("connected",flags).SetValue(controller,true);
+        type.GetField("rtcReady",flags).SetValue(controller,true);
         type.GetMethod("UpdateCallView",flags).Invoke(controller,null);type.GetMethod("UpdateView",flags).Invoke(controller,null);
         type.GetMethod("ShowPlayerSpeech",flags).Invoke(controller,new object[]{"今天办公室有点吵，想来这里歇一会儿。",true});
         type.GetMethod("SetHostCaption",flags).Invoke(controller,new object[]{"那就先歇一会儿，今天慢慢聊。"});
         await Wait(.3f);var root=host.GetComponent<UIDocument>().rootVisualElement;
-        Check("single_microphone",root.Query<Button>(className:"call-toggle").ToList().Count==1&&root.Query<Button>(className:"companion-button").ToList().Count==0);
-        var dialogue=root.Q(className:"call-dialogue");Check("two_dialogue_rows",dialogue.childCount==2);Check("original_font_size",Math.Abs(root.Q<Label>(className:"caption").resolvedStyle.fontSize-14)<.1);
+        Check("single_microphone",root.Query<Button>(className:"mic-control").ToList().Count==1);
+        Check("live_transcript",root.Q<Label>(className:"transcript").text.Contains("办公室"));
+        Check("host_subtitle",root.Q<Label>(className:"caption").text.Contains("慢慢聊"));
         Check("bounded_panel",root.Q(className:"speech-box").resolvedStyle.height<=166.1f);
         ScreenCapture.CaptureScreenshot(Path.Combine(output,"call-panel.png"));await Wait(.3f);
         var player=host.GetComponent<LiveAudioPlayer>();player.Frame=Frame;player.Pause(false);player.Source.volume=.12f;

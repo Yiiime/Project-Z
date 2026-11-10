@@ -88,7 +88,20 @@ export class SingingService {
    const t={id:uid(),owner,sourceId,originSessionId:sessionId,originalText:text,requestText:text,revision:0,attempt:0,createdAt:now(),voice:Z_VOICE,assetId:null,plan:null};s.tasks.push(t);this.record(s,t,'queued');return t;});
  }
  owned(s,id,owner){const t=s.tasks.find(t=>t.id===id&&t.owner===owner);if(!t)throw Error('task_not_found');return t;}
- context(owner){const s=this.read();return {enabled:true,voice:s.voice,tasks:s.tasks.filter(t=>t.owner===owner).slice(-24).map(t=>({id:t.id,sourceId:t.sourceId,originSessionId:t.originSessionId,requesterKind:['provider-verification','management'].includes(t.originSessionId)?'operator':'player',request:t.originalText,plan:t.plan,status:t.status,reason:t.note,createdAt:t.createdAt,updatedAt:t.updatedAt,assetId:t.assetId,question:t.question||'',attempt:t.attempt})),knowledge:s.assets.filter(a=>playableAsset(a)&&!a.unavailable).map(a=>({title:a.plan.title,artist:a.plan.artist,coverage:[a.plan.segment.description],listeningVerified:false})).slice(-30),limits:{singleSegmentSeconds:90,backgroundConcurrency:1,review:'none',fixedWaiting:false,providerLookup:'netease_source_policy',referenceConditioning:false}};}
+ context(owner,{publicRoom=false}={}){
+  const s=this.read();
+  const daytime=t=>t.originSessionId?.startsWith('day:');
+  const dayAssets=new Set(publicRoom?s.tasks.filter(daytime).map(t=>t.assetId):[]);
+  for(const t of s.tasks)if(!daytime(t)&&t.owner===owner)dayAssets.delete(t.assetId);
+  return {enabled:true,voice:s.voice,tasks:s.tasks.filter(t=>t.owner===owner && (!publicRoom||!daytime(t))).slice(-24).map(t=>({id:t.id,sourceId:t.sourceId,originSessionId:t.originSessionId,requesterKind:['provider-verification','management'].includes(t.originSessionId)?'operator':'player',request:t.originalText,plan:t.plan,status:t.status,reason:t.note,createdAt:t.createdAt,updatedAt:t.updatedAt,assetId:t.assetId,question:t.question||'',attempt:t.attempt})),knowledge:s.assets.filter(a=>playableAsset(a)&&!a.unavailable&&(a.approved||!dayAssets.has(a.id))).map(a=>({title:a.plan.title,artist:a.plan.artist,coverage:[a.plan.segment.description],listeningVerified:false})).slice(-30),limits:{singleSegmentSeconds:90,backgroundConcurrency:1,review:'none',fixedWaiting:false,providerLookup:'netease_source_policy',referenceConditioning:false}};}
+ daytimeTasks(owner,binding){
+  const sourceIds=new Set(binding.songs.map(s=>s.sourceId).filter(Boolean));
+  if(!sourceIds.size)return [];
+  const session='day:'+binding.worldId+':'+binding.day;
+  return this.read().tasks.filter(t=>t.owner===owner && t.originSessionId===session && sourceIds.has(t.sourceId))
+    .map(({id,sourceId,originSessionId,originalText,plan,status,assetId,createdAt,updatedAt,attempt})=>
+      ({id,sourceId,originSessionId,request:originalText,requesterKind:'player',plan,status,assetId,createdAt,updatedAt,attempt}));
+ }
  overview(owner){return this.context(owner);}
  async tick(){
   if(this.busy||this.closed)return;this.busy=true;

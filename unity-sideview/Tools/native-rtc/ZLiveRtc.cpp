@@ -48,6 +48,11 @@ __attribute__((visibility("default"))) int ZRtcStart(const char* appId, const ch
  if (result != 0) {stop(); return result;}
  return 0;
 }
+__attribute__((visibility("default"))) int ZRtcSetMuted(int muted) {
+ std::lock_guard<std::mutex> lock(engineMutex);
+ if (!engine || !room || state.load() != 2) return -1;
+ return muted ? engine->stopAudioCapture() : engine->startAudioCapture();
+}
 __attribute__((visibility("default"))) int ZRtcState() {return state.load();}
 __attribute__((visibility("default"))) void ZRtcStop() {std::lock_guard<std::mutex> lock(engineMutex); stop();}
 // Unity output is the AEC reference, never a second microphone input. Do not block

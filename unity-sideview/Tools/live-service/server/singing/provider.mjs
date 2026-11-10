@@ -57,7 +57,7 @@ export async function readSingingResult(directory) {
   const errors=[providerError,...(report.events||[]).map(event=>{try{return typeof event.error==='string'?JSON.parse(event.error):event.error;}catch{return null;}})].filter(Boolean);
   if(errors.some(error=>String(error.code)==='45000030'))throw Error('singing_provider_resource_not_granted');
   if(report.httpStatus===401||errors.some(error=>String(error.code)==='45000010'))throw Error('singing_provider_configuration_error');
-  if(['timeout','network_error','connection_ended','upload_failed'].includes(report.outcome))throw Error('generation_outcome_unknown');
+  if(['timeout','network_error','connection_ended','upload_failed','frame_limit','message_limit','invalid_server_frame','invalid_server_json','unexpected_frame'].includes(report.outcome))throw Error('generation_outcome_unknown');
   if(report.outcome==='handshake_rejected'||report.outcome==='provider_error')throw Error('singing_provider_unavailable');
   if(!report.audioGenerated||!report.generationDone||!/^vivi-wanan-[\w-]+\.wav$/.test(report.audioFile||''))throw Error('singing_no_complete_audio');
   const modes=report.events.filter(e=>e.type==='response.output_audio.started').map(e=>e.tts_type);

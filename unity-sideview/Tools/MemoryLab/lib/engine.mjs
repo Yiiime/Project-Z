@@ -1,3 +1,4 @@
+import { memoryProjection, privateOffer, narrativeChange, rememberNarration } from "./live-memory.mjs";
 import { uid } from "./store.mjs";
 import { clone } from "./catalog.mjs";
 import { Policy, TurnError, canonical } from "./policy.mjs";
@@ -596,7 +597,7 @@ export class Engine {
         },
       ]),
     );
-    const memories = selected.selected;
+    const memories = [...selected.selected];
     memories.push({
       id: event.id,
       summary: event.text,
@@ -616,8 +617,23 @@ export class Engine {
             .map((m) => m.id),
         ]),
     );
+    let story;
+    if (j.actor === "z" && j.mode === "player") {
+      const events=this.records(w,"event");
+      const projection=memoryProjection(w, events, {privateChat:true});
+      const previous=events.findLast(e=>e.speaker==="z" && e.conversationId===j.conversation);
+      const offer=privateOffer(projection,event.text,previous?.text||"");
+      if(offer)story={id:offer.id,count:offer.count,line:offer.steps[offer.count]};
+      const broadcast=projection.entries;
+      // Keep actual public playback receipts visible even when a song is no longer recent conversation.
+      const relevant=broadcast.filter(e=>event.text.includes(e.text.match(/《([^》]+)》/)?.[1]||"\0") ||
+        /歌|唱/.test(event.text)&&/唱|播|点歌/.test(e.text));
+      for(const e of (relevant.length?relevant:broadcast).slice(-3))
+        if(!memories.some(m=>m.id===e.id))memories.push({id:e.id,summary:"第"+e.day+"天 "+e.speaker+"："+e.text,source_event_ids:[e.id],disclose_to:["z","player"]});
+    }
     this.save(w);
     return {
+      ...(story?{z_story:story}:{}),
       protocol_version: this.catalog.registry.protocol_version,
       session_id: w.worldId,
       turn_id: j.id,
@@ -874,6 +890,7 @@ export class Engine {
             ![
               "communication",
               "peer_relation_changes",
+              "day_song_reply",
               "agenda_update",
               "social_decision",
               "task_participation",
@@ -929,6 +946,18 @@ export class Engine {
         hour,
         selected: p.context.character_state.memories,
       });
+    if(event && p.actor==="z" && mode==="player" && output.info.day_song_reply){
+      event.daySongReply=output.info.day_song_reply;
+      event.daySongSource=p.context.interaction.source_event_id;
+      this.store.put("event",event);
+    }
+    if(event && p.actor==="z" && mode==="player" && p.context.z_story){
+      const current=this.world(world);
+      const offered=p.context.z_story;
+      const card=memoryProjection(current,this.records(current,"event"),{privateChat:true}).stories.find(s=>s.id===offered.id&&s.count===offered.count);
+      rememberNarration(current,narrativeChange(card,output.dialogue),"private_player_chat",event.id);
+      this.save(current);
+    }
     const latest = this.world(world),
       a = latest.actors[p.actor];
     if (action.type === "communicate") {
@@ -1149,12 +1178,18 @@ export class Engine {
     );
     if (!changed) {if(eventMeta.id)this.observe(world,"重复任务回执已确认，没有新进度。",[],{kind:"fact",wake:false,...eventMeta});return;}
     const owner = this.tasks.definition(task).owner;
-    this.observe(
+    const event=this.observe(
       world,
       `游戏确认任务“${this.tasks.definition(task).title}”的步骤${step}${success ? "已完成" : "失败"}。`,
       [...new Set([owner, "player", who])],
       { kind: "fact", ...eventMeta },
     );
+    // Only publish the ordinary exploration steps whose definition requires Z.
+    // A substitute collaborator, a failed attempt or an invitation is not a joint outing.
+    if (success && task==="map_blank" && ((step==="visit" && who==="player") || (step==="explain" && who==="z"))) {
+      event.publicActivity=task+"."+step;
+      this.store.put("event",event);
+    }
   }
   snapshot(world) {
     const w = this.world(world);
@@ -1222,6 +1257,7 @@ export class Engine {
       version: 2,
       worldId: world,
       contentRevision: this.catalog.registry.pack_version,
+      broadcast: memoryProjection(w,this.records(w,"event")),
       world: clone(w),
       records: Object.fromEntries(kinds.map((k) => [k, this.records(w, k)])),
       tasks: this.tasks.snapshot(world),
@@ -1299,6 +1335,7 @@ export class Engine {
       this.store.clearRecords(w.id);
       this.tasks.restore(world, {});
       w.actors = this.initialActors(w.initialMetrics || {});
+      delete w.zNarrated;
       w.seq=0;w.hour=0;w.day=1;w.period=0;w.tick=0;w.reflected={};w.memoryRevision=0;
     }
     w.epoch = epoch;
