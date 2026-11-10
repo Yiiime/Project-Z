@@ -11,7 +11,7 @@
     },
     {
       "path": "main-agent/config/skills-source-lock.json",
-      "sha256": "ec55432295701d670233c28370aeddec8ee3771c91d569c280023f697e7125c4"
+      "sha256": "c0a080888c34d35a8910bd38fd0bc2d76a41a1d438b8b30bba3ec75484a30b49"
     },
     {
       "path": "main-agent/prompts/conversation-host.txt",
@@ -27,7 +27,7 @@
     },
     {
       "path": "skills/audience-reaction/SKILL.md",
-      "sha256": "4e0106bf557f624cf37fe9149b163ae80d5ccf4cb059d814f27ca43d5b4ba17f"
+      "sha256": "b2c963b69a40d70887385c33b5c88e01e4c1fb531c2cf96c318609910e811be4"
     },
     {
       "path": "skills/audience-reaction/agents/openai.yaml",
@@ -39,7 +39,7 @@
     },
     {
       "path": "skills/audience-reaction/references/dialogue-review.md",
-      "sha256": "a81a5bbbb5a4ed083ba613c6ab6b71d28c8af78de161af93ff6ca182e3e7f25a"
+      "sha256": "4f487cf4d94a8621f23c1290a5a6c6d80b6d2e637641314794ba7963ed9e081d"
     },
     {
       "path": "skills/audience-reaction/references/examples.md",

@@ -43,7 +43,7 @@ export class AudienceDirector {
     const pace=this.pacing();
     this.cooldowns.set(item.npc_id,now);
     this.nextPublishAt=now+pace.publishGapMs+Math.floor(this.random()*(pace.jitterMs||0));
-    this.recentMessages.push({npcId:item.npc_id,text:item.text});this.recentMessages=this.recentMessages.slice(-6);
+    this.recentMessages.push({npcId:item.npc_id,text:item.text});this.recentMessages=this.recentMessages.slice(-32);
   }
   get inflight() {return this.requests.values().next().value || null;}
   _allowed() {try {return this.canPublish() === true;} catch {return false;}}
@@ -127,7 +127,8 @@ export class AudienceDirector {
     const hostPreview=sourcePreview?(({expiresAt,...view})=>view)(sourcePreview):null;
     const payload = {requestId: uuid(), kind: 'audience', message: '结合公开现场与自己的观看兴趣，选择一条值得发的弹幕，无需逐句回应', eventId: publicEvents.at(-1).id,
       context: {phase: this.currentPhase||'chat', publicEvents, audience: {eligibleNpcIds,...(hostPreview?{hostPreview}:{}),
-        waitingMessages:this.dialogue.snapshot().waiting_messages, recentMessages: this.recentMessages.map(item => ({...item})), allowAdvance}}};
+        ownMessages: eligibleNpcIds.flatMap(npc=>this.recentMessages.filter(m=>m.npcId===npc).slice(-2)),
+        waitingMessages:this.dialogue.snapshot().waiting_messages, recentMessages: this.recentMessages.slice(-8).map(item => ({...item})), allowAdvance}}};
     const request = {token, controller, deadline: now + this.config.generationDeadlineMs,
       expiresAt: sourcePreview?sourcePreview.expiresAt:now + this.config.candidateTtlMs, sourcePreview, publicEvents, eligibleNpcIds, allowAdvance, payload};
     this.requests.set(payload.requestId,request);

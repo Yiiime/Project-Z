@@ -122,7 +122,9 @@ public sealed partial class LiveFeatureController {
             characterImage=new Image{image=character.Texture,scaleMode=ScaleMode.ScaleToFit,pickingMode=PickingMode.Ignore};
             characterImage.AddToClassList("character");
             stage.Add(characterImage);
+            const float deskEdge=.870f; // Rear edge of the tabletop in the room illustration.
             var clip=Box("foreground-clip");
+            clip.style.top=Length.Percent(deskEdge*100);
             clip.pickingMode=PickingMode.Ignore;
             var art=Box("foreground-art");
             art.style.backgroundImage=new StyleBackground(room);
@@ -130,7 +132,7 @@ public sealed partial class LiveFeatureController {
             stage.Add(clip);
             stage.RegisterCallback<GeometryChangedEvent>(e=>{
                 var size=e.newRect.size;
-                art.style.width=size.x;art.style.height=size.y;art.style.top=-size.y*.795f;
+                art.style.width=size.x;art.style.height=size.y;art.style.top=-size.y*deskEdge;
                 character.SetViewport(size.x,size.y,Screen.width/Mathf.Max(1,root.resolvedStyle.width));
                 characterImage.image=character.Texture;
             });

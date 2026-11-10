@@ -7,7 +7,7 @@
 .row, .header, .chat-row, .composer, .speech-box, .dialog-actions, .back { flex-direction:row; align-items:center; }
 .spacer { flex-grow:1; }
 .stage,.character { position:absolute; top:0; bottom:0; left:0; right:0; -unity-background-scale-mode:stretch-to-fill; }
-.foreground-clip { position:absolute; top:79.5%; left:0; bottom:0; right:0; overflow:hidden; }
+.foreground-clip { position:absolute; left:0; bottom:0; right:0; overflow:hidden; }
 .foreground-art { position:absolute; left:0; -unity-background-scale-mode:stretch-to-fill; }
 .header { position:absolute; left:3.2%; top:5.45%; }
 .room .host-avatar { width:55px; height:55px; border-radius:28px; border-color:#e8def8; border-width:1px; background-color:rgba(102,115,168,0.53); -unity-text-align:middle-center; font-size:27px; }
