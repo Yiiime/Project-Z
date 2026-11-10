@@ -27,3 +27,10 @@ test('media preparation and playback are separate receipts',()=>{
   assert.equal(m.pending.at(-1).text,'《嗜好》已播完');
 });
 
+test('yesterday’s player quotes outrank host recap, farewell and the current question',()=>{
+ const e=(day,speaker,text)=>({day,speaker,text,id:text,layer:'daily'});
+ const m=new BroadcastMemory({...binding,entries:[e(1,'player','海风好舒服'),e(1,'player','想听歌'),e(1,'z','晚上好呀'),e(1,'z','今天跟朋友说了话'),e(1,'z','晚安'),e(2,'player','昨天我说了什么？')]});
+ m.record('player.message','昨天我在直播间说了什么？',{id:'q'});
+ assert.deepEqual(m.recall().entries.slice(0,2).map(e=>e.speaker),['player','player']);
+ assert(m.recall().entries.every(e=>e.day===1));
+});

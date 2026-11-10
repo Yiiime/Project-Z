@@ -1172,12 +1172,18 @@ export class Engine {
     );
     if (!changed) {if(eventMeta.id)this.observe(world,"重复任务回执已确认，没有新进度。",[],{kind:"fact",wake:false,...eventMeta});return;}
     const owner = this.tasks.definition(task).owner;
-    this.observe(
+    const event=this.observe(
       world,
       `游戏确认任务“${this.tasks.definition(task).title}”的步骤${step}${success ? "已完成" : "失败"}。`,
       [...new Set([owner, "player", who])],
       { kind: "fact", ...eventMeta },
     );
+    // Only publish the ordinary exploration steps whose definition requires Z.
+    // A substitute collaborator, a failed attempt or an invitation is not a joint outing.
+    if (success && task==="map_blank" && ((step==="visit" && who==="player") || (step==="explain" && who==="z"))) {
+      event.publicActivity=task+"."+step;
+      this.store.put("event",event);
+    }
   }
   snapshot(world) {
     const w = this.world(world);

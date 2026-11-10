@@ -1,5 +1,6 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Seabreeze;
 
@@ -27,13 +28,24 @@ namespace ZLive {
                 ? new LiveMemoryBridge(game) : null;
         }
 
+        public async Task WaitForDaytimeSync() {
+            // Give a just-finished daytime conversation time to reach its checkpoint.
+            // Offline play still opens; the local outbox only supplies the fact of meeting.
+            for (int i=0; i<20 && Current && !game.Memory.Client.Synchronized; i++) await Task.Delay(100);
+        }
+        string RecapFlag => "z_live_day_recap_" + owner.day;
         public JObject Binding() {
             if (!Current) return null;
             if (checkpoint != owner.memory.checkpoint || projection == null) {
                 checkpoint = owner.memory.checkpoint;
                 projection = string.IsNullOrEmpty(checkpoint) ? null : JObject.Parse(checkpoint)["broadcast"] as JObject;
             }
+            var today=(int?)projection?["day"]==owner.day ? projection?["today"] as JArray : null;
+            var localTalk=owner.memory.outbox.Any(e=>e.day==owner.day && e.kind=="utterance" && e.channel=="private_player_chat" &&
+                ((e.speakerId=="player" && e.recipientId=="z") || (e.speakerId=="z" && e.recipientId=="player")));
             return new JObject {
+                ["today"] = today?.Count>0 ? today.DeepClone() : localTalk ? new JArray("和岛上的朋友说了会儿话") : new JArray(),
+                ["recapSpoken"] = owner.flags.Contains(RecapFlag),
                 ["worldId"] = owner.memory.worldId, ["runId"] = run, ["day"] = owner.day,
                 ["stage"] = (string)projection?["stage"] ?? "island_daily",
                 ["entries"] = projection?["entries"]?.DeepClone() ?? new JArray(),
@@ -53,6 +65,7 @@ namespace ZLive {
                 int seq = (int)row["seq"];
                 if (seq <= cursor) continue;
                 if (seq != cursor + 1) break;
+                if ((int?)row["recapDay"] == owner.day && !owner.flags.Contains(RecapFlag)) owner.flags.Add(RecapFlag);
                 state.outbox.Add(new MemoryEvent {
                     id = prefix + seq, seq = ++state.nextSeq, day = owner.day, period = owner.period,
                     accepted = (bool?)row["shared"] == true, kind = "live_memory", channel = "livestream", speakerId = (string)row["speaker"],

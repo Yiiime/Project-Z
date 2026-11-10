@@ -21,6 +21,30 @@ export function isPublic(event, world) {
   return event.kind==='fact' && event.speaker==='engine' &&
     ['player',...Object.keys(world.actors)].every(id=>event.disclose_to?.includes(id));
 }
+// Locations are coarse public landmarks, not private addresses or dialogue content.
+const landmarks={main_street:'公共街',public_middle:'公共街',public_east:'公共街',corner_garden:'街角花园',
+  cafe:'咖啡店',dock:'码头',flower_shop:'花店',photo_studio:'照相馆',ancient_tree_square:'古树广场',
+  grocery:'杂货铺',old_bookshop:'旧书屋',boardwalk:'木栈道',boardwalk_bench:'木栈道',beach:'沙滩',
+  visitor_center:'游客中心',seafront_west:'海滨街',seafront_east:'海滨街',hilltop_platform:'山顶平台'};
+const activities={'map_blank.visit':'和岛上的朋友一起去看了地图上还没有标出来的地方',
+  'map_blank.explain':'和大家说了说，为什么我想把那个地方留在地图上'};
+
+function dayActivities(world,events){
+  const lines=new Set();
+  for(const e of events){
+    if(1+Math.floor(e.hour/24)!==world.day)continue;
+    if(e.kind==='fact' && e.speaker==='engine' && Object.hasOwn(activities,e.publicActivity)){
+      lines.add(activities[e.publicActivity]);continue;
+    }
+    if(e.channel!=='private_player_chat'||!e.visible?.includes('player')||!e.visible.includes('z')||
+      !((e.speaker==='player'&&e.recipient==='z')||(e.speaker==='z'&&e.recipient==='player')))continue;
+    const hour=e.hour%24, when=hour<12?'上午':hour<18?'下午':hour<20?'傍晚':'开播前';
+    const place=Object.hasOwn(landmarks,e.location)?landmarks[e.location]:null;
+    // Do not read text, gist, inferred memories, names or a private location.
+    lines.add(when+(place?'在'+place+'附近':'')+'和岛上的朋友说了会儿话');
+  }
+  return [...lines];
+}
 export function memoryProjection(world, events, {privateChat=false}={}) {
   const visible=events.filter(e=>isPublic(e,world) || (privateChat &&
     e.visible?.includes('z') && e.visible.includes('player') && e.channel==='private_player_chat'));
@@ -41,7 +65,7 @@ export function memoryProjection(world, events, {privateChat=false}={}) {
     ...eligible.filter(e=>e.speaker==='player').slice(-8),...eligible.slice(-16)]);
   const entries=eligible.filter(e=>retained.has(e)).map(e=>({id:e.id,day:1+Math.floor(e.hour/24),speaker:e.speaker,
       layer:(e.channel==='private_player_chat'||e.subject==='player_and_z')?'shared':'daily',text:e.text.slice(0,240)}));
-  return {day:world.day,stage:evidence?"verified_clue":"island_daily",entries,stories};
+  return {day:world.day,stage:evidence?"verified_clue":"island_daily",entries,stories,today:dayActivities(world,events)};
 }
 export function narrativeChange(offer,text) {
   if (!offer || offer.count>=offer.steps.length || ![offer.steps[offer.count],...(offer.aliases?.[offer.count]||[])].some(s=>matchesStep(text,s))) return null;

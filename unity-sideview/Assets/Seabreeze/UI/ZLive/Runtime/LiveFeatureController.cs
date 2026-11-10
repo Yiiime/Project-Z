@@ -40,6 +40,8 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     void ReadConnection(string file){if(!File.Exists(file))return;var c=JObject.Parse(File.ReadAllText(file));pendingBase=(string)c["baseUrl"];pendingToken=(string)c["token"];pendingPin=(string)c["certificateSha256"];}
     public async Task Enter(){transport=new LiveTransport(pendingBase,pendingToken,pendingPin);transport.Event+=e=>events.Enqueue(e);transport.Connection+=s=>connections.Enqueue(s);audioPlayer.Transport=transport;
         liveMemory=LiveMemoryBridge.Open();
+        if(liveMemory!=null)await liveMemory.WaitForDaytimeSync();
+        if(leaving||disposed)return;
         state=await transport.Enter(PlayerPrefs.GetString(SessionKey,""),!muted&&audioPlayer.Source.volume>0,character.Ready,liveMemory?.Binding());if(leaving||disposed){await transport.Control("end");return;}PlayerPrefs.SetString(SessionKey,transport.SessionId);PlayerPrefs.Save();ApplyState(state);await transport.Control("resume");
         // A new Unity process cannot prove an old audio instance completed. Never replay it silently.
         foreach(JObject c in (JArray)state["pendingCommands"]){if((string)c["type"]=="host.present"||(string)c["type"]=="media.play"||(string)c["type"]=="audience.present")await Report(c,new JObject{{"status","interrupted"},{"reason","client_restarted"}});else Queue(c);}

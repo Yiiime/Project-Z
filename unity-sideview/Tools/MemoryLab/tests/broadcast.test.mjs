@@ -24,18 +24,24 @@ test('Unity receipts and story stages follow the checkpoint, public recall canno
   const cp=await send(5,'z','他现在是咖啡店老板',{stepId:'childhood_friend',receiptId:'2'});
   const replay=await send(5,'z','他现在是咖啡店老板',{stepId:'childhood_friend',receiptId:'2'});
   assert.deepEqual(replay.broadcast,cp.broadcast);
+  assert.equal(cp.broadcast.today.length,1);
+  assert.deepEqual((await post("open",{checkpoint:cp})).broadcast.today,cp.broadcast.today);
   assert.equal(cp.broadcast.stories[0].count,2);
   assert(!JSON.stringify(cp.broadcast).includes('紫杉'));
   assert(!JSON.stringify(cp.broadcast).includes('已播完'));
   const privateChat=memoryProjection(engine.world(session.worldId),engine.records(engine.world(session.worldId),'event'),{privateChat:true});
   assert(privateChat.entries.some(e=>e.text.includes('紫杉')&&e.layer==='shared'));
   session={...session,day:2,period:0,runId:'reload'};
-  const tomorrow=await post('open',{checkpoint:cp});assert(tomorrow.broadcast.entries.some(e=>e.day===1&&e.text.includes('播放中断')));
+  const tomorrow=await post('open',{checkpoint:cp});assert.deepEqual(tomorrow.broadcast.today,[]);assert(tomorrow.broadcast.entries.some(e=>e.day===1&&e.text.includes('播放中断')));
   const queued={id:'offline_song',seq:6,day:1,period:3,kind:'live_memory',speakerId:'engine',text:'《另一首》已播完',channel:'livestream',conversationId:'live_1'};
   const recovered=await post('sync',{eventData:queued});
   const duplicate=await post('sync',{eventData:queued});
   assert.deepEqual(recovered.broadcast,duplicate.broadcast);
   assert.equal(recovered.broadcast.entries.filter(e=>e.id===queued.id&&e.day===1).length,1);
+  engine.tasks.offer(session.worldId,'map_blank','liyuan');engine.tasks.respond(session.worldId,'map_blank',true);
+  const visit=(n,succeeded)=>sync(n,'task_receipt',{day:2,period:0,taskId:'map_blank',stepId:'visit',receiptId:'walk_'+n,performerId:'player',succeeded});
+  assert.deepEqual((await visit(7,false)).broadcast.today,[]);
+  assert((await visit(8,true)).broadcast.today.some(line=>line.includes('地图上还没有标出来的地方')));
   const rolledBack=await post('open',{runId:'earlier',checkpoint:old});
   assert.deepEqual(rolledBack.broadcast.entries,[]);assert.equal(rolledBack.broadcast.stories[0].count,0);
   const fresh=await post('open',{worldId:'other',runId:'new'});assert.deepEqual(fresh.broadcast.entries,[]);
@@ -51,3 +57,14 @@ test('a crack needs a verified public contradiction, a later day, trust and matc
   world.actors.z.info.trust=39;assert(!has());assert.equal(memoryProjection(world,[e]).stories[0].steps.length,1);
 });
 
+
+test('same-day recap collapses repeated dialogue and only describes public circumstances',()=>{
+  const world={day:2,actors:{z:{info:{}}}};
+  const meet={speaker:'player',recipient:'z',hour:34,kind:'claim',visible:['player','z'],channel:'private_player_chat',location:'cafe',text:'私下约了潜水',gist:'潜水'};
+  const projection=memoryProjection(world,[{...meet,hour:9,location:'dock'},meet,{...meet,speaker:'z',recipient:'player'},
+    {...meet,speaker:'axing'}, {...meet,channel:'livestream'}, {...meet,hour:38,location:'z_home'},
+    {kind:'fact',speaker:'engine',publicActivity:'map_blank.visit',hour:39,text:'任务记录',visible:[]}]);
+  assert.deepEqual(projection.today,['上午在咖啡店附近和岛上的朋友说了会儿话','下午和岛上的朋友说了会儿话','和岛上的朋友一起去看了地图上还没有标出来的地方']);
+  assert(!projection.today.join('').match(/码头|潜水|家/));
+  assert.deepEqual(memoryProjection({...world,day:3},[meet]).today,[]);
+});

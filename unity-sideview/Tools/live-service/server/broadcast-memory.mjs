@@ -21,7 +21,9 @@ function publicBinding(b) {
   for(const s of stories)if(!s||!text(s.id,80)||!['anchor','crack'].includes(s.layer)||
     !Array.isArray(s.steps)||(s.steps.length<1||s.steps.length>3)||!s.steps.every(v=>text(v,100))||!Array.isArray(s.topics)||
     s.topics.length>16||!s.topics.every(v=>text(v,32))||!Number.isInteger(s.count)||s.count<0||s.count>s.steps.length)throw Error('invalid_memory_story');
-  return {worldId:b.worldId,runId:b.runId,day:b.day,stage:b.stage==="verified_clue"?"verified_clue":"island_daily",entries:entries.map(({id,text,day,speaker,layer})=>({id,text,day,speaker,layer})),
+  const today=b.today??[];
+  if(!Array.isArray(today)||today.length>128||!today.every(v=>text(v,90)))throw Error('invalid_daily_recap');
+  return {today:[...new Set(today)],recapSpoken:b.recapSpoken===true,worldId:b.worldId,runId:b.runId,day:b.day,stage:b.stage==="verified_clue"?"verified_clue":"island_daily",entries:entries.map(({id,text,day,speaker,layer})=>({id,text,day,speaker,layer})),
     stories:stories.map(({id,layer,topics,steps,aliases,count})=>({id,layer,topics:[...topics],steps:[...steps],
       aliases:steps.map((_,i)=>Array.isArray(aliases?.[i])?aliases[i].filter(v=>text(v,60)).slice(0,6):[]),count}))};
 }
@@ -34,6 +36,7 @@ export class BroadcastMemory {
     this.pending=saved?.pending||[];
     this.last=saved?.last||0;
     this.lastTopic=saved?.lastTopic||null;
+    this.recapSpoken=!!saved?.recapSpoken;
     this.offer=saved?.offer||null;
     this.spoken=saved?.spoken||{};
   }
@@ -42,7 +45,17 @@ export class BroadcastMemory {
       throw Error('invalid_memory_binding');
     this.binding=publicBinding(binding);
   }
-  save(){return {binding:this.binding,pending:this.pending,last:this.last,lastTopic:this.lastTopic,offer:this.offer,spoken:this.spoken};}
+  get needsRecap(){return this.binding.today.length>0 && !this.binding.recapSpoken && !this.recapSpoken;}
+  opening(){
+    if(!this.needsRecap)return null;
+    const {today}=this.binding;
+    // Keep the greeting short; the full list remains in recall for follow-up questions.
+    const outings=today.filter(v=>!v.endsWith('说了会儿话'));
+    const chats=today.filter(v=>v.endsWith('说了会儿话'));
+    const lines=[...chats.slice(0,Math.max(1,4-outings.length)),...outings.slice(0,3)];
+    return '晚上好呀！今天'+lines.join('，还')+'。';
+  }
+  save(){return {recapSpoken:this.recapSpoken,binding:this.binding,pending:this.pending,last:this.last,lastTopic:this.lastTopic,offer:this.offer,spoken:this.spoken};}
   acknowledge(n){if(Number.isSafeInteger(n)&&n>=0&&n<=this.last)this.pending=this.pending.filter(row=>row.seq>n);}
   record(type,text,meta={},media=null){
     let speaker=roles[type], change=null;
@@ -67,15 +80,18 @@ export class BroadcastMemory {
       if(result.status!=='persisted'||!['prepare_song','clarify_song'].includes(result.tool))return;
       speaker='engine';text='已收到点歌请求：'+result.request;
     } else return;
+    const recap=type==='speech.completed' && !!this.recapSpeech && meta.speechId===this.recapSpeech;
+    if(recap){this.recapSpoken=true;this.recapSpeech=null;}
     const shared=speaker==='z' && !!this.lastTopic && meta.replyTo?.includes(this.lastTopic.id);
-    this.pending.push({seq:++this.last,speaker,shared:!!shared,text:text.slice(0,360),...(change?{change}:{})});
+    this.pending.push({seq:++this.last,speaker,...(recap?{recapDay:this.binding.day}:{}),shared:!!shared,text:text.slice(0,360),...(change?{change}:{})});
   }
   recall(){
     const topic=this.lastTopic?.text||'', words=grams(topic), day=this.binding.day;
-    const entries=(this.binding.entries||[]).map((e,i)=>{
+    const yesterday=/昨天|昨晚/.test(topic), ownWords=/我.{0,12}(?:说|讲|提|发|点过)/.test(topic);
+    const entries=(this.binding.entries||[]).filter(e=>!yesterday||e.day===day-1).map((e,i)=>{
       const overlap=[...grams(e.text)].filter(k=>words.has(k)).length;
       const songs=songTopic.test(topic)&&songTopic.test(e.text);
-      return {e,score:overlap*5+(songs?4:0)+(/昨天|昨晚/.test(topic)&&e.day===day-1?4:0),i};
+      return {e,score:overlap*5+(songs?4:0)+(ownWords&&e.speaker==="player"?24:0),i};
     }).filter(x=>!topic||x.score>0||/之前|上次|还记得|昨天|昨晚/.test(topic))
       .sort((a,b)=>b.score-a.score||b.i-a.i).slice(0,3).map(x=>x.e);
     const stories=this.binding.stories||[];
@@ -91,7 +107,7 @@ export class BroadcastMemory {
       }
       if(count)entries.unshift({id:story.id,layer:story.layer,status:['hinted','unfolding','unfolded'][count-1],text:story.steps.slice(0,count).join('。')});
     }
-    return {day,stage:this.binding.stage,entries:entries.slice(0,3),next:next?{id:next.id,layer:next.layer,step:next.step,line:next.line}:null};
+    return {day,today:this.binding.today,stage:this.binding.stage,entries:entries.slice(0,3),next:next?{id:next.id,layer:next.layer,step:next.step,line:next.line}:null};
   }
 }
 

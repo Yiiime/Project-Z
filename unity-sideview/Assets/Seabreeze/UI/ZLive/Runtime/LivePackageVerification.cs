@@ -28,6 +28,11 @@ namespace ZLive {
             yield return new WaitForSecondsRealtime(1);
             var ui = FindFirstObjectByType<GameUI>();
             var game = GameSession.Instance;
+            bool verifyDay=Array.IndexOf(Environment.GetCommandLineArgs(),"--verify-daytime-recap")>=0;
+            if(verifyDay && game && game.State.day==1 && game.State.period==0) {
+                game.Memory.CommitLine("verify-daytime","player","z","测试私话：蓝信封不能在直播里说。","","private_player_chat");
+                for(int i=0;i<3;i++)game.Clock.Advance();
+            }
             if (!ui || !game || game.State.day != 1 || game.State.period != 3) { Fail("evening save"); yield break; }
             typeof(GameUI).GetMethod("ToggleOverlay",Member).Invoke(ui,new object[]{"phone"});
             yield return new WaitForSecondsRealtime(1);
@@ -45,6 +50,24 @@ namespace ZLive {
             var draft = root.Q<TextField>(className:"chat-input");
             var chat = root.Q<ScrollView>(className:"chat");
             var send = (Button)typeof(LiveFeatureController).GetField("sendButton",Member).GetValue(feature);
+            if(verifyDay) {
+                deadline=Time.realtimeSinceStartupAsDouble+35;
+                bool heard=false;
+                while(!heard && Time.realtimeSinceStartupAsDouble<deadline) {
+                    var current=(JObject)typeof(LiveFeatureController).GetField("state",Member).GetValue(feature);
+                    foreach(var ev in (JArray)current["publicEvents"]) {
+                        string kind=(string)ev["type"], text=(string)ev["text"];
+                        if(text.Contains("蓝信封") || (!heard && (kind=="npc.message" || kind=="player.message"))) { Fail("recap privacy or ordering"); yield break; }
+                        if(kind=="speech.completed" && !heard) {
+                            if(!text.Contains("上午") || !text.Contains("朋友")) { Fail("missing daytime opening"); yield break; }
+                            heard=true;
+                        }
+                    }
+                    yield return null;
+                }
+                if(!heard) { Fail("no unprompted host speech"); yield break; }
+                Debug.Log("LIVE_PACKAGE_DAYTIME_RECAP_PASS");
+            }
             var lines = new[]{"晚上的海风好舒服。","想听你唱一首歌。"};
             foreach (string line in lines) {
                 draft.value = line;

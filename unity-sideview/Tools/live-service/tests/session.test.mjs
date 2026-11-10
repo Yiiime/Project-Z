@@ -8,7 +8,7 @@ import {ArtifactStore,loadEnvironment,Providers} from '../server/providers.mjs';
 import {LiveSession} from '../server/session.mjs';
 import {normalizeAgentInput,parseAgentReply,buildAgentRequest} from '../server/shared/worker/agent-director.js';
 const frame=()=>new Promise(r=>setImmediate(r));
-async function fixture(t){const root=fs.mkdtempSync(path.join(os.tmpdir(),'z-unity-test-'));const providers={env:{},config:async()=>({enabled:false}),generate:async()=>({action:'wait',speech:'',mood:'neutral',handledIds:[],wakeAfterMs:120000,memory:''})};const s=new LiveSession({root:path.join(root,'sessions'),providers,artifacts:new ArtifactStore(path.join(root,'artifacts')),songRoot:fileURLToPath(new URL('../server/assets/songs',import.meta.url))});await s.initialize();clearInterval(s.engine._timer);t.after(()=>{s.close();fs.rmSync(root,{recursive:true,force:true});});s.control(envelope(s,{action:'resume'}));return s;}
+async function fixture(t,memory=null){const root=fs.mkdtempSync(path.join(os.tmpdir(),'z-unity-test-'));const providers={env:{},config:async()=>({enabled:false}),generate:async()=>({action:'wait',speech:'',mood:'neutral',handledIds:[],wakeAfterMs:120000,memory:''})};const s=new LiveSession({root:path.join(root,'sessions'),memory,providers,artifacts:new ArtifactStore(path.join(root,'artifacts')),songRoot:fileURLToPath(new URL('../server/assets/songs',import.meta.url))});await s.initialize();clearInterval(s.engine._timer);t.after(()=>{s.close();fs.rmSync(root,{recursive:true,force:true});});s.control(envelope(s,{action:'resume'}));return s;}
 const envelope=(s,extra={})=>({protocolVersion:1,sessionId:s.id,epoch:s.epoch,...extra});
 const receipt=(s,c,status,extra={})=>s.receipt(envelope(s,{executorLeaseId:s.lease,commandId:c.commandId,taskId:c.taskId,resourceRevision:c.resourceRevision,payload:{...Object.fromEntries(['artifactId','playbackId','speechId','stage','round','view','modality'].filter(k=>c.payload[k]!==undefined).map(k=>[k,c.payload[k]])),status,...extra}}));
 const latest=(s,type)=>[...s.commands.values()].filter(c=>c.type===type).at(-1);
@@ -179,4 +179,26 @@ test('five minutes of audience display receipts follow room, call and singing pa
  assert.equal(sample.names,8);assert(new Set(period(60000,120000).map(x=>x[1])).size>=5);
  assert(!e.inbox.some(m=>!m.mine));
  const before=serial;s.control(envelope(s,{action:'end'}));e._clock+=30000;a.tick();await frame();assert.equal(serial,before);
+});
+
+
+test('daytime recap opens on a host turn with no chat, is saved only on delivery and survives refresh/restart',async t=>{
+ const memory={worldId:'a'.repeat(32),runId:'b'.repeat(32),day:2,today:['上午在咖啡店附近和岛上的朋友说了会儿话']};
+ const s=await fixture(t,memory);s.engine._tick();await frame();
+ const first=latest(s,'host.present');assert.match(first.payload.text,/上午在咖啡店/);
+ assert(!s.engine.facts.some(e=>['player.message','npc.message'].includes(e.type)));
+ assert(!s.broadcast.recapSpoken);receipt(s,first,'interrupted',{reason:'aborted'});
+ assert(s.broadcast.opening());s.engine._clock+=5000;s.engine._tick();await frame();
+ const c=latest(s,'host.present');assert.notEqual(first.commandId,c.commandId);
+ receipt(s,c,'started',{durationMs:2000,positionMs:0});receipt(s,c,'completed',{positionMs:2000});
+ assert(s.broadcast.recapSpoken);assert.equal(s.broadcast.pending.filter(r=>r.recapDay===2).length,1);
+ s.broadcast.refresh(memory);s.engine._tick();assert.equal(latest(s,'host.present').commandId,c.commandId);
+ const restored=new LiveSession({root:s.root,providers:s.providers,artifacts:s.artifacts,songRoot:s.songRoot,saved:s.persistData()});
+ t.after(()=>restored.close());assert.equal(restored.broadcast.opening(),null);
+});
+test('an empty day stays quiet; a late daytime checkpoint schedules its own host turn',async t=>{
+ const m={worldId:'a'.repeat(32),runId:'b'.repeat(32),day:1};
+ const s=await fixture(t,m);s.engine._tick();assert(!latest(s,'host.present'));
+ s.heartbeat(envelope(s,{executorLeaseId:s.lease,memory:{...m,today:['和岛上的朋友说了会儿话']}}));
+ s.engine._tick();await frame();assert.match(latest(s,'host.present').payload.text,/朋友/);
 });

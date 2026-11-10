@@ -381,7 +381,7 @@ export function createServer({
                     recipient: event.recipientId,
                     conversationId: event.conversationId,
                     channel: event.channel || "private_player_chat",
-                    location,
+                    location: event.locationId || event.location || "",
                     seq: event.seq,
                     hour: when,
                   });
