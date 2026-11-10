@@ -36,12 +36,12 @@ public sealed partial class LiveAudioPlayer:MonoBehaviour {
             while(position<duration){await Frame();cancel.ThrowIfCancellationRequested();if(Paused)continue;position=Mathf.Min(duration,position+Time.unscaledDeltaTime*1000);string shown=SafePrefix(text,Mathf.FloorToInt(text.Length*position/duration));Caption?.Invoke(shown);if(position-last>=600){last=position;await Receipt(command,new JObject{{"status","progress"},{"positionMs",Mathf.RoundToInt(position)},{"text",shown}});}}
             Caption?.Invoke(text);await Frame();await Receipt(command,new JObject{{"status","completed"},{"positionMs",Mathf.RoundToInt(duration)}});
         }
-    }finally{playingSpeechId=null;Source.Stop();RestoreFade();Character?.EndCue();voiceGate.Release();}}
+    }finally{Caption?.Invoke("");playingSpeechId=null;Source.Stop();RestoreFade();Character?.EndCue();voiceGate.Release();}}
     public async Task Play(JObject command,CancellationToken cancel){var p=(JObject)command["payload"];if(!manifests.TryGetValue((string)p["artifactId"],out var clips))throw new Exception("media_not_prepared");await voiceGate.WaitAsync(cancel);try{float total=0;foreach(JObject meta in clips)total+=(await Decode(meta,cancel)).length*1000+((int?)meta["pauseAfterMs"]??0);float offset=0;await WaitReady(cancel);
         for(int i=0;i<clips.Count;i++){var meta=(JObject)clips[i];var clip=await Decode(meta,cancel);float clipDurationMs=clip.length*1000;Character?.Cue((string)meta["mood"],(string)meta["gesture"],"smooth");Caption?.Invoke((string)meta["text"]);Source.clip=clip;Source.Play();Character?.BeginSpeaking();await Frame();cancel.ThrowIfCancellationRequested();if(i==0)await Receipt(command,new JObject{{"status","started"},{"durationMs",Mathf.RoundToInt(total)},{"positionMs",0}});
             await Receipt(command,new JObject{{"status","progress"},{"positionMs",Mathf.RoundToInt(offset)},{"lineIndex",i}});await PlayClip(command,clip,(string)meta["text"],meta["words"] as JArray,offset,i,cancel,titleManifests.Contains((string)p["artifactId"]));offset+=clipDurationMs;float pause=(int?)meta["pauseAfterMs"]??0,waited=0;while(waited<pause){await Frame();cancel.ThrowIfCancellationRequested();if(!Paused)waited+=Time.unscaledDeltaTime*1000;}offset+=pause;
         }await Receipt(command,new JObject{{"status","completed"},{"positionMs",Mathf.RoundToInt(total)}});
-    }finally{playingSpeechId=null;Source.Stop();RestoreFade();Character?.EndCue();voiceGate.Release();}}
+    }finally{Caption?.Invoke("");playingSpeechId=null;Source.Stop();RestoreFade();Character?.EndCue();voiceGate.Release();}}
     async Task WaitReady(CancellationToken cancel){while(Paused){cancel.ThrowIfCancellationRequested();await Frame();}cancel.ThrowIfCancellationRequested();}
     async Task PlayClip(JObject command,AudioClip clip,string text,JArray words,float offset,int line,CancellationToken cancel,bool titleOnly=false) {
         float last=-1000,seconds=0,stalled=0,activeTime=0;

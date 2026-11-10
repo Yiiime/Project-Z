@@ -4,7 +4,6 @@ import {validateAgendaUpdates,validateTopicProgress} from '../ui/session-continu
 // Host decisions and isolated NPC generation; no provider keys or full skills in UI.
 import {TALENT_GESTURES, EXPRESSION_GESTURES, playableSongs} from '../ui/talent-config.js';
 import {AGENT_BUNDLE} from './agent-bundle-data.js';
-import {CALL_STORY} from '../ui/call-contract.js';
 import {releaseInput,hardReviewCheck,REVIEW_ISSUES,QUALITY_ISSUES} from './host-review.js';
 import {Z_PERSONA, Z_CURRENT_WORLD} from './z-persona.js';
 const ENDPOINT = 'https://api.deepseek.com/chat/completions';
@@ -84,7 +83,7 @@ export function normalizeAgentInput(raw) {
     if(candidate.segment!==undefined){const part=keys(candidate.segment,['index','scope']);if(candidate.role!=='host'||!Number.isInteger(part.index)||part.index<0||part.index>5||!['sentence','reply'].includes(part.scope))throw bad();normalized.segment={index:part.index,scope:part.scope};}
     if(candidate.plannedTool!==undefined){
       const tool=keys(candidate.plannedTool,['name','targetId']);
-      if(candidate.role!=='host'||candidate.intent!=='tool'||!['prepare_song','clarify_song','cancel_song','play_prepared_song','start_singing','replay_talent','finish_activity','offer_call_story'].includes(tool.name))throw bad();
+      if(candidate.role!=='host'||candidate.intent!=='tool'||!['prepare_song','clarify_song','cancel_song','play_prepared_song','start_singing','replay_talent','finish_activity'].includes(tool.name))throw bad();
       normalized.plannedTool={name:tool.name,targetId:str(tool.targetId,100,true)};
     }
     const publicEvents=list(c.publicEvents,40,normalizePublicEvent),sessionEvents=list(c.sessionEvents,32,normalizePublicEvent);
@@ -109,16 +108,10 @@ export function normalizeAgentInput(raw) {
     if(raw.kind!=='host')throw bad();
     const c=keys(v.call,['active','id','input','turns','audienceOpen','story','audienceCandidates','audienceReason']);
     if(c.active!==true||!UUID.test(c.id)||!['idle','listening','reviewing'].includes(c.input)||!Number.isInteger(c.turns)||c.turns<0||c.turns>100000||typeof c.audienceOpen!=='boolean')throw bad();
-    context.call={active:true,id:c.id,input:c.input,turns:c.turns,audienceOpen:c.audienceOpen,story:null,catalog:CALL_STORY};
+    context.call={active:true,id:c.id,input:c.input,turns:c.turns,audienceOpen:c.audienceOpen};
     context.call.audienceCandidates=list(c.audienceCandidates,5,m=>{keys(m,['id','npcId','name','text']);if(!NPCS.some(n=>n.npc_id===m.npcId&&n.display_name===m.name))throw bad();return {id:str(m.id,100),npcId:m.npcId,name:str(m.name,80),text:str(m.text,72)};});
     context.call.audienceReason=c.audienceReason||'none';if(!['none','invited','cadence'].includes(context.call.audienceReason)||context.call.audienceCandidates.length&&!c.audienceOpen||new Set(context.call.audienceCandidates.map(m=>m.id)).size!==context.call.audienceCandidates.length)throw bad();
-    if(c.story!==null){
-      const s=keys(c.story,['id','step','status','choices']);
-      if(s.id!==CALL_STORY.id||!Number.isInteger(s.step)||s.step<0||s.step>=CALL_STORY.steps.length||!['offered','skipped','completed'].includes(s.status))throw bad();
-      const choices=list(s.choices,2,x=>str(x,16));
-      if(choices.some((x,i)=>!CALL_STORY.steps[i].choices.some(y=>y.id===x))||s.status==='offered'&&(choices.length!==s.step||choices.includes('skip'))||s.status==='completed'&&(s.step!==1||choices.length!==2||choices.includes('skip'))||s.status==='skipped'&&(choices.at(-1)!=='skip'||s.step!==choices.length-1))throw bad();
-      context.call.story={id:s.id,step:s.step,status:s.status,choices};
-    }
+
   }
   if(v.mediaRuntime!==undefined){
     const r=keys(v.mediaRuntime,['audioEnabled','ttsAvailable']);
@@ -228,8 +221,7 @@ const CALL_HOST_ADAPTER=`
 连麦中通常20—80字，最多160字，一至三句，一次最多一个问题。倾听、具体回应，不强行安慰或每句提问。call.joined时简单招呼，然后等待。空inbox且无新工具/剧情结果时wait，continuation=await_event；不连续独白。必须回答本轮真人消息，handledIds包含对应ID；不要为模拟弹幕跳过来客。
 弹幕继续可见。只在call.audienceCandidates提供了相关已发布弹幕时自然引用，audienceMessageIds最多填写一个对应ID；先接住玩家，再转述弹幕并回到连麦主线。不必每个窗口都读，不编造全体共识，绝不由NPC替来客确认技能或剧情选择。
 唱歌沿用现有工具和真实状态。普通提议用speak，来客已明确请求/同意后才启动技能；不从情绪推导许可。唱歌以当前宿主真实能力为准，TTS朗读不是唱歌。玩家明确请求、参数足够且工具空闲时，本轮直接action=tool执行；不要只说“我来唱”却不调用工具，也不为询问昵称等无关问题搁置已明确的请求。若确有下一步需紧接当前台词执行，用continuation=continue，宿主最多允许一次后续决策。记录当前问题到memory/agenda，在技能完成或失败回执后自然回到它。媒介completed后用finish_activity回到聊天。不要复述回执的技术字段。
-轻剧情只允许call.catalog这张口头明信片。工具offer_call_story args={}只展示选择卡，不生成图片，不改变人设主线、Day或关系值。来客明确要玩或聊过至少两轮且气氛合适时，可用此工具邀请。已有story则不可再次邀请；选择由页面按钮产生，不能替用户选择。offered时等待，skipped不追邀，completed简短回应后回聊天。不能把台词当作执行成功。
-最终JSON继续使用conversation-host协议；以上reply映射speak，request_skill映射现有tool，offer_story映射offer_call_story。不存在独立allowedActions字段。优先可信运行时可用能力，不生成未注册工具。
+直播才艺只有唱歌。连麦中可以自然聊天或点歌。不存在独立allowedActions字段。优先可信运行时可用能力，不生成未注册工具。
 `;
 export function buildAgentRequest(value,now=Date.now()) {
   const c=value.context, config=publicConfig(true);
@@ -322,9 +314,7 @@ export function parseAgentReply(raw,value,{release=false}={}) {
         t.name==='finish_activity'?['taskId','cancel']:
         t.name==='prepare_song'?['messageId']:(t.name==='clarify_song'||t.name==='cancel_song')?['taskId','messageId']:t.name==='play_prepared_song'?['taskId']:t.name==='start_singing'?['songId']:t.name==='replay_talent'?['taskId']:[]));
       if(['preparing','ready','starting','playing','paused'].includes(c.media?.phase)&&!(t.name==='finish_activity'&&a.cancel===true))throw bad();
-      if(t.name==='offer_call_story'){
-        if(!c.call?.active||c.call.story||c.activeSkill||c.call.input!=='idle')throw bad();
-      }else if(t.name==='prepare_song'||t.name==='clarify_song'||t.name==='cancel_song'){
+      if(t.name==='prepare_song'||t.name==='clarify_song'||t.name==='cancel_song'){
         if(!c.singing?.enabled||!playerSources.some(m=>m.id===a.messageId&&m.mine)||!handledIds.includes(a.messageId))throw bad();
         if(t.name==='cancel_song'&&!c.singing.tasks.some(t=>t.id===a.taskId&&!['scheduled','completed','failed','cancelled','rejected'].includes(t.status)))throw bad();
         if(t.name==='clarify_song'&&!c.singing.tasks.some(t=>t.id===a.taskId&&t.status==='needs_input'))throw bad();

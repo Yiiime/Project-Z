@@ -28,7 +28,7 @@ export class NativeVoiceService {
   try{
    const config=await this.config(owner);if(!config.validMode||config.missing.some(k=>k!=='VOLC_VOICEPRINT_ID'))throw Error('voiceprint_not_configured');
    if(config.voiceprintId)return {enrolled:true};validateEnrollmentWav(audio);
-   const {status,data}=await this.api(config,'RegisterVoicePrint',{AudioFormat:0,Audio:audio.toString('base64'),AudioName:'z_'+randomUUID(),Version:2},{signal});
+   const {status,data}=await this.api(config,'RegisterVoicePrint',{AudioFormat:0,Audio:audio.toString('base64'),AudioName:'z_'+randomUUID().replaceAll('-','').slice(0,30),Version:2},{signal});
    if(status!==200||data?.ResponseMetadata?.Error||typeof data?.Result!=='string'||!data.Result)throw Error('voiceprint_registration_failed');
    await fs.mkdir(this.profileRoot,{recursive:true,mode:0o700});const file=this.profile(owner),tmp=file+'.'+randomUUID()+'.tmp';
    await fs.writeFile(tmp,JSON.stringify({appId:config.rtcAppId,id:data.Result,version:2}),{mode:0o600});await fs.rename(tmp,file);return {enrolled:true};

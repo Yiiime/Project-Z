@@ -9,43 +9,62 @@ using UnityEngine.UIElements;
 
 namespace ZLive {
 public sealed partial class LiveFeatureController {
-    VisualElement callBar,storyChoices,normalSpeech,callDialogue,hostRow,playerRow;
-    Label hostLine,playerLine;Button callButton;float thinkingAfter;bool thinkingOffered;
-    bool callChanging,requestingMicrophonePermission,rtcReady;string voiceNotice="",rtcCallId;
-    CancellationTokenSource microphoneCancel,enrollmentCancel;AudioClip enrollmentClip;
+    Button callButton, leaveCall;
+    Label callLabel;
+    Image callIcon;
+    float thinkingAfter;
+    bool thinkingOffered, callChanging, requestingMicrophonePermission, rtcReady, micMuted;
+    string rtcCallId;
+    CancellationTokenSource microphoneCancel,enrollmentCancel;
+    AudioClip enrollmentClip;
     void BuildCompanionUI() {
-        callButton=Icon("mic","点击上麦",ToggleCall);callButton.AddToClassList("call-toggle");form.Insert(form.IndexOf(sendButton),callButton);
-        var speech=document.rootVisualElement.Q(className:"speech-box");
-        normalSpeech=Box("normal-speech");foreach(var child in speech.Children().ToArray()){child.RemoveFromHierarchy();normalSpeech.Add(child);}speech.Add(normalSpeech);
-        callDialogue=Box("call-dialogue");speech.Add(callDialogue);
-        hostRow=Bubble("Z",false,out hostLine);playerRow=Bubble("你",true,out playerLine);
-        callDialogue.Add(hostRow);callDialogue.Add(playerRow);
-        callBar=Class(new ScrollView{verticalScrollerVisibility=ScrollerVisibility.Hidden},"call-story-card");sidebar.Insert(0,callBar);
-        storyChoices=Box("story-choices");callBar.Add(storyChoices);UpdateCallView();
+        callButton=Action("",ToggleCall,"mic-control");
+        callIcon=Art("mic","tool-icon");
+        callButton.Add(callIcon);
+        callLabel=Text("连麦","mic-label");
+        callButton.Add(callLabel);
+        controls.Insert(0,callButton);
+        leaveCall=Action("下麦",LeaveCall,"leave-mic");
+        controls.Insert(1,leaveCall);
+        UpdateCallView();
     }
-    VisualElement Bubble(string name,bool mine,out Label line) {
-        var row=Box(mine?"call-bubble call-player":"call-bubble");row.Add(Text(name,mine?"speaker-z speaker-player":"speaker-z"));
-        var scroll=Class(new ScrollView{verticalScrollerVisibility=ScrollerVisibility.Hidden},"call-line-scroll");line=Text("","caption");scroll.Add(line);row.Add(scroll);return row;
+    void SetHostCaption(string text){
+        caption.text=text??"";
+        speech.style.display=string.IsNullOrEmpty(text)?DisplayStyle.None:DisplayStyle.Flex;
+        if(!string.IsNullOrEmpty(text))thinkingAfter=0;
     }
-    void SetHostCaption(string text){if(!string.IsNullOrEmpty(text))thinkingAfter=0;caption.text=text;if(hostLine!=null){hostLine.text=text;hostRow.style.display=DisplayStyle.Flex;}}
     void SetVoiceDraft(string text,int limit){ReplaceChatDraft(text??"",limit);}
-    void ShowPlayerSpeech(string text,bool final) {
-        if(playerLine==null||string.IsNullOrWhiteSpace(text))return;
-        audioPlayer.CancelThinking();thinkingAfter=final?Time.unscaledTime+.9f:0;thinkingOffered=false;playerLine.text=text;playerRow.style.display=DisplayStyle.Flex;
-        callDialogue.Insert(0,playerRow);hostLine.text=final?"…":"正在听你说…";hostRow.style.display=DisplayStyle.Flex;
+    void ShowPlayerSpeech(string text,bool final){
+        if(string.IsNullOrWhiteSpace(text))return;
+        audioPlayer.CancelThinking();thinkingAfter=final?Time.unscaledTime+.9f:0;
+        thinkingOffered=false;transcript.text="你："+text;
+        transcript.style.display=DisplayStyle.Flex;
+    }
+    bool leavingCall;
+    async void LeaveCall(){
+        if(leavingCall)return;
+        leavingCall=true;
+        CancelMicrophone();
+        UpdateCallView();
+        try{await CallAction("call.end");}finally{leavingCall=false;UpdateCallView();}
     }
     async void ToggleCall() {
-        if(transport==null||enrollmentCancel!=null||SessionClosing||SessionInputBlocked)return;
+        if(transport==null||enrollmentCancel!=null||leavingCall||SessionClosing||SessionInputBlocked)return;
         if(callChanging){microphoneCancel?.Cancel();return;}
-        if((bool?)state?["call"]?["active"]==true){CancelMicrophone();try{await transport.Input("call.end",new JObject());ApplyState(await transport.Request(transport.Route()));}catch(Exception e){Error(e);}return;}
-        callChanging=true;var own=microphoneCancel=CancellationTokenSource.CreateLinkedTokenSource(life.Token);var token=own.Token;
+        if(rtcReady){
+            try{NativeRtc.SetMuted(!micMuted);micMuted=!micMuted;UpdateCallView();}
+            catch(Exception e){Toast(FriendlyError(e));}
+            return;
+        }
+        callChanging=true;var own=microphoneCancel=CancellationTokenSource.CreateLinkedTokenSource(life.Token);var token=own.Token;UpdateCallView();
         try {
             NativeRtc.EnsureAvailable();var config=await transport.Request(transport.Route("/voice/config"));token.ThrowIfCancellationRequested();
+            if((bool?)config["needsEnrollment"]==true&&(bool?)config["credentialsConfigured"]==true){ShowVoiceSettings();return;}
             if((bool?)config["configured"]!=true||(bool?)config["requested"]!=true)throw new LiveProtocolException((bool?)config["needsEnrollment"]==true?"voiceprint_enrollment_required":"voiceprint_not_configured");
             await EnsureMicrophonePermission(token);
             if(locallyPaused){await transport.Control("resume");locallyPaused=false;audioPlayer.Pause(false);}
-            if(muted)ToggleSound();
-            playerLine.text=hostLine.text="";playerRow.style.display=hostRow.style.display=DisplayStyle.None;
+
+            transcript.text="";transcript.style.display=DisplayStyle.None;
             await transport.Input("call.join",new JObject());token.ThrowIfCancellationRequested();
             ApplyState(await transport.Request(transport.Route()));token.ThrowIfCancellationRequested();
             var rtc=await transport.Voice("start");token.ThrowIfCancellationRequested();rtcCallId=(string)rtc["callId"];
@@ -56,7 +75,13 @@ public sealed partial class LiveFeatureController {
             while(!rtcReady){token.ThrowIfCancellationRequested();if(Time.realtimeSinceStartupAsDouble>deadline)throw new LiveProtocolException("voiceprint_connect_timeout");await NextFrame();}
         }catch(OperationCanceledException){if(microphoneCancel==own)await EndCancelledCall();}
         catch(Exception e){Toast(FriendlyError(e));if(microphoneCancel==own)await EndCancelledCall();}
-        finally{if(microphoneCancel==own)callChanging=false;UpdateCallView();}
+        finally{
+            if(microphoneCancel==own){
+                callChanging=false;
+                if(!rtcReady){microphoneCancel=null;own.Dispose();}
+            }
+            if(!disposed)UpdateCallView();
+        }
     }
     async Task EndCancelledCall(){NativeRtc.Stop();try{await transport.Input("call.end",new JObject());ApplyState(await transport.Request(transport.Route()));}catch{}CancelMicrophone();}
 
@@ -66,23 +91,24 @@ public sealed partial class LiveFeatureController {
             case "ready":rtcReady=true;break;
             case "transcript":if((bool?)e["speakerVerified"]==true)ShowPlayerSpeech((string)e["text"],(bool?)e["final"]==true);break;
             case "review":SetVoiceDraft((string)e["text"],360);input.Focus();Toast("请编辑这一句后发送");break;
-            case "discard":hostLine.text=caption.text;break;
-            case "error":Toast(FriendlyError(new LiveProtocolException((string)e["code"])));CancelMicrophone();break;
+            case "discard":transcript.style.display=DisplayStyle.None;break;
+            case "error":Toast(FriendlyError(new LiveProtocolException((string)e["code"])));LeaveCall();break;
         }
     }
     async Task CallAction(string action,JObject payload=null){if(transport==null||locallyPaused||SessionClosing||SessionInputBlocked)return;try{await transport.Input(action,payload??new JObject());ApplyState(await transport.Request(transport.Route()));}catch(Exception e){Error(e);}}
     void UpdateCallView() {
-        if(callButton==null)return;var call=state?["call"];bool active=(bool?)call?["active"]==true;
-        callButton.tooltip=active||callChanging?"点击下麦":"点击上麦";callButton.EnableInClassList("connected",active||callChanging);callButton.SetEnabled(transport!=null&&enrollmentCancel==null&&!SessionClosing&&!SessionInputBlocked);
-        document.rootVisualElement.EnableInClassList("call-active",active);
-        normalSpeech.style.display=active?DisplayStyle.None:DisplayStyle.Flex;callDialogue.style.display=active?DisplayStyle.Flex:DisplayStyle.None;
-        UpdateChatInputLimit();input.textEdition.placeholder=active?"已上麦，也可以打字…":"和 Z 聊聊……";
-        if(rtcCallId!=null&&(!active||(string)call?["id"]!=rtcCallId))CancelMicrophone();
-        var story=call?["story"] as JObject;bool offered=active&&(string)story?["status"]=="offered";callBar.style.display=offered?DisplayStyle.Flex:DisplayStyle.None;
-        string fingerprint=offered?story.ToString():"";if(fingerprint==storyFingerprint)return;storyFingerprint=fingerprint;storyChoices.Clear();if(!offered)return;
-        var step=call["storyDefinition"]?["steps"]?[(int)story["step"]];if(step==null)return;
-        storyChoices.Add(Text("今晚的小片段","eyebrow"));storyChoices.Add(Text((string)step["question"],"song-note"));
-        foreach(JObject choice in (JArray)step["choices"]){string id=(string)choice["id"];int revision=(int)story["revision"];storyChoices.Add(Action((string)choice["label"],()=>_=CallAction("call.story",new JObject{{"choice",id},{"revision",revision}})));}
+        if(callButton==null)return;
+        var call=state?["call"];
+        if(rtcCallId!=null&&((bool?)call?["active"]!=true||(string)call?["id"]!=rtcCallId))CancelMicrophone();
+        callLabel.text=rtcReady?(micMuted?"已静音":"连麦中"):callChanging?"等待接通…":"连麦";
+        string icon=micMuted?"mic-off":"mic";
+        if(callIcon.name!=icon){callIcon.name=icon;callIcon.image=Resources.Load<Texture2D>("LiveGlass/"+icon);}
+        callButton.tooltip=rtcReady?(micMuted?"恢复麦克风":"静音麦克风"):callChanging?"取消连麦":"申请连麦";
+        callButton.SetEnabled(connected&&!leavingCall&&enrollmentCancel==null&&!SessionClosing&&!SessionInputBlocked);
+        leaveCall.style.display=rtcReady?DisplayStyle.Flex:DisplayStyle.None;
+        if(!rtcReady)transcript.style.display=DisplayStyle.None;
+        UpdateChatInputLimit();
+        input.textEdition.placeholder=rtcReady?"已上麦，也可以打字…":"和 Z 聊聊…";
     }
     void UpdateCompanion(){
         if(thinkingAfter>0&&!thinkingOffered&&Time.unscaledTime>=thinkingAfter&&(bool?)state?["call"]?["active"]==true&&(bool?)state?["performance"]?["waiting"]==true&&state?["call"]?["thinkingAudio"] is JObject meta){thinkingOffered=true;_=audioPlayer.Thinking(meta,life.Token);}
@@ -92,33 +118,56 @@ if(transport==null||SessionClosing||SessionInputBlocked){CancelCompanion();retur
         try{var permission=Application.RequestUserAuthorization(UserAuthorization.Microphone);while(!permission.isDone){await NextFrame();token.ThrowIfCancellationRequested();}token.ThrowIfCancellationRequested();if(!Application.HasUserAuthorization(UserAuthorization.Microphone))throw new LiveProtocolException("microphone_permission_required");}
         finally{requestingMicrophonePermission=false;}
     }
-    void CancelMicrophone(){thinkingAfter=0;audioPlayer?.CancelThinking();rtcReady=callChanging=false;rtcCallId=null;microphoneCancel?.Cancel();microphoneCancel?.Dispose();microphoneCancel=null;NativeRtc.Stop();}
+    void CancelMicrophone(){thinkingAfter=0;audioPlayer?.CancelThinking();micMuted=rtcReady=callChanging=false;rtcCallId=null;microphoneCancel?.Cancel();microphoneCancel?.Dispose();microphoneCancel=null;NativeRtc.Stop();}
     void CancelCompanion(){CancelMicrophone();enrollmentCancel?.Cancel();}
     async void ShowVoiceSettings() {
-        OpenDialog("YOUR VOICE","连麦声音设置");
-        var note=Text("正在读取声音设置…","dialog-description");dialogContent.Add(note);
+        OpenDialog("登记你的声音");
+        dialogContent.Add(Action("取消",CloseDialog,"secondary"));
+        var note=Text("正在读取声音设置…","dialog-copy");dialogContent.Add(note);
         try{var config=await transport.Request(transport.Route("/voice/config"));if(note.panel==null)return;
             if((bool?)config["needsEnrollment"]!=true){note.text="已记住你的声音。点击直播麦克风即可连麦。";return;}
             if((bool?)config["credentialsConfigured"]!=true){note.text="声音服务尚未配置，请在本地服务配置中补齐 RTC 与语音凭证。";return;}
-            note.text="先在相对安静的地方录入约 25 秒声音，之后用于区分你和周围的人。录音只用于声纹登记，不保存原录音。";
-            var start=Action("开始录入声音",null,"dialog-primary");dialogContent.Add(start);start.clicked+=()=>EnrollVoice(note,start);
+            note.text="先在相对安静的地方录入约 5 秒有效人声，之后用于区分你和周围的人。录音只用于声纹登记，不保存原录音。";
+            var start=Action("开始录入声音",null,"primary");dialogContent.Add(start);start.clicked+=()=>EnrollVoice(note,start);
         }catch(Exception e){note.text=FriendlyError(e);}
     }
     async void EnrollVoice(Label note,Button start) {
         if(enrollmentCancel!=null)return;if(callChanging||(bool?)state?["call"]?["active"]==true){note.text="请先下麦，再录入声音。";return;}
         var own=enrollmentCancel=CancellationTokenSource.CreateLinkedTokenSource(life.Token);var token=own.Token;start.SetEnabled(false);UpdateCallView();
         EventCallback<DetachFromPanelEvent> detached=_=>own.Cancel();note.RegisterCallback(detached);
+        string device=null;
         try{await EnsureMicrophonePermission(token);if(Microphone.devices.Length==0)throw new LiveProtocolException("microphone_unavailable");
-            string device=Microphone.devices[0];enrollmentClip=Microphone.Start(device,false,26,16000);if(enrollmentClip==null)throw new LiveProtocolException("microphone_unavailable");
-            double began=Time.realtimeSinceStartupAsDouble;
-            while(Time.realtimeSinceStartupAsDouble-began<25){token.ThrowIfCancellationRequested();if(note.panel==null)throw new OperationCanceledException();note.text="请用平常的声音聊聊今天：今天我来到了月亮小岛，想和 Z 聊一会儿。工作里有忙碌，也有值得开心的小事……（还剩 "+Mathf.CeilToInt(25-(float)(Time.realtimeSinceStartupAsDouble-began))+" 秒）";await NextFrame();}
-            int frames=Microphone.GetPosition(device);Microphone.End(device);var samples=new float[frames*enrollmentClip.channels];enrollmentClip.GetData(samples,0);
-            int count=(int)((long)frames*16000/enrollmentClip.frequency),voiced=0;var pcm=new short[count];
-            for(int i=0;i<count;i++){float sample=0;int at=Math.Min(frames-1,(int)((long)i*enrollmentClip.frequency/16000));for(int c=0;c<enrollmentClip.channels;c++)sample+=samples[at*enrollmentClip.channels+c]/enrollmentClip.channels;pcm[i]=(short)Mathf.RoundToInt(Mathf.Clamp(sample,-1,1)*32767);if(Mathf.Abs(sample)>.008f)voiced++;}
-            if(voiced<16000*2)throw new LiveProtocolException("voiceprint_recording_too_quiet");
+            device=Microphone.devices[0];enrollmentClip=Microphone.Start(device,false,10,16000);if(enrollmentClip==null)throw new LiveProtocolException("microphone_unavailable");
+            // Count non-silent 20 ms windows; pauses between words do not use the voice budget.
+            int rate=enrollmentClip.frequency, channels=enrollmentClip.channels;
+            int window=Math.Max(1,rate/50), read=0, voicedWindows=0;
+            float[] block=new float[window*channels];
+            double deadline=Time.realtimeSinceStartupAsDouble+9;
+            while(voicedWindows<250&&Time.realtimeSinceStartupAsDouble<deadline){
+                token.ThrowIfCancellationRequested();
+                int available=Microphone.GetPosition(device);
+                while(read+window<=available&&voicedWindows<250){
+                    enrollmentClip.GetData(block,read);
+                    double power=0;foreach(float sample in block)power+=sample*sample;
+                    if(power/block.Length>0.000064)voicedWindows++;
+                    read+=window;
+                }
+                note.text="请自然地说：“今天我来到了月亮小岛，想听 Z 唱一首喜欢的歌。”\n还需约 "+Mathf.CeilToInt((250-voicedWindows)/50f)+" 秒人声";
+                await NextFrame();
+            }
+            token.ThrowIfCancellationRequested();
+            Microphone.End(device);
+            if(voicedWindows<250)throw new LiveProtocolException("voiceprint_recording_too_quiet");
+            var samples=new float[read*channels];enrollmentClip.GetData(samples,0);
+            int count=(int)((long)read*16000/rate);var pcm=new short[count];
+            for(int i=0;i<count;i++){
+                int frame=(int)((long)i*rate/16000);float sample=0;
+                for(int c=0;c<channels;c++)sample+=samples[frame*channels+c]/channels;
+                pcm[i]=(short)Mathf.RoundToInt(Mathf.Clamp(sample,-1,1)*32767);
+            }
             using(var memory=new MemoryStream())using(var writer=new BinaryWriter(memory)){writer.Write(System.Text.Encoding.ASCII.GetBytes("RIFF"));writer.Write(36+count*2);writer.Write(System.Text.Encoding.ASCII.GetBytes("WAVEfmt "));writer.Write(16);writer.Write((short)1);writer.Write((short)1);writer.Write(16000);writer.Write(32000);writer.Write((short)2);writer.Write((short)16);writer.Write(System.Text.Encoding.ASCII.GetBytes("data"));writer.Write(count*2);foreach(short sample in pcm)writer.Write(sample);note.text="正在保存声音设置…";await transport.EnrollVoice(memory.ToArray(),token);}
-            note.text="已记住你的声音，可以回直播间上麦了。";
-        }catch(OperationCanceledException){}catch(Exception e){note.text=FriendlyError(e);}finally{if(enrollmentClip!=null){Microphone.End(null);Destroy(enrollmentClip);enrollmentClip=null;}note.UnregisterCallback(detached);enrollmentCancel=null;own.Dispose();start.SetEnabled(true);UpdateCallView();}
+            CloseDialog();Toast("声音已登记");document.rootVisualElement.schedule.Execute(()=>{if(!disposed&&!leaving&&!SessionClosing)ToggleCall();});
+        }catch(OperationCanceledException){}catch(Exception e){note.text=FriendlyError(e);}finally{if(enrollmentClip!=null){if(device!=null&&Microphone.IsRecording(device))Microphone.End(device);Destroy(enrollmentClip);enrollmentClip=null;}note.UnregisterCallback(detached);enrollmentCancel=null;own.Dispose();start.SetEnabled(true);UpdateCallView();}
     }
 }
 }

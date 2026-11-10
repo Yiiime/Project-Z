@@ -9,11 +9,12 @@ namespace ZLive {
 public static class NativeRtc {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)] delegate int StartFn(string app,string room,string user,string token,string library);
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)] delegate int StateFn();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)] delegate int MuteFn(int muted);
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)] delegate void StopFn();
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)] delegate void ReferenceFn([In] float[] samples,int count,int channels,int rate,float gain);
     [DllImport("/usr/lib/libSystem.B.dylib")] static extern IntPtr dlopen(string file,int mode);
     [DllImport("/usr/lib/libSystem.B.dylib")] static extern IntPtr dlsym(IntPtr handle,string name);
-    static IntPtr library;static StartFn start;static StateFn state;static StopFn stop;static ReferenceFn reference;
+    static IntPtr library;static MuteFn mute;static StartFn start;static StateFn state;static StopFn stop;static ReferenceFn reference;
     static string directory;static volatile bool active;
     public static string RuntimeDirectory {
         get {
@@ -36,7 +37,7 @@ public static class NativeRtc {
         directory=RuntimeDirectory;string file=Path.Combine(directory,"libZLiveRtc.dylib");
         if(!File.Exists(file))throw new LiveProtocolException("rtc_plugin_missing");
         library=dlopen(file,2);if(library==IntPtr.Zero)throw new LiveProtocolException("rtc_plugin_invalid");
-        try{start=Symbol<StartFn>("ZRtcStart");state=Symbol<StateFn>("ZRtcState");stop=Symbol<StopFn>("ZRtcStop");reference=Symbol<ReferenceFn>("ZRtcReference");}
+        try{start=Symbol<StartFn>("ZRtcStart");mute=Symbol<MuteFn>("ZRtcSetMuted");state=Symbol<StateFn>("ZRtcState");stop=Symbol<StopFn>("ZRtcStop");reference=Symbol<ReferenceFn>("ZRtcReference");}
         catch{library=IntPtr.Zero;throw;}
 #else
         throw new LiveProtocolException("rtc_platform_unsupported");
@@ -45,6 +46,7 @@ public static class NativeRtc {
     public static void Start(string app,string room,string user,string token) {
         EnsureAvailable();Stop();if(start(app,room,user,token,directory)!=0)throw new LiveProtocolException("rtc_join_failed");active=true;
     }
+    public static void SetMuted(bool value){if(!active||mute(value?1:0)!=0)throw new LiveProtocolException("rtc_mute_failed");}
     public static int State=>active&&state!=null?state():0;
     public static void Stop(){active=false;stop?.Invoke();}
     public static void Reference(float[] data,int channels,int rate,float gain){if(active)reference?.Invoke(data,data.Length,channels,rate,gain);}
