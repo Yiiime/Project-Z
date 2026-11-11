@@ -27,6 +27,7 @@ namespace Seabreeze
         public bool started;
         public string resumeDialogue = "";
         public MemorySaveState memory;
+        public PhoneSaveState phone = new PhoneSaveState();
 
         public void Sanitize()
         {
@@ -37,6 +38,8 @@ namespace Seabreeze
             if (journal == null) journal = new List<string>();
             if (items == null) items = new List<string>();
             if (relationships == null) relationships = new List<RelationshipValue>();
+            if (phone == null) phone = new PhoneSaveState();
+            phone.Sanitize();
             if (!Enum.TryParse(place, out PlaceId _)) place = "Street";
             if (float.IsNaN(playerX) || float.IsInfinity(playerX)) playerX = -8f;
             if (place == nameof(PlaceId.Restaurant))

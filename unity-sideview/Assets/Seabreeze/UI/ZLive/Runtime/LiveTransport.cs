@@ -56,11 +56,11 @@ public sealed class LiveTransport : IDisposable {
             }
         }
     }
-    public async Task<JObject> Enter(string previous,bool audio,bool character) {
+    public async Task<JObject> Enter(string previous,bool audio,bool character,JObject memory=null) {
         JObject snapshot=null;
         if(!string.IsNullOrEmpty(previous))try{snapshot=await Request("/v1/live/sessions/"+previous);}catch(LiveProtocolException e)when(e.Message=="not_found"){}
         if((string)snapshot?["phase"]=="ended")snapshot=null;
-        if(snapshot==null)snapshot=await Request("/v1/live/sessions",new JObject{{"protocolVersion",1},{"mode","private"},{"capabilities",new JObject{{"audioEnabled",audio},{"characterReady",character}}}});
+        if(snapshot==null)snapshot=await Request("/v1/live/sessions",new JObject{{"memory",memory},{"protocolVersion",1},{"mode","private"},{"capabilities",new JObject{{"audioEnabled",audio},{"characterReady",character}}}});
         SessionId=(string)snapshot["sessionId"];Lease=(string)snapshot["executorLeaseId"];Epoch=(int)snapshot["epoch"];Cursor=(long)snapshot["lastServerSeq"];return snapshot;
     }
     public JObject Envelope()=>new JObject{{"protocolVersion",1},{"eventId",Guid.NewGuid().ToString()},{"sessionId",SessionId},{"epoch",Epoch}};
@@ -106,7 +106,7 @@ public sealed class LiveTransport : IDisposable {
             }
         }
     }
-    public async Task Heartbeat(){var b=Envelope();b["executorLeaseId"]=Lease;b["lastServerSeq"]=Cursor;await Request(Route("/heartbeat"),b);}
+    public async Task Heartbeat(int memoryAck=0,JObject memory=null){var b=Envelope();if(memory!=null){b["memoryAck"]=memoryAck;b["memory"]=memory;}b["executorLeaseId"]=Lease;b["lastServerSeq"]=Cursor;await Request(Route("/heartbeat"),b);}
     public async Task Subscribe(){while(!life.IsCancellationRequested){try{
         using(var request=new HttpRequestMessage(HttpMethod.Get,BaseUrl+Route("/events?afterSeq="+Cursor)))using(var response=await http.SendAsync(request,HttpCompletionOption.ResponseHeadersRead,life.Token)){
             if(!response.IsSuccessStatusCode)throw new LiveProtocolException("resync_required");Connection?.Invoke("connected");

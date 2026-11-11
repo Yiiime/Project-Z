@@ -1,5 +1,6 @@
 import {SessionContinuity,validateAgendaUpdates,validateTopicProgress} from './session-continuity.js';
 import {LiveEngine} from './live-engine.js';
+import {AUDIENCE_NAMES} from '../audience-roster.js';
 import {AudienceDirector} from './audience-director.js';
 import {TALENT_MOODS,TALENT_GESTURES} from './talent-config.js';
 const id=()=>crypto.randomUUID();
@@ -15,7 +16,7 @@ export class ConversationEngine extends LiveEngine {
     this.addEventListener('speak',({detail})=>{
       if(detail.resume)return;
       this._cancelTopic('new_speech');
-      this.audience?.dialogue.invalidate(this._state.call?.active?'host':null);
+      this.audience?.dialogue.invalidate(this._state.call?.active||this.audience?.config.phases?'host':null);
       if(detail.source!=='deepseek')return;
       if(this.handoffEnabled)this.audience.setHostPreview({speechId:detail.id,text:detail.text});
       // These are dispatched speech cues, not proof that a model was rendered.
@@ -23,19 +24,21 @@ export class ConversationEngine extends LiveEngine {
       this.recentExpressions=this.recentExpressions.slice(-6);
     });
     this._state.stage='free';this._state.stageLabel='和 Z 聊聊天';
-    this.audience=new AudienceDirector({now:()=>this._clock,request:(p,o)=>this.client.generate(p.kind==='audience'?{...p,context:{...p.context,experience:'autonomous'}}:p,o),
+    this.audience=new AudienceDirector({now:()=>this._clock, phase:()=>this._state.media?.kind==='singing'&&this._state.media.phase==='playing'?'performing':this._state.call?.active?'call':this._clock<15000?'opening':'chat',request:(p,o)=>this.client.generate(p.kind==='audience'?{...p,context:{...p.context,experience:'autonomous'}}:p,o),
       canPublish:()=>this.enabled&&this._started&&!this._destroyed&&!this._state.paused,
-      canCommit:()=>!this.pending,
+      canCommit:()=>!!this.audience.config.phases||!this.pending,
       canPreview:()=>this.handoffEnabled&&!this.pending&&!this.audiencePreview&&!this._unhandledInbox().some(m=>m.mine)&&!this._mediaPlaying()&&(!this._active||this.speechPlan?.result.action==='speak'&&this.speechPlan.result.continuation!=='await_event'),
       onSelected:preview=>this._selectAudiencePreview(preview),
       onSelectionEnd:entry=>this._endAudiencePreview(entry),
       canAdvance:()=>!this.inbox.some(m=>m.mine),publish:item=>{
-        const m=this._message(item.text,{id:item.messageId,name:({wind:'晚风来信',moon:'月亮邮差',salt:'海盐汽水'})[item.npc_id],type:'chat',source:'agent-audience'});
-        this._receive(m,false,item.npc_id);}});
+        const m=this._message(item.text,{id:item.messageId,name:AUDIENCE_NAMES[item.npc_id],type:'chat',source:'agent-audience'});
+        if(this.audience.config.phases&&!this._state.call?.active&&(item.intent!=='advance'||this._clock<(this.nextAudienceTurn||0)||this._hasPendingPlayerChat()||this._mediaPlaying())){
+          this._public('npc.message',m.text,{id:m.id,speakerRole:'audience',speakerId:item.npc_id});this._emitState();
+        }else{if(this.audience.config.phases)this.nextAudienceTurn=this._clock+20000;this._receive(m,false,item.npc_id);}}});
   }
   start(){if(this._started||this._destroyed)return;this._started=true;this._lastTick=performance.now();this._timer=setInterval(()=>this._tick(),160);
     this._public('session.opened','Z 的直播已开始，现在是自由对话，没有预设节目。');this._emitState();}
-  configureAgent(client,config={}){this.client=client;this.singingEnabled=config.singingBackground===true;clearInterval(this.singingPoll);if(this.singingEnabled){void this._pollSinging();this.singingPoll=setInterval(()=>void this._pollSinging(),5000);}this.enabled=!!config.enabled;this.topicEnabled=config.topic?.enabled===true;this.handoffEnabled=config.policy?.audience?.handoff===true;this.audience.setConfig(config.policy?.audience||{});this.audience.dialogue.configure(config.review);
+  configureAgent(client,config={}){this.client=client;this.singingEnabled=config.singingBackground===true;clearInterval(this.singingPoll);if(this.singingEnabled){void this._pollSinging();this.singingPoll=setInterval(()=>void this._pollSinging(),5000);}this.enabled=!!config.enabled;this.topicEnabled=config.topic?.enabled===true;this.handoffEnabled=config.policy?.audience?.handoff===true;this.audience.setConfig(config.policy?.audience||{});this.audience.dialogue.configure(config.review);this.audience.dialogue.setConcurrent(!!this.audience.config.phases);
     Object.assign(this._state.agent,{enabled:this.enabled,errorCode:null,source:this.enabled?'ready':'local',capabilities:config.capabilities||[]});
     this._state.textMode=this.enabled?'provider':'local';this._state.textStatus=this.enabled?'ready':'local';this.nextWake=this._clock;this._emitState();}
   configureSpeech(director){this.speechAudio=director;director.addEventListener('preparation',({detail})=>this.audience.dialogue.log({stage:'host.audio.prepare',...detail}));}
@@ -130,7 +133,7 @@ export class ConversationEngine extends LiveEngine {
     const published=this.audience.getPublicEvents().find(x=>x.id===e.id);if(!published)return;
     const index=this.facts.findIndex(x=>x.id===e.id);if(index>=0)this.facts[index]=published;else this.facts.push(published);
     this.facts=this.facts.slice(-12);this.session.record(published);
-    if(!['speech.progress','speech.completed'].includes(type)){
+    if(!['speech.progress','speech.completed'].includes(type)&&!(type==='npc.message'&&this.audience.config.phases)){
       const transitionWasPreparing=Boolean(this.topicWork||this.topicProgress);
       this._cancelTopic('public_context_changed');
       const matchingPublication=type==='npc.message'&&this.audiencePreview?.status==='published'&&this.audiencePreview.messageId===e.id;
@@ -148,7 +151,7 @@ export class ConversationEngine extends LiveEngine {
   _receive(m,mine,speakerId){
     this.inboxVersion++;
     if(!mine&&this.audiencePreview?.status==='pending'&&this.audiencePreview.messageId!==m.id){this.audience.clearPreparation('other_message_published');this.audiencePreview=null;}
-    if(mine&&this.handoffEnabled){this.audience.clearPreparation('player_arrived');this.audiencePreview=null;}
+    if(mine&&(this.handoffEnabled||this.audience.config.phases)){this.audience.clearPreparation('player_arrived');this.audiencePreview=null;}
     if(this.audiencePreview?.messageId===m.id&&this.audiencePreview.text===m.text&&this.audiencePreview.npcId===speakerId)this.audiencePreview.status='published';
     this.inbox.push({id:m.id,name:m.name,text:m.text,mine});if(this.inbox.length>16){const old=this.inbox.shift();this._setReceipt(old.id,'seen');}
     this._public(mine?'player.message':'npc.message',m.text,{id:m.id,speakerRole:mine?'player':'audience',speakerId:speakerId||(mine?'player':m.name)});

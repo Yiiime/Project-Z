@@ -53,6 +53,7 @@ namespace Seabreeze
             var scaler=cg.GetComponent<CanvasScaler>();scaler.uiScaleMode=CanvasScaler.ScaleMode.ScaleWithScreenSize;scaler.referenceResolution=new Vector2(1920,1080);scaler.matchWidthOrHeight=.5f;
             if(EventSystem.current==null)
             { var es=new GameObject("UI Event System",typeof(EventSystem),typeof(InputSystemUIInputModule)); es.transform.SetParent(transform,false); }
+            InitializePhone();
             BuildHUD(); BuildDialogue(); BuildInteraction(); BuildToast();
             overlayRoot=Stretch("Overlay",canvasRect,Vector2.zero,Vector2.zero);overlayGroup=overlayRoot.gameObject.AddComponent<CanvasGroup>();overlayRoot.gameObject.SetActive(false);
             session.Changed+=OnStateChanged;
@@ -64,6 +65,7 @@ namespace Seabreeze
         }
         void OnDestroy()
         {
+            DisposePhone();
             if(nativeLive!=null)nativeLive.Close();
             if(Instance==this){Instance=null;Time.timeScale=1f;}
             if(session!=null)
@@ -238,6 +240,7 @@ namespace Seabreeze
                 if(toastGroup!=null)toastGroup.alpha=Mathf.MoveTowards(toastGroup.alpha,Time.unscaledTime<toastUntil?1:0,Time.unscaledDeltaTime*2);
                 return;
             }
+            TickPhone();
             if(session.Dialogue.IsOpen&&!HasOverlay)
             {
                 if(dialogueText.maxVisibleCharacters!=int.MaxValue)
@@ -254,7 +257,7 @@ namespace Seabreeze
                     if(GameInput.Pressed(Key.Digit3)&&choiceButtons.Count>2)Choose(2);
                 }
             }
-            if(GameInput.Pressed(Key.Escape)) {if(IsPhonePage(overlayMode)&&overlayMode!="phone")OpenOverlay("phone");else if(HasOverlay)CloseOverlay();else OpenOverlay("pause");}
+            if(GameInput.Pressed(Key.Escape)) {if(IsPhonePage(overlayMode))PhoneBack();else if(HasOverlay)CloseOverlay();else OpenOverlay("pause");}
             else if(!session.Dialogue.IsOpen)
             {
                 if(GameInput.Pressed(Key.M))ToggleOverlay("map");
@@ -280,6 +283,7 @@ namespace Seabreeze
         void OpenOverlay(string mode)
         {
             if(!initialized||IsTransitioning||overlayBusy||(session.Memory?.PlayerChatOpen??false))return;
+            if(!IsPhonePage(mode))FinishPhoneClose();
             overlayBusy=true;Time.timeScale=0f;session.SetOverlay(true);HideInteraction();dialogueRoot.gameObject.SetActive(false);
             overlayRoutine=StartCoroutine(ShowOverlayRoutine(mode));
         }
@@ -350,6 +354,7 @@ namespace Seabreeze
         }
         void FinishCloseOverlay()
         {
+            FinishPhoneClose();
             if(nativeLive!=null){nativeLive.Close();nativeLive=null;}
             canvas.enabled=true;overlayBusy=false;overlayRoutine=null;
             overlayMode="";Time.timeScale=1f;overlayRoot.gameObject.SetActive(false);session.SetOverlay(IsTransitioning);

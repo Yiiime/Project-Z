@@ -342,3 +342,29 @@ test('task choices use the same durable Unity event queue as spoken lines',async
   assert.equal(invited.code,200,invited.data.error);assert.equal(invited.data.seq,2);
   assert.equal(app.engine.tasks.collaborators('native','tools')[0].status,'invited');
 });
+
+test("Z progresses from public childhood detail to a private follow-up only after actual speech",async t=>{
+  let offer;
+  const {post}=await setup(t,context=>{
+    offer=context.z_story;
+    const result=reply(context);
+    if(offer)result.dialogue=offer.line+"。";
+    return result;
+  });
+  await post("game/open",base,true);
+  await post("game/sync",{...base,eventData:{id:"first_public",seq:1,kind:"live_memory",speakerId:"z",
+    text:"李庭是我的发小。",day:1,period:0,channel:"livestream",stepId:"childhood_friend",receiptId:"1"}},true);
+  await post("game/focus",{...base,actorId:"z"},true);
+  await post("game/sync",{...base,eventData:{...event("followup",2),text:"你和李庭后来怎么样了？"}},true);
+  const ask=await post("game/utterance",{...base,actorId:"z",recipientId:"player",conversationId:"c1",scene:"Street"},true);
+  assert.equal(ask.code,200,ask.data.error);assert.equal(offer.count,1);
+  const checkpoint=JSON.parse(ask.data.checkpoint);
+  assert.equal(checkpoint.world.zNarrated.length,1);
+  const heard=await post("game/sync",{...base,eventData:{...event("actually_spoken",3),speakerId:"z",recipientId:"player",
+    proposalId:ask.data.proposalId,text:ask.data.text}},true);
+  assert.equal(heard.code,200,heard.data.error);
+  const after=JSON.parse(heard.data.checkpoint);
+  assert.equal(after.world.zNarrated.at(-1).step,2);
+  assert.equal(after.broadcast.stories.find(s=>s.id==="childhood_friend").count,1);
+  assert(!after.broadcast.entries.some(e=>e.id==="actually_spoken"));
+});

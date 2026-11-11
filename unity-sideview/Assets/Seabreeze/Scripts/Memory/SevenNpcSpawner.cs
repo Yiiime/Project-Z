@@ -28,6 +28,7 @@ namespace Seabreeze
                 root.transform.position=new Vector3(Mathf.Clamp(x,-stage.width/2+1,stage.width/2-1),0,0);
                 var interact=root.AddComponent<Interactable>();interact.id=definition.id;interact.label=definition.displayName;interact.npc=true;
                 var npc=root.AddComponent<NpcPresence>();npc.npcId=definition.id;npc.character=definition.appearance;npc.location=stage.place;
+                npc.motionResource=definition.motion;
                 var runtime=ScriptableObject.CreateInstance<NpcData>();runtime.hideFlags=HideFlags.DontSave;
                 runtime.id=definition.id;runtime.displayName=definition.displayName;runtime.description=definition.occupation;runtime.accent=definition.Accent;
                 runtime.schedule=definition.schedule!=null&&definition.schedule.Length>0?definition.schedule:new[]{new NpcSchedule { place=stage.place,from=TimePeriod.Morning,through=TimePeriod.Night }};

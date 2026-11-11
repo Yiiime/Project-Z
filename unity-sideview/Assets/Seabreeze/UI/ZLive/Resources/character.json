@@ -13,9 +13,9 @@
   "loadTimeoutMs": 20000,
   "layout": {
     "x": 0.49,
-    "top": -0.03,
-    "height": 1.6,
-    "maxWidth": 0.95
+    "top": 0.092,
+    "height": 1.25,
+    "maxWidth": 0.742
   },
   "parameters": {
     "mouthOpen": "ParamMouthOpenY",

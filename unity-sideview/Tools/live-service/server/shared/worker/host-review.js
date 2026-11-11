@@ -2,7 +2,8 @@
 // candidate self-attestation. Preserve every player correction and cited fact.
 export const REVIEW_ISSUES=['contradiction','unsupported_fact','private_memory','false_action','fabricated_reaction'];
 export const QUALITY_ISSUES=['repetitive','over_questioning','overlong','missed_request'];
-export const SPEAKER_NAMES={Z:'Z',player:'连麦来客',wind:'晚风来信',moon:'月亮邮差',salt:'海盐汽水'};
+import {AUDIENCE_NAMES} from '../audience-roster.js';
+export const SPEAKER_NAMES={Z:'Z',player:'连麦来客',...AUDIENCE_NAMES};
 const key=e=>JSON.stringify([e.id,e.type,e.text,e.speakerRole,e.speakerId,e.status,e.speechId,e.replyTo]);
 export function releaseInput(c,{expanded=false,persona='',world={}}={}) {
  const seen=new Set(),all=[...(c.sessionEvents||[]),...(c.publicEvents||[])].filter(e=>{const k=key(e);if(seen.has(k))return false;seen.add(k);return true;});

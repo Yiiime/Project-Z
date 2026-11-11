@@ -1,0 +1,412 @@
+{
+  "status": "colour-preview-only",
+  "sourceFile": "idle-before-colour.png",
+  "sourceSha256": "1e67e3458495eace2579d2622badf250f3b0ce129a9e1e9eec367380c2388895",
+  "reference": "median material colours across all 32 approved walking frames",
+  "referenceFrames": [
+    {
+      "file": "zhengyi_walk_000.png",
+      "sha256": "6d3312f41aa937ed44cd85b668fc3d0a70efef13200f97a7ac45542484d9efb7"
+    },
+    {
+      "file": "zhengyi_walk_001.png",
+      "sha256": "e44ec36b3a432e33a2db2f31ea75902480914d75d79bea8fd180e1105f04f6cf"
+    },
+    {
+      "file": "zhengyi_walk_002.png",
+      "sha256": "52a2fc043f68f3c5da146a8e637aac8d04d29459c37f0f0324a46ff523028a61"
+    },
+    {
+      "file": "zhengyi_walk_003.png",
+      "sha256": "df66625180dcc13e72f4639ca21d4e289a117c94f4c7afaefec0fb361f8d4db8"
+    },
+    {
+      "file": "zhengyi_walk_004.png",
+      "sha256": "d0423ea68e48f0ad9c41c64bb3730205028602b5a23dd6384cf0de5befa30b9c"
+    },
+    {
+      "file": "zhengyi_walk_005.png",
+      "sha256": "b096089183f42932a04e55e607df743b3cbf4ddfe4cf00d098d57b5efce7915d"
+    },
+    {
+      "file": "zhengyi_walk_006.png",
+      "sha256": "78b85dfd7d960a03b6172fc69fa8f0807494d03c2c6d84196f7ec4097242491c"
+    },
+    {
+      "file": "zhengyi_walk_007.png",
+      "sha256": "893e2a5697fa64d196ed16e0e3f382ac9bcd44e2e4b02ea7fb5d36344eacb401"
+    },
+    {
+      "file": "zhengyi_walk_008.png",
+      "sha256": "c81416f2c46254e1bae9f6008e5b71da73a4ca11dfe72bb12b760b3c1214ede4"
+    },
+    {
+      "file": "zhengyi_walk_009.png",
+      "sha256": "5385ab63d81dc058f332ac10aa8b870f24889e3a6e020a7068c719192cb7b7ce"
+    },
+    {
+      "file": "zhengyi_walk_010.png",
+      "sha256": "f2c09d226a1949437cd379fc030e92535b24257c0150e26732f19f02f566408a"
+    },
+    {
+      "file": "zhengyi_walk_011.png",
+      "sha256": "be0aef120875aaf612f4381bd616a92e88edea904ea9ebd48e192a3e21d2c63c"
+    },
+    {
+      "file": "zhengyi_walk_012.png",
+      "sha256": "6497064dfb53f85b78c786fc72ad6a1e8722497e00bd690459fb0f284a6b6336"
+    },
+    {
+      "file": "zhengyi_walk_013.png",
+      "sha256": "b9dfb5851661b0b87c4437ffde6fd0b86745ae0a90e8b922f137bc2edc13971e"
+    },
+    {
+      "file": "zhengyi_walk_014.png",
+      "sha256": "ae9260fd5a1cc4a3942fc9d7e0cb1dbcced27742744fe3c178891fa3b8760224"
+    },
+    {
+      "file": "zhengyi_walk_015.png",
+      "sha256": "c2fd8c28f8da0a2254a4301806b77be12e5ebb7f928345cd8c0abc57b3fcc677"
+    },
+    {
+      "file": "zhengyi_walk_016.png",
+      "sha256": "03e9fe16ae7df81964ba506e895a562d27b8f54924f3745e2c38719b9c47d4fc"
+    },
+    {
+      "file": "zhengyi_walk_017.png",
+      "sha256": "2c1462bac85c60c543e8ab4e540aca1ccf1aef6a181fd89f20e52d83898f982b"
+    },
+    {
+      "file": "zhengyi_walk_018.png",
+      "sha256": "9d7edd212e22c78cefdb56204dbc86464b30261fb09377d064b3e57e02862cac"
+    },
+    {
+      "file": "zhengyi_walk_019.png",
+      "sha256": "ca053ac852013f5b1ff5f5b073e5f3ab525e544a4a2763c6ed30d07f2a366754"
+    },
+    {
+      "file": "zhengyi_walk_020.png",
+      "sha256": "94bdfb3a9d5b84c6b662b0c9b0bc51e6d3f59d58fdd644a560c4f9c3ec0b057e"
+    },
+    {
+      "file": "zhengyi_walk_021.png",
+      "sha256": "44d561a8f7547ba478f59c0c891d953f91d1da23d54709fe4d75b3e99baf4904"
+    },
+    {
+      "file": "zhengyi_walk_022.png",
+      "sha256": "ade6d64e147916a90eba9e691e66bef8c4490821f5aa4c7132f4535d34ad3fb1"
+    },
+    {
+      "file": "zhengyi_walk_023.png",
+      "sha256": "38857b651c7d9d8c9fab6da1353a448537d33e334127facd20bab6560f5e6465"
+    },
+    {
+      "file": "zhengyi_walk_024.png",
+      "sha256": "dd60c4c455c28ee1506053302046bba347b10e8ce39a9e27768717406ce357a7"
+    },
+    {
+      "file": "zhengyi_walk_025.png",
+      "sha256": "75ae409c1ea31a0e225b4b2ba82a3fc13023d38f94139c7a29f4377ea8d6c21c"
+    },
+    {
+      "file": "zhengyi_walk_026.png",
+      "sha256": "190ec64855546bda1ef7dd1056d2f1a91fe0d1067dd719be55c1e41e881c660a"
+    },
+    {
+      "file": "zhengyi_walk_027.png",
+      "sha256": "80f9a6466b05acc6f7cd1ca01f4209add1da8c57513b3577d8e5fd9ee0d707df"
+    },
+    {
+      "file": "zhengyi_walk_028.png",
+      "sha256": "30751e4ae98b09efaf59a511a5da81c94fe29b411930b2ae02d2c34b26e5a574"
+    },
+    {
+      "file": "zhengyi_walk_029.png",
+      "sha256": "307608e63ef58b749b0680653f449bf276f616e3802dee4e6cfe109bdd38f795"
+    },
+    {
+      "file": "zhengyi_walk_030.png",
+      "sha256": "853ee353ea4de3f289a6f0d7b6567bddfdcedf8b99143757d43e36ad00b4d873"
+    },
+    {
+      "file": "zhengyi_walk_031.png",
+      "sha256": "381181f8113f8e8e073da5566c33a0bb030120084bd67f2f9ee80412d3fd62d3"
+    }
+  ],
+  "canvas": [
+    600,
+    1056
+  ],
+  "alphaByteIdentical": true,
+  "silhouetteUnchanged": true,
+  "positionAndScaleUnchanged": true,
+  "colourSpace": "sRGB/D65 CIELAB for numerical colour correction",
+  "redrawing": false,
+  "gameModified": false,
+  "parameters": {
+    "hair": {
+      "sourceMedianLab": [
+        74.62355767347013,
+        10.737954453555798,
+        -3.340078099284094
+      ],
+      "targetMedianLab": [
+        69.09337392327842,
+        8.616618853788811,
+        -1.9731893004932888
+      ],
+      "lightnessGain": 1.08,
+      "labOffset": [
+        -5.530183750191711,
+        -2.1213355997669865,
+        1.3668887987908052
+      ]
+    },
+    "skin": {
+      "sourceMedianLab": [
+        89.52140955632271,
+        9.807158138062377,
+        8.353012731951303
+      ],
+      "targetMedianLab": [
+        84.88559832596675,
+        9.720832095470088,
+        11.167611738313422
+      ],
+      "lightnessGain": 1.08,
+      "labOffset": [
+        -4.635811230355955,
+        -0.08632604259228849,
+        2.814599006362119
+      ]
+    },
+    "shirt": {
+      "sourceMedianLab": [
+        77.26083523470899,
+        6.8569385390133135,
+        -18.736709260311592
+      ],
+      "targetMedianLab": [
+        71.6131711711765,
+        6.339019407353486,
+        -18.41709676958583
+      ],
+      "lightnessGain": 1.0260456359328896,
+      "labOffset": [
+        -5.647664063532488,
+        -0.517919131659828,
+        0.31961249072576337
+      ]
+    },
+    "trousers": {
+      "sourceMedianLab": [
+        24.323311908251213,
+        9.691036372527911,
+        -22.466637828997715
+      ],
+      "targetMedianLab": [
+        23.64626078447438,
+        3.9818426674059078,
+        -14.01077819716906
+      ],
+      "lightnessGain": 1.08,
+      "labOffset": [
+        -0.6770511237768346,
+        -5.709193705122003,
+        8.455859631828655
+      ]
+    },
+    "boots": {
+      "sourceMedianLab": [
+        24.806413640202948,
+        4.574289336211041,
+        -2.540862512037523
+      ],
+      "targetMedianLab": [
+        23.93252769660547,
+        0.3109075819137247,
+        -0.07834031200140423
+      ],
+      "lightnessGain": 1.0333336056240852,
+      "labOffset": [
+        -0.8738859435974788,
+        -4.263381754297316,
+        2.4625222000361187
+      ]
+    }
+  },
+  "beforeStatistics": {
+    "hair": {
+      "medianLab": [
+        74.62355767347013,
+        10.737954453555798,
+        -3.340078099284094
+      ],
+      "lightness20": 64.63848393641473,
+      "lightness80": 77.61436684958008,
+      "pixels": 31118
+    },
+    "skin": {
+      "medianLab": [
+        89.52140955632271,
+        9.807158138062377,
+        8.353012731951303
+      ],
+      "lightness20": 77.85632352229318,
+      "lightness80": 90.06835351961809,
+      "pixels": 4303
+    },
+    "shirt": {
+      "medianLab": [
+        77.26083523470899,
+        6.8569385390133135,
+        -18.736709260311592
+      ],
+      "lightness20": 69.97251458964293,
+      "lightness80": 79.0429225798233,
+      "pixels": 19623
+    },
+    "trousers": {
+      "medianLab": [
+        24.323311908251213,
+        9.691036372527911,
+        -22.466637828997715
+      ],
+      "lightness20": 23.063219665414906,
+      "lightness80": 24.98687772046098,
+      "pixels": 30922
+    },
+    "boots": {
+      "medianLab": [
+        24.806413640202948,
+        4.574289336211041,
+        -2.540862512037523
+      ],
+      "lightness20": 21.078926462221972,
+      "lightness80": 28.14752044572888,
+      "pixels": 14183
+    }
+  },
+  "afterStatistics": {
+    "hair": {
+      "medianLab": [
+        69.04187144930793,
+        8.686738105790791,
+        -2.090867577489597
+      ],
+      "lightness20": 58.594340584272395,
+      "lightness80": 72.31543187126731,
+      "pixels": 29405
+    },
+    "skin": {
+      "medianLab": [
+        84.66084885313859,
+        9.608108452292985,
+        11.075251499884796
+      ],
+      "lightness20": 72.39747113663405,
+      "lightness80": 85.44316803410638,
+      "pixels": 4519
+    },
+    "shirt": {
+      "medianLab": [
+        71.72267260838991,
+        6.399231164061825,
+        -18.470074630324483
+      ],
+      "lightness20": 64.52304193245591,
+      "lightness80": 73.46393835769244,
+      "pixels": 19509
+    },
+    "trousers": {
+      "medianLab": [
+        23.77437798650145,
+        4.298971172626537,
+        -14.67105230291903
+      ],
+      "lightness20": 22.23836141616215,
+      "lightness80": 24.399203527295256,
+      "pixels": 30798
+    },
+    "boots": {
+      "medianLab": [
+        23.971724512453974,
+        0.8557828923135558,
+        -0.32095871144419696
+      ],
+      "lightness20": 20.40989452004806,
+      "lightness80": 27.252567182691678,
+      "pixels": 14204
+    }
+  },
+  "referenceStatistics": {
+    "hair": {
+      "medianLab": [
+        69.09337392327842,
+        8.616618853788811,
+        -1.9731893004932888
+      ],
+      "lightness20": 57.97528041931687,
+      "lightness80": 72.88289937521009
+    },
+    "skin": {
+      "medianLab": [
+        84.88559832596675,
+        9.720832095470088,
+        11.167611738313422
+      ],
+      "lightness20": 73.14341524399433,
+      "lightness80": 87.38038334396005
+    },
+    "shirt": {
+      "medianLab": [
+        71.6131711711765,
+        6.339019407353486,
+        -18.41709676958583
+      ],
+      "lightness20": 65.29099283658793,
+      "lightness80": 74.59764537104331
+    },
+    "trousers": {
+      "medianLab": [
+        23.64626078447438,
+        3.9818426674059078,
+        -14.01077819716906
+      ],
+      "lightness20": 21.042818339417366,
+      "lightness80": 25.100246505115386
+    },
+    "boots": {
+      "medianLab": [
+        23.93252769660547,
+        0.3109075819137247,
+        -0.07834031200140423
+      ],
+      "lightness20": 20.301696421400802,
+      "lightness80": 27.60591212907071
+    }
+  },
+  "materialSampleDistances": {
+    "hair": {
+      "beforeSampleDistance": 6.0787648437806,
+      "afterSampleDistance": 0.1463468182203416
+    },
+    "skin": {
+      "beforeSampleDistance": 5.424035906567974,
+      "afterSampleDistance": 0.26786070803731116
+    },
+    "shirt": {
+      "beforeSampleDistance": 5.680361057686694,
+      "afterSampleDistance": 0.13573015186814932
+    },
+    "trousers": {
+      "beforeSampleDistance": 10.225206750966048,
+      "afterSampleDistance": 0.7436036585457593
+    },
+    "boots": {
+      "beforeSampleDistance": 5.000411604154526,
+      "afterSampleDistance": 0.5977367162925132
+    }
+  },
+  "note": "Material-sample Lab distances are supporting measurements, not a perceptual identity score."
+}

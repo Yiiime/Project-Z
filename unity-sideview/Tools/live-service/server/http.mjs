@@ -71,7 +71,7 @@ export async function createLiveServer({root,providers,artifacts,songRoot,token,
    const creationKey=owner+':'+key;if(creations.has(creationKey)){const c=creations.get(creationKey);if(c.fingerprint!==fingerprint)return json(res,409,{error:'idempotency_conflict'});return json(res,201,(await c.promise).snapshot());}
    if([...sessions.values()].filter(s=>s.owner===owner&&s.phase!=='ended').length+(pendingCreations.get(owner)||0)>=(tokens?2:20))return json(res,429,{error:'session_limit'});
    pendingCreations.set(owner,(pendingCreations.get(owner)||0)+1);
-   const promise=(async()=>{try{const s=new LiveSession({root,providers:currentProviders,owner,artifacts,songRoot,capabilities:body.capabilities});await s.initialize();sessions.set(s.id,s);return s;}finally{pendingCreations.set(owner,pendingCreations.get(owner)-1);}})();creations.set(creationKey,{fingerprint,promise});return json(res,201,(await promise).snapshot());
+   const promise=(async()=>{try{const s=new LiveSession({root,providers:currentProviders,owner,artifacts,songRoot,memory:body.memory,capabilities:body.capabilities});await s.initialize();sessions.set(s.id,s);return s;}finally{pendingCreations.set(owner,pendingCreations.get(owner)-1);}})();creations.set(creationKey,{fingerprint,promise});return json(res,201,(await promise).snapshot());
   }
   const match=url.pathname.match(/^\/v1\/live\/sessions\/([a-f0-9-]+)(?:\/(events|inputs|receipts|control|heartbeat|artifacts)(?:\/([a-f0-9]{64}))?)?$/);if(!match)return json(res,404,{error:'not_found'});
   const s=sessions.get(match[1]);if(!s||s.owner!==owner)return json(res,404,{error:'not_found'});const route=match[2];

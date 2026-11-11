@@ -28,6 +28,7 @@ export class Policy {
       p = defs.info.properties,
       ids = [...this.catalog.actors.keys()];
     if (actor === "z") {
+      p.day_song_reply = {enum:["accept","discuss","decline"]};
       delete p.persuasion;
       delete p.support_willingness;
       delete p.changes.properties.persuasion;

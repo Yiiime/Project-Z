@@ -336,7 +336,7 @@ PlayerSettings:
   enableCrashReportAPI: 0
   cameraUsageDescription: 
   locationUsageDescription: 
-  microphoneUsageDescription: 用于直播连麦，实时识别你说的话并与 Z 对话；仅在设置中主动录入声纹。
+  microphoneUsageDescription: 允许使用麦克风，以便说一句话登记声音，随后与 Z 连麦聊天和点歌。
   bluetoothUsageDescription: 
   macOSTargetOSVersion: 12.0
   switchNMETAOverride: 

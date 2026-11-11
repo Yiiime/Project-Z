@@ -7,11 +7,11 @@
     },
     {
       "path": "main-agent/config/skills-scheduling.json",
-      "sha256": "81d8e216b12b429153249a7c0ae2cfe3c09de64fd9e5fff5c1c8ab4fd562601b"
+      "sha256": "a19adbd773a22cf911c2bff20ca2a55d08d384468926a6154d7ce6b3a40f80c3"
     },
     {
       "path": "main-agent/config/skills-source-lock.json",
-      "sha256": "8e0e02dcdcf5f40be58eb1ea0241da7e16c5263e9d4f0d04ec9ff738fc77b6d0"
+      "sha256": "c0a080888c34d35a8910bd38fd0bc2d76a41a1d438b8b30bba3ec75484a30b49"
     },
     {
       "path": "main-agent/prompts/conversation-host.txt",
@@ -27,7 +27,7 @@
     },
     {
       "path": "skills/audience-reaction/SKILL.md",
-      "sha256": "867c3868c13f9dfd375a904b0016307594e9d329eccba7b41fcac9aef12e08c0"
+      "sha256": "b2c963b69a40d70887385c33b5c88e01e4c1fb531c2cf96c318609910e811be4"
     },
     {
       "path": "skills/audience-reaction/agents/openai.yaml",
@@ -39,7 +39,7 @@
     },
     {
       "path": "skills/audience-reaction/references/dialogue-review.md",
-      "sha256": "a81a5bbbb5a4ed083ba613c6ab6b71d28c8af78de161af93ff6ca182e3e7f25a"
+      "sha256": "4f487cf4d94a8621f23c1290a5a6c6d80b6d2e637641314794ba7963ed9e081d"
     },
     {
       "path": "skills/audience-reaction/references/examples.md",
@@ -59,7 +59,7 @@
     },
     {
       "path": "skills/call-companion/SKILL.md",
-      "sha256": "1bf7febb823d3f69a2fd10ec86cdcdb9d79bc5a970e8154eb0f8721ad1af8a49"
+      "sha256": "ad17809ae5ee6a5804ed0b1a1464551a0507c87258445efd3e1753288755e0c3"
     },
     {
       "path": "skills/call-companion/references/audience.md",
@@ -67,19 +67,19 @@
     },
     {
       "path": "skills/call-companion/references/companionship.md",
-      "sha256": "140105a5cf119f78fac64282cc0a982ba6901cc01f526a21c10e089860c96472"
+      "sha256": "566c12a2899f9d0a7790dbb3bdacd8ee16b247830353518c2e026c6c53ada427"
     },
     {
       "path": "skills/call-companion/references/contract.md",
-      "sha256": "79fcf14c1169bae39cbaf558d71eb0f4071c70abe44803c743b387b94611e47f"
+      "sha256": "14a07902b3a88812b124a0469d724bc18b52c8c3a77cb5e25db74d4285aa2754"
     },
     {
       "path": "skills/call-companion/references/examples.md",
-      "sha256": "2d83790bd55f32d8f99c61285be08e3a8abdbb3e7b8438da865e53a8e1c4e7a1"
+      "sha256": "4216511429e4c8c4842d2d5e0d791471fb100098920fa09601bc6f1ed512214e"
     },
     {
       "path": "skills/call-companion/references/story.md",
-      "sha256": "1d570f423232c7c17ad164f59f8cce08adde5e818c70ad97e6916021db49f4cf"
+      "sha256": "187940eca89e158fa01f6508d74825d7c07c7ac5d56d70b60ad2f1aad4d1261a"
     },
     {
       "path": "skills/call-companion/references/talents.md",
@@ -87,7 +87,7 @@
     },
     {
       "path": "skills/call-companion/references/zz-native-adapter.md",
-      "sha256": "2e43a1c322b854e7a333eca926631e8e6c3882050677acc4263a3ba84deff0ab"
+      "sha256": "e5d105b4339410dcca8a2c93993456cc6f84e1ceca36ca608f9309b5b6311779"
     },
     {
       "path": "skills/live-session-control/SKILL.md",

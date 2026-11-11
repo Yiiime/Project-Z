@@ -1,3 +1,5 @@
+import {dayConversation} from "./lib/daytime.mjs";
+import {localSongSubmit,DaySongDispatch} from "./lib/day-song-dispatch.mjs";
 import http from "node:http";
 import {
   readFileSync,
@@ -26,6 +28,7 @@ export function environmentFromFile(path) {
       process.env[found[1]] = found[2].trim().replace(/^(['"])(.*)\1$/, "$2");
   }
 }
+import {memoryProjection, narrativeChange, rememberNarration} from "./lib/live-memory.mjs";
 const logicalHour = (day, period) => {
   if (
     !Number.isInteger(day) ||
@@ -44,6 +47,7 @@ export function createServer({
   dbPath = join(APP_ROOT, ".data/unified.sqlite"),
   root = PROJECT,
   providerFactory,
+  songSubmit,
   decide,
   backgroundEnabled = true,
   configPath = process.env.Z_MEMORY_CONFIG ||
@@ -72,6 +76,7 @@ export function createServer({
   let configurationRevision = 1;
   const engine = new Engine(store, catalog, provider, { decide }),
     token = randomBytes(24).toString("hex");
+  const daySongs=songSubmit ? new DaySongDispatch(songSubmit) : null;
   let background = false;
   const status = () => ({
     ok: true,
@@ -134,12 +139,14 @@ export function createServer({
     w.responseRevision++;
     w.lastAccess = Date.now();
     engine.save(w);
+    const checkpoint=engine.checkpoint(world);
+    daySongs?.update(w.worldId,w.day,checkpoint.broadcast.songs);
     return {
       ok: true,
       runId: w.runId,
       seq: w.seq,
       responseRevision: w.responseRevision,
-      checkpoint: JSON.stringify(engine.checkpoint(world)),
+      checkpoint: JSON.stringify(checkpoint),
       ...extra,
     };
   };
@@ -308,6 +315,13 @@ export function createServer({
           w.period = p.period;
           w.hour = target;
           engine.save(w);
+          if(daySongs){
+            // A checkpoint can be rolled back, or reopened after an offline evening.
+            daySongs.resetWorld(w.worldId);
+            const events=engine.records(w,"event");
+            const pastDays=new Set(events.filter(e=>e.daySongBridge).map(e=>Math.floor(e.hour/24)+1).filter(day=>day<w.day));
+            for(const day of pastDays)daySongs.update(w.worldId,day,dayConversation(events,day).songs);
+          }
           result = gameResponse(world);
         } else {
           const w = checkRun(p);
@@ -343,6 +357,22 @@ export function createServer({
                   seq: event.seq,
                   hour: when,
                 });
+              } else if (event.kind === "live_memory") {
+                if(event.channel!=="livestream" || !["player","z","engine"].includes(event.speakerId) ||
+                   typeof event.text!=="string" || !event.text.length || event.text.length>360)
+                  throw new TurnError("直播记忆回执无效");
+                const actual=engine.addEvent(world,{id:event.id,seq:event.seq,hour:when,text:event.text,
+                  kind:event.speakerId==="engine"?"fact":"claim",speaker:event.speakerId,channel:"livestream",
+                  location:"live_room",subject:event.accepted===true && event.speakerId==="z"?"player_and_z":undefined,visible:["z","player"],conversationId:event.conversationId});
+                if(event.speakerId==="z" && event.stepId){
+                  const current=engine.world(world);
+                  const card=memoryProjection(current,engine.records(current,"event")).stories.find(s=>s.id===event.stepId);
+                  const change=narrativeChange(card,event.text);
+                  if(change && change.step===Number(event.receiptId)){
+                    rememberNarration(current,change,"livestream",actual.id);
+                    engine.save(current);
+                  }
+                }
               } else if (event.kind === "utterance") {
                 const audience =
                   event.channel === "private_player_chat" ||
@@ -364,7 +394,7 @@ export function createServer({
                     recipient: event.recipientId,
                     conversationId: event.conversationId,
                     channel: event.channel || "private_player_chat",
-                    location,
+                    location: event.locationId || event.location || "",
                     seq: event.seq,
                     hour: when,
                   });
@@ -445,6 +475,7 @@ export function createServer({
                 throw new TurnError("不支持该事件类型；剧情必须由引擎显式投递");
               const stored = engine.event(world, event.id);
               if (stored) {
+                if(event.kind==="utterance" && stored.speaker==="z" && stored.channel==="private_player_chat")stored.daySongBridge=true;
                 stored.game_payload_hash = digest;
                 store.put("event", stored);
               }
@@ -701,6 +732,7 @@ export function createServer({
   }, 1500);
   timer.unref();
   server.on("close", () => {
+    daySongs?.close();
     clearInterval(timer);
     for (const w of store.experiments().filter((w) => w.worldId))
       engine.cancel(w.worldId);
@@ -715,6 +747,7 @@ if (import.meta.url === pathToFileURL(resolve(process.argv[1] || "")).href) {
   environmentFromFile(flag("--env-file"));
   const port = Number(flag("--port") || process.env.Z_MEMORY_PORT || 4330);
   const app = createServer({
+    songSubmit:localSongSubmit(process.env.Z_LIVE_CONNECTION_FILE || resolve(APP_ROOT,"../../UserSettings/ZLive/local-connection.json")),
     dbPath:
       flag("--db") ||
       process.env.Z_MEMORY_DB ||

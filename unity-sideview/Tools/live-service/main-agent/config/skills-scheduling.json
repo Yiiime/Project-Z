@@ -38,7 +38,7 @@
     "maxForegroundActivities": 1,
     "maxMainVoiceOwners": 1,
     "reservedHostModelSlots": 1,
-    "maxAudienceRequests": 1,
+    "maxAudienceRequests": 2,
     "maxTalentModelRequests": 1,
     "pauseAudienceWhenPlayerWaiting": true,
     "coalescePendingProgress": true,
@@ -53,12 +53,12 @@
     "idleTopicLease": "host_or_npc_exclusive"
   },
   "audience": {
-    "generationDeadlineMs": 1500,
+    "generationDeadlineMs": 6500,
     "coalesceWindowMs": 200,
     "firstPublishDelayMs": 0,
-    "publishGapMs": 700,
-    "candidateTtlMs": 6000,
-    "npcPublishCooldownMs": 15000,
+    "publishGapMs": 3650,
+    "candidateTtlMs": 18000,
+    "npcPublishCooldownMs": 20000,
     "maxChainNpcMessages": 3,
     "maxChainAdvances": 2,
     "maxChars": 36,
@@ -68,12 +68,18 @@
     "heatFromNpcPublishedCount": false,
     "phases": {
       "opening": {
-        "maxItems": 2,
-        "maxAdvances": 0
+        "maxItems": 1,
+        "maxAdvances": 0,
+        "publishGapMs": 3800,
+        "jitterMs": 350,
+        "maxPoolSize": 2
       },
       "chat": {
-        "maxItems": 3,
-        "maxAdvances": 1
+        "maxItems": 1,
+        "maxAdvances": 1,
+        "publishGapMs": 3350,
+        "jitterMs": 750,
+        "maxPoolSize": 2
       },
       "question": {
         "maxItems": 3,
@@ -84,8 +90,11 @@
         "maxAdvances": 0
       },
       "performing": {
-        "maxItems": 2,
-        "maxAdvances": 0
+        "maxItems": 1,
+        "maxAdvances": 0,
+        "publishGapMs": 2750,
+        "jitterMs": 800,
+        "maxPoolSize": 3
       },
       "displayed": {
         "maxItems": 3,
@@ -102,8 +111,18 @@
       "ended": {
         "maxItems": 0,
         "maxAdvances": 0
+      },
+      "call": {
+        "maxItems": 1,
+        "maxAdvances": 1,
+        "publishGapMs": 5100,
+        "jitterMs": 1250,
+        "maxPoolSize": 2
       }
-    }
+    },
+    "intervalMs": 1600,
+    "maxConcurrent": 2,
+    "maxPoolSize": 2
   },
   "tasks": {
     "maxGenerationRetries": 1,
