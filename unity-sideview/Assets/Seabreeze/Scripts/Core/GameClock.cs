@@ -19,6 +19,7 @@ namespace Seabreeze
         }
         internal void AdvanceFromStory()
         {
+            if (StoryPlaytest.Enabled) return;
             if (!session) return;
             session.State.period++;
             if (session.State.period > 3) { session.State.period = 0; session.State.day++; }
@@ -27,6 +28,17 @@ namespace Seabreeze
             session.Story?.Notify(Period == TimePeriod.Morning ? "新的一天，海风又从窗边吹了进来。" : "不知不觉，已经是" + PeriodName(Period) + "了。");
             session.NotifyChanged();
             session.Save();
+        }
+        public void CompleteStoryTaskPeriod()
+        {
+            if (!StoryPlaytest.Enabled || session == null) return;
+            if (session.State.period < 3) session.State.period++;
+            else if (string.IsNullOrEmpty(session.State.storyProgress.winner))
+            {
+                session.State.storyProgress.livePending = true;
+                session.State.storyProgress.liveId = Guid.NewGuid().ToString("N");
+            }
+            Refresh(); session.NotifyChanged(); session.Save();
         }
         public bool CompleteLiveSession(string sessionId)
         {

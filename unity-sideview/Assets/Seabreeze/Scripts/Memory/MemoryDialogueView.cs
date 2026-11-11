@@ -206,7 +206,7 @@ namespace Seabreeze
             if(speechPanel.gameObject.activeSelf&&(Time.unscaledTime>speechUntil||fullView||overlay))speechPanel.gameObject.SetActive(false);
             if(PlayerInputReady&&GameInput.Pressed(Key.Escape))memory.Conversations.Cancel("玩家结束交谈");
             RefreshTasks();
-            bool showTasks=fullView&&!overlay&&(offeredTask!=null||activeTasks.Count>0);
+            bool showTasks=!StoryPlaytest.Enabled&&fullView&&!overlay&&(offeredTask!=null||activeTasks.Count>0);
             if(taskPanel.gameObject.activeSelf!=showTasks||taskLayoutVisible!=showTasks)
             {
                 taskLayoutVisible=showTasks;

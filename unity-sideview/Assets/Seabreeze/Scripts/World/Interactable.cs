@@ -12,8 +12,9 @@ namespace Seabreeze
         public string arrivalId;
         public bool npc;
         public Vector3 promptOffset = new Vector3(0, 2.8f, 0);
-        public bool Available => isDoor || (GameSession.Instance != null && GameSession.Instance.Story.IsAvailable(id));
-        public void Activate()
+        public virtual bool Available => isDoor || (GameSession.Instance != null && GameSession.Instance.Story.IsAvailable(id));
+        public virtual string Prompt => isDoor ? label : GameSession.Instance.Story.PromptFor(id);
+        public virtual void Activate()
         {
             if (!Available)
                 return;

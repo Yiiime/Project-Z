@@ -16,6 +16,7 @@ namespace Seabreeze
             get
             {
                 if (!session) return "沿着海边走走";
+                if (StoryPlaytest.Enabled) return "完成委托推进时段；四个任务后进入夜间直播。";
                 if (MemoryRuntimeConfig.Enabled) return "走近岛民按 E 交谈；长椅和咖啡可以推进时段。";
                 if (!string.IsNullOrEmpty(session.State.ending)) return "这一日，已经有了自己的名字。还可以继续散步。";
                 if (!Has("postcard_found")) return "海边长椅旁，有一张被风吹来的旧明信片。";
@@ -58,10 +59,10 @@ namespace Seabreeze
                 case "noticeboard": return "看看告示板";
                 case "bicycle": return "看看旧自行车";
                 case "sea": return "听一会儿海";
-                case "bench": case "lighthouse_bench": return "坐一会儿 · 推进时段";
+                case "bench": case "lighthouse_bench": return StoryPlaytest.Enabled ? "坐一会儿 · 不推进时间" : "坐一会儿 · 推进时段";
                 case "radio": return "听听收音机";
                 case "guestbook": return "翻开留言簿";
-                case "coffee": return "喝杯咖啡 · 推进时段";
+                case "coffee": return StoryPlaytest.Enabled ? "喝杯咖啡 · 不推进时间" : "喝杯咖啡 · 推进时段";
                 case "letterbox": return "看看旧邮筒";
                 case "telescope": return "看看远处";
                 default: return "查看";

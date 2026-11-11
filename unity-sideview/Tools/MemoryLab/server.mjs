@@ -16,6 +16,7 @@ import { Catalog, PROJECT } from "./lib/catalog.mjs";
 import { ModelProvider } from "./lib/provider.mjs";
 import { Engine } from "./lib/engine.mjs";
 import { TurnError, canonical } from "./lib/policy.mjs";
+import { StoryTaskService } from "./lib/story-task-service.mjs";
 export function environmentFromFile(path) {
   if (!path) return;
   for (const line of readFileSync(path, "utf8").split("\n")) {
@@ -72,6 +73,8 @@ export function createServer({
   let configurationRevision = 1;
   const engine = new Engine(store, catalog, provider, { decide }),
     token = randomBytes(24).toString("hex");
+  const storyAssetsRoot = dbPath === ":memory:" ? join(tmpdir(), "z-story-"+randomBytes(8).toString("hex")) : join(dirname(dbPath), "story-assets");
+  const storyTasks = new StoryTaskService({root:storyAssetsRoot,provider,catalog,engine});
   let background = false;
   const status = () => ({
     ok: true,
@@ -158,6 +161,13 @@ export function createServer({
       if (req.headers.origin && req.headers.origin !== "http://" + host)
         throw new TurnError("请求来源不匹配");
       if (req.method === "GET") {
+        const storyAsset = url.pathname.match(/^\/api\/story-assets\/([a-f0-9]{32})\/(item|container)\.png$/);
+        if (storyAsset) {
+          const file=join(storyAssetsRoot,storyAsset[1],storyAsset[2]+".png");
+          if(!existsSync(file))return respond(res,{error:"图片尚未就绪"},404);
+          res.writeHead(200,{"Content-Type":"image/png","Cache-Control":"private, max-age=86400","X-Content-Type-Options":"nosniff"});
+          return res.end(readFileSync(file));
+        }
         if (url.pathname === "/")
           return respond(
             res,
@@ -304,6 +314,7 @@ export function createServer({
           if (w.hour > target + 0.001)
             throw new TurnError("当前游戏不能加载未来记忆");
           w.host = "unity";
+          w.storyMode = p.storyPlaytest === true;
           w.day = p.day;
           w.period = p.period;
           w.hour = target;
@@ -311,7 +322,11 @@ export function createServer({
           result = gameResponse(world);
         } else {
           const w = checkRun(p);
-          if (url.pathname === "/api/game/sync") {
+          if (url.pathname === "/api/game/story/plan") {
+            result={...gameResponse(world),storyTask:await storyTasks.plan(p)};
+          } else if (url.pathname === "/api/game/story/status") {
+            result={...gameResponse(world),storyTask:storyTasks.get(p.taskId,world)};
+          } else if (url.pathname === "/api/game/sync") {
             const event = p.eventData;
             if (!event?.id || !Number.isInteger(event.seq))
               throw new TurnError("事件缺少稳定标识和序号");

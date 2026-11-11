@@ -11,7 +11,7 @@ namespace Seabreeze
         {
             public string id,stage;
             public NpcPresence first,second;
-            public bool player,cancelled,sending;
+            public bool player,cancelled,sending,hadPlayerInput,hadPlayerReply;
             public float started;
             public readonly Dictionary<NpcPresence,bool> previous = new Dictionary<NpcPresence,bool>();
         }
@@ -39,8 +39,13 @@ namespace Seabreeze
         public void Initialize(MemoryGameController m,GameSession s,WorldDirector w){memory=m;session=s;world=w;nextDecision=Time.unscaledTime+4;}
         void Update()
         {
-            foreach(var c in sessions.Values.ToArray())if(!WorldReady||!Present(c.first)||(!c.player&&c.stage!="选择是否交谈"&&!Present(c.second))||Time.unscaledTime-c.started>MemoryRuntimeConfig.Settings.conversationTimeout)Finish(c,false);
-            if(!WorldReady||!memory.Client.CanGenerate||Time.unscaledTime<nextDecision||sessions.Values.Any(c=>!c.player))return;
+            foreach(var c in sessions.Values.ToArray())
+            {
+                bool timeout=Time.unscaledTime-c.started>MemoryRuntimeConfig.Settings.conversationTimeout;
+                if(!WorldReady||!Present(c.first)||(!c.player&&c.stage!="选择是否交谈"&&!Present(c.second))||timeout)
+                    Finish(c,StoryPlaytest.Enabled&&c.player&&timeout&&WorldReady&&Present(c.first));
+            }
+            if(StoryPlaytest.Enabled||!WorldReady||!memory.Client.CanGenerate||Time.unscaledTime<nextDecision||sessions.Values.Any(c=>!c.player))return;
             nextDecision=Time.unscaledTime+MemoryRuntimeConfig.Settings.decisionInterval;
             var actors=memory.Spawner.Actors.Where(Eligible).ToArray();if(actors.Length<2)return;
             for(int n=0;n<actors.Length;n++)
@@ -104,7 +109,7 @@ namespace Seabreeze
         public void SendPlayer(string message)
         {
             var c=player;if(c==null||c.sending||!memory.Client.CanGenerate||string.IsNullOrWhiteSpace(message))return;
-            c.sending=true;c.started=Time.unscaledTime;memory.CommitLine(c.id,"player",c.first.npcId,message.Trim(),"","private_player_chat");StartCoroutine(PlayerReply(c));
+            c.hadPlayerInput=true;c.sending=true;c.started=Time.unscaledTime;memory.CommitLine(c.id,"player",c.first.npcId,message.Trim(),"","private_player_chat");StartCoroutine(PlayerReply(c));
         }
         IEnumerator PlayerReply(Conversation c)
         {
@@ -115,19 +120,20 @@ namespace Seabreeze
             if(error==null&&line!=null&&Valid(c))
             {
                 memory.ShowResult(line);
-                if(!string.IsNullOrEmpty(line.result?.dialogue)){memory.CommitLine(c.id,c.first.npcId,"player",line.result.dialogue,line.proposalId,"private_player_chat");CommittedNpcLines++;}
+                if(!string.IsNullOrEmpty(line.result?.dialogue)){memory.CommitLine(c.id,c.first.npcId,"player",line.result.dialogue,line.proposalId,"private_player_chat");CommittedNpcLines++;c.hadPlayerReply=c.hadPlayerInput;}
                 else memory.Client.CommitDecision(line,c.first.npcId,new[]{c.first.npcId,"player"},request.locationId);
                 LastRecalledMemoryIds=line.recalledMemoryIds??Array.Empty<string>();
             }
             c.sending=false;
         }
         public void RequestPlayerReply(){if(player!=null&&!player.sending){player.sending=true;StartCoroutine(PlayerReply(player));}}
-        public void Cancel(string reason="玩家结束交谈"){if(player!=null)Finish(player,false);else foreach(var c in sessions.Values.ToArray())Finish(c,false);}
+        public void Cancel(string reason="玩家结束交谈"){if(player!=null)Finish(player,StoryPlaytest.Enabled);else foreach(var c in sessions.Values.ToArray())Finish(c,false);}
         public void CancelAll(string reason="世界状态变化"){foreach(var c in sessions.Values.ToArray())Finish(c,false);}
         public void ResetTimeline(){CancelAll();cooldown.Clear();planner=0;LastIntentReason="";LastRecalledMemoryIds=Array.Empty<string>();CompletedConversations=CommittedNpcLines=0;}
         void Finish(Conversation c,bool completed)
         {
             if(c==null||c.cancelled)return;c.cancelled=true;memory.Client?.CancelConversation(c.id);
+            if(StoryPlaytest.Enabled&&c.player&&completed&&c.hadPlayerReply&&!c.sending)StoryPlaytestRuntime.Instance?.RecordChat(c.first.npcId,c.id);
             if(c.second!=null)cooldown[Pair(c.first.npcId,c.second.npcId)]=Time.unscaledTime+MemoryRuntimeConfig.Settings.pairCooldown;
             foreach(var old in c.previous)if(old.Key!=null&&old.Key.Movement!=null){held.Remove(old.Key);old.Key.ConversationPartner=null;old.Key.Movement.Interrupt("conversation_finished");old.Key.Movement.SetInteractionHold(false);old.Key.Movement.SimulateDecisions=old.Value;}
             sessions.Remove(c.id);if(completed)CompletedConversations++;

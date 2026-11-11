@@ -226,6 +226,7 @@ namespace Seabreeze
         void Update()
         {
             if(!initialized||session==null)return;
+            if(StoryPlaytest.Enabled && StoryPlaytestRuntime.Instance?.MovieOpen==true){hud.gameObject.SetActive(false);HideInteraction();return;}
             bool playerChat=session.Memory!=null&&session.Memory.PlayerChatOpen;
             hud.gameObject.SetActive(!hidden&&!playerChat);
             if(playerChat){HideInteraction();return;}
@@ -282,6 +283,7 @@ namespace Seabreeze
         }
         void OpenOverlay(string mode)
         {
+            if(StoryPlaytest.Enabled && mode=="live"){ShowToast("完成今天四个委托后，会自动进入夜间直播。");return;}
             if(!initialized||IsTransitioning||overlayBusy||(session.Memory?.PlayerChatOpen??false))return;
             if(!IsPhonePage(mode))FinishPhoneClose();
             overlayBusy=true;Time.timeScale=0f;session.SetOverlay(true);HideInteraction();dialogueRoot.gameObject.SetActive(false);

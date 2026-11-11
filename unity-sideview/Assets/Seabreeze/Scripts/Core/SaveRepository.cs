@@ -18,13 +18,13 @@ namespace Seabreeze
                 {
                     if (!Path.IsPathRooted(VerificationDirectory))
                         throw new InvalidOperationException("Verification saves require an absolute directory.");
-                    return Path.Combine(VerificationDirectory, MemoryRuntimeConfig.Enabled ? "seven-memory-save.json" : "seabreeze-save.json");
+                    return Path.Combine(VerificationDirectory, StoryPlaytest.Enabled ? "story-playtest-save.json" : MemoryRuntimeConfig.Enabled ? "seven-memory-save.json" : "seabreeze-save.json");
                 }
 #endif
                 string directory = Environment.GetEnvironmentVariable("Z_MEMORY_SAVE_ROOT");
                 if (string.IsNullOrEmpty(directory)) directory = Application.persistentDataPath;
                 if (!Path.IsPathRooted(directory)) throw new InvalidOperationException("Save directory must be absolute.");
-                return Path.Combine(directory, MemoryRuntimeConfig.Enabled ? "seven-memory-save.json" : "seabreeze-save.json");
+                return Path.Combine(directory, StoryPlaytest.Enabled ? "story-playtest-save.json" : MemoryRuntimeConfig.Enabled ? "seven-memory-save.json" : "seabreeze-save.json");
             }
         }
         public static string LastError { get; private set; }

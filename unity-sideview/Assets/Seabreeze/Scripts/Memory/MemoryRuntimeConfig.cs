@@ -20,6 +20,7 @@ namespace Seabreeze
                 var asset=Resources.Load<TextAsset>("Memory/integration");
                 settings=asset!=null?JsonUtility.FromJson<MemorySettings>(asset.text):new MemorySettings { enabled=false };
                 string[] args=Environment.GetCommandLineArgs();
+                if(StoryPlaytest.Enabled)settings.serviceUrl="http://127.0.0.1:4347";
                 if(Array.IndexOf(args,"-memorySmokeOutput")>=0)
                 {
                     string saveRoot=Environment.GetEnvironmentVariable("Z_MEMORY_SAVE_ROOT")??"";

@@ -40,11 +40,13 @@ namespace Seabreeze
             Dialogue.Initialize(this);
             Story.Initialize(this);
             IsReady = true;
+            if (StoryPlaytest.Enabled && GetComponent<StoryPlaytestRuntime>() == null) gameObject.AddComponent<StoryPlaytestRuntime>();
             if (!Database) Debug.LogError("Seabreeze story database missing. Run Seabreeze/Rebuild Game Content in the Editor.");
             if (!State.started)
             {
                 State.started = true;
-                if (MemoryRuntimeConfig.Enabled) Story.AddJournal("来到小岛。可以走近岛民按 E 交谈；坐长椅或喝咖啡推进游戏时段。");
+                if (StoryPlaytest.Enabled) Story.AddJournal("剧情试玩：与岛民交谈、领取委托。四个任务结束后进入直播，直播结束才到次日上午。");
+                else if (MemoryRuntimeConfig.Enabled) Story.AddJournal("来到小岛。可以走近岛民按 E 交谈；坐长椅或喝咖啡推进游戏时段。");
                 else { Story.AddJournal("来到汐风镇的第一天。今天没有行程，也许先沿着海边走走。咖啡馆在街道左侧，灯塔在右侧。"); Dialogue.StartDialogue("intro"); }
             }
             else if (!MemoryRuntimeConfig.Enabled && !string.IsNullOrEmpty(State.resumeDialogue)) Dialogue.StartDialogue(State.resumeDialogue);

@@ -512,7 +512,7 @@ export class Engine {
         { id: "wait_here", type: "wait", target: null, parameters: {} },
       ],
       env = j.environment || {};
-    if (j.mode === "player")
+    if (j.mode === "player" && !w.storyMode)
       actions.push(...this.tasks.options(w.worldId, actor, j.event));
     const present =
       env.present_characters ||
@@ -675,7 +675,7 @@ export class Engine {
         cooperation_state: this.tasks.cooperation(w.worldId, j.actor),
       },
       tasks:
-        j.mode === "player"
+        j.mode === "player" && !w.storyMode
           ? this.tasks
               .list(w.worldId, j.actor)
               .map((t) => ({

@@ -14,7 +14,7 @@ namespace Seabreeze
     [Serializable] public sealed class MemoryRequest
     {
         public string worldId,runId,requestId,checkpoint,actorId,recipientId,conversationId,topic,scene,locationId,channel,proposalId,taskId,stepId,receiptId,performerId,responderId,text;
-        public int day,period,turn;public bool accepted,succeeded;
+        public int day,period,turn;public bool accepted,succeeded,storyPlaytest;
         public string[] candidates=Array.Empty<string>(),observers=Array.Empty<string>(),reachableLocations=Array.Empty<string>();
         public JObject details;public MemoryEvent eventData;
     }
@@ -23,7 +23,7 @@ namespace Seabreeze
         public bool ok,configured,verified,endConversation;
         public string error,warning,app,mode,model,runId,requestId,actorId,targetId,reason,topic,proposalId,text,checkpoint;
         public int seq,configurationRevision,responseRevision;
-        public ActorTurn result;public JObject state;
+        public ActorTurn result;public JObject state,storyTask;
         public string[] recalledMemoryIds=Array.Empty<string>();
     }
     [Serializable] public sealed class NpcSavedPosition { public string actorId,place,locationId;public float x;public int day,period; }

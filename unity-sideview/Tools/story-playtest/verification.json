@@ -1,0 +1,48 @@
+{
+  "scope": "NPC story progression local playtest",
+  "backend_tests": {
+    "passed": 45,
+    "failed": 0
+  },
+  "unity": {
+    "version": "6000.3.27f1",
+    "build_passed": true,
+    "bundled_films": 33
+  },
+  "runtime": {
+    "passed": true,
+    "error": "",
+    "save": "/private/tmp/project-z-story-smoke-1111c/story-playtest-save.json",
+    "checks": [
+      "real model conversation / unobstructed dialogue layout / completion credit",
+      "rest does not advance time",
+      "task-1: accept/pickup/delivery/distance/idempotence",
+      "task-2: accept/pickup/delivery/distance/idempotence",
+      "task-3: accept/pickup/delivery/distance/idempotence",
+      "task-4: accept/pickup/delivery/distance/idempotence",
+      "four tasks => night livestream => next morning",
+      "save/load preserves progress and chat cap",
+      "task-5: accept/pickup/delivery/distance/idempotence",
+      "task-6: accept/pickup/delivery/distance/idempotence",
+      "task-7: accept/pickup/delivery/distance/idempotence",
+      "task-8: accept/pickup/delivery/distance/idempotence",
+      "task-9: accept/pickup/delivery/distance/idempotence",
+      "task-10: accept/pickup/delivery/distance/idempotence",
+      "correct ending / prior chapters / route lock"
+    ]
+  },
+  "repository_checks": {
+    "passed": true,
+    "mode": "Isolated source copy with exact committed Git LFS pointers; hydrated main checkout has a pre-existing 60 MB asset",
+    "asset_files": 3528,
+    "guids": 1828,
+    "scenes": 30,
+    "csharp_files": 286
+  },
+  "asset_generation": {
+    "mode": "AI vector drawing rendered to transparent PNG",
+    "real_model_verified": true,
+    "seedream_status": "Account returned InvalidEndpointOrModel.ModelIDAccessDisabled"
+  },
+  "content": "Prebuilt subtitle animatics for 8 NPCs and fixed livestream prototype"
+}

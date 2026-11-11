@@ -44,7 +44,7 @@ namespace Seabreeze
         }
         public MemoryRequest RequestBase()
         {
-            return new MemoryRequest { worldId=session.State.memory.worldId,runId=RunId,requestId=Guid.NewGuid().ToString("N"),day=session.State.day,period=session.State.period };
+            return new MemoryRequest { worldId=session.State.memory.worldId,runId=RunId,requestId=Guid.NewGuid().ToString("N"),day=session.State.day,period=session.State.period,storyPlaytest=StoryPlaytest.Enabled };
         }
         void Update()
         {
