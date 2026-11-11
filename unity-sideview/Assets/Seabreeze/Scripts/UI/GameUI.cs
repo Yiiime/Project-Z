@@ -310,10 +310,14 @@ namespace Seabreeze
                 yield return overlayContent.gameObject.AddComponent<PhoneSceneGlass>().Capture((RectTransform)overlayContent);
                 yield return FadeOverlay(1,Style.FadeInDuration);overlayBusy=false;overlayRoutine=null;yield break;
             }
-            Vector2 size=mode=="pause"||mode=="restart"?new Vector2(760,730):mode=="ending"?new Vector2(1160,790):new Vector2(1280,790);
-            var panel=Panel("Panel",overlayRoot,C,C,Vector2.zero,size,Ink,true);overlayContent=panel.transform;
-            CircleButton("Close",panel.transform,new Vector2(1,1),new Vector2(1,1),new Vector2(-24,-24),LineIcon.Symbol.Close,CloseOverlay);
-            if(mode=="map")BuildMap();else if(mode=="journal")BuildJournal();else if(mode=="pause")BuildPause();else if(mode=="restart")BuildRestart();else if(mode=="ending")BuildEnding();
+            if(mode=="map")BuildMap();
+            else
+            {
+                Vector2 size=mode=="pause"||mode=="restart"?new Vector2(760,730):mode=="ending"?new Vector2(1160,790):new Vector2(1280,790);
+                var panel=Panel("Panel",overlayRoot,C,C,Vector2.zero,size,Ink,true);overlayContent=panel.transform;
+                CircleButton("Close",panel.transform,new Vector2(1,1),new Vector2(1,1),new Vector2(-24,-24),LineIcon.Symbol.Close,CloseOverlay);
+                if(mode=="journal")BuildJournal();else if(mode=="pause")BuildPause();else if(mode=="restart")BuildRestart();else if(mode=="ending")BuildEnding();
+            }
             yield return FadeOverlay(1,Style.FadeInDuration);overlayBusy=false;overlayRoutine=null;
         }
         IEnumerator FadeOverlay(float target,float duration)
@@ -362,29 +366,6 @@ namespace Seabreeze
             Label("Eyebrow",overlayContent,TL,TL,new Vector2(46,-36),new Vector2(width-150,28),eyebrow,17,Accent);
             Label("Title",overlayContent,TL,TL,new Vector2(44,-78),new Vector2(width-150,60),title,38,Paper);
             Label("Subtitle",overlayContent,TL,TL,new Vector2(46,-145),new Vector2(width-92,70),subtitle,21,Muted);
-        }
-        void BuildMap()
-        {
-            Header("TIDELINE  /  LOCAL MAP","在小镇，慢一点也没关系", "当前："+PlaceName(session.CurrentPlace)+"   ·   "+PeriodName(session.Clock.Period)+"   ·   选择地点前往，也可以从街道的出入口步行进入。" );
-            var area=Rect("Map drawing",overlayContent,TL,TL,new Vector2(46,-235),new Vector2(1188,335));
-            Panel("Sea",area,BL,BL,new Vector2(0,0),new Vector2(1188,127),new Color(.08f,.20f,.30f,.6f));
-            for(int i=0;i<4;i++)Line(area,BL,BL,new Vector2(50+i*140,27+i*20),new Vector2(430,1),new Color(.25f,.52f,.63f,.30f));
-            Label("Sea label",area,BL,BL,new Vector2(935,48),new Vector2(200,35),"海，向东展开",18,new Color(.52f,.73f,.81f,1));
-            Line(area,BL,BL,new Vector2(165,199),new Vector2(850,2),new Color(.67f,.75f,.82f,.45f));
-            MapNode(area,PlaceId.Cafe,180,"咖啡还热着","室内 · 阿遥的咖啡与旧相册");
-            MapNode(area,PlaceId.Street,580,"沿着海走一走","街道 · 明信片、旧邮差与海风");
-            MapNode(area,PlaceId.Lighthouse,1010,"等一盏灯亮起","海堤 · 观景台与蓝色信箱");
-            Label("Map note",overlayContent,TL,TL,new Vector2(46,-611),new Vector2(1180,90),"长椅与咖啡可以让时间向前。\n有人会在傍晚换个地方；错过一段时间，也可以在第二天再来。",22,Muted);
-            Label("Map shortcut",overlayContent,new Vector2(0,0),BL,new Vector2(46,27),new Vector2(1000,30),"M / Esc  收起地图",18,Muted);
-        }
-        void MapNode(Transform parent,PlaceId place,float x,string thought,string description)
-        {
-            var rt=Rect(place.ToString(),parent,BL,C,new Vector2(x,200),new Vector2(62,62));
-            var icon=rt.gameObject.AddComponent<LineIcon>();icon.symbol=LineIcon.Symbol.Pin;icon.ring=true;icon.color=session.CurrentPlace==place?Accent:Paper;icon.raycastTarget=false;
-            Label("Place",parent,BL,C,new Vector2(x,266),new Vector2(270,40),PlaceName(place),26,session.CurrentPlace==place?Accent:Paper,TextAlignmentOptions.Midline);
-            Label("Thought",parent,BL,C,new Vector2(x,150),new Vector2(310,32),thought,19,Muted,TextAlignmentOptions.Midline);
-            var button=Button("Travel",parent,BL,C,new Vector2(x,102),new Vector2(240,40),session.CurrentPlace==place?"在这里继续探索":"前往  "+PlaceName(place),()=>CloseOverlayThen(()=>{if(session.CurrentPlace!=place)session.Travel(place);}),session.CurrentPlace==place,18);
-            button.GetComponentInChildren<TextMeshProUGUI>().alignment=TextAlignmentOptions.Midline;
         }
         void BuildJournal()
         {
