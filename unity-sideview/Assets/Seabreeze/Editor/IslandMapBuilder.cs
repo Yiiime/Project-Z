@@ -23,18 +23,18 @@ namespace Seabreeze.Editor
             {place=p;label=l;source=s;row=r;col=c;footY=y;indoor=inside;ppu=inside?165:120;}
         }
         static readonly Layout[] Maps={
-            new Layout(PlaceId.ResidentialCenter,"居民街","居民街.png",0,0,1195),
+            new Layout(PlaceId.ResidentialCenter,"居民街","居民街-1110.png",0,0,1200),
             new Layout(PlaceId.Forest,"居民街 · 森林入口","居民街-森林入口.png",0,1,1175),
             new Layout(PlaceId.ForestPath1,"森林 · 林间步道","森林1.png",-1,0,1210),
             new Layout(PlaceId.ForestPath2,"森林 · 林深处","森林-森林中2.png",-1,1,1145),
             new Layout(PlaceId.ForestCabin,"梨园的木屋","林间木屋 1.png",-1,2,1175),
             new Layout(PlaceId.Research,"阿里的研究所","山顶-研究所.png",-2,0,1185),
-            new Layout(PlaceId.Summit,"山顶观景台","山顶观景台-月亮岛地图版 1.png",-2,1,1175),
-            new Layout(PlaceId.Harbor,"码头 · 游客中心","2-1码头-游客中心.png",1,0,1215),
+            new Layout(PlaceId.Summit,"山顶观景台","山顶观景台-1110.png",-2,1,1260),
+            new Layout(PlaceId.Harbor,"码头 · 游客中心","2-1码头-游客中心-1110.png",1,0,1215),
             new Layout(PlaceId.Street,"花店 · 咖啡店 · 照相馆","2-2 花店照相馆.png",1,1,1210),
             new Layout(PlaceId.Square,"市民广场","2-3市民广场.png",1,2,1220),
             new Layout(PlaceId.EastCrossing,"公共街 · 广场东口","2-4广场东口.png",1,3,1210),
-            new Layout(PlaceId.Boardwalk,"海滨步道","3-1海滨步道.png",2,0,1200),
+            new Layout(PlaceId.Boardwalk,"海滨步道","3-1海滨步道-1110.png",2,0,1180),
             new Layout(PlaceId.Seafront,"海滨街 · 酒吧与餐厅","3-2酒吧餐厅.png",2,1,1220),
             new Layout(PlaceId.BeachEntrance,"沙滩入口","3-3沙滩入口.png",2,3,1200),
             new Layout(PlaceId.Beach,"沙滩","海滨街-沙滩.png",2,4,1230),
@@ -51,7 +51,8 @@ namespace Seabreeze.Editor
             new Layout(PlaceId.CabinInterior,"梨园的木屋 · 室内","室内11-木屋 1.png",3,9,1340,true),
             new Layout(PlaceId.ResearchInterior,"研究所 · 室内","山顶-研究所室内.png",3,10,1168,true),
             new Layout(PlaceId.BarInterior,"海风酒吧 · 室内","室内酒吧 1.png",3,11,955,true),
-            new Layout(PlaceId.RestaurantInterior,"餐厅 · 室内","餐厅室内 1.png",3,12,930,true)
+            new Layout(PlaceId.RestaurantInterior,"餐厅 · 室内","餐厅室内 1.png",3,12,930,true),
+            new Layout(PlaceId.GeneralStore,"海岛杂货铺","杂货铺室内.png",3,14,714,true)
         };
         static readonly List<IslandMapLink> links=new List<IslandMapLink>();
         static Layout Find(PlaceId p)=>Maps.Single(m=>m.place==p);
@@ -80,7 +81,7 @@ namespace Seabreeze.Editor
             Path(PlaceId.ResidentialCenter,PlaceId.Harbor,335,4270,"下行 · 码头与游客中心","上行 · 居民街西段");
             Path(PlaceId.ResidentialCenter,PlaceId.Street,3320,3100,"下行 · 公共街","上行 · 居民街");
             Path(PlaceId.ResidentialCenter,PlaceId.EastCrossing,6470,930,"下行 · 广场东口","上行 · 居民街东段");
-            Path(PlaceId.Harbor,PlaceId.Boardwalk,4040,2920,"下行 · 海滨步道","上行 · 码头与游客中心");
+            Path(PlaceId.Harbor,PlaceId.Boardwalk,4040,2870,"下行 · 海滨步道","上行 · 码头与游客中心");
             Path(PlaceId.EastCrossing,PlaceId.BeachEntrance,2310,730,"下行 · 沙滩入口","上行 · 广场东口");
             Path(PlaceId.Forest,PlaceId.ForestPath1,1175,300,"上山 · 林间步道","下山 · 居民街");
             Path(PlaceId.ForestCabin,PlaceId.Research,1580,2160,"上山 · 研究所","下山 · 梨园木屋");
@@ -88,11 +89,12 @@ namespace Seabreeze.Editor
             Street(PlaceId.Summit,PlaceId.Research);
             Door(PlaceId.ResidentialCenter,PlaceId.CaptainHome,1295,1940);
             Door(PlaceId.ResidentialCenter,PlaceId.LiTingHome,2605,1925);
-            Door(PlaceId.ResidentialCenter,PlaceId.ZiqingHome,4060,1940);
-            Door(PlaceId.ResidentialCenter,PlaceId.ZHome,5470,1930);
-            Door(PlaceId.ResidentialCenter,PlaceId.ZBedroom,5680,1980);
+            Door(PlaceId.ResidentialCenter,PlaceId.ZiqingHome,4040,1940);
+            Door(PlaceId.ResidentialCenter,PlaceId.ZHome,5530,1930);
+            Door(PlaceId.ResidentialCenter,PlaceId.ZBedroom,5740,1980);
             Door(PlaceId.ResidentialCenter,PlaceId.ZhouHome,6950,1930);
             Door(PlaceId.Harbor,PlaceId.VisitorCenter,2150,1620);
+            Door(PlaceId.Boardwalk,PlaceId.GeneralStore,4010,1017);
             Door(PlaceId.Street,PlaceId.FlowerShop,2155,1940);
             Door(PlaceId.Street,PlaceId.Cafe,4120,1940);
             Door(PlaceId.Street,PlaceId.PhotoStudio,5515,1960);
@@ -131,7 +133,7 @@ namespace Seabreeze.Editor
             if(!catalog){catalog=ScriptableObject.CreateInstance<IslandMapCatalog>();AssetDatabase.CreateAsset(catalog,CatalogPath);}
             catalog.locations=Maps.Select(m=>new IslandMapNode{place=m.place,mapId=m.place.ToString(),displayName=m.label,row=m.row,column=m.col,width=m.width,groundPixelY=m.footY,sourceFile=m.source,indoor=m.indoor}).ToArray();
             catalog.routes=links.ToArray();EditorUtility.SetDirty(catalog);
-            var retired=new[]{"ResidentialWest","ResidentialEast","Garden","GeneralStore","Bookshop","Restaurant"};
+            var retired=new[]{"ResidentialWest","ResidentialEast","Garden","Bookshop","Restaurant"};
             var existing=EditorBuildSettings.scenes.Where(s=>!retired.Contains(System.IO.Path.GetFileNameWithoutExtension(s.path))).ToList();
             foreach(var m in Maps){string path=Scenes+m.place+".unity";var prior=existing.Find(s=>s.path==path);if(prior==null)existing.Add(new EditorBuildSettingsScene(path,true));else prior.enabled=true;}
             EditorBuildSettings.scenes=existing.ToArray();AssetDatabase.SaveAssets();AssetDatabase.Refresh();

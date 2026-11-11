@@ -95,6 +95,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Seabreeze/Scenes/ZBedroom.unity
     guid: 4e65fa5343ecf4a53b27bbdb2be2fe24
+  - enabled: 1
+    path: Assets/Seabreeze/Scenes/GeneralStore.unity
+    guid: 49b9e7c64fde94e09bf81127759400d2
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

@@ -1,0 +1,365 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 1024" width="1440" height="1024" role="group" aria-labelledby="title desc" font-family="PingFang SC, Hiragino Sans GB, Heiti SC, sans-serif">
+<title id="title">岛屿地图</title>
+<desc id="desc">深蓝灰紫岛屿地图。居民街、公共街、海滨街由南北向街巷连通。北岬森林小径连接梨园的家、阿里的研究所和山顶平台。岛屿东侧有曲湾和近岸小岛。南岸是沿滨海步道展开的沙滩。当前位置在公共街。悬停或用 Tab 键聚焦地标图标可查看名称。</desc>
+<defs><clipPath id="map-clip"><rect width="1288" height="674" rx="20"/></clipPath></defs>
+<style>
+.map-poi { cursor: pointer; outline: none; }
+.map-tip { display: none; pointer-events: none; }
+.map-poi:hover .map-tip, .map-poi:focus-visible .map-tip { display: inline; }
+#map-card:has(.map-poi:hover) .map-poi:not(:hover) .map-tip { display: none; }
+.map-poi .poi-halo { fill: transparent; stroke: transparent; }
+.map-poi:hover .poi-halo, .map-poi:focus-visible .poi-halo { stroke: #d9c7fa; }
+</style>
+<defs><clipPath id="island-clip"><path d="M93 221C111 202 109 188 107 169C105 144 122 125 146 120C168 115 183 123 206 117C228 111 237 96 266 94C288 92 309 100 333 98C366 94 390 75 425 79C459 82 476 92 505 87C537 82 553 68 586 68C617 68 640 85 670 83C695 81 711 64 736 61C769 56 787 69 814 60C837 53 836 34 867 25C898 16 919 26 943 25C973 24 997 21 1015 36C1035 52 1034 70 1024 86C1016 100 996 105 996 120C996 136 1022 141 1045 151C1067 161 1074 183 1090 196C1111 215 1141 212 1160 233C1183 258 1177 287 1157 303C1143 314 1120 312 1105 324C1086 339 1092 361 1070 368C1052 374 1034 363 1029 348C1024 331 1035 320 1029 305C1023 290 1004 294 997 308C985 330 994 353 988 374C981 398 958 411 956 434C954 454 978 460 978 478C977 501 957 518 934 519C913 521 896 510 878 521C856 535 859 556 834 569C816 579 794 573 774 579C751 586 739 600 710 602C685 605 664 595 639 599C610 603 588 612 562 602C538 592 525 582 499 583C468 584 442 579 424 563C404 546 399 534 368 535C339 536 328 549 303 541C272 546 263 536 240 536C221 537 206 538 196 525C183 510 192 493 207 478C226 459 254 453 248 435C243 418 219 421 200 423C178 425 171 411 160 400C145 386 129 393 110 386C93 380 96 368 83 361C65 352 48 347 52 326C55 311 73 307 75 290C77 274 62 266 68 249C72 234 83 234 93 221Z"/></clipPath></defs>
+<rect x="0" y="0" width="1440" height="1024" rx="0" fill="#181c2e" stroke="none"/>
+<rect x="36" y="28" width="1368" height="968" rx="30" fill="#232941" stroke="#666b83"/>
+<text x="76" y="72" fill="#babbd1" font-size="15" font-weight="400" text-anchor="start" letter-spacing="0">第 3 天  ·  傍晚</text>
+<text x="1363" y="72" fill="#babbd1" font-size="15" font-weight="400" text-anchor="end" letter-spacing="0">Z  °</text>
+<path d="M88 109l-8 8 8 8" fill="none" stroke="#efedf8" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="107" y="130" fill="#f5f2fc" font-size="36" font-weight="500" text-anchor="start" letter-spacing="0">岛屿地图</text>
+<path d="M1344 110l16 16m0-16-16 16" fill="none" stroke="#efedf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="76" y="169" fill="#b9bcd0" font-size="16" font-weight="400" text-anchor="start" letter-spacing="0">区域总览</text>
+<g id="map-card" transform="translate(76 191)" clip-path="url(#map-clip)">
+<rect x="0" y="0" width="1288" height="674" rx="20" fill="#333a55" stroke="none"/>
+<g transform="translate(144 21) scale(.8 1.045)">
+<path d="M93 221C111 202 109 188 107 169C105 144 122 125 146 120C168 115 183 123 206 117C228 111 237 96 266 94C288 92 309 100 333 98C366 94 390 75 425 79C459 82 476 92 505 87C537 82 553 68 586 68C617 68 640 85 670 83C695 81 711 64 736 61C769 56 787 69 814 60C837 53 836 34 867 25C898 16 919 26 943 25C973 24 997 21 1015 36C1035 52 1034 70 1024 86C1016 100 996 105 996 120C996 136 1022 141 1045 151C1067 161 1074 183 1090 196C1111 215 1141 212 1160 233C1183 258 1177 287 1157 303C1143 314 1120 312 1105 324C1086 339 1092 361 1070 368C1052 374 1034 363 1029 348C1024 331 1035 320 1029 305C1023 290 1004 294 997 308C985 330 994 353 988 374C981 398 958 411 956 434C954 454 978 460 978 478C977 501 957 518 934 519C913 521 896 510 878 521C856 535 859 556 834 569C816 579 794 573 774 579C751 586 739 600 710 602C685 605 664 595 639 599C610 603 588 612 562 602C538 592 525 582 499 583C468 584 442 579 424 563C404 546 399 534 368 535C339 536 328 549 303 541C272 546 263 536 240 536C221 537 206 538 196 525C183 510 192 493 207 478C226 459 254 453 248 435C243 418 219 421 200 423C178 425 171 411 160 400C145 386 129 393 110 386C93 380 96 368 83 361C65 352 48 347 52 326C55 311 73 307 75 290C77 274 62 266 68 249C72 234 83 234 93 221Z" fill="none" stroke="#3b435f" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M93 221C111 202 109 188 107 169C105 144 122 125 146 120C168 115 183 123 206 117C228 111 237 96 266 94C288 92 309 100 333 98C366 94 390 75 425 79C459 82 476 92 505 87C537 82 553 68 586 68C617 68 640 85 670 83C695 81 711 64 736 61C769 56 787 69 814 60C837 53 836 34 867 25C898 16 919 26 943 25C973 24 997 21 1015 36C1035 52 1034 70 1024 86C1016 100 996 105 996 120C996 136 1022 141 1045 151C1067 161 1074 183 1090 196C1111 215 1141 212 1160 233C1183 258 1177 287 1157 303C1143 314 1120 312 1105 324C1086 339 1092 361 1070 368C1052 374 1034 363 1029 348C1024 331 1035 320 1029 305C1023 290 1004 294 997 308C985 330 994 353 988 374C981 398 958 411 956 434C954 454 978 460 978 478C977 501 957 518 934 519C913 521 896 510 878 521C856 535 859 556 834 569C816 579 794 573 774 579C751 586 739 600 710 602C685 605 664 595 639 599C610 603 588 612 562 602C538 592 525 582 499 583C468 584 442 579 424 563C404 546 399 534 368 535C339 536 328 549 303 541C272 546 263 536 240 536C221 537 206 538 196 525C183 510 192 493 207 478C226 459 254 453 248 435C243 418 219 421 200 423C178 425 171 411 160 400C145 386 129 393 110 386C93 380 96 368 83 361C65 352 48 347 52 326C55 311 73 307 75 290C77 274 62 266 68 249C72 234 83 234 93 221Z" fill="none" stroke="#434d68" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M139 438C149 432 162 436 168 446C173 456 184 460 181 473C178 486 161 488 152 478C144 470 133 470 131 458C130 450 132 442 139 438Z" fill="none" stroke="#3b435f" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M139 438C149 432 162 436 168 446C173 456 184 460 181 473C178 486 161 488 152 478C144 470 133 470 131 458C130 450 132 442 139 438Z" fill="none" stroke="#434d68" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1094 445C1110 435 1110 422 1124 414C1136 407 1151 411 1153 424C1155 436 1145 443 1140 452C1131 467 1127 485 1111 489C1097 493 1086 486 1086 475C1086 465 1085 453 1094 445Z" fill="none" stroke="#3b435f" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1094 445C1110 435 1110 422 1124 414C1136 407 1151 411 1153 424C1155 436 1145 443 1140 452C1131 467 1127 485 1111 489C1097 493 1086 486 1086 475C1086 465 1085 453 1094 445Z" fill="none" stroke="#434d68" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M93 221C111 202 109 188 107 169C105 144 122 125 146 120C168 115 183 123 206 117C228 111 237 96 266 94C288 92 309 100 333 98C366 94 390 75 425 79C459 82 476 92 505 87C537 82 553 68 586 68C617 68 640 85 670 83C695 81 711 64 736 61C769 56 787 69 814 60C837 53 836 34 867 25C898 16 919 26 943 25C973 24 997 21 1015 36C1035 52 1034 70 1024 86C1016 100 996 105 996 120C996 136 1022 141 1045 151C1067 161 1074 183 1090 196C1111 215 1141 212 1160 233C1183 258 1177 287 1157 303C1143 314 1120 312 1105 324C1086 339 1092 361 1070 368C1052 374 1034 363 1029 348C1024 331 1035 320 1029 305C1023 290 1004 294 997 308C985 330 994 353 988 374C981 398 958 411 956 434C954 454 978 460 978 478C977 501 957 518 934 519C913 521 896 510 878 521C856 535 859 556 834 569C816 579 794 573 774 579C751 586 739 600 710 602C685 605 664 595 639 599C610 603 588 612 562 602C538 592 525 582 499 583C468 584 442 579 424 563C404 546 399 534 368 535C339 536 328 549 303 541C272 546 263 536 240 536C221 537 206 538 196 525C183 510 192 493 207 478C226 459 254 453 248 435C243 418 219 421 200 423C178 425 171 411 160 400C145 386 129 393 110 386C93 380 96 368 83 361C65 352 48 347 52 326C55 311 73 307 75 290C77 274 62 266 68 249C72 234 83 234 93 221Z" fill="#47516b" stroke="#69738d" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+<g clip-path="url(#island-clip)">
+<path d="M753 44C758 78 754 104 777 126C799 146 798 174 831 189C859 201 882 191 903 201C934 216 959 223 982 208C1006 192 1040 201 1072 193C1100 185 1140 211 1174 209L1220-24H760Z" fill="#4a5c70" stroke="#65798d" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M175 521C202 519 215 527 244 531C276 535 296 524 326 524C358 524 379 529 407 537C444 547 471 541 509 544C546 546 572 554 606 551C642 548 678 541 713 544C751 547 769 536 800 529C839 521 865 525 893 508C918 491 941 477 987 477L1010 670H170Z" fill="#777183" stroke="#8a8296" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<path d="M93 221C111 202 109 188 107 169C105 144 122 125 146 120C168 115 183 123 206 117C228 111 237 96 266 94C288 92 309 100 333 98C366 94 390 75 425 79C459 82 476 92 505 87C537 82 553 68 586 68C617 68 640 85 670 83C695 81 711 64 736 61C769 56 787 69 814 60C837 53 836 34 867 25C898 16 919 26 943 25C973 24 997 21 1015 36C1035 52 1034 70 1024 86C1016 100 996 105 996 120C996 136 1022 141 1045 151C1067 161 1074 183 1090 196C1111 215 1141 212 1160 233C1183 258 1177 287 1157 303C1143 314 1120 312 1105 324C1086 339 1092 361 1070 368C1052 374 1034 363 1029 348C1024 331 1035 320 1029 305C1023 290 1004 294 997 308C985 330 994 353 988 374C981 398 958 411 956 434C954 454 978 460 978 478C977 501 957 518 934 519C913 521 896 510 878 521C856 535 859 556 834 569C816 579 794 573 774 579C751 586 739 600 710 602C685 605 664 595 639 599C610 603 588 612 562 602C538 592 525 582 499 583C468 584 442 579 424 563C404 546 399 534 368 535C339 536 328 549 303 541C272 546 263 536 240 536C221 537 206 538 196 525C183 510 192 493 207 478C226 459 254 453 248 435C243 418 219 421 200 423C178 425 171 411 160 400C145 386 129 393 110 386C93 380 96 368 83 361C65 352 48 347 52 326C55 311 73 307 75 290C77 274 62 266 68 249C72 234 83 234 93 221Z" fill="none" stroke="#69738d" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M139 438C149 432 162 436 168 446C173 456 184 460 181 473C178 486 161 488 152 478C144 470 133 470 131 458C130 450 132 442 139 438Z" fill="#49536d" stroke="#65708a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1094 445C1110 435 1110 422 1124 414C1136 407 1151 411 1153 424C1155 436 1145 443 1140 452C1131 467 1127 485 1111 489C1097 493 1086 486 1086 475C1086 465 1085 453 1094 445Z" fill="#49536d" stroke="#65708a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M198 568q12-6 23 0 2 7-8 10-10 1-15-10Z" fill="#46516c" stroke="#62708a" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M179 581q6-5 13-1-3 6-13 1Z" fill="#46516c" stroke="#62708a" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M18 438q11-5 22 0m7 0q11-5 22 0" fill="none" stroke="#56617e" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M33 550q10-5 20 0m7 0q10-5 20 0" fill="none" stroke="#56617e" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M150 594q10-5 20 0m7 0q10-5 20 0" fill="none" stroke="#56617e" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1133 535q9-4 18 0m6 0q9-4 18 0" fill="none" stroke="#56617e" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1061 251q20-11 40 2" fill="none" stroke="#758296" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1063 260q15-8 31 2" fill="none" stroke="#758296" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M460 564q19-5 37-3" fill="none" stroke="#758296" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M716 574q20-4 39-9" fill="none" stroke="#758296" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"/>
+<text transform="translate(222 126) scale(1.25 .95694) translate(-222 -126)" x="222" y="126" fill="#b9c0d5" font-size="14" font-weight="400" text-anchor="start" letter-spacing="2">居民区</text>
+<text transform="translate(1002 183) scale(1.25 .95694) translate(-1002 -183)" x="1002" y="183" fill="#c0cfdd" font-size="18" font-weight="400" text-anchor="middle" letter-spacing="3">森林</text>
+<text transform="translate(586 579) scale(1.25 .95694) translate(-586 -579)" x="586" y="579" fill="#dfd5e6" font-size="18" font-weight="400" text-anchor="middle" letter-spacing="3">沙滩</text>
+<path d="M191 218C236 218 274 205 337 205S436 213 488 220S544 228 574 229S613 232 639 232S739 209 789 211S877 224 918 211" fill="none" stroke="#383e58" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M96 369C161 375 211 357 259 351S309 347 337 347C390 347 435 356 476 353S530 348 574 356C598 362 613 370 630 370C694 374 739 359 790 352S864 352 928 356" fill="none" stroke="#383e58" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M337 509C368 506 399 518 425 518C479 523 525 518 569 513S642 511 683 515C740 521 781 498 816 499" fill="none" stroke="#383e58" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M337 205C335 250 344 294 337 347C332 382 316 408 318 441S328 480 337 509" fill="none" stroke="#383e58" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M574 229C580 271 563 310 574 356" fill="none" stroke="#383e58" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M918 211C922 243 928 266 926 294S920 331 928 356C941 393 893 414 872 441S843 496 816 499" fill="none" stroke="#383e58" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M191 218v-15m146 2v-12m151 27v-15m151 27v-16m150-5v-13" fill="none" stroke="#383e58" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M191 218C236 218 274 205 337 205S436 213 488 220S544 228 574 229S613 232 639 232S739 209 789 211S877 224 918 211" fill="none" stroke="#838aa7" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M96 369C161 375 211 357 259 351S309 347 337 347C390 347 435 356 476 353S530 348 574 356C598 362 613 370 630 370C694 374 739 359 790 352S864 352 928 356" fill="none" stroke="#838aa7" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M337 509C368 506 399 518 425 518C479 523 525 518 569 513S642 511 683 515C740 521 781 498 816 499" fill="none" stroke="#838aa7" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M337 205C335 250 344 294 337 347C332 382 316 408 318 441S328 480 337 509" fill="none" stroke="#838aa7" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M574 229C580 271 563 310 574 356" fill="none" stroke="#838aa7" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M918 211C922 243 928 266 926 294S920 331 928 356C941 393 893 414 872 441S843 496 816 499" fill="none" stroke="#838aa7" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M191 218v-15m146 2v-12m151 27v-15m151 27v-16m150-5v-13" fill="none" stroke="#838aa7" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M918 211C904 187 867 187 844 153C836 135 861 117 886 101C917 84 942 68 981 59" fill="none" stroke="#ada1cb" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 7"/>
+<path d="M206 511H296Q316 511 337 509" fill="none" stroke="#383e58" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M206 511H296Q316 511 337 509" fill="none" stroke="#838aa7" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M104 511H206" fill="none" stroke="#373c54" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M104 511H206" fill="none" stroke="#b1a6bc" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M108 507v8" fill="none" stroke="#a79ab6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M121 507v8" fill="none" stroke="#a79ab6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M134 507v8" fill="none" stroke="#a79ab6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M147 507v8" fill="none" stroke="#a79ab6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M160 507v8" fill="none" stroke="#a79ab6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M173 507v8" fill="none" stroke="#a79ab6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M186 507v8" fill="none" stroke="#a79ab6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M199 507v8" fill="none" stroke="#a79ab6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle transform="translate(191 218) scale(1.22 .96) translate(-191 -218)" cx="191" cy="218" r="4.5" fill="#454e6a" stroke="#9ba1ba" stroke-width="1.6"/>
+<circle transform="translate(337 205) scale(1.22 .96) translate(-337 -205)" cx="337" cy="205" r="4.5" fill="#454e6a" stroke="#9ba1ba" stroke-width="1.6"/>
+<circle transform="translate(488 220) scale(1.22 .96) translate(-488 -220)" cx="488" cy="220" r="4.5" fill="#454e6a" stroke="#9ba1ba" stroke-width="1.6"/>
+<circle transform="translate(574 229) scale(1.22 .96) translate(-574 -229)" cx="574" cy="229" r="4.5" fill="#454e6a" stroke="#9ba1ba" stroke-width="1.6"/>
+<circle transform="translate(639 232) scale(1.22 .96) translate(-639 -232)" cx="639" cy="232" r="4.5" fill="#454e6a" stroke="#9ba1ba" stroke-width="1.6"/>
+<circle transform="translate(789 211) scale(1.22 .96) translate(-789 -211)" cx="789" cy="211" r="4.5" fill="#454e6a" stroke="#9ba1ba" stroke-width="1.6"/>
+<circle transform="translate(918 211) scale(1.22 .96) translate(-918 -211)" cx="918" cy="211" r="4.5" fill="#454e6a" stroke="#9ba1ba" stroke-width="1.6"/>
+<circle transform="translate(928 356) scale(1.22 .96) translate(-928 -356)" cx="928" cy="356" r="4.5" fill="#454e6a" stroke="#9ba1ba" stroke-width="1.6"/>
+<circle transform="translate(816 499) scale(1.22 .96) translate(-816 -499)" cx="816" cy="499" r="4.5" fill="#454e6a" stroke="#9ba1ba" stroke-width="1.6"/>
+<circle transform="translate(337 509) scale(1.22 .96) translate(-337 -509)" cx="337" cy="509" r="4.5" fill="#454e6a" stroke="#9ba1ba" stroke-width="1.6"/>
+<circle transform="translate(425 518) scale(1.22 .96) translate(-425 -518)" cx="425" cy="518" r="4.5" fill="#454e6a" stroke="#9ba1ba" stroke-width="1.6"/>
+<circle transform="translate(337 347) scale(1.22 .96) translate(-337 -347)" cx="337" cy="347" r="4.5" fill="#454e6a" stroke="#9ba1ba" stroke-width="1.6"/>
+<circle transform="translate(574 356) scale(1.22 .96) translate(-574 -356)" cx="574" cy="356" r="4.5" fill="#454e6a" stroke="#9ba1ba" stroke-width="1.6"/>
+<circle transform="translate(96 369) scale(1.22 .96) translate(-96 -369)" cx="96" cy="369" r="4.5" fill="#454e6a" stroke="#9ba1ba" stroke-width="1.6"/>
+<rect x="665" y="207" width="86" height="28" rx="14" fill="#333a53" stroke="#666b87"/>
+<text transform="translate(708 226) scale(1.25 .95694) translate(-708 -226)" x="708" y="226" fill="#e7e3f2" font-size="15" font-weight="500" text-anchor="middle" letter-spacing="1">居民街</text>
+<rect x="152" y="347" width="86" height="28" rx="14" fill="#333a53" stroke="#666b87"/>
+<text transform="translate(195 366) scale(1.25 .95694) translate(-195 -366)" x="195" y="366" fill="#e7e3f2" font-size="15" font-weight="500" text-anchor="middle" letter-spacing="1">公共街</text>
+<rect x="562" y="498" width="86" height="28" rx="14" fill="#333a53" stroke="#666b87"/>
+<text transform="translate(605 517) scale(1.25 .95694) translate(-605 -517)" x="605" y="517" fill="#e7e3f2" font-size="15" font-weight="500" text-anchor="middle" letter-spacing="1">海滨街</text>
+<g class="map-poi" tabindex="0" role="img" aria-label="留洋的家">
+<rect class="poi-halo" x="168" y="169" width="46" height="42" rx="12" stroke-width="1.6"/>
+<g transform="translate(191 190) scale(1.15 .94) translate(-191 -190)">
+<rect x="174" y="173" width="34" height="34" rx="10" fill="#424a64" stroke="#626c88"/>
+<g transform="translate(181.5 180.5) scale(0.791667)">
+<path d="M3 10.5 12 3l9 7.5M5.5 9v11h5v-5h3v5h5V9" fill="none" stroke="#e3dfef" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<g class="map-tip" aria-hidden="true" transform="translate(191 190) scale(1.25 .95694)">
+<rect x="-39.0" y="-54" width="78" height="28" rx="8" fill="#242941" stroke="#a197bd"/>
+<path d="M-4 -26l4 4 4-4" fill="#242941" stroke="#a197bd" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="0" y="-35" fill="#f3edfa" text-anchor="middle" font-size="14">留洋的家</text>
+</g></g>
+<g class="map-poi" tabindex="0" role="img" aria-label="李庭的家">
+<rect class="poi-halo" x="314" y="156" width="46" height="42" rx="12" stroke-width="1.6"/>
+<g transform="translate(337 177) scale(1.15 .94) translate(-337 -177)">
+<rect x="320" y="160" width="34" height="34" rx="10" fill="#424a64" stroke="#626c88"/>
+<g transform="translate(327.5 167.5) scale(0.791667)">
+<path d="M3 10.5 12 3l9 7.5M5.5 9v11h5v-5h3v5h5V9" fill="none" stroke="#e3dfef" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<g class="map-tip" aria-hidden="true" transform="translate(337 177) scale(1.25 .95694)">
+<rect x="-39.0" y="-54" width="78" height="28" rx="8" fill="#242941" stroke="#a197bd"/>
+<path d="M-4 -26l4 4 4-4" fill="#242941" stroke="#a197bd" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="0" y="-35" fill="#f3edfa" text-anchor="middle" font-size="14">李庭的家</text>
+</g></g>
+<g class="map-poi" tabindex="0" role="img" aria-label="晴野的家">
+<rect class="poi-halo" x="465" y="171" width="46" height="42" rx="12" stroke-width="1.6"/>
+<g transform="translate(488 192) scale(1.15 .94) translate(-488 -192)">
+<rect x="471" y="175" width="34" height="34" rx="10" fill="#424a64" stroke="#626c88"/>
+<g transform="translate(478.5 182.5) scale(0.791667)">
+<path d="M3 10.5 12 3l9 7.5M5.5 9v11h5v-5h3v5h5V9" fill="none" stroke="#e3dfef" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<g class="map-tip" aria-hidden="true" transform="translate(488 192) scale(1.25 .95694)">
+<rect x="-39.0" y="-54" width="78" height="28" rx="8" fill="#242941" stroke="#a197bd"/>
+<path d="M-4 -26l4 4 4-4" fill="#242941" stroke="#a197bd" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="0" y="-35" fill="#f3edfa" text-anchor="middle" font-size="14">晴野的家</text>
+</g></g>
+<g class="map-poi" tabindex="0" role="img" aria-label="Z的家">
+<rect class="poi-halo" x="616" y="183" width="46" height="42" rx="12" stroke-width="1.6"/>
+<g transform="translate(639 204) scale(1.15 .94) translate(-639 -204)">
+<rect x="622" y="187" width="34" height="34" rx="10" fill="#424a64" stroke="#626c88"/>
+<g transform="translate(629.5 194.5) scale(0.791667)">
+<path d="M3 10.5 12 3l9 7.5M5.5 9v11h5v-5h3v5h5V9" fill="none" stroke="#e3dfef" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<g class="map-tip" aria-hidden="true" transform="translate(639 204) scale(1.25 .95694)">
+<rect x="-32.0" y="-54" width="64" height="28" rx="8" fill="#242941" stroke="#a197bd"/>
+<path d="M-4 -26l4 4 4-4" fill="#242941" stroke="#a197bd" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="0" y="-35" fill="#f3edfa" text-anchor="middle" font-size="14">Z的家</text>
+</g></g>
+<g class="map-poi" tabindex="0" role="img" aria-label="周伯伯的家">
+<rect class="poi-halo" x="766" y="162" width="46" height="42" rx="12" stroke-width="1.6"/>
+<g transform="translate(789 183) scale(1.15 .94) translate(-789 -183)">
+<rect x="772" y="166" width="34" height="34" rx="10" fill="#424a64" stroke="#626c88"/>
+<g transform="translate(779.5 173.5) scale(0.791667)">
+<path d="M3 10.5 12 3l9 7.5M5.5 9v11h5v-5h3v5h5V9" fill="none" stroke="#e3dfef" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<g class="map-tip" aria-hidden="true" transform="translate(789 183) scale(1.25 .95694)">
+<rect x="-46.0" y="-54" width="92" height="28" rx="8" fill="#242941" stroke="#a197bd"/>
+<path d="M-4 -26l4 4 4-4" fill="#242941" stroke="#a197bd" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="0" y="-35" fill="#f3edfa" text-anchor="middle" font-size="14">周伯伯的家</text>
+</g></g>
+<g class="map-poi" tabindex="0" role="img" aria-label="码头">
+<rect class="poi-halo" x="84" y="320" width="46" height="42" rx="12" stroke-width="1.6"/>
+<g transform="translate(107 341) scale(1.15 .94) translate(-107 -341)">
+<rect x="90" y="324" width="34" height="34" rx="10" fill="#424a64" stroke="#626c88"/>
+<g transform="translate(97.5 331.5) scale(0.791667)">
+<path d="M12 8v12M8.5 11h7M4 14c0 3.5 3.6 6 8 7 4.4-1 8-3.5 8-7m-16 0 3 1m13-1-3 1 M15 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" fill="none" stroke="#e3dfef" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<g class="map-tip" aria-hidden="true" transform="translate(107 341) scale(1.25 .95694)">
+<rect x="-25.0" y="-54" width="50" height="28" rx="8" fill="#242941" stroke="#a197bd"/>
+<path d="M-4 -26l4 4 4-4" fill="#242941" stroke="#a197bd" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="0" y="-35" fill="#f3edfa" text-anchor="middle" font-size="14">码头</text>
+</g></g>
+<g class="map-poi" tabindex="0" role="img" aria-label="游客中心">
+<rect class="poi-halo" x="229" y="303" width="46" height="42" rx="12" stroke-width="1.6"/>
+<g transform="translate(252 324) scale(1.15 .94) translate(-252 -324)">
+<rect x="235" y="307" width="34" height="34" rx="10" fill="#424a64" stroke="#626c88"/>
+<g transform="translate(242.5 314.5) scale(0.791667)">
+<path d="M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Zm-10-1v6m0-10v.1" fill="none" stroke="#e3dfef" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<g class="map-tip" aria-hidden="true" transform="translate(252 324) scale(1.25 .95694)">
+<rect x="-39.0" y="-54" width="78" height="28" rx="8" fill="#242941" stroke="#a197bd"/>
+<path d="M-4 -26l4 4 4-4" fill="#242941" stroke="#a197bd" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="0" y="-35" fill="#f3edfa" text-anchor="middle" font-size="14">游客中心</text>
+</g></g>
+<g class="map-poi" tabindex="0" role="img" aria-label="街角花园">
+<rect class="poi-halo" x="387" y="304" width="46" height="42" rx="12" stroke-width="1.6"/>
+<g transform="translate(410 325) scale(1.15 .94) translate(-410 -325)">
+<rect x="393" y="308" width="34" height="34" rx="10" fill="#424a64" stroke="#626c88"/>
+<g transform="translate(400.5 315.5) scale(0.791667)">
+<path d="M12 10c-6-2-4-8 0-8s6 6 0 8Zm2 1c4-5 9-1 7 2-2 4-7 3-7-2Zm-2 3c5 3 3 8 0 8-4 0-5-5 0-8Zm-2-3c-4-5-9-1-7 2 2 4 7 3 7-2Z" fill="none" stroke="#e3dfef" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<g class="map-tip" aria-hidden="true" transform="translate(410 325) scale(1.25 .95694)">
+<rect x="-39.0" y="-54" width="78" height="28" rx="8" fill="#242941" stroke="#a197bd"/>
+<path d="M-4 -26l4 4 4-4" fill="#242941" stroke="#a197bd" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="0" y="-35" fill="#f3edfa" text-anchor="middle" font-size="14">街角花园</text>
+</g></g>
+<g class="map-poi" tabindex="0" role="img" aria-label="花店">
+<rect class="poi-halo" x="496" y="302" width="46" height="42" rx="12" stroke-width="1.6"/>
+<g transform="translate(519 323) scale(1.15 .94) translate(-519 -323)">
+<rect x="502" y="306" width="34" height="34" rx="10" fill="#424a64" stroke="#626c88"/>
+<g transform="translate(509.5 313.5) scale(0.791667)">
+<path d="M12 20V11m0 6c-5 0-7-2-7-5 4 0 6 2 7 5Zm0 0c5 0 7-2 7-5-4 0-6 2-7 5ZM12 11c-5 0-7-3-7-7l4 2 3-4 3 4 4-2c0 4-2 7-7 7Z" fill="none" stroke="#e3dfef" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<g class="map-tip" aria-hidden="true" transform="translate(519 323) scale(1.25 .95694)">
+<rect x="-25.0" y="-54" width="50" height="28" rx="8" fill="#242941" stroke="#a197bd"/>
+<path d="M-4 -26l4 4 4-4" fill="#242941" stroke="#a197bd" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="0" y="-35" fill="#f3edfa" text-anchor="middle" font-size="14">花店</text>
+</g></g>
+<g class="map-poi" tabindex="0" role="img" aria-label="咖啡店">
+<rect class="poi-halo" x="607" y="321" width="46" height="42" rx="12" stroke-width="1.6"/>
+<g transform="translate(630 342) scale(1.15 .94) translate(-630 -342)">
+<rect x="613" y="325" width="34" height="34" rx="10" fill="#424a64" stroke="#626c88"/>
+<g transform="translate(620.5 332.5) scale(0.791667)">
+<path d="M4 5h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V5Zm13 1h2a2.5 2.5 0 0 1 0 5h-2M3 19h17" fill="none" stroke="#e3dfef" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<g class="map-tip" aria-hidden="true" transform="translate(630 342) scale(1.25 .95694)">
+<rect x="-32.0" y="-54" width="64" height="28" rx="8" fill="#242941" stroke="#a197bd"/>
+<path d="M-4 -26l4 4 4-4" fill="#242941" stroke="#a197bd" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="0" y="-35" fill="#f3edfa" text-anchor="middle" font-size="14">咖啡店</text>
+</g></g>
+<g class="map-poi" tabindex="0" role="img" aria-label="照相馆">
+<rect class="poi-halo" x="718" y="311" width="46" height="42" rx="12" stroke-width="1.6"/>
+<g transform="translate(741 332) scale(1.15 .94) translate(-741 -332)">
+<rect x="724" y="315" width="34" height="34" rx="10" fill="#424a64" stroke="#626c88"/>
+<g transform="translate(731.5 322.5) scale(0.791667)">
+<path d="M3 7h4l2-3h6l2 3h4v12H3Zm13 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" fill="none" stroke="#e3dfef" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<g class="map-tip" aria-hidden="true" transform="translate(741 332) scale(1.25 .95694)">
+<rect x="-32.0" y="-54" width="64" height="28" rx="8" fill="#242941" stroke="#a197bd"/>
+<path d="M-4 -26l4 4 4-4" fill="#242941" stroke="#a197bd" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="0" y="-35" fill="#f3edfa" text-anchor="middle" font-size="14">照相馆</text>
+</g></g>
+<g class="map-poi" tabindex="0" role="img" aria-label="古树广场">
+<rect class="poi-halo" x="840" y="302" width="46" height="42" rx="12" stroke-width="1.6"/>
+<g transform="translate(863 323) scale(1.15 .94) translate(-863 -323)">
+<rect x="846" y="306" width="34" height="34" rx="10" fill="#424a64" stroke="#626c88"/>
+<g transform="translate(853.5 313.5) scale(0.791667)">
+<path d="M12 16v5m-3 0h6M7 16a5 5 0 0 1-1-9 6 6 0 0 1 12 0 5 5 0 0 1-1 9Z" fill="none" stroke="#e3dfef" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<g class="map-tip" aria-hidden="true" transform="translate(863 323) scale(1.25 .95694)">
+<rect x="-39.0" y="-54" width="78" height="28" rx="8" fill="#242941" stroke="#a197bd"/>
+<path d="M-4 -26l4 4 4-4" fill="#242941" stroke="#a197bd" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="0" y="-35" fill="#f3edfa" text-anchor="middle" font-size="14">古树广场</text>
+</g></g>
+<g class="map-poi" tabindex="0" role="img" aria-label="海岛杂货铺">
+<rect class="poi-halo" x="402" y="469" width="46" height="42" rx="12" stroke-width="1.6"/>
+<g transform="translate(425 490) scale(1.15 .94) translate(-425 -490)">
+<rect x="408" y="473" width="34" height="34" rx="10" fill="#424a64" stroke="#626c88"/>
+<g transform="translate(415.5 480.5) scale(0.791667)">
+<path d="M5 8h14l2 13H3ZM8 9V6a4 4 0 0 1 8 0v3" fill="none" stroke="#e3dfef" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<g class="map-tip" aria-hidden="true" transform="translate(425 490) scale(1.25 .95694)">
+<rect x="-46.0" y="-54" width="92" height="28" rx="8" fill="#242941" stroke="#a197bd"/>
+<path d="M-4 -26l4 4 4-4" fill="#242941" stroke="#a197bd" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="0" y="-35" fill="#f3edfa" text-anchor="middle" font-size="14">海岛杂货铺</text>
+</g></g>
+<g class="map-poi" tabindex="0" role="img" aria-label="海风酒吧">
+<rect class="poi-halo" x="528" y="466" width="46" height="42" rx="12" stroke-width="1.6"/>
+<g transform="translate(551 487) scale(1.15 .94) translate(-551 -487)">
+<rect x="534" y="470" width="34" height="34" rx="10" fill="#424a64" stroke="#626c88"/>
+<g transform="translate(541.5 477.5) scale(0.791667)">
+<path d="M12 6v14m0-14C9 3 5 3 2.5 4v14c3.5-1 6.5-1 9.5 2 3-3 6-3 9.5-2V4C19 3 15 3 12 6Z" fill="none" stroke="#e3dfef" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<g class="map-tip" aria-hidden="true" transform="translate(551 487) scale(1.25 .95694)">
+<rect x="-39.0" y="-54" width="78" height="28" rx="8" fill="#242941" stroke="#a197bd"/>
+<path d="M-4 -26l4 4 4-4" fill="#242941" stroke="#a197bd" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="0" y="-35" fill="#f3edfa" text-anchor="middle" font-size="14">海风酒吧</text>
+</g></g>
+<g class="map-poi" tabindex="0" role="img" aria-label="海湾餐厅">
+<rect class="poi-halo" x="751" y="458" width="46" height="42" rx="12" stroke-width="1.6"/>
+<g transform="translate(774 479) scale(1.15 .94) translate(-774 -479)">
+<rect x="757" y="462" width="34" height="34" rx="10" fill="#424a64" stroke="#626c88"/>
+<g transform="translate(764.5 469.5) scale(0.791667)">
+<path d="M9 17V6l11-3v11M9 17c0 1.7-1.8 3-3.7 3S2 19.3 2 17.8c0-1.7 1.8-3 3.7-3S9 15.5 9 17Zm11-3c0 1.7-1.8 3-3.7 3S13 16.3 13 14.8c0-1.7 1.8-3 3.7-3S20 12.5 20 14Z" fill="none" stroke="#e3dfef" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<g class="map-tip" aria-hidden="true" transform="translate(774 479) scale(1.25 .95694)">
+<rect x="-39.0" y="-54" width="78" height="28" rx="8" fill="#242941" stroke="#a197bd"/>
+<path d="M-4 -26l4 4 4-4" fill="#242941" stroke="#a197bd" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="0" y="-35" fill="#f3edfa" text-anchor="middle" font-size="14">海湾餐厅</text>
+</g></g>
+<g class="map-poi" tabindex="0" role="img" aria-label="梨园的家">
+<rect class="poi-halo" x="821" y="132" width="46" height="42" rx="12" stroke-width="1.6"/>
+<g transform="translate(844 153) scale(1.15 .94) translate(-844 -153)">
+<rect x="827" y="136" width="34" height="34" rx="10" fill="#424a64" stroke="#626c88"/>
+<g transform="translate(834.5 143.5) scale(0.791667)">
+<path d="M3 10.5 12 3l9 7.5M5.5 9v11h5v-5h3v5h5V9" fill="none" stroke="#e3dfef" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<g class="map-tip" aria-hidden="true" transform="translate(844 153) scale(1.25 .95694)">
+<rect x="-39.0" y="-54" width="78" height="28" rx="8" fill="#242941" stroke="#a197bd"/>
+<path d="M-4 -26l4 4 4-4" fill="#242941" stroke="#a197bd" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="0" y="-35" fill="#f3edfa" text-anchor="middle" font-size="14">梨园的家</text>
+</g></g>
+<g class="map-poi" tabindex="0" role="img" aria-label="阿里的研究所">
+<rect class="poi-halo" x="863" y="80" width="46" height="42" rx="12" stroke-width="1.6"/>
+<g transform="translate(886 101) scale(1.15 .94) translate(-886 -101)">
+<rect x="869" y="84" width="34" height="34" rx="10" fill="#424a64" stroke="#626c88"/>
+<g transform="translate(876.5 91.5) scale(0.791667)">
+<path d="M8 3h8m-6 0v7l-5 8a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-8V3m-7 12h10" fill="none" stroke="#e3dfef" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<g class="map-tip" aria-hidden="true" transform="translate(886 101) scale(1.25 .95694)">
+<rect x="-53.0" y="-54" width="106" height="28" rx="8" fill="#242941" stroke="#a197bd"/>
+<path d="M-4 -26l4 4 4-4" fill="#242941" stroke="#a197bd" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="0" y="-35" fill="#f3edfa" text-anchor="middle" font-size="14">阿里的研究所</text>
+</g></g>
+<g class="map-poi" tabindex="0" role="img" aria-label="山顶平台">
+<rect class="poi-halo" x="958" y="38" width="46" height="42" rx="12" stroke-width="1.6"/>
+<g transform="translate(981 59) scale(1.15 .94) translate(-981 -59)">
+<rect x="964" y="42" width="34" height="34" rx="10" fill="#424a64" stroke="#626c88"/>
+<g transform="translate(971.5 49.5) scale(0.791667)">
+<path d="M10 13h4M3 14l2-8h4l1 8m11 0-2-8h-4l-1 8M10 15.5a4 4 0 1 1-8 0 4 4 0 0 1 8 0Zm12 0a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" fill="none" stroke="#e3dfef" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<g class="map-tip" aria-hidden="true" transform="translate(981 59) scale(1.25 .95694)">
+<rect x="-39.0" y="-54" width="78" height="28" rx="8" fill="#242941" stroke="#a197bd"/>
+<path d="M-4 -26l4 4 4-4" fill="#242941" stroke="#a197bd" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="0" y="-35" fill="#f3edfa" text-anchor="middle" font-size="14">山顶平台</text>
+</g></g>
+<g class="map-poi" tabindex="0" role="img" aria-label="海滨木质栈道">
+<rect class="poi-halo" x="136" y="470" width="46" height="42" rx="12" stroke-width="1.6"/>
+<g transform="translate(146.5 478.5) scale(1.04167)">
+<path d="M3 7h18v10H3ZM6 7v10m4-10v10m4-10v10m4-10v10M3 5v14m18-14v14" fill="none" stroke="#d3c6df" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<g class="map-tip" aria-hidden="true" transform="translate(159 491) scale(1.25 .95694)">
+<rect x="-53.0" y="-54" width="106" height="28" rx="8" fill="#242941" stroke="#a197bd"/>
+<path d="M-4 -26l4 4 4-4" fill="#242941" stroke="#a197bd" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="0" y="-35" fill="#f3edfa" text-anchor="middle" font-size="14">海滨木质栈道</text>
+</g></g>
+<circle transform="translate(630 370) scale(1.22 .96) translate(-630 -370)" cx="630" cy="370" r="13" fill="#5d557e" stroke="none" stroke-width="1"/>
+<circle transform="translate(630 370) scale(1.22 .96) translate(-630 -370)" cx="630" cy="370" r="8" fill="#d9c7fa" stroke="#f3eaff" stroke-width="1.8"/>
+<text transform="translate(630 399) scale(1.25 .95694) translate(-630 -399)" x="630" y="399" fill="#e1d1fa" font-size="13" font-weight="400" text-anchor="middle" letter-spacing="0">当前位置</text>
+</g></g>
+<rect x="76" y="191" width="1288" height="674" rx="20" fill="none" stroke="#535b76"/>
+<g transform="translate(0 64)">
+<rect x="76" y="821" width="718" height="82" rx="16" fill="#363d56" stroke="#505872"/>
+<rect x="96" y="842" width="40" height="40" rx="12" fill="#494364" stroke="#67617f"/>
+<path d="M111 855l12 7-6 2-2 6Z" fill="none" stroke="#e3d3fa" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="153" y="859" fill="#f1edf8" font-size="22" font-weight="500" text-anchor="start" letter-spacing="0">查看地点</text>
+<text x="153" y="882" fill="#babbd0" font-size="14" font-weight="400" text-anchor="start" letter-spacing="0">将鼠标移到图标上查看名称</text>
+<rect x="810" y="821" width="554" height="82" rx="16" fill="#363d56" stroke="#505872"/>
+<text x="832" y="869" fill="#bfc1d5" font-size="14" font-weight="400" text-anchor="start" letter-spacing="0">图例</text>
+<path d="M891 846v32" fill="none" stroke="#59627b" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="916" cy="862" r="5.5" fill="#d9c7fa" stroke="#f3eaff" stroke-width="1.2"/>
+<text x="930" y="867" fill="#e2dfee" font-size="14" font-weight="400" text-anchor="start" letter-spacing="0">当前位置</text>
+<circle cx="1024" cy="862" r="4.5" fill="#454e6a" stroke="#b9bdd1" stroke-width="1.5"/>
+<text x="1038" y="867" fill="#e2dfee" font-size="14" font-weight="400" text-anchor="start" letter-spacing="0">路口</text>
+<path d="M1094 862h25" fill="none" stroke="#929ab4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1127" y="867" fill="#e2dfee" font-size="14" font-weight="400" text-anchor="start" letter-spacing="0">街道</text>
+<path d="M1187 862h24" fill="none" stroke="#b5a7d3" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 4"/>
+<text x="1219" y="867" fill="#e2dfee" font-size="14" font-weight="400" text-anchor="start" letter-spacing="0">森林小径</text>
+</g></svg>
