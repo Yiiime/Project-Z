@@ -20,18 +20,19 @@ namespace Seabreeze
         void Spawn()
         {
             foreach(var old in stage.GetComponentsInChildren<NpcPresence>(true))old.gameObject.SetActive(false);
-            foreach(var definition in SevenCharacterCatalog.Actors.Where(a=>a.schedule!=null&&a.schedule.Length>0?a.schedule.Any(s=>s.place==stage.place):a.Place==stage.place))
+            var staged=session.FirstDay?.StagedCast(stage.place);
+            foreach(var definition in staged??SevenCharacterCatalog.Actors.Where(a=>a.schedule!=null&&a.schedule.Length>0?a.schedule.Any(s=>s.place==stage.place):a.Place==stage.place))
             {
                 var saved=session.State.memory.positions.Find(a=>a.actorId==definition.id&&a.place==stage.place.ToString());
-                float x=saved!=null?saved.x:definition.x;
+                float x=staged!=null?session.FirstDay.CastPosition(definition.id,stage.place):saved!=null?saved.x:definition.x;
                 var root=new GameObject("岛民 "+definition.displayName);root.transform.SetParent(stage.transform,false);
                 root.transform.position=new Vector3(Mathf.Clamp(x,-stage.width/2+1,stage.width/2-1),0,0);
-                var interact=root.AddComponent<Interactable>();interact.id=definition.id;interact.label=definition.displayName;interact.npc=true;
+                var interact=root.AddComponent<Interactable>();interact.id=definition.id;interact.label=definition.displayName;interact.npc=true;if(staged!=null)interact.promptOffset=new Vector3(0,3.5f,0);
                 var npc=root.AddComponent<NpcPresence>();npc.npcId=definition.id;npc.character=definition.appearance;npc.location=stage.place;
                 npc.motionResource=definition.motion;
                 var runtime=ScriptableObject.CreateInstance<NpcData>();runtime.hideFlags=HideFlags.DontSave;
                 runtime.id=definition.id;runtime.displayName=definition.displayName;runtime.description=definition.occupation;runtime.accent=definition.Accent;
-                runtime.schedule=definition.schedule!=null&&definition.schedule.Length>0?definition.schedule:new[]{new NpcSchedule { place=stage.place,from=TimePeriod.Morning,through=TimePeriod.Night }};
+                runtime.schedule=staged==null&&definition.schedule!=null&&definition.schedule.Length>0?definition.schedule:new[]{new NpcSchedule { place=stage.place,from=TimePeriod.Morning,through=TimePeriod.Night }};
                 npc.RuntimeData=runtime;data.Add(runtime);actors.Add(npc);world.Interactables.Add(interact);
             }
         }

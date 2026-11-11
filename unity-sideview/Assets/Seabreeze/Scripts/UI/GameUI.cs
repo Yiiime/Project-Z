@@ -21,6 +21,7 @@ namespace Seabreeze
         NativeLiveHost nativeLive;
         RectTransform canvasRect, hud, bottomStrip, overlayRoot, dialogueRoot;
         Transform overlayContent;
+        Image firstDayTaskSurface;
         TextMeshProUGUI dateText, timeText, weatherText, placeText, ambienceText, objectiveText;
         TextMeshProUGUI speakerText, dialogueText, nextText, toastText;
         RectTransform choiceRoot;
@@ -57,6 +58,7 @@ namespace Seabreeze
             BuildHUD(); BuildDialogue(); BuildInteraction(); BuildToast();
             overlayRoot=Stretch("Overlay",canvasRect,Vector2.zero,Vector2.zero);overlayGroup=overlayRoot.gameObject.AddComponent<CanvasGroup>();overlayRoot.gameObject.SetActive(false);
             session.Changed+=OnStateChanged;
+            if(MusicDirector.Instance!=null)MusicDirector.Instance.Changed+=RefreshHUD;
             session.Dialogue.Changed+=OnDialogueChanged;
             session.Dialogue.Closed+=OnDialogueClosed;
             session.Story.Toast+=ShowToast;
@@ -66,6 +68,7 @@ namespace Seabreeze
         void OnDestroy()
         {
             DisposePhone();
+            if(MusicDirector.Instance!=null)MusicDirector.Instance.Changed-=RefreshHUD;
             if(nativeLive!=null)nativeLive.Close();
             if(Instance==this){Instance=null;Time.timeScale=1f;}
             if(session!=null)
@@ -85,10 +88,17 @@ namespace Seabreeze
             FinalKitAssets.Icon("pin",hud,TL,TL,new Vector2(44,-169),new Vector2(18,20));
             placeText=Label("Place",hud,TL,TL,new Vector2(72,-165),new Vector2(420,32),"",20,Paper);
             bottomStrip=Stretch("Exploration footer",hud,Vector2.zero,Vector2.zero);
+            var musicButton=Panel("Music toggle",bottomStrip,BL,BL,new Vector2(30,18),new Vector2(580,48),new Color(.05f,.10f,.18f,.28f),true);
+            ((RoundedPanel)musicButton).CornerRadius=24;
+            var musicAction=musicButton.gameObject.AddComponent<Button>();musicAction.targetGraphic=musicButton;musicAction.onClick.AddListener(()=>{MusicDirector.Instance?.ToggleMusic();RefreshHUD();});
+            UIHoverFeedback.Attach(musicAction);
             FinalKitAssets.Icon("waveform",bottomStrip,BL,BL,new Vector2(44,28),new Vector2(20,24));
             ambienceText=Label("Ambience",bottomStrip,BL,BL,new Vector2(76,26),new Vector2(1120,30),"",18,new Color(.79f,.78f,.86f),TextAlignmentOptions.MidlineLeft);
-            objectiveText=Label("Current thought",hud,TL,TL,Vector2.zero,Vector2.zero,"",18,Muted);
-            objectiveText.gameObject.SetActive(false);
+            firstDayTaskSurface=Panel("First day task glass",hud,TL,TL,new Vector2(32,-211),new Vector2(624,100),new Color(.055f,.10f,.18f,.73f));
+            ((RoundedPanel)firstDayTaskSurface).CornerRadius=16;
+            objectiveText=Label("Current thought",firstDayTaskSurface.transform,TL,TL,new Vector2(16,-12),new Vector2(590,80),"",19,Paper);
+            objectiveText.outlineColor=new Color(.06f,.1f,.15f,.9f);objectiveText.outlineWidth=.12f;
+            objectiveText.gameObject.SetActive(false);firstDayTaskSurface.gameObject.SetActive(false);
             var phone=KitCircle("Phone",hud,new Vector2(1,0),new Vector2(1,0),new Vector2(-34,54),64,"phone",()=>ToggleOverlay("phone"));
             Label("Key",phone.transform,new Vector2(.5f,0),TC,new Vector2(0,-6),new Vector2(92,24),"Tab",14,Muted,TextAlignmentOptions.Top);
             phoneBadge=MakeBadge(phone.transform,new Vector2(-2,2));
@@ -156,11 +166,14 @@ namespace Seabreeze
             RefreshPhoneBadge();
             placeText.text=PlaceName(session.CurrentPlace);
             objectiveText.text=session.Story.Objective;
-            ambienceText.text=session.CurrentPlace==PlaceId.Cafe?"杯碟轻响。烘焙的香气，藏在海风够不到的地方。":session.CurrentPlace==PlaceId.Lighthouse?"灯塔静静转身。海浪替那些没说完的话，停顿了一下。":"海风，和远处的浪";
+            objectiveText.gameObject.SetActive(session.FirstDay!=null&&session.FirstDay.Active);
+            firstDayTaskSurface.gameObject.SetActive(objectiveText.gameObject.activeSelf);
+            ambienceText.text=MusicDirector.Instance==null?"海风，和远处的浪":MusicDirector.Instance.MusicEnabled?"♪  "+MusicDirector.Instance.CurrentTitle+"  ·  点击关闭音乐":"音乐已关闭  ·  点击开启";
         }
         static IslandMapCatalog placeCatalog;
         public static string PlaceName(PlaceId id)
         {
+            if(id==PlaceId.PlayerHome)return "海边小屋";
             if(placeCatalog==null)placeCatalog=Resources.Load<IslandMapCatalog>("Content/IslandMap");
             if(placeCatalog!=null)foreach(var location in placeCatalog.locations)if(location.place==id)return location.displayName;
             return id==PlaceId.Cafe?"潮汐咖啡馆":id==PlaceId.Lighthouse?"灯塔海堤":"海边小街";
@@ -232,6 +245,7 @@ namespace Seabreeze
         void Update()
         {
             if(!initialized||session==null||session.IsAtTitle)return;
+            if(session.FirstDay!=null&&session.FirstDay.BlocksInput&&!(session.Memory?.PlayerChatOpen??false)){HideInteraction();return;}
             bool playerChat=session.Memory!=null&&session.Memory.PlayerChatOpen;
             hud.gameObject.SetActive(!hidden&&!playerChat);
             if(playerChat){HideInteraction();return;}

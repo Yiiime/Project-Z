@@ -17,7 +17,7 @@ namespace Seabreeze
         RectTransform taskPanel;bool taskLayoutVisible;
         TextMeshProUGUI taskTitle;Button acceptTask,declineTask,inviteTask;string offeredTask,lastCheckpoint;readonly List<string> activeTasks=new List<string>();int selectedTask;
         RectTransform root,speechPanel,playerPanel,portrait,column,content;
-        TextMeshProUGUI speechTitle,speechText,playerTitle,locationText,historyText,playerState,emptyPrompt;
+        TextMeshProUGUI speechTitle,speechText,playerTitle,locationText,historyText,playerState,emptyPrompt,inputHelp;
         TMP_InputField input; Button send; ScrollRect historyScroll;
         CanvasGroup playerGroup; Live2DCharacterView character; Coroutine transition;
         sealed class ChatBubble
@@ -95,9 +95,9 @@ namespace Seabreeze
             var sendColors=send.colors;sendColors.highlightedColor=new Color(.86f,.86f,1,1);sendColors.pressedColor=new Color(.7f,.75f,.9f,1);send.colors=sendColors;
             sendCaption=Label("Send caption",sendPanel.transform,new Vector2(.5f,.5f),new Vector2(.5f,.5f),Vector2.zero,new Vector2(90,35),"发送 →",21,BubbleInk,TextAlignmentOptions.Center);
             playerState=Label("连接与等待状态",column,Vector2.zero,Vector2.zero,new Vector2(5,88),new Vector2(730,32),"",18,Paper);playerState.richText=false;playerState.rectTransform.anchorMax=Vector2.right;playerState.rectTransform.sizeDelta=new Vector2(0,32);
-            var help=Label("输入提示",column,Vector2.zero,Vector2.zero,new Vector2(5,-36),new Vector2(730,28),"Enter 发送    ·    点击气泡显示全文    ·    Esc 返回",16,new Color(.9f,.92f,1,.7f));help.rectTransform.anchorMax=Vector2.right;help.rectTransform.sizeDelta=new Vector2(0,28);
+            inputHelp=Label("输入提示",column,Vector2.zero,Vector2.zero,new Vector2(5,-36),new Vector2(730,28),"Enter 发送    ·    点击气泡显示全文    ·    Esc 返回",16,new Color(.9f,.92f,1,.7f));inputHelp.rectTransform.anchorMax=Vector2.right;inputHelp.rectTransform.sizeDelta=new Vector2(0,28);
             DialogueControl("声音",-76,"sound",()=>{AudioListener.volume=AudioListener.volume>.01f?0:1;});
-            DialogueControl("结束交谈",-8,"close",()=>memory.Conversations.Cancel("玩家结束交谈"));
+            DialogueControl("结束交谈",-8,"close",CloseConversationView);
             BuildDaylightPresentation();
             playerGroup.alpha=0;playerPanel.gameObject.SetActive(false);
         }
@@ -159,7 +159,7 @@ namespace Seabreeze
             float start=playerGroup.alpha,end=opening?1:0,duration=opening?Style.DialogueEnterDuration:Style.DialogueExitDuration;
             for(float t=0;t<1;t+=Time.unscaledDeltaTime/Mathf.Max(.01f,duration)){SetPose(Mathf.Lerp(start,end,t*t*(3-2*t)));yield return null;}
             SetPose(end);transition=null;entering=false;Closing=false;
-            if(opening){playerGroup.interactable=true;input.ActivateInputField();}
+            if(opening){playerGroup.interactable=true;if(!ScriptedOpen)input.ActivateInputField();}
             else{playerPanel.gameObject.SetActive(false);character.Hide();backdrop.Release();}
         }
         void SetPose(float alpha){playerGroup.alpha=alpha;portrait.anchoredPosition=Vector2.left*(1-alpha)*34;portrait.localScale=Vector3.one*Mathf.Lerp(.975f,1,alpha);column.anchoredPosition=Vector2.right*(1-alpha)*18;}
@@ -203,8 +203,11 @@ namespace Seabreeze
         }
         public void ResetView()
         {
-            StopAllCoroutines();transition=null;Closing=entering=false;ClearHistory();FinishTyping();backdrop.Release();playerPanel.gameObject.SetActive(false);playerGroup.alpha=0;character.Hide();speechPanel.gameObject.SetActive(false);taskPanel.gameObject.SetActive(false);lastCheckpoint=null;
-
+            StopAllCoroutines();
+            var cancelledStory=ResetStoryState();
+            transition=null;Closing=entering=false;ClearHistory();FinishTyping();backdrop.Release();playerPanel.gameObject.SetActive(false);playerGroup.alpha=0;character.Hide();speechPanel.gameObject.SetActive(false);taskPanel.gameObject.SetActive(false);lastCheckpoint=null;
+            // Notify after the view is fully reset. A callback cannot leave a half-reset new view.
+            cancelledStory?.Invoke(false);
         }
         void Update()
         {
@@ -213,7 +216,8 @@ namespace Seabreeze
             if(fullView&&!Mathf.Approximately(previousColumnWidth,column.rect.width))RefreshHistoryLayout();
 
             if(speechPanel.gameObject.activeSelf&&(Time.unscaledTime>speechUntil||fullView||overlay))speechPanel.gameObject.SetActive(false);
-            if(PlayerInputReady&&GameInput.Pressed(Key.Escape))memory.Conversations.Cancel("玩家结束交谈");
+            if(ScriptedOpen){TickStory();return;}
+            if(PlayerInputReady&&GameInput.Pressed(Key.Escape))CloseConversationView();
             RefreshTasks();
             bool showTasks=fullView&&!overlay&&(offeredTask!=null||activeTasks.Count>0);
             if(taskPanel.gameObject.activeSelf!=showTasks||taskLayoutVisible!=showTasks)

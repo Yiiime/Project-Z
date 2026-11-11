@@ -13,6 +13,9 @@ namespace Seabreeze
         public List<string> favoriteMemoryIds = new List<string>();
         public List<PhoneMetPerson> metPeople = new List<PhoneMetPerson>();
         public List<PhoneSavedMemory> memories = new List<PhoneSavedMemory>();
+        // A save-owned album survives loading and never mixes photographs from a new game.
+        public string albumId = "";
+        public List<PhoneSavedPhoto> photos = new List<PhoneSavedPhoto>();
 
         public void Sanitize()
         {
@@ -22,13 +25,24 @@ namespace Seabreeze
             if (favoriteMemoryIds == null) favoriteMemoryIds = new List<string>();
             if (metPeople == null) metPeople = new List<PhoneMetPerson>();
             if (memories == null) memories = new List<PhoneSavedMemory>();
+            if (albumId == null) albumId = "";
+            if (photos == null) photos = new List<PhoneSavedPhoto>();
             readMessageIds.RemoveAll(string.IsNullOrEmpty);
             favoriteMemoryIds.RemoveAll(string.IsNullOrEmpty);
             metPeople.RemoveAll(p => p == null || string.IsNullOrEmpty(p.actorId));
             memories.RemoveAll(m => m == null || string.IsNullOrEmpty(m.id));
+            photos.RemoveAll(p => p == null || string.IsNullOrEmpty(p.id));
             foreach (var memory in memories)
                 if (memory.actorIds == null) memory.actorIds = Array.Empty<string>();
         }
+    }
+
+    [Serializable]
+    public sealed class PhoneSavedPhoto
+    {
+        // Relative basenames only. Absolute OS paths are never serialized into a save.
+        public string id, fileName, thumbnailFileName, title, place, capturedUtc;
+        public int day, period, width, height;
     }
 
     [Serializable]

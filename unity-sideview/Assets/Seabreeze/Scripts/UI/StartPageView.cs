@@ -19,7 +19,8 @@ namespace Seabreeze
         StartPageConfig config;
         Texture2D gradient;
         TMP_FontAsset titleFont;
-        GameObject modal;
+        GameObject modal, landing;
+        bool menuOpened;
         TextMeshProUGUI status, notice;
         Button primary;
         Action<bool> enter;
@@ -71,22 +72,22 @@ namespace Seabreeze
             Label("Invitation", menu, Vector2.up, Vector2.up, new Vector2(0, -316), new Vector2(530, 70),
                 "在小岛住下来。\n和某个人，把平凡的一天过成回忆。", 22, new Color(.84f, .89f, .88f));
 
-            primary = MenuButton("Enter island", new Vector2(0, -427), new Vector2(442, 76), hasSave ? "继续小岛生活" : "开启小岛生活", () => { if (!hasSave && confirmFresh) ConfirmNew(); else Choose(!hasSave); }, true);
+            primary = MenuButton("Enter island", new Vector2(0, -427), new Vector2(442, 76), "开始故事", () => { if (hasSave || confirmFresh) ConfirmNew(); else Choose(true); }, true);
             Label("Arrow", primary.transform, new Vector2(1, .5f), new Vector2(1, .5f), new Vector2(-25, 0), new Vector2(40, 35), "→", 27, Warm, TextAlignmentOptions.Center);
-            string progress = hasSave && preview != null ? $"第 {preview.day} 天 · {GameClock.PeriodName((TimePeriod)preview.period)}  /  {GameUI.PlaceName(ParsePlace(preview.place))}" : "从第一天开始，按自己的步调探索。";
+            string progress = hasSave && preview != null ? $"上次停在：第 {preview.day} 天 · {GameClock.PeriodName((TimePeriod)preview.period)}  /  {GameUI.PlaceName(ParsePlace(preview.place))}" : "从 Z 的直播间开始，赴一场小岛之约。";
             status = Label("Save preview", menu, Vector2.up, Vector2.up, new Vector2(2, -518), new Vector2(540, 38), progress, 17, Quiet);
-            if (hasSave) MenuButton("New island life", new Vector2(0, -575), new Vector2(218, 54), "重新开始", ConfirmNew, false);
+            if (hasSave) MenuButton("Continue island life", new Vector2(0, -575), new Vector2(218, 54), "继续旅程", () => Choose(false), false);
             MenuButton("Controls", new Vector2(hasSave ? 233 : 0, -575), new Vector2(194, 54), "如何游玩", ShowControls, false);
             notice = Label("Save notice", menu, Vector2.up, Vector2.up, new Vector2(0, -646), new Vector2(560, 68), "", 16, Warm);
 
             Label("Shoreline", root, Vector2.zero, Vector2.zero, new Vector2(64, 37), new Vector2(650, 30), "海浪，微风，还有尚未说完的话。", 17, Quiet);
             var version = Label("Demo", root, Vector2.one, Vector2.one, new Vector2(-58, -46), new Vector2(450, 26), "小岛生活 · DEMO", 15, White, TextAlignmentOptions.Right);
             version.characterSpacing = 3;
-            soundButton = CornerButton("Sound", -58, originalVolume > .001f ? "声音 · 开" : "声音 · 关", ToggleSound);
+            soundButton = CornerButton("Sound", -58, MusicDirector.Instance==null||MusicDirector.Instance.MusicEnabled ? "音乐 · 开" : "音乐 · 关", ToggleSound);
             motionButton = CornerButton("Motion", -190, "动效 · 开", ToggleMotion);
             CornerButton("Exit", -322, "退出", ConfirmQuit);
             LayoutBackground();
-            StartCoroutine(RevealMenu());
+            BuildLanding();
         }
 
         static PlaceId ParsePlace(string id) => Enum.TryParse(id, out PlaceId p) ? p : PlaceId.Street;
@@ -112,10 +113,24 @@ namespace Seabreeze
         }
         void ToggleSound()
         {
-            bool audible = AudioListener.volume > .001f;
-            if (audible) originalVolume = AudioListener.volume;
-            AudioListener.volume = audible ? 0 : Mathf.Max(.05f, originalVolume);
-            soundButton.GetComponentInChildren<TextMeshProUGUI>().text = audible ? "声音 · 关" : "声音 · 开";
+            MusicDirector.Instance?.ToggleMusic();
+            soundButton.GetComponentInChildren<TextMeshProUGUI>().text = MusicDirector.Instance == null || MusicDirector.Instance.MusicEnabled ? "音乐 · 开" : "音乐 · 关";
+        }
+        void BuildLanding()
+        {
+            menu.gameObject.SetActive(false);
+            var cover = Rect("Universal title landing", root, new Vector2(.5f,.5f), new Vector2(.5f,.5f), new Vector2(0,40), new Vector2(1000,620));
+            landing=cover.gameObject;
+            Label("Title",cover,Vector2.up,Vector2.up,new Vector2(0,-80),new Vector2(1000,95),"来自月亮的 Z",76,White,TextAlignmentOptions.Center);
+            Label("Philosophy",cover,Vector2.up,Vector2.up,new Vector2(130,-227),new Vector2(740,110),"让匆忙的日子，慢下来。\n找回一些原初的情感联系和交流。",24,new Color(.86f,.92f,.93f),TextAlignmentOptions.Center);
+            var open=UIPrimitives.Button("Open story menu",cover,new Vector2(.5f,0),new Vector2(.5f,0),new Vector2(0,110),new Vector2(360,70),"进入小岛  →",OpenMenu,true,25);
+            Label("Begin hint",cover,new Vector2(.5f,0),new Vector2(.5f,0),new Vector2(0,55),new Vector2(800,35),"Enter / 点击进入  ·  一段关于相遇的故事",17,Quiet,TextAlignmentOptions.Center);
+        }
+        void OpenMenu()
+        {
+            if(menuOpened)return;
+            menuOpened=true;if(landing!=null)Destroy(landing);menu.gameObject.SetActive(true);
+            StartCoroutine(RevealMenu());
         }
         void ToggleMotion()
         {
@@ -140,7 +155,7 @@ namespace Seabreeze
             if (busy) return;
             if (GameInput.Pressed(Key.Escape)) { if (modal != null) CloseModal(); else ConfirmQuit(); }
             if (GameInput.Pressed(Key.Enter) && modal == null && Time.frameCount > lastModalClosedFrame && EventSystem.current != null && EventSystem.current.currentSelectedGameObject == null)
-                primary.onClick.Invoke();
+                { if(!menuOpened)OpenMenu();else primary.onClick.Invoke(); }
         }
         void LayoutBackground()
         {
@@ -157,11 +172,11 @@ namespace Seabreeze
         }
         void ConfirmNew()
         {
-            ShowModal("重新开始小岛生活？", hasSave ? "当前小岛进度会被新的一天替换。\n如果只是想接着探索，请返回并选择「继续小岛生活」。" : "确认后将开启第一天的小岛生活。\n无法读取的旧存档会被新进度替换。",
+            ShowModal("重新开始小岛生活？", hasSave ? "当前小岛进度会被新的一天替换。\n如果只是想接着探索，请返回并选择「继续旅程」。" : "确认后将开启第一天的小岛生活。\n无法读取的旧存档会被新进度替换。",
                 "确认重新开始", () => Choose(true));
         }
         void ConfirmQuit() => ShowModal("今天，先到这里。", "关闭游戏后，你仍可以从上次保存的进度继续。", "退出游戏", Quit);
-        void ShowControls() => ShowModal("在小岛，慢慢来。", "A / D 或方向键   沿街行走\n空格   跳跃     E   与附近的人或物交互\nTab   打开手机     M   地图     Esc   返回 / 暂停\n\n走到街道边缘会前往相邻街道；\n上下路口和建筑入口，靠近后按 E。", "知道了", CloseModal);
+        void ShowControls() => ShowModal("在小岛，慢慢来。", "A / D 或方向键   沿街行走\n空格   跳跃     E   与附近的人或物交互\nTab   打开手机     M   地图     P   拍照\nEsc   返回 / 暂停\n\n走到街道边缘会前往相邻街道；\n上下路口和建筑入口，靠近后按 E。", "知道了", CloseModal);
         void ShowModal(string title, string text, string actionLabel, Action action)
         {
             CloseModal();

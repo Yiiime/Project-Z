@@ -12,6 +12,7 @@ namespace Seabreeze
         public DialogueRunner Dialogue { get; private set; }
         public StoryDirector Story { get; private set; }
         public StoryDatabase Database { get; private set; }
+        public FirstDayDirector FirstDay { get; internal set; }
         public MemoryGameController Memory { get; internal set; }
         public event Action Changed;
         public event Action<PlaceId> TravelRequested;
@@ -19,7 +20,7 @@ namespace Seabreeze
         public bool IsAtTitle { get; internal set; }
         public bool HasResumeSave { get; private set; }
         bool overlay;
-        public bool NonPlayerInputBlocked => IsAtTitle || overlay || (Dialogue && Dialogue.IsOpen);
+        public bool NonPlayerInputBlocked => IsAtTitle || overlay || (FirstDay != null && FirstDay.BlocksInput) || (Dialogue && Dialogue.IsOpen);
         public bool InputBlocked => NonPlayerInputBlocked || (Memory != null && Memory.PlayerChatOpen);
         public PlaceId CurrentPlace => State != null && Enum.TryParse(State.place, out PlaceId p) ? p : PlaceId.Street;
 
@@ -54,7 +55,8 @@ namespace Seabreeze
             if (!State.started)
             {
                 State.started = true;
-                if (MemoryRuntimeConfig.Enabled) Story.AddJournal("来到小岛。可以走近岛民按 E 交谈；坐长椅或喝咖啡推进游戏时段。");
+                if (State.firstDay != null) Story.AddJournal("一封从 Z 的直播间寄来的小岛邀请。故事将从这里开始。");
+                else if (MemoryRuntimeConfig.Enabled) Story.AddJournal("来到小岛。可以走近岛民按 E 交谈；坐长椅或喝咖啡推进游戏时段。");
                 else { Story.AddJournal("来到汐风镇的第一天。今天没有行程，也许先沿着海边走走。咖啡馆在街道左侧，灯塔在右侧。"); Dialogue.StartDialogue("intro"); }
             }
             else if (!MemoryRuntimeConfig.Enabled && !string.IsNullOrEmpty(State.resumeDialogue)) Dialogue.StartDialogue(State.resumeDialogue);
@@ -65,7 +67,7 @@ namespace Seabreeze
         // Read again on Continue so those presentation-only changes never become progress.
         internal bool PrepareTitleEntry(bool newGame)
         {
-            var next = newGame ? new SaveData() : SaveRepository.Load();
+            var next = newGame ? new SaveData { firstDay = new FirstDayState(), place = nameof(PlaceId.Harbor), playerX = -10, period = (int)TimePeriod.Afternoon } : SaveRepository.Load();
             if (!newGame && !next.started) return false;
             Dialogue.Cancel();
             State = next;
@@ -94,29 +96,32 @@ namespace Seabreeze
         }
         public void NewGame()
         {
+            FirstDay?.ResetForStateChange();
             Memory?.BeforeStateChange();
             Dialogue.Cancel();
-            State = new SaveData { started = true };
+            State = new SaveData { started = true, firstDay = new FirstDayState(), place = nameof(PlaceId.Harbor), playerX = -10, period = 1 };
             if (MemoryRuntimeConfig.Enabled) State.memory = new MemorySaveState();
             overlay = false;
             Story.ResetTransientState();
             Story.AddJournal(MemoryRuntimeConfig.Enabled ? "新的一次小岛生活。走近岛民按 E 交谈。" : "来到汐风镇的第一天。今天没有行程，也许先沿着海边走走。咖啡馆在街道左侧，灯塔在右侧。");
             Clock.Refresh();
-            TravelRequested?.Invoke(PlaceId.Street);
+            TravelRequested?.Invoke(PlaceId.Harbor);
             if (!MemoryRuntimeConfig.Enabled) Dialogue.StartDialogue("intro");
             Memory?.AfterStateChange();
+            FirstDay?.ResumeAfterTravel();
             NotifyChanged();
             Save();
         }
         public void LoadSavedGame()
         {
             if (!MemoryRuntimeConfig.Enabled) return;
+            FirstDay?.ResetForStateChange();
             Memory?.BeforeStateChange(); Dialogue.Cancel();
             State = SaveRepository.Load();
             if (State.memory == null) State.memory = new MemorySaveState();
             State.started = true; overlay = false; Story.ResetTransientState(); Clock.Refresh();
             TravelRequested?.Invoke(CurrentPlace);
-            Memory?.AfterStateChange(); NotifyChanged();
+            Memory?.AfterStateChange(); FirstDay?.ResumeAfterTravel(); NotifyChanged();
         }
         public void Travel(PlaceId place)
         {

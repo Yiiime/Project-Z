@@ -37,8 +37,12 @@ namespace Seabreeze
             world = gameObject.AddComponent<WorldDirector>();
             world.Initialize();
             ui = gameObject.AddComponent<GameUI>();
+            gameObject.AddComponent<MusicDirector>().Initialize(session);
             ui.Initialize();
             gameObject.AddComponent<AmbientAudio>().Initialize();
+            gameObject.AddComponent<PhotoCaptureService>().Initialize(session);
+            session.FirstDay = gameObject.AddComponent<FirstDayDirector>();
+            session.FirstDay.Initialize(session, world);
             if (smokeRun)
                 InitializeMemory();
             else
@@ -118,6 +122,7 @@ namespace Seabreeze
             session.Save();
             Destroy(startPage);
             startPage = null;
+            session.FirstDay.Resume();
         }
 
         void OnDestroy()

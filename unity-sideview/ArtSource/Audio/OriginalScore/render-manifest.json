@@ -1,0 +1,38 @@
+[
+  {
+    "file": "morning_letters",
+    "title": "海风来信",
+    "bpm": 78,
+    "bars": 24,
+    "durationSeconds": 73.846154,
+    "peakDb": -3.19,
+    "rmsDb": -17.97
+  },
+  {
+    "file": "lantern_tide",
+    "title": "灯火与潮汐",
+    "bpm": 70,
+    "bars": 24,
+    "durationSeconds": 82.285714,
+    "peakDb": -3.82,
+    "rmsDb": -17.94
+  },
+  {
+    "file": "a_window_for_you",
+    "title": "为你留一扇窗",
+    "bpm": 64,
+    "bars": 24,
+    "durationSeconds": 90.0,
+    "peakDb": -3.17,
+    "rmsDb": -18.01
+  },
+  {
+    "file": "after_the_fireworks",
+    "title": "烟花之后",
+    "bpm": 72,
+    "bars": 24,
+    "durationSeconds": 80.0,
+    "peakDb": -3.06,
+    "rmsDb": -17.99
+  }
+]
