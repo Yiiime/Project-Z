@@ -223,9 +223,15 @@ namespace Seabreeze
         public void ShowToast(string text)
         {if(!initialized)return;toastText.text=text;toastUntil=Time.unscaledTime+3.8f;toastGroup.alpha=1;toastGroup.transform.SetAsLastSibling();}
 
+        public void SetTitleVisible(bool visible)
+        {
+            if (canvas != null) canvas.enabled = !visible;
+            if (visible) HideInteraction();
+        }
+
         void Update()
         {
-            if(!initialized||session==null)return;
+            if(!initialized||session==null||session.IsAtTitle)return;
             bool playerChat=session.Memory!=null&&session.Memory.PlayerChatOpen;
             hud.gameObject.SetActive(!hidden&&!playerChat);
             if(playerChat){HideInteraction();return;}
@@ -356,8 +362,8 @@ namespace Seabreeze
         {
             FinishPhoneClose();
             if(nativeLive!=null){nativeLive.Close();nativeLive=null;}
-            canvas.enabled=true;overlayBusy=false;overlayRoutine=null;
-            overlayMode="";Time.timeScale=1f;overlayRoot.gameObject.SetActive(false);session.SetOverlay(IsTransitioning);
+            canvas.enabled=!session.IsAtTitle;overlayBusy=false;overlayRoutine=null;
+            overlayMode="";Time.timeScale=session.IsAtTitle?0f:1f;overlayRoot.gameObject.SetActive(false);session.SetOverlay(IsTransitioning);
             dialogueRoot.gameObject.SetActive(session.Dialogue.IsOpen);dialogueFrame=Time.frameCount;RefreshHUD();
         }
         void Header(string eyebrow,string title,string subtitle)

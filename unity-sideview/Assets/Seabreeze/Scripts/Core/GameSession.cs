@@ -16,8 +16,10 @@ namespace Seabreeze
         public event Action Changed;
         public event Action<PlaceId> TravelRequested;
         public bool IsReady { get; private set; }
+        public bool IsAtTitle { get; internal set; }
+        public bool HasResumeSave { get; private set; }
         bool overlay;
-        public bool NonPlayerInputBlocked => overlay || (Dialogue && Dialogue.IsOpen);
+        public bool NonPlayerInputBlocked => IsAtTitle || overlay || (Dialogue && Dialogue.IsOpen);
         public bool InputBlocked => NonPlayerInputBlocked || (Memory != null && Memory.PlayerChatOpen);
         public PlaceId CurrentPlace => State != null && Enum.TryParse(State.place, out PlaceId p) ? p : PlaceId.Street;
 
@@ -26,12 +28,14 @@ namespace Seabreeze
             if (Instance && Instance != this) { Destroy(gameObject); return; }
             Instance = this;
         }
-        public void Initialize()
+        public void Initialize(bool atTitle = false)
         {
             if (IsReady) return;
             Instance = this;
+            IsAtTitle = atTitle;
             Database = Resources.Load<StoryDatabase>("Content/StoryDatabase");
             State = SaveRepository.Load();
+            HasResumeSave = State.started;
             if (MemoryRuntimeConfig.Enabled && State.memory == null) State.memory = new MemorySaveState();
             Clock = GetComponent<GameClock>() ?? gameObject.AddComponent<GameClock>();
             Dialogue = GetComponent<DialogueRunner>() ?? gameObject.AddComponent<DialogueRunner>();
@@ -41,6 +45,12 @@ namespace Seabreeze
             Story.Initialize(this);
             IsReady = true;
             if (!Database) Debug.LogError("Seabreeze story database missing. Run Seabreeze/Rebuild Game Content in the Editor.");
+            if (!IsAtTitle) BeginStory();
+            NotifyChanged();
+        }
+
+        void BeginStory()
+        {
             if (!State.started)
             {
                 State.started = true;
@@ -49,7 +59,23 @@ namespace Seabreeze
             }
             else if (!MemoryRuntimeConfig.Enabled && !string.IsNullOrEmpty(State.resumeDialogue)) Dialogue.StartDialogue(State.resumeDialogue);
             Story.Evaluate();
+        }
+
+        // The title scene may attach a backdrop while its save is still only a preview.
+        // Read again on Continue so those presentation-only changes never become progress.
+        internal bool PrepareTitleEntry(bool newGame)
+        {
+            var next = newGame ? new SaveData() : SaveRepository.Load();
+            if (!newGame && !next.started) return false;
+            Dialogue.Cancel();
+            State = next;
+            if (MemoryRuntimeConfig.Enabled && State.memory == null) State.memory = new MemorySaveState();
+            overlay = false;
+            Story.ResetTransientState();
+            Clock.Refresh();
+            BeginStory();
             NotifyChanged();
+            return true;
         }
         public void SetOverlay(bool value) { overlay = value; }
         public bool HasFlag(string key) => State != null && !string.IsNullOrEmpty(key) && State.flags.Contains(key);
@@ -60,7 +86,7 @@ namespace Seabreeze
         public void NotifyChanged() { Changed?.Invoke(); }
         public bool Save()
         {
-            if (State == null) return false;
+            if (IsAtTitle || State == null) return false;
             Memory?.BeforeSave();
             bool saved = SaveRepository.Write(State);
             if (!saved && Story) Story.Notify("暂时无法写入存档，当前进度仍保留在本次游戏中。");
@@ -101,7 +127,7 @@ namespace Seabreeze
         {
             State.place = place.ToString();
             SetFlag("visited_" + place);
-            Story?.Evaluate();
+            if (!IsAtTitle) Story?.Evaluate();
             NotifyChanged();
             Save();
         }

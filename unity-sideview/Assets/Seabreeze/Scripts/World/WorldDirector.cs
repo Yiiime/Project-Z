@@ -140,7 +140,7 @@ namespace Seabreeze
             GameSession.Instance.State.playerX = spawn.x;
             GameSession.Instance.SetPlace(scene.place);
             GameSession.Instance.State.started = true;
-            GameSession.Instance.Story.Evaluate();
+            if (!GameSession.Instance.IsAtTitle) GameSession.Instance.Story.Evaluate();
         }
 
         // World routes still dispatch GameSession.TravelRequested: NPC memory and
@@ -283,6 +283,7 @@ namespace Seabreeze
 
         void Update()
         {
+            if (GameSession.Instance != null && GameSession.Instance.IsAtTitle) return;
             if (!IsTransitioning && Player != null && Stage != null && GameSession.Instance != null &&
                 GameSession.Instance.IsReady && GameSession.Instance.State == attachedState)
             {
@@ -297,6 +298,7 @@ namespace Seabreeze
 
         void SavePosition()
         {
+            if (GameSession.Instance != null && GameSession.Instance.IsAtTitle) return;
             if (!IsTransitioning && GameSession.Instance != null && Player != null &&
                 GameSession.Instance.State == attachedState)
             {

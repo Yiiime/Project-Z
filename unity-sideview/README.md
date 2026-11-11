@@ -8,6 +8,8 @@
 2. 打开 `Assets/Seabreeze/Scenes/Street.unity`，点击 Play。
 3. 第一次导入需要解析 Packages 并生成中文字体缓存。探索玩法内容均在项目内，可离线运行。手机内的原生直播连接本机服务，配置见 `Tools/live-service/README.md`。
 
+点击 Play 后先进入动态海岛首页。可继续有效存档，或确认后重新开始；首页停留不会推进游戏或自动覆盖存档。新入口、白天对话配色及本轮编辑器验收见 [开始页与对话说明](Docs/StartPageAndDayDialogue.md)。当前默认八人模式的 AI 对话仍需要记忆服务和模型配置，直播也需要相应服务。
+
 本机曾构建 `Builds/macOS/Seabreeze.app`（macOS Universal）；构建产物不随源码提交。从仓库克隆后请在 Unity 中构建。
 
 八人记忆试玩：双击 `启动七人记忆试玩.command`（启动器名称为兼容保留），在本机配置页连接模型，再进入游戏。当前角色的自主交谈、定向剧情消息、存档隔离与验收说明见 [当前接入说明](Docs/MemoryIntegration.md)。当前模式使用独立试玩存档，不自动发布固定 Day4 公告。
