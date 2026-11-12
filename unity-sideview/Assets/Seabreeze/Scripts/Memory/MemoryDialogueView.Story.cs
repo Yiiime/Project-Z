@@ -33,8 +33,8 @@ namespace Seabreeze
             storyGeneration++;
             storyOwner = session.State;
             storyFinished = finished; storyLines = lines; storyIndex = 0;
-            // A previous free chat may have made room for its task panel.
-            taskLayoutVisible = false; taskPanel.gameObject.SetActive(false);
+            // Authored dialogue reuses the presentation without free-chat task cards.
+            ClearTaskCards();
             portrait.anchorMin = new Vector2(.015f,.025f); portrait.anchorMax = new Vector2(.445f,.84f);
             portrait.offsetMin = portrait.offsetMax = Vector2.zero;
             column.anchorMin = new Vector2(.455f,.12f); column.anchorMax = new Vector2(.95f,.87f);
@@ -97,7 +97,6 @@ namespace Seabreeze
         void TickStory()
         {
             if (!ScriptedOpen) return;
-            taskPanel.gameObject.SetActive(false);
             playerState.text = "第一天 · 小岛来信";
             if (PlayerInputReady && GameInput.Pressed(Key.Escape)) { CloseStory(false); return; }
             if (PlayerInputReady && (GameInput.Pressed(Key.E) || GameInput.Pressed(Key.Space) || GameInput.Pressed(Key.Enter))) AdvanceStory();

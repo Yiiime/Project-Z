@@ -105,12 +105,36 @@ namespace Seabreeze
             }
             Append(new MemoryEvent{id=id,kind="story_event",text=text,observers=observers,verified=verified,discloseTo=discloseTo??observers,location=session.CurrentPlace.ToString(),locationId=Location(null)});
         }
-        public void RespondTask(string taskId,bool accepted){Client.RespondTask(taskId,accepted,r=>Conversations.RequestPlayerReply());}
-        public void InviteTask(string taskId,string actorId,string text){BeginPlayerChat(actorId);Client.InviteTask(taskId,actorId,text,r=>Conversations.RequestPlayerReply());}
+        public void RespondTask(string taskId,bool accepted)
+        {
+            Client.RespondTask(taskId,accepted,ReplyToCurrentConversation());
+        }
+        public void InviteTask(string taskId,string actorId,string text)
+        {
+            if(Conversations?.PlayerActor?.npcId!=actorId)BeginPlayerChat(actorId);
+            if(Conversations?.PlayerActor?.npcId!=actorId)return;
+            Client.InviteTask(taskId,actorId,text,ReplyToCurrentConversation());
+        }
+        Action<MemoryReply> ReplyToCurrentConversation()
+        {
+            // Task synchronization may finish after Esc, travel, a new save or a
+            // different NPC conversation. The reply belongs to the original session.
+            var coordinator=Conversations;
+            var actor=coordinator?.PlayerActor;
+            string conversation=coordinator?.ActiveId;
+            var state=session.State;
+            return _=>
+            {
+                if(this!=null&&session!=null&&session.State==state&&coordinator!=null&&
+                   coordinator==Conversations&&actor!=null&&coordinator.PlayerActor==actor&&
+                   !string.IsNullOrEmpty(conversation)&&coordinator.ActiveId==conversation)
+                    coordinator.RequestPlayerReply();
+            };
+        }
         public void BeforeSave(){if(!changing)Spawner?.CapturePositions();}
         public void BeforeStateChange(){changing=true;Conversations?.ResetTimeline();GetComponent<MemoryActionExecutor>()?.ResetTimeline();}
         public void AfterStateChange(){if(session.State.memory==null)session.State.memory=new MemorySaveState();session.State.memory.Sanitize();changing=false;lastDay=session.State.day;lastPeriod=session.State.period;Spawner.Reload();Client.BeginWorld();View.ResetView();}
-        void TravelRequested(PlaceId place){Spawner?.CapturePositions();Conversations?.CancelAll("切换场景");View?.ResetView();}
+        void TravelRequested(PlaceId place){if(!changing)Spawner?.CapturePositions();Conversations?.CancelAll("切换场景");View?.ResetView();}
         void OnDestroy(){if(session!=null){session.Clock.Changed-=ClockChanged;session.TravelRequested-=TravelRequested;}if(Client!=null)Client.ConnectionChanged-=ConnectionChanged;}
     }
 }

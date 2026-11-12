@@ -1,0 +1,43 @@
+[
+  {
+    "actor": "liting",
+    "cards": [
+      "bar_box"
+    ]
+  },
+  {
+    "actor": "axing",
+    "cards": [
+      "generator"
+    ]
+  },
+  {
+    "actor": "xiaoxiaoqing",
+    "cards": [
+      "flowers"
+    ]
+  },
+  {
+    "actor": "liyuan",
+    "cards": [
+      "map_blank",
+      "map_trial"
+    ]
+  },
+  {
+    "actor": "z",
+    "cards": []
+  },
+  {
+    "checkpoint": "",
+    "count": 0
+  },
+  {
+    "checkpoint": "{broken",
+    "count": 0
+  },
+  {
+    "checkpoint": "{\"tasks\":{\"state\":[{\"task\":\"bar_box\",\"status\":\"completed\"}]}}",
+    "count": 0
+  }
+]

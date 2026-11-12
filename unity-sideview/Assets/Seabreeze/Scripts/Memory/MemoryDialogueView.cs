@@ -14,8 +14,6 @@ namespace Seabreeze
     public sealed partial class MemoryDialogueView : MonoBehaviour
     {
         MemoryGameController memory; GameSession session;
-        RectTransform taskPanel;bool taskLayoutVisible;
-        TextMeshProUGUI taskTitle;Button acceptTask,declineTask,inviteTask;string offeredTask,lastCheckpoint;readonly List<string> activeTasks=new List<string>();int selectedTask;
         RectTransform root,speechPanel,playerPanel,portrait,column,content;
         TextMeshProUGUI speechTitle,speechText,playerTitle,locationText,historyText,playerState,emptyPrompt,inputHelp;
         TMP_InputField input; Button send; ScrollRect historyScroll;
@@ -72,14 +70,6 @@ namespace Seabreeze
             speechText=Label("台词",speechPanel,Vector2.up,Vector2.up,new Vector2(26,-60),new Vector2(1008,122),"",25,Paper);speechTitle.richText=speechText.richText=false;
             speechText.enableAutoSizing=true;speechText.fontSizeMin=18;speechText.fontSizeMax=25;speechPanel.gameObject.SetActive(false);
             BuildPlayerView();
-            taskPanel=Panel("玩家任务",root,Vector2.one,Vector2.one,new Vector2(-26,-150),new Vector2(430,152),Style.PanelFill).rectTransform;
-            var taskControls=Rect("Task controls",taskPanel,Vector2.zero,Vector2.zero,Vector2.zero,new Vector2(430,152));
-            taskTitle=Label("当前玩家任务",taskControls,Vector2.up,Vector2.up,new Vector2(18,-8),new Vector2(394,32),"",17,Accent);taskTitle.richText=false;taskTitle.overflowMode=TextOverflowModes.Ellipsis;
-            acceptTask=ButtonAt("接受任务",taskControls,new Vector2(16,-50),new Vector2(125,36),()=>memory.RespondTask(offeredTask,true));
-            declineTask=ButtonAt("暂不接受",taskControls,new Vector2(154,-50),new Vector2(125,36),()=>memory.RespondTask(offeredTask,false));
-            ButtonAt("切换任务",taskControls,new Vector2(292,-50),new Vector2(122,36),()=>{if(activeTasks.Count>0)selectedTask=(selectedTask+1)%activeTasks.Count;});
-            inviteTask=ButtonAt("邀请当前NPC协作",taskControls,new Vector2(16,-96),new Vector2(240,36),()=>{if(activeTasks.Count>0)memory.InviteTask(activeTasks[selectedTask],selectedActor,"我接受了这项委托。你愿意和我一起做吗？只帮一部分或者另约也可以。");});
-            taskPanel.gameObject.SetActive(false);
             session.Clock.Changed+=RefreshDialoguePalette;
         }
         static RectTransform Region(string name,Transform parent,Vector2 min,Vector2 max)
@@ -152,11 +142,6 @@ namespace Seabreeze
         }
         static void Fill(RectTransform rect){rect.anchorMin=Vector2.zero;rect.anchorMax=Vector2.one;rect.offsetMin=rect.offsetMax=Vector2.zero;}
         static bool IsComposing(){var system=EventSystem.current?.currentInputModule?.input;return !string.IsNullOrEmpty(system!=null?system.compositionString:Input.compositionString);}
-        Button ButtonAt(string caption,Transform parent,Vector2 position,Vector2 size,Action action)
-        {
-            var b=UIPrimitives.Button(caption,parent,Vector2.up,Vector2.up,position,size,caption,action,false,18);
-            b.GetComponentInChildren<TextMeshProUGUI>().alignment=TextAlignmentOptions.Center;return b;
-        }
         void Send()
         {
             if(IsComposing()){StartCoroutine(ResumeInput());return;}
@@ -166,14 +151,14 @@ namespace Seabreeze
         IEnumerator ResumeInput(){yield return null;if(PlayerInputReady&&memory.PlayerChatOpen)input.ActivateInputField();}
         public void OpenPlayer(string actorId)
         {
-            if(transition!=null)StopCoroutine(transition);ResetPortraitIdle();Closing=false;entering=true;selectedActor=actorId;lastCheckpoint=null;ClearHistory();typing=false;portraitEmotion=null;expressionEndsAt=0;
+            if(transition!=null)StopCoroutine(transition);ResetPortraitIdle();Closing=false;entering=true;selectedActor=actorId;ClearTaskCards();ClearHistory();typing=false;portraitEmotion=null;expressionEndsAt=0;
             playerTitle.text=SevenCharacterCatalog.Name(actorId);
             RefreshDialoguePalette();
 
             locationText.text=GameUI.PlaceName(session.CurrentPlace)+"  ·  "+GameUI.PeriodName(session.Clock.Period);
             playerPanel.gameObject.SetActive(true);speechPanel.gameObject.SetActive(false);playerGroup.alpha=0;playerGroup.interactable=false;input.text="";
             ApplyPortrait(actorId);
-            RefreshHistoryLayout();transition=StartCoroutine(AnimatePlayer(true));
+            if(!ScriptedOpen)RefreshTasks();RefreshHistoryLayout();transition=StartCoroutine(AnimatePlayer(true));
         }
         void ApplyPortrait(string actorId)
         {
@@ -222,6 +207,8 @@ namespace Seabreeze
                 bubble.Panel.sizeDelta=new Vector2(bubbleWidth,textHeight+52);bubble.Text.rectTransform.sizeDelta=new Vector2(bubbleWidth-68,textHeight);
                 bubble.Text.ForceMeshUpdate();y+=textHeight+62;
             }
+            y=LayoutTaskCards(width,y);
+            emptyPrompt.gameObject.SetActive(history.Count==0&&taskCards.Count==0);
             content.sizeDelta=new Vector2(0,Mathf.Max(historyScroll.viewport.rect.height,y+8));historyScroll.verticalNormalizedPosition=0;
             lastLayoutCharacters=historyText!=null?historyText.maxVisibleCharacters:-1;
         }
@@ -324,18 +311,11 @@ namespace Seabreeze
             speechTitle.text=SevenCharacterCatalog.Name(speaker);speechText.text=text;speechTitle.color=SevenCharacterCatalog.Find(speaker)?.Accent??Paper;
             speechUntil=Time.unscaledTime+Mathf.Clamp(1.3f+text.Length*.05f,2.5f,6);speechPanel.gameObject.SetActive(true);
         }
-        void RefreshTasks()
-        {
-            string checkpoint=session.State.memory.checkpoint;if(checkpoint==lastCheckpoint)return;lastCheckpoint=checkpoint;activeTasks.Clear();offeredTask=null;
-            if(string.IsNullOrEmpty(checkpoint))return;
-            try {var snapshot=Newtonsoft.Json.Linq.JObject.Parse(checkpoint);foreach(var item in snapshot["tasks"]?["state"]??new Newtonsoft.Json.Linq.JArray()) {string id=(string)item["task"],state=(string)item["status"];if(state=="active")activeTasks.Add(id);if(state=="offered") {var book=Newtonsoft.Json.Linq.JObject.Parse(Resources.Load<TextAsset>("Memory/task-catalog").text);if(book["tasks"].Any(t=>(string)t["id"]==id&&(string)t["owner"]==selectedActor))offeredTask=id;}}}catch { }
-            selectedTask=Mathf.Clamp(selectedTask,0,Mathf.Max(0,activeTasks.Count-1));
-        }
         public void ResetView()
         {
             StopAllCoroutines();
             var cancelledStory=ResetStoryState();
-            transition=null;Closing=entering=false;ClearHistory();FinishTyping();ResetPortraitIdle();memory.ResetZhouboPortraitSelection();backdrop.Release();playerPanel.gameObject.SetActive(false);playerGroup.alpha=0;character.Hide();speechPanel.gameObject.SetActive(false);taskPanel.gameObject.SetActive(false);lastCheckpoint=null;
+            transition=null;Closing=entering=false;ClearHistory();FinishTyping();ResetPortraitIdle();memory.ResetZhouboPortraitSelection();backdrop.Release();playerPanel.gameObject.SetActive(false);playerGroup.alpha=0;character.Hide();speechPanel.gameObject.SetActive(false);ClearTaskCards();
             // Notify after the view is fully reset. A callback cannot leave a half-reset new view.
             cancelledStory?.Invoke(false);
         }
@@ -349,20 +329,10 @@ namespace Seabreeze
             if(speechPanel.gameObject.activeSelf&&(Time.unscaledTime>speechUntil||fullView||overlay))speechPanel.gameObject.SetActive(false);
             if(ScriptedOpen){TickStory();return;}
             if(PlayerInputReady&&GameInput.Pressed(Key.Escape))CloseConversationView();
-            RefreshTasks();
-            bool showTasks=fullView&&!overlay&&(offeredTask!=null||activeTasks.Count>0);
-            if(taskPanel.gameObject.activeSelf!=showTasks||taskLayoutVisible!=showTasks)
-            {
-                taskLayoutVisible=showTasks;
-                taskPanel.gameObject.SetActive(showTasks);
-                portrait.anchorMax=new Vector2(showTasks ? .36f : .445f,.95f);
-                column.anchorMin=new Vector2(showTasks ? .385f : .455f,.11f);column.anchorMax=new Vector2(showTasks ? 1 : .95f,.87f);column.offsetMin=Vector2.zero;column.offsetMax=new Vector2(showTasks ? -488 : 0,0);
-                RefreshHistoryLayout();
-            }
-            acceptTask.interactable=declineTask.interactable=fullView&&offeredTask!=null&&memory.Client.CanGenerate;inviteTask.interactable=fullView&&activeTasks.Count>0&&memory.Client.CanGenerate;
-            taskTitle.text=offeredTask!=null?"NPC已提出："+offeredTask:activeTasks.Count>0?"玩家进行中："+activeTasks[selectedTask]:"";
+            if(!Closing)RefreshTasks();
+            UpdateTaskActions(fullView&&!overlay);
             send.interactable=PlayerInputReady&&memory.PlayerChatOpen&&memory.Client.CanGenerate&&!memory.Conversations.Sending;
-            playerState.text=memory.Conversations.Sending?"对方正在想怎么说…":"";
+            playerState.text=memory.Conversations.Sending?"对方正在想怎么说…":memory.Client.CanGenerate?"":"暂时无法连接。Esc 返回后，可在暂停菜单设置对话服务。";
             playerState.color=new Color(.94f,.94f,1,.82f);
             if(followingSpeech&&PlayerInputReady)
             {
