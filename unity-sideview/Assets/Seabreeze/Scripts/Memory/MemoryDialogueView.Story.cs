@@ -108,6 +108,7 @@ namespace Seabreeze
                 if (historyText.maxVisibleCharacters >= historyText.textInfo.characterCount) FinishTyping();
                 else character.SetState("neutral", lastSpeaker == selectedActor);
             }
+            RefreshTypingLayout();
         }
         void CloseConversationView()
         {
