@@ -12,7 +12,14 @@ fi
 if [[ ! -d Tools/MemoryLab/node_modules/ajv ]]; then (cd Tools/MemoryLab && npm ci --ignore-scripts --no-audit --no-fund); fi
 if ! curl --silent --fail "http://127.0.0.1:${z_ending_port}/api/health" | "$z_ending_node" -e 'let b="";process.stdin.on("data",d=>b+=d);process.stdin.on("end",()=>{try{process.exit(JSON.parse(b).endingIntegration?0:1)}catch{process.exit(1)}})'; then
   mkdir -p Tools/MemoryLab/.data
-  nohup "$z_ending_node" Tools/MemoryLab/server.mjs --port "$z_ending_port" >Tools/MemoryLab/.data/ending-game-service.log 2>&1 &
+  "$z_ending_node" --input-type=module - <<'JS'
+import {spawn} from 'node:child_process';
+import {openSync,closeSync} from 'node:fs';
+import {resolve} from 'node:path';
+const log=openSync('Tools/MemoryLab/.data/ending-game-service.log','a',0o600);
+const child=spawn(process.execPath,[resolve('Tools/MemoryLab/server.mjs'),'--port',process.env.Z_MEMORY_PORT],{cwd:process.cwd(),env:process.env,detached:true,stdio:['ignore',log,log]});
+child.unref();closeSync(log);
+JS
   for z_ending_attempt in {1..40}; do
     if curl --silent --fail "http://127.0.0.1:${z_ending_port}/api/health" >/dev/null; then break; fi
     sleep .2
