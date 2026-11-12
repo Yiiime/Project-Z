@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,23 +14,25 @@ namespace Seabreeze
     public sealed class StartPageView : MonoBehaviour
     {
         CanvasGroup group, menuGroup;
-        RectTransform root, menu;
+        RectTransform root, composition, menu;
         RawImage background;
         StartPageAtmosphere atmosphere;
+        StartPageCoastalMotion coastalMotion;
         StartPageConfig config;
         Texture2D gradient;
-        TMP_FontAsset titleFont;
         GameObject modal;
         TextMeshProUGUI status, notice;
-        Button primary;
+        Button primary, lastMenuSelection, soundButton, motionButton;
+        Button modalDefaultSelection, lastModalSelection;
         Action<bool> enter;
+        Action modalBack;
         bool hasSave, busy, dismissed, confirmFresh, motion = true;
         int lastModalClosedFrame = -1;
-        float elapsed;
-        Button soundButton, motionButton;
-        static readonly Color White = new Color(.95f, .96f, .94f);
-        static readonly Color Quiet = new Color(.76f, .83f, .85f);
-        static readonly Color Warm = new Color(.96f, .82f, .60f);
+        string savePreview;
+        readonly List<Button> mainItems = new List<Button>();
+        static readonly Color White = new Color(.96f, .97f, .96f);
+        static readonly Color Quiet = new Color(.78f, .84f, .87f);
+        static readonly Color Warm = new Color(1f, .89f, .68f);
 
         public void Initialize(bool canContinue, SaveData preview, Action<bool> enterGame)
         {
@@ -41,160 +44,244 @@ namespace Seabreeze
             var scaler = go.GetComponent<CanvasScaler>(); scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             scaler.referenceResolution = new Vector2(1920, 1080); scaler.matchWidthOrHeight = .5f;
             group = go.GetComponent<CanvasGroup>();
-            background = Stretch("Painted coast", root, Vector2.zero, Vector2.zero).gameObject.AddComponent<RawImage>();
+            var matte = Stretch("Cinematic side matte", root, Vector2.zero, Vector2.zero).gameObject.AddComponent<Image>();
+            matte.color = new Color(.035f, .065f, .10f); matte.raycastTarget = true;
+            composition = Rect("Coastal composition", root, new Vector2(.5f, .5f), new Vector2(.5f, .5f), Vector2.zero, new Vector2(1920, 1080));
+            composition.gameObject.AddComponent<RectMask2D>();
+            background = Stretch("Painted coast", composition, Vector2.zero, Vector2.zero).gameObject.AddComponent<RawImage>();
             background.texture = config != null ? config.background : Resources.Load<Texture2D>("Art/street_day");
             background.raycastTarget = true;
-            atmosphere = Stretch("Sea light and distant birds", root, Vector2.zero, Vector2.zero).gameObject.AddComponent<StartPageAtmosphere>();
+            coastalMotion = background.gameObject.AddComponent<StartPageCoastalMotion>();
+            coastalMotion.Initialize(config);
+            atmosphere = Stretch("Sea light and distant birds", composition, Vector2.zero, Vector2.zero).gameObject.AddComponent<StartPageAtmosphere>();
             atmosphere.Sea = config != null ? config.sea : new Rect(.05f, .32f, .40f, .17f);
             atmosphere.Sky = config != null ? config.sky : new Rect(.10f, .68f, .45f, .19f);
-            var shade = Stretch("Soft coastal vignette", root, Vector2.zero, Vector2.zero).gameObject.AddComponent<RawImage>();
-            gradient = MakeGradient(config != null ? config.shade : new Color(.045f, .10f, .17f, .76f));
+            var shade = Stretch("Soft coastal vignette", composition, Vector2.zero, Vector2.zero).gameObject.AddComponent<RawImage>();
+            gradient = MakeGradient(config != null ? config.shade : new Color(.045f, .10f, .17f, .14f));
             shade.texture = gradient; shade.raycastTarget = false;
 
-            var small = Label("Edition", root, Vector2.up, Vector2.up, new Vector2(64, -44), new Vector2(610, 30),
-                "Z  /  A STORY OF EVERYDAY CONNECTIONS", 13, Quiet);
-            small.characterSpacing = 3;
-            menu = Rect("Title and invitations", root, new Vector2(.085f, .5f), new Vector2(0, .5f), Vector2.zero, new Vector2(650, 780));
-            menuGroup = menu.gameObject.AddComponent<CanvasGroup>(); menuGroup.alpha = 0;
-            Line(menu, Vector2.up, Vector2.up, new Vector2(0, -15), new Vector2(34, 1), Warm);
-            var eyebrow = Label("Chapter", menu, Vector2.up, Vector2.up, new Vector2(50, 0), new Vector2(550, 32), "一封写给慢生活的信", 18, Warm);
-            eyebrow.characterSpacing = 4;
-            var name = Label("Game name", menu, Vector2.up, Vector2.up, new Vector2(-3, -62), new Vector2(620, 90), "来自月亮的", 62, White);
-            name.characterSpacing = 5;
-            var z = Label("Z", menu, Vector2.up, Vector2.up, new Vector2(-5, -133), new Vector2(190, 252), "Z", 230, White);
-            var titleSource = Resources.Load<Font>("UI/FinalKit/BodoniModa");
-            if (titleSource != null)
-            {
-                titleFont = TMP_FontAsset.CreateFontAsset(titleSource, 90, 9, UnityEngine.TextCore.LowLevel.GlyphRenderMode.SDFAA,
-                    512, 512, AtlasPopulationMode.Dynamic, false);
-                if (titleFont != null) { titleFont.TryAddCharacters("Z"); z.font = titleFont; }
-            }
-            var seal = Rect("Moon signature", menu, Vector2.up, new Vector2(.5f, .5f), new Vector2(246, -247), new Vector2(132, 132))
+            // Keep the title and every primary action together in the quiet sky beside the coast.
+            menu = Rect("Title and menu", composition, new Vector2(.73f, .53f), new Vector2(.5f, .5f), Vector2.zero, new Vector2(520, 560));
+            menuGroup = menu.gameObject.AddComponent<CanvasGroup>();
+            menuGroup.alpha = 0; menuGroup.interactable = false; menuGroup.blocksRaycasts = false;
+            var moon = Rect("Moon signature", menu, new Vector2(.5f, .5f), new Vector2(.5f, .5f), new Vector2(0, 222), new Vector2(42, 42))
                 .gameObject.AddComponent<StartPageMoonGraphic>();
-            seal.color = new Color(Warm.r, Warm.g, Warm.b, .78f);
-            var subtitle = Label("English title", menu, Vector2.up, Vector2.up, new Vector2(338, -210), new Vector2(290, 40), "FROM THE MOON", 15, Quiet);
-            subtitle.characterSpacing = 4;
-            Label("Signature", menu, Vector2.up, Vector2.up, new Vector2(338, -250), new Vector2(305, 70), "愿每一次相遇，\n都有回声。", 20, White);
-            Label("Invitation", menu, Vector2.up, Vector2.up, new Vector2(0, -408), new Vector2(610, 75),
-                "让匆忙的日子，慢下来。\n在海风里，找回久违的陪伴。", 23, new Color(.85f, .9f, .9f));
+            moon.color = new Color(White.r, White.g, White.b, .9f);
+            var title = Label("Game name", menu, new Vector2(.5f, .5f), new Vector2(.5f, .5f), new Vector2(0, 150), new Vector2(520, 90),
+                "来自月亮的 Z", 64, White, TextAlignmentOptions.Center);
+            title.characterSpacing = 1.5f;
+            title.textWrappingMode = TextWrappingModes.NoWrap;
+            title.enableAutoSizing = true; title.fontSizeMin = 58; title.fontSizeMax = 64;
 
-            primary = MenuButton("Enter island", new Vector2(0, -524), new Vector2(460, 78), "开始游戏", () => { if (hasSave || confirmFresh) ConfirmNew(); else Choose(true); }, true);
-            Label("Arrow", primary.transform, new Vector2(1, .5f), new Vector2(1, .5f), new Vector2(-26, 0), new Vector2(40, 35), "→", 29, new Color(.15f,.24f,.28f), TextAlignmentOptions.Center);
-            string progress = hasSave && preview != null ? $"上次停在：第 {preview.day} 天 · {GameClock.PeriodName((TimePeriod)preview.period)}  /  {GameUI.PlaceName(ParsePlace(preview.place))}" : "从 Z 的直播间，赴一场小岛之约。";
-            status = Label("Save preview", menu, Vector2.up, Vector2.up, new Vector2(2, -615), new Vector2(620, 38), progress, 16, Quiet);
-            if (hasSave) MenuButton("Continue island life", new Vector2(0, -672), new Vector2(220, 52), "继续旅程", () => Choose(false), false);
-            MenuButton("Controls", new Vector2(hasSave ? 240 : 0, -672), new Vector2(220, 52), "如何游玩", ShowControls, false);
-            notice = Label("Save notice", menu, Vector2.up, Vector2.up, new Vector2(0, -741), new Vector2(640, 65), "", 16, Warm);
+            primary = MainItem("Start game", "开始游戏", () => { if (hasSave || confirmFresh) ConfirmNew(); else Choose(true); });
+            if (hasSave) MainItem("Continue journey", "继续旅程", () => Choose(false));
+            MainItem("Settings", "设置", ShowSettings);
+            MainItem("Exit", "退出", ConfirmQuit);
+            LinkVertical(mainItems);
+            lastMenuSelection = primary;
 
-            Line(root, new Vector2(1,0), new Vector2(1,0), new Vector2(-64,150), new Vector2(270,1), new Color(.94f,.94f,.88f,.38f));
-            var coast = Label("Coast caption", root, new Vector2(1,0), new Vector2(1,0), new Vector2(-64,171), new Vector2(380,34), "海风，正在等你。", 21, White, TextAlignmentOptions.Right);
-            coast.characterSpacing = 3;
-            Label("Coast detail", root, new Vector2(1,0), new Vector2(1,0), new Vector2(-64,111), new Vector2(380,25), "MOON ISLAND  /  海滨步道", 13, Quiet, TextAlignmentOptions.Right);
-            Label("Shoreline", root, Vector2.zero, Vector2.zero, new Vector2(64, 36), new Vector2(700, 28), "一段关于相遇的故事     ·     按 Enter 开始", 15, Quiet);
-            var version = Label("Demo", root, Vector2.one, Vector2.one, new Vector2(-64, -44), new Vector2(450, 26), "小岛生活  /  DEMO", 13, White, TextAlignmentOptions.Right);
-            version.characterSpacing = 3;
-            soundButton = CornerButton("Sound", -58, MusicDirector.Instance==null||MusicDirector.Instance.MusicEnabled ? "音乐 · 开" : "音乐 · 关", ToggleSound);
-            motionButton = CornerButton("Motion", -190, "动效 · 开", ToggleMotion);
-            CornerButton("Exit", -322, "退出", ConfirmQuit);
-            LayoutBackground();
+            float messageY = 40 - mainItems.Count * 54 - 18;
+            status = Label("Entry status", menu, new Vector2(.5f, .5f), new Vector2(.5f, 1), new Vector2(0, messageY), new Vector2(480, 30), "", 16, Quiet, TextAlignmentOptions.Top);
+            notice = Label("Save notice", menu, new Vector2(.5f, .5f), new Vector2(.5f, 1), new Vector2(0, messageY - 38), new Vector2(480, 90), "", 17, Warm, TextAlignmentOptions.Top);
+            savePreview = hasSave && preview != null
+                ? $"上次停在：第 {preview.day} 天 · {GameClock.PeriodName((TimePeriod)preview.period)} / {GameUI.PlaceName(ParsePlace(preview.place))}"
+                : "";
+            LayoutTitle(); LayoutBackground();
             StartCoroutine(RevealMenu());
         }
 
         static PlaceId ParsePlace(string id) => Enum.TryParse(id, out PlaceId p) ? p : PlaceId.Street;
 
-        Button MenuButton(string name, Vector2 pos, Vector2 size, string caption, Action action, bool accent)
+        Button MainItem(string name, string caption, Action action)
         {
-            var image = Panel(name, menu, Vector2.up, Vector2.up, pos, size,
-                accent ? new Color(.91f, .88f, .77f, .97f) : new Color(.09f, .17f, .24f, .25f), true);
-            ((RoundedPanel)image).CornerRadius = accent ? 5 : 4;
-            ((RoundedPanel)image).SetBorder(accent ? new Color(.98f, .95f, .84f, .8f) : new Color(.65f, .80f, .82f, .18f), 1);
-            var b = image.gameObject.AddComponent<Button>(); b.targetGraphic = image;
-            b.onClick.AddListener(() => { if (!busy) action(); });
-            var colors = b.colors; colors.normalColor = Color.white; colors.highlightedColor = new Color(1.10f, 1.12f, 1.13f);
-            colors.selectedColor = colors.highlightedColor; colors.pressedColor = new Color(.8f, .9f, .94f); colors.fadeDuration = .18f; b.colors = colors;
-            Label("Label", image.transform, new Vector2(0, .5f), new Vector2(0, .5f), new Vector2(24, 0), size - new Vector2(45, 14), caption, accent ? 26 : 19, accent ? new Color(.13f,.21f,.25f) : White, TextAlignmentOptions.MidlineLeft);
-            return b;
+            var button = TextButton(name, menu, new Vector2(0, 40 - mainItems.Count * 54), new Vector2(330, 50), caption, action, 27);
+            mainItems.Add(button);
+            return button;
         }
-        Button CornerButton(string name, float x, string caption, Action action)
+
+        Button TextButton(string name, Transform parent, Vector2 position, Vector2 size, string caption, Action action, float fontSize)
         {
-            var b = MenuButton(name, Vector2.zero, new Vector2(120, 42), caption, action, false);
-            var rt = (RectTransform)b.transform; rt.SetParent(root, false); rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(1, 0); rt.anchoredPosition = new Vector2(x, 34);
-            b.GetComponentInChildren<TextMeshProUGUI>().fontSize = 16; return b;
+            var rect = Rect(name, parent, new Vector2(.5f, .5f), new Vector2(.5f, .5f), position, size);
+            var hitArea = rect.gameObject.AddComponent<Image>(); hitArea.color = Color.clear; hitArea.raycastTarget = true;
+            var button = rect.gameObject.AddComponent<Button>(); button.targetGraphic = hitArea; button.transition = Selectable.Transition.None;
+            button.onClick.AddListener(() => { if (!busy && Time.frameCount > lastModalClosedFrame) action(); });
+            var label = Label("Label", rect, new Vector2(.5f, .5f), new Vector2(.5f, .5f), Vector2.zero, size - new Vector2(54, 4), caption, fontSize, White, TextAlignmentOptions.Center);
+            label.textWrappingMode = TextWrappingModes.NoWrap;
+            label.characterSpacing = 1;
+            var marker = Rect("Selection light", rect, new Vector2(.5f, .5f), new Vector2(1, .5f), new Vector2(-size.x * .33f, 0), new Vector2(20, 1.5f)).gameObject.AddComponent<Image>();
+            marker.color = new Color(Warm.r, Warm.g, Warm.b, 0); marker.raycastTarget = false;
+            rect.gameObject.AddComponent<TitleMenuItem>().Initialize(button, label, marker, White, Warm);
+            return button;
         }
+
+        static void LinkVertical(IList<Button> items)
+        {
+            for (int i = 0; i < items.Count; i++)
+                items[i].navigation = new Navigation { mode = Navigation.Mode.Explicit,
+                    selectOnUp = items[(i + items.Count - 1) % items.Count], selectOnDown = items[(i + 1) % items.Count] };
+        }
+
+        void ShowSettings()
+        {
+            var card = ModalCard("设置", 500);
+            soundButton = TextButton("Music setting", card, new Vector2(0, 100), new Vector2(380, 54), MusicCaption(), ToggleSound, 25);
+            motionButton = TextButton("Motion setting", card, new Vector2(0, 38), new Vector2(380, 54), motion ? "动效 · 开" : "动效 · 关", ToggleMotion, 25);
+            var controls = TextButton("Controls", card, new Vector2(0, -24), new Vector2(380, 54), "如何游玩", ShowControls, 25);
+            var back = TextButton("Back to title", card, new Vector2(0, -122), new Vector2(380, 54), "返回", CloseModal, 23);
+            Label("Last journey", card, new Vector2(.5f, 0), new Vector2(.5f, 0), new Vector2(0, 30), new Vector2(610, 30), savePreview, 16, Quiet, TextAlignmentOptions.Center);
+            LinkVertical(new[] { soundButton, motionButton, controls, back });
+            SetModalSelection(soundButton);
+        }
+
+        string MusicCaption() => MusicDirector.Instance == null || MusicDirector.Instance.MusicEnabled ? "音乐 · 开" : "音乐 · 关";
         void ToggleSound()
         {
             MusicDirector.Instance?.ToggleMusic();
-            soundButton.GetComponentInChildren<TextMeshProUGUI>().text = MusicDirector.Instance == null || MusicDirector.Instance.MusicEnabled ? "音乐 · 开" : "音乐 · 关";
+            if (soundButton != null) soundButton.GetComponentInChildren<TextMeshProUGUI>().text = MusicCaption();
         }
         void ToggleMotion()
         {
             motion = !motion; atmosphere.MotionEnabled = motion;
-            motionButton.GetComponentInChildren<TextMeshProUGUI>().text = motion ? "动效 · 开" : "动效 · 关";
+            if (coastalMotion != null) coastalMotion.MotionEnabled = motion;
+            if (motionButton != null) motionButton.GetComponentInChildren<TextMeshProUGUI>().text = motion ? "动效 · 开" : "动效 · 关";
         }
+
         IEnumerator RevealMenu()
         {
-            for (float t = 0; t < 1; t += Time.unscaledDeltaTime / .9f)
+            for (float t = 0; t < 1; t += Time.unscaledDeltaTime / .8f)
             {
                 if (busy) yield break;
-                float e = 1 - Mathf.Pow(1 - t, 3); menuGroup.alpha = e; menu.anchoredPosition = new Vector2(0, -12 * (1 - e));
+                float e = 1 - Mathf.Pow(1 - t, 3); menuGroup.alpha = e; menu.anchoredPosition = new Vector2(0, -8 * (1 - e));
                 yield return null;
             }
             menuGroup.alpha = 1; menu.anchoredPosition = Vector2.zero;
+            if (modal == null) { menuGroup.interactable = true; menuGroup.blocksRaycasts = true; Select(lastMenuSelection); }
         }
+
         void Update()
         {
             if (root == null || dismissed) return;
-            if (motion) elapsed += Time.unscaledDeltaTime;
-            LayoutBackground();
+            LayoutTitle(); LayoutBackground();
             if (busy) return;
-            if (GameInput.Pressed(Key.Escape)) { if (modal != null) CloseModal(); else ConfirmQuit(); }
-            if (GameInput.Pressed(Key.Enter) && modal == null && Time.frameCount > lastModalClosedFrame && EventSystem.current != null && EventSystem.current.currentSelectedGameObject == null)
-                primary.onClick.Invoke();
+            if (GameInput.Pressed(Key.Escape)) { if (modal != null) modalBack?.Invoke(); else ConfirmQuit(); }
         }
+
+        void LateUpdate()
+        {
+            if (busy || dismissed || menuGroup == null || Time.frameCount <= lastModalClosedFrame) return;
+            var selected = EventSystem.current != null ? EventSystem.current.currentSelectedGameObject : null;
+            if (modal != null)
+            {
+                var button = selected != null ? selected.GetComponent<Button>() : null;
+                if (IsModalButton(button)) lastModalSelection = button;
+                else
+                {
+                    var restore = IsModalButton(lastModalSelection) ? lastModalSelection : modalDefaultSelection;
+                    if (IsModalButton(restore)) Select(restore);
+                }
+                return;
+            }
+            if (!menuGroup.interactable) return;
+            if (selected == null) Select(lastMenuSelection != null ? lastMenuSelection : primary);
+            else
+            {
+                var button = selected.GetComponent<Button>();
+                if (button != null && mainItems.Contains(button)) lastMenuSelection = button;
+            }
+        }
+
+        static void Select(Button button)
+        {
+            if (EventSystem.current != null && button != null) EventSystem.current.SetSelectedGameObject(button.gameObject);
+        }
+
+        bool IsModalButton(Button button) => modal != null && button != null && button.IsActive() && button.IsInteractable()
+            && button.transform.IsChildOf(modal.transform);
+
+        void SetModalSelection(Button button)
+        {
+            modalDefaultSelection = lastModalSelection = button;
+            Select(button);
+        }
+
+        void LayoutTitle()
+        {
+            if (root.rect.width < 1 || root.rect.height < 1) return;
+            // Preserve the full lighthouse/sea composition on ultrawide displays.
+            composition.sizeDelta = new Vector2(Mathf.Min(root.rect.width, root.rect.height * 16f / 9f), root.rect.height);
+            float aspect = composition.rect.width / composition.rect.height;
+            menu.anchorMin = menu.anchorMax = new Vector2(aspect < 1.45f ? .68f : .73f, .53f);
+            float scale = Mathf.Min(1, Mathf.Min(root.rect.width * .43f / 520, root.rect.height * .77f / 560));
+            menu.localScale = Vector3.one * scale;
+        }
+
         void LayoutBackground()
         {
             if (background.texture == null || root.rect.height < 1) return;
             float imageAspect = (float)background.texture.width / background.texture.height;
-            float displayAspect = root.rect.width / root.rect.height;
-            float zoom = (config != null ? config.overscan : 1.04f) + .006f * Mathf.Sin(elapsed * .11f);
+            float displayAspect = composition.rect.width / composition.rect.height;
+            // The viewpoint is still; water and birds animate in their own layers.
+            float zoom = config != null ? config.overscan : 1.015f;
             float w = Mathf.Min(1, displayAspect / imageAspect) / zoom, h = Mathf.Min(1, imageAspect / displayAspect) / zoom;
             float center = config != null ? config.focusX : .5f;
-            float x = Mathf.Clamp(center - w * .5f + Mathf.Sin(elapsed * .055f) * .006f, 0, 1 - w);
-            float y = (1 - h) * .5f + Mathf.Sin(elapsed * .075f) * .0015f;
+            float x = Mathf.Clamp(center - w * .5f, 0, 1 - w);
+            float y = (1 - h) * .5f;
             background.uvRect = new Rect(x, Mathf.Clamp(y, 0, 1 - h), w, h);
             atmosphere.ImageUV = background.uvRect;
         }
+
         void ConfirmNew()
         {
             ShowModal("重新开始小岛生活？", hasSave ? "将从 Z 的直播邀请重新开始，替换当前旅程进度。\n如果只是想接着探索，请返回并选择「继续旅程」。" : "确认后将从 Z 的直播间开启新的旅程。\n无法读取的旧存档会被新进度替换。",
                 "确认重新开始", () => Choose(true));
         }
         void ConfirmQuit() => ShowModal("今天，先到这里。", "关闭游戏后，你仍可以从上次保存的进度继续。", "退出游戏", Quit);
-        void ShowControls() => ShowModal("在小岛，慢慢来。", "A / D 或方向键   沿街行走\n空格   跳跃     E   与附近的人或物交互\nTab   打开手机     M   地图     P   拍照\nEsc   返回 / 暂停\n\n走到街道边缘会前往相邻街道；\n上下路口和建筑入口，靠近后按 E。", "知道了", CloseModal);
-        void ShowModal(string title, string text, string actionLabel, Action action)
+        void ShowControls() => ShowModal("在小岛，慢慢来。", "A / D 或方向键   沿街行走\n空格   跳跃     E   与附近的人或物交互\nTab   打开手机     M   地图     P   拍照\nEsc   返回 / 暂停\n\n走到街道边缘会前往相邻街道；\n上下路口和建筑入口，靠近后按 E。", "知道了", ShowSettings, ShowSettings);
+
+        RectTransform ModalCard(string title, float height)
         {
+            var selected = EventSystem.current != null ? EventSystem.current.currentSelectedGameObject : null;
+            if (selected != null && selected.transform.IsChildOf(menu)) lastMenuSelection = selected.GetComponent<Button>();
             CloseModal();
-            var veil = Panel("Title modal veil", root, Vector2.zero, Vector2.zero, Vector2.zero, Vector2.one, new Color(.025f, .055f, .10f, .52f), true);
+            menuGroup.interactable = false; menuGroup.blocksRaycasts = false;
+            var veil = Panel("Title modal veil", root, Vector2.zero, Vector2.zero, Vector2.zero, Vector2.one, new Color(.025f, .055f, .10f, .42f), true);
             var vr = veil.rectTransform; vr.anchorMax = Vector2.one; vr.offsetMin = vr.offsetMax = Vector2.zero; modal = veil.gameObject;
-            var card = Panel("Title modal", veil.transform, new Vector2(.5f, .5f), new Vector2(.5f, .5f), Vector2.zero, new Vector2(700, 470), new Color(.075f, .14f, .21f, .98f), true);
+            modalBack = CloseModal;
+            var card = Panel("Title modal", veil.transform, new Vector2(.5f, .5f), new Vector2(.5f, .5f), Vector2.zero, new Vector2(700, height), new Color(.075f, .14f, .21f, .96f), true);
+            card.rectTransform.localScale = Vector3.one * Mathf.Min(1, Mathf.Min((root.rect.width - 48) / 700, (root.rect.height - 48) / height));
             Label("Heading", card.transform, Vector2.up, Vector2.up, new Vector2(42, -38), new Vector2(616, 48), title, 32, White);
-            Label("Body", card.transform, Vector2.up, Vector2.up, new Vector2(42, -113), new Vector2(616, 225), text, 22, Quiet);
-            var cancel = UIPrimitives.Button("Cancel", card.transform, Vector2.zero, Vector2.zero, new Vector2(42, 34), new Vector2(210, 58), "返回", CloseModal);
-            var confirm = UIPrimitives.Button("Confirm", card.transform, Vector2.zero, Vector2.zero, new Vector2(275, 34), new Vector2(380, 58), actionLabel, () => { if (!busy) action(); }, true);
+            return card.rectTransform;
+        }
+
+        void ShowModal(string title, string text, string actionLabel, Action action, Action back = null)
+        {
+            var card = ModalCard(title, 470);
+            modalBack = back ?? CloseModal;
+            Label("Body", card, Vector2.up, Vector2.up, new Vector2(42, -113), new Vector2(616, 225), text, 22, Quiet);
+            var cancel = UIPrimitives.Button("Cancel", card, Vector2.zero, Vector2.zero, new Vector2(42, 34), new Vector2(210, 58), "返回", () => modalBack?.Invoke());
+            var confirm = UIPrimitives.Button("Confirm", card, Vector2.zero, Vector2.zero, new Vector2(275, 34), new Vector2(380, 58), actionLabel, () => { if (!busy) action(); }, true);
             cancel.navigation = new Navigation { mode = Navigation.Mode.Explicit, selectOnRight = confirm };
             confirm.navigation = new Navigation { mode = Navigation.Mode.Explicit, selectOnLeft = cancel };
-            if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(cancel.gameObject);
+            SetModalSelection(cancel);
         }
+
         void CloseModal()
         {
             lastModalClosedFrame = Time.frameCount;
             if (modal != null) { modal.SetActive(false); Destroy(modal); modal = null; }
+            modalBack = null;
+            modalDefaultSelection = lastModalSelection = null;
+            if (menuGroup != null) { menuGroup.interactable = !busy; menuGroup.blocksRaycasts = !busy; }
             if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(null);
         }
         void Choose(bool fresh) { if (busy) return; ShowLoading(); enter?.Invoke(fresh); }
         public void ShowLoading() { busy = true; CloseModal(); menuGroup.alpha = 1; group.interactable = false; status.text = "海风正在捎来你的故事…"; }
         public void ShowSaveNotice(string message) { if (notice != null) notice.text = message; if (!hasSave) confirmFresh = true; }
-        public void ShowError(string message) { busy = false; group.interactable = true; ShowSaveNotice(message); status.text = "暂时没能抵达小岛，请再试一次。"; }
+        public void ShowError(string message)
+        {
+            busy = false; group.interactable = true; menuGroup.interactable = true; menuGroup.blocksRaycasts = true;
+            ShowSaveNotice(message); status.text = "暂时没能抵达小岛，请再试一次。"; Select(lastMenuSelection != null ? lastMenuSelection : primary);
+        }
         public IEnumerator Dismiss()
         {
             busy = true;
@@ -218,9 +305,8 @@ namespace Seabreeze
             for (int y = 0; y < h; y++) for (int x = 0; x < w; x++)
             {
                 float u = (float)x / (w - 1), v = (float)y / (h - 1);
-                float left = Mathf.Lerp(1.13f, .08f, Mathf.SmoothStep(0, 1, Mathf.InverseLerp(.20f, .74f, u)));
-                float bottom = .52f * (1 - Mathf.SmoothStep(0, 1, Mathf.InverseLerp(0, .22f, v)));
-                pixels[y * w + x] = new Color(tint.r, tint.g, tint.b, Mathf.Clamp01(tint.a * left + bottom));
+                float edge = Mathf.SmoothStep(0, 1, Mathf.InverseLerp(.45f, 1.15f, new Vector2((u - .5f) * 1.6f, (v - .5f) * 1.4f).magnitude));
+                pixels[y * w + x] = new Color(tint.r, tint.g, tint.b, tint.a * (.12f + edge * .88f));
             }
             texture.SetPixels(pixels); texture.Apply(false, true); return texture;
         }
@@ -228,12 +314,6 @@ namespace Seabreeze
         {
             if (gradient != null) Destroy(gradient);
             if (root != null) Destroy(root.gameObject);
-            if (titleFont != null)
-            {
-                foreach (var texture in titleFont.atlasTextures) if (texture != null) Destroy(texture);
-                if (titleFont.material != null) Destroy(titleFont.material);
-                Destroy(titleFont);
-            }
         }
     }
 }
