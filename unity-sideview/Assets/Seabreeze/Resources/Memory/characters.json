@@ -10,7 +10,8 @@
       "locationId": "z_home",
       "x": 3.4,
       "color": "#C5AFD9",
-      "portrait": "Memory/Portraits/ZFinal-v03"
+      "portrait": "Memory/Portraits/ZFinal-v03",
+      "motion": "Art/CastMotion/z"
     },
     {
       "id": "liyuan",
@@ -21,7 +22,8 @@
       "locationId": "liyuan_home",
       "x": -4,
       "color": "#97BCCB",
-      "portrait": "Memory/Portraits/Liyuan"
+      "portrait": "Memory/Portraits/Liyuan",
+      "motion": "Art/CastMotion/liyuan"
     },
     {
       "id": "liting",
@@ -32,7 +34,8 @@
       "locationId": "cafe",
       "x": -2,
       "color": "#A8CFAD",
-      "portrait": "Memory/Portraits/Liting"
+      "portrait": "Memory/Portraits/Liting",
+      "motion": "Art/CastMotion/liting"
     },
     {
       "id": "axing",
@@ -43,12 +46,13 @@
       "locationId": "axing_lab",
       "x": 2,
       "color": "#9FD8CA",
-      "portrait": "Memory/Portraits/Axing"
+      "portrait": "Memory/Portraits/Axing",
+      "motion": "Art/CastMotion/axing"
     },
     {
       "id": "zhengyi",
       "displayName": "正义",
-      "motion": "Art/ZhengyiMotion",
+      "motion": "Art/CastMotion/zhengyi",
       "occupation": "岛上巡警",
       "appearance": 1,
       "place": "Street",
@@ -67,7 +71,8 @@
       "x": -6,
       "color": "#EDA6B4",
       "portrait": "Memory/Portraits/Qingye",
-      "dialogueCharactersPerSecond": 13
+      "dialogueCharactersPerSecond": 13,
+      "motion": "Art/CastMotion/xiaoxiaoqing"
     },
     {
       "id": "linxu",
@@ -78,7 +83,8 @@
       "locationId": "dock",
       "x": 6,
       "color": "#E4B972",
-      "portrait": "Memory/Portraits/Liuyang"
+      "portrait": "Memory/Portraits/Liuyang",
+      "motion": "Art/CastMotion/linxu"
     },
     {
       "id": "zhou_bobo",
@@ -90,7 +96,8 @@
       "x": -10,
       "color": "#C5AFD9",
       "portrait": "Memory/Portraits/ZhouboDaily",
-      "previewPortrait": "Memory/Portraits/ZhouboFinal-v03"
+      "previewPortrait": "Memory/Portraits/ZhouboFinal-v03",
+      "motion": "Art/CastMotion/zhou_bobo"
     }
   ]
 }

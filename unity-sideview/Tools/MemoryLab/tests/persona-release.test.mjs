@@ -62,7 +62,11 @@ test('Unity public roster preserves IDs, motion and occupations without corporat
  const e=setup(t),r=JSON.parse(readFileSync(new URL('../../../Assets/Seabreeze/Resources/Memory/characters.json',import.meta.url)));
  assert.deepEqual(r.actors.map(a=>a.id),[...e.catalog.actors.keys()]);
  for(const a of r.actors){const p=e.catalog.identity(a.id);assert.equal(a.displayName,p.name);assert.equal(a.occupation,p.occupation);}
- assert.equal(r.actors.find(a=>a.id==='zhengyi').motion,'Art/ZhengyiMotion');
+ for(const a of r.actors){
+  assert.equal(a.motion,'Art/CastMotion/'+a.id);
+  const motion=JSON.parse(readFileSync(new URL('../../../Assets/Seabreeze/Resources/'+a.motion+'/motion.json',import.meta.url)));
+  assert.equal(motion.characterId,a.id);
+ }
  assert(!JSON.stringify(r).match(/YLY|Luna|夺权|巡警演员/));
  const z=e.catalog.prompt('z'),zhou=e.catalog.profile('zhou_bobo'),liyuan=e.catalog.profile('liyuan');
  assert(!z.includes(zhou));assert(!z.includes(liyuan));assert(!e.catalog.sharedWorld().match(/YLY|Luna|夺权|制造者/));

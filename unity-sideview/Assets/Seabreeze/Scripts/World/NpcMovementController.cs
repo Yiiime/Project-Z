@@ -199,6 +199,7 @@ namespace Seabreeze
         void Suspend()
         {
             InvalidateRequest();
+            visual?.StopNpcMotionImmediately();
             speed = ActualSpeed = 0;
             if (body != null) body.linearVelocity = Vector2.zero;
         }
@@ -266,6 +267,8 @@ namespace Seabreeze
             blockedTime = movementTime = 0;
             blockingObject = null;
             movementTimeout = next == null ? 0 : 8 + Vector2.Distance(body.position, next.position) / maxSpeed * 3;
+            if (next != null && visual.UsesNpcStateMotion)
+                visual.BeginNpcMotionRoute(Mathf.Abs(next.position.x - body.position.x));
             NpcMoveResult waiting = next == null ? Finish(NpcMoveOutcome.Waiting, "wait", true, false) : null;
             // State is committed before a receipt listener can submit a newer destination.
             Publish(interrupted);
@@ -357,6 +360,11 @@ namespace Seabreeze
             }
             float remaining = Mathf.Max(0, Mathf.Abs(distance) - ArrivalDistance * .5f);
             float desired = Mathf.Sign(distance) * Mathf.Min(maxSpeed, Mathf.Sqrt(2 * deceleration * remaining));
+            if (visual.UsesNpcStateMotion)
+            {
+                if (!visual.HasNpcMotionRoute) visual.BeginNpcMotionRoute(Mathf.Abs(distance));
+                desired *= visual.NpcRouteSpeedFactor;
+            }
             float rate = Mathf.Sign(speed) != Mathf.Sign(desired) || Mathf.Abs(desired) < Mathf.Abs(speed) ? deceleration : acceleration;
             speed = Mathf.MoveTowards(speed, desired, rate * dt);
             float step = speed * dt;
@@ -385,7 +393,7 @@ namespace Seabreeze
                 body.MovePosition(next);
                 blockedTime = 0;
             }
-            else { speed = 0; blockedTime += dt; }
+            else { speed = 0; blockedTime += dt; visual.StopNpcMotionImmediately(); }
             movementTime += dt;
             if (blockedTime >= blockedTimeout || movementTime >= movementTimeout)
                 Finish(NpcMoveOutcome.Blocked, blockedTime >= blockedTimeout ? "obstructed:" + blockingObject : "timed_out", true);
@@ -422,6 +430,8 @@ namespace Seabreeze
             {
                 speed = ActualSpeed = 0;
                 if (body != null) body.linearVelocity = Vector2.zero;
+                if (outcome == NpcMoveOutcome.Arrived) visual?.CompleteNpcMotionRoute();
+                else visual?.StopNpcMotionImmediately();
             }
             nextDecisionTime = Time.time + simulatedWait;
             if (string.IsNullOrEmpty(completed)) return null;
@@ -452,7 +462,11 @@ namespace Seabreeze
             previousVisualX = x; hasVisualPosition = true;
             // Spawn/teleport/reload is not a walking stride. Interpolated render
             // displacement, rather than the requested physics velocity, drives art.
-            if (!CanAct || Mathf.Abs(dx) > Mathf.Max(.25f, maxSpeed * Time.deltaTime * 2)) dx = 0;
+            if (!CanAct || Mathf.Abs(dx) > Mathf.Max(.25f, maxSpeed * Time.deltaTime * 2))
+            {
+                dx = 0;
+                visual.StopNpcMotionImmediately();
+            }
             visual.AnimateNpcDisplacement(dx, CanAct ? ActualSpeed * FacingSign : 0, Time.deltaTime);
         }
 

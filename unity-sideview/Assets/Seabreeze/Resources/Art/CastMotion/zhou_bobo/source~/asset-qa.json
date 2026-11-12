@@ -1,0 +1,129 @@
+{
+  "characterId": "zhou_bobo",
+  "frames": 128,
+  "states": {
+    "idle": {
+      "frames": 1,
+      "durationSeconds": 0.03333333333333333,
+      "sourceSoleRows": [
+        1806,
+        1806
+      ],
+      "opaqueAreaRange": [
+        343326,
+        343326
+      ],
+      "minTransparentMargin": 27
+    },
+    "start": {
+      "frames": 46,
+      "durationSeconds": 1.9166666666666667,
+      "sourceSoleRows": [
+        1783,
+        1807
+      ],
+      "opaqueAreaRange": [
+        345576,
+        481712
+      ],
+      "minTransparentMargin": 25
+    },
+    "walk": {
+      "frames": 34,
+      "durationSeconds": 1.4166666666666667,
+      "sourceSoleRows": [
+        1784,
+        1806
+      ],
+      "opaqueAreaRange": [
+        361179,
+        483605
+      ],
+      "minTransparentMargin": 25
+    },
+    "stop": {
+      "frames": 47,
+      "durationSeconds": 1.95,
+      "sourceSoleRows": [
+        1782,
+        1806
+      ],
+      "opaqueAreaRange": [
+        342671,
+        473088
+      ],
+      "minTransparentMargin": 26
+    }
+  },
+  "allRGBA": true,
+  "nativeCanvas": [
+    928,
+    1736
+  ],
+  "perFrameScale": false,
+  "perFrameAlignment": false,
+  "nativeTimingPreserved": true,
+  "opaqueInteriorChanges": 0,
+  "neutralMaterialAlphaHoles": 0,
+  "atlasPages": 18,
+  "atlasPixelRoundtrip": true,
+  "runtimeTarget": true,
+  "videoPreviews": {
+    "idle": {
+      "fps": 60,
+      "frames": 60,
+      "seconds": 1.0
+    },
+    "idle-slow": {
+      "fps": 60,
+      "frames": 120,
+      "seconds": 2.0
+    },
+    "start": {
+      "fps": 60,
+      "frames": 115,
+      "seconds": 1.9166666666666667
+    },
+    "start-slow": {
+      "fps": 60,
+      "frames": 230,
+      "seconds": 3.8333333333333335
+    },
+    "walk": {
+      "fps": 60,
+      "frames": 255,
+      "seconds": 4.25
+    },
+    "walk-slow": {
+      "fps": 60,
+      "frames": 510,
+      "seconds": 8.5
+    },
+    "stop": {
+      "fps": 60,
+      "frames": 117,
+      "seconds": 1.95
+    },
+    "stop-slow": {
+      "fps": 60,
+      "frames": 234,
+      "seconds": 3.9
+    },
+    "state-chain": {
+      "fps": 60,
+      "frames": 522,
+      "seconds": 8.7
+    },
+    "state-chain-slow": {
+      "fps": 60,
+      "frames": 1044,
+      "seconds": 17.4
+    },
+    "source-vs-rgba": {
+      "fps": 60,
+      "frames": 522,
+      "seconds": 8.7
+    }
+  },
+  "visualApproval": "pending cast integration review"
+}

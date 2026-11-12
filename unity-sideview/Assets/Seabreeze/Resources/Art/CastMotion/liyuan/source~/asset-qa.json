@@ -1,0 +1,286 @@
+{
+  "characterId": "c03",
+  "frameCount": 102,
+  "perState": {
+    "idle": {
+      "frames": 1,
+      "sourceIntervalSeconds": [
+        1.6333333333333333,
+        1.6666666666666667
+      ],
+      "nativeDurationSeconds": 0.03333333333333333,
+      "sourceSoleRows": [
+        1824,
+        1824
+      ],
+      "minimumTransparentMarginPixels": 27,
+      "loop": false,
+      "holdLastFrame": true
+    },
+    "start": {
+      "frames": 30,
+      "sourceIntervalSeconds": [
+        1.6666666666666667,
+        2.9166666666666665
+      ],
+      "nativeDurationSeconds": 1.25,
+      "sourceSoleRows": [
+        1805,
+        1824
+      ],
+      "minimumTransparentMarginPixels": 23,
+      "loop": false,
+      "holdLastFrame": false
+    },
+    "walk": {
+      "frames": 37,
+      "sourceIntervalSeconds": [
+        2.9166666666666665,
+        4.466666666666667
+      ],
+      "nativeDurationSeconds": 1.55,
+      "sourceSoleRows": [
+        1799,
+        1818
+      ],
+      "minimumTransparentMarginPixels": 22,
+      "loop": true,
+      "holdLastFrame": false
+    },
+    "stop": {
+      "frames": 34,
+      "sourceIntervalSeconds": [
+        7.5,
+        8.916666666666666
+      ],
+      "nativeDurationSeconds": 1.4166666666666667,
+      "sourceSoleRows": [
+        1806,
+        1824
+      ],
+      "minimumTransparentMarginPixels": 23,
+      "loop": false,
+      "holdLastFrame": true
+    }
+  },
+  "commonCanvas": [
+    984,
+    1752
+  ],
+  "pixelScale": 1,
+  "allStatesUseSameCrop": true,
+  "allRgba": true,
+  "allTransparentBorders": true,
+  "zeroRgbAtZeroAlpha": true,
+  "opaqueInteriorChangedPixels": 0,
+  "atlasPages": 15,
+  "atlasRoundtripPixelIdentical": true,
+  "sourceFrameTimesPreserved": true,
+  "noInterpolationOrGeometryChange": true,
+  "seamComparisons": [
+    {
+      "name": "idle-start",
+      "frames": [
+        39,
+        40
+      ],
+      "foregroundRgbMeanDifference": 3.4295210218570937,
+      "blendingApplied": false
+    },
+    {
+      "name": "start-walk",
+      "frames": [
+        69,
+        70
+      ],
+      "foregroundRgbMeanDifference": 8.833200655244253,
+      "blendingApplied": false
+    },
+    {
+      "name": "walk-loop",
+      "frames": [
+        106,
+        70,
+        107
+      ],
+      "foregroundRgbMeanDifference": 9.175530530999309,
+      "blendingApplied": false
+    },
+    {
+      "name": "walk-stop",
+      "frames": [
+        106,
+        180,
+        107
+      ],
+      "foregroundRgbMeanDifference": 12.821862569444775,
+      "blendingApplied": false
+    },
+    {
+      "name": "stop-idle",
+      "frames": [
+        213,
+        39,
+        214
+      ],
+      "foregroundRgbMeanDifference": 2.9005939766588065,
+      "blendingApplied": false
+    }
+  ],
+  "sourceFacing": "right_side_with_slight_body_yaw",
+  "assetApprovalPending": true,
+  "sourceGroundingNotice": {
+    "standingReferenceRow": 1826,
+    "stateSoleRanges": {
+      "idle": [
+        1824,
+        1824
+      ],
+      "start": [
+        1805,
+        1824
+      ],
+      "walk": [
+        1799,
+        1818
+      ],
+      "stop": [
+        1806,
+        1824
+      ]
+    },
+    "correctedByPerFrameAlignment": false,
+    "flatGroundIntegrationNeedsReview": true
+  },
+  "idleIsStaticFrameNotUnverifiedBreathingLoop": true,
+  "missingStates": [],
+  "reviewOnly": true,
+  "gameModified": false,
+  "previewContainerTimingChecks": {
+    "idle": {
+      "frames": 120,
+      "timeBase": [
+        1,
+        15360
+      ],
+      "durationTicks": 30720,
+      "durationSeconds": 2.0
+    },
+    "idle-slow": {
+      "frames": 240,
+      "timeBase": [
+        1,
+        15360
+      ],
+      "durationTicks": 61440,
+      "durationSeconds": 4.0
+    },
+    "start": {
+      "frames": 75,
+      "timeBase": [
+        1,
+        15360
+      ],
+      "durationTicks": 19200,
+      "durationSeconds": 1.25
+    },
+    "start-slow": {
+      "frames": 150,
+      "timeBase": [
+        1,
+        15360
+      ],
+      "durationTicks": 38400,
+      "durationSeconds": 2.5
+    },
+    "walk": {
+      "frames": 372,
+      "timeBase": [
+        1,
+        15360
+      ],
+      "durationTicks": 95232,
+      "durationSeconds": 6.2
+    },
+    "walk-slow": {
+      "frames": 744,
+      "timeBase": [
+        1,
+        15360
+      ],
+      "durationTicks": 190464,
+      "durationSeconds": 12.4
+    },
+    "stop": {
+      "frames": 85,
+      "timeBase": [
+        1,
+        15360
+      ],
+      "durationTicks": 21760,
+      "durationSeconds": 1.4166666666666667
+    },
+    "stop-slow": {
+      "frames": 170,
+      "timeBase": [
+        1,
+        15360
+      ],
+      "durationTicks": 43520,
+      "durationSeconds": 2.8333333333333335
+    },
+    "state-chain": {
+      "frames": 559,
+      "timeBase": [
+        1,
+        15360
+      ],
+      "durationTicks": 143104,
+      "durationSeconds": 9.316666666666666
+    },
+    "state-chain-slow": {
+      "frames": 1118,
+      "timeBase": [
+        1,
+        15360
+      ],
+      "durationTicks": 286208,
+      "durationSeconds": 18.633333333333333
+    },
+    "source-vs-rgba": {
+      "frames": 559,
+      "timeBase": [
+        1,
+        15360
+      ],
+      "durationTicks": 143104,
+      "durationSeconds": 9.316666666666666
+    }
+  },
+  "sourceCopyHashMatches": true,
+  "preexistingDirtyFilesUnchanged": true,
+  "gitHeadAndStatusUnchanged": true,
+  "visualReview": {
+    "allDeliveredFramesViewedInContactSheets": true,
+    "nativeDetailRegionsViewed": [
+      "face",
+      "shoulder",
+      "hands",
+      "waist",
+      "knees",
+      "boots"
+    ],
+    "allTransitionTripletsViewed": true,
+    "continuousVideoPlaybackWatched": false,
+    "browserPreviewUiVerified": false,
+    "browserUiLimitation": "Local file URL was blocked by built-in browser policy. MP4 timing and full decoding checked; visual review uses source/output frames and seam triplets.",
+    "unityTested": false,
+    "needsUserMotionApproval": true
+  },
+  "limitations": [
+    "Source sole-height variation retained (6–25 pixels relative to standing opaque baseline).",
+    "Small source torso yaw, coat motion and edge compression remain.",
+    "Idle is a static frame; breathing loop not provided.",
+    "Start/stop preview uses a selected walk boundary. Arbitrary-phase stop, turning, movement-speed synchronization and game integration remain untested."
+  ]
+}
