@@ -8,6 +8,8 @@ namespace Seabreeze
     public sealed class Live2DModelProfile : ScriptableObject
     {
         public GameObject prefab;
+        [Tooltip("Optional UI material for the finished portrait. Leave empty for standard Canvas display.")]
+        public Material portraitDisplayMaterial;
         public string characterId = "z";
         [Tooltip("Index appended to the current URP renderer list by Live2DProjectSetup.")]
         public int rendererIndex = 1;
