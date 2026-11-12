@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>把明天交还给你 · Project Z</title><link rel="stylesheet" href="/app.css"></head>
+<body class="dock-page"><div class="coast" aria-hidden="true"></div><div class="night-veil" aria-hidden="true"></div>
+<header class="top"><a class="brand" href="/">PROJECT Z <span>来自月亮的 Z</span></a><nav><button id="sound" class="quiet" aria-pressed="false">海风 · 关闭</button><a class="quiet" href="/editor">上传故事文件 ↗</a></nav></header>
+<main class="dock-main"><div class="chapter"><span class="dot"></span> DAY 07 <span>·</span> 23:17 <span>·</span> 月亮岛码头</div>
+<h1>把明天<br>交还给<span>你</span>。</h1><p class="lead">七天的回忆，走到了同一个夜晚。<br>这一次，最后一句话留给 Z。</p>
+<div class="dock-bottom"><div class="memory-note"><span class="small-label">这一局，我们记得</span><p><strong id="memory-count">—</strong> 段知情经历 <span>／</span> <span id="scenario-title">正在读取</span></p><button id="show-memories" class="text-button">翻开这些日子 →</button></div>
+<div class="start-block"><button id="start" class="primary">听听她的选择 <span>→</span></button><p id="model-note">正在连接本机服务</p><details class="preview-options"><summary>查看两种示例演出</summary><div><button id="preview-leave">离开示例</button><button id="preview-stay">留下示例</button></div><p>仅预览呈现流程，不代表模型根据本局作出的决定。</p></details></div></div>
+<p id="error" role="alert" class="error"></p><div id="waiting" class="waiting" hidden><span class="loader"></span><h2>Z 正在想起这些日子</h2><p>她会先作出自己的选择，再回望每一段知情经历。</p><p id="wait-time"></p></div></main>
+<img class="z-at-dock" src="/assets/z.png" alt="站在夜色中的 Z">
+<footer class="dock-footer"><span>THE LAST NIGHT ON MOON ISLAND</span><span>选择的声音，属于她自己。</span></footer>
+<dialog id="memory-dialog"><div class="dialog-head"><div><span class="small-label">SEVEN DAYS, STILL HERE</span><h2>这些日子</h2></div><button id="close-memories" aria-label="关闭回忆">×</button></div><div id="memory-list"></div></dialog>
+<script type="module" src="/app.js"></script></body></html>
