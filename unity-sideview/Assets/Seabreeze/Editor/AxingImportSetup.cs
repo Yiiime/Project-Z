@@ -57,12 +57,14 @@ namespace Seabreeze.Editor
             }
         }
 
+        // Unity uses the v13 rig with two iris UVs redirected to the original portrait
+        // detail in the 4096 atlas. The model and texture must be imported as a pair.
         static readonly Dictionary<string, string> RequiredHashes =
             new Dictionary<string, string>(StringComparer.Ordinal)
             {
                 { "Model.model3.json", "4b52e973f09f3fe00181fe677efc09b850682f7172453e1516b2b99c2beb8c62" },
-                { "Model.moc3", "adfa5c9af1e75a84cb7c328073e295dd330008b19e491dccc4803f67f39784bf" },
-                { "texture_00.png", "7572a8609e161a71bb6f1c051992762d8fd14e9cd2404a7908e23a5f4d3c7004" }
+                { "Model.moc3", "833add2955a1027057954f97463977fc00204382c72c1bd3199ab91869259df9" },
+                { "texture_00.png", "6c504ce33ea789548d555473a6f5c553bd749473c044e6c24d6e10ef623e0057" }
             };
 
         [MenuItem("Seabreeze/Configure Axing v13 dialogue portrait")]
