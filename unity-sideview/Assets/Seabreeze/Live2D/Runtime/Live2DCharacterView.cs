@@ -75,6 +75,7 @@ namespace Seabreeze
             }
             ReleaseStage();
             profile = next;
+            image.material = next.portraitDisplayMaterial;
             stage = new GameObject("Live2D Portrait Stage - " + next.characterId);
             // Keep model and camera in world units. The canvas scales only the resulting RawImage.
             if (stage.scene != gameObject.scene)
@@ -333,7 +334,11 @@ namespace Seabreeze
             modelCamera.targetTexture = null;
             if (target == null)
             {
-                target = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32)
+                // Preserve the atlas values while the model layers composite. The display
+                // material converts the finished portrait to the canvas color space.
+                var readWrite = profile.portraitDisplayMaterial != null
+                    ? RenderTextureReadWrite.Linear : RenderTextureReadWrite.Default;
+                target = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32, readWrite)
                 { name = "Live2D Portrait Alpha", antiAliasing = 1, filterMode = FilterMode.Bilinear, wrapMode = TextureWrapMode.Clamp };
             }
             else
@@ -425,13 +430,14 @@ namespace Seabreeze
             if (modelCamera != null) modelCamera.targetTexture = null;
             if (target != null) { target.Release(); Destroy(target); target = null; }
             if (stage != null) { stage.SetActive(false); Destroy(stage); }
-            stage = null; modelObject = null; modelCamera = null; driver = null; animator = null; rootCanvas = null; zhouboGloom = null; profile = null;
+            stage = null; modelObject = null; modelCamera = null; driver = null; animator = null; zhouboGloom = null; profile = null;
         }
         void Release()
         {
             ReleaseStage();
             if (image != null) Destroy(image.gameObject);
             image = null;
+            rootCanvas = null;
         }
         void OnDisable() { Hide(); }
         void OnDestroy() { Release(); }

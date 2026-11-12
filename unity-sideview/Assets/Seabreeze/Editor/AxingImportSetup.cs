@@ -30,6 +30,7 @@ namespace Seabreeze.Editor
         const string TexturePath = ModelRoot + "/texture_00.png";
         const string ProfilePath = "Assets/Seabreeze/Resources/Memory/Portraits/Axing.asset";
         const int AtlasTextureSize = 4096;
+        const string DisplayMaterialPath = ModelRoot + "/AxingPortraitComposite.mat";
 
         // These are the authored motion3 clips, not their static exp3 endpoint
         // poses. The service-facing keys deliberately stay stable even if the
@@ -91,6 +92,7 @@ namespace Seabreeze.Editor
             }
 
             profile.prefab = prefab;
+            profile.portraitDisplayMaterial = RequireAsset<Material>(DisplayMaterialPath, "阿星 portrait display material");
             profile.characterId = "axing";
             profile.rendererIndex = 1;
             profile.renderLayer = 30;
@@ -194,6 +196,9 @@ namespace Seabreeze.Editor
             importer.textureType = TextureImporterType.Default;
             importer.spriteImportMode = SpriteImportMode.None;
             importer.alphaIsTransparency = true;
+            // Preserve the color values the artist used for semi-transparent facial layers.
+            // The display material converts the finished composite for the linear Canvas.
+            importer.sRGBTexture = false;
             importer.maxTextureSize = AtlasTextureSize;
             importer.textureCompression = TextureImporterCompression.Uncompressed;
             SetPortraitPlatformSettings(importer, "DefaultTexturePlatform");
@@ -219,7 +224,7 @@ namespace Seabreeze.Editor
 
             var defaultPlatform = importer.GetPlatformTextureSettings("DefaultTexturePlatform");
             var standalone = importer.GetPlatformTextureSettings("Standalone");
-            if (importer.maxTextureSize != AtlasTextureSize ||
+            if (importer.sRGBTexture || importer.maxTextureSize != AtlasTextureSize ||
                 importer.textureType != TextureImporterType.Default ||
                 importer.spriteImportMode != SpriteImportMode.None ||
                 importer.textureCompression != TextureImporterCompression.Uncompressed ||
@@ -494,6 +499,8 @@ namespace Seabreeze.Editor
             if (profile.animatorController != controller || profile.idleState != "Idle" || profile.talkState != "Idle" ||
                 profile.proceduralIdle)
                 throw new InvalidDataException("阿星 profile must keep authored Idle for action return and speech.");
+            if (profile.portraitDisplayMaterial != RequireAsset<Material>(DisplayMaterialPath, "阿星 portrait display material"))
+                throw new InvalidDataException("阿星 portrait display material must match its atlas color space.");
             string[] keys = { "repair", "puzzled", "angry", "surprise", "sigh", "smile" };
             foreach (var key in keys)
                 if (profile.FindExpression(key) == null)
