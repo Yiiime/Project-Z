@@ -1,0 +1,192 @@
+{
+  "conversations": [
+    {
+      "id": "harbor",
+      "actor": "z",
+      "lines": [
+        {
+          "speaker": "z",
+          "text": "是你！船靠近的时候，我就一直在找那个朝岸边张望的人。一路还顺利吗？"
+        },
+        {
+          "speaker": "player",
+          "text": "风有点大。不过，比屏幕里的海更好看。"
+        },
+        {
+          "speaker": "z",
+          "text": "对吧。欢迎来到月亮岛。这里没有什么必须赶上的事情，走慢一点也没关系。"
+        },
+        {
+          "speaker": "z",
+          "text": "今晚古树广场有烟花，大家都会去。我想先把你介绍给他们。沿着码头一直往右，穿过公共街，就能看到那棵大树。"
+        },
+        {
+          "speaker": "z",
+          "text": "A、D 可以走路，靠近人按 E。看到喜欢的风景就按 P 拍下来，照片在 Tab 手机的相册里。我先去广场等你。"
+        }
+      ]
+    },
+    {
+      "id": "meet_z",
+      "actor": "z",
+      "lines": [
+        {
+          "speaker": "z",
+          "text": "走过来以后，是不是觉得小岛没那么陌生了？"
+        },
+        {
+          "speaker": "player",
+          "text": "还记不住所有人的名字。"
+        },
+        {
+          "speaker": "z",
+          "text": "不用急，大家都在这里。先去打个招呼，等你准备好了，再回来找我。今晚的烟花，我们一起开始。"
+        }
+      ]
+    },
+    {
+      "id": "meet_liyuan",
+      "actor": "liyuan",
+      "lines": [
+        {
+          "speaker": "liyuan",
+          "text": "我是梨园，平时给岛上的路画地图。你刚才走的那条街，我来来回回量过好多次。"
+        },
+        {
+          "speaker": "player",
+          "text": "那你一定不会迷路。"
+        },
+        {
+          "speaker": "liyuan",
+          "text": "也会。有时候不是找不到路，是舍不得回去。下次想往树林走，来问我。"
+        }
+      ]
+    },
+    {
+      "id": "meet_liting",
+      "actor": "liting",
+      "lines": [
+        {
+          "speaker": "liting",
+          "text": "李庭，咖啡店是我开的。第一次上岛吧？今晚先不推销咖啡，明天你路过再说。"
+        },
+        {
+          "speaker": "player",
+          "text": "我可能会起得有点晚。"
+        },
+        {
+          "speaker": "liting",
+          "text": "那正好。我的店也没那么早开。等你闻到面包的味道，再来就行。"
+        }
+      ]
+    },
+    {
+      "id": "meet_axing",
+      "actor": "axing",
+      "lines": [
+        {
+          "speaker": "axing",
+          "text": "我是阿星。今晚的灯和音响归我管，烟花可不归我，你可以放心站在这里。"
+        },
+        {
+          "speaker": "player",
+          "text": "听起来你已经检查过好多遍了。"
+        },
+        {
+          "speaker": "axing",
+          "text": "嗯。东西顺利运转的时候，最好谁也不用注意到我。你安心看天空就好。"
+        }
+      ]
+    },
+    {
+      "id": "meet_zhengyi",
+      "actor": "zhengyi",
+      "lines": [
+        {
+          "speaker": "zhengyi",
+          "text": "你好，我是正义。平时在游客中心附近，有什么不熟悉的事可以来找我。"
+        },
+        {
+          "speaker": "player",
+          "text": "这里的人，好像都认识彼此。"
+        },
+        {
+          "speaker": "zhengyi",
+          "text": "慢慢地你也会认识。今晚只记住一件事：往亮着灯的地方走，总能遇见愿意搭话的人。"
+        }
+      ]
+    },
+    {
+      "id": "meet_xiaoxiaoqing",
+      "actor": "xiaoxiaoqing",
+      "lines": [
+        {
+          "speaker": "xiaoxiaoqing",
+          "text": "我是小小晴，街角花店的。今天带来的花有点歪，不是被海风吹的，是我抱得太紧。"
+        },
+        {
+          "speaker": "player",
+          "text": "这样也很好看。"
+        },
+        {
+          "speaker": "xiaoxiaoqing",
+          "text": "真的吗？那就让它歪着吧。第一次见面，祝你在岛上不用一直绷着。"
+        }
+      ]
+    },
+    {
+      "id": "meet_linxu",
+      "actor": "linxu",
+      "lines": [
+        {
+          "speaker": "linxu",
+          "text": "林序。今天送你来的那艘船，我开了不少回。刚才你下船的时候，脚步比上船稳多了。"
+        },
+        {
+          "speaker": "player",
+          "text": "已经开始适应海浪了。"
+        },
+        {
+          "speaker": "linxu",
+          "text": "上岸以后，也可以把那种不着急的节奏留着。明天想去码头听海，随时过来。"
+        }
+      ]
+    },
+    {
+      "id": "meet_zhou_bobo",
+      "actor": "zhou_bobo",
+      "lines": [
+        {
+          "speaker": "zhou_bobo",
+          "text": "叫我周伯伯就好，我在街上开照相馆。第一次看这里的烟花，可别一直盯着取景框。"
+        },
+        {
+          "speaker": "player",
+          "text": "又想拍下来，又怕错过。"
+        },
+        {
+          "speaker": "zhou_bobo",
+          "text": "那就拍一张，再把相机放下。留下来的，不一定只有照片。"
+        }
+      ]
+    },
+    {
+      "id": "fireworks_invite",
+      "actor": "z",
+      "lines": [
+        {
+          "speaker": "z",
+          "text": "你把大家都认识了一遍呀。刚才我听见他们在叫你的名字了。"
+        },
+        {
+          "speaker": "player",
+          "text": "嗯。这次终于能把名字和人对上了。"
+        },
+        {
+          "speaker": "z",
+          "text": "那要不要开始今晚的烟花？大家已经准备好了。也可以再逛一会儿，我们等你。"
+        }
+      ]
+    }
+  ]
+}

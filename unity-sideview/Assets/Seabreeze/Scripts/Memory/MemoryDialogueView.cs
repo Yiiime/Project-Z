@@ -11,19 +11,20 @@ using static Seabreeze.UIPrimitives;
 namespace Seabreeze
 {
     // PR32 presentation, driven by the existing model conversation and memory events.
-    public sealed class MemoryDialogueView : MonoBehaviour
+    public sealed partial class MemoryDialogueView : MonoBehaviour
     {
         MemoryGameController memory; GameSession session;
         RectTransform taskPanel;bool taskLayoutVisible;
         TextMeshProUGUI taskTitle;Button acceptTask,declineTask,inviteTask;string offeredTask,lastCheckpoint;readonly List<string> activeTasks=new List<string>();int selectedTask;
         RectTransform root,speechPanel,playerPanel,portrait,column,content;
-        TextMeshProUGUI speechTitle,speechText,playerTitle,locationText,historyText,playerState,emptyPrompt;
+        TextMeshProUGUI speechTitle,speechText,playerTitle,locationText,historyText,playerState,emptyPrompt,inputHelp;
         TMP_InputField input; Button send; ScrollRect historyScroll;
         CanvasGroup playerGroup; Live2DCharacterView character; Coroutine transition;
         sealed class ChatBubble
         {
             public RectTransform Row,Panel;
             public TextMeshProUGUI Text;
+            public Image Surface;
             public bool IsPlayer;
         }
         readonly List<ChatBubble> history=new List<ChatBubble>();
@@ -79,6 +80,7 @@ namespace Seabreeze
             ButtonAt("切换任务",taskControls,new Vector2(292,-50),new Vector2(122,36),()=>{if(activeTasks.Count>0)selectedTask=(selectedTask+1)%activeTasks.Count;});
             inviteTask=ButtonAt("邀请当前NPC协作",taskControls,new Vector2(16,-96),new Vector2(240,36),()=>{if(activeTasks.Count>0)memory.InviteTask(activeTasks[selectedTask],selectedActor,"我接受了这项委托。你愿意和我一起做吗？只帮一部分或者另约也可以。");});
             taskPanel.gameObject.SetActive(false);
+            session.Clock.Changed+=RefreshDialoguePalette;
         }
         static RectTransform Region(string name,Transform parent,Vector2 min,Vector2 max)
         {
@@ -100,7 +102,8 @@ namespace Seabreeze
             historyScroll=viewport.gameObject.AddComponent<ScrollRect>();historyScroll.horizontal=false;historyScroll.movementType=ScrollRect.MovementType.Clamped;historyScroll.scrollSensitivity=34;historyScroll.viewport=viewport;
             content=Region("Conversation content",viewport,Vector2.up,Vector2.one);content.pivot=new Vector2(.5f,1);historyScroll.content=content;
             emptyPrompt=Label("Conversation invitation",content,Vector2.up,Vector2.up,new Vector2(12,-26),new Vector2(630,64),"想说什么，就从这里开始吧。",23,new Color(.95f,.95f,1,.8f));
-            var dock=Panel("回复",column,Vector2.zero,Vector2.zero,Vector2.zero,new Vector2(0,72),new Color(.94f,.95f,1,.64f),true);dock.rectTransform.anchorMax=Vector2.right;
+            replySurface=Panel("回复",column,Vector2.zero,Vector2.zero,Vector2.zero,new Vector2(0,72),new Color(.94f,.95f,1,.64f),true);replySurface.rectTransform.anchorMax=Vector2.right;
+            var dock=replySurface;
             ((RoundedPanel)dock).CornerRadius=36;((RoundedPanel)dock).SetBorder(new Color(1,1,1,.28f),1);
             input=dock.gameObject.AddComponent<TMP_InputField>();input.characterLimit=300;input.lineType=TMP_InputField.LineType.SingleLine;
             var area=Stretch("Text Area",dock.transform,new Vector2(26,18),new Vector2(-128,-18));area.gameObject.AddComponent<RectMask2D>();
@@ -108,20 +111,23 @@ namespace Seabreeze
             input.textViewport=area;input.textComponent=entered;input.richText=false;input.caretColor=BubbleInk;input.customCaretColor=true;
             var hint=Label("Placeholder",area,Vector2.zero,Vector2.zero,Vector2.zero,Vector2.zero,"写下想说的话…",23,new Color(.2f,.23f,.30f,.63f));Fill(hint.rectTransform);hint.richText=false;input.placeholder=hint;
             input.onSubmit.AddListener(_=>Send());
-            var sendPanel=Panel("发送",dock.transform,new Vector2(1,.5f),new Vector2(1,.5f),new Vector2(-12,0),new Vector2(98,48),new Color(1,1,1,.28f),true);
+            sendSurface=Panel("发送",dock.transform,new Vector2(1,.5f),new Vector2(1,.5f),new Vector2(-12,0),new Vector2(98,48),new Color(1,1,1,.28f),true);
+            var sendPanel=sendSurface;
             ((RoundedPanel)sendPanel).CornerRadius=24;((RoundedPanel)sendPanel).SetBorder(new Color(1,1,1,.4f),1);
             send=sendPanel.gameObject.AddComponent<Button>();send.targetGraphic=sendPanel;send.navigation=new Navigation{mode=Navigation.Mode.None};send.onClick.AddListener(Send);
             var sendColors=send.colors;sendColors.highlightedColor=new Color(.86f,.86f,1,1);sendColors.pressedColor=new Color(.7f,.75f,.9f,1);send.colors=sendColors;
-            Label("Send caption",sendPanel.transform,new Vector2(.5f,.5f),new Vector2(.5f,.5f),Vector2.zero,new Vector2(90,35),"发送 →",21,BubbleInk,TextAlignmentOptions.Center);
+            sendCaption=Label("Send caption",sendPanel.transform,new Vector2(.5f,.5f),new Vector2(.5f,.5f),Vector2.zero,new Vector2(90,35),"发送 →",21,BubbleInk,TextAlignmentOptions.Center);
             playerState=Label("连接与等待状态",column,Vector2.zero,Vector2.zero,new Vector2(5,88),new Vector2(730,32),"",18,Paper);playerState.richText=false;playerState.rectTransform.anchorMax=Vector2.right;playerState.rectTransform.sizeDelta=new Vector2(0,32);
-            var help=Label("输入提示",column,Vector2.zero,Vector2.zero,new Vector2(5,-36),new Vector2(730,28),"Enter 发送    ·    点击气泡显示全文    ·    Esc 返回",16,new Color(.9f,.92f,1,.7f));help.rectTransform.anchorMax=Vector2.right;help.rectTransform.sizeDelta=new Vector2(0,28);
+            inputHelp=Label("输入提示",column,Vector2.zero,Vector2.zero,new Vector2(5,-36),new Vector2(730,28),"Enter 发送    ·    点击气泡显示全文    ·    Esc 返回",16,new Color(.9f,.92f,1,.7f));inputHelp.rectTransform.anchorMax=Vector2.right;inputHelp.rectTransform.sizeDelta=new Vector2(0,28);
             DialogueControl("声音",-76,"sound",()=>{AudioListener.volume=AudioListener.volume>.01f?0:1;if(AudioListener.volume<=.01f)memory.Client.StopSpeech();});
-            DialogueControl("结束交谈",-8,"close",()=>memory.Conversations.Cancel("玩家结束交谈"));
+            DialogueControl("结束交谈",-8,"close",CloseConversationView);
+            BuildDaylightPresentation();
             playerGroup.alpha=0;playerPanel.gameObject.SetActive(false);
         }
         void DialogueControl(string name,float x,string symbol,Action action)
         {
             var p=Panel(name,column,Vector2.one,Vector2.one,new Vector2(x,-12),new Vector2(49,49),new Color(.92f,.94f,1,.45f),true);
+            headerControls.Add(p);
             ((RoundedPanel)p).CornerRadius=25;((RoundedPanel)p).SetBorder(new Color(1,1,1,.28f));
             var button=p.gameObject.AddComponent<Button>();button.targetGraphic=p;button.navigation=new Navigation{mode=Navigation.Mode.None};button.onClick.AddListener(()=>{if(PlayerInputReady)action();});
             FinalKitAssets.Icon(symbol,p.transform,new Vector2(.5f,.5f),new Vector2(.5f,.5f),Vector2.zero,new Vector2(21,21));
@@ -139,7 +145,8 @@ namespace Seabreeze
             var panel=FinalKitAssets.Bubble(isPlayer?"bubble-player":"bubble-npc",row,anchor,anchor,Vector2.zero,new Vector2(334,86));panel.raycastTarget=true;
             var text=Label("Message",panel.transform,Vector2.up,Vector2.up,new Vector2(34,-22),new Vector2(260,36),message,24,BubbleInk);text.richText=false;text.lineSpacing=5;text.maxVisibleCharacters=isPlayer?int.MaxValue:0;
             var reveal=panel.gameObject.AddComponent<Button>();reveal.targetGraphic=panel;reveal.transition=Selectable.Transition.None;reveal.navigation=new Navigation{mode=Navigation.Mode.None};reveal.onClick.AddListener(FinishTyping);
-            history.Add(new ChatBubble{Row=row,Panel=panel.rectTransform,Text=text,IsPlayer=isPlayer});historyText=text;
+            var bubble=new ChatBubble{Row=row,Panel=panel.rectTransform,Text=text,Surface=panel,IsPlayer=isPlayer};
+            ApplyBubblePalette(bubble);history.Add(bubble);historyText=text;
             if(history.Count>12){Destroy(history[0].Row.gameObject);history.RemoveAt(0);}
             RefreshHistoryLayout();
         }
@@ -161,6 +168,7 @@ namespace Seabreeze
         {
             if(transition!=null)StopCoroutine(transition);ResetPortraitIdle();Closing=false;entering=true;selectedActor=actorId;lastCheckpoint=null;ClearHistory();typing=false;portraitEmotion=null;expressionEndsAt=0;
             playerTitle.text=SevenCharacterCatalog.Name(actorId);
+            RefreshDialoguePalette();
 
             locationText.text=GameUI.PlaceName(session.CurrentPlace)+"  ·  "+GameUI.PeriodName(session.Clock.Period);
             playerPanel.gameObject.SetActive(true);speechPanel.gameObject.SetActive(false);playerGroup.alpha=0;playerGroup.interactable=false;input.text="";
@@ -185,7 +193,7 @@ namespace Seabreeze
             float start=playerGroup.alpha,end=opening?1:0,duration=opening?Style.DialogueEnterDuration:Style.DialogueExitDuration;
             for(float t=0;t<1;t+=Time.unscaledDeltaTime/Mathf.Max(.01f,duration)){SetPose(Mathf.Lerp(start,end,t*t*(3-2*t)));yield return null;}
             SetPose(end);transition=null;entering=false;Closing=false;
-            if(opening){playerGroup.interactable=true;input.ActivateInputField();}
+            if(opening){playerGroup.interactable=true;if(!ScriptedOpen)input.ActivateInputField();}
             else{playerPanel.gameObject.SetActive(false);character.Hide();backdrop.Release();}
         }
         void SetPose(float alpha){playerGroup.alpha=alpha;portrait.anchoredPosition=Vector2.left*(1-alpha)*34;portrait.localScale=Vector3.one*Mathf.Lerp(.975f,1,alpha);column.anchoredPosition=Vector2.right*(1-alpha)*18;}
@@ -325,8 +333,11 @@ namespace Seabreeze
         }
         public void ResetView()
         {
-            StopAllCoroutines();transition=null;Closing=entering=false;ClearHistory();FinishTyping();ResetPortraitIdle();memory.ResetZhouboPortraitSelection();backdrop.Release();playerPanel.gameObject.SetActive(false);playerGroup.alpha=0;character.Hide();speechPanel.gameObject.SetActive(false);taskPanel.gameObject.SetActive(false);lastCheckpoint=null;
-
+            StopAllCoroutines();
+            var cancelledStory=ResetStoryState();
+            transition=null;Closing=entering=false;ClearHistory();FinishTyping();ResetPortraitIdle();memory.ResetZhouboPortraitSelection();backdrop.Release();playerPanel.gameObject.SetActive(false);playerGroup.alpha=0;character.Hide();speechPanel.gameObject.SetActive(false);taskPanel.gameObject.SetActive(false);lastCheckpoint=null;
+            // Notify after the view is fully reset. A callback cannot leave a half-reset new view.
+            cancelledStory?.Invoke(false);
         }
         void Update()
         {
@@ -336,7 +347,8 @@ namespace Seabreeze
             if(fullView&&!Mathf.Approximately(previousColumnWidth,column.rect.width))RefreshHistoryLayout();
 
             if(speechPanel.gameObject.activeSelf&&(Time.unscaledTime>speechUntil||fullView||overlay))speechPanel.gameObject.SetActive(false);
-            if(PlayerInputReady&&GameInput.Pressed(Key.Escape))memory.Conversations.Cancel("玩家结束交谈");
+            if(ScriptedOpen){TickStory();return;}
+            if(PlayerInputReady&&GameInput.Pressed(Key.Escape))CloseConversationView();
             RefreshTasks();
             bool showTasks=fullView&&!overlay&&(offeredTask!=null||activeTasks.Count>0);
             if(taskPanel.gameObject.activeSelf!=showTasks||taskLayoutVisible!=showTasks)

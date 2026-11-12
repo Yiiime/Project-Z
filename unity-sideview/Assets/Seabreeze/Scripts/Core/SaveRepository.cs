@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace Seabreeze
@@ -44,6 +46,11 @@ namespace Seabreeze
                 if (!json.TrimStart().StartsWith("{")) throw new InvalidDataException("Invalid save JSON.");
                 var result = JsonUtility.FromJson<SaveData>(json);
                 if (result == null) return null;
+                // JsonUtility creates inline class values even when an old save
+                // omits them. Only an explicitly saved first day may start it.
+                var firstDay = ParseObject(json)[nameof(SaveData.firstDay)];
+                if (firstDay == null || firstDay.Type == JTokenType.Null)
+                    result.firstDay = null;
                 result.Sanitize();
                 return result;
             }
@@ -60,7 +67,16 @@ namespace Seabreeze
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(PathOnDisk));
                 var temp = PathOnDisk + ".tmp";
-                File.WriteAllText(temp, JsonUtility.ToJson(data, true));
+                var json = JsonUtility.ToJson(data, true);
+                if (data.firstDay == null)
+                {
+                    // Preserve the opt-in across subsequent saves: JsonUtility
+                    // otherwise serializes null as a new opening-state object.
+                    var payload = ParseObject(json);
+                    payload.Remove(nameof(SaveData.firstDay));
+                    json = payload.ToString(Formatting.Indented);
+                }
+                File.WriteAllText(temp, json);
                 if (File.Exists(PathOnDisk))
                 {
                     // File.Replace atomically swaps an existing save and preserves its predecessor.
@@ -75,6 +91,14 @@ namespace Seabreeze
                 LastError = e.Message;
                 Debug.LogWarning("Seabreeze save failed: " + e.Message);
                 return false;
+            }
+        }
+        static JObject ParseObject(string json)
+        {
+            using (var reader = new JsonTextReader(new StringReader(json)))
+            {
+                reader.DateParseHandling = DateParseHandling.None;
+                return JObject.Load(reader);
             }
         }
     }

@@ -104,7 +104,19 @@ namespace Seabreeze
             int shown=0;
             foreach(var memory in phoneData.Memories.Where(m=>phoneRoute.Filter=="all"||(phoneRoute.Filter=="photos"&&m.IsPhoto)||(phoneRoute.Filter=="memories"&&!m.IsPhoto)||(phoneRoute.Filter=="favorites"&&phoneData.IsFavorite(m.Id))))
             {
-                shown++;string id=memory.Id;var card=PhoneButton(root,"Memory "+id,0,y,336,126,"",()=>PhoneNavigate("memory",id));
+                shown++;string id=memory.Id;
+                if(memory.IsPhoto)
+                {
+                    var photoCard=PhoneButton(root,"Photo "+id,0,y,336,268,"",()=>PhoneNavigate("memory",id));
+                    var image=Rect("Photo thumbnail",photoCard.transform,TL,TL,new Vector2(12,-12),new Vector2(312,176)).gameObject.AddComponent<Image>();
+                    image.color=new Color(.08f,.12f,.18f,.6f);image.raycastTarget=false;
+                    bool loaded=image.gameObject.AddComponent<PhotoImageView>().Load(memory.ThumbnailPath);
+                    if(!loaded)PhoneText(photoCard.transform,24,72,288,40,"照片文件暂时无法读取",15,PhoneMuted).alignment=TextAlignmentOptions.Center;
+                    var caption=PhoneText(photoCard.transform,14,197,308,30,memory.Title,18,PhoneWhite);caption.overflowMode=TextOverflowModes.Ellipsis;
+                    var date=PhoneText(photoCard.transform,14,235,308,22,MemoryMeta(memory)+(phoneData.IsFavorite(id)?" · ★":""),12,PhoneMuted);date.overflowMode=TextOverflowModes.Ellipsis;
+                    y+=280;continue;
+                }
+                var card=PhoneButton(root,"Memory "+id,0,y,336,126,"",()=>PhoneNavigate("memory",id));
                 FinalKitAssets.Icon(memory.IsPhoto?"album":"tasks",card.transform,TL,TL,new Vector2(16,-17),new Vector2(30,30));
                 PhoneText(card.transform,58,17,260,22,(memory.IsPhoto?"留影":memory.ActorIds.Length>0?"共同经历":"岛上见闻")+(phoneData.IsFavorite(id)?" · 已收藏":""),13,PhoneLilac);
                 var title=PhoneText(card.transform,16,57,304,29,memory.Title,20,PhoneWhite);title.overflowMode=TextOverflowModes.Ellipsis;
@@ -115,7 +127,7 @@ namespace Seabreeze
             {
                 var empty=Rect("Empty album",root,TL,TL,new Vector2(0,-y),new Vector2(336,400));
                 string title=phoneRoute.Filter=="photos"?"还没有留下照片":phoneRoute.Filter=="favorites"?"想记住的，慢慢收藏":"把相遇留在这里";
-                string text=phoneRoute.Filter=="photos"?"这里只收下真实获得的照片。共同经历可以先在「回忆」里看看。":phoneRoute.Filter=="favorites"?"打开一段回忆，点一下收藏，就能在这里再找到它。":"一次见面，一件一起完成的小事，都会让这里慢慢丰富起来。";
+                string text=phoneRoute.Filter=="photos"?"在小岛的任何地方按 P，留下眼前的画面。输入文字时，先退出输入框再拍照。":phoneRoute.Filter=="favorites"?"打开一段回忆，点一下收藏，就能在这里再找到它。":"一次见面，一件一起完成的小事，都会让这里慢慢丰富起来。按 P 也可以拍下此刻。";
                 y+=PhoneEmpty(empty,title,text,"album");
                 if(phoneRoute.Filter=="photos")y=PhonePersonLink(root,y,"zhou_bobo");
             }
@@ -132,16 +144,22 @@ namespace Seabreeze
             var root=PhoneList(110);var memory=phoneData.Memories.FirstOrDefault(m=>m.Id==phoneRoute.Id);
             if(memory==null){EndPhoneList(PhoneEmpty(root,"这段回忆暂时不在这里","返回相册，看看其他经历。","album"));return;}
             float y=0;
-            // Only an explicitly acquired Resources sprite is a photograph. Text records have no synthetic image.
-            var photo=memory.IsPhoto&&!string.IsNullOrEmpty(memory.ImagePath)?Resources.Load<Sprite>(memory.ImagePath):null;
-            if(photo!=null)
+            // The photo file is a captured frame belonging to this save. Text memories stay text.
+            bool photoLoaded=false;
+            if(memory.IsPhoto)
             {
-                var image=PhoneSurface("Acquired photo",root,0,0,336,206,Color.clear,18);
-                var picture=Rect("Photo",image.transform,C,C,Vector2.zero,new Vector2(336,206)).gameObject.AddComponent<Image>();picture.sprite=photo;picture.preserveAspect=true;picture.raycastTarget=false;
-                var b=image.gameObject.AddComponent<Button>();image.raycastTarget=true;b.targetGraphic=image;b.onClick.AddListener(()=>ShowPhoneLightbox(photo,memory.Title));
-                y=PhoneParagraph(root,216,"点击照片查看大图",12,PhoneMuted)+12;
+                var surface=PhoneSurface("Acquired photo",root,0,0,336,206,new Color(.05f,.08f,.13f,.35f),18);
+                var picture=Rect("Photo",surface.transform,C,C,Vector2.zero,new Vector2(336,206)).gameObject.AddComponent<Image>();
+                photoLoaded=picture.gameObject.AddComponent<PhotoImageView>().Load(memory.ImagePath);
+                if(photoLoaded)
+                {
+                    var b=surface.gameObject.AddComponent<Button>();surface.raycastTarget=true;b.targetGraphic=surface;
+                    b.onClick.AddListener(()=>ShowPhoneLightbox(memory.ImagePath,memory.Title));
+                    y=PhoneParagraph(root,216,"点击照片查看大图",12,PhoneMuted)+12;
+                }
+                else Destroy(surface.gameObject);
             }
-            else
+            if(!photoLoaded)
             {
                 var banner=PhoneSurface("Memory heading",root,0,0,336,72,new Color(.54f,.51f,.66f,.18f),18);
                 FinalKitAssets.Icon("tasks",banner.transform,TL,TL,new Vector2(18,-20),new Vector2(32,32));
@@ -154,12 +172,21 @@ namespace Seabreeze
             PhoneButton(root,"Favorite memory",0,y+8,336,48,saved?"★ 已收藏 · 点击取消":"收藏这段回忆",()=>{RememberPhoneScroll();phoneData.ToggleFavorite(memory.Id);},16,saved);
             EndPhoneList(y+72);
         }
-        void ShowPhoneLightbox(Sprite photo,string title)
+        void ShowPhoneLightbox(string photoPath,string title)
         {
             if(overlayBusy||phoneLightbox!=null)return;
             var view=Stretch("Photo lightbox",overlayRoot,Vector2.zero,Vector2.zero);phoneLightbox=view.gameObject;
             var cover=view.gameObject.AddComponent<Image>();cover.color=new Color(.025f,.045f,.075f,.96f);cover.raycastTarget=true;
-            var image=Stretch("Full photo",view,new Vector2(70,110),new Vector2(-70,-100)).gameObject.AddComponent<Image>();image.sprite=photo;image.preserveAspect=true;image.raycastTarget=false;
+            var image=Stretch("Full photo",view,new Vector2(70,110),new Vector2(-70,-100)).gameObject.AddComponent<Image>();image.raycastTarget=false;
+            // Image.preserveAspect uses the pivot to align its letterboxed content.
+            // Keep the photo centred without changing the surrounding safe margins.
+            image.rectTransform.pivot=Vector2.one*.5f;
+            image.rectTransform.offsetMin=new Vector2(70,110);image.rectTransform.offsetMax=new Vector2(-70,-100);
+            if(!image.gameObject.AddComponent<PhotoImageView>().Load(photoPath))
+            {
+                image.color=Color.clear;
+                Label("Missing photo",view,C,C,Vector2.zero,new Vector2(900,60),"照片文件暂时无法读取",24,PhoneMuted,TextAlignmentOptions.Center);
+            }
             var heading=Label("Caption",view,TC,TC,new Vector2(0,-32),new Vector2(900,40),title,24,PhoneWhite,TextAlignmentOptions.Center);heading.richText=false;
             var close=PhoneButton(view,"Close photo",30,26,130,44,"‹ 返回回忆",PhoneBack);
             Label("Photo back hint",view,new Vector2(.5f,0),new Vector2(.5f,0),new Vector2(0,38),new Vector2(700,30),"Esc 返回这段回忆  ·  Tab 收起手机",16,PhoneMuted,TextAlignmentOptions.Center);

@@ -26,7 +26,7 @@ namespace Seabreeze
     }
     public sealed class PhoneMemory
     {
-        public string Id, Title, Text, Place, DateLabel, ImagePath;
+        public string Id, Title, Text, Place, DateLabel, ImagePath, ThumbnailPath;
         public string[] ActorIds = Array.Empty<string>();
         public bool IsPhoto;
     }
@@ -39,10 +39,10 @@ namespace Seabreeze
     public sealed class PhoneKnownFact { public string Text, Source; }
 
     /// <summary>
-    /// Read-only projection of player-visible game state. Phone actions only change
-    /// phone preferences; task decisions and receipts remain owned by the game engine.
+    /// Projection of player-visible game state, preferences and accepted phone chats.
+    /// Task decisions and receipts remain owned by the game engine.
     /// </summary>
-    public sealed class PhoneDataService : MonoBehaviour
+    public sealed partial class PhoneDataService : MonoBehaviour
     {
         readonly List<PhoneMessage> messages = new List<PhoneMessage>();
         readonly List<PhoneTask> tasks = new List<PhoneTask>();
@@ -70,6 +70,7 @@ namespace Seabreeze
 
         public void Initialize(GameSession owner)
         {
+            ResetChatRequests();
             if (session != null) session.Changed -= Invalidate;
             session = owner;
             if (session != null) session.Changed += Invalidate;
@@ -78,7 +79,7 @@ namespace Seabreeze
             Refresh();
         }
 
-        void OnDestroy() { if (session != null) session.Changed -= Invalidate; }
+        void OnDestroy() { ResetChatRequests(); if (session != null) session.Changed -= Invalidate; }
         void Invalidate() { dirty = true; }
         void Update()
         {
@@ -102,6 +103,7 @@ namespace Seabreeze
                 bool stateChanged = state != session.State;
                 if (stateChanged)
                 {
+                    ResetChatRequests();
                     state = session.State;
                     checkpointText = null;
                     checkpoint = null;
@@ -115,6 +117,7 @@ namespace Seabreeze
                 bool worldChanged = !string.IsNullOrEmpty(phone.worldId) && !string.IsNullOrEmpty(worldId) && phone.worldId != worldId;
                 if (worldChanged)
                 {
+                    ResetChatRequests();
                     phone = state.phone = new PhoneSaveState();
                     checkpoint = null;
                     checkpointText = null;
@@ -197,7 +200,7 @@ namespace Seabreeze
             foreach (var memory in memories)
             {
                 AppendSignature(signature, memory.Id, memory.Title, memory.Text, memory.Place, memory.DateLabel,
-                    memory.ImagePath, memory.IsPhoto ? "1" : "0");
+                    memory.ImagePath, memory.ThumbnailPath, memory.IsPhoto ? "1" : "0");
                 AppendSignature(signature, memory.ActorIds);
             }
             foreach (var person in people)
@@ -268,6 +271,34 @@ namespace Seabreeze
         }
 
         void BuildTasks()
+        {
+            BuildSynchronizedTasks();
+            var firstDay = state.firstDay;
+            if (firstDay == null || firstDay.phase == FirstDayPhase.None) return;
+            bool complete = firstDay.phase == FirstDayPhase.Complete;
+            var task = new PhoneTask
+            {
+                Id = "first_day", Title = "初来小岛的这一天", OwnerId = "z", Status = complete ? "completed" : "active",
+                Description = complete ? "从直播间的一次邀请，到和大家一起看烟花。第一天，已经有了想记住的人。"
+                    : session.FirstDay != null ? session.FirstDay.Objective : "沿着海风，认识岛上的人。"
+            };
+            string[] labels = { "在 Z 的直播间接受小岛邀请", "在码头和 Z 打招呼", "沿街走到古树广场", "和广场的每位岛民聊一聊", "和 Z 一起开启烟花", "回家，在床边结束这一天" };
+            FirstDayPhase[] finishedAt = { FirstDayPhase.Arrival, FirstDayPhase.WalkToSquare, FirstDayPhase.MeetIslanders,
+                FirstDayPhase.Fireworks, FirstDayPhase.Home, FirstDayPhase.Complete };
+            bool nextFound = false;
+            for (int i = 0; i < labels.Length; i++)
+            {
+                bool done = firstDay.phase >= finishedAt[i];
+                bool ready = !complete && !done && !nextFound;
+                if (ready) nextFound = true;
+                task.Steps.Add(new PhoneTaskStep { Id = "first_day_" + i, Label = labels[i], Complete = done, Ready = ready });
+            }
+            tasks.Insert(0, task);
+            if (!TaskDataAvailable) TaskDataHint = "第一天的约定保存在这台设备上。";
+            TaskDataAvailable = true;
+        }
+
+        void BuildSynchronizedTasks()
         {
             tasks.Clear();
             TaskDataAvailable = checkpointValid;
@@ -395,6 +426,14 @@ namespace Seabreeze
         void BuildMemoriesAndPeople()
         {
             memories.Clear(); people.Clear();
+            foreach (var photo in state.phone.photos.AsEnumerable().Reverse())
+                memories.Add(new PhoneMemory
+                {
+                    Id = photo.id, Title = photo.title ?? "留住这一刻", Text = "按下快门时，眼前的风景。",
+                    Place = photo.place ?? "", DateLabel = DateLabel(photo.day, photo.period), IsPhoto = true,
+                    ImagePath = PhotoCaptureService.ResolvePath(state.phone, photo.fileName),
+                    ThumbnailPath = PhotoCaptureService.ResolvePath(state.phone, photo.thumbnailFileName)
+                });
             foreach (var memory in state.phone.memories.AsEnumerable().Reverse())
                 memories.Add(new PhoneMemory { Id = memory.id, Title = memory.title, Text = memory.text, Place = memory.place ?? "",
                     DateLabel = DateLabel(memory.day, memory.period), ActorIds = memory.actorIds ?? Array.Empty<string>(), IsPhoto = false, ImagePath = "" });

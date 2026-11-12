@@ -19,6 +19,7 @@
     "com.unity.modules.animation": "1.0.0",
     "com.unity.modules.imgui": "1.0.0",
     "com.unity.collections": "2.7.1",
-    "com.unity.burst": "1.8.31"
+    "com.unity.burst": "1.8.31",
+    "com.unity.modules.video": "1.0.0"
   }
 }

@@ -4,7 +4,7 @@ namespace Seabreeze
 {
     public class AmbientAudio : MonoBehaviour
     {
-        AudioSource ocean, pad, steps;
+        AudioSource ocean, steps;
         float foot;
         public void Initialize()
         {
@@ -13,11 +13,6 @@ namespace Seabreeze
             ocean.loop = true;
             ocean.volume = .15f;
             ocean.Play();
-            pad = gameObject.AddComponent<AudioSource>();
-            pad.clip = MakePad();
-            pad.loop = true;
-            pad.volume = .055f;
-            pad.Play();
             steps = gameObject.AddComponent<AudioSource>();
             steps.clip = MakeStep();
             steps.volume = .075f;
@@ -61,24 +56,6 @@ namespace Seabreeze
             }
 
             var c = AudioClip.Create("Original synthesized shoreline", n, 1, rate, false);
-            c.SetData(data, 0);
-            return c;
-        }
-
-        static AudioClip MakePad()
-        {
-            int rate = 22050, n = rate * 16;
-            float[] data = new float[n];
-            float[] freq = {130.8125f, 164.8125f, 196, 246.9375f};
-            for (int i = 0; i < n; i++)
-            {
-                float t = (float)i / rate, v = 0;
-                foreach (float f in freq)
-                    v += Mathf.Sin(2 * Mathf.PI * f * t) * .12f;
-                data[i] = v * Mathf.Pow(Mathf.Sin(Mathf.PI * t / 16), 2);
-            }
-
-            var c = AudioClip.Create("Original quiet chord", n, 1, rate, false);
             c.SetData(data, 0);
             return c;
         }
