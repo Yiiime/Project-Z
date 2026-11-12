@@ -1,3 +1,4 @@
+import { SpeechService, SpeechError } from "./lib/speech.mjs";
 import {dayConversation} from "./lib/daytime.mjs";
 import {localSongSubmit,DaySongDispatch} from "./lib/day-song-dispatch.mjs";
 import http from "node:http";
@@ -47,6 +48,7 @@ export function createServer({
   dbPath = join(APP_ROOT, ".data/unified.sqlite"),
   root = PROJECT,
   providerFactory,
+  speech = new SpeechService(),
   songSubmit,
   decide,
   backgroundEnabled = true,
@@ -86,6 +88,7 @@ export function createServer({
     mode: provider.mode || "real",
     version: catalog.registry.pack_version,
     ...provider.publicConfig(),
+    speech: speech.status(),
   });
   const respond = (res, data, code = 200, type = "application/json") => {
     const body = typeof data === "string" ? data : JSON.stringify(data);
@@ -305,6 +308,7 @@ export function createServer({
             logicalHour(p.day, p.period) + 0.001
           )
             throw new TurnError("当前游戏不能加载未来记忆");
+          speech.cancel(world);
           engine.open(world, p.runId, inputCheckpoint);
           const w = engine.world(world);
           const target = logicalHour(p.day, p.period);
@@ -325,7 +329,36 @@ export function createServer({
           result = gameResponse(world);
         } else {
           const w = checkRun(p);
-          if (url.pathname === "/api/game/sync") {
+          if (url.pathname === "/api/game/speech") {
+            // Synthesize the committed server-side proposal, never caller-supplied text.
+            const proposal = store.record(p.proposalId);
+            const currentSpeech = () => {
+              const current = checkRun(p);
+              const event = proposal?.eventId ? engine.event(world, proposal.eventId) : null;
+              const latest = engine.records(current, "event").filter(e =>
+                e.conversationId === p.conversationId && e.channel === "private_player_chat").at(-1);
+              return proposal?.world === world && proposal.runId === p.runId &&
+                proposal.epoch === current.epoch && proposal.hour === current.hour && proposal.status === "committed" &&
+                proposal.actor === p.actorId && current.focus?.actor === p.actorId &&
+                proposal.context.interaction.mode === "player" && proposal.conversation === p.conversationId &&
+                event?.channel === "private_player_chat" && event.recipient === "player" &&
+                latest?.id === event.id && proposal.output.dialogue;
+            };
+            if (!currentSpeech()) throw new TurnError("语音不属于当前已展示的单聊台词");
+            const controller = new AbortController();
+            const closed = () => { if (!res.writableEnded) controller.abort(); };
+            res.once("close", closed);
+            try {
+              const audio = await speech.synthesize({worldId:world,runId:p.runId,proposalId:p.proposalId,
+                actorId:p.actorId,conversationId:p.conversationId,text:proposal.output.dialogue,delivery:proposal.delivery},controller.signal);
+              if (!currentSpeech()) throw new SpeechError("tts_cancelled");
+              return respond(res,{ok:true,runId:p.runId,proposalId:p.proposalId,audio,
+                speechWarning:proposal.speech_warning || ""});
+            } finally { res.removeListener("close",closed); }
+          } else if (url.pathname === "/api/game/speech/cancel") {
+            speech.cancel(world,p.conversationId,p.proposalId);
+            return respond(res,{ok:true});
+          } else if (url.pathname === "/api/game/sync") {
             const event = p.eventData;
             if (!event?.id || !Number.isInteger(event.seq))
               throw new TurnError("事件缺少稳定标识和序号");
@@ -362,6 +395,7 @@ export function createServer({
               engine.save(w);
               const location =
                 event.locationId || event.location || "main_street";
+              if (event.kind === "clock" || (event.kind === "utterance" && event.speakerId === "player")) speech.cancel(world);
               if (event.kind === "clock") {
                 engine.observe(world, "游戏日期时段已经推进。", [], {
                   kind: "fact",
@@ -501,6 +535,7 @@ export function createServer({
                 : {},
             );
           } else if (url.pathname === "/api/game/focus") {
+            speech.cancel(world);
             engine.focus(world, p.actorId || null, "unity_" + p.runId);
             result = gameResponse(world);
           } else if (url.pathname === "/api/game/intent") {
@@ -574,6 +609,7 @@ export function createServer({
               actorId: actor,
               proposalId: r.proposalId,
               text: r.output.dialogue,
+              delivery: store.record(r.proposalId)?.delivery || "",
               result: r.output,
               endConversation:
                 r.output.info.communication?.intent === "end" ||
@@ -596,6 +632,7 @@ export function createServer({
               expression: proposal?.portrait_expression ?? null,
             });
           } else if (url.pathname === "/api/game/cancel") {
+            speech.cancel(world,p.conversationId);
             engine.cancel(world, {
               actor: p.actorId,
               conversation: p.conversationId,
@@ -604,6 +641,7 @@ export function createServer({
           } else if (url.pathname === "/api/game/checkpoint")
             result = gameResponse(world);
           else if (url.pathname === "/api/game/close") {
+            speech.cancel(world);
             engine.cancel(world);
             const current = engine.world(world);
             current.active = false;
@@ -721,10 +759,11 @@ export function createServer({
         res,
         {
           error:
-            error instanceof TurnError
+            error instanceof TurnError || error instanceof SpeechError
               ? error.message
               : "请求处理失败，未返回内部信息",
           ok: false,
+          ...(error instanceof SpeechError ? {speechError:error.code} : {}),
         },
         400,
       );
@@ -758,6 +797,7 @@ export function createServer({
   }, 1500);
   timer.unref();
   server.on("close", () => {
+    speech.cancel();
     daySongs?.close();
     clearInterval(timer);
     for (const w of store.experiments().filter((w) => w.worldId))

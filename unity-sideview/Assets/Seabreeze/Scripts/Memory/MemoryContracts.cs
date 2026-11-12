@@ -18,11 +18,16 @@ namespace Seabreeze
         public string[] candidates=Array.Empty<string>(),observers=Array.Empty<string>(),reachableLocations=Array.Empty<string>();
         public JObject details;public MemoryEvent eventData;
     }
+    [Serializable] public sealed class MemorySpeechAudio
+    {
+        public string format,base64; public int sampleRate,channels;
+    }
     [Serializable] public sealed class MemoryReply
     {
         public bool ok,configured,verified,endConversation;
-        public string error,warning,app,mode,model,runId,requestId,actorId,targetId,reason,topic,proposalId,text,expression,checkpoint;
+        public string error,warning,app,mode,model,runId,requestId,actorId,targetId,reason,topic,proposalId,text,expression,checkpoint,delivery,speechError,speechWarning;
         public int seq,configurationRevision,responseRevision;
+        public MemorySpeechAudio audio;
         public ActorTurn result;public JObject state;
         public string[] recalledMemoryIds=Array.Empty<string>();
     }

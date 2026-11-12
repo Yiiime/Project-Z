@@ -101,7 +101,7 @@ namespace Seabreeze
             Label("Send caption",sendPanel.transform,new Vector2(.5f,.5f),new Vector2(.5f,.5f),Vector2.zero,new Vector2(90,35),"发送 →",21,BubbleInk,TextAlignmentOptions.Center);
             playerState=Label("连接与等待状态",column,Vector2.zero,Vector2.zero,new Vector2(5,88),new Vector2(730,32),"",18,Paper);playerState.richText=false;playerState.rectTransform.anchorMax=Vector2.right;playerState.rectTransform.sizeDelta=new Vector2(0,32);
             var help=Label("输入提示",column,Vector2.zero,Vector2.zero,new Vector2(5,-36),new Vector2(730,28),"Enter 发送    ·    点击气泡显示全文    ·    Esc 返回",16,new Color(.9f,.92f,1,.7f));help.rectTransform.anchorMax=Vector2.right;help.rectTransform.sizeDelta=new Vector2(0,28);
-            DialogueControl("声音",-76,"sound",()=>{AudioListener.volume=AudioListener.volume>.01f?0:1;});
+            DialogueControl("声音",-76,"sound",()=>{AudioListener.volume=AudioListener.volume>.01f?0:1;if(AudioListener.volume<=.01f)memory.Client.StopSpeech();});
             DialogueControl("结束交谈",-8,"close",()=>memory.Conversations.Cancel("玩家结束交谈"));
             playerGroup.alpha=0;playerPanel.gameObject.SetActive(false);
         }
@@ -323,7 +323,7 @@ namespace Seabreeze
             acceptTask.interactable=declineTask.interactable=fullView&&offeredTask!=null&&memory.Client.CanGenerate;inviteTask.interactable=fullView&&activeTasks.Count>0&&memory.Client.CanGenerate;
             taskTitle.text=offeredTask!=null?"NPC已提出："+offeredTask:activeTasks.Count>0?"玩家进行中："+activeTasks[selectedTask]:"";
             send.interactable=PlayerInputReady&&memory.PlayerChatOpen&&memory.Client.CanGenerate&&!memory.Conversations.Sending;
-            playerState.text=memory.Conversations.Sending?"对方正在想怎么说…":memory.Client.CanGenerate?"":"暂时无法连接。Esc 返回后，可在暂停菜单设置对话服务。";
+            playerState.text=memory.Conversations.Sending?"对方正在想怎么说…":memory.Client.CanGenerate?memory.Client.SpeechStatus:"暂时无法连接。Esc 返回后，可在暂停菜单设置对话服务。";
             playerState.color=new Color(.94f,.94f,1,.82f);
             if(typing&&PlayerInputReady){revealed+=Time.unscaledDeltaTime*charactersPerSecond;historyText.maxVisibleCharacters=Mathf.FloorToInt(revealed);if(historyText.maxVisibleCharacters>=historyText.textInfo.characterCount)FinishTyping();else character.SetState(portraitEmotion,lastSpeaker==selectedActor);}
 

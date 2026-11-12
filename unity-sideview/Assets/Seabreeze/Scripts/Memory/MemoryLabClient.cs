@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,6 +17,16 @@ namespace Seabreeze
         HttpClient http;
         readonly Dictionary<string,CancellationTokenSource> requests=new Dictionary<string,CancellationTokenSource>();
         int generation;
+        int speechVersion;
+        CancellationTokenSource speechCancellation;
+        Coroutine speechRoutine;
+        AudioSource speechSource;
+        AudioClip speechClip;
+        string speechConversation="",speechProposal="";
+        public string SpeechStatus {get;private set;}="";
+        public bool SpeechPlaying => speechSource!=null&&speechSource.isPlaying;
+        public bool SpeechBusy {get;private set;}
+
         int acknowledgedRevision;
         bool opened,opening,syncing,checking,focusing;int focusVersion;
         float nextHealth,nextOpen,retryModelAt;
@@ -41,6 +52,7 @@ namespace Seabreeze
         }
         public void BeginWorld()
         {
+            StopSpeech(false);
             generation++;focusVersion++;focusing=false;foreach(var c in requests.Values)c.Cancel();requests.Clear();
             StopAllCoroutines();opened=opening=syncing=checking=false;
             RunId=Guid.NewGuid().ToString("N");nextHealth=nextOpen=retryModelAt=0;LastError="";BackgroundError="";acknowledgedRevision=0;
@@ -120,14 +132,14 @@ namespace Seabreeze
                 error.StartsWith("本轮取消或超过等待预算",StringComparison.Ordinal)||
                 error.StartsWith("台词超出本轮字数预算",StringComparison.Ordinal);
         }
-        public void CancelConversation(string conversationId) {StartCoroutine(CancelAfterDelivered(conversationId));}
+        public void CancelConversation(string conversationId) {if(speechConversation==conversationId)StopSpeech();StartCoroutine(CancelAfterDelivered(conversationId));}
         IEnumerator CancelAfterDelivered(string conversation)
         {
             while(session.State.memory.outbox.Any(e=>e.conversationId==conversation))yield return null;
             if(!opened)yield break;var request=RequestBase();request.conversationId=conversation;
             yield return Send("/api/game/cancel",request,3,_=>{},_=>{});
         }
-        public void Focus(string actor){int version=++focusVersion;focusing=true;StartCoroutine(FocusAfterDelivered(actor,version));}
+        public void Focus(string actor){StopSpeech();int version=++focusVersion;focusing=true;StartCoroutine(FocusAfterDelivered(actor,version));}
         IEnumerator FocusAfterDelivered(string actor,int version)
         {
             while(version==focusVersion&&(!opened||session.State.memory.outbox.Count>0))yield return null;
@@ -144,6 +156,99 @@ namespace Seabreeze
         IEnumerator AfterSynchronized(Action<MemoryReply> completed){while(!CanGenerate)yield return null;completed(new MemoryReply{ok=true});}
         public void ConfirmTaskStep(string task,string step,string performer,Newtonsoft.Json.Linq.JObject evidence)
         {session.Memory.Append(new MemoryEvent{kind="task_receipt",taskId=task,stepId=step,performerId=performer,receiptId=Guid.NewGuid().ToString("N"),succeeded=true,participants=evidence?["participants"]?.ToObject<string[]>()??Array.Empty<string>(),voluntaryConsents=evidence?["voluntary_consents"]?.ToObject<string[]>()??Array.Empty<string>(),messageEventId=(string)evidence?["message_event_id"]});}
+        // Only the coordinator's private player reply path starts speech.
+        public void Speak(MemoryReply line,string conversation,string actor)
+        {
+            StopSpeech();
+            if(line==null||string.IsNullOrEmpty(line.proposalId)||AudioListener.volume<=.01f)return;
+            speechConversation=conversation;speechProposal=line.proposalId;SpeechBusy=true;SpeechStatus="正在准备语音…";
+            int version=speechVersion;
+            speechRoutine=StartCoroutine(SpeakAfterDelivered(line,conversation,actor,version));
+        }
+        public void StopSpeech(bool notify=true)
+        {
+            string conversation=speechConversation,proposal=speechProposal;
+            speechVersion++;
+            try{speechCancellation?.Cancel();}catch(ObjectDisposedException){}speechCancellation=null;
+            if(speechRoutine!=null){StopCoroutine(speechRoutine);speechRoutine=null;}
+            if(speechSource!=null){speechSource.Stop();speechSource.clip=null;}
+            if(speechClip!=null){Destroy(speechClip);speechClip=null;}
+            speechConversation=speechProposal="";SpeechBusy=false;SpeechStatus="";
+            if(notify&&opened&&!string.IsNullOrEmpty(proposal))
+            {
+                var request=RequestBase();request.conversationId=conversation;request.proposalId=proposal;
+                StartCoroutine(Send("/api/game/speech/cancel",request,3,_=>{},_=>{}));
+            }
+        }
+        IEnumerator SpeakAfterDelivered(MemoryReply line,string conversation,string actor,int version)
+        {
+            // CommitLine appends to the journal. Voice must wait for its receipt.
+            float deadline=Time.realtimeSinceStartup+45;
+            while(!Synchronized&&version==speechVersion&&Time.realtimeSinceStartup<deadline)yield return null;
+            if(version!=speechVersion)yield break;
+            if(!Synchronized){SpeechBusy=false;SpeechStatus="文字已显示，语音等待同步超时。";yield break;}
+            var request=RequestBase();request.conversationId=conversation;request.proposalId=line.proposalId;request.actorId=actor;
+            var cts=new CancellationTokenSource(TimeSpan.FromSeconds(40));speechCancellation=cts;
+            var task=FetchSpeech(request,cts);
+            while(!task.IsCompleted&&version==speechVersion)yield return null;
+            if(version!=speechVersion)yield break;
+            speechCancellation=null;
+            if(task.IsCanceled||task.IsFaulted){SpeechBusy=false;SpeechStatus="语音连接中断，文字对话可继续。";yield break;}
+            var reply=task.Result;
+            if(!reply.ok){SpeechBusy=false;SpeechStatus=reply.error??"语音暂不可用，文字对话可继续。";yield break;}
+            if(reply.runId!=RunId||reply.proposalId!=line.proposalId){SpeechBusy=false;SpeechStatus="";yield break;}
+            try
+            {
+                speechClip=DecodeSpeech(reply.audio);
+                if(speechSource==null){speechSource=gameObject.AddComponent<AudioSource>();speechSource.playOnAwake=false;speechSource.spatialBlend=0;}
+                speechSource.clip=speechClip;speechSource.Play();SpeechStatus="正在说话…";
+                if(!string.IsNullOrEmpty(reply.speechWarning))Debug.LogWarning("TTS: "+reply.speechWarning);
+            }
+            catch {SpeechBusy=false;SpeechStatus="语音数据无效，文字对话可继续。";yield break;}
+            while(version==speechVersion&&speechSource!=null&&speechSource.isPlaying)yield return null;
+            if(version==speechVersion)
+            {
+                SpeechBusy=false;SpeechStatus="";speechSource.clip=null;
+                if(speechClip!=null){Destroy(speechClip);speechClip=null;}
+                speechRoutine=null;
+            }
+        }
+        async Task<MemoryReply> FetchSpeech(MemoryRequest input,CancellationTokenSource cts)
+        {
+            try
+            {
+                using(var request=new HttpRequestMessage(HttpMethod.Post,MemoryRuntimeConfig.Settings.serviceUrl+"/api/game/speech"))
+                {
+                    request.Headers.Add("X-Z-Memory","1");request.Content=new StringContent(JsonConvert.SerializeObject(input),Encoding.UTF8,"application/json");
+                    using(var response=await http.SendAsync(request,HttpCompletionOption.ResponseHeadersRead,cts.Token))
+                    using(var stream=await response.Content.ReadAsStreamAsync())
+                    using(var buffer=new MemoryStream())
+                    {
+                        if(response.Content.Headers.ContentLength>6000000)throw new InvalidDataException();
+                        var bytes=new byte[16384];int count;
+                        while((count=await stream.ReadAsync(bytes,0,bytes.Length,cts.Token))>0)
+                        {if(buffer.Length+count>6000000)throw new InvalidDataException();buffer.Write(bytes,0,count);}
+                        var reply=JsonConvert.DeserializeObject<MemoryReply>(Encoding.UTF8.GetString(buffer.ToArray()));
+                        if(reply==null)throw new InvalidDataException();
+                        if(!response.IsSuccessStatusCode)reply.ok=false;
+                        return reply;
+                    }
+                }
+            }
+            catch {return new MemoryReply{ok=false,error=cts.IsCancellationRequested?"语音已取消或等待超时。":"语音连接失败，文字对话可继续。"};}
+            finally {cts.Dispose();}
+        }
+        public static AudioClip DecodeSpeech(MemorySpeechAudio audio)
+        {
+            if(audio==null||audio.format!="pcm_s16le"||audio.sampleRate!=24000||audio.channels!=1||string.IsNullOrEmpty(audio.base64)||audio.base64.Length>5600000)throw new InvalidDataException();
+            var bytes=Convert.FromBase64String(audio.base64);
+            if(bytes.Length==0||bytes.Length>4*1024*1024||bytes.Length%2!=0)throw new InvalidDataException();
+            var samples=new float[bytes.Length/2];
+            for(int i=0;i<samples.Length;i++)samples[i]=(short)(bytes[i*2]|bytes[i*2+1]<<8)/32768f;
+            var clip=AudioClip.Create("NPC dialogue",samples.Length,1,24000,false);
+            if(!clip.SetData(samples,0)){Destroy(clip);throw new InvalidDataException();}
+            return clip;
+        }
         IEnumerator Send(string endpoint,MemoryRequest input,int seconds,Action<MemoryReply> complete,Action<string> failed)
         {
             int version=generation;string key=Guid.NewGuid().ToString("N");
@@ -173,6 +278,6 @@ namespace Seabreeze
             }
             requests.Remove(key);cts.Dispose();
         }
-        void OnDestroy(){generation++;foreach(var c in requests.Values)c.Cancel();requests.Clear();http?.Dispose();}
+        void OnDestroy(){StopSpeech(false);generation++;foreach(var c in requests.Values)c.Cancel();requests.Clear();http?.Dispose();}
     }
 }

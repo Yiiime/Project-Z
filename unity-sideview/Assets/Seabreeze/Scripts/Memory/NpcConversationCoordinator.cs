@@ -105,6 +105,7 @@ namespace Seabreeze
         public void SendPlayer(string message)
         {
             var c=player;if(c==null||c.sending||!memory.Client.CanQueuePlayerInput||string.IsNullOrWhiteSpace(message))return;
+            memory.Client.StopSpeech();
             c.sending=true;c.started=Time.unscaledTime;memory.CommitLine(c.id,"player",c.first.npcId,message.Trim(),"","private_player_chat");StartCoroutine(PlayerReply(c));
         }
         IEnumerator PlayerReply(Conversation c)
@@ -117,13 +118,13 @@ namespace Seabreeze
             {
                 memory.ShowResult(line);
                 string dialogue=line.result?.dialogue??line.text;string expression=line.result?.expression??line.expression;
-                if(!string.IsNullOrEmpty(dialogue)){memory.CommitLine(c.id,c.first.npcId,"player",dialogue,line.proposalId,"private_player_chat",expression);CommittedNpcLines++;}
+                if(!string.IsNullOrEmpty(dialogue)){memory.CommitLine(c.id,c.first.npcId,"player",dialogue,line.proposalId,"private_player_chat",expression);CommittedNpcLines++;memory.Client.Speak(line,c.id,c.first.npcId);}
                 else memory.Client.CommitDecision(line,c.first.npcId,new[]{c.first.npcId,"player"},request.locationId);
                 LastRecalledMemoryIds=line.recalledMemoryIds??Array.Empty<string>();
             }
             c.sending=false;
         }
-        public void RequestPlayerReply(){if(player!=null&&!player.sending){player.sending=true;StartCoroutine(PlayerReply(player));}}
+        public void RequestPlayerReply(){if(player!=null&&!player.sending){memory.Client.StopSpeech();player.sending=true;StartCoroutine(PlayerReply(player));}}
         public void Cancel(string reason="玩家结束交谈"){if(player!=null)Finish(player,false);else foreach(var c in sessions.Values.ToArray())Finish(c,false);}
         public void CancelAll(string reason="世界状态变化"){foreach(var c in sessions.Values.ToArray())Finish(c,false);}
         public void ResetTimeline(){CancelAll();cooldown.Clear();planner=0;LastIntentReason="";LastRecalledMemoryIds=Array.Empty<string>();CompletedConversations=CommittedNpcLines=0;}

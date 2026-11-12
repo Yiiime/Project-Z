@@ -1,0 +1,11 @@
+{
+  "z": { "speaker": "zh_female_vv_uranus_bigtts", "resourceId": "seed-tts-2.0" },
+  "zhou_bobo": { "speaker": "S_bF1VdCXi2", "resourceId": "seed-icl-2.0", "model": "seed-tts-2.0-expressive" },
+  "zhengyi": { "speaker": "S_3lNRdCXi2", "resourceId": "seed-icl-2.0", "model": "seed-tts-2.0-expressive" },
+  "liyuan": { "speaker": "S_bDuUdCXi2", "resourceId": "seed-icl-2.0", "model": "seed-tts-2.0-expressive" },
+  "liting": { "speaker": "S_tE2QdCXi2", "resourceId": "seed-icl-2.0", "model": "seed-tts-2.0-expressive" },
+  "xiaoxiaoqing": { "speaker": "S_bBXTdCXi2", "resourceId": "seed-icl-2.0", "model": "seed-tts-2.0-expressive" },
+  "linxu": { "speaker": "S_bxTSdCXi2", "resourceId": "seed-icl-2.0", "model": "seed-tts-2.0-expressive" },
+  "axing": { "speaker": "S_jDoSdCXi2", "resourceId": "seed-icl-2.0", "model": "seed-tts-2.0-expressive" },
+  "chenchen": { "speaker": "S_7nhRdCXi2", "resourceId": "seed-icl-2.0", "model": "seed-tts-2.0-expressive" }
+}
