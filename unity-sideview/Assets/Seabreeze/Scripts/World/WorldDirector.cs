@@ -141,6 +141,9 @@ namespace Seabreeze
             GameSession.Instance.SetPlace(scene.place);
             GameSession.Instance.State.started = true;
             GameSession.Instance.Story.Evaluate();
+            // Replace legacy scene NPCs while the transition is still opaque.
+            // Waiting for Spawner.Update after FinishTransition exposed the old cast.
+            GameSession.Instance.Memory?.Spawner?.PrepareStage(scene);
         }
 
         // World routes still dispatch GameSession.TravelRequested: NPC memory and
@@ -239,6 +242,20 @@ namespace Seabreeze
                 yield return null; // WorldScene.Start attaches its destination and arrival marker.
                 arrived = Stage != null && Stage.place == place;
                 if (!arrived) Debug.LogError($"Map '{place}' loaded without an attached WorldScene.");
+                var spawner = GameSession.Instance.Memory?.Spawner;
+                if (arrived && spawner != null)
+                {
+                    spawner.PrepareStage(Stage);
+                    // NpcPresence.Start creates its movement component, whose Start
+                    // then resolves the ground/anchors. No physics tick is required,
+                    // so this also works while timeScale is zero.
+                    float readyDeadline = Time.realtimeSinceStartup + 5f;
+                    while (spawner != null && !spawner.IsStageReady(Stage)
+                        && Time.realtimeSinceStartup < readyDeadline)
+                        yield return null;
+                    if (spawner != null && !spawner.IsStageReady(Stage))
+                        Debug.LogWarning($"NPC initialization in '{place}' did not finish within 5 seconds; releasing the scene transition.");
+                }
                 for (float t = 0; t < .35f; t += Time.unscaledDeltaTime)
                 {
                     fade.alpha = 1 - t / .35f;
