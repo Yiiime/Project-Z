@@ -58,10 +58,16 @@ Z继续使用主线已有的公开回忆投影。七岛民直播目前使用本�
 
 晴野压花册人体转送、正义信号枪、完整新任务执行器与全部结局尚未实现；此次更新也不能保证任意多轮对话永不出戏。上述回归和抽测不等于全剧情通关。
 
-保持草稿PR，使用tools/team/z save保存；本次不执行ship或发布线上服务。
+用户于2026-11-12确认正式交付PR #54。按仓库流程保存后运行tools/team/z ship，交由GitHub队列检查与合并；该流程交付仓库代码，不等于部署外部线上体验服务。
 
 Unity报告：`/private/tmp/pr54-unity-baseline.json`、`/private/tmp/pr54-unity-personas.json`；后者包含三次真实台词和七人发布名单。截图为同目录`pr54-unity-baseline.png`、`pr54-unity-personas.island-0.png`至`island-2.png`、`pr54-unity-personas.live.png`，已人工查看对话与直播截图。场景可见5位角色，不把名册8人误称为8人同时在场。
 
 本次追加修复Unity直播端的三处绑定：LiveFeatureController从SevenCharacterCatalog读取姓名；LiveFeatureView用稳定ID选已有头像/颜色；LivePackageVerification采用七岛民名册。没有修改USS/UXML、场景、美术或布局。复验入口为PersonaReleaseVerification.Begin，需要临时Z_MEMORY_SAVE_ROOT、-memoryService和-personaVerificationOutput参数；直播fixture为Z_VERIFY_AUDIENCE=1 node Tools/live-service/scripts/verify-session-ui.mjs。
 
 未单独打包新的Mac可执行程序，也未做真实TTS/麦克风和全剧情通关；这些不是上述Unity编辑器和文本模型验证的覆盖范围。
+
+## 正式交付复核（2026-11-12）
+
+交付前重新读取AGENTS.md，检查工作区、暂存区及相对最新origin/main的完整PR差异。59个文件均在原始及本轮追加授权范围内，没有新超范围路径。分支已包含最新main；代码与本次真实模型、Unity试玩时一致，后续只补交付文档。
+
+ship-check发现与PR #51的engine.mjs/机制记录、PR #53的机制记录有普通文本重叠；没有场景、美术等难合并文件重叠，missing confirmations为空，可按仓库规则继续交付。检查结果与自动合并状态以[PR #54](https://github.com/Yiiime/Project-Z/pull/54)为准。
