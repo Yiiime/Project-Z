@@ -13,6 +13,7 @@ namespace Seabreeze
         FirstDayCinema cinema; FirstDayOverlay invitations;
         NativeLiveHost openingLive;
         FirstDayContent content;
+        readonly FirstDayGathering gathering = new FirstDayGathering();
         WorldScene decorated;
         bool busy, resuming, waitingInvitation, travelSucceeded;
         float liveOpened;
@@ -20,6 +21,8 @@ namespace Seabreeze
         public bool BlocksInput => busy;
         public bool Active => session?.State?.firstDay != null && Phase != FirstDayPhase.None && Phase != FirstDayPhase.Complete;
         public FirstDayPhase Phase => session?.State?.firstDay?.phase ?? FirstDayPhase.None;
+        public bool GatheringActive => session != null && !session.IsAtTitle
+            && Phase == FirstDayPhase.MeetIslanders && session.CurrentPlace == PlaceId.Square;
         public string[] Cast => SevenCharacterCatalog.Actors.Select(a=>a.id).ToArray();
         public int GreetedCount => session.State.firstDay?.greeted.Count(id=>Cast.Contains(id)) ?? 0;
         public string Objective
@@ -53,6 +56,7 @@ namespace Seabreeze
         }
         public void ResetForStateChange()
         {
+            gathering.Reset();
             generation++;StopAllCoroutines();cinema.Cancel();invitations.Hide();
             if(openingLive!=null){openingLive.Close();openingLive=null;}
             session.Memory?.View.ResetView();MusicDirector.Instance?.SetMoodOverride(null);
@@ -137,7 +141,7 @@ namespace Seabreeze
         }
         void Update()
         {
-            if(session==null||session.IsAtTitle||!session.IsReady)return;
+            if(session==null||session.IsAtTitle||!session.IsReady){gathering.Reset();return;}
             if(waitingInvitation&&openingLive!=null&&invitations.Visible&&Phase==FirstDayPhase.Live)
             {
                 float wait=12-(Time.unscaledTime-liveOpened);
@@ -146,7 +150,7 @@ namespace Seabreeze
             }
             if(openingLive!=null && Phase==FirstDayPhase.Live && !invitations.IsModal && GameInput.Pressed(UnityEngine.InputSystem.Key.Escape))
                 if(!openingLive.HandleBack())OfferInvitation();
-            if(world.Stage==null||world.IsTransitioning)return;
+            if(world.Stage==null||world.IsTransitioning){gathering.Reset();return;}
             if(decorated!=world.Stage){decorated=world.Stage;Decorate();}
             if(Active&&Phase==FirstDayPhase.WalkToSquare&&session.CurrentPlace==PlaceId.Square)
             {
@@ -154,7 +158,8 @@ namespace Seabreeze
                 SetPhase(FirstDayPhase.MeetIslanders,"来到古树广场。烟花开始前，先认识今晚一起看烟花的人。");
                 session.Memory?.Spawner.Reload();session.Story.Notify("广场上的每个人，都有一句想对你说的话。");
             }
-            if(Active&&session.Memory?.Spawner!=null&&StagedCast(session.CurrentPlace)!=null)
+            gathering.Tick(session,world);
+            if(!GatheringActive&&Active&&session.Memory?.Spawner!=null&&StagedCast(session.CurrentPlace)!=null)
                 foreach(var npc in session.Memory.Spawner.Actors)if(npc!=null&&npc.Movement!=null){npc.Movement.SimulateDecisions=false;npc.Movement.SetInteractionHold(true);}
         }
         void Decorate()
@@ -176,6 +181,8 @@ namespace Seabreeze
         public float CastPosition(string actor,PlaceId place)
         {
             if(place==PlaceId.Harbor)return -7.8f;
+            if(place==PlaceId.Square&&(Phase==FirstDayPhase.WalkToSquare||Phase==FirstDayPhase.MeetIslanders)
+                &&FirstDayGathering.TryPosition(actor,out float x))return x;
             int index=Array.IndexOf(Cast,actor);
             return -7.4f+index*2.05f;
         }
@@ -228,7 +235,8 @@ namespace Seabreeze
             var conversation=content?.conversations?.FirstOrDefault(c=>c.id==id);
             if(conversation==null||session.Memory?.View==null){session.Story.Notify("这段故事暂时没有准备好，请稍后再试。");return;}
             busy=true;var owner=session.State;int stamp=generation;
-            session.Memory.View.OpenStory(conversation.actor,conversation.lines,finished=>{if(owner!=session.State||stamp!=generation)return;busy=false;if(finished)completed?.Invoke();});
+            if(GatheringActive)gathering.BeginGreeting(conversation.actor);
+            session.Memory.View.OpenStory(conversation.actor,conversation.lines,finished=>{if(owner!=session.State||stamp!=generation)return;gathering.EndGreeting();busy=false;if(finished)completed?.Invoke();});
         }
         void AskFireworks()
         {
@@ -263,6 +271,6 @@ namespace Seabreeze
                 session.Story.Notify("片尾已结束。现在可以继续小岛生活，照片和回忆都留在手机里。");
             });
         }
-        void OnDestroy(){if(openingLive!=null)openingLive.Close();}
+        void OnDestroy(){gathering.Reset();if(openingLive!=null)openingLive.Close();}
     }
 }
