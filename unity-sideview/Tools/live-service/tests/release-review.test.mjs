@@ -12,7 +12,7 @@ const tick=()=>new Promise(r=>setImmediate(r));
 async function until(check){for(let i=0;i<200&&!check();i++)await new Promise(r=>setTimeout(r,5));assert(check(),'timed out');}
 test('review projection retains all corrections and explicit old evidence and exposes missing-history count',()=>{
  const c=context();c.sessionEvents=[event('old','不，我没有辞职'),...Array.from({length:12},(_,i)=>event('h'+i,'旧事实 '+i,'host'))];c.candidate.evidenceIds=['h0'];
- const small=releaseInput(c);assert(small.publicEvents.some(e=>e.id==='old'));assert(small.publicEvents.some(e=>e.id==='h0'));assert(small.historyOmitted>0);assert.equal(small.speakerNames.salt,'海盐汽水');
+ const small=releaseInput(c);assert(small.publicEvents.some(e=>e.id==='old'));assert(small.publicEvents.some(e=>e.id==='h0'));assert(small.historyOmitted>0);assert.equal(small.speakerNames.zhengyi,'正义');
  assert.equal(releaseInput(c,{expanded:true,persona:'完整角色素材'}).historyOmitted,0);
  assert.throws(()=>hardReviewCheck({...c,candidate:{...c.candidate,replyTo:['unknown']}}),/unknown_reference/);
  assert.throws(()=>hardReviewCheck({...c,candidate:{...c.candidate,intent:'tool',plannedTool:{name:'play_prepared_song',targetId:'not-ready'}},singing:{tasks:[]}}),/tool_not_ready/);

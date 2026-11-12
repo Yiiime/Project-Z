@@ -1,0 +1,217 @@
+{
+  "parameters": {
+    "surprise_mark": "ParamQingyeFxSurprise",
+    "shock_mark": "ParamQingyeFxShock",
+    "question_mark": "ParamQingyeFxQuestion",
+    "star_iris_left": "ParamQingyeFxIrisStarL",
+    "star_iris_right": "ParamQingyeFxIrisStarR",
+    "star_left_big": "ParamQingyeFxStarLeftBig",
+    "star_left_small": "ParamQingyeFxStarLeftSmall",
+    "star_right_big": "ParamQingyeFxStarRightBig",
+    "star_right_small": "ParamQingyeFxStarRightSmall",
+    "anger_mark": "ParamQingyeFxAnger"
+  },
+  "drawables": {
+    "surprise_mark": {
+      "id": "QY_FX_surprise_mark",
+      "parameter": "ParamQingyeFxSurprise",
+      "canvas_xy": [
+        865,
+        289
+      ],
+      "size": [
+        15,
+        57
+      ],
+      "texture": "texture_external.png",
+      "texture_rect": [
+        3,
+        3,
+        15,
+        57
+      ],
+      "category": "external"
+    },
+    "shock_mark": {
+      "id": "QY_FX_shock_mark",
+      "parameter": "ParamQingyeFxShock",
+      "canvas_xy": [
+        270,
+        275
+      ],
+      "size": [
+        37,
+        67
+      ],
+      "texture": "texture_external.png",
+      "texture_rect": [
+        22,
+        3,
+        37,
+        67
+      ],
+      "category": "external"
+    },
+    "question_mark": {
+      "id": "QY_FX_question_mark",
+      "parameter": "ParamQingyeFxQuestion",
+      "canvas_xy": [
+        930,
+        355
+      ],
+      "size": [
+        46,
+        84
+      ],
+      "texture": "texture_external.png",
+      "texture_rect": [
+        63,
+        3,
+        46,
+        84
+      ],
+      "category": "external"
+    },
+    "star_iris_left": {
+      "id": "QY_FX_star_iris_left",
+      "parameter": "ParamQingyeFxIrisStarL",
+      "canvas_xy": [
+        535,
+        444
+      ],
+      "size": [
+        27,
+        27
+      ],
+      "texture": "texture_external.png",
+      "texture_rect": [
+        113,
+        3,
+        27,
+        27
+      ],
+      "category": "iris"
+    },
+    "star_iris_right": {
+      "id": "QY_FX_star_iris_right",
+      "parameter": "ParamQingyeFxIrisStarR",
+      "canvas_xy": [
+        689,
+        444
+      ],
+      "size": [
+        27,
+        27
+      ],
+      "texture": "texture_external.png",
+      "texture_rect": [
+        144,
+        3,
+        27,
+        27
+      ],
+      "category": "iris"
+    },
+    "star_left_big": {
+      "id": "QY_FX_star_left_big",
+      "parameter": "ParamQingyeFxStarLeftBig",
+      "canvas_xy": [
+        344,
+        323
+      ],
+      "size": [
+        35,
+        35
+      ],
+      "texture": "texture_external.png",
+      "texture_rect": [
+        175,
+        3,
+        35,
+        35
+      ],
+      "category": "external"
+    },
+    "star_left_small": {
+      "id": "QY_FX_star_left_small",
+      "parameter": "ParamQingyeFxStarLeftSmall",
+      "canvas_xy": [
+        320,
+        459
+      ],
+      "size": [
+        23,
+        23
+      ],
+      "texture": "texture_external.png",
+      "texture_rect": [
+        214,
+        3,
+        23,
+        23
+      ],
+      "category": "external"
+    },
+    "star_right_big": {
+      "id": "QY_FX_star_right_big",
+      "parameter": "ParamQingyeFxStarRightBig",
+      "canvas_xy": [
+        867,
+        320
+      ],
+      "size": [
+        35,
+        35
+      ],
+      "texture": "texture_external.png",
+      "texture_rect": [
+        241,
+        3,
+        35,
+        35
+      ],
+      "category": "external"
+    },
+    "star_right_small": {
+      "id": "QY_FX_star_right_small",
+      "parameter": "ParamQingyeFxStarRightSmall",
+      "canvas_xy": [
+        915,
+        459
+      ],
+      "size": [
+        23,
+        23
+      ],
+      "texture": "texture_external.png",
+      "texture_rect": [
+        280,
+        3,
+        23,
+        23
+      ],
+      "category": "external"
+    },
+    "anger_mark": {
+      "id": "QY_FX_anger_mark",
+      "parameter": "ParamQingyeFxAnger",
+      "canvas_xy": [
+        818,
+        227
+      ],
+      "size": [
+        49,
+        48
+      ],
+      "texture": "texture_external.png",
+      "texture_rect": [
+        307,
+        3,
+        49,
+        48
+      ],
+      "category": "external"
+    }
+  },
+  "model_base_sha256": "cc647784c3511febf78b50ba42c317c31680c5d33cf8620a230cac7190cfbc50"
+}

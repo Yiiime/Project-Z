@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20658eea1de5e4e48acec160054bac1e, type: 3}
+  m_Name: Liyuan
+  m_EditorClassIdentifier: Assembly-CSharp::Seabreeze.Live2DModelProfile
+  prefab: {fileID: 4898544216569870879, guid: f20bf5c7b1deb42649b308c8336591e4, type: 3}
+  characterId: liyuan
+  rendererIndex: 1
+  renderLayer: 30
+  modelPosition: {x: 0, y: 0, z: 0}
+  modelScale: 1
+  cameraCenter: {x: 0, y: 0}
+  orthographicSize: 2
+  autoFrame: 1
+  visibleHeight: 0.78
+  verticalFocus: 0.62
+  uvRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  textureHeight: 1200
+  defaultEmotion: neutral
+  expressions:
+  - emotion: neutral
+    expression: {fileID: 11400000, guid: a454e3c08f6da4e71932dbd95357f663, type: 2}
+  - emotion: smile
+    expression: {fileID: 11400000, guid: c141262709b1e4278a2af882a1884c71, type: 2}
+  - emotion: dialogue_smile
+    expression: {fileID: 11400000, guid: 2547178cab3ed42cfbdf04f56d9705eb, type: 2}
+  - emotion: bawl
+    expression: {fileID: 11400000, guid: f64f572042ef047128c040e43ed06cde, type: 2}
+  - emotion: bawl_dry
+    expression: {fileID: 11400000, guid: f64f572042ef047128c040e43ed06cde, type: 2}
+  - emotion: bawl_wet
+    expression: {fileID: 11400000, guid: 88c06721a24af49a7b7a8529a905def8, type: 2}
+  - emotion: bawl_tears_preview
+    expression: {fileID: 11400000, guid: 88c06721a24af49a7b7a8529a905def8, type: 2}
+  - emotion: bawling
+    expression: {fileID: 11400000, guid: f64f572042ef047128c040e43ed06cde, type: 2}
+  - emotion: happy
+    expression: {fileID: 11400000, guid: c141262709b1e4278a2af882a1884c71, type: 2}
+  - emotion: warm
+    expression: {fileID: 11400000, guid: c141262709b1e4278a2af882a1884c71, type: 2}
+  animatorController: {fileID: 0}
+  idleState: Idle
+  talkState: Talk
+  proceduralIdle: 1
+  proceduralTalk: 1
+  expressionFadeSeconds: 0.08
+  clearExpressionOnInterrupt: 1
+  discreteExpressionParameters: 0
+  expressionIndexParameter: 
+  expressionMixParameter: 
+  expressionTransitions: []
+  mouthParameter: ParamMouthOpenY
+  speechAddsToExpressionTarget: 1
+  speechPeak: 0.85
+  speechRest: 0
+  speechExpressions:
+  - emotion: neutral
+    peak: 0.85
+  - emotion: smile
+    peak: 0.85
+  - emotion: dialogue_smile
+    peak: 0.85
+  - emotion: happy
+    peak: 0.85
+  - emotion: warm
+    peak: 0.85
+  - emotion: bawl
+    peak: 0.65
+  - emotion: bawl_dry
+    peak: 0.65
+  - emotion: bawl_wet
+    peak: 0.65
+  - emotion: bawl_tears_preview
+    peak: 0.65
+  - emotion: bawling
+    peak: 0.65
+  tearExpression: bawl_wet
+  tearStartSeconds: 1.75
+  breathParameter: ParamBreath
+  leftEyeParameter: ParamEyeLOpen
+  rightEyeParameter: ParamEyeROpen
+  authoringNotes: "\u68A8\u56ED c03 v04-r2 Project Z \u6B63\u5F0F\u63A5\u5165\uFF1B\u4E2D\u6027\u65E5\u5E38\u5E73\u5634\u89D2\uFF0CParamMouthOpenY
+    \u8BF4\u8BDD\u53EA\u5199\u5165 0/0.85 \u4E24\u6863\uFF1Bsmile \u7ED1\u5B9A SmileHold\uFF0C\u5927\u54ED\u53EA\u5199\u5165
+    0/0.65 \u4E24\u6863\u3002bawl/bawling \u6309\u72EC\u7ACB\u6F14\u51FA\u5148\u95ED\u773C\uFF080.55
+    \u79D2\u5F00\u59CB\uFF0C0.70 \u79D2\u95ED\u5408\uFF09\uFF0C\u518D\u5728 0.85..1.05
+    \u79D2\u8FDB\u5165 BawlDry\uFF1B1.75..2.00 \u79D2\u4ECE\u776B\u7F18\u7EBF\u6027\u8D77\u6CEA\uFF0C\u4E0D\u76F4\u63A5\u8DF3\u5165
+    BawlWet\uFF1B\u5207\u53E5/\u9000\u573A\u6E05\u9664 ParamDialogueSmile\u3001ParamBawl\u3001ParamBawlTears
+    \u4E0E\u65E7\u53E3\u578B\uFF0C\u6062\u590D neutral/Idle\u3002"

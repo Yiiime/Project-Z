@@ -31,10 +31,20 @@ namespace Seabreeze
         DialogueSceneBackdrop backdrop;
         float previousColumnWidth;
         static readonly Color BubbleInk=new Color(.145f,.149f,.208f,1);
-        string selectedActor,lastSpeaker; bool entering,typing; float revealed,speechUntil;
+        const float ExpressionHoldSeconds=1.2f;
+        const float LiyuanSmilePreparationSeconds=.25f;
+        const float LiyuanBawlPreparationSeconds=2f;
+        float charactersPerSecond;
+        float ExpressionClock => selectedActor == "xiaoxiaoqing" ? Time.realtimeSinceStartup : Time.unscaledTime;
+        Coroutine linePreparation;
+        bool linePreparationActive;
+        string selectedActor,lastSpeaker,portraitEmotion; bool entering,typing; float revealed,speechUntil,expressionEndsAt;
 
         public bool Closing {get;private set;}
         public bool PlayerInputReady => !entering&&!Closing&&playerPanel!=null&&playerPanel.gameObject.activeSelf;
+        internal TMP_InputField DialogueInput => input;
+        internal Button DialogueSend => send;
+        internal TextMeshProUGUI DialogueHistory => historyText;
         public string VisibleSpeech => speechText!=null&&speechPanel.gameObject.activeSelf?speechTitle.text+"："+speechText.text:"";
         public void Initialize(MemoryGameController m,GameSession s,WorldDirector w)
         {
@@ -138,20 +148,30 @@ namespace Seabreeze
         {
             if(IsComposing()){StartCoroutine(ResumeInput());return;}
             if(!PlayerInputReady||memory.Conversations==null||!memory.Client.CanGenerate||memory.Conversations.Sending||string.IsNullOrWhiteSpace(input.text))return;
-            FinishTyping();string value=input.text;input.text="";memory.Conversations.SendPlayer(value);input.ActivateInputField();
+            FinishTyping();ResetPortraitIdle();string value=input.text;input.text="";memory.Conversations.SendPlayer(value);input.ActivateInputField();
         }
         IEnumerator ResumeInput(){yield return null;if(PlayerInputReady&&memory.PlayerChatOpen)input.ActivateInputField();}
         public void OpenPlayer(string actorId)
         {
-            if(transition!=null)StopCoroutine(transition);Closing=false;entering=true;selectedActor=actorId;lastCheckpoint=null;ClearHistory();typing=false;
+            if(transition!=null)StopCoroutine(transition);ResetPortraitIdle();Closing=false;entering=true;selectedActor=actorId;lastCheckpoint=null;ClearHistory();typing=false;portraitEmotion=null;expressionEndsAt=0;
             playerTitle.text=SevenCharacterCatalog.Name(actorId);
             RefreshDialoguePalette();
 
             locationText.text=GameUI.PlaceName(session.CurrentPlace)+"  ·  "+GameUI.PeriodName(session.Clock.Period);
             playerPanel.gameObject.SetActive(true);speechPanel.gameObject.SetActive(false);playerGroup.alpha=0;playerGroup.interactable=false;input.text="";
-            var definition=SevenCharacterCatalog.Find(actorId);var profile=!string.IsNullOrEmpty(definition?.portrait)?Resources.Load<Live2DModelProfile>(definition.portrait):null;
-            portrait.gameObject.SetActive(profile!=null);if(profile!=null)character.Show(profile);else character.Hide();
+            ApplyPortrait(actorId);
             RefreshHistoryLayout();transition=StartCoroutine(AnimatePlayer(true));
+        }
+        void ApplyPortrait(string actorId)
+        {
+            var definition=SevenCharacterCatalog.Find(actorId);
+            charactersPerSecond = definition != null && definition.dialogueCharactersPerSecond > 0
+                ? definition.dialogueCharactersPerSecond : Style.TypewriterSpeed;
+            bool final=actorId=="zhou_bobo"&&memory.ZhouboPortraitFinal;
+            string path=final?definition?.previewPortrait:definition?.portrait;
+            var profile=!string.IsNullOrEmpty(path)?Resources.Load<Live2DModelProfile>(path):null;
+            portrait.gameObject.SetActive(profile!=null);
+            if(profile!=null)character.Show(profile);else character.Hide();
         }
         IEnumerator AnimatePlayer(bool opening)
         {
@@ -166,7 +186,7 @@ namespace Seabreeze
         public void HidePlayer()
         {
             if(playerPanel==null||!playerPanel.gameObject.activeSelf)return;
-            if(transition!=null)StopCoroutine(transition);Closing=true;entering=false;playerGroup.interactable=false;input.DeactivateInputField();FinishTyping();transition=StartCoroutine(AnimatePlayer(false));
+            if(transition!=null)StopCoroutine(transition);Closing=true;entering=false;playerGroup.interactable=false;input.DeactivateInputField();FinishTyping();ResetPortraitIdle();memory.ResetZhouboPortraitSelection();transition=StartCoroutine(AnimatePlayer(false));
         }
         void RefreshHistoryLayout()
         {
@@ -183,13 +203,97 @@ namespace Seabreeze
             }
             content.sizeDelta=new Vector2(0,Mathf.Max(historyScroll.viewport.rect.height,y+8));historyScroll.verticalNormalizedPosition=0;
         }
-        void FinishTyping(){typing=false;if(historyText!=null)historyText.maxVisibleCharacters=int.MaxValue;if(character!=null)character.SetState("neutral",false);}
-        public void ShowLine(string speaker,string text,Vector3 position,bool playerConversation)
+        void FinishTyping()
+        {
+            bool hadPendingLine=typing||linePreparationActive;
+            CancelPendingLinePreparation();
+            if(hadPendingLine&&!string.IsNullOrEmpty(portraitEmotion))expressionEndsAt=ExpressionClock+ExpressionHoldSeconds;
+            typing=false;
+            if(historyText!=null)historyText.maxVisibleCharacters=int.MaxValue;
+            if(character!=null)character.SetState(portraitEmotion,false);
+        }
+        void BeginPortraitLine(string speaker,string expression)
+        {
+            CancelPendingLinePreparation();expressionEndsAt=0;portraitEmotion=null;
+            if(character==null)return;
+            // Every incoming line owns a fresh parameter frame. This is wider than
+            // the expression list so c06 tears, eye closure, gaze and mouth shape
+            // cannot leak through a line switch or an NPC/player handoff.
+            character.ResetToDefault();
+            bool speaking=speaker!=null&&speaker==selectedActor;
+            string key=expression?.Trim();
+            var profile=character.CurrentProfile;
+            if(speaking && profile!=null && profile.portraitMotions!=null && profile.portraitMotions.Length>0)
+            {
+                character.SetState(null,true);
+                if(character.PlayPortraitMotion(key))return;
+            }
+            if(speaking&&!string.IsNullOrEmpty(key)&&(character.CurrentProfile?.FindExpression(key)!=null||Live2DCharacterView.SupportsExternalExpression(character.CurrentProfile,key)))portraitEmotion=key;
+            float preparationSeconds=speaking?PreparationSeconds(character.CurrentProfile,key):0f;
+            bool prepare=preparationSeconds>.001f&&!string.IsNullOrEmpty(portraitEmotion);
+            // 梨园的笑哭表演、留洋叹气的准备动作先于文字和口型。
+            character.SetState(portraitEmotion,prepare?false:speaking);
+            if(prepare)
+            {
+                linePreparationActive=true;
+                linePreparation=StartCoroutine(PrepareLineAfter(preparationSeconds,portraitEmotion));
+            }
+            else if(speaking&&!string.IsNullOrEmpty(key)&&portraitEmotion==null)character.PlayPortraitMotion(key);
+        }
+        IEnumerator PrepareLineAfter(float seconds,string emotion)
+        {
+            yield return new WaitForSecondsRealtime(seconds);
+            if(!linePreparationActive||!string.Equals(portraitEmotion,emotion,StringComparison.OrdinalIgnoreCase))
+            {
+                linePreparation=null;linePreparationActive=false;yield break;
+            }
+            linePreparation=null;linePreparationActive=false;
+            if(character!=null)character.SetState(portraitEmotion,true);
+            typing=true;
+        }
+        void CancelPendingLinePreparation()
+        {
+            linePreparationActive=false;
+            if(linePreparation!=null){StopCoroutine(linePreparation);linePreparation=null;}
+        }
+        static bool IsLiyuanProfile(Live2DModelProfile value)
+        {
+            return value!=null&&string.Equals(value.characterId,"liyuan",StringComparison.OrdinalIgnoreCase);
+        }
+        static float PreparationSeconds(Live2DModelProfile profile,string expression)
+        {
+            if(profile!=null&&profile.characterId=="c01"&&string.Equals(expression,"sigh",StringComparison.OrdinalIgnoreCase))
+                return profile.FindExpressionTransition(expression)?.introSeconds??0f;
+            if(!IsLiyuanProfile(profile)) return 0f;
+            switch((expression??string.Empty).Trim().ToLowerInvariant().Replace('-','_'))
+            {
+                case "smile":
+                case "dialogue_smile":
+                case "happy":
+                case "warm":
+                    return LiyuanSmilePreparationSeconds;
+                case "bawl":
+                case "bawl_dry":
+                case "bawl_wet":
+                case "bawl_tears_preview":
+                case "bawling":
+                    return LiyuanBawlPreparationSeconds;
+                default:
+                    return 0f;
+            }
+        }
+        void ResetPortraitIdle()
+        {
+            CancelPendingLinePreparation();expressionEndsAt=0;portraitEmotion=null;character?.ResetToDefault();
+        }
+
+        public void ShowLine(string speaker,string text,Vector3 position,bool playerConversation,string expression=null)
         {
             if(playerConversation)
             {
                 FinishTyping();AddBubble(text,speaker=="player");lastSpeaker=speaker;revealed=0;
-                typing=speaker!="player";historyText.maxVisibleCharacters=typing?0:int.MaxValue;return;
+                BeginPortraitLine(speaker,expression);
+                typing=speaker!="player"&&!linePreparationActive;historyText.maxVisibleCharacters=(typing||linePreparationActive)?0:int.MaxValue;return;
             }
             speechTitle.text=SevenCharacterCatalog.Name(speaker);speechText.text=text;speechTitle.color=SevenCharacterCatalog.Find(speaker)?.Accent??Paper;
             speechUntil=Time.unscaledTime+Mathf.Clamp(1.3f+text.Length*.05f,2.5f,6);speechPanel.gameObject.SetActive(true);
@@ -205,13 +309,14 @@ namespace Seabreeze
         {
             StopAllCoroutines();
             var cancelledStory=ResetStoryState();
-            transition=null;Closing=entering=false;ClearHistory();FinishTyping();backdrop.Release();playerPanel.gameObject.SetActive(false);playerGroup.alpha=0;character.Hide();speechPanel.gameObject.SetActive(false);taskPanel.gameObject.SetActive(false);lastCheckpoint=null;
+            transition=null;Closing=entering=false;ClearHistory();FinishTyping();ResetPortraitIdle();memory.ResetZhouboPortraitSelection();backdrop.Release();playerPanel.gameObject.SetActive(false);playerGroup.alpha=0;character.Hide();speechPanel.gameObject.SetActive(false);taskPanel.gameObject.SetActive(false);lastCheckpoint=null;
             // Notify after the view is fully reset. A callback cannot leave a half-reset new view.
             cancelledStory?.Invoke(false);
         }
         void Update()
         {
             if(memory?.Client==null||root==null)return;
+            if(expressionEndsAt>0&&ExpressionClock>=expressionEndsAt){expressionEndsAt=0;portraitEmotion=null;if(character!=null)character.SetState(null,false);}
             bool fullView=playerPanel.gameObject.activeSelf,overlay=GameUI.Instance!=null&&(GameUI.Instance.HasOverlay||GameUI.Instance.IsOverlayTransitioning);
             if(fullView&&!Mathf.Approximately(previousColumnWidth,column.rect.width))RefreshHistoryLayout();
 
@@ -233,7 +338,7 @@ namespace Seabreeze
             send.interactable=PlayerInputReady&&memory.PlayerChatOpen&&memory.Client.CanGenerate&&!memory.Conversations.Sending;
             playerState.text=memory.Conversations.Sending?"对方正在想怎么说…":memory.Client.CanGenerate?"":"暂时无法连接。Esc 返回后，可在暂停菜单设置对话服务。";
             playerState.color=new Color(.94f,.94f,1,.82f);
-            if(typing&&PlayerInputReady){revealed+=Time.unscaledDeltaTime*Style.TypewriterSpeed;historyText.maxVisibleCharacters=Mathf.FloorToInt(revealed);if(historyText.maxVisibleCharacters>=historyText.textInfo.characterCount)FinishTyping();else character.SetState("neutral",lastSpeaker==selectedActor);}
+            if(typing&&PlayerInputReady){revealed+=Time.unscaledDeltaTime*charactersPerSecond;historyText.maxVisibleCharacters=Mathf.FloorToInt(revealed);if(historyText.maxVisibleCharacters>=historyText.textInfo.characterCount)FinishTyping();else character.SetState(portraitEmotion,lastSpeaker==selectedActor);}
 
         }
     }

@@ -1,18 +1,93 @@
-// Authored spectator biographies. Personal details belong to that viewer only;
-// they are not facts about Z, another spectator, or anything playing tonight.
+// Generated PUBLIC roster from MemoryLab; never put private profiles here.
 export const NPCS = [
-  ['wind','晚风来信','温和，讲具体的小事，不写散文。','想起自己的旧事才冒泡，喜欢听别人生活中的小片段。','上学时常和同桌分一副有线耳机。',['分享与现场有关系的一小段自己的回忆','接住别人讲的具体往事，听对方多讲一句']],
-  ['moon','月亮邮差','嘴快，短句，很少解释笑点。','喜欢和公屏里的人搭话、接梗，不抢主持。','爱玩文字游戏，接不住的梗就放过。',['顺着玩家或观众的一句原话接梗','跟现场某个人搭句话，而非夸歌']],
-  ['salt','海盐汽水','直说自己的选择，不为了抬杠而反问。','会认真参与选择，也能保留不同口味。','写作业时只放纯音乐。',['给出自己的选择和一个理由','补一个此前没说到的不同体验']],
-  ['buoy','橘子浮标','兴奋时一句就够，很少用比喻。','喜欢和 Z 打招呼、被注意到，是气氛组。','喜欢在互动开始时第一个举手。',['抓合适的机会和 Z 打个招呼或讨一个回应','有人邀请时简短应和，不反复要求点名']],
-  ['tape','倒带一格','像歌迷聊天，点名具体，说完就听。','关心接下来唱什么，把喜欢的歌放进歌单。','有一张专门留给返程路上的歌单。',['提出一个明确的听歌偏好或想点的歌','对照自己的歌单谈选择，不从歌名猜唱法']],
-  ['bean','困困豆','话短、有点慢半拍，不必每次都说困。','喜欢放松听人聊天，偶尔自嘲，不分析作品。','常忘记关睡眠定时。',['用自己的小失误接一句话','给玩家或主播一个短而具体的回应']],
-  ['rain','听雨同学','有好奇心，一次只关心一个细节。','注意已经说出口的细节，想把故事听明白。','比起猜歌名，更爱听人解释为什么选它。',['跟进 Z 或玩家刚提过的一个具体细节','说出刚听懂的一处联系，不替别人下结论']],
-  ['toast','烤面包边','家常、实在，不写抒情金句。','从眼前的日常说起，喜欢交换小习惯。','爱把吐司边单独烤脆，当作夜宵。',['拿自己的一个小习惯和现场话题对照','顺口回应别人的生活做法，不借歌名造比喻']],
-].map(([npc_id,display_name,voice,motive,personal_detail,approaches])=>({npc_id,display_name,voice,motive,personal_detail,approaches}));
+  {
+    "npc_id": "liyuan",
+    "display_name": "梨园",
+    "occupation": "独居岛民，常住森林小屋",
+    "voice": "按本人语言习惯，简短自然地接话",
+    "motive": "按自己的戒心与牵挂决定是否回应、接近熟人",
+    "personal_detail": "平常话少、独来独往，身边有旧地图；没有另开的地图铺。",
+    "approaches": [
+      "接住现场某个人刚说的具体小事",
+      "从自己的日常或工作说一个相关看法"
+    ]
+  },
+  {
+    "npc_id": "liting",
+    "display_name": "李庭",
+    "occupation": "咖啡店老板",
+    "voice": "按本人语言习惯，简短自然地接话",
+    "motive": "用自己习惯的方式关心Z、处理未说清的关系",
+    "personal_detail": "经营咖啡店，喜欢修旧设备；Z认识他，是关系闹僵过的发小。",
+    "approaches": [
+      "接住现场某个人刚说的具体小事",
+      "从自己的日常或工作说一个相关看法"
+    ]
+  },
+  {
+    "npc_id": "axing",
+    "display_name": "阿星",
+    "occupation": "工程师，负责设备维护",
+    "voice": "按本人语言习惯，简短自然地接话",
+    "motive": "核实消息、协商自己的工作与关系",
+    "personal_detail": "常在研究所修设备，也会去码头检修；不能因职业得知所有私聊。",
+    "approaches": [
+      "接住现场某个人刚说的具体小事",
+      "从自己的日常或工作说一个相关看法"
+    ]
+  },
+  {
+    "npc_id": "zhengyi",
+    "display_name": "正义",
+    "occupation": "岛上巡警",
+    "voice": "按本人语言习惯，简短自然地接话",
+    "motive": "与熟人打招呼、邀请Z吃宵夜",
+    "personal_detail": "常在游客中心，也会在岛上巡逻。",
+    "approaches": [
+      "接住现场某个人刚说的具体小事",
+      "从自己的日常或工作说一个相关看法"
+    ]
+  },
+  {
+    "npc_id": "xiaoxiaoqing",
+    "display_name": "晴野",
+    "occupation": "花店店长，负责花艺与植被养护",
+    "voice": "按本人语言习惯，简短自然地接话",
+    "motive": "分享花束故事、维护朋友关系和自己的边界",
+    "personal_detail": "经营花店，也照料街角花园的花。",
+    "approaches": [
+      "接住现场某个人刚说的具体小事",
+      "从自己的日常或工作说一个相关看法"
+    ]
+  },
+  {
+    "npc_id": "linxu",
+    "display_name": "留洋",
+    "occupation": "船长",
+    "voice": "按本人语言习惯，简短自然地接话",
+    "motive": "协商出航条件、倾听并尊重Z的决定",
+    "personal_detail": "经营和驾驶自己的船；实际船况、海况与能否出航要检查。",
+    "approaches": [
+      "接住现场某个人刚说的具体小事",
+      "从自己的日常或工作说一个相关看法"
+    ]
+  },
+  {
+    "npc_id": "zhou_bobo",
+    "display_name": "周伯伯",
+    "occupation": "照相馆老板",
+    "voice": "按本人语言习惯，简短自然地接话",
+    "motive": "了解熟人的近况、选择性提供背景信息",
+    "personal_detail": "拍照、洗印、装相框；公开身份是熟悉岛民的年长店主。",
+    "approaches": [
+      "接住现场某个人刚说的具体小事",
+      "从自己的日常或工作说一个相关看法"
+    ]
+  }
+];
 // Direct attention to different parts of the public conversation, even when two
 // spectators are generated concurrently from exactly the same room snapshot.
-const recipients={wind:'host',moon:'peer',salt:'player',buoy:'host',tape:'host',bean:'peer',rain:'host',toast:'player'};
+const recipients={liyuan:'host',liting:'host',axing:'peer',zhengyi:'player',xiaoxiaoqing:'host',linxu:'player',zhou_bobo:'peer'};
 export function speakingTurn(profile,publicEvents,ownLines) {
   const visible=publicEvents.filter(e=>e.speakerId!==profile.npc_id);
   const role=recipients[profile.npc_id];

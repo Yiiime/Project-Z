@@ -77,6 +77,7 @@ namespace Seabreeze.Editor
         [MenuItem("Seabreeze/Verify Zhengyi video motion in game")]
         public static void Run()
         {
+            if (Resources.Load<TextAsset>("Art/CastMotion/player/motion") != null) { CastMotionVerification.Run(); return; }
             Require(!EditorApplication.isPlayingOrWillChangePlaymode, "Run from Edit mode.");
             Require(!Application.isBatchMode, "The current dialogue backdrop requires a visible Game view. Run without -batchmode; Import supports batch mode.");
             Require(!string.IsNullOrEmpty(Arg("-memoryService", "")), "Provide an explicitly isolated simulated Memory Lab URL with -memoryService.");

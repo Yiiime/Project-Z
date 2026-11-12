@@ -69,3 +69,13 @@ Unity验证使用`Z_MEMORY_SAVE_ROOT`和`-moonlifeVerificationOutput`指定临�
 团队拉取后按上方现有启动流程试玩，在海边小街找到正义，检查左右移动、停步和按E交谈。美术原图、导入参数及原始帧时长见 `Resources/Art/ZhengyiMotion/motion.json`；隔离验收入口见[动画接入约定](IntegrationContract.md#zhengyi-video-motion-on-the-current-eight-role-roster-2026-11-10)。
 
 最新八人基底上已通过Unity 6000.3.27f1编译、6组可见Game视图场景验收及现有记忆服务42项测试。检查覆盖原帧时序、尺寸与脚底位置、双向移动、当前玩家对话与NPC互聊、读档及切场景；使用独立临时存档和模拟模型，没有重新调用真实模型。编辑器SearchDatabase启动异常单独记录。此前十人版的独立应用结果不作为本次八人版打包验收。
+
+### 当前主线的整组角色动画本地试玩
+
+本次基底为 `8ce0369`，继续使用八名 NPC 的当前人设、关系、任务与记忆。场景动画更新为同源视频提取的站姿、起步、完整双步循环和停步，梨园沿用已确认素材。原图、比例和各自的脚底锚点保留。
+
+主线 PR #54 的新显示名继续保留：晴野使用稳定 ID `xiaoxiaoqing`，留洋使用稳定 ID `linxu`（输入视频名为“船长”）。“沉晨”只输出素材，没有加入角色注册表、场景或记忆系统。
+
+双击 `Builds/CastMotionReview/启动角色动画试玩.command`。新入口单独保存到 `ReviewData/saves/` 与 `ReviewData/runtime.sqlite`，模型配置在 `ReviewData/.local/model.json`。首次启动可复制现有本机配置；配置缺失或无效时仍启动游戏，通过游戏内模型设置填写。退出游戏会关闭该入口启动的记忆服务。
+
+验证区分：素材/时序校验、Unity 自动化场景验收、模拟模型对话、独立包启动。模拟台词只用于验收，不属于普通试玩的模型回复，也不迁入正常试玩数据。本轮没有重新评价真实模型的对话质量。当前基底的剧情推进规则保持原样，未迁入旧版十人名单或旧 Day4 触发代码。

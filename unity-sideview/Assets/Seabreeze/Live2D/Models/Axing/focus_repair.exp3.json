@@ -1,0 +1,14 @@
+{
+  "Type": "Live2D Expression",
+  "FadeInTime": 0.0,
+  "FadeOutTime": 0.0,
+  "Parameters": [
+    { "Id": "ParamPose", "Value": 4.0, "Blend": "Overwrite" },
+    { "Id": "ParamAngleX", "Value": -5.0, "Blend": "Overwrite" },
+    { "Id": "ParamAngleY", "Value": -12.0, "Blend": "Overwrite" },
+    { "Id": "ParamAngleZ", "Value": -3.0, "Blend": "Overwrite" },
+    { "Id": "ParamFxQuestion", "Value": 0.0, "Blend": "Overwrite" },
+    { "Id": "ParamFxExclamation", "Value": 0.0, "Blend": "Overwrite" },
+    { "Id": "ParamFxAnger", "Value": 0.0, "Blend": "Overwrite" }
+  ]
+}

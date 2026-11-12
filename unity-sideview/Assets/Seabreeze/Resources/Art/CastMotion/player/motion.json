@@ -1,0 +1,1470 @@
+{
+  "version": 2,
+  "characterId": "player",
+  "revision": "native-video-four-state",
+  "canvasHeightUnits": 2.71247800515023,
+  "startFrame": 0,
+  "walkSpeed": 1.1,
+  "strideLength": 2.2,
+  "cycleSeconds": 1.3333333333333333,
+  "idle": "player_idle_000",
+  "walk": [
+    "player_walk_000",
+    "player_walk_001",
+    "player_walk_002",
+    "player_walk_003",
+    "player_walk_004",
+    "player_walk_005",
+    "player_walk_006",
+    "player_walk_007",
+    "player_walk_008",
+    "player_walk_009",
+    "player_walk_010",
+    "player_walk_011",
+    "player_walk_012",
+    "player_walk_013",
+    "player_walk_014",
+    "player_walk_015",
+    "player_walk_016",
+    "player_walk_017",
+    "player_walk_018",
+    "player_walk_019",
+    "player_walk_020",
+    "player_walk_021",
+    "player_walk_022",
+    "player_walk_023",
+    "player_walk_024",
+    "player_walk_025",
+    "player_walk_026",
+    "player_walk_027",
+    "player_walk_028",
+    "player_walk_029",
+    "player_walk_030",
+    "player_walk_031"
+  ],
+  "frameDurations": [
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333
+  ],
+  "start": [
+    "player_start_000",
+    "player_start_001",
+    "player_start_002",
+    "player_start_003",
+    "player_start_004",
+    "player_start_005",
+    "player_start_006",
+    "player_start_007",
+    "player_start_008",
+    "player_start_009",
+    "player_start_010",
+    "player_start_011",
+    "player_start_012",
+    "player_start_013",
+    "player_start_014",
+    "player_start_015",
+    "player_start_016",
+    "player_start_017",
+    "player_start_018",
+    "player_start_019",
+    "player_start_020",
+    "player_start_021",
+    "player_start_022",
+    "player_start_023",
+    "player_start_024",
+    "player_start_025",
+    "player_start_026",
+    "player_start_027"
+  ],
+  "startDurations": [
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333
+  ],
+  "stop": [
+    "player_stop_000",
+    "player_stop_001",
+    "player_stop_002",
+    "player_stop_003",
+    "player_stop_004",
+    "player_stop_005",
+    "player_stop_006",
+    "player_stop_007",
+    "player_stop_008",
+    "player_stop_009",
+    "player_stop_010",
+    "player_stop_011",
+    "player_stop_012",
+    "player_stop_013",
+    "player_stop_014",
+    "player_stop_015",
+    "player_stop_016",
+    "player_stop_017",
+    "player_stop_018",
+    "player_stop_019",
+    "player_stop_020",
+    "player_stop_021",
+    "player_stop_022",
+    "player_stop_023",
+    "player_stop_024"
+  ],
+  "stopDurations": [
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05
+  ],
+  "assets": [
+    {
+      "name": "player_idle_000",
+      "file": "player_idle_000.png",
+      "sha256": "4dee47992b10be8641dc2b6904d3bb2aea3b301b3f26bf9deff0fbb0328319ee",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "idle",
+      "sourceFrame": 35
+    },
+    {
+      "name": "player_start_000",
+      "file": "player_start_000.png",
+      "sha256": "6c766e9bc04c9eccf336eb6c2b4db2c8a01689f1aaccc3c1b71b4197a81b3385",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 36
+    },
+    {
+      "name": "player_start_001",
+      "file": "player_start_001.png",
+      "sha256": "b00dd32ed62549e0cca2096d34910fb9eeeddab077a591814b14de16e984a21c",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 37
+    },
+    {
+      "name": "player_start_002",
+      "file": "player_start_002.png",
+      "sha256": "1c642341d36a130cce9add827ae34e80705b21d8fe2bb7764d9dc45370b74d3d",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 38
+    },
+    {
+      "name": "player_start_003",
+      "file": "player_start_003.png",
+      "sha256": "d193286a8f3ea6988118fa4d861a92b5e26475f6646fda4b1a2cc362d5b8d57a",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 39
+    },
+    {
+      "name": "player_start_004",
+      "file": "player_start_004.png",
+      "sha256": "c0b0c60176eca638049fc069583f142827f84a57b97302ae3052b161a764435c",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 40
+    },
+    {
+      "name": "player_start_005",
+      "file": "player_start_005.png",
+      "sha256": "41fd79f0828c67dd6a88ea43e0f7bc443437a1cb82f69ea26c59946f59068709",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 41
+    },
+    {
+      "name": "player_start_006",
+      "file": "player_start_006.png",
+      "sha256": "3c8617719aaea6780538fac2cb9baf2f3a8f01a401d26c9c723c4b8e2f84b5ab",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 42
+    },
+    {
+      "name": "player_start_007",
+      "file": "player_start_007.png",
+      "sha256": "c1acd4dc0708337320be674522c4911331fe1f881f8cfe25d25b9601f572414e",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 43
+    },
+    {
+      "name": "player_start_008",
+      "file": "player_start_008.png",
+      "sha256": "faeb360bcc622752fe24377296318cf672e8a93687913a49d5f363e50aa5a3f3",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 44
+    },
+    {
+      "name": "player_start_009",
+      "file": "player_start_009.png",
+      "sha256": "29031b20b0f0fb9ce52bae2d2f0c90c52b4f3a77e69f7dce76368f9ab324efc1",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 45
+    },
+    {
+      "name": "player_start_010",
+      "file": "player_start_010.png",
+      "sha256": "51907ccc608cd16d521dbf2cc72fff1296dd21b987766e75bb6c680fa5a2d98e",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 46
+    },
+    {
+      "name": "player_start_011",
+      "file": "player_start_011.png",
+      "sha256": "980390326702f33ac142d515cffc16508fe5f65fed59c7c8728babd6a6cf5e93",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 47
+    },
+    {
+      "name": "player_start_012",
+      "file": "player_start_012.png",
+      "sha256": "923d449c2d54b80c80df0c53019ecaa42ffe1c50d70c71c10549f18c1ae5df08",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 48
+    },
+    {
+      "name": "player_start_013",
+      "file": "player_start_013.png",
+      "sha256": "1daa34945fc113a69cc65b73f09e287f94c1752f8da3738eec28ebaea91b797d",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 49
+    },
+    {
+      "name": "player_start_014",
+      "file": "player_start_014.png",
+      "sha256": "07364b481b60eb54f4bd4ecaf8f2ac788d17946e00ae136cd310f0e7c11abf25",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 50
+    },
+    {
+      "name": "player_start_015",
+      "file": "player_start_015.png",
+      "sha256": "ef38491909b1f0217b462a9aed80fafb5450d8258d05d6fa2fd0ac36fc63562e",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 51
+    },
+    {
+      "name": "player_start_016",
+      "file": "player_start_016.png",
+      "sha256": "e6843ef533e5f5d99cd7f47c627bc246d9c41f57d245a74752d540c6a1e3d804",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 52
+    },
+    {
+      "name": "player_start_017",
+      "file": "player_start_017.png",
+      "sha256": "a55538e7a7fea1f1d3e96c17491dff00c805bd9e4e29086892672260c373b8c3",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 53
+    },
+    {
+      "name": "player_start_018",
+      "file": "player_start_018.png",
+      "sha256": "391b3245b8656d94c70e8bdfdc4321b9720720cc2d2d6ed34c6a261f63b1b340",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 54
+    },
+    {
+      "name": "player_start_019",
+      "file": "player_start_019.png",
+      "sha256": "767129ff73dfd4d273706e0d18cf688a8b62532ee7704f9c530b11065b6ef7aa",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 55
+    },
+    {
+      "name": "player_start_020",
+      "file": "player_start_020.png",
+      "sha256": "c36c5eb9e4ae04e4d744e1b6f39a41285e34ee714028b638450061bb3c8bf658",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 56
+    },
+    {
+      "name": "player_start_021",
+      "file": "player_start_021.png",
+      "sha256": "01c7366ab1f4575fe804bdeaf35d4307ea4c330122a980798b7b2bce700118e6",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 57
+    },
+    {
+      "name": "player_start_022",
+      "file": "player_start_022.png",
+      "sha256": "be91cfb9f31d732e9ede30533f8a3cd282eae07acba4289f03c9406c7ab2bb26",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 58
+    },
+    {
+      "name": "player_start_023",
+      "file": "player_start_023.png",
+      "sha256": "4776c724a778028e817fdc020b8bf2eda48ce4f06ff9c7191efb1ab4857b7629",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 59
+    },
+    {
+      "name": "player_start_024",
+      "file": "player_start_024.png",
+      "sha256": "5d5c08e0beb8948229a8c709bacb9c3c71dc04e28057a197617031b4c5e471c9",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 60
+    },
+    {
+      "name": "player_start_025",
+      "file": "player_start_025.png",
+      "sha256": "148375b16779f38a0c9d5c33a763d76809f0226bf6b5bddf3ad4e5cec4b2a25e",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 61
+    },
+    {
+      "name": "player_start_026",
+      "file": "player_start_026.png",
+      "sha256": "3f2cbe4bdc6101bca7318fbb10da07e26b91816dfe8c742a66eb0b7be44ea348",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 62
+    },
+    {
+      "name": "player_start_027",
+      "file": "player_start_027.png",
+      "sha256": "c33d770d56d2b08392787a3f3bbe91e62b01accd56af71231b041ef1efd6f4e1",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "start",
+      "sourceFrame": 63
+    },
+    {
+      "name": "player_walk_000",
+      "file": "player_walk_000.png",
+      "sha256": "52868b3a63ac9b464b4a39ba4956ae315f29b7291447125b2af96c91e93401a3",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 64
+    },
+    {
+      "name": "player_walk_001",
+      "file": "player_walk_001.png",
+      "sha256": "15e7f21dd702f5ebc2ca9dab65fcf5c218f381bfe822e8c57efdc75e07d63f56",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 65
+    },
+    {
+      "name": "player_walk_002",
+      "file": "player_walk_002.png",
+      "sha256": "58f161c89c1128d2b39e2a5c45593befe6a2f89261475da8f7080c392528e368",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 66
+    },
+    {
+      "name": "player_walk_003",
+      "file": "player_walk_003.png",
+      "sha256": "203b5f5459e828b7082161c78a2bb2a52f609537ebadf923f486dc923fa1b2a4",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 67
+    },
+    {
+      "name": "player_walk_004",
+      "file": "player_walk_004.png",
+      "sha256": "cd1d1361c0ec4f7dc5d76cec5ee0c10bf7d772113c41c6de3924ab84484d64ea",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 68
+    },
+    {
+      "name": "player_walk_005",
+      "file": "player_walk_005.png",
+      "sha256": "792334d4602afe9366f88949c613f2fc1d0fca63c012d9f725562abf3061c9c3",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 69
+    },
+    {
+      "name": "player_walk_006",
+      "file": "player_walk_006.png",
+      "sha256": "7de42d68405dd55df8e2b56368be5dc44fce9dbc094c4a90888dbe3cf118f24b",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 70
+    },
+    {
+      "name": "player_walk_007",
+      "file": "player_walk_007.png",
+      "sha256": "95e9a63e770c650c0ba9e79c3665884f4858eedbc192dace2d844e1c9aa96890",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 71
+    },
+    {
+      "name": "player_walk_008",
+      "file": "player_walk_008.png",
+      "sha256": "ad9f6bb315e9126f7146dac36fcabe29e6cd2baeb31580f94539c8ac3f2e2749",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 72
+    },
+    {
+      "name": "player_walk_009",
+      "file": "player_walk_009.png",
+      "sha256": "315da426de7a81f48449916182c77dcba422c5d3d52d55a7c9fa608f31b3cf50",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 73
+    },
+    {
+      "name": "player_walk_010",
+      "file": "player_walk_010.png",
+      "sha256": "8ddd5a1dc0de9b970f399e3e68124c0af52e77fa1a6e67a035df843066822026",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 74
+    },
+    {
+      "name": "player_walk_011",
+      "file": "player_walk_011.png",
+      "sha256": "18fdb46b1e267b3fe1cd3b60f488717c0e4be069871f0d05cc397186fb120c20",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 75
+    },
+    {
+      "name": "player_walk_012",
+      "file": "player_walk_012.png",
+      "sha256": "497f10440ccf98bcbbd3cfd8a95b8450c5b5d7ad755f9999c1b3f00331cd0480",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 76
+    },
+    {
+      "name": "player_walk_013",
+      "file": "player_walk_013.png",
+      "sha256": "a4c183da8cc61f4e636bde827344a02728101ecaa34ea63620e481f20f667d7a",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 77
+    },
+    {
+      "name": "player_walk_014",
+      "file": "player_walk_014.png",
+      "sha256": "2f0f3202297041dd616b7ce5b7043eb85b9cddc47fa78a45d1245ead9f653db8",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 78
+    },
+    {
+      "name": "player_walk_015",
+      "file": "player_walk_015.png",
+      "sha256": "11d985e964c2b52045282628c36d978e4afbb8308ad184e0748a593197e86798",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 79
+    },
+    {
+      "name": "player_walk_016",
+      "file": "player_walk_016.png",
+      "sha256": "3c9a241d91826fbbb06ea5102398565f0c2e79025136bbe30c74ebf231d663f3",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 80
+    },
+    {
+      "name": "player_walk_017",
+      "file": "player_walk_017.png",
+      "sha256": "7358553b337a801f6806e2de310ef68dc498c284eba41d9ea8ae2aa5ffbbd260",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 81
+    },
+    {
+      "name": "player_walk_018",
+      "file": "player_walk_018.png",
+      "sha256": "83293922552900c000899f38b9864fa9c97d62e484ad2569af1d3c251b79fdee",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 82
+    },
+    {
+      "name": "player_walk_019",
+      "file": "player_walk_019.png",
+      "sha256": "f214eb2d4a4bcf8673efc275ef485a642d4f1566d49610ccb729b1b9b0b3b6f8",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 83
+    },
+    {
+      "name": "player_walk_020",
+      "file": "player_walk_020.png",
+      "sha256": "fe006cab02d4f3f11655f02ea07db849c12f89d45c43463cebeea690a571fd28",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 84
+    },
+    {
+      "name": "player_walk_021",
+      "file": "player_walk_021.png",
+      "sha256": "ec885adadb92b401a24af80af91078a4a1d975582978361a63c66f8100c0d144",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 85
+    },
+    {
+      "name": "player_walk_022",
+      "file": "player_walk_022.png",
+      "sha256": "1e1fe13fbc5326268b119dd227fa635936dddb6072f0c25ce7387a32ec28213a",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 86
+    },
+    {
+      "name": "player_walk_023",
+      "file": "player_walk_023.png",
+      "sha256": "61780f555a681f5f88b5cc434afd6a5fb1e7627c1112a647b5bcb9ffa8d74e83",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 87
+    },
+    {
+      "name": "player_walk_024",
+      "file": "player_walk_024.png",
+      "sha256": "9660bd161c0eefde97f9914a6503082f78f6f9dbd968d6a7255c97272210d933",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 88
+    },
+    {
+      "name": "player_walk_025",
+      "file": "player_walk_025.png",
+      "sha256": "453e0a4853d1801e30ed357df2901b3c51aca14e8efe90c92fe5e9647785a2c7",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 89
+    },
+    {
+      "name": "player_walk_026",
+      "file": "player_walk_026.png",
+      "sha256": "3bcbb06d4bb286ce385cd5a19f52222e883b798de55cf49fe89b765da2c33329",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 90
+    },
+    {
+      "name": "player_walk_027",
+      "file": "player_walk_027.png",
+      "sha256": "76138ce88dbbda11581d208d3a3e961b6f1c5109b7a62a7fb0487aac5eac7493",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 91
+    },
+    {
+      "name": "player_walk_028",
+      "file": "player_walk_028.png",
+      "sha256": "4924d629630e92c6ada51ae59838c9b683d86bda19259d9325a2a02a02762413",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 92
+    },
+    {
+      "name": "player_walk_029",
+      "file": "player_walk_029.png",
+      "sha256": "bb1bc91f7fe5b1df35b15d9e4ecbeac156e98952873e0f4b36acad8dcb5f361e",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 93
+    },
+    {
+      "name": "player_walk_030",
+      "file": "player_walk_030.png",
+      "sha256": "c5c858d70a006ee013412cc1559f592a0cbead83a24bb9b53ba2d592851b901c",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 94
+    },
+    {
+      "name": "player_walk_031",
+      "file": "player_walk_031.png",
+      "sha256": "06ef49579c5c32e5e69325967ae18be0543f91d23deb482ef9dd294f0dc1c49f",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "walk",
+      "sourceFrame": 95
+    },
+    {
+      "name": "player_stop_000",
+      "file": "player_stop_000.png",
+      "sha256": "9f49d71f80d8986bf8a3667e59c4e5e0266ff879ae48f7cb179dfd91a78b8072",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "stop",
+      "sourceFrame": 186
+    },
+    {
+      "name": "player_stop_001",
+      "file": "player_stop_001.png",
+      "sha256": "88384f73a62ac7448fef57f2a71e38c368aaeb822c82c6cc0011c6adb6e22eb3",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "stop",
+      "sourceFrame": 187
+    },
+    {
+      "name": "player_stop_002",
+      "file": "player_stop_002.png",
+      "sha256": "e577f2274487b1fcf1a0867ea8829e843e57fcdb4f921dd918ef2811085e0ccd",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "stop",
+      "sourceFrame": 188
+    },
+    {
+      "name": "player_stop_003",
+      "file": "player_stop_003.png",
+      "sha256": "412490f3910a649d4663532131fdf90f7e7b8157e24da9e951f7bd1c4e71d71a",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "stop",
+      "sourceFrame": 189
+    },
+    {
+      "name": "player_stop_004",
+      "file": "player_stop_004.png",
+      "sha256": "a2bda4e9b787eb87fdd397e89a44d0a7369d5286511034546ac7da9e3ba5011b",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "stop",
+      "sourceFrame": 190
+    },
+    {
+      "name": "player_stop_005",
+      "file": "player_stop_005.png",
+      "sha256": "9255f749dd093ed4f46687c91dba0456ebf7ec337ef8f377f41cc9e2cc6e3523",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "stop",
+      "sourceFrame": 191
+    },
+    {
+      "name": "player_stop_006",
+      "file": "player_stop_006.png",
+      "sha256": "2b78cdfa3bd5f65af6d947079f3663551ac4bce8e39b210cf675d3418146e498",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "stop",
+      "sourceFrame": 192
+    },
+    {
+      "name": "player_stop_007",
+      "file": "player_stop_007.png",
+      "sha256": "fc49146e6d9dc716d60c4fd30abef485f513a5b39992df26e6ee92797b2a14ca",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "stop",
+      "sourceFrame": 193
+    },
+    {
+      "name": "player_stop_008",
+      "file": "player_stop_008.png",
+      "sha256": "1eabed5ad2fd26cde377b346ded34a0e326159443ab7726d2a66dbc1323a0d61",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "stop",
+      "sourceFrame": 194
+    },
+    {
+      "name": "player_stop_009",
+      "file": "player_stop_009.png",
+      "sha256": "b704e44635d5c8d43d1ff55e96e09f08f7bdce953945ae339de0db7043489fb0",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "stop",
+      "sourceFrame": 195
+    },
+    {
+      "name": "player_stop_010",
+      "file": "player_stop_010.png",
+      "sha256": "1df8aa6be84ee2495714837d819b4ef1fca52ad85870045cc7878807e262302d",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "stop",
+      "sourceFrame": 196
+    },
+    {
+      "name": "player_stop_011",
+      "file": "player_stop_011.png",
+      "sha256": "ac4041cca7beab572b4c1e33b52aba1fd0702101fafecedeac532d63bd53e6f4",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "stop",
+      "sourceFrame": 197
+    },
+    {
+      "name": "player_stop_012",
+      "file": "player_stop_012.png",
+      "sha256": "b30ea15f17fe1a2d07c58a9e350666e9ed7daa6c4a334d5e89806d1f0e022aae",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "stop",
+      "sourceFrame": 198
+    },
+    {
+      "name": "player_stop_013",
+      "file": "player_stop_013.png",
+      "sha256": "9057d97f9b762d0d5f4683ea5979bb7985d5ea803a815e8355949b67b9086597",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "stop",
+      "sourceFrame": 199
+    },
+    {
+      "name": "player_stop_014",
+      "file": "player_stop_014.png",
+      "sha256": "7ed5e3fe1cc26ad52dd58e4f96aaa6cf827668d910d6d2253ee4b20cc9c10900",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "stop",
+      "sourceFrame": 200
+    },
+    {
+      "name": "player_stop_015",
+      "file": "player_stop_015.png",
+      "sha256": "610d7efc5ecc26e8d925b63f0f43e0793a2d664482c7aab36714a1a72f6066c0",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "stop",
+      "sourceFrame": 201
+    },
+    {
+      "name": "player_stop_016",
+      "file": "player_stop_016.png",
+      "sha256": "71ee4f03c4374b62a69aa63a46cb08141673e300d701af348be69023586a8032",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "stop",
+      "sourceFrame": 202
+    },
+    {
+      "name": "player_stop_017",
+      "file": "player_stop_017.png",
+      "sha256": "16cd8df54636f3ecc2b66cc4c555f9c7911fcbc9b02ab0de5d0de0237617694e",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "stop",
+      "sourceFrame": 203
+    },
+    {
+      "name": "player_stop_018",
+      "file": "player_stop_018.png",
+      "sha256": "b3bf70d1f66699cb0f6bc90f045b452fb1276374bf7ea6b4ead2dee59e2bfca1",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "stop",
+      "sourceFrame": 204
+    },
+    {
+      "name": "player_stop_019",
+      "file": "player_stop_019.png",
+      "sha256": "6f4216128b65683aabf5c81701e5f1f3e7c9b6decedd756fa2cbc3cbd4ab3a54",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "stop",
+      "sourceFrame": 205
+    },
+    {
+      "name": "player_stop_020",
+      "file": "player_stop_020.png",
+      "sha256": "06e6dec9dbdff5034ee04407cc5b7fa59830081506f5978a09ae629f40334e5d",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "stop",
+      "sourceFrame": 206
+    },
+    {
+      "name": "player_stop_021",
+      "file": "player_stop_021.png",
+      "sha256": "36d35248b7fcf236ad00233183a9d717fc2c34197e961c8e7f595e4be9d796f9",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "stop",
+      "sourceFrame": 207
+    },
+    {
+      "name": "player_stop_022",
+      "file": "player_stop_022.png",
+      "sha256": "d993952832c39b49529501b3aa8b8cc86a86f75b8b16883d5fa38e545259e5f7",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "stop",
+      "sourceFrame": 208
+    },
+    {
+      "name": "player_stop_023",
+      "file": "player_stop_023.png",
+      "sha256": "01ff5c0f64db66133aac559af4dfc15917af6a464d4a8bbb8cb53c61c8dbfbe4",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "stop",
+      "sourceFrame": 209
+    },
+    {
+      "name": "player_stop_024",
+      "file": "player_stop_024.png",
+      "sha256": "5f68e1bc32c5d6d436e18f7740b63e568e00f71861aa43be99088c9a5b58a9c3",
+      "width": 944,
+      "height": 1816,
+      "pixelsPerUnit": 669.4985163204748,
+      "pivot": {
+        "x": 0.4957627118644068,
+        "y": 0.0159691629955947
+      },
+      "state": "stop",
+      "sourceFrame": 210
+    }
+  ],
+  "source": {
+    "videoSha256": "6228553db3877129c9e6451a7f792c70ac29451a4516166aada0c7c9ec9d6c47",
+    "review": "source~/video-extraction.json",
+    "nativePng": true,
+    "gpuCompression": "BC7 at native dimensions"
+  },
+  "stopFromStart": [
+    24,
+    24,
+    24,
+    21,
+    21,
+    17,
+    17,
+    17,
+    0,
+    0,
+    0,
+    0,
+    1,
+    2,
+    2,
+    2,
+    2,
+    2,
+    4,
+    5,
+    6,
+    8,
+    9,
+    11,
+    14,
+    22,
+    18,
+    17
+  ],
+  "stopFromWalk": [
+    0,
+    1,
+    1,
+    3,
+    2,
+    2,
+    2,
+    3,
+    6,
+    7,
+    8,
+    9,
+    13,
+    22,
+    19,
+    18,
+    0,
+    0,
+    1,
+    1,
+    2,
+    2,
+    2,
+    3,
+    5,
+    6,
+    8,
+    9,
+    13,
+    22,
+    19,
+    17
+  ],
+  "stopResponseSeconds": 0.16
+}

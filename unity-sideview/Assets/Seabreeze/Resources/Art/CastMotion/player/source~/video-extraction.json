@@ -1,0 +1,3358 @@
+{
+  "version": 1,
+  "characterId": "player",
+  "characterName": "主角",
+  "runtimeTarget": true,
+  "source": {
+    "characterId": "player",
+    "characterName": "主角",
+    "sourceLabel": "主角",
+    "sourceVideo": "source/source-video.mp4",
+    "originalFile": "主角行走动画.mp4",
+    "sourceSha256": "6228553db3877129c9e6451a7f792c70ac29451a4516166aada0c7c9ec9d6c47",
+    "runtimeTarget": true
+  },
+  "video": {
+    "kind": "vide",
+    "timescale": 15360,
+    "durationTicks": 153856,
+    "durationSeconds": 10.016666666666667,
+    "samples": 241
+  },
+  "size": [
+    1080,
+    1920
+  ],
+  "canvas": {
+    "size": [
+      944,
+      1816
+    ],
+    "sourceCropTopLeft": [
+      72,
+      56,
+      944,
+      1816
+    ],
+    "sourceForegroundUnion": [
+      104,
+      80,
+      980,
+      1842
+    ],
+    "pixelScale": 1,
+    "standingHeightPixels": 1749,
+    "footAnchorSource": [
+      540.0,
+      1843
+    ],
+    "footAnchorTopLeft": [
+      468.0,
+      1787
+    ],
+    "unityPivotNormalizedBottomLeft": [
+      0.4957627118644068,
+      0.0159691629955947
+    ]
+  },
+  "states": {
+    "idle": {
+      "startFrame": 35,
+      "endFrameExclusive": 36,
+      "loop": false,
+      "holdLastFrame": true,
+      "frameCount": 1,
+      "sourceStartSeconds": 1.4666666666666666,
+      "sourceEndSecondsExclusive": 1.5,
+      "durationSeconds": 0.03333333333333333,
+      "frames": [
+        {
+          "state": "idle",
+          "index": 0,
+          "file": "frames/idle/player_idle_000.png",
+          "sourceFrame": 35,
+          "sourcePtsTicks": 22528,
+          "sourceSeconds": 1.4666666666666666,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "4dee47992b10be8641dc2b6904d3bb2aea3b301b3f26bf9deff0fbb0328319ee",
+          "solidBounds": [
+            327,
+            38,
+            624,
+            1787
+          ],
+          "opaqueInteriorPixels": 300346,
+          "edgeRecoveryPixels": 11811,
+          "shadowClassifiedPixels": 219598,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 0,
+            "rectTopLeft": [
+              2,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              944,
+              1816
+            ]
+          }
+        }
+      ]
+    },
+    "start": {
+      "startFrame": 36,
+      "endFrameExclusive": 64,
+      "loop": false,
+      "holdLastFrame": false,
+      "frameCount": 28,
+      "sourceStartSeconds": 1.5,
+      "sourceEndSecondsExclusive": 2.6666666666666665,
+      "durationSeconds": 1.1666666666666667,
+      "frames": [
+        {
+          "state": "start",
+          "index": 0,
+          "file": "frames/start/player_start_000.png",
+          "sourceFrame": 36,
+          "sourcePtsTicks": 23040,
+          "sourceSeconds": 1.5,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "6c766e9bc04c9eccf336eb6c2b4db2c8a01689f1aaccc3c1b71b4197a81b3385",
+          "solidBounds": [
+            331,
+            36,
+            610,
+            1786
+          ],
+          "opaqueInteriorPixels": 310155,
+          "edgeRecoveryPixels": 12278,
+          "shadowClassifiedPixels": 218291,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 1,
+            "rectTopLeft": [
+              2,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 1,
+          "file": "frames/start/player_start_001.png",
+          "sourceFrame": 37,
+          "sourcePtsTicks": 23808,
+          "sourceSeconds": 1.55,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "b00dd32ed62549e0cca2096d34910fb9eeeddab077a591814b14de16e984a21c",
+          "solidBounds": [
+            332,
+            35,
+            600,
+            1786
+          ],
+          "opaqueInteriorPixels": 315729,
+          "edgeRecoveryPixels": 12438,
+          "shadowClassifiedPixels": 217537,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 1,
+            "rectTopLeft": [
+              950,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              950,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 2,
+          "file": "frames/start/player_start_002.png",
+          "sourceFrame": 38,
+          "sourcePtsTicks": 24320,
+          "sourceSeconds": 1.5833333333333333,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "1c642341d36a130cce9add827ae34e80705b21d8fe2bb7764d9dc45370b74d3d",
+          "solidBounds": [
+            332,
+            35,
+            594,
+            1786
+          ],
+          "opaqueInteriorPixels": 322527,
+          "edgeRecoveryPixels": 12373,
+          "shadowClassifiedPixels": 216362,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 1,
+            "rectTopLeft": [
+              1898,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              1898,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 3,
+          "file": "frames/start/player_start_003.png",
+          "sourceFrame": 39,
+          "sourcePtsTicks": 25088,
+          "sourceSeconds": 1.6333333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "d193286a8f3ea6988118fa4d861a92b5e26475f6646fda4b1a2cc362d5b8d57a",
+          "solidBounds": [
+            324,
+            33,
+            595,
+            1786
+          ],
+          "opaqueInteriorPixels": 330631,
+          "edgeRecoveryPixels": 12622,
+          "shadowClassifiedPixels": 214847,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 1,
+            "rectTopLeft": [
+              2846,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2846,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 4,
+          "file": "frames/start/player_start_004.png",
+          "sourceFrame": 40,
+          "sourcePtsTicks": 25600,
+          "sourceSeconds": 1.6666666666666667,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "c0b0c60176eca638049fc069583f142827f84a57b97302ae3052b161a764435c",
+          "solidBounds": [
+            305,
+            32,
+            625,
+            1785
+          ],
+          "opaqueInteriorPixels": 350677,
+          "edgeRecoveryPixels": 12561,
+          "shadowClassifiedPixels": 210823,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 1,
+            "rectTopLeft": [
+              2,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 5,
+          "file": "frames/start/player_start_005.png",
+          "sourceFrame": 41,
+          "sourcePtsTicks": 26368,
+          "sourceSeconds": 1.7166666666666666,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "41fd79f0828c67dd6a88ea43e0f7bc443437a1cb82f69ea26c59946f59068709",
+          "solidBounds": [
+            294,
+            31,
+            641,
+            1785
+          ],
+          "opaqueInteriorPixels": 361338,
+          "edgeRecoveryPixels": 13655,
+          "shadowClassifiedPixels": 208139,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 1,
+            "rectTopLeft": [
+              950,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              950,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 6,
+          "file": "frames/start/player_start_006.png",
+          "sourceFrame": 42,
+          "sourcePtsTicks": 26880,
+          "sourceSeconds": 1.75,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "3c8617719aaea6780538fac2cb9baf2f3a8f01a401d26c9c723c4b8e2f84b5ab",
+          "solidBounds": [
+            284,
+            30,
+            655,
+            1784
+          ],
+          "opaqueInteriorPixels": 369907,
+          "edgeRecoveryPixels": 14435,
+          "shadowClassifiedPixels": 206138,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 1,
+            "rectTopLeft": [
+              1898,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              1898,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 7,
+          "file": "frames/start/player_start_007.png",
+          "sourceFrame": 43,
+          "sourcePtsTicks": 27648,
+          "sourceSeconds": 1.8,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "c1acd4dc0708337320be674522c4911331fe1f881f8cfe25d25b9601f572414e",
+          "solidBounds": [
+            271,
+            29,
+            666,
+            1784
+          ],
+          "opaqueInteriorPixels": 376213,
+          "edgeRecoveryPixels": 15688,
+          "shadowClassifiedPixels": 204713,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 1,
+            "rectTopLeft": [
+              2846,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2846,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 8,
+          "file": "frames/start/player_start_008.png",
+          "sourceFrame": 44,
+          "sourcePtsTicks": 28160,
+          "sourceSeconds": 1.8333333333333333,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "faeb360bcc622752fe24377296318cf672e8a93687913a49d5f363e50aa5a3f3",
+          "solidBounds": [
+            242,
+            29,
+            681,
+            1784
+          ],
+          "opaqueInteriorPixels": 389990,
+          "edgeRecoveryPixels": 16965,
+          "shadowClassifiedPixels": 200552,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 2,
+            "rectTopLeft": [
+              2,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 9,
+          "file": "frames/start/player_start_009.png",
+          "sourceFrame": 45,
+          "sourcePtsTicks": 28928,
+          "sourceSeconds": 1.8833333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "29031b20b0f0fb9ce52bae2d2f0c90c52b4f3a77e69f7dce76368f9ab324efc1",
+          "solidBounds": [
+            224,
+            30,
+            684,
+            1784
+          ],
+          "opaqueInteriorPixels": 396521,
+          "edgeRecoveryPixels": 17403,
+          "shadowClassifiedPixels": 199893,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 2,
+            "rectTopLeft": [
+              950,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              950,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 10,
+          "file": "frames/start/player_start_010.png",
+          "sourceFrame": 46,
+          "sourcePtsTicks": 29440,
+          "sourceSeconds": 1.9166666666666667,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "51907ccc608cd16d521dbf2cc72fff1296dd21b987766e75bb6c680fa5a2d98e",
+          "solidBounds": [
+            207,
+            31,
+            685,
+            1783
+          ],
+          "opaqueInteriorPixels": 403976,
+          "edgeRecoveryPixels": 17769,
+          "shadowClassifiedPixels": 198583,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 2,
+            "rectTopLeft": [
+              1898,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              1898,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 11,
+          "file": "frames/start/player_start_011.png",
+          "sourceFrame": 47,
+          "sourcePtsTicks": 30208,
+          "sourceSeconds": 1.9666666666666666,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "980390326702f33ac142d515cffc16508fe5f65fed59c7c8728babd6a6cf5e93",
+          "solidBounds": [
+            188,
+            32,
+            720,
+            1783
+          ],
+          "opaqueInteriorPixels": 411145,
+          "edgeRecoveryPixels": 17813,
+          "shadowClassifiedPixels": 197818,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 2,
+            "rectTopLeft": [
+              2846,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2846,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 12,
+          "file": "frames/start/player_start_012.png",
+          "sourceFrame": 48,
+          "sourcePtsTicks": 30720,
+          "sourceSeconds": 2.0,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "923d449c2d54b80c80df0c53019ecaa42ffe1c50d70c71c10549f18c1ae5df08",
+          "solidBounds": [
+            148,
+            35,
+            803,
+            1782
+          ],
+          "opaqueInteriorPixels": 426375,
+          "edgeRecoveryPixels": 18023,
+          "shadowClassifiedPixels": 195328,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 2,
+            "rectTopLeft": [
+              2,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 13,
+          "file": "frames/start/player_start_013.png",
+          "sourceFrame": 49,
+          "sourcePtsTicks": 31488,
+          "sourceSeconds": 2.05,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "1daa34945fc113a69cc65b73f09e287f94c1752f8da3738eec28ebaea91b797d",
+          "solidBounds": [
+            126,
+            37,
+            838,
+            1781
+          ],
+          "opaqueInteriorPixels": 432127,
+          "edgeRecoveryPixels": 18406,
+          "shadowClassifiedPixels": 195001,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 2,
+            "rectTopLeft": [
+              950,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              950,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 14,
+          "file": "frames/start/player_start_014.png",
+          "sourceFrame": 50,
+          "sourcePtsTicks": 32000,
+          "sourceSeconds": 2.0833333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "07364b481b60eb54f4bd4ecaf8f2ac788d17946e00ae136cd310f0e7c11abf25",
+          "solidBounds": [
+            107,
+            38,
+            864,
+            1780
+          ],
+          "opaqueInteriorPixels": 436160,
+          "edgeRecoveryPixels": 18894,
+          "shadowClassifiedPixels": 194952,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 2,
+            "rectTopLeft": [
+              1898,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              1898,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 15,
+          "file": "frames/start/player_start_015.png",
+          "sourceFrame": 51,
+          "sourcePtsTicks": 32768,
+          "sourceSeconds": 2.1333333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "ef38491909b1f0217b462a9aed80fafb5450d8258d05d6fa2fd0ac36fc63562e",
+          "solidBounds": [
+            88,
+            39,
+            883,
+            1779
+          ],
+          "opaqueInteriorPixels": 438717,
+          "edgeRecoveryPixels": 19800,
+          "shadowClassifiedPixels": 195020,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 2,
+            "rectTopLeft": [
+              2846,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2846,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 16,
+          "file": "frames/start/player_start_016.png",
+          "sourceFrame": 52,
+          "sourcePtsTicks": 33280,
+          "sourceSeconds": 2.1666666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "e6843ef533e5f5d99cd7f47c627bc246d9c41f57d245a74752d540c6a1e3d804",
+          "solidBounds": [
+            50,
+            39,
+            890,
+            1776
+          ],
+          "opaqueInteriorPixels": 440450,
+          "edgeRecoveryPixels": 19773,
+          "shadowClassifiedPixels": 195755,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 3,
+            "rectTopLeft": [
+              2,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 17,
+          "file": "frames/start/player_start_017.png",
+          "sourceFrame": 53,
+          "sourcePtsTicks": 34048,
+          "sourceSeconds": 2.216666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "a55538e7a7fea1f1d3e96c17491dff00c805bd9e4e29086892672260c373b8c3",
+          "solidBounds": [
+            45,
+            37,
+            873,
+            1774
+          ],
+          "opaqueInteriorPixels": 435573,
+          "edgeRecoveryPixels": 19399,
+          "shadowClassifiedPixels": 197095,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 3,
+            "rectTopLeft": [
+              950,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              950,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 18,
+          "file": "frames/start/player_start_018.png",
+          "sourceFrame": 54,
+          "sourcePtsTicks": 34560,
+          "sourceSeconds": 2.25,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "391b3245b8656d94c70e8bdfdc4321b9720720cc2d2d6ed34c6a261f63b1b340",
+          "solidBounds": [
+            46,
+            36,
+            849,
+            1772
+          ],
+          "opaqueInteriorPixels": 427417,
+          "edgeRecoveryPixels": 18658,
+          "shadowClassifiedPixels": 198612,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 3,
+            "rectTopLeft": [
+              1898,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              1898,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 19,
+          "file": "frames/start/player_start_019.png",
+          "sourceFrame": 55,
+          "sourcePtsTicks": 35328,
+          "sourceSeconds": 2.3,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "767129ff73dfd4d273706e0d18cf688a8b62532ee7704f9c530b11065b6ef7aa",
+          "solidBounds": [
+            54,
+            34,
+            828,
+            1768
+          ],
+          "opaqueInteriorPixels": 416701,
+          "edgeRecoveryPixels": 18192,
+          "shadowClassifiedPixels": 200354,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 3,
+            "rectTopLeft": [
+              2846,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2846,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 20,
+          "file": "frames/start/player_start_020.png",
+          "sourceFrame": 56,
+          "sourcePtsTicks": 35840,
+          "sourceSeconds": 2.3333333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "c36c5eb9e4ae04e4d744e1b6f39a41285e34ee714028b638450061bb3c8bf658",
+          "solidBounds": [
+            89,
+            31,
+            776,
+            1762
+          ],
+          "opaqueInteriorPixels": 384171,
+          "edgeRecoveryPixels": 16937,
+          "shadowClassifiedPixels": 203117,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 3,
+            "rectTopLeft": [
+              2,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 21,
+          "file": "frames/start/player_start_021.png",
+          "sourceFrame": 57,
+          "sourcePtsTicks": 36608,
+          "sourceSeconds": 2.3833333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "01c7366ab1f4575fe804bdeaf35d4307ea4c330122a980798b7b2bce700118e6",
+          "solidBounds": [
+            116,
+            29,
+            752,
+            1763
+          ],
+          "opaqueInteriorPixels": 363828,
+          "edgeRecoveryPixels": 16259,
+          "shadowClassifiedPixels": 204723,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 3,
+            "rectTopLeft": [
+              950,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              950,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 22,
+          "file": "frames/start/player_start_022.png",
+          "sourceFrame": 58,
+          "sourcePtsTicks": 37120,
+          "sourceSeconds": 2.4166666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "be91cfb9f31d732e9ede30533f8a3cd282eae07acba4289f03c9406c7ab2bb26",
+          "solidBounds": [
+            141,
+            27,
+            727,
+            1764
+          ],
+          "opaqueInteriorPixels": 345471,
+          "edgeRecoveryPixels": 15395,
+          "shadowClassifiedPixels": 205290,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 3,
+            "rectTopLeft": [
+              1898,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              1898,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 23,
+          "file": "frames/start/player_start_023.png",
+          "sourceFrame": 59,
+          "sourcePtsTicks": 37888,
+          "sourceSeconds": 2.466666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "4776c724a778028e817fdc020b8bf2eda48ce4f06ff9c7191efb1ab4857b7629",
+          "solidBounds": [
+            169,
+            26,
+            700,
+            1765
+          ],
+          "opaqueInteriorPixels": 336920,
+          "edgeRecoveryPixels": 15179,
+          "shadowClassifiedPixels": 205946,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 3,
+            "rectTopLeft": [
+              2846,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2846,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 24,
+          "file": "frames/start/player_start_024.png",
+          "sourceFrame": 60,
+          "sourcePtsTicks": 38400,
+          "sourceSeconds": 2.5,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "5d5c08e0beb8948229a8c709bacb9c3c71dc04e28057a197617031b4c5e471c9",
+          "solidBounds": [
+            238,
+            25,
+            650,
+            1766
+          ],
+          "opaqueInteriorPixels": 335034,
+          "edgeRecoveryPixels": 14092,
+          "shadowClassifiedPixels": 207398,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 4,
+            "rectTopLeft": [
+              2,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 25,
+          "file": "frames/start/player_start_025.png",
+          "sourceFrame": 61,
+          "sourcePtsTicks": 39168,
+          "sourceSeconds": 2.55,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "148375b16779f38a0c9d5c33a763d76809f0226bf6b5bddf3ad4e5cec4b2a25e",
+          "solidBounds": [
+            284,
+            24,
+            667,
+            1765
+          ],
+          "opaqueInteriorPixels": 330705,
+          "edgeRecoveryPixels": 13679,
+          "shadowClassifiedPixels": 217681,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 4,
+            "rectTopLeft": [
+              950,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              950,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 26,
+          "file": "frames/start/player_start_026.png",
+          "sourceFrame": 62,
+          "sourcePtsTicks": 39680,
+          "sourceSeconds": 2.5833333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "3f2cbe4bdc6101bca7318fbb10da07e26b91816dfe8c742a66eb0b7be44ea348",
+          "solidBounds": [
+            328,
+            24,
+            679,
+            1765
+          ],
+          "opaqueInteriorPixels": 343465,
+          "edgeRecoveryPixels": 13499,
+          "shadowClassifiedPixels": 222712,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 4,
+            "rectTopLeft": [
+              1898,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              1898,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 27,
+          "file": "frames/start/player_start_027.png",
+          "sourceFrame": 63,
+          "sourcePtsTicks": 40448,
+          "sourceSeconds": 2.6333333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "c33d770d56d2b08392787a3f3bbe91e62b01accd56af71231b041ef1efd6f4e1",
+          "solidBounds": [
+            320,
+            24,
+            685,
+            1765
+          ],
+          "opaqueInteriorPixels": 378766,
+          "edgeRecoveryPixels": 14375,
+          "shadowClassifiedPixels": 210221,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 4,
+            "rectTopLeft": [
+              2846,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2846,
+              2,
+              944,
+              1816
+            ]
+          }
+        }
+      ]
+    },
+    "walk": {
+      "startFrame": 64,
+      "endFrameExclusive": 96,
+      "loop": true,
+      "holdLastFrame": false,
+      "frameCount": 32,
+      "sourceStartSeconds": 2.6666666666666665,
+      "sourceEndSecondsExclusive": 4.0,
+      "durationSeconds": 1.3333333333333333,
+      "frames": [
+        {
+          "state": "walk",
+          "index": 0,
+          "file": "frames/walk/player_walk_000.png",
+          "sourceFrame": 64,
+          "sourcePtsTicks": 40960,
+          "sourceSeconds": 2.6666666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "52868b3a63ac9b464b4a39ba4956ae315f29b7291447125b2af96c91e93401a3",
+          "solidBounds": [
+            260,
+            25,
+            724,
+            1764
+          ],
+          "opaqueInteriorPixels": 419965,
+          "edgeRecoveryPixels": 18171,
+          "shadowClassifiedPixels": 197925,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 5,
+            "rectTopLeft": [
+              2,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 1,
+          "file": "frames/walk/player_walk_001.png",
+          "sourceFrame": 65,
+          "sourcePtsTicks": 41728,
+          "sourceSeconds": 2.716666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "15e7f21dd702f5ebc2ca9dab65fcf5c218f381bfe822e8c57efdc75e07d63f56",
+          "solidBounds": [
+            232,
+            27,
+            778,
+            1764
+          ],
+          "opaqueInteriorPixels": 431041,
+          "edgeRecoveryPixels": 18352,
+          "shadowClassifiedPixels": 196510,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 5,
+            "rectTopLeft": [
+              950,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              950,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 2,
+          "file": "frames/walk/player_walk_002.png",
+          "sourceFrame": 66,
+          "sourcePtsTicks": 42240,
+          "sourceSeconds": 2.75,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "58f161c89c1128d2b39e2a5c45593befe6a2f89261475da8f7080c392528e368",
+          "solidBounds": [
+            206,
+            29,
+            822,
+            1764
+          ],
+          "opaqueInteriorPixels": 439028,
+          "edgeRecoveryPixels": 19323,
+          "shadowClassifiedPixels": 195969,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 5,
+            "rectTopLeft": [
+              1898,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              1898,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 3,
+          "file": "frames/walk/player_walk_003.png",
+          "sourceFrame": 67,
+          "sourcePtsTicks": 43008,
+          "sourceSeconds": 2.8,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "203b5f5459e828b7082161c78a2bb2a52f609537ebadf923f486dc923fa1b2a4",
+          "solidBounds": [
+            178,
+            32,
+            860,
+            1764
+          ],
+          "opaqueInteriorPixels": 444714,
+          "edgeRecoveryPixels": 20030,
+          "shadowClassifiedPixels": 195935,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 5,
+            "rectTopLeft": [
+              2846,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2846,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 4,
+          "file": "frames/walk/player_walk_004.png",
+          "sourceFrame": 68,
+          "sourcePtsTicks": 43520,
+          "sourceSeconds": 2.8333333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "cd1d1361c0ec4f7dc5d76cec5ee0c10bf7d772113c41c6de3924ab84484d64ea",
+          "solidBounds": [
+            124,
+            37,
+            906,
+            1764
+          ],
+          "opaqueInteriorPixels": 450669,
+          "edgeRecoveryPixels": 21763,
+          "shadowClassifiedPixels": 194959,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 5,
+            "rectTopLeft": [
+              2,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 5,
+          "file": "frames/walk/player_walk_005.png",
+          "sourceFrame": 69,
+          "sourcePtsTicks": 44288,
+          "sourceSeconds": 2.8833333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "792334d4602afe9366f88949c613f2fc1d0fca63c012d9f725562abf3061c9c3",
+          "solidBounds": [
+            103,
+            38,
+            905,
+            1764
+          ],
+          "opaqueInteriorPixels": 451141,
+          "edgeRecoveryPixels": 21368,
+          "shadowClassifiedPixels": 196065,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 5,
+            "rectTopLeft": [
+              950,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              950,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 6,
+          "file": "frames/walk/player_walk_006.png",
+          "sourceFrame": 70,
+          "sourcePtsTicks": 44800,
+          "sourceSeconds": 2.9166666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "7de42d68405dd55df8e2b56368be5dc44fce9dbc094c4a90888dbe3cf118f24b",
+          "solidBounds": [
+            83,
+            37,
+            888,
+            1764
+          ],
+          "opaqueInteriorPixels": 449231,
+          "edgeRecoveryPixels": 21618,
+          "shadowClassifiedPixels": 197224,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 5,
+            "rectTopLeft": [
+              1898,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              1898,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 7,
+          "file": "frames/walk/player_walk_007.png",
+          "sourceFrame": 71,
+          "sourcePtsTicks": 45568,
+          "sourceSeconds": 2.966666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "95e9a63e770c650c0ba9e79c3665884f4858eedbc192dace2d844e1c9aa96890",
+          "solidBounds": [
+            68,
+            35,
+            862,
+            1764
+          ],
+          "opaqueInteriorPixels": 445535,
+          "edgeRecoveryPixels": 21262,
+          "shadowClassifiedPixels": 198903,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 5,
+            "rectTopLeft": [
+              2846,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2846,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 8,
+          "file": "frames/walk/player_walk_008.png",
+          "sourceFrame": 72,
+          "sourcePtsTicks": 46080,
+          "sourceSeconds": 3.0,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "ad9f6bb315e9126f7146dac36fcabe29e6cd2baeb31580f94539c8ac3f2e2749",
+          "solidBounds": [
+            66,
+            32,
+            805,
+            1766
+          ],
+          "opaqueInteriorPixels": 427081,
+          "edgeRecoveryPixels": 18946,
+          "shadowClassifiedPixels": 203051,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 6,
+            "rectTopLeft": [
+              2,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 9,
+          "file": "frames/walk/player_walk_009.png",
+          "sourceFrame": 73,
+          "sourcePtsTicks": 46848,
+          "sourceSeconds": 3.05,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "315da426de7a81f48449916182c77dcba422c5d3d52d55a7c9fa608f31b3cf50",
+          "solidBounds": [
+            80,
+            30,
+            778,
+            1768
+          ],
+          "opaqueInteriorPixels": 407921,
+          "edgeRecoveryPixels": 17932,
+          "shadowClassifiedPixels": 206228,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 6,
+            "rectTopLeft": [
+              950,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              950,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 10,
+          "file": "frames/walk/player_walk_010.png",
+          "sourceFrame": 74,
+          "sourcePtsTicks": 47360,
+          "sourceSeconds": 3.0833333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "8ddd5a1dc0de9b970f399e3e68124c0af52e77fa1a6e67a035df843066822026",
+          "solidBounds": [
+            95,
+            29,
+            750,
+            1770
+          ],
+          "opaqueInteriorPixels": 387176,
+          "edgeRecoveryPixels": 17210,
+          "shadowClassifiedPixels": 208523,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 6,
+            "rectTopLeft": [
+              1898,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              1898,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 11,
+          "file": "frames/walk/player_walk_011.png",
+          "sourceFrame": 75,
+          "sourcePtsTicks": 48128,
+          "sourceSeconds": 3.1333333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "18fdb46b1e267b3fe1cd3b60f488717c0e4be069871f0d05cc397186fb120c20",
+          "solidBounds": [
+            118,
+            27,
+            722,
+            1771
+          ],
+          "opaqueInteriorPixels": 364137,
+          "edgeRecoveryPixels": 16639,
+          "shadowClassifiedPixels": 210398,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 6,
+            "rectTopLeft": [
+              2846,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2846,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 12,
+          "file": "frames/walk/player_walk_012.png",
+          "sourceFrame": 76,
+          "sourcePtsTicks": 48640,
+          "sourceSeconds": 3.1666666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "497f10440ccf98bcbbd3cfd8a95b8450c5b5d7ad755f9999c1b3f00331cd0480",
+          "solidBounds": [
+            188,
+            24,
+            664,
+            1773
+          ],
+          "opaqueInteriorPixels": 345873,
+          "edgeRecoveryPixels": 15050,
+          "shadowClassifiedPixels": 209363,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 6,
+            "rectTopLeft": [
+              2,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 13,
+          "file": "frames/walk/player_walk_013.png",
+          "sourceFrame": 77,
+          "sourcePtsTicks": 49408,
+          "sourceSeconds": 3.216666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "a4c183da8cc61f4e636bde827344a02728101ecaa34ea63620e481f20f667d7a",
+          "solidBounds": [
+            232,
+            24,
+            649,
+            1774
+          ],
+          "opaqueInteriorPixels": 340563,
+          "edgeRecoveryPixels": 14069,
+          "shadowClassifiedPixels": 209958,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 6,
+            "rectTopLeft": [
+              950,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              950,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 14,
+          "file": "frames/walk/player_walk_014.png",
+          "sourceFrame": 78,
+          "sourcePtsTicks": 49920,
+          "sourceSeconds": 3.25,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "2f0f3202297041dd616b7ce5b7043eb85b9cddc47fa78a45d1245ead9f653db8",
+          "solidBounds": [
+            271,
+            24,
+            664,
+            1774
+          ],
+          "opaqueInteriorPixels": 336095,
+          "edgeRecoveryPixels": 13749,
+          "shadowClassifiedPixels": 218931,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 6,
+            "rectTopLeft": [
+              1898,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              1898,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 15,
+          "file": "frames/walk/player_walk_015.png",
+          "sourceFrame": 79,
+          "sourcePtsTicks": 50688,
+          "sourceSeconds": 3.3,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "11d985e964c2b52045282628c36d978e4afbb8308ad184e0748a593197e86798",
+          "solidBounds": [
+            312,
+            24,
+            675,
+            1774
+          ],
+          "opaqueInteriorPixels": 347915,
+          "edgeRecoveryPixels": 14188,
+          "shadowClassifiedPixels": 220288,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 6,
+            "rectTopLeft": [
+              2846,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2846,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 16,
+          "file": "frames/walk/player_walk_016.png",
+          "sourceFrame": 80,
+          "sourcePtsTicks": 51200,
+          "sourceSeconds": 3.3333333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "3c9a241d91826fbbb06ea5102398565f0c2e79025136bbe30c74ebf231d663f3",
+          "solidBounds": [
+            266,
+            25,
+            682,
+            1775
+          ],
+          "opaqueInteriorPixels": 389740,
+          "edgeRecoveryPixels": 17309,
+          "shadowClassifiedPixels": 200244,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 7,
+            "rectTopLeft": [
+              2,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 17,
+          "file": "frames/walk/player_walk_017.png",
+          "sourceFrame": 81,
+          "sourcePtsTicks": 51968,
+          "sourceSeconds": 3.3833333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "7358553b337a801f6806e2de310ef68dc498c284eba41d9ea8ae2aa5ffbbd260",
+          "solidBounds": [
+            236,
+            26,
+            712,
+            1775
+          ],
+          "opaqueInteriorPixels": 399437,
+          "edgeRecoveryPixels": 17956,
+          "shadowClassifiedPixels": 198691,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 7,
+            "rectTopLeft": [
+              950,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              950,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 18,
+          "file": "frames/walk/player_walk_018.png",
+          "sourceFrame": 82,
+          "sourcePtsTicks": 52480,
+          "sourceSeconds": 3.4166666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "83293922552900c000899f38b9864fa9c97d62e484ad2569af1d3c251b79fdee",
+          "solidBounds": [
+            205,
+            29,
+            758,
+            1775
+          ],
+          "opaqueInteriorPixels": 409893,
+          "edgeRecoveryPixels": 17563,
+          "shadowClassifiedPixels": 197739,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 7,
+            "rectTopLeft": [
+              1898,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              1898,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 19,
+          "file": "frames/walk/player_walk_019.png",
+          "sourceFrame": 83,
+          "sourcePtsTicks": 53248,
+          "sourceSeconds": 3.466666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "f214eb2d4a4bcf8673efc275ef485a642d4f1566d49610ccb729b1b9b0b3b6f8",
+          "solidBounds": [
+            172,
+            31,
+            802,
+            1776
+          ],
+          "opaqueInteriorPixels": 420594,
+          "edgeRecoveryPixels": 17967,
+          "shadowClassifiedPixels": 196921,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 7,
+            "rectTopLeft": [
+              2846,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2846,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 20,
+          "file": "frames/walk/player_walk_020.png",
+          "sourceFrame": 84,
+          "sourcePtsTicks": 53760,
+          "sourceSeconds": 3.5,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "fe006cab02d4f3f11655f02ea07db849c12f89d45c43463cebeea690a571fd28",
+          "solidBounds": [
+            109,
+            36,
+            874,
+            1776
+          ],
+          "opaqueInteriorPixels": 437331,
+          "edgeRecoveryPixels": 19145,
+          "shadowClassifiedPixels": 195171,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 7,
+            "rectTopLeft": [
+              2,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 21,
+          "file": "frames/walk/player_walk_021.png",
+          "sourceFrame": 85,
+          "sourcePtsTicks": 54528,
+          "sourceSeconds": 3.55,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "ec885adadb92b401a24af80af91078a4a1d975582978361a63c66f8100c0d144",
+          "solidBounds": [
+            82,
+            38,
+            897,
+            1775
+          ],
+          "opaqueInteriorPixels": 439995,
+          "edgeRecoveryPixels": 19991,
+          "shadowClassifiedPixels": 195270,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 7,
+            "rectTopLeft": [
+              950,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              950,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 22,
+          "file": "frames/walk/player_walk_022.png",
+          "sourceFrame": 86,
+          "sourcePtsTicks": 55040,
+          "sourceSeconds": 3.5833333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "1e1fe13fbc5326268b119dd227fa635936dddb6072f0c25ce7387a32ec28213a",
+          "solidBounds": [
+            58,
+            37,
+            896,
+            1774
+          ],
+          "opaqueInteriorPixels": 439871,
+          "edgeRecoveryPixels": 19897,
+          "shadowClassifiedPixels": 196335,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 7,
+            "rectTopLeft": [
+              1898,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              1898,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 23,
+          "file": "frames/walk/player_walk_023.png",
+          "sourceFrame": 87,
+          "sourcePtsTicks": 55808,
+          "sourceSeconds": 3.6333333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "61780f555a681f5f88b5cc434afd6a5fb1e7627c1112a647b5bcb9ffa8d74e83",
+          "solidBounds": [
+            39,
+            35,
+            867,
+            1772
+          ],
+          "opaqueInteriorPixels": 434812,
+          "edgeRecoveryPixels": 19643,
+          "shadowClassifiedPixels": 198912,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 7,
+            "rectTopLeft": [
+              2846,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2846,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 24,
+          "file": "frames/walk/player_walk_024.png",
+          "sourceFrame": 88,
+          "sourcePtsTicks": 56320,
+          "sourceSeconds": 3.6666666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "9660bd161c0eefde97f9914a6503082f78f6f9dbd968d6a7255c97272210d933",
+          "solidBounds": [
+            50,
+            32,
+            807,
+            1767
+          ],
+          "opaqueInteriorPixels": 413760,
+          "edgeRecoveryPixels": 18233,
+          "shadowClassifiedPixels": 201927,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 8,
+            "rectTopLeft": [
+              2,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 25,
+          "file": "frames/walk/player_walk_025.png",
+          "sourceFrame": 89,
+          "sourcePtsTicks": 57088,
+          "sourceSeconds": 3.716666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "453e0a4853d1801e30ed357df2901b3c51aca14e8efe90c92fe5e9647785a2c7",
+          "solidBounds": [
+            69,
+            30,
+            780,
+            1759
+          ],
+          "opaqueInteriorPixels": 393442,
+          "edgeRecoveryPixels": 17522,
+          "shadowClassifiedPixels": 205031,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 8,
+            "rectTopLeft": [
+              950,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              950,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 26,
+          "file": "frames/walk/player_walk_026.png",
+          "sourceFrame": 90,
+          "sourcePtsTicks": 57600,
+          "sourceSeconds": 3.75,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "3bcbb06d4bb286ce385cd5a19f52222e883b798de55cf49fe89b765da2c33329",
+          "solidBounds": [
+            90,
+            28,
+            748,
+            1760
+          ],
+          "opaqueInteriorPixels": 369231,
+          "edgeRecoveryPixels": 16619,
+          "shadowClassifiedPixels": 208103,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 8,
+            "rectTopLeft": [
+              1898,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              1898,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 27,
+          "file": "frames/walk/player_walk_027.png",
+          "sourceFrame": 91,
+          "sourcePtsTicks": 58368,
+          "sourceSeconds": 3.8,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "76138ce88dbbda11581d208d3a3e961b6f1c5109b7a62a7fb0487aac5eac7493",
+          "solidBounds": [
+            119,
+            26,
+            718,
+            1762
+          ],
+          "opaqueInteriorPixels": 346316,
+          "edgeRecoveryPixels": 16092,
+          "shadowClassifiedPixels": 210994,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 8,
+            "rectTopLeft": [
+              2846,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2846,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 28,
+          "file": "frames/walk/player_walk_028.png",
+          "sourceFrame": 92,
+          "sourcePtsTicks": 58880,
+          "sourceSeconds": 3.8333333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "4924d629630e92c6ada51ae59838c9b683d86bda19259d9325a2a02a02762413",
+          "solidBounds": [
+            210,
+            24,
+            654,
+            1764
+          ],
+          "opaqueInteriorPixels": 338769,
+          "edgeRecoveryPixels": 15180,
+          "shadowClassifiedPixels": 207413,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 8,
+            "rectTopLeft": [
+              2,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 29,
+          "file": "frames/walk/player_walk_029.png",
+          "sourceFrame": 93,
+          "sourcePtsTicks": 59648,
+          "sourceSeconds": 3.8833333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "bb1bc91f7fe5b1df35b15d9e4ecbeac156e98952873e0f4b36acad8dcb5f361e",
+          "solidBounds": [
+            257,
+            24,
+            667,
+            1764
+          ],
+          "opaqueInteriorPixels": 333494,
+          "edgeRecoveryPixels": 13870,
+          "shadowClassifiedPixels": 214520,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 8,
+            "rectTopLeft": [
+              950,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              950,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 30,
+          "file": "frames/walk/player_walk_030.png",
+          "sourceFrame": 94,
+          "sourcePtsTicks": 60160,
+          "sourceSeconds": 3.9166666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "c5c858d70a006ee013412cc1559f592a0cbead83a24bb9b53ba2d592851b901c",
+          "solidBounds": [
+            301,
+            24,
+            679,
+            1764
+          ],
+          "opaqueInteriorPixels": 338562,
+          "edgeRecoveryPixels": 13803,
+          "shadowClassifiedPixels": 222735,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 8,
+            "rectTopLeft": [
+              1898,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              1898,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 31,
+          "file": "frames/walk/player_walk_031.png",
+          "sourceFrame": 95,
+          "sourcePtsTicks": 60928,
+          "sourceSeconds": 3.966666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "06ef49579c5c32e5e69325967ae18be0543f91d23deb482ef9dd294f0dc1c49f",
+          "solidBounds": [
+            318,
+            24,
+            687,
+            1764
+          ],
+          "opaqueInteriorPixels": 371807,
+          "edgeRecoveryPixels": 14427,
+          "shadowClassifiedPixels": 213569,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 8,
+            "rectTopLeft": [
+              2846,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2846,
+              2,
+              944,
+              1816
+            ]
+          }
+        }
+      ]
+    },
+    "stop": {
+      "startFrame": 186,
+      "endFrameExclusive": 211,
+      "loop": false,
+      "holdLastFrame": true,
+      "frameCount": 25,
+      "sourceStartSeconds": 7.75,
+      "sourceEndSecondsExclusive": 8.8,
+      "durationSeconds": 1.05,
+      "frames": [
+        {
+          "state": "stop",
+          "index": 0,
+          "file": "frames/stop/player_stop_000.png",
+          "sourceFrame": 186,
+          "sourcePtsTicks": 119040,
+          "sourceSeconds": 7.75,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "9f49d71f80d8986bf8a3667e59c4e5e0266ff879ae48f7cb179dfd91a78b8072",
+          "solidBounds": [
+            250,
+            25,
+            726,
+            1763
+          ],
+          "opaqueInteriorPixels": 420694,
+          "edgeRecoveryPixels": 18409,
+          "shadowClassifiedPixels": 197603,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 9,
+            "rectTopLeft": [
+              2,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 1,
+          "file": "frames/stop/player_stop_001.png",
+          "sourceFrame": 187,
+          "sourcePtsTicks": 119808,
+          "sourceSeconds": 7.8,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "88384f73a62ac7448fef57f2a71e38c368aaeb822c82c6cc0011c6adb6e22eb3",
+          "solidBounds": [
+            218,
+            26,
+            786,
+            1763
+          ],
+          "opaqueInteriorPixels": 433586,
+          "edgeRecoveryPixels": 18697,
+          "shadowClassifiedPixels": 196483,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 9,
+            "rectTopLeft": [
+              950,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              950,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 2,
+          "file": "frames/stop/player_stop_002.png",
+          "sourceFrame": 188,
+          "sourcePtsTicks": 120320,
+          "sourceSeconds": 7.833333333333333,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "e577f2274487b1fcf1a0867ea8829e843e57fcdb4f921dd918ef2811085e0ccd",
+          "solidBounds": [
+            126,
+            42,
+            890,
+            1774
+          ],
+          "opaqueInteriorPixels": 450202,
+          "edgeRecoveryPixels": 22161,
+          "shadowClassifiedPixels": 193629,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 9,
+            "rectTopLeft": [
+              1898,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              1898,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 3,
+          "file": "frames/stop/player_stop_003.png",
+          "sourceFrame": 189,
+          "sourcePtsTicks": 121088,
+          "sourceSeconds": 7.883333333333334,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "412490f3910a649d4663532131fdf90f7e7b8157e24da9e951f7bd1c4e71d71a",
+          "solidBounds": [
+            118,
+            42,
+            878,
+            1775
+          ],
+          "opaqueInteriorPixels": 447585,
+          "edgeRecoveryPixels": 21740,
+          "shadowClassifiedPixels": 194509,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 9,
+            "rectTopLeft": [
+              2846,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2846,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 4,
+          "file": "frames/stop/player_stop_004.png",
+          "sourceFrame": 190,
+          "sourcePtsTicks": 121600,
+          "sourceSeconds": 7.916666666666667,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "a2bda4e9b787eb87fdd397e89a44d0a7369d5286511034546ac7da9e3ba5011b",
+          "solidBounds": [
+            112,
+            42,
+            862,
+            1777
+          ],
+          "opaqueInteriorPixels": 445616,
+          "edgeRecoveryPixels": 21324,
+          "shadowClassifiedPixels": 195304,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 9,
+            "rectTopLeft": [
+              2,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 5,
+          "file": "frames/stop/player_stop_005.png",
+          "sourceFrame": 191,
+          "sourcePtsTicks": 122368,
+          "sourceSeconds": 7.966666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "9255f749dd093ed4f46687c91dba0456ebf7ec337ef8f377f41cc9e2cc6e3523",
+          "solidBounds": [
+            107,
+            42,
+            841,
+            1778
+          ],
+          "opaqueInteriorPixels": 442636,
+          "edgeRecoveryPixels": 21086,
+          "shadowClassifiedPixels": 196298,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 9,
+            "rectTopLeft": [
+              950,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              950,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 6,
+          "file": "frames/stop/player_stop_006.png",
+          "sourceFrame": 192,
+          "sourcePtsTicks": 122880,
+          "sourceSeconds": 8.0,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "2b78cdfa3bd5f65af6d947079f3663551ac4bce8e39b210cf675d3418146e498",
+          "solidBounds": [
+            107,
+            41,
+            788,
+            1781
+          ],
+          "opaqueInteriorPixels": 432909,
+          "edgeRecoveryPixels": 20231,
+          "shadowClassifiedPixels": 197755,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 9,
+            "rectTopLeft": [
+              1898,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              1898,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 7,
+          "file": "frames/stop/player_stop_007.png",
+          "sourceFrame": 193,
+          "sourcePtsTicks": 123648,
+          "sourceSeconds": 8.05,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "fc49146e6d9dc716d60c4fd30abef485f513a5b39992df26e6ee92797b2a14ca",
+          "solidBounds": [
+            111,
+            41,
+            771,
+            1782
+          ],
+          "opaqueInteriorPixels": 424917,
+          "edgeRecoveryPixels": 20330,
+          "shadowClassifiedPixels": 198900,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 9,
+            "rectTopLeft": [
+              2846,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2846,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 8,
+          "file": "frames/stop/player_stop_008.png",
+          "sourceFrame": 194,
+          "sourcePtsTicks": 124160,
+          "sourceSeconds": 8.083333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "1eabed5ad2fd26cde377b346ded34a0e326159443ab7726d2a66dbc1323a0d61",
+          "solidBounds": [
+            117,
+            41,
+            763,
+            1783
+          ],
+          "opaqueInteriorPixels": 416397,
+          "edgeRecoveryPixels": 19704,
+          "shadowClassifiedPixels": 200053,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 10,
+            "rectTopLeft": [
+              2,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 9,
+          "file": "frames/stop/player_stop_009.png",
+          "sourceFrame": 195,
+          "sourcePtsTicks": 124928,
+          "sourceSeconds": 8.133333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "b704e44635d5c8d43d1ff55e96e09f08f7bdce953945ae339de0db7043489fb0",
+          "solidBounds": [
+            126,
+            41,
+            754,
+            1784
+          ],
+          "opaqueInteriorPixels": 406773,
+          "edgeRecoveryPixels": 19613,
+          "shadowClassifiedPixels": 201259,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 10,
+            "rectTopLeft": [
+              950,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              950,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 10,
+          "file": "frames/stop/player_stop_010.png",
+          "sourceFrame": 196,
+          "sourcePtsTicks": 125440,
+          "sourceSeconds": 8.166666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "1df8aa6be84ee2495714837d819b4ef1fca52ad85870045cc7878807e262302d",
+          "solidBounds": [
+            150,
+            41,
+            735,
+            1785
+          ],
+          "opaqueInteriorPixels": 390814,
+          "edgeRecoveryPixels": 17480,
+          "shadowClassifiedPixels": 202582,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 10,
+            "rectTopLeft": [
+              1898,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              1898,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 11,
+          "file": "frames/stop/player_stop_011.png",
+          "sourceFrame": 197,
+          "sourcePtsTicks": 126208,
+          "sourceSeconds": 8.216666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "ac4041cca7beab572b4c1e33b52aba1fd0702101fafecedeac532d63bd53e6f4",
+          "solidBounds": [
+            164,
+            40,
+            722,
+            1786
+          ],
+          "opaqueInteriorPixels": 386066,
+          "edgeRecoveryPixels": 17243,
+          "shadowClassifiedPixels": 203117,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 10,
+            "rectTopLeft": [
+              2846,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2846,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 12,
+          "file": "frames/stop/player_stop_012.png",
+          "sourceFrame": 198,
+          "sourcePtsTicks": 126720,
+          "sourceSeconds": 8.25,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "b30ea15f17fe1a2d07c58a9e350666e9ed7daa6c4a334d5e89806d1f0e022aae",
+          "solidBounds": [
+            179,
+            40,
+            711,
+            1786
+          ],
+          "opaqueInteriorPixels": 381488,
+          "edgeRecoveryPixels": 16659,
+          "shadowClassifiedPixels": 202759,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 10,
+            "rectTopLeft": [
+              2,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 13,
+          "file": "frames/stop/player_stop_013.png",
+          "sourceFrame": 199,
+          "sourcePtsTicks": 127488,
+          "sourceSeconds": 8.3,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "9057d97f9b762d0d5f4683ea5979bb7985d5ea803a815e8355949b67b9086597",
+          "solidBounds": [
+            194,
+            40,
+            698,
+            1786
+          ],
+          "opaqueInteriorPixels": 376164,
+          "edgeRecoveryPixels": 16315,
+          "shadowClassifiedPixels": 201850,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 10,
+            "rectTopLeft": [
+              950,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              950,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 14,
+          "file": "frames/stop/player_stop_014.png",
+          "sourceFrame": 200,
+          "sourcePtsTicks": 128000,
+          "sourceSeconds": 8.333333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "7ed5e3fe1cc26ad52dd58e4f96aaa6cf827668d910d6d2253ee4b20cc9c10900",
+          "solidBounds": [
+            234,
+            40,
+            670,
+            1786
+          ],
+          "opaqueInteriorPixels": 360178,
+          "edgeRecoveryPixels": 14753,
+          "shadowClassifiedPixels": 202123,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 10,
+            "rectTopLeft": [
+              1898,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              1898,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 15,
+          "file": "frames/stop/player_stop_015.png",
+          "sourceFrame": 201,
+          "sourcePtsTicks": 128768,
+          "sourceSeconds": 8.383333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "610d7efc5ecc26e8d925b63f0f43e0793a2d664482c7aab36714a1a72f6066c0",
+          "solidBounds": [
+            256,
+            39,
+            657,
+            1786
+          ],
+          "opaqueInteriorPixels": 347500,
+          "edgeRecoveryPixels": 14298,
+          "shadowClassifiedPixels": 205750,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 10,
+            "rectTopLeft": [
+              2846,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2846,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 16,
+          "file": "frames/stop/player_stop_016.png",
+          "sourceFrame": 202,
+          "sourcePtsTicks": 129280,
+          "sourceSeconds": 8.416666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "71ee4f03c4374b62a69aa63a46cb08141673e300d701af348be69023586a8032",
+          "solidBounds": [
+            277,
+            39,
+            644,
+            1786
+          ],
+          "opaqueInteriorPixels": 335166,
+          "edgeRecoveryPixels": 13678,
+          "shadowClassifiedPixels": 209575,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 11,
+            "rectTopLeft": [
+              2,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 17,
+          "file": "frames/stop/player_stop_017.png",
+          "sourceFrame": 203,
+          "sourcePtsTicks": 130048,
+          "sourceSeconds": 8.466666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "16cd8df54636f3ecc2b66cc4c555f9c7911fcbc9b02ab0de5d0de0237617694e",
+          "solidBounds": [
+            297,
+            39,
+            632,
+            1786
+          ],
+          "opaqueInteriorPixels": 323702,
+          "edgeRecoveryPixels": 13182,
+          "shadowClassifiedPixels": 213189,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 11,
+            "rectTopLeft": [
+              950,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              950,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 18,
+          "file": "frames/stop/player_stop_018.png",
+          "sourceFrame": 204,
+          "sourcePtsTicks": 130560,
+          "sourceSeconds": 8.5,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "b3bf70d1f66699cb0f6bc90f045b452fb1276374bf7ea6b4ead2dee59e2bfca1",
+          "solidBounds": [
+            330,
+            39,
+            616,
+            1786
+          ],
+          "opaqueInteriorPixels": 306528,
+          "edgeRecoveryPixels": 12951,
+          "shadowClassifiedPixels": 220021,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 11,
+            "rectTopLeft": [
+              1898,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              1898,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 19,
+          "file": "frames/stop/player_stop_019.png",
+          "sourceFrame": 205,
+          "sourcePtsTicks": 131328,
+          "sourceSeconds": 8.55,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "6f4216128b65683aabf5c81701e5f1f3e7c9b6decedd756fa2cbc3cbd4ab3a54",
+          "solidBounds": [
+            329,
+            38,
+            612,
+            1786
+          ],
+          "opaqueInteriorPixels": 301954,
+          "edgeRecoveryPixels": 13022,
+          "shadowClassifiedPixels": 222557,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 11,
+            "rectTopLeft": [
+              2846,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2846,
+              1822,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 20,
+          "file": "frames/stop/player_stop_020.png",
+          "sourceFrame": 206,
+          "sourcePtsTicks": 131840,
+          "sourceSeconds": 8.583333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "06e6dec9dbdff5034ee04407cc5b7fa59830081506f5978a09ae629f40334e5d",
+          "solidBounds": [
+            329,
+            38,
+            610,
+            1786
+          ],
+          "opaqueInteriorPixels": 300728,
+          "edgeRecoveryPixels": 12920,
+          "shadowClassifiedPixels": 222214,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 11,
+            "rectTopLeft": [
+              2,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 21,
+          "file": "frames/stop/player_stop_021.png",
+          "sourceFrame": 207,
+          "sourcePtsTicks": 132608,
+          "sourceSeconds": 8.633333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "36d35248b7fcf236ad00233183a9d717fc2c34197e961c8e7f595e4be9d796f9",
+          "solidBounds": [
+            328,
+            38,
+            618,
+            1786
+          ],
+          "opaqueInteriorPixels": 300607,
+          "edgeRecoveryPixels": 12864,
+          "shadowClassifiedPixels": 221057,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 11,
+            "rectTopLeft": [
+              950,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              950,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 22,
+          "file": "frames/stop/player_stop_022.png",
+          "sourceFrame": 208,
+          "sourcePtsTicks": 133120,
+          "sourceSeconds": 8.666666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "d993952832c39b49529501b3aa8b8cc86a86f75b8b16883d5fa38e545259e5f7",
+          "solidBounds": [
+            328,
+            38,
+            624,
+            1786
+          ],
+          "opaqueInteriorPixels": 300337,
+          "edgeRecoveryPixels": 12661,
+          "shadowClassifiedPixels": 219736,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 11,
+            "rectTopLeft": [
+              1898,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              1898,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 23,
+          "file": "frames/stop/player_stop_023.png",
+          "sourceFrame": 209,
+          "sourcePtsTicks": 133888,
+          "sourceSeconds": 8.716666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "01ff5c0f64db66133aac559af4dfc15917af6a464d4a8bbb8cb53c61c8dbfbe4",
+          "solidBounds": [
+            327,
+            38,
+            624,
+            1786
+          ],
+          "opaqueInteriorPixels": 300118,
+          "edgeRecoveryPixels": 12324,
+          "shadowClassifiedPixels": 219664,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 11,
+            "rectTopLeft": [
+              2846,
+              1822,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2846,
+              2,
+              944,
+              1816
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 24,
+          "file": "frames/stop/player_stop_024.png",
+          "sourceFrame": 210,
+          "sourcePtsTicks": 134400,
+          "sourceSeconds": 8.75,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "5f68e1bc32c5d6d436e18f7740b63e568e00f71861aa43be99088c9a5b58a9c3",
+          "solidBounds": [
+            327,
+            38,
+            624,
+            1786
+          ],
+          "opaqueInteriorPixels": 300097,
+          "edgeRecoveryPixels": 12307,
+          "shadowClassifiedPixels": 219663,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 12,
+            "rectTopLeft": [
+              2,
+              2,
+              944,
+              1816
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              944,
+              1816
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "atlas": [
+    {
+      "file": "atlas/player_idle_00.png",
+      "state": "idle",
+      "size": [
+        948,
+        1820
+      ],
+      "usedCells": 1
+    },
+    {
+      "file": "atlas/player_start_00.png",
+      "state": "start",
+      "size": [
+        3792,
+        3640
+      ],
+      "usedCells": 8
+    },
+    {
+      "file": "atlas/player_start_01.png",
+      "state": "start",
+      "size": [
+        3792,
+        3640
+      ],
+      "usedCells": 8
+    },
+    {
+      "file": "atlas/player_start_02.png",
+      "state": "start",
+      "size": [
+        3792,
+        3640
+      ],
+      "usedCells": 8
+    },
+    {
+      "file": "atlas/player_start_03.png",
+      "state": "start",
+      "size": [
+        3792,
+        1820
+      ],
+      "usedCells": 4
+    },
+    {
+      "file": "atlas/player_walk_00.png",
+      "state": "walk",
+      "size": [
+        3792,
+        3640
+      ],
+      "usedCells": 8
+    },
+    {
+      "file": "atlas/player_walk_01.png",
+      "state": "walk",
+      "size": [
+        3792,
+        3640
+      ],
+      "usedCells": 8
+    },
+    {
+      "file": "atlas/player_walk_02.png",
+      "state": "walk",
+      "size": [
+        3792,
+        3640
+      ],
+      "usedCells": 8
+    },
+    {
+      "file": "atlas/player_walk_03.png",
+      "state": "walk",
+      "size": [
+        3792,
+        3640
+      ],
+      "usedCells": 8
+    },
+    {
+      "file": "atlas/player_stop_00.png",
+      "state": "stop",
+      "size": [
+        3792,
+        3640
+      ],
+      "usedCells": 8
+    },
+    {
+      "file": "atlas/player_stop_01.png",
+      "state": "stop",
+      "size": [
+        3792,
+        3640
+      ],
+      "usedCells": 8
+    },
+    {
+      "file": "atlas/player_stop_02.png",
+      "state": "stop",
+      "size": [
+        3792,
+        3640
+      ],
+      "usedCells": 8
+    },
+    {
+      "file": "atlas/player_stop_03.png",
+      "state": "stop",
+      "size": [
+        948,
+        1820
+      ],
+      "usedCells": 1
+    }
+  ],
+  "processing": {
+    "ffmpegAlphaFilter": "format=yuva444p,chromakey=0x76ad6b:0.035:0.028,format=rgba",
+    "localDespill": true,
+    "redraw": false,
+    "interpolation": false,
+    "perFrameScale": false,
+    "perFrameAlignment": false,
+    "solidNeutralMaterialProtection": true
+  },
+  "notes": [
+    "Native contiguous frames only; shared native crop for all states.",
+    "Walk boundary reference is excluded from the loop.",
+    "Small source body yaw, hair/cloth movement and sole-height variation are retained.",
+    "No redraw, retargeting, optical flow or image interpolation."
+  ],
+  "reviewChain": [
+    {
+      "state": "idle",
+      "holdSeconds": 1
+    },
+    {
+      "state": "start"
+    },
+    {
+      "state": "walk",
+      "repeats": 2
+    },
+    {
+      "state": "stop"
+    },
+    {
+      "state": "idle",
+      "holdSeconds": 1
+    }
+  ]
+}

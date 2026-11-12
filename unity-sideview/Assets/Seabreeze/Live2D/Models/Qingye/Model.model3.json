@@ -1,0 +1,128 @@
+{
+  "Version": 3,
+  "FileReferences": {
+    "Moc": "Model.moc3",
+    "Textures": [
+      "texture_00.png",
+      "texture_expression.png",
+      "texture_external.png",
+      "texture_r6_lips.png"
+    ],
+    "DisplayInfo": "Model.cdi3.json",
+    "Physics": "Model.physics3.json",
+    "Motions": {
+      "qingye_smile_trial": [
+        {
+          "File": "qingye_smile_trial.motion3.json",
+          "FadeInTime": 0.2,
+          "FadeOutTime": 0.4
+        }
+      ],
+      "qingye_cry_trial": [
+        {
+          "File": "qingye_cry_trial.motion3.json",
+          "FadeInTime": 0.2,
+          "FadeOutTime": 0.4
+        }
+      ]
+    },
+    "Expressions": [
+      {
+        "Name": "smile",
+        "File": "smile.exp3.json"
+      },
+      {
+        "Name": "surprise",
+        "File": "surprise.exp3.json"
+      },
+      {
+        "Name": "angry",
+        "File": "angry.exp3.json"
+      },
+      {
+        "Name": "troubled",
+        "File": "troubled.exp3.json"
+      },
+      {
+        "Name": "wave",
+        "File": "wave.exp3.json"
+      },
+      {
+        "Name": "explain",
+        "File": "explain.exp3.json"
+      },
+      {
+        "Name": "point",
+        "File": "point.exp3.json"
+      },
+      {
+        "Name": "blush",
+        "File": "blush.exp3.json"
+      },
+      {
+        "Name": "mouth_line",
+        "File": "mouth_line.exp3.json"
+      },
+      {
+        "Name": "mouth_frown",
+        "File": "mouth_frown.exp3.json"
+      },
+      {
+        "Name": "qingye_smile_trial",
+        "File": "qingye_smile_trial.exp3.json"
+      },
+      {
+        "Name": "qingye_cry_dry_trial",
+        "File": "qingye_cry_dry_trial.exp3.json"
+      },
+      {
+        "Name": "qingye_cry_wet_trial",
+        "File": "qingye_cry_wet_trial.exp3.json"
+      },
+      {
+        "Name": "qingye_surprise_r6",
+        "File": "qingye_surprise_r6.exp3.json"
+      },
+      {
+        "Name": "qingye_shock_r6",
+        "File": "qingye_shock_r6.exp3.json"
+      },
+      {
+        "Name": "qingye_curious_r6",
+        "File": "qingye_curious_r6.exp3.json"
+      },
+      {
+        "Name": "qingye_starry_curious_r6",
+        "File": "qingye_starry_curious_r6.exp3.json"
+      },
+      {
+        "Name": "qingye_angry_r6",
+        "File": "qingye_angry_r6.exp3.json"
+      }
+    ]
+  },
+  "Groups": [
+    {
+      "Target": "Parameter",
+      "Name": "EyeBlink",
+      "Ids": [
+        "ParamEyeLOpen",
+        "ParamEyeROpen"
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Name": "LipSync",
+      "Ids": [
+        "ParamMouthOpenY"
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Name": "NeutralSpeech",
+      "Ids": [
+        "ParamQYNeutralSpeech"
+      ]
+    }
+  ]
+}

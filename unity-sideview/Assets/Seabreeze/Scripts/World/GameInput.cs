@@ -17,6 +17,15 @@ namespace Seabreeze
         }
 
         public static bool InteractPressed => Pressed(Key.E);
+        public static bool ShiftInteractPressed
+        {
+            get
+            {
+                var keyboard = Keyboard.current;
+                return keyboard != null && InteractPressed &&
+                    (keyboard.leftShiftKey.isPressed || keyboard.rightShiftKey.isPressed);
+            }
+        }
         public static bool Pressed(Key key) => Keyboard.current != null && Keyboard.current[key].wasPressedThisFrame;
     }
 }

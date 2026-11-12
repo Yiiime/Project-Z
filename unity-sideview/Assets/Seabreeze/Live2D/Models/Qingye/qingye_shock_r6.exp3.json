@@ -1,0 +1,32 @@
+{
+  "Type": "Live2D Expression",
+  "FadeInTime": 0.12,
+  "FadeOutTime": 0.16,
+  "Parameters": [
+    {
+      "Id": "ParamQYR6Shock",
+      "Value": 1.0,
+      "Blend": "Overwrite"
+    },
+    {
+      "Id": "ParamBrowForm",
+      "Value": 0.68,
+      "Blend": "Overwrite"
+    },
+    {
+      "Id": "ParamEyeBallY",
+      "Value": -0.1,
+      "Blend": "Overwrite"
+    },
+    {
+      "Id": "ParamAngleY",
+      "Value": 3.0,
+      "Blend": "Overwrite"
+    },
+    {
+      "Id": "ParamQingyeFxShock",
+      "Value": 1.0,
+      "Blend": "Overwrite"
+    }
+  ]
+}
