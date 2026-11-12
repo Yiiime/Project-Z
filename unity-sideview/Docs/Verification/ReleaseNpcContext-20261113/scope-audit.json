@@ -1,6 +1,6 @@
 {
   "branch": "task/evanc4823-commits/npc-perception-records-live-expression-1",
-  "base": "6939902182391b6ddb9e008e65f12bb4fa1b2ee7",
+  "base": "c1df9ae0a3bcffae805962e72ed87d3b20646316",
   "allowedAreas": [
     "memory-ai",
     "rules-save",
@@ -90,6 +90,13 @@
     "unity-sideview/Docs/Verification/LocalIntegration-20261112/runtime-report.json",
     "unity-sideview/Docs/Verification/NpcRuntimeRecords-20261112/unity-report.json",
     "unity-sideview/Docs/Verification/NpcRuntimeRecords-20261112/viewer.jpg",
+    "unity-sideview/Docs/Verification/ReleaseNpcContext-20261113/README.md",
+    "unity-sideview/Docs/Verification/ReleaseNpcContext-20261113/expression-report.json",
+    "unity-sideview/Docs/Verification/ReleaseNpcContext-20261113/happy.png",
+    "unity-sideview/Docs/Verification/ReleaseNpcContext-20261113/neutral.png",
+    "unity-sideview/Docs/Verification/ReleaseNpcContext-20261113/npc-runtime-report.json",
+    "unity-sideview/Docs/Verification/ReleaseNpcContext-20261113/sad.png",
+    "unity-sideview/Docs/Verification/ReleaseNpcContext-20261113/scope-audit.json",
     "unity-sideview/Docs/Verification/UnifiedCharacters-20261108.md",
     "unity-sideview/README.md",
     "unity-sideview/Tools/MemoryLab/content/current/contracts/portrait-expressions.json",
