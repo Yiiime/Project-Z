@@ -1,0 +1,1821 @@
+{
+  "version": 2,
+  "characterId": "linxu",
+  "revision": "native-video-four-state",
+  "canvasHeightUnits": 2.6672108843537417,
+  "startFrame": 0,
+  "walkSpeed": 1.1,
+  "strideLength": 0,
+  "cycleSeconds": 1.55,
+  "idle": "linxu_idle_000",
+  "walk": [
+    "linxu_walk_000",
+    "linxu_walk_001",
+    "linxu_walk_002",
+    "linxu_walk_003",
+    "linxu_walk_004",
+    "linxu_walk_005",
+    "linxu_walk_006",
+    "linxu_walk_007",
+    "linxu_walk_008",
+    "linxu_walk_009",
+    "linxu_walk_010",
+    "linxu_walk_011",
+    "linxu_walk_012",
+    "linxu_walk_013",
+    "linxu_walk_014",
+    "linxu_walk_015",
+    "linxu_walk_016",
+    "linxu_walk_017",
+    "linxu_walk_018",
+    "linxu_walk_019",
+    "linxu_walk_020",
+    "linxu_walk_021",
+    "linxu_walk_022",
+    "linxu_walk_023",
+    "linxu_walk_024",
+    "linxu_walk_025",
+    "linxu_walk_026",
+    "linxu_walk_027",
+    "linxu_walk_028",
+    "linxu_walk_029",
+    "linxu_walk_030",
+    "linxu_walk_031",
+    "linxu_walk_032",
+    "linxu_walk_033",
+    "linxu_walk_034",
+    "linxu_walk_035",
+    "linxu_walk_036"
+  ],
+  "frameDurations": [
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05
+  ],
+  "start": [
+    "linxu_start_000",
+    "linxu_start_001",
+    "linxu_start_002",
+    "linxu_start_003",
+    "linxu_start_004",
+    "linxu_start_005",
+    "linxu_start_006",
+    "linxu_start_007",
+    "linxu_start_008",
+    "linxu_start_009",
+    "linxu_start_010",
+    "linxu_start_011",
+    "linxu_start_012",
+    "linxu_start_013",
+    "linxu_start_014",
+    "linxu_start_015",
+    "linxu_start_016",
+    "linxu_start_017",
+    "linxu_start_018",
+    "linxu_start_019",
+    "linxu_start_020",
+    "linxu_start_021",
+    "linxu_start_022",
+    "linxu_start_023",
+    "linxu_start_024",
+    "linxu_start_025",
+    "linxu_start_026",
+    "linxu_start_027",
+    "linxu_start_028",
+    "linxu_start_029",
+    "linxu_start_030",
+    "linxu_start_031",
+    "linxu_start_032"
+  ],
+  "startDurations": [
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333
+  ],
+  "stop": [
+    "linxu_stop_000",
+    "linxu_stop_001",
+    "linxu_stop_002",
+    "linxu_stop_003",
+    "linxu_stop_004",
+    "linxu_stop_005",
+    "linxu_stop_006",
+    "linxu_stop_007",
+    "linxu_stop_008",
+    "linxu_stop_009",
+    "linxu_stop_010",
+    "linxu_stop_011",
+    "linxu_stop_012",
+    "linxu_stop_013",
+    "linxu_stop_014",
+    "linxu_stop_015",
+    "linxu_stop_016",
+    "linxu_stop_017",
+    "linxu_stop_018",
+    "linxu_stop_019",
+    "linxu_stop_020",
+    "linxu_stop_021",
+    "linxu_stop_022",
+    "linxu_stop_023",
+    "linxu_stop_024",
+    "linxu_stop_025",
+    "linxu_stop_026",
+    "linxu_stop_027",
+    "linxu_stop_028",
+    "linxu_stop_029",
+    "linxu_stop_030",
+    "linxu_stop_031",
+    "linxu_stop_032",
+    "linxu_stop_033",
+    "linxu_stop_034",
+    "linxu_stop_035",
+    "linxu_stop_036",
+    "linxu_stop_037",
+    "linxu_stop_038",
+    "linxu_stop_039",
+    "linxu_stop_040"
+  ],
+  "stopDurations": [
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05
+  ],
+  "assets": [
+    {
+      "name": "linxu_idle_000",
+      "file": "linxu_idle_000.png",
+      "sha256": "26d94803f8510e63d1661789bf7e34e8736c6184a62b63d5c0dbb6513763f926",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "idle",
+      "sourceFrame": 44
+    },
+    {
+      "name": "linxu_start_000",
+      "file": "linxu_start_000.png",
+      "sha256": "ee0660c5f382829c3f38643f7ed2236031c0733f5bd64d0ba2e363d48f149105",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 45
+    },
+    {
+      "name": "linxu_start_001",
+      "file": "linxu_start_001.png",
+      "sha256": "13ad6e58d7ec129164d5413c19c664698595dae7e98b94785cc999db1cb1a361",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 46
+    },
+    {
+      "name": "linxu_start_002",
+      "file": "linxu_start_002.png",
+      "sha256": "6ffb1a31c4dfe1c085fde8a369ad61e09eac98a7c61b106750295b503526fec7",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 47
+    },
+    {
+      "name": "linxu_start_003",
+      "file": "linxu_start_003.png",
+      "sha256": "49c8f280550a64176b9349a0ff6d10c04c991fe79e68773b56d46bc7bbaf1fb7",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 48
+    },
+    {
+      "name": "linxu_start_004",
+      "file": "linxu_start_004.png",
+      "sha256": "ee8d0380f6361fe8789bf1edbe6b88d236bc9006914f62e9dd74479523766406",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 49
+    },
+    {
+      "name": "linxu_start_005",
+      "file": "linxu_start_005.png",
+      "sha256": "ad50f6e854897f2f037126f858f18bdea9b2f0c63c8596c3b4f95aaee0b65b60",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 50
+    },
+    {
+      "name": "linxu_start_006",
+      "file": "linxu_start_006.png",
+      "sha256": "d0bb5c55012fe596137186129ca2484b59b01d58fc65296d14f68c44d7f0e1f6",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 51
+    },
+    {
+      "name": "linxu_start_007",
+      "file": "linxu_start_007.png",
+      "sha256": "e54adecdb54096762b6dc1aad02c9d0b0640b1b828cba6112ecde0b3b0193d28",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 52
+    },
+    {
+      "name": "linxu_start_008",
+      "file": "linxu_start_008.png",
+      "sha256": "6e8569a4bed3b183a805aa77b527408603adfab2f054ce32351ab7d7ab0b512b",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 53
+    },
+    {
+      "name": "linxu_start_009",
+      "file": "linxu_start_009.png",
+      "sha256": "7890ac95e7c460e5b8a81fb62d3ff30184fbfe64eb3f251ae49f71443df4e0cf",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 54
+    },
+    {
+      "name": "linxu_start_010",
+      "file": "linxu_start_010.png",
+      "sha256": "299e8aee91c12a73c73bbb1c44843c500ad838d72faa1a86c1bbcbf16bb8d701",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 55
+    },
+    {
+      "name": "linxu_start_011",
+      "file": "linxu_start_011.png",
+      "sha256": "3f4d46ad0f63cfda2e1b10a51b30b7070725bd91aa364640c5511a1313d6c37c",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 56
+    },
+    {
+      "name": "linxu_start_012",
+      "file": "linxu_start_012.png",
+      "sha256": "a4915ab92711b32876558596cf5a4db03e84277d95e47fcf70ce0f5cb9f9252a",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 57
+    },
+    {
+      "name": "linxu_start_013",
+      "file": "linxu_start_013.png",
+      "sha256": "e96a81b35eda395406b1e9acd798ca63f000bd7d2bbaf1bdc3660c49f5896fdc",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 58
+    },
+    {
+      "name": "linxu_start_014",
+      "file": "linxu_start_014.png",
+      "sha256": "5ab37ff80921189fbe6b7f4d1835f3b5b2a0e4695273bfb9d5fe7064d3138322",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 59
+    },
+    {
+      "name": "linxu_start_015",
+      "file": "linxu_start_015.png",
+      "sha256": "386b0fda2588f96488c07e79c54a2233802cfc748c7d16a4ac86abffa7ce5818",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 60
+    },
+    {
+      "name": "linxu_start_016",
+      "file": "linxu_start_016.png",
+      "sha256": "02ec521af82301bfd9c177cd33a631ad60bde73d2a443a0d1438c69c021ee5f0",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 61
+    },
+    {
+      "name": "linxu_start_017",
+      "file": "linxu_start_017.png",
+      "sha256": "2e697fb1ebfab51d25ee3d396119fa110b5ee8d51c23f3b184dace6d3181a39f",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 62
+    },
+    {
+      "name": "linxu_start_018",
+      "file": "linxu_start_018.png",
+      "sha256": "58d41ab5bb5b88913736665c587cb98804e4dfdda765bd3a50aa4b25f2d8eadd",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 63
+    },
+    {
+      "name": "linxu_start_019",
+      "file": "linxu_start_019.png",
+      "sha256": "9cae51e34c018f971005e7385204539e440242fc7af1e8afa3bf180b87c01ccf",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 64
+    },
+    {
+      "name": "linxu_start_020",
+      "file": "linxu_start_020.png",
+      "sha256": "856e190553732776fcdb1430533cb6df317a23a63a685bb326f26c71661c7171",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 65
+    },
+    {
+      "name": "linxu_start_021",
+      "file": "linxu_start_021.png",
+      "sha256": "34141cd80dcd420f72589c9dddeed2bd311bbb9f035072e2e4d16cb8acc67456",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 66
+    },
+    {
+      "name": "linxu_start_022",
+      "file": "linxu_start_022.png",
+      "sha256": "994f4c8d21218cf4a816c2ad4c55670d42f3766ac4d608055c88c28048437d97",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 67
+    },
+    {
+      "name": "linxu_start_023",
+      "file": "linxu_start_023.png",
+      "sha256": "1c6095a661e50c6b2d54b3328874ca7057b9659dfaa9f183a62f0a58c0e6a10f",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 68
+    },
+    {
+      "name": "linxu_start_024",
+      "file": "linxu_start_024.png",
+      "sha256": "d1a0d0da0492326bd7b9db82d4c0797169232bbd567edf1c6288beffac6dc6d0",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 69
+    },
+    {
+      "name": "linxu_start_025",
+      "file": "linxu_start_025.png",
+      "sha256": "7f80b3fb883ba3bae4847003d390b11d638aba708390aa2b786b01921a41885a",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 70
+    },
+    {
+      "name": "linxu_start_026",
+      "file": "linxu_start_026.png",
+      "sha256": "09134ded9ba5b1c87be4db5bfc40cc33e21db0b91d6e87f0e635e1471b86d9ae",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 71
+    },
+    {
+      "name": "linxu_start_027",
+      "file": "linxu_start_027.png",
+      "sha256": "b80dfdc4e30302613d03488094f571e08318516b202b499ba500b965167cb9ed",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 72
+    },
+    {
+      "name": "linxu_start_028",
+      "file": "linxu_start_028.png",
+      "sha256": "d3b163c575aa690f15cf62a991cbe1e0c418fa3a5a5e638c86f6de852e4b96ef",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 73
+    },
+    {
+      "name": "linxu_start_029",
+      "file": "linxu_start_029.png",
+      "sha256": "035c9bd8ebf69a56f5a287ed50c6a4a73849946a22ad99f19d01ab523ea07c46",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 74
+    },
+    {
+      "name": "linxu_start_030",
+      "file": "linxu_start_030.png",
+      "sha256": "0bb9c701416447b22a2a5cd640cfc09c950325d0e2ee057890575c2fc10bdec9",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 75
+    },
+    {
+      "name": "linxu_start_031",
+      "file": "linxu_start_031.png",
+      "sha256": "def5a020b00ed4d237b0cd2281f3fb8874eab3fc5d7c5256b3011f9aececf1bc",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 76
+    },
+    {
+      "name": "linxu_start_032",
+      "file": "linxu_start_032.png",
+      "sha256": "04326ef3900b99e9818e10cfec08e6e601f474e4715402ac16186b7634d99406",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "start",
+      "sourceFrame": 77
+    },
+    {
+      "name": "linxu_walk_000",
+      "file": "linxu_walk_000.png",
+      "sha256": "3b99f229dfaa80cf1551dc409cd3378715de6f746af280293f173307560caa24",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 78
+    },
+    {
+      "name": "linxu_walk_001",
+      "file": "linxu_walk_001.png",
+      "sha256": "136c55e130c7f3d8a13703e9ec44a96c67215a96546bfc432ba4cc1510f0f0d4",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 79
+    },
+    {
+      "name": "linxu_walk_002",
+      "file": "linxu_walk_002.png",
+      "sha256": "0b1075de72ecc328c5cab1f6a741c31c1598f651b1cf1aae82c5c49ffad44cfd",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 80
+    },
+    {
+      "name": "linxu_walk_003",
+      "file": "linxu_walk_003.png",
+      "sha256": "f7715d944d7e8ff6bf5f6c457ca1e691692710db162024bbc8533278bdecbd8e",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 81
+    },
+    {
+      "name": "linxu_walk_004",
+      "file": "linxu_walk_004.png",
+      "sha256": "a5648292e43cbfd67da779cd4e48518bd5c5892b050f4c307919c5e6a67af4f7",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 82
+    },
+    {
+      "name": "linxu_walk_005",
+      "file": "linxu_walk_005.png",
+      "sha256": "2b58c6ff7c84deb520c3ff0b9d28e1ecc353ee6f2515559c1291f8a56ff3ab7e",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 83
+    },
+    {
+      "name": "linxu_walk_006",
+      "file": "linxu_walk_006.png",
+      "sha256": "c7030537c5363f93fbbdf56c6953c43a677555d6d2b1f27fc154928013093a9c",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 84
+    },
+    {
+      "name": "linxu_walk_007",
+      "file": "linxu_walk_007.png",
+      "sha256": "da3a9862d5ed28ab81f5caf6c0ad1cb19a6e0c4edf82a3de62f916ba5b9ba851",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 85
+    },
+    {
+      "name": "linxu_walk_008",
+      "file": "linxu_walk_008.png",
+      "sha256": "bdfb882617819ae3569e340a4f66d1302fd0ad2747e2387498e8df1257bade6a",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 86
+    },
+    {
+      "name": "linxu_walk_009",
+      "file": "linxu_walk_009.png",
+      "sha256": "c112d9f0e99fe820639eca7e1848a85e5585a01d91d08305acd17f7ee2e87239",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 87
+    },
+    {
+      "name": "linxu_walk_010",
+      "file": "linxu_walk_010.png",
+      "sha256": "056418ecea5f2497d3d582d69d965147823e1983a47c88fd36ac4ab0f457d012",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 88
+    },
+    {
+      "name": "linxu_walk_011",
+      "file": "linxu_walk_011.png",
+      "sha256": "673cf03e3644adae600a11e40cee2f1976d313b9067b8520f199fb71d2df8499",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 89
+    },
+    {
+      "name": "linxu_walk_012",
+      "file": "linxu_walk_012.png",
+      "sha256": "259ebeeaee7531f45021a15bbafcef44ae376a37ac0e46bb3632a624cb876170",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 90
+    },
+    {
+      "name": "linxu_walk_013",
+      "file": "linxu_walk_013.png",
+      "sha256": "8a4467d0e5fb3d32bdc2c046a6e11fc710e42e1c31bbcb4f8cacd04c9fd05b8a",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 91
+    },
+    {
+      "name": "linxu_walk_014",
+      "file": "linxu_walk_014.png",
+      "sha256": "6aa1b12c3c1476b1b5851752f74cb44490990562b36287c76a05cd31fc465050",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 92
+    },
+    {
+      "name": "linxu_walk_015",
+      "file": "linxu_walk_015.png",
+      "sha256": "3c50c85bc568dd6039c603c3b81700eeac1a587e596dcd15e7d4422f5eec2950",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 93
+    },
+    {
+      "name": "linxu_walk_016",
+      "file": "linxu_walk_016.png",
+      "sha256": "af4559aa962ff9b347fa8b358f8544d7aa749b245cb2cdd15722ad2d87290f17",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 94
+    },
+    {
+      "name": "linxu_walk_017",
+      "file": "linxu_walk_017.png",
+      "sha256": "0e8abcad611ece3ec07e92661bbaffa38cdaff050c9d44dad7165af3ffb5a4eb",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 95
+    },
+    {
+      "name": "linxu_walk_018",
+      "file": "linxu_walk_018.png",
+      "sha256": "72126c9b42c53bb0b3afe6fbc17d9017d7c951762608f065502b59208af6dace",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 96
+    },
+    {
+      "name": "linxu_walk_019",
+      "file": "linxu_walk_019.png",
+      "sha256": "b4d3d691e7e358ec11b98a4e85e221a715fc003484f81a429d665f8ab011ee4b",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 97
+    },
+    {
+      "name": "linxu_walk_020",
+      "file": "linxu_walk_020.png",
+      "sha256": "80b8a56f5e8413da426c7ba6d72c10fdd9a89df5f714481078a1021669bde9e7",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 98
+    },
+    {
+      "name": "linxu_walk_021",
+      "file": "linxu_walk_021.png",
+      "sha256": "06718394aa48fb221db9ce48abd74cf4c526ca49cd2a093dbd3a842a86d36617",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 99
+    },
+    {
+      "name": "linxu_walk_022",
+      "file": "linxu_walk_022.png",
+      "sha256": "4cfdc8f6cfc6ff5f647be317b2374b2e51c92182d8c094085c9d50787f94de23",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 100
+    },
+    {
+      "name": "linxu_walk_023",
+      "file": "linxu_walk_023.png",
+      "sha256": "beddcb6654ec3788e272eed4b2e95a4520ea3c0cd1ab8c82787a6c9ee5f68eca",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 101
+    },
+    {
+      "name": "linxu_walk_024",
+      "file": "linxu_walk_024.png",
+      "sha256": "08b7820ffac021cef38b2dc354466d2be00cdd5a195686fb091ecdbef2a9e48d",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 102
+    },
+    {
+      "name": "linxu_walk_025",
+      "file": "linxu_walk_025.png",
+      "sha256": "2aca98918bb8220bda6f4e70f818c879caad9faaa6eb4b0bf559d45ac60555f9",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 103
+    },
+    {
+      "name": "linxu_walk_026",
+      "file": "linxu_walk_026.png",
+      "sha256": "f2c9176708054dc08e0159526661ee1aefbc1210b89d6ecabdc3ab8fe5f465d6",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 104
+    },
+    {
+      "name": "linxu_walk_027",
+      "file": "linxu_walk_027.png",
+      "sha256": "ae41fc97d793e4e58fde6c21b7b3ebfe8f4260846e0485b82dee64ae1e0c1cd5",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 105
+    },
+    {
+      "name": "linxu_walk_028",
+      "file": "linxu_walk_028.png",
+      "sha256": "776a6436cc0d30ca69b90c9baac5e883ea94e13817087c52d2d88f6ab34342eb",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 106
+    },
+    {
+      "name": "linxu_walk_029",
+      "file": "linxu_walk_029.png",
+      "sha256": "5d6cb40ac84b89eda56c87e2d4aacbd182de3dc98588e26c532a48a9dd8c1c92",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 107
+    },
+    {
+      "name": "linxu_walk_030",
+      "file": "linxu_walk_030.png",
+      "sha256": "6861b7ac99d18f5b1246fbc68ae937b48fa96663714fc66d65ba779f1f878a61",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 108
+    },
+    {
+      "name": "linxu_walk_031",
+      "file": "linxu_walk_031.png",
+      "sha256": "07eeaf5314a67c1599fc9f493f78049df894147b1ac533a22b83198f3eaaa649",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 109
+    },
+    {
+      "name": "linxu_walk_032",
+      "file": "linxu_walk_032.png",
+      "sha256": "0dc2ce2ddf94ad436b1d8c37a6c9ec156486e040b2706eaf65b14627f8e3e11b",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 110
+    },
+    {
+      "name": "linxu_walk_033",
+      "file": "linxu_walk_033.png",
+      "sha256": "1862613cc4db5980b295ff26e34bc8d7d8084908310bf04b9f0b47073ce9a71a",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 111
+    },
+    {
+      "name": "linxu_walk_034",
+      "file": "linxu_walk_034.png",
+      "sha256": "43381727eab0d948dae5d3495a5bf54ed6ec6fce322db76b724e8af825c9782e",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 112
+    },
+    {
+      "name": "linxu_walk_035",
+      "file": "linxu_walk_035.png",
+      "sha256": "bc96cfae5301b7ad5c1ab52d77f32d544369f2b53cb8e25498002a0ec5b1620a",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 113
+    },
+    {
+      "name": "linxu_walk_036",
+      "file": "linxu_walk_036.png",
+      "sha256": "f447634672d4c6ed7d53cc510033f77e104e4219e60f52b9cf526f7a3a1b225d",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "walk",
+      "sourceFrame": 114
+    },
+    {
+      "name": "linxu_stop_000",
+      "file": "linxu_stop_000.png",
+      "sha256": "9fd46ec88240f6dd735040fccc6256c5a520b6816f55066f30fa795b73635b2a",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 180
+    },
+    {
+      "name": "linxu_stop_001",
+      "file": "linxu_stop_001.png",
+      "sha256": "39f6b0e87d6c7aca608f6bcb6da278b389c4b15b6f0c63a1844f5f8c92046faf",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 181
+    },
+    {
+      "name": "linxu_stop_002",
+      "file": "linxu_stop_002.png",
+      "sha256": "f783c6f9b4ea87657069b7bdefaa4af227d6e9918eb0da0af01ab660e392290e",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 182
+    },
+    {
+      "name": "linxu_stop_003",
+      "file": "linxu_stop_003.png",
+      "sha256": "51167f36cf303f1caddf18eb6c2cb52651197c6245a837fd2f43dc1d71c9d1bb",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 183
+    },
+    {
+      "name": "linxu_stop_004",
+      "file": "linxu_stop_004.png",
+      "sha256": "a73db873e756fca128f25c5fc5af19060a50303002fe9c7d74b8eda4394e5eaf",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 184
+    },
+    {
+      "name": "linxu_stop_005",
+      "file": "linxu_stop_005.png",
+      "sha256": "e96adba12350bb8760c6e01b9071817a361f8b6fbf3c6a4bcecd371574fcc81b",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 185
+    },
+    {
+      "name": "linxu_stop_006",
+      "file": "linxu_stop_006.png",
+      "sha256": "051912a7bcd93d1b52ed9945817e285fc46647fd442a6d544bb8047a12c787b6",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 186
+    },
+    {
+      "name": "linxu_stop_007",
+      "file": "linxu_stop_007.png",
+      "sha256": "40662e96b5c2d4a3ec463f6beb7a4c31bd1a70e133e0799d5d381567082e0ece",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 187
+    },
+    {
+      "name": "linxu_stop_008",
+      "file": "linxu_stop_008.png",
+      "sha256": "13ad8788f9434b27b87e32369f58f333ca21359a0c46a6a57d0fea59ec271533",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 188
+    },
+    {
+      "name": "linxu_stop_009",
+      "file": "linxu_stop_009.png",
+      "sha256": "bddadcb072f52dd3c9e4b2d882222cda03b445f419127f6c43edcd7b5c8ac776",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 189
+    },
+    {
+      "name": "linxu_stop_010",
+      "file": "linxu_stop_010.png",
+      "sha256": "6d0a92e3b07a67340b0ac0c222208ebd3f1fe9ef2faae4e1bb94af3d4270a330",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 190
+    },
+    {
+      "name": "linxu_stop_011",
+      "file": "linxu_stop_011.png",
+      "sha256": "af41ffa932164928dc17071ffdaecc763a466fe938254b9cb2a7635a63033701",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 191
+    },
+    {
+      "name": "linxu_stop_012",
+      "file": "linxu_stop_012.png",
+      "sha256": "ead881671006aeb62f7b7d27bbbb8242a6e7fe1b99106cc164fab9147979f746",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 192
+    },
+    {
+      "name": "linxu_stop_013",
+      "file": "linxu_stop_013.png",
+      "sha256": "421c28e3190195eb33774e399a659e93174b034619b1b40bd087fbdcb07db393",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 193
+    },
+    {
+      "name": "linxu_stop_014",
+      "file": "linxu_stop_014.png",
+      "sha256": "3b89d959a38d9e6e588d2166b9678613025546440dc428e85adc6fe1ac406397",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 194
+    },
+    {
+      "name": "linxu_stop_015",
+      "file": "linxu_stop_015.png",
+      "sha256": "a8840db2b3e7225883ed22379b60ba1cc7e1d6d8a409228c336be88575a6eb4a",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 195
+    },
+    {
+      "name": "linxu_stop_016",
+      "file": "linxu_stop_016.png",
+      "sha256": "75c09ffa7c3d3a441778d8de209784427315c41bc51e2171d967e733937033bb",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 196
+    },
+    {
+      "name": "linxu_stop_017",
+      "file": "linxu_stop_017.png",
+      "sha256": "cc5e934b267139610051b2b8e08deeb829f27a28f282cd02948db18835257b63",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 197
+    },
+    {
+      "name": "linxu_stop_018",
+      "file": "linxu_stop_018.png",
+      "sha256": "69c3a4df439b7600831ce2603a8d0e94bc83b106a5b08b875580aca3ff95b105",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 198
+    },
+    {
+      "name": "linxu_stop_019",
+      "file": "linxu_stop_019.png",
+      "sha256": "19a61cce4b2d3fa368939c14bf3ed0734463b15af0294874fd40cad2f5e32c9c",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 199
+    },
+    {
+      "name": "linxu_stop_020",
+      "file": "linxu_stop_020.png",
+      "sha256": "6a5228074306ecf539488a55398e9e6d724cb9313107a029be71954da8959674",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 200
+    },
+    {
+      "name": "linxu_stop_021",
+      "file": "linxu_stop_021.png",
+      "sha256": "7f71d69ee4ae73008a2d7344b3cefbdf2e19cc2e9beafbeb46736357f268f387",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 201
+    },
+    {
+      "name": "linxu_stop_022",
+      "file": "linxu_stop_022.png",
+      "sha256": "2034b6f7c060b260b85acbe96c87673d1327a35b5347de57ff2cf10b610c9c55",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 202
+    },
+    {
+      "name": "linxu_stop_023",
+      "file": "linxu_stop_023.png",
+      "sha256": "4301f6a2ecde9289af9503e3e765ba1dd5d3da363a332bb766ddf641f5c37c4a",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 203
+    },
+    {
+      "name": "linxu_stop_024",
+      "file": "linxu_stop_024.png",
+      "sha256": "2d2a8bf2f11807561b880fdc1d1b435d44ed01fc948c4b193458f297b5f8aa64",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 204
+    },
+    {
+      "name": "linxu_stop_025",
+      "file": "linxu_stop_025.png",
+      "sha256": "a4c19f38b01ab509b0aca6db7c97c73740687bd692b91f4c57cca329c5ea1d02",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 205
+    },
+    {
+      "name": "linxu_stop_026",
+      "file": "linxu_stop_026.png",
+      "sha256": "8eb75f3646dee322a3f0513be80ea30a7f115e8766c01d0347395f9323990c30",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 206
+    },
+    {
+      "name": "linxu_stop_027",
+      "file": "linxu_stop_027.png",
+      "sha256": "11fdb3958c1f146874d4fe6ffddac4b891010becf50e26e76832aef877cea01d",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 207
+    },
+    {
+      "name": "linxu_stop_028",
+      "file": "linxu_stop_028.png",
+      "sha256": "9b495b38ee8085688a5f2ee6cf814e93088d2bdf72a9eab91d1efe89cc5b521b",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 208
+    },
+    {
+      "name": "linxu_stop_029",
+      "file": "linxu_stop_029.png",
+      "sha256": "a3ab2c1de4a215016fd4b9617696afe5714a0b9bb7954d8f3bdbc7503344bdae",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 209
+    },
+    {
+      "name": "linxu_stop_030",
+      "file": "linxu_stop_030.png",
+      "sha256": "683a3516d87ecf56dc472fe3738ebfe4f78fb9c1fbff1a480224f13fcdcb1c19",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 210
+    },
+    {
+      "name": "linxu_stop_031",
+      "file": "linxu_stop_031.png",
+      "sha256": "084ab44cb72d22ae61a8a3febabd15fc74b4b0edcb967275b2ddfef9fc050612",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 211
+    },
+    {
+      "name": "linxu_stop_032",
+      "file": "linxu_stop_032.png",
+      "sha256": "109ff424ce9d4540895baa4d604402e5fa5de9d0e2f0ee88aec01731e6d24d91",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 212
+    },
+    {
+      "name": "linxu_stop_033",
+      "file": "linxu_stop_033.png",
+      "sha256": "c7a68b531663377dbd87a4201bc07081667c5f5bf656187be3a860e99a7b4b33",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 213
+    },
+    {
+      "name": "linxu_stop_034",
+      "file": "linxu_stop_034.png",
+      "sha256": "357124b972a78bdc1ef1afe9f5a9c727ab50b3fc4ef5c1a4d33f81e11c30603e",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 214
+    },
+    {
+      "name": "linxu_stop_035",
+      "file": "linxu_stop_035.png",
+      "sha256": "2f3ca2caeb92f9d357c7ad69c04e390f4a1136ec3fc17f69014edf3a852c5468",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 215
+    },
+    {
+      "name": "linxu_stop_036",
+      "file": "linxu_stop_036.png",
+      "sha256": "d2cf687a174ec207baa4cc7aa696364bf951d87208b5bcb3e61f1e53e5bbe757",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 216
+    },
+    {
+      "name": "linxu_stop_037",
+      "file": "linxu_stop_037.png",
+      "sha256": "196876f41bf1739839091eb97fd9a0671458c75dd3b75de9e131a447c6ef2f8d",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 217
+    },
+    {
+      "name": "linxu_stop_038",
+      "file": "linxu_stop_038.png",
+      "sha256": "6e841011d183b7ec7072b479422f3de3d1c5b33b88bb6734125cb8c53fb46412",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 218
+    },
+    {
+      "name": "linxu_stop_039",
+      "file": "linxu_stop_039.png",
+      "sha256": "6aa5caaaff1e10b6c2ffbd1f85ec3d22f7e3fa91edbc2974b2dc76c332a67e24",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 219
+    },
+    {
+      "name": "linxu_stop_040",
+      "file": "linxu_stop_040.png",
+      "sha256": "ac3e2fbb210a1f128202cea0a5662ec11d6725f5b5f1b941f729dba9eee37c0b",
+      "width": 1560,
+      "height": 3016,
+      "pixelsPerUnit": 1130.7692307692307,
+      "pivot": {
+        "x": 0.491025641025641,
+        "y": 0.010941644562334263
+      },
+      "state": "stop",
+      "sourceFrame": 220
+    }
+  ],
+  "source": {
+    "videoSha256": "4138783ca6825b474f8c6436db46036bc02294fa4ea559b0a2d404639e3a354e",
+    "review": "source~/video-extraction.json",
+    "nativePng": true,
+    "gpuCompression": "BC7 at native dimensions"
+  }
+}

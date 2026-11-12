@@ -1,0 +1,5743 @@
+{
+  "version": 1,
+  "characterId": "xiaoxiaoqing",
+  "characterName": "小小晴",
+  "runtimeTarget": true,
+  "source": {
+    "characterId": "xiaoxiaoqing",
+    "characterName": "小小晴",
+    "sourceLabel": "晴野",
+    "sourceVideo": "source/source-video.mp4",
+    "originalFile": "晴野行走动画.mp4",
+    "sourceSha256": "dc658346451895e23dde1a45a0b014ee57d84f44b23450d8f3630dd467a53589",
+    "runtimeTarget": true
+  },
+  "video": {
+    "kind": "vide",
+    "timescale": 15360,
+    "durationTicks": 153856,
+    "durationSeconds": 10.016666666666667,
+    "samples": 241
+  },
+  "size": [
+    1792,
+    3184
+  ],
+  "canvas": {
+    "size": [
+      1536,
+      2864
+    ],
+    "sourceCropTopLeft": [
+      144,
+      182,
+      1536,
+      2864
+    ],
+    "sourceForegroundUnion": [
+      176,
+      206,
+      1643,
+      3020
+    ],
+    "pixelScale": 1,
+    "standingHeightPixels": 2810,
+    "footAnchorSource": [
+      896.0,
+      3019
+    ],
+    "footAnchorTopLeft": [
+      752.0,
+      2837
+    ],
+    "unityPivotNormalizedBottomLeft": [
+      0.4895833333333333,
+      0.00942737430167595
+    ]
+  },
+  "states": {
+    "idle": {
+      "startFrame": 31,
+      "endFrameExclusive": 32,
+      "loop": false,
+      "holdLastFrame": true,
+      "frameCount": 1,
+      "sourceStartSeconds": 1.3,
+      "sourceEndSecondsExclusive": 1.3333333333333333,
+      "durationSeconds": 0.03333333333333333,
+      "frames": [
+        {
+          "state": "idle",
+          "index": 0,
+          "file": "frames/idle/xiaoxiaoqing_idle_000.png",
+          "sourceFrame": 31,
+          "sourcePtsTicks": 19968,
+          "sourceSeconds": 1.3,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "c54be8babc4f24aefc7f5bbf74b18f8e19cf3112a194c6b5fe3547e19e46e871",
+          "solidBounds": [
+            372,
+            27,
+            1065,
+            2837
+          ],
+          "opaqueInteriorPixels": 1154377,
+          "edgeRecoveryPixels": 18962,
+          "shadowClassifiedPixels": 543202,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 0,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        }
+      ]
+    },
+    "start": {
+      "startFrame": 32,
+      "endFrameExclusive": 90,
+      "loop": false,
+      "holdLastFrame": false,
+      "frameCount": 58,
+      "sourceStartSeconds": 1.3333333333333333,
+      "sourceEndSecondsExclusive": 3.75,
+      "durationSeconds": 2.4166666666666665,
+      "frames": [
+        {
+          "state": "start",
+          "index": 0,
+          "file": "frames/start/xiaoxiaoqing_start_000.png",
+          "sourceFrame": 32,
+          "sourcePtsTicks": 20480,
+          "sourceSeconds": 1.3333333333333333,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "a0fa097d86f5525bf35175998a23fa7dacbf210f24f528e7ef7b629bd1b22c31",
+          "solidBounds": [
+            373,
+            28,
+            1067,
+            2837
+          ],
+          "opaqueInteriorPixels": 1154953,
+          "edgeRecoveryPixels": 18812,
+          "shadowClassifiedPixels": 543184,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 1,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 1,
+          "file": "frames/start/xiaoxiaoqing_start_001.png",
+          "sourceFrame": 33,
+          "sourcePtsTicks": 21248,
+          "sourceSeconds": 1.3833333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "05d9cb54a1e4890d745f68b77f294db3799f3fd939918f1c3ea16453bb2ae2b4",
+          "solidBounds": [
+            373,
+            29,
+            1067,
+            2837
+          ],
+          "opaqueInteriorPixels": 1155949,
+          "edgeRecoveryPixels": 19234,
+          "shadowClassifiedPixels": 543081,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 1,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 2,
+          "file": "frames/start/xiaoxiaoqing_start_002.png",
+          "sourceFrame": 34,
+          "sourcePtsTicks": 21760,
+          "sourceSeconds": 1.4166666666666667,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "8b5456b9c0d134624d852145cc95190ae0351b473a2f8624b8ebc7981ee5de25",
+          "solidBounds": [
+            374,
+            29,
+            1069,
+            2837
+          ],
+          "opaqueInteriorPixels": 1156368,
+          "edgeRecoveryPixels": 18768,
+          "shadowClassifiedPixels": 543037,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 2,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 3,
+          "file": "frames/start/xiaoxiaoqing_start_003.png",
+          "sourceFrame": 35,
+          "sourcePtsTicks": 22528,
+          "sourceSeconds": 1.4666666666666666,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "6337fbd38632c4a9d6fa7c2fa6c66c816b7edb64819796d3412f7c3af8d1ac9f",
+          "solidBounds": [
+            375,
+            30,
+            1070,
+            2837
+          ],
+          "opaqueInteriorPixels": 1157157,
+          "edgeRecoveryPixels": 19591,
+          "shadowClassifiedPixels": 542692,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 2,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 4,
+          "file": "frames/start/xiaoxiaoqing_start_004.png",
+          "sourceFrame": 36,
+          "sourcePtsTicks": 23040,
+          "sourceSeconds": 1.5,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "d0cd23e05f72151060d8040a46ec1e8a7f8f38448693bf4ee4c6c17680d97c92",
+          "solidBounds": [
+            376,
+            31,
+            1071,
+            2837
+          ],
+          "opaqueInteriorPixels": 1157550,
+          "edgeRecoveryPixels": 19323,
+          "shadowClassifiedPixels": 542411,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 3,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 5,
+          "file": "frames/start/xiaoxiaoqing_start_005.png",
+          "sourceFrame": 37,
+          "sourcePtsTicks": 23808,
+          "sourceSeconds": 1.55,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "5736696d32a2618ef5b4df38e83a5c0e6e574ca26a702f8940e534fa99401482",
+          "solidBounds": [
+            377,
+            33,
+            1071,
+            2837
+          ],
+          "opaqueInteriorPixels": 1158888,
+          "edgeRecoveryPixels": 19899,
+          "shadowClassifiedPixels": 541469,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 3,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 6,
+          "file": "frames/start/xiaoxiaoqing_start_006.png",
+          "sourceFrame": 38,
+          "sourcePtsTicks": 24320,
+          "sourceSeconds": 1.5833333333333333,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "76cef17b94870ac94f83a12ebf9ebd61278b032a665af9a7398af9c0dd6e6538",
+          "solidBounds": [
+            377,
+            34,
+            1071,
+            2837
+          ],
+          "opaqueInteriorPixels": 1160010,
+          "edgeRecoveryPixels": 19587,
+          "shadowClassifiedPixels": 540613,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 4,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 7,
+          "file": "frames/start/xiaoxiaoqing_start_007.png",
+          "sourceFrame": 39,
+          "sourcePtsTicks": 25088,
+          "sourceSeconds": 1.6333333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "3507ec712517dda24e1d91006e5df50c587ffb1bd3afa44a3a10e36b872e4152",
+          "solidBounds": [
+            377,
+            35,
+            1071,
+            2837
+          ],
+          "opaqueInteriorPixels": 1163530,
+          "edgeRecoveryPixels": 20129,
+          "shadowClassifiedPixels": 539246,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 4,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 8,
+          "file": "frames/start/xiaoxiaoqing_start_008.png",
+          "sourceFrame": 40,
+          "sourcePtsTicks": 25600,
+          "sourceSeconds": 1.6666666666666667,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "15e386e4962951a26e8ccd3b2c6892bed4c10611e3fe8a39bcde0bd178825ec4",
+          "solidBounds": [
+            376,
+            37,
+            1071,
+            2837
+          ],
+          "opaqueInteriorPixels": 1170502,
+          "edgeRecoveryPixels": 19753,
+          "shadowClassifiedPixels": 537160,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 5,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 9,
+          "file": "frames/start/xiaoxiaoqing_start_009.png",
+          "sourceFrame": 41,
+          "sourcePtsTicks": 26368,
+          "sourceSeconds": 1.7166666666666666,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "f13b3241094df839a095ac584ad6fef71dfc24d0f4604f758743869d69253663",
+          "solidBounds": [
+            375,
+            37,
+            1080,
+            2837
+          ],
+          "opaqueInteriorPixels": 1185872,
+          "edgeRecoveryPixels": 20147,
+          "shadowClassifiedPixels": 533040,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 5,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 10,
+          "file": "frames/start/xiaoxiaoqing_start_010.png",
+          "sourceFrame": 42,
+          "sourcePtsTicks": 26880,
+          "sourceSeconds": 1.75,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "fa9668fa00bcb21f731d786e14788958fe5abbd6a3db86b8594bacadfbe10ba2",
+          "solidBounds": [
+            372,
+            37,
+            1091,
+            2837
+          ],
+          "opaqueInteriorPixels": 1201191,
+          "edgeRecoveryPixels": 19467,
+          "shadowClassifiedPixels": 528918,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 6,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 11,
+          "file": "frames/start/xiaoxiaoqing_start_011.png",
+          "sourceFrame": 43,
+          "sourcePtsTicks": 27648,
+          "sourceSeconds": 1.8,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "4853c38580ed72b785649e808eb90412723680ca62e14845d13a73d480d2cde6",
+          "solidBounds": [
+            369,
+            37,
+            1101,
+            2837
+          ],
+          "opaqueInteriorPixels": 1220140,
+          "edgeRecoveryPixels": 20151,
+          "shadowClassifiedPixels": 523190,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 6,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 12,
+          "file": "frames/start/xiaoxiaoqing_start_012.png",
+          "sourceFrame": 44,
+          "sourcePtsTicks": 28160,
+          "sourceSeconds": 1.8333333333333333,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "88809e1bf6f390083c32cc2cd80900b9415c9f67580bcee6fb2cf0b5a04e26ad",
+          "solidBounds": [
+            366,
+            36,
+            1111,
+            2837
+          ],
+          "opaqueInteriorPixels": 1240434,
+          "edgeRecoveryPixels": 19958,
+          "shadowClassifiedPixels": 516665,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 7,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 13,
+          "file": "frames/start/xiaoxiaoqing_start_013.png",
+          "sourceFrame": 45,
+          "sourcePtsTicks": 28928,
+          "sourceSeconds": 1.8833333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "e507ef9527f686622626b8a86839e944ec0736761db3c3d65e6966171c19ed1e",
+          "solidBounds": [
+            360,
+            35,
+            1125,
+            2837
+          ],
+          "opaqueInteriorPixels": 1267547,
+          "edgeRecoveryPixels": 21976,
+          "shadowClassifiedPixels": 505646,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 7,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 14,
+          "file": "frames/start/xiaoxiaoqing_start_014.png",
+          "sourceFrame": 46,
+          "sourcePtsTicks": 29440,
+          "sourceSeconds": 1.9166666666666667,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "e7423a474a693bb7bfb70f4c6153b5bba26189dc3fd110b28c901962d03ce674",
+          "solidBounds": [
+            355,
+            34,
+            1137,
+            2837
+          ],
+          "opaqueInteriorPixels": 1290759,
+          "edgeRecoveryPixels": 20791,
+          "shadowClassifiedPixels": 494955,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 8,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 15,
+          "file": "frames/start/xiaoxiaoqing_start_015.png",
+          "sourceFrame": 47,
+          "sourcePtsTicks": 30208,
+          "sourceSeconds": 1.9666666666666666,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "8b6dfba2c2d83e3a4a6a2c0648b6d813d6951f743669aa91b672ed3b6e427320",
+          "solidBounds": [
+            349,
+            33,
+            1149,
+            2837
+          ],
+          "opaqueInteriorPixels": 1312140,
+          "edgeRecoveryPixels": 21827,
+          "shadowClassifiedPixels": 485256,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 8,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 16,
+          "file": "frames/start/xiaoxiaoqing_start_016.png",
+          "sourceFrame": 48,
+          "sourcePtsTicks": 30720,
+          "sourceSeconds": 2.0,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "8fe667632d94fc1f457e3a1622c113d3b19094b8b1a47b4c244544d8d0947b35",
+          "solidBounds": [
+            343,
+            32,
+            1160,
+            2837
+          ],
+          "opaqueInteriorPixels": 1327668,
+          "edgeRecoveryPixels": 22075,
+          "shadowClassifiedPixels": 480158,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 9,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 17,
+          "file": "frames/start/xiaoxiaoqing_start_017.png",
+          "sourceFrame": 49,
+          "sourcePtsTicks": 31488,
+          "sourceSeconds": 2.05,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "05ee729c13fc26f4f4d1786284541a1980b2e1b3777e3bcb2e381487db0bc3ed",
+          "solidBounds": [
+            334,
+            31,
+            1171,
+            2837
+          ],
+          "opaqueInteriorPixels": 1343941,
+          "edgeRecoveryPixels": 23103,
+          "shadowClassifiedPixels": 474864,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 9,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 18,
+          "file": "frames/start/xiaoxiaoqing_start_018.png",
+          "sourceFrame": 50,
+          "sourcePtsTicks": 32000,
+          "sourceSeconds": 2.0833333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "09e95eabe6e21579d683b460dca2c503206b8a903f03cd767cf4567b565f6d4b",
+          "solidBounds": [
+            324,
+            33,
+            1197,
+            2837
+          ],
+          "opaqueInteriorPixels": 1355408,
+          "edgeRecoveryPixels": 22620,
+          "shadowClassifiedPixels": 473174,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 10,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 19,
+          "file": "frames/start/xiaoxiaoqing_start_019.png",
+          "sourceFrame": 51,
+          "sourcePtsTicks": 32768,
+          "sourceSeconds": 2.1333333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "1e0bdb24d2788ef92c88c29f835dd51001d3630856632ddcad6e32b12782953c",
+          "solidBounds": [
+            313,
+            34,
+            1248,
+            2837
+          ],
+          "opaqueInteriorPixels": 1366871,
+          "edgeRecoveryPixels": 23644,
+          "shadowClassifiedPixels": 471984,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 10,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 20,
+          "file": "frames/start/xiaoxiaoqing_start_020.png",
+          "sourceFrame": 52,
+          "sourcePtsTicks": 33280,
+          "sourceSeconds": 2.1666666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "24c86494fca0fcb885f430bdf2b3eeb15e84ff7c3c6ab7b886c510d61facca0e",
+          "solidBounds": [
+            303,
+            36,
+            1296,
+            2837
+          ],
+          "opaqueInteriorPixels": 1376640,
+          "edgeRecoveryPixels": 23307,
+          "shadowClassifiedPixels": 471251,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 11,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 21,
+          "file": "frames/start/xiaoxiaoqing_start_021.png",
+          "sourceFrame": 53,
+          "sourcePtsTicks": 34048,
+          "sourceSeconds": 2.216666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "e47438fa297e86459c25c476b1dce21a5512e9594c69f6a02bcca4f7c561d482",
+          "solidBounds": [
+            290,
+            39,
+            1344,
+            2837
+          ],
+          "opaqueInteriorPixels": 1390948,
+          "edgeRecoveryPixels": 24019,
+          "shadowClassifiedPixels": 469902,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 11,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 22,
+          "file": "frames/start/xiaoxiaoqing_start_022.png",
+          "sourceFrame": 54,
+          "sourcePtsTicks": 34560,
+          "sourceSeconds": 2.25,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "4f6282b0240f50050e27d0933787f188a089483c8f3f686e18a881f06a02149f",
+          "solidBounds": [
+            276,
+            43,
+            1383,
+            2837
+          ],
+          "opaqueInteriorPixels": 1404327,
+          "edgeRecoveryPixels": 23595,
+          "shadowClassifiedPixels": 469529,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 12,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 23,
+          "file": "frames/start/xiaoxiaoqing_start_023.png",
+          "sourceFrame": 55,
+          "sourcePtsTicks": 35328,
+          "sourceSeconds": 2.3,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "426e4953ad1ce11a1331cc974db393d322d2c4309edfd8a135ad04154694bbea",
+          "solidBounds": [
+            261,
+            45,
+            1417,
+            2837
+          ],
+          "opaqueInteriorPixels": 1417430,
+          "edgeRecoveryPixels": 24086,
+          "shadowClassifiedPixels": 470258,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 12,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 24,
+          "file": "frames/start/xiaoxiaoqing_start_024.png",
+          "sourceFrame": 56,
+          "sourcePtsTicks": 35840,
+          "sourceSeconds": 2.3333333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "4565daa4ec356fc99986487f87c50331f54d53dff649bdaf7f0706b0cc47379d",
+          "solidBounds": [
+            248,
+            49,
+            1438,
+            2837
+          ],
+          "opaqueInteriorPixels": 1428642,
+          "edgeRecoveryPixels": 24008,
+          "shadowClassifiedPixels": 470408,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 13,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 25,
+          "file": "frames/start/xiaoxiaoqing_start_025.png",
+          "sourceFrame": 57,
+          "sourcePtsTicks": 36608,
+          "sourceSeconds": 2.3833333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "c7c3210cf57c58f787bca059fed53026975a27f2d014f495a4c49d57c29d2dcf",
+          "solidBounds": [
+            226,
+            53,
+            1451,
+            2837
+          ],
+          "opaqueInteriorPixels": 1441265,
+          "edgeRecoveryPixels": 24437,
+          "shadowClassifiedPixels": 469299,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 13,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 26,
+          "file": "frames/start/xiaoxiaoqing_start_026.png",
+          "sourceFrame": 58,
+          "sourcePtsTicks": 37120,
+          "sourceSeconds": 2.4166666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "1fd53a81a943c9f0a81b15d2debd46621d999e2cf1a25d53a2fe14529711eb1c",
+          "solidBounds": [
+            191,
+            57,
+            1449,
+            2836
+          ],
+          "opaqueInteriorPixels": 1448272,
+          "edgeRecoveryPixels": 24236,
+          "shadowClassifiedPixels": 469702,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 14,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 27,
+          "file": "frames/start/xiaoxiaoqing_start_027.png",
+          "sourceFrame": 59,
+          "sourcePtsTicks": 37888,
+          "sourceSeconds": 2.466666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "8d5aac8a2b000b88cede09f94b76e930b3afd2736d81a223e35e255493ee4864",
+          "solidBounds": [
+            155,
+            60,
+            1433,
+            2836
+          ],
+          "opaqueInteriorPixels": 1452094,
+          "edgeRecoveryPixels": 24845,
+          "shadowClassifiedPixels": 470077,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 14,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 28,
+          "file": "frames/start/xiaoxiaoqing_start_028.png",
+          "sourceFrame": 60,
+          "sourcePtsTicks": 38400,
+          "sourceSeconds": 2.5,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "2ecee4b771bcea98acf4d90bd42cb27cbfe7c28ec48242dafa1b8ffc4f7d7cfd",
+          "solidBounds": [
+            122,
+            62,
+            1404,
+            2836
+          ],
+          "opaqueInteriorPixels": 1452162,
+          "edgeRecoveryPixels": 24506,
+          "shadowClassifiedPixels": 470338,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 15,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 29,
+          "file": "frames/start/xiaoxiaoqing_start_029.png",
+          "sourceFrame": 61,
+          "sourcePtsTicks": 39168,
+          "sourceSeconds": 2.55,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "f2e794c0bced27dbac24b883189f4c63b9277c7550b352104c663f99991b4513",
+          "solidBounds": [
+            88,
+            62,
+            1370,
+            2834
+          ],
+          "opaqueInteriorPixels": 1446208,
+          "edgeRecoveryPixels": 25281,
+          "shadowClassifiedPixels": 471520,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 15,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 30,
+          "file": "frames/start/xiaoxiaoqing_start_030.png",
+          "sourceFrame": 62,
+          "sourcePtsTicks": 39680,
+          "sourceSeconds": 2.5833333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "ab7774264e870e58c574e07f656951b86ae7a1a263fcc725f2a2d0a6decb2273",
+          "solidBounds": [
+            60,
+            59,
+            1327,
+            2832
+          ],
+          "opaqueInteriorPixels": 1432642,
+          "edgeRecoveryPixels": 26273,
+          "shadowClassifiedPixels": 473225,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 16,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 31,
+          "file": "frames/start/xiaoxiaoqing_start_031.png",
+          "sourceFrame": 63,
+          "sourcePtsTicks": 40448,
+          "sourceSeconds": 2.6333333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "a2c92004aa837c1fbf521fac85a91bd7a0e495ce6f23e180c164b00d674bfc45",
+          "solidBounds": [
+            45,
+            55,
+            1286,
+            2832
+          ],
+          "opaqueInteriorPixels": 1411615,
+          "edgeRecoveryPixels": 26519,
+          "shadowClassifiedPixels": 477561,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 16,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 32,
+          "file": "frames/start/xiaoxiaoqing_start_032.png",
+          "sourceFrame": 64,
+          "sourcePtsTicks": 40960,
+          "sourceSeconds": 2.6666666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "15ca4a6a03310027beb8630c7a717ced67856d8ae76747688c5a5abeb7ff348b",
+          "solidBounds": [
+            50,
+            51,
+            1244,
+            2832
+          ],
+          "opaqueInteriorPixels": 1389371,
+          "edgeRecoveryPixels": 26251,
+          "shadowClassifiedPixels": 480497,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 17,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 33,
+          "file": "frames/start/xiaoxiaoqing_start_033.png",
+          "sourceFrame": 65,
+          "sourcePtsTicks": 41728,
+          "sourceSeconds": 2.716666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "cce0773aeffefc54ae2900321c178c065a35257f3d7beab074ae46c6993f5d8a",
+          "solidBounds": [
+            74,
+            47,
+            1199,
+            2826
+          ],
+          "opaqueInteriorPixels": 1361795,
+          "edgeRecoveryPixels": 26835,
+          "shadowClassifiedPixels": 488929,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 17,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 34,
+          "file": "frames/start/xiaoxiaoqing_start_034.png",
+          "sourceFrame": 66,
+          "sourcePtsTicks": 42240,
+          "sourceSeconds": 2.75,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "0eab7a6bb214e98baecc317fc6bd7de0e42d33d5268d3392bc470e05330ec525",
+          "solidBounds": [
+            106,
+            42,
+            1158,
+            2825
+          ],
+          "opaqueInteriorPixels": 1340678,
+          "edgeRecoveryPixels": 26161,
+          "shadowClassifiedPixels": 496002,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 18,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 35,
+          "file": "frames/start/xiaoxiaoqing_start_035.png",
+          "sourceFrame": 67,
+          "sourcePtsTicks": 43008,
+          "sourceSeconds": 2.8,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "fd891be8dafbcd67d279b87a531a440d1a9475674438f5f7ccb8eb2d9d637cfa",
+          "solidBounds": [
+            149,
+            38,
+            1113,
+            2825
+          ],
+          "opaqueInteriorPixels": 1319676,
+          "edgeRecoveryPixels": 26087,
+          "shadowClassifiedPixels": 500145,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 18,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 36,
+          "file": "frames/start/xiaoxiaoqing_start_036.png",
+          "sourceFrame": 68,
+          "sourcePtsTicks": 43520,
+          "sourceSeconds": 2.8333333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "be37e0b5f40f003064527b97de48debb149ed80f6f99b8c7b3d7728907fcb9cf",
+          "solidBounds": [
+            195,
+            35,
+            1070,
+            2824
+          ],
+          "opaqueInteriorPixels": 1303043,
+          "edgeRecoveryPixels": 25112,
+          "shadowClassifiedPixels": 499282,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 19,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 37,
+          "file": "frames/start/xiaoxiaoqing_start_037.png",
+          "sourceFrame": 69,
+          "sourcePtsTicks": 44288,
+          "sourceSeconds": 2.8833333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "e0b3acd1670c107f5dbf54f0ceb08a1ac0307a1166481f7c07a010c0397218f6",
+          "solidBounds": [
+            223,
+            31,
+            1053,
+            2824
+          ],
+          "opaqueInteriorPixels": 1296193,
+          "edgeRecoveryPixels": 26122,
+          "shadowClassifiedPixels": 497842,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 19,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 38,
+          "file": "frames/start/xiaoxiaoqing_start_038.png",
+          "sourceFrame": 70,
+          "sourcePtsTicks": 44800,
+          "sourceSeconds": 2.9166666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "ec9bd9e11b17d1404dc3b6e0ff1b53a8d802992c7f805e6f2edd41420687aea3",
+          "solidBounds": [
+            233,
+            29,
+            1080,
+            2824
+          ],
+          "opaqueInteriorPixels": 1311977,
+          "edgeRecoveryPixels": 24523,
+          "shadowClassifiedPixels": 499052,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 20,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 39,
+          "file": "frames/start/xiaoxiaoqing_start_039.png",
+          "sourceFrame": 71,
+          "sourcePtsTicks": 45568,
+          "sourceSeconds": 2.966666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "ed2eecdf4dcf14f2e232c31c713bfe0a5267ec13592400b4fba8487ba15eea8b",
+          "solidBounds": [
+            241,
+            27,
+            1120,
+            2823
+          ],
+          "opaqueInteriorPixels": 1307386,
+          "edgeRecoveryPixels": 23856,
+          "shadowClassifiedPixels": 525624,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 20,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 40,
+          "file": "frames/start/xiaoxiaoqing_start_040.png",
+          "sourceFrame": 72,
+          "sourcePtsTicks": 46080,
+          "sourceSeconds": 3.0,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "f5333ca9b7cc6a9b917539940a8a6ccd2121ba8c4af448f5f9513c517aebee42",
+          "solidBounds": [
+            245,
+            27,
+            1173,
+            2824
+          ],
+          "opaqueInteriorPixels": 1336375,
+          "edgeRecoveryPixels": 24918,
+          "shadowClassifiedPixels": 532687,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 21,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 41,
+          "file": "frames/start/xiaoxiaoqing_start_041.png",
+          "sourceFrame": 73,
+          "sourcePtsTicks": 46848,
+          "sourceSeconds": 3.05,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "d50e632b8854736040466c86ca3c39ac22de4ff5953947e478ac610c28ceb486",
+          "solidBounds": [
+            245,
+            28,
+            1224,
+            2824
+          ],
+          "opaqueInteriorPixels": 1411144,
+          "edgeRecoveryPixels": 26054,
+          "shadowClassifiedPixels": 496330,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 21,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 42,
+          "file": "frames/start/xiaoxiaoqing_start_042.png",
+          "sourceFrame": 74,
+          "sourcePtsTicks": 47360,
+          "sourceSeconds": 3.0833333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "1fcd89412be932b2c57754e8a4e1257a32476a5dda7cab603f70871d32a66214",
+          "solidBounds": [
+            241,
+            31,
+            1272,
+            2823
+          ],
+          "opaqueInteriorPixels": 1457413,
+          "edgeRecoveryPixels": 27597,
+          "shadowClassifiedPixels": 478234,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 22,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 43,
+          "file": "frames/start/xiaoxiaoqing_start_043.png",
+          "sourceFrame": 75,
+          "sourcePtsTicks": 48128,
+          "sourceSeconds": 3.1333333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "38e8a3ff0e4873627ea4e00df45c6872480db4b23e749d2174e72a68bc00c81b",
+          "solidBounds": [
+            233,
+            34,
+            1315,
+            2822
+          ],
+          "opaqueInteriorPixels": 1486907,
+          "edgeRecoveryPixels": 28282,
+          "shadowClassifiedPixels": 474548,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 22,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 44,
+          "file": "frames/start/xiaoxiaoqing_start_044.png",
+          "sourceFrame": 76,
+          "sourcePtsTicks": 48640,
+          "sourceSeconds": 3.1666666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "c97ac69777376ab776decf0093229bc858ad513fa84a34e2c2406efb18c2fb74",
+          "solidBounds": [
+            223,
+            38,
+            1351,
+            2822
+          ],
+          "opaqueInteriorPixels": 1514881,
+          "edgeRecoveryPixels": 28873,
+          "shadowClassifiedPixels": 472727,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 23,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 45,
+          "file": "frames/start/xiaoxiaoqing_start_045.png",
+          "sourceFrame": 77,
+          "sourcePtsTicks": 49408,
+          "sourceSeconds": 3.216666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "cf5bca4af973587652ec4d6186b7736094889604dba12f17b9b2cc60bd5ad495",
+          "solidBounds": [
+            209,
+            45,
+            1383,
+            2822
+          ],
+          "opaqueInteriorPixels": 1534755,
+          "edgeRecoveryPixels": 32646,
+          "shadowClassifiedPixels": 471423,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 23,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 46,
+          "file": "frames/start/xiaoxiaoqing_start_046.png",
+          "sourceFrame": 78,
+          "sourcePtsTicks": 49920,
+          "sourceSeconds": 3.25,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "ca281d57b82503762ebd619ffdcd2eb4133fa5f4d61f01797fe5892121835b09",
+          "solidBounds": [
+            186,
+            49,
+            1415,
+            2821
+          ],
+          "opaqueInteriorPixels": 1543662,
+          "edgeRecoveryPixels": 33625,
+          "shadowClassifiedPixels": 472909,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 24,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 47,
+          "file": "frames/start/xiaoxiaoqing_start_047.png",
+          "sourceFrame": 79,
+          "sourcePtsTicks": 50688,
+          "sourceSeconds": 3.3,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "cc28817ec95eed36280612348db60e222182d0bbc67c7eb3cb8382e8e3b12d2e",
+          "solidBounds": [
+            143,
+            53,
+            1444,
+            2822
+          ],
+          "opaqueInteriorPixels": 1544603,
+          "edgeRecoveryPixels": 36894,
+          "shadowClassifiedPixels": 474025,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 24,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 48,
+          "file": "frames/start/xiaoxiaoqing_start_048.png",
+          "sourceFrame": 80,
+          "sourcePtsTicks": 51200,
+          "sourceSeconds": 3.3333333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "c8aece2dbfb1f1ebb175a8893be146f9690b5e2d3bbce0af4b090f59bf5d247b",
+          "solidBounds": [
+            104,
+            58,
+            1443,
+            2829
+          ],
+          "opaqueInteriorPixels": 1549133,
+          "edgeRecoveryPixels": 38056,
+          "shadowClassifiedPixels": 473481,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 25,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 49,
+          "file": "frames/start/xiaoxiaoqing_start_049.png",
+          "sourceFrame": 81,
+          "sourcePtsTicks": 51968,
+          "sourceSeconds": 3.3833333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "d6980975aa8c228a27af124f572878cc51338f9319271ee1de4b2f4b8b78a9d9",
+          "solidBounds": [
+            73,
+            61,
+            1431,
+            2832
+          ],
+          "opaqueInteriorPixels": 1553261,
+          "edgeRecoveryPixels": 33568,
+          "shadowClassifiedPixels": 474030,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 25,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 50,
+          "file": "frames/start/xiaoxiaoqing_start_050.png",
+          "sourceFrame": 82,
+          "sourcePtsTicks": 52480,
+          "sourceSeconds": 3.4166666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "30ca7ae5aa2ab34bdddd8679e1402f4a79ab6f2a244e67d80f089cbab82ce3fa",
+          "solidBounds": [
+            54,
+            61,
+            1419,
+            2834
+          ],
+          "opaqueInteriorPixels": 1543341,
+          "edgeRecoveryPixels": 33814,
+          "shadowClassifiedPixels": 476649,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 26,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 51,
+          "file": "frames/start/xiaoxiaoqing_start_051.png",
+          "sourceFrame": 83,
+          "sourcePtsTicks": 53248,
+          "sourceSeconds": 3.466666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "e701fd2dfb02bba503405aa976e48420a4fa0b7126c547a92f36702f28a7c84a",
+          "solidBounds": [
+            58,
+            59,
+            1396,
+            2834
+          ],
+          "opaqueInteriorPixels": 1519687,
+          "edgeRecoveryPixels": 32434,
+          "shadowClassifiedPixels": 484191,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 26,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 52,
+          "file": "frames/start/xiaoxiaoqing_start_052.png",
+          "sourceFrame": 84,
+          "sourcePtsTicks": 53760,
+          "sourceSeconds": 3.5,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "7da6ffefbbe47327d147cfd95e2ab8ba3e3a3ed983e1c8a9c2b4ba367c78f243",
+          "solidBounds": [
+            84,
+            54,
+            1360,
+            2834
+          ],
+          "opaqueInteriorPixels": 1489824,
+          "edgeRecoveryPixels": 29515,
+          "shadowClassifiedPixels": 491113,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 27,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 53,
+          "file": "frames/start/xiaoxiaoqing_start_053.png",
+          "sourceFrame": 85,
+          "sourcePtsTicks": 54528,
+          "sourceSeconds": 3.55,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "c65d3ab5b339bc1876f5d1bc5e489c99b810335d8618f09a12d771592e6b72e5",
+          "solidBounds": [
+            129,
+            48,
+            1312,
+            2834
+          ],
+          "opaqueInteriorPixels": 1434077,
+          "edgeRecoveryPixels": 28440,
+          "shadowClassifiedPixels": 499135,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 27,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 54,
+          "file": "frames/start/xiaoxiaoqing_start_054.png",
+          "sourceFrame": 86,
+          "sourcePtsTicks": 55040,
+          "sourceSeconds": 3.5833333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "03522beb7e679c4b4704807e4e3c7677cd511a0a7870cb8e59f257c84a1f792e",
+          "solidBounds": [
+            182,
+            41,
+            1259,
+            2834
+          ],
+          "opaqueInteriorPixels": 1391406,
+          "edgeRecoveryPixels": 28833,
+          "shadowClassifiedPixels": 501948,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 28,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 55,
+          "file": "frames/start/xiaoxiaoqing_start_055.png",
+          "sourceFrame": 87,
+          "sourcePtsTicks": 55808,
+          "sourceSeconds": 3.6333333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "7824f8e3ed90e77120ff9d30616feabe56ee7bf9f9057d813a6f8cbc3363fe6e",
+          "solidBounds": [
+            202,
+            37,
+            1195,
+            2835
+          ],
+          "opaqueInteriorPixels": 1360034,
+          "edgeRecoveryPixels": 27933,
+          "shadowClassifiedPixels": 503111,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 28,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 56,
+          "file": "frames/start/xiaoxiaoqing_start_056.png",
+          "sourceFrame": 88,
+          "sourcePtsTicks": 56320,
+          "sourceSeconds": 3.6666666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "cbc6b91f09f12d1219c9e7d3fe0ab8ff08bd5c58412b63c8f24322477eabefc5",
+          "solidBounds": [
+            222,
+            33,
+            1119,
+            2836
+          ],
+          "opaqueInteriorPixels": 1336928,
+          "edgeRecoveryPixels": 26073,
+          "shadowClassifiedPixels": 497392,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 29,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 57,
+          "file": "frames/start/xiaoxiaoqing_start_057.png",
+          "sourceFrame": 89,
+          "sourcePtsTicks": 57088,
+          "sourceSeconds": 3.716666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "ec2542d5a786fa2d1194592992a080f5d9d3dadabe8971601ccdb41ef74fa4ba",
+          "solidBounds": [
+            243,
+            28,
+            1117,
+            2836
+          ],
+          "opaqueInteriorPixels": 1301742,
+          "edgeRecoveryPixels": 24307,
+          "shadowClassifiedPixels": 512867,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 29,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        }
+      ]
+    },
+    "walk": {
+      "startFrame": 90,
+      "endFrameExclusive": 122,
+      "loop": true,
+      "holdLastFrame": false,
+      "frameCount": 32,
+      "sourceStartSeconds": 3.75,
+      "sourceEndSecondsExclusive": 5.083333333333333,
+      "durationSeconds": 1.3333333333333333,
+      "frames": [
+        {
+          "state": "walk",
+          "index": 0,
+          "file": "frames/walk/xiaoxiaoqing_walk_000.png",
+          "sourceFrame": 90,
+          "sourcePtsTicks": 57600,
+          "sourceSeconds": 3.75,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "2b96cd9d3b189df8774a423a1775ff2335674c82ea8aa6f844f661acfd4a1f35",
+          "solidBounds": [
+            261,
+            25,
+            1137,
+            2836
+          ],
+          "opaqueInteriorPixels": 1290012,
+          "edgeRecoveryPixels": 24103,
+          "shadowClassifiedPixels": 526890,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 30,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 1,
+          "file": "frames/walk/xiaoxiaoqing_walk_001.png",
+          "sourceFrame": 91,
+          "sourcePtsTicks": 58368,
+          "sourceSeconds": 3.8,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "e58aaf566cf5726bbc4f0f3f8136b74dc76b7811c5be122a57c5824331566b85",
+          "solidBounds": [
+            274,
+            25,
+            1149,
+            2836
+          ],
+          "opaqueInteriorPixels": 1340288,
+          "edgeRecoveryPixels": 24146,
+          "shadowClassifiedPixels": 499286,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 30,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 2,
+          "file": "frames/walk/xiaoxiaoqing_walk_002.png",
+          "sourceFrame": 92,
+          "sourcePtsTicks": 58880,
+          "sourceSeconds": 3.8333333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "c22e9d0182f1d1c51914b73dae5acfa1fbac1374d94209d24e2e34767e38f602",
+          "solidBounds": [
+            279,
+            25,
+            1167,
+            2836
+          ],
+          "opaqueInteriorPixels": 1380267,
+          "edgeRecoveryPixels": 24922,
+          "shadowClassifiedPixels": 477496,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 31,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 3,
+          "file": "frames/walk/xiaoxiaoqing_walk_003.png",
+          "sourceFrame": 93,
+          "sourcePtsTicks": 59648,
+          "sourceSeconds": 3.8833333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "57272dc40b8f68ab98653df9915a351ddf984280e7546667aedbab25aa292954",
+          "solidBounds": [
+            275,
+            29,
+            1228,
+            2836
+          ],
+          "opaqueInteriorPixels": 1415936,
+          "edgeRecoveryPixels": 26426,
+          "shadowClassifiedPixels": 473417,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 31,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 4,
+          "file": "frames/walk/xiaoxiaoqing_walk_004.png",
+          "sourceFrame": 94,
+          "sourcePtsTicks": 60160,
+          "sourceSeconds": 3.9166666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "0312142c26c4428dd2aad7c20af7052cac0a9f8a91e426769babdf1e204337af",
+          "solidBounds": [
+            261,
+            34,
+            1335,
+            2835
+          ],
+          "opaqueInteriorPixels": 1449921,
+          "edgeRecoveryPixels": 27721,
+          "shadowClassifiedPixels": 472468,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 32,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 5,
+          "file": "frames/walk/xiaoxiaoqing_walk_005.png",
+          "sourceFrame": 95,
+          "sourcePtsTicks": 60928,
+          "sourceSeconds": 3.966666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "58470e2e904a9acb50fa23b4de0fa0e32456f1ebbb5f7ab728d1a9cd7cbffcef",
+          "solidBounds": [
+            241,
+            40,
+            1413,
+            2835
+          ],
+          "opaqueInteriorPixels": 1481862,
+          "edgeRecoveryPixels": 28328,
+          "shadowClassifiedPixels": 472140,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 32,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 6,
+          "file": "frames/walk/xiaoxiaoqing_walk_006.png",
+          "sourceFrame": 96,
+          "sourcePtsTicks": 61440,
+          "sourceSeconds": 4.0,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "ab061217469248784a520107db275331cebc46e285426c22071a443a81732878",
+          "solidBounds": [
+            216,
+            46,
+            1466,
+            2835
+          ],
+          "opaqueInteriorPixels": 1508747,
+          "edgeRecoveryPixels": 29045,
+          "shadowClassifiedPixels": 470736,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 33,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 7,
+          "file": "frames/walk/xiaoxiaoqing_walk_007.png",
+          "sourceFrame": 97,
+          "sourcePtsTicks": 62208,
+          "sourceSeconds": 4.05,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "17909206c4c07dc69c0f40ea4427c02aa20414c3771d110791eacad6ffb0b8f0",
+          "solidBounds": [
+            161,
+            54,
+            1483,
+            2834
+          ],
+          "opaqueInteriorPixels": 1528691,
+          "edgeRecoveryPixels": 30370,
+          "shadowClassifiedPixels": 469597,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 33,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 8,
+          "file": "frames/walk/xiaoxiaoqing_walk_008.png",
+          "sourceFrame": 98,
+          "sourcePtsTicks": 62720,
+          "sourceSeconds": 4.083333333333333,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "6893e74a1bd2de1ec4a2d8ef5e16cca4f3b58d34366c700af397ce520bc0f4af",
+          "solidBounds": [
+            112,
+            59,
+            1459,
+            2832
+          ],
+          "opaqueInteriorPixels": 1537190,
+          "edgeRecoveryPixels": 30101,
+          "shadowClassifiedPixels": 470524,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 34,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 9,
+          "file": "frames/walk/xiaoxiaoqing_walk_009.png",
+          "sourceFrame": 99,
+          "sourcePtsTicks": 63488,
+          "sourceSeconds": 4.133333333333334,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "c503a226ab56417438f0f1081b935b6a82414103aab1d95242b612096b365448",
+          "solidBounds": [
+            73,
+            62,
+            1418,
+            2831
+          ],
+          "opaqueInteriorPixels": 1530699,
+          "edgeRecoveryPixels": 29472,
+          "shadowClassifiedPixels": 472411,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 34,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 10,
+          "file": "frames/walk/xiaoxiaoqing_walk_010.png",
+          "sourceFrame": 100,
+          "sourcePtsTicks": 64000,
+          "sourceSeconds": 4.166666666666667,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "719ead054798c45e949efcac7b94bfbf7b68eba8fedb8e89de0b61b6d16ae7f3",
+          "solidBounds": [
+            42,
+            60,
+            1360,
+            2830
+          ],
+          "opaqueInteriorPixels": 1510831,
+          "edgeRecoveryPixels": 29640,
+          "shadowClassifiedPixels": 474245,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 35,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 11,
+          "file": "frames/walk/xiaoxiaoqing_walk_011.png",
+          "sourceFrame": 101,
+          "sourcePtsTicks": 64768,
+          "sourceSeconds": 4.216666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "83381aedfe3f1ad194556eacc3a03c871964855cfd5fd93ba8c43943312b2303",
+          "solidBounds": [
+            47,
+            55,
+            1298,
+            2825
+          ],
+          "opaqueInteriorPixels": 1463508,
+          "edgeRecoveryPixels": 28749,
+          "shadowClassifiedPixels": 482411,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 35,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 12,
+          "file": "frames/walk/xiaoxiaoqing_walk_012.png",
+          "sourceFrame": 102,
+          "sourcePtsTicks": 65280,
+          "sourceSeconds": 4.25,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "b7a565916c42fe33f4f27da3f5e11423bfe5a81f81463e45007c7723b9fdace9",
+          "solidBounds": [
+            78,
+            49,
+            1241,
+            2824
+          ],
+          "opaqueInteriorPixels": 1417986,
+          "edgeRecoveryPixels": 27766,
+          "shadowClassifiedPixels": 492169,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 36,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 13,
+          "file": "frames/walk/xiaoxiaoqing_walk_013.png",
+          "sourceFrame": 103,
+          "sourcePtsTicks": 66048,
+          "sourceSeconds": 4.3,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "845e745574ed5bc73c583e0a50f0f6ce683247e60a6a516ce37107c31bc07e33",
+          "solidBounds": [
+            126,
+            43,
+            1184,
+            2823
+          ],
+          "opaqueInteriorPixels": 1368026,
+          "edgeRecoveryPixels": 27256,
+          "shadowClassifiedPixels": 499266,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 36,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 14,
+          "file": "frames/walk/xiaoxiaoqing_walk_014.png",
+          "sourceFrame": 104,
+          "sourcePtsTicks": 66560,
+          "sourceSeconds": 4.333333333333333,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "34d7cb6f4ab0d301a2dad5934da37b0e8cfb27eef8053f9f9b9952cd8fbf5b38",
+          "solidBounds": [
+            163,
+            37,
+            1126,
+            2822
+          ],
+          "opaqueInteriorPixels": 1334883,
+          "edgeRecoveryPixels": 27128,
+          "shadowClassifiedPixels": 499475,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 37,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 15,
+          "file": "frames/walk/xiaoxiaoqing_walk_015.png",
+          "sourceFrame": 105,
+          "sourcePtsTicks": 67328,
+          "sourceSeconds": 4.383333333333334,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "65af5067a5f9d4542c5cfa20d6253787696c05ddca958b27b3f18a74c6a9a084",
+          "solidBounds": [
+            187,
+            33,
+            1077,
+            2821
+          ],
+          "opaqueInteriorPixels": 1308600,
+          "edgeRecoveryPixels": 27522,
+          "shadowClassifiedPixels": 496958,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 37,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 16,
+          "file": "frames/walk/xiaoxiaoqing_walk_016.png",
+          "sourceFrame": 106,
+          "sourcePtsTicks": 67840,
+          "sourceSeconds": 4.416666666666667,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "6e15f98d7dd4c379184967112dce75221086984f4fb933df485860fd5565b1ba",
+          "solidBounds": [
+            209,
+            29,
+            1097,
+            2821
+          ],
+          "opaqueInteriorPixels": 1307846,
+          "edgeRecoveryPixels": 25696,
+          "shadowClassifiedPixels": 498081,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 38,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 17,
+          "file": "frames/walk/xiaoxiaoqing_walk_017.png",
+          "sourceFrame": 107,
+          "sourcePtsTicks": 68608,
+          "sourceSeconds": 4.466666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "5b2953426ac6a2cdf72fb19a13c825cc172e6d931aa756ad2ecab4bcba96bafa",
+          "solidBounds": [
+            231,
+            27,
+            1129,
+            2822
+          ],
+          "opaqueInteriorPixels": 1295091,
+          "edgeRecoveryPixels": 25268,
+          "shadowClassifiedPixels": 530119,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 38,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 18,
+          "file": "frames/walk/xiaoxiaoqing_walk_018.png",
+          "sourceFrame": 108,
+          "sourcePtsTicks": 69120,
+          "sourceSeconds": 4.5,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "f35ae9452370263fcf6f4a9c9f06a88b1dcacefa9d62ea868305fa955d24e00f",
+          "solidBounds": [
+            245,
+            26,
+            1201,
+            2823
+          ],
+          "opaqueInteriorPixels": 1359800,
+          "edgeRecoveryPixels": 25019,
+          "shadowClassifiedPixels": 520752,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 39,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 19,
+          "file": "frames/walk/xiaoxiaoqing_walk_019.png",
+          "sourceFrame": 109,
+          "sourcePtsTicks": 69888,
+          "sourceSeconds": 4.55,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "6b06c6f5810ab68ac702b3d7592db47e30e6f46ae45500df0b2f35fb1a32d859",
+          "solidBounds": [
+            251,
+            28,
+            1267,
+            2823
+          ],
+          "opaqueInteriorPixels": 1437486,
+          "edgeRecoveryPixels": 28349,
+          "shadowClassifiedPixels": 480149,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 39,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 20,
+          "file": "frames/walk/xiaoxiaoqing_walk_020.png",
+          "sourceFrame": 110,
+          "sourcePtsTicks": 70400,
+          "sourceSeconds": 4.583333333333333,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "7224b5dd886b73cca0915b927a3444e5e225887d8fc1b7b29b51114f0b6672ce",
+          "solidBounds": [
+            247,
+            32,
+            1323,
+            2822
+          ],
+          "opaqueInteriorPixels": 1483266,
+          "edgeRecoveryPixels": 29863,
+          "shadowClassifiedPixels": 472109,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 40,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 21,
+          "file": "frames/walk/xiaoxiaoqing_walk_021.png",
+          "sourceFrame": 111,
+          "sourcePtsTicks": 71168,
+          "sourceSeconds": 4.633333333333334,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "60b0c30e3d9d102ffba2128936c670f132f1da0a5b71df2fdd4722cdde0d2f2e",
+          "solidBounds": [
+            236,
+            37,
+            1373,
+            2822
+          ],
+          "opaqueInteriorPixels": 1514346,
+          "edgeRecoveryPixels": 31166,
+          "shadowClassifiedPixels": 473144,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 40,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 22,
+          "file": "frames/walk/xiaoxiaoqing_walk_022.png",
+          "sourceFrame": 112,
+          "sourcePtsTicks": 71680,
+          "sourceSeconds": 4.666666666666667,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "4ba8298df47177343d5e5f5a80ffceebe120d589866853e449e24f0b5a4bd4a9",
+          "solidBounds": [
+            221,
+            44,
+            1417,
+            2822
+          ],
+          "opaqueInteriorPixels": 1536231,
+          "edgeRecoveryPixels": 32362,
+          "shadowClassifiedPixels": 472184,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 41,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 23,
+          "file": "frames/walk/xiaoxiaoqing_walk_023.png",
+          "sourceFrame": 113,
+          "sourcePtsTicks": 72448,
+          "sourceSeconds": 4.716666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "05ab356afe25cf6ab45f5992d4e409d2e96a8ac9f29c9f46bb01c156bf299493",
+          "solidBounds": [
+            176,
+            51,
+            1474,
+            2820
+          ],
+          "opaqueInteriorPixels": 1546989,
+          "edgeRecoveryPixels": 34203,
+          "shadowClassifiedPixels": 472672,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 41,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 24,
+          "file": "frames/walk/xiaoxiaoqing_walk_024.png",
+          "sourceFrame": 114,
+          "sourcePtsTicks": 72960,
+          "sourceSeconds": 4.75,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "4365b61cd83dad7bd92e426682367b17058d87ec871261f3089d542d204402b0",
+          "solidBounds": [
+            124,
+            57,
+            1473,
+            2827
+          ],
+          "opaqueInteriorPixels": 1552497,
+          "edgeRecoveryPixels": 34378,
+          "shadowClassifiedPixels": 474127,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 42,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 25,
+          "file": "frames/walk/xiaoxiaoqing_walk_025.png",
+          "sourceFrame": 115,
+          "sourcePtsTicks": 73728,
+          "sourceSeconds": 4.8,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "8780734e806e6f02b603dc93ba1f41a9ab119fdbf1b4b6ff992edad719892fe7",
+          "solidBounds": [
+            81,
+            61,
+            1453,
+            2832
+          ],
+          "opaqueInteriorPixels": 1549461,
+          "edgeRecoveryPixels": 33432,
+          "shadowClassifiedPixels": 476589,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 42,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 26,
+          "file": "frames/walk/xiaoxiaoqing_walk_026.png",
+          "sourceFrame": 116,
+          "sourcePtsTicks": 74240,
+          "sourceSeconds": 4.833333333333333,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "3408654ef6bd2cac7ed7d423f73ff31909e29d12f63ec8b0ee0464556d94e180",
+          "solidBounds": [
+            62,
+            61,
+            1439,
+            2834
+          ],
+          "opaqueInteriorPixels": 1536974,
+          "edgeRecoveryPixels": 33570,
+          "shadowClassifiedPixels": 478813,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 43,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 27,
+          "file": "frames/walk/xiaoxiaoqing_walk_027.png",
+          "sourceFrame": 117,
+          "sourcePtsTicks": 75008,
+          "sourceSeconds": 4.883333333333334,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "bad8c5931a8aee45d24a9401851cf9294cecc40077daacfc92dad7af555e8695",
+          "solidBounds": [
+            80,
+            55,
+            1404,
+            2833
+          ],
+          "opaqueInteriorPixels": 1502645,
+          "edgeRecoveryPixels": 31569,
+          "shadowClassifiedPixels": 489483,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 43,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 28,
+          "file": "frames/walk/xiaoxiaoqing_walk_028.png",
+          "sourceFrame": 118,
+          "sourcePtsTicks": 75520,
+          "sourceSeconds": 4.916666666666667,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "d36f7d1909d0f80bbc8ddeb35f863d303ea551f0b34b44f14710889b8fb7750a",
+          "solidBounds": [
+            133,
+            49,
+            1353,
+            2834
+          ],
+          "opaqueInteriorPixels": 1453089,
+          "edgeRecoveryPixels": 28915,
+          "shadowClassifiedPixels": 498753,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 44,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 29,
+          "file": "frames/walk/xiaoxiaoqing_walk_029.png",
+          "sourceFrame": 119,
+          "sourcePtsTicks": 76288,
+          "sourceSeconds": 4.966666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "d568864289cf8a1063cdae6e7da74a6222660e8c3c27be2e87c56a7c534c8874",
+          "solidBounds": [
+            184,
+            42,
+            1286,
+            2834
+          ],
+          "opaqueInteriorPixels": 1392781,
+          "edgeRecoveryPixels": 29993,
+          "shadowClassifiedPixels": 503367,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 44,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 30,
+          "file": "frames/walk/xiaoxiaoqing_walk_030.png",
+          "sourceFrame": 120,
+          "sourcePtsTicks": 76800,
+          "sourceSeconds": 5.0,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "885d946a70b652db1a5c56a1349db97aeb54332c80635668de52398ecb7de256",
+          "solidBounds": [
+            204,
+            36,
+            1195,
+            2836
+          ],
+          "opaqueInteriorPixels": 1361753,
+          "edgeRecoveryPixels": 28517,
+          "shadowClassifiedPixels": 499588,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 45,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 31,
+          "file": "frames/walk/xiaoxiaoqing_walk_031.png",
+          "sourceFrame": 121,
+          "sourcePtsTicks": 77568,
+          "sourceSeconds": 5.05,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "c32abc20cc95756f0a5b55fc2c0046067ad732ddeb9f3668fe9964616e8695f9",
+          "solidBounds": [
+            228,
+            30,
+            1111,
+            2836
+          ],
+          "opaqueInteriorPixels": 1316195,
+          "edgeRecoveryPixels": 25204,
+          "shadowClassifiedPixels": 510156,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 45,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        }
+      ]
+    },
+    "stop": {
+      "startFrame": 193,
+      "endFrameExclusive": 240,
+      "loop": false,
+      "holdLastFrame": true,
+      "frameCount": 47,
+      "sourceStartSeconds": 8.05,
+      "sourceEndSecondsExclusive": 10.0,
+      "durationSeconds": 1.95,
+      "frames": [
+        {
+          "state": "stop",
+          "index": 0,
+          "file": "frames/stop/xiaoxiaoqing_stop_000.png",
+          "sourceFrame": 193,
+          "sourcePtsTicks": 123648,
+          "sourceSeconds": 8.05,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "e80968407843882581003e0054fe3ca4f72a1daac48a03f4000bc86ce3c63c48",
+          "solidBounds": [
+            288,
+            25,
+            1135,
+            2836
+          ],
+          "opaqueInteriorPixels": 1276783,
+          "edgeRecoveryPixels": 25436,
+          "shadowClassifiedPixels": 522716,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 46,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 1,
+          "file": "frames/stop/xiaoxiaoqing_stop_001.png",
+          "sourceFrame": 194,
+          "sourcePtsTicks": 124160,
+          "sourceSeconds": 8.083333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "95b3b32598dc87b75cc4be07066adf9d51153adec4e925d9736ec7fc418a8bcf",
+          "solidBounds": [
+            308,
+            23,
+            1156,
+            2836
+          ],
+          "opaqueInteriorPixels": 1323873,
+          "edgeRecoveryPixels": 22943,
+          "shadowClassifiedPixels": 503715,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 46,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 2,
+          "file": "frames/stop/xiaoxiaoqing_stop_002.png",
+          "sourceFrame": 195,
+          "sourcePtsTicks": 124928,
+          "sourceSeconds": 8.133333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "7e6fe85fea3de82e579733d51661acf1a7d8276c151f1672002dfec11ed50044",
+          "solidBounds": [
+            315,
+            23,
+            1181,
+            2836
+          ],
+          "opaqueInteriorPixels": 1362131,
+          "edgeRecoveryPixels": 23717,
+          "shadowClassifiedPixels": 479607,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 47,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 3,
+          "file": "frames/stop/xiaoxiaoqing_stop_003.png",
+          "sourceFrame": 196,
+          "sourcePtsTicks": 125440,
+          "sourceSeconds": 8.166666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "5f5dd759cdd22d0d01a66e28af5084ad05721424b4556df7a7bd500087ce14dd",
+          "solidBounds": [
+            315,
+            27,
+            1271,
+            2837
+          ],
+          "opaqueInteriorPixels": 1408749,
+          "edgeRecoveryPixels": 24883,
+          "shadowClassifiedPixels": 469985,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 47,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 4,
+          "file": "frames/stop/xiaoxiaoqing_stop_004.png",
+          "sourceFrame": 197,
+          "sourcePtsTicks": 126208,
+          "sourceSeconds": 8.216666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "cf56791a20c18e81c1abae96df11986fbdce0f76c45c6e60a33cd6681e42ebae",
+          "solidBounds": [
+            306,
+            32,
+            1361,
+            2836
+          ],
+          "opaqueInteriorPixels": 1435499,
+          "edgeRecoveryPixels": 26174,
+          "shadowClassifiedPixels": 469585,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 48,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 5,
+          "file": "frames/stop/xiaoxiaoqing_stop_005.png",
+          "sourceFrame": 198,
+          "sourcePtsTicks": 126720,
+          "sourceSeconds": 8.25,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "2fdb48c7aa0d34f2cc95b8be19fa319494d99357a49bbd952026f6cc6155be2a",
+          "solidBounds": [
+            287,
+            39,
+            1448,
+            2836
+          ],
+          "opaqueInteriorPixels": 1468859,
+          "edgeRecoveryPixels": 26121,
+          "shadowClassifiedPixels": 470801,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 48,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 6,
+          "file": "frames/stop/xiaoxiaoqing_stop_006.png",
+          "sourceFrame": 199,
+          "sourcePtsTicks": 127488,
+          "sourceSeconds": 8.3,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "32a5d148ddd2f9fa0b5e7bc11fb73d228c7dfe9934b33a9a48387ca130a539d8",
+          "solidBounds": [
+            255,
+            45,
+            1486,
+            2836
+          ],
+          "opaqueInteriorPixels": 1486793,
+          "edgeRecoveryPixels": 26323,
+          "shadowClassifiedPixels": 471902,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 49,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 7,
+          "file": "frames/stop/xiaoxiaoqing_stop_007.png",
+          "sourceFrame": 200,
+          "sourcePtsTicks": 128000,
+          "sourceSeconds": 8.333333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "7ef3a11e3aa1a33d82ced64fdbca347217d0b8877827108e1a4a8c83d057df88",
+          "solidBounds": [
+            203,
+            53,
+            1488,
+            2836
+          ],
+          "opaqueInteriorPixels": 1503461,
+          "edgeRecoveryPixels": 27449,
+          "shadowClassifiedPixels": 470742,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 49,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 8,
+          "file": "frames/stop/xiaoxiaoqing_stop_008.png",
+          "sourceFrame": 201,
+          "sourcePtsTicks": 128768,
+          "sourceSeconds": 8.383333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "96527a5c67a812fefa28bbf7ef03cd7591d168b8d040a55c52064f6307a4c3c6",
+          "solidBounds": [
+            165,
+            57,
+            1469,
+            2836
+          ],
+          "opaqueInteriorPixels": 1509164,
+          "edgeRecoveryPixels": 28214,
+          "shadowClassifiedPixels": 469882,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 50,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 9,
+          "file": "frames/stop/xiaoxiaoqing_stop_009.png",
+          "sourceFrame": 202,
+          "sourcePtsTicks": 129280,
+          "sourceSeconds": 8.416666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "8b16df184fd8e58ef402db9547e254accc67de24833bd339fb78275071c84415",
+          "solidBounds": [
+            128,
+            59,
+            1434,
+            2834
+          ],
+          "opaqueInteriorPixels": 1504081,
+          "edgeRecoveryPixels": 28801,
+          "shadowClassifiedPixels": 470610,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 50,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 10,
+          "file": "frames/stop/xiaoxiaoqing_stop_010.png",
+          "sourceFrame": 203,
+          "sourcePtsTicks": 130048,
+          "sourceSeconds": 8.466666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "6d811e875c2c3bca00dc508e801fb415b4cbe3ba6dd3c443fed5cbf70960e35a",
+          "solidBounds": [
+            108,
+            59,
+            1407,
+            2833
+          ],
+          "opaqueInteriorPixels": 1489500,
+          "edgeRecoveryPixels": 28088,
+          "shadowClassifiedPixels": 472557,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 51,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 11,
+          "file": "frames/stop/xiaoxiaoqing_stop_011.png",
+          "sourceFrame": 204,
+          "sourcePtsTicks": 130560,
+          "sourceSeconds": 8.5,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "00c58f36ca3b1e61f1935699fa9ac21fa82ae9c8d0ee4edf4fcbf872a10c6f7a",
+          "solidBounds": [
+            97,
+            56,
+            1364,
+            2830
+          ],
+          "opaqueInteriorPixels": 1457796,
+          "edgeRecoveryPixels": 28015,
+          "shadowClassifiedPixels": 475014,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 51,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 12,
+          "file": "frames/stop/xiaoxiaoqing_stop_012.png",
+          "sourceFrame": 205,
+          "sourcePtsTicks": 131328,
+          "sourceSeconds": 8.55,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "6989409fee40344ffb69af6a0d209e165edbc224afe075c8c5492f1a1ca962d8",
+          "solidBounds": [
+            100,
+            52,
+            1334,
+            2825
+          ],
+          "opaqueInteriorPixels": 1427577,
+          "edgeRecoveryPixels": 27007,
+          "shadowClassifiedPixels": 479000,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 52,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 13,
+          "file": "frames/stop/xiaoxiaoqing_stop_013.png",
+          "sourceFrame": 206,
+          "sourcePtsTicks": 131840,
+          "sourceSeconds": 8.583333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "0bc44fdee734070b93adb6e6ee3c0aee584cdf33db9c668cf85535167ab505a5",
+          "solidBounds": [
+            126,
+            47,
+            1296,
+            2824
+          ],
+          "opaqueInteriorPixels": 1388191,
+          "edgeRecoveryPixels": 26960,
+          "shadowClassifiedPixels": 488008,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 52,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 14,
+          "file": "frames/stop/xiaoxiaoqing_stop_014.png",
+          "sourceFrame": 207,
+          "sourcePtsTicks": 132608,
+          "sourceSeconds": 8.633333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "50be97fc55a5b6f6fccc27a2d301dd0bf0208952cdbbad3bc20172afae8a0f03",
+          "solidBounds": [
+            154,
+            44,
+            1270,
+            2825
+          ],
+          "opaqueInteriorPixels": 1358441,
+          "edgeRecoveryPixels": 26661,
+          "shadowClassifiedPixels": 493915,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 53,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 15,
+          "file": "frames/stop/xiaoxiaoqing_stop_015.png",
+          "sourceFrame": 208,
+          "sourcePtsTicks": 133120,
+          "sourceSeconds": 8.666666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "0fdebb8be4c9857aa4ba48d2077cd5816ddf7fb3e7200a40528d00ba37a9c303",
+          "solidBounds": [
+            198,
+            40,
+            1240,
+            2825
+          ],
+          "opaqueInteriorPixels": 1332482,
+          "edgeRecoveryPixels": 25998,
+          "shadowClassifiedPixels": 495121,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 53,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 16,
+          "file": "frames/stop/xiaoxiaoqing_stop_016.png",
+          "sourceFrame": 209,
+          "sourcePtsTicks": 133888,
+          "sourceSeconds": 8.716666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "b4c1af0442835b58db31b2708b81035c990e6ef00dd1cfc47c0eceb3a580f3e0",
+          "solidBounds": [
+            234,
+            38,
+            1218,
+            2824
+          ],
+          "opaqueInteriorPixels": 1318719,
+          "edgeRecoveryPixels": 25443,
+          "shadowClassifiedPixels": 493182,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 54,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 17,
+          "file": "frames/stop/xiaoxiaoqing_stop_017.png",
+          "sourceFrame": 210,
+          "sourcePtsTicks": 134400,
+          "sourceSeconds": 8.75,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "a2c80c9b3b8c5d69adc087c9d824bb13b4f7e73538ca39a0545d11e6e4df0229",
+          "solidBounds": [
+            278,
+            34,
+            1190,
+            2824
+          ],
+          "opaqueInteriorPixels": 1308644,
+          "edgeRecoveryPixels": 25327,
+          "shadowClassifiedPixels": 488190,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 54,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 18,
+          "file": "frames/stop/xiaoxiaoqing_stop_018.png",
+          "sourceFrame": 211,
+          "sourcePtsTicks": 135168,
+          "sourceSeconds": 8.8,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "a10c4d8e9eba2a5073758ffeb6d26aebe52cf9ad759790f555a82fbae1d7e167",
+          "solidBounds": [
+            294,
+            33,
+            1172,
+            2824
+          ],
+          "opaqueInteriorPixels": 1311275,
+          "edgeRecoveryPixels": 24516,
+          "shadowClassifiedPixels": 485079,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 55,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 19,
+          "file": "frames/stop/xiaoxiaoqing_stop_019.png",
+          "sourceFrame": 212,
+          "sourcePtsTicks": 135680,
+          "sourceSeconds": 8.833333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "470b91d2b7086b3e5ab45b92243a2d2a486d98607a2edd20c33d621dd1402291",
+          "solidBounds": [
+            318,
+            31,
+            1163,
+            2824
+          ],
+          "opaqueInteriorPixels": 1324897,
+          "edgeRecoveryPixels": 23740,
+          "shadowClassifiedPixels": 483601,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 55,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 20,
+          "file": "frames/stop/xiaoxiaoqing_stop_020.png",
+          "sourceFrame": 213,
+          "sourcePtsTicks": 136448,
+          "sourceSeconds": 8.883333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "69a613d817093e1e56a3d0d0b86b819c07cebb5ec1ecdfec2e668862df1cadec",
+          "solidBounds": [
+            336,
+            31,
+            1193,
+            2823
+          ],
+          "opaqueInteriorPixels": 1329375,
+          "edgeRecoveryPixels": 23064,
+          "shadowClassifiedPixels": 490384,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 56,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 21,
+          "file": "frames/stop/xiaoxiaoqing_stop_021.png",
+          "sourceFrame": 214,
+          "sourcePtsTicks": 136960,
+          "sourceSeconds": 8.916666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "32da52c1c28f3f348cc831e24d520ea77ae67dc0f0f0484b1c78debf4474a2ca",
+          "solidBounds": [
+            360,
+            31,
+            1216,
+            2823
+          ],
+          "opaqueInteriorPixels": 1322318,
+          "edgeRecoveryPixels": 22849,
+          "shadowClassifiedPixels": 502440,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 56,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 22,
+          "file": "frames/stop/xiaoxiaoqing_stop_022.png",
+          "sourceFrame": 215,
+          "sourcePtsTicks": 137728,
+          "sourceSeconds": 8.966666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "83f5e4b9274c2089c03d936e59c2a4491a858563fa81a0cfdf142cd23a5e3139",
+          "solidBounds": [
+            376,
+            31,
+            1227,
+            2825
+          ],
+          "opaqueInteriorPixels": 1308299,
+          "edgeRecoveryPixels": 22076,
+          "shadowClassifiedPixels": 515122,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 57,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 23,
+          "file": "frames/stop/xiaoxiaoqing_stop_023.png",
+          "sourceFrame": 216,
+          "sourcePtsTicks": 138240,
+          "sourceSeconds": 9.0,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "746d0ba4779dd6c9fb8a81bea1c603ff982445e9d67d81610b328aee2c16f314",
+          "solidBounds": [
+            395,
+            32,
+            1234,
+            2828
+          ],
+          "opaqueInteriorPixels": 1290745,
+          "edgeRecoveryPixels": 22170,
+          "shadowClassifiedPixels": 529255,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 57,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 24,
+          "file": "frames/stop/xiaoxiaoqing_stop_024.png",
+          "sourceFrame": 217,
+          "sourcePtsTicks": 139008,
+          "sourceSeconds": 9.05,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "a4b8c7c572dd1be7337b1c401bc1dd77b7f2a9503fc71d5680ea0c166eca7bf3",
+          "solidBounds": [
+            409,
+            33,
+            1233,
+            2830
+          ],
+          "opaqueInteriorPixels": 1275701,
+          "edgeRecoveryPixels": 21803,
+          "shadowClassifiedPixels": 539285,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 58,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 25,
+          "file": "frames/stop/xiaoxiaoqing_stop_025.png",
+          "sourceFrame": 218,
+          "sourcePtsTicks": 139520,
+          "sourceSeconds": 9.083333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "82c88320a5323cfe8a7b934b8731c8ae150d7471deec1d1b7f7a83d0fb6430ac",
+          "solidBounds": [
+            423,
+            35,
+            1226,
+            2834
+          ],
+          "opaqueInteriorPixels": 1262009,
+          "edgeRecoveryPixels": 22171,
+          "shadowClassifiedPixels": 547077,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 58,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 26,
+          "file": "frames/stop/xiaoxiaoqing_stop_026.png",
+          "sourceFrame": 219,
+          "sourcePtsTicks": 140288,
+          "sourceSeconds": 9.133333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "98812f8b1e8dc081302bf7bdbb1802cad47f164c924f80eda1576ed110f4395c",
+          "solidBounds": [
+            433,
+            35,
+            1225,
+            2836
+          ],
+          "opaqueInteriorPixels": 1254082,
+          "edgeRecoveryPixels": 21565,
+          "shadowClassifiedPixels": 548064,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 59,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 27,
+          "file": "frames/stop/xiaoxiaoqing_stop_027.png",
+          "sourceFrame": 220,
+          "sourcePtsTicks": 140800,
+          "sourceSeconds": 9.166666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "9de051b42a09982c5b8f64c43a4bf549541c9a87f8e42c0fb4ba4e5e3a9cf495",
+          "solidBounds": [
+            441,
+            35,
+            1226,
+            2838
+          ],
+          "opaqueInteriorPixels": 1245095,
+          "edgeRecoveryPixels": 21616,
+          "shadowClassifiedPixels": 547497,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 59,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 28,
+          "file": "frames/stop/xiaoxiaoqing_stop_028.png",
+          "sourceFrame": 221,
+          "sourcePtsTicks": 141568,
+          "sourceSeconds": 9.216666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "6a27b3b7a1341eee42b3f8adbe4f25ff62fb1f795e1dd29c8c86958ff6f7c1d5",
+          "solidBounds": [
+            445,
+            35,
+            1223,
+            2838
+          ],
+          "opaqueInteriorPixels": 1235130,
+          "edgeRecoveryPixels": 20773,
+          "shadowClassifiedPixels": 546960,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 60,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 29,
+          "file": "frames/stop/xiaoxiaoqing_stop_029.png",
+          "sourceFrame": 222,
+          "sourcePtsTicks": 142080,
+          "sourceSeconds": 9.25,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "d134b08fc1565f6d7f5f4c90b3aa00c38a9b1cc40109a8362574a87e606175cd",
+          "solidBounds": [
+            449,
+            33,
+            1219,
+            2837
+          ],
+          "opaqueInteriorPixels": 1222955,
+          "edgeRecoveryPixels": 20871,
+          "shadowClassifiedPixels": 546162,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 60,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 30,
+          "file": "frames/stop/xiaoxiaoqing_stop_030.png",
+          "sourceFrame": 223,
+          "sourcePtsTicks": 142848,
+          "sourceSeconds": 9.3,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "d3f01b32a9c29a18b7e4e1b1c393ffe81f8592553eb1c323a94f9f8cd3880b0f",
+          "solidBounds": [
+            450,
+            33,
+            1215,
+            2838
+          ],
+          "opaqueInteriorPixels": 1213665,
+          "edgeRecoveryPixels": 20417,
+          "shadowClassifiedPixels": 545523,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 61,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 31,
+          "file": "frames/stop/xiaoxiaoqing_stop_031.png",
+          "sourceFrame": 224,
+          "sourcePtsTicks": 143360,
+          "sourceSeconds": 9.333333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "70c7654966fa18e90b510f5356f9b09df34c30bec9aa390ddf09b9e7155b6992",
+          "solidBounds": [
+            451,
+            32,
+            1209,
+            2838
+          ],
+          "opaqueInteriorPixels": 1203805,
+          "edgeRecoveryPixels": 20675,
+          "shadowClassifiedPixels": 544794,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 61,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 32,
+          "file": "frames/stop/xiaoxiaoqing_stop_032.png",
+          "sourceFrame": 225,
+          "sourcePtsTicks": 144128,
+          "sourceSeconds": 9.383333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "0d53cf7e6a75f7733cee3a3b079b365039b851f4159ee1ca58a682027d689476",
+          "solidBounds": [
+            449,
+            31,
+            1203,
+            2837
+          ],
+          "opaqueInteriorPixels": 1196416,
+          "edgeRecoveryPixels": 20030,
+          "shadowClassifiedPixels": 544428,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 62,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 33,
+          "file": "frames/stop/xiaoxiaoqing_stop_033.png",
+          "sourceFrame": 226,
+          "sourcePtsTicks": 144640,
+          "sourceSeconds": 9.416666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "bdc1485de170c8849b5ce7d2426ec28c3a0cfe880020f7bf34cd466d1710fde2",
+          "solidBounds": [
+            447,
+            31,
+            1194,
+            2837
+          ],
+          "opaqueInteriorPixels": 1189686,
+          "edgeRecoveryPixels": 20715,
+          "shadowClassifiedPixels": 543988,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 62,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 34,
+          "file": "frames/stop/xiaoxiaoqing_stop_034.png",
+          "sourceFrame": 227,
+          "sourcePtsTicks": 145408,
+          "sourceSeconds": 9.466666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "55351135cf65ce0a84732bbbe175aa1434a04c421fe9a9a2afc57cc9c02b1cb6",
+          "solidBounds": [
+            443,
+            30,
+            1186,
+            2838
+          ],
+          "opaqueInteriorPixels": 1186860,
+          "edgeRecoveryPixels": 20420,
+          "shadowClassifiedPixels": 543720,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 63,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 35,
+          "file": "frames/stop/xiaoxiaoqing_stop_035.png",
+          "sourceFrame": 228,
+          "sourcePtsTicks": 145920,
+          "sourceSeconds": 9.5,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "994a4345604e975aba405b32dd915138ba9bd94acc977543d010907dfd5367f2",
+          "solidBounds": [
+            438,
+            29,
+            1177,
+            2838
+          ],
+          "opaqueInteriorPixels": 1185083,
+          "edgeRecoveryPixels": 20736,
+          "shadowClassifiedPixels": 543439,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 63,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 36,
+          "file": "frames/stop/xiaoxiaoqing_stop_036.png",
+          "sourceFrame": 229,
+          "sourcePtsTicks": 146688,
+          "sourceSeconds": 9.55,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "25bffd6f0948b44da57306d9b077450df0b105aeb20509b2b053503c4647a721",
+          "solidBounds": [
+            432,
+            29,
+            1168,
+            2837
+          ],
+          "opaqueInteriorPixels": 1182941,
+          "edgeRecoveryPixels": 20067,
+          "shadowClassifiedPixels": 543415,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 64,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 37,
+          "file": "frames/stop/xiaoxiaoqing_stop_037.png",
+          "sourceFrame": 230,
+          "sourcePtsTicks": 147200,
+          "sourceSeconds": 9.583333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "f930372a7e1320fbec1b5f8a99804c68a7275318b61b18bbcc3f40adf741998c",
+          "solidBounds": [
+            424,
+            29,
+            1157,
+            2838
+          ],
+          "opaqueInteriorPixels": 1180698,
+          "edgeRecoveryPixels": 20556,
+          "shadowClassifiedPixels": 543342,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 64,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 38,
+          "file": "frames/stop/xiaoxiaoqing_stop_038.png",
+          "sourceFrame": 231,
+          "sourcePtsTicks": 147968,
+          "sourceSeconds": 9.633333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "b5082c31c7a4cc8501d8197b0c27f9c91ffa3c7dc67f33129dccb7e3f1cc94b1",
+          "solidBounds": [
+            418,
+            29,
+            1149,
+            2838
+          ],
+          "opaqueInteriorPixels": 1179065,
+          "edgeRecoveryPixels": 20292,
+          "shadowClassifiedPixels": 543247,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 65,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 39,
+          "file": "frames/stop/xiaoxiaoqing_stop_039.png",
+          "sourceFrame": 232,
+          "sourcePtsTicks": 148480,
+          "sourceSeconds": 9.666666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "bad9d884b43a4e9c7ba0d30b8758cbb569c0688466888c0577aca227c3a74a90",
+          "solidBounds": [
+            411,
+            29,
+            1139,
+            2838
+          ],
+          "opaqueInteriorPixels": 1176913,
+          "edgeRecoveryPixels": 20826,
+          "shadowClassifiedPixels": 543007,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 65,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 40,
+          "file": "frames/stop/xiaoxiaoqing_stop_040.png",
+          "sourceFrame": 233,
+          "sourcePtsTicks": 149248,
+          "sourceSeconds": 9.716666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "90486059fae964da657ec2508ef50c704b2911c18efc9780d9fb345d2bf89c5e",
+          "solidBounds": [
+            405,
+            29,
+            1128,
+            2837
+          ],
+          "opaqueInteriorPixels": 1174034,
+          "edgeRecoveryPixels": 20024,
+          "shadowClassifiedPixels": 543088,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 66,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 41,
+          "file": "frames/stop/xiaoxiaoqing_stop_041.png",
+          "sourceFrame": 234,
+          "sourcePtsTicks": 149760,
+          "sourceSeconds": 9.75,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "39efccb792c9d5c6cd4a8825f58284348dd366fac04cc5d6d8e33ad89dce595e",
+          "solidBounds": [
+            397,
+            29,
+            1117,
+            2838
+          ],
+          "opaqueInteriorPixels": 1171373,
+          "edgeRecoveryPixels": 20683,
+          "shadowClassifiedPixels": 542973,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 66,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 42,
+          "file": "frames/stop/xiaoxiaoqing_stop_042.png",
+          "sourceFrame": 235,
+          "sourcePtsTicks": 150528,
+          "sourceSeconds": 9.8,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "159e4dccddc7071c600d4780455511608e04ee46d8124cdaae17d409600ac3d5",
+          "solidBounds": [
+            391,
+            29,
+            1109,
+            2838
+          ],
+          "opaqueInteriorPixels": 1169460,
+          "edgeRecoveryPixels": 20341,
+          "shadowClassifiedPixels": 543101,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 67,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 43,
+          "file": "frames/stop/xiaoxiaoqing_stop_043.png",
+          "sourceFrame": 236,
+          "sourcePtsTicks": 151040,
+          "sourceSeconds": 9.833333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "a234767e61f6f1cb8345060b844cf05b56f4a001ee1750b5cfe0b4bf1a63eaac",
+          "solidBounds": [
+            385,
+            29,
+            1099,
+            2838
+          ],
+          "opaqueInteriorPixels": 1167260,
+          "edgeRecoveryPixels": 20858,
+          "shadowClassifiedPixels": 543057,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 67,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 44,
+          "file": "frames/stop/xiaoxiaoqing_stop_044.png",
+          "sourceFrame": 237,
+          "sourcePtsTicks": 151808,
+          "sourceSeconds": 9.883333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "508ee4c56f489bfcb78dadd237399ef1a603e632c7b54662a5bd15309c56bb09",
+          "solidBounds": [
+            381,
+            29,
+            1091,
+            2837
+          ],
+          "opaqueInteriorPixels": 1164472,
+          "edgeRecoveryPixels": 20262,
+          "shadowClassifiedPixels": 543117,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 68,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 45,
+          "file": "frames/stop/xiaoxiaoqing_stop_045.png",
+          "sourceFrame": 238,
+          "sourcePtsTicks": 152320,
+          "sourceSeconds": 9.916666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "33556d4e00f71befaefde811c1ad4811b2b9fd822676c90216d5f8071a0ed56b",
+          "solidBounds": [
+            377,
+            29,
+            1083,
+            2837
+          ],
+          "opaqueInteriorPixels": 1162077,
+          "edgeRecoveryPixels": 20905,
+          "shadowClassifiedPixels": 543104,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 68,
+            "rectTopLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              1542,
+              2,
+              1536,
+              2864
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 46,
+          "file": "frames/stop/xiaoxiaoqing_stop_046.png",
+          "sourceFrame": 239,
+          "sourcePtsTicks": 153088,
+          "sourceSeconds": 9.966666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "84476664923c90f9f745492937c012519e89fcd0b2ce2c8fe5144c6ad624f1af",
+          "solidBounds": [
+            373,
+            29,
+            1079,
+            2837
+          ],
+          "opaqueInteriorPixels": 1161165,
+          "edgeRecoveryPixels": 21349,
+          "shadowClassifiedPixels": 543056,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 69,
+            "rectTopLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1536,
+              2864
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "atlas": [
+    {
+      "file": "atlas/xiaoxiaoqing_idle_00.png",
+      "state": "idle",
+      "size": [
+        1540,
+        2868
+      ],
+      "usedCells": 1
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_00.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_01.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_02.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_03.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_04.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_05.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_06.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_07.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_08.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_09.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_10.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_11.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_12.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_13.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_14.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_15.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_16.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_17.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_18.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_19.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_20.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_21.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_22.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_23.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_24.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_25.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_26.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_27.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_start_28.png",
+      "state": "start",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_walk_00.png",
+      "state": "walk",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_walk_01.png",
+      "state": "walk",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_walk_02.png",
+      "state": "walk",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_walk_03.png",
+      "state": "walk",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_walk_04.png",
+      "state": "walk",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_walk_05.png",
+      "state": "walk",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_walk_06.png",
+      "state": "walk",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_walk_07.png",
+      "state": "walk",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_walk_08.png",
+      "state": "walk",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_walk_09.png",
+      "state": "walk",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_walk_10.png",
+      "state": "walk",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_walk_11.png",
+      "state": "walk",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_walk_12.png",
+      "state": "walk",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_walk_13.png",
+      "state": "walk",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_walk_14.png",
+      "state": "walk",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_walk_15.png",
+      "state": "walk",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_stop_00.png",
+      "state": "stop",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_stop_01.png",
+      "state": "stop",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_stop_02.png",
+      "state": "stop",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_stop_03.png",
+      "state": "stop",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_stop_04.png",
+      "state": "stop",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_stop_05.png",
+      "state": "stop",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_stop_06.png",
+      "state": "stop",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_stop_07.png",
+      "state": "stop",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_stop_08.png",
+      "state": "stop",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_stop_09.png",
+      "state": "stop",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_stop_10.png",
+      "state": "stop",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_stop_11.png",
+      "state": "stop",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_stop_12.png",
+      "state": "stop",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_stop_13.png",
+      "state": "stop",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_stop_14.png",
+      "state": "stop",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_stop_15.png",
+      "state": "stop",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_stop_16.png",
+      "state": "stop",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_stop_17.png",
+      "state": "stop",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_stop_18.png",
+      "state": "stop",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_stop_19.png",
+      "state": "stop",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_stop_20.png",
+      "state": "stop",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_stop_21.png",
+      "state": "stop",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_stop_22.png",
+      "state": "stop",
+      "size": [
+        3080,
+        2868
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/xiaoxiaoqing_stop_23.png",
+      "state": "stop",
+      "size": [
+        1540,
+        2868
+      ],
+      "usedCells": 1
+    }
+  ],
+  "processing": {
+    "ffmpegAlphaFilter": "format=yuva444p,chromakey=0x8db96f:0.035:0.028,format=rgba",
+    "localDespill": true,
+    "redraw": false,
+    "interpolation": false,
+    "perFrameScale": false,
+    "perFrameAlignment": false,
+    "solidNeutralMaterialProtection": true
+  },
+  "notes": [
+    "Native contiguous frames only; shared native crop for all states.",
+    "Walk boundary reference is excluded from the loop.",
+    "Small source body yaw, hair/cloth movement and sole-height variation are retained.",
+    "No redraw, retargeting, optical flow or image interpolation."
+  ],
+  "reviewChain": [
+    {
+      "state": "idle",
+      "holdSeconds": 1
+    },
+    {
+      "state": "start"
+    },
+    {
+      "state": "walk",
+      "repeats": 2
+    },
+    {
+      "state": "stop"
+    },
+    {
+      "state": "idle",
+      "holdSeconds": 1
+    }
+  ]
+}

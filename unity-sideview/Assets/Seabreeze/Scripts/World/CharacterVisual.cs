@@ -18,19 +18,38 @@ namespace Seabreeze
         float playerDistance, playerSettleTime;
         int playerFrame = -1;
         bool playerWasWalking, playerWasAirborne;
+        Sprite[] playerStartSprites, playerStopSprites;
+        float[] playerWalkEnds, playerStartEnds, playerStopEnds;
+        float playerStateTime, playerStopRate, playerLastDirection;
+        bool playerIntentKnown, playerWantsMove;
         NpcMotionDefinition npcMotion;
         float npcDistance, npcSettleTime;
         float npcCycleSeconds;
         float[] npcFrameEnds;
         int[] npcStopFrames;
+        Sprite[] npcStartSprites, npcStopSprites;
+        float[] npcStartEnds, npcStopEnds;
+        float npcRouteLength, npcRouteDistance, npcRouteStartDistance, npcRouteStopDistance, npcRouteSpeed;
+        float npcStateTime;
+        bool npcRouteActive, npcRouteEnding;
         bool npcWasWalking;
         int npcFrame = -1;
         public bool UsesPlayerMotion => playerMotion != null;
+        public bool UsesPlayerStateMotion => playerMotion != null && playerMotion.version == 2;
+        public int PlayerMotionFrame => playerFrame;
         public float PlayerMotionPhase => playerMotion != null ? playerDistance / playerMotion.strideLength : 0;
         public bool UsesNpcMotion => npcMotion != null;
         public float NpcWalkSpeed => npcMotion != null ? npcMotion.walkSpeed : 0;
         public float NpcCycleSeconds => npcMotion != null ? npcCycleSeconds : DefaultNpcCycleSeconds;
         public bool UsesVariableNpcTiming => npcFrameEnds != null;
+        public bool UsesNpcStateMotion => npcStartSprites != null && npcStopSprites != null;
+        public bool HasNpcMotionRoute => npcRouteActive;
+        public float NpcStartSeconds => UsesNpcStateMotion ? npcStartEnds[npcStartEnds.Length - 1] : 0;
+        public float NpcStopSeconds => UsesNpcStateMotion ? npcStopEnds[npcStopEnds.Length - 1] : 0;
+        public float NpcRouteSpeedFactor => !npcRouteActive || npcRouteEnding ? 1 :
+            Mathf.Max(.02f, npcRouteDistance < npcRouteStartDistance
+                ? Mathf.Sqrt(npcRouteDistance / npcRouteStartDistance)
+                : Mathf.Sqrt(Mathf.Clamp01((npcRouteLength - npcRouteDistance) / npcRouteStopDistance)));
         public float NpcCycleDistance => NpcWalkSpeed * NpcCycleSeconds;
         public float NpcMotionPhase => npcMotion != null ? npcDistance / NpcCycleDistance : 0;
         public int NpcMotionFrame => npcFrame;
@@ -44,6 +63,10 @@ namespace Seabreeze
             public string idle;
             public string[] walk;
             public int[] stopFrames;
+            public float cycleSeconds, stopResponseSeconds;
+            public string[] start, stop;
+            public float[] frameDurations, startDurations, stopDurations;
+            public int[] stopFromStart, stopFromWalk;
         }
         [System.Serializable]
         sealed class NpcMotionDefinition
@@ -54,6 +77,8 @@ namespace Seabreeze
             public string[] walk;
             public float[] frameDurations;
             public int[] stopFrames;
+            public string[] start, stop;
+            public float[] startDurations, stopDurations;
         }
         public void Build(int kind, string motionResource = null)
         {
@@ -205,7 +230,7 @@ namespace Seabreeze
             NpcMotionDefinition definition = null;
             try { if (config != null) definition = JsonUtility.FromJson<NpcMotionDefinition>(config.text); }
             catch (System.ArgumentException) { }
-            if (definition == null || definition.version != 1 || definition.walk == null
+            if (definition == null || (definition.version != 1 && definition.version != 2) || definition.walk == null
                 || definition.walk.Length < 2 || definition.walk.Length > 64
                 || definition.walk.Any(string.IsNullOrWhiteSpace) || definition.walk.Distinct().Count() != definition.walk.Length
                 || string.IsNullOrWhiteSpace(definition.idle)
@@ -213,6 +238,7 @@ namespace Seabreeze
                 || (definition.cycleSeconds != 0 && !PositiveFinite(definition.cycleSeconds))
                 || !PositiveFinite(definition.walkSpeed * (definition.cycleSeconds > 0 ? definition.cycleSeconds : DefaultNpcCycleSeconds))
                 || !PositiveFinite(definition.walkSpeed) || definition.startFrame < 0 || definition.startFrame >= definition.walk.Length
+                || (definition.version == 2 && (definition.frameDurations == null || definition.frameDurations.Length != definition.walk.Length))
                 || (definition.stopFrames != null && definition.stopFrames.Any(i => i < 0 || i >= definition.walk.Length)))
             {
                 Debug.LogError("NPC motion manifest is missing or invalid: " + root, this);
@@ -247,8 +273,17 @@ namespace Seabreeze
             }
             var idle = Resources.Load<Sprite>(root + definition.idle);
             var frames = definition.walk.Select(name => Resources.Load<Sprite>(root + name)).ToArray();
-            if (idle == null || frames.Any(sprite => sprite == null)
-                || frames.Concat(new[] { idle }).Any(sprite =>
+            Sprite[] starts = null, stops = null;
+            float[] startEnds = null, stopEnds = null;
+            if (definition.version == 2 && (!LoadNpcClip(root, definition.start, definition.startDurations, out starts, out startEnds)
+                || !LoadNpcClip(root, definition.stop, definition.stopDurations, out stops, out stopEnds)))
+            {
+                Debug.LogError("NPC state motion requires complete start/stop clips with native durations: " + root, this);
+                return false;
+            }
+            var all = frames.Concat(starts ?? System.Array.Empty<Sprite>()).Concat(stops ?? System.Array.Empty<Sprite>()).ToArray();
+            if (idle == null || all.Any(sprite => sprite == null)
+                || all.Concat(new[] { idle }).Any(sprite =>
                     Mathf.Abs(sprite.rect.height / sprite.pixelsPerUnit - definition.canvasHeightUnits) > .002f
                     || sprite.rect.size != idle.rect.size || (sprite.pivot - idle.pivot).sqrMagnitude > .001f))
             {
@@ -259,6 +294,8 @@ namespace Seabreeze
             npcCycleSeconds = cycle;
             npcFrameEnds = ends;
             npcStopFrames = definition.stopFrames != null && definition.stopFrames.Length > 0 ? definition.stopFrames : null;
+            npcStartSprites = starts; npcStopSprites = stops;
+            npcStartEnds = startEnds; npcStopEnds = stopEnds;
             idleSprite = idle;
             walkFrames = frames;
             fullSprite = Part("Character artwork", idle, Vector2.zero, Vector2.one, Color.white, 25, rig);
@@ -266,6 +303,104 @@ namespace Seabreeze
             fullSprite.transform.localPosition = Vector3.zero;
             npcDistance = NpcStartDistance();
             return true;
+        }
+
+        static bool LoadNpcClip(string root, string[] names, float[] durations, out Sprite[] sprites, out float[] ends)
+        {
+            sprites = null; ends = null;
+            if (names == null || names.Length < 1 || names.Length > 128 || names.Any(string.IsNullOrWhiteSpace)
+                || names.Distinct().Count() != names.Length || durations == null || durations.Length != names.Length
+                || durations.Any(value => !PositiveFinite(value))) return false;
+            double total = durations.Sum(value => (double)value);
+            if (double.IsNaN(total) || double.IsInfinity(total) || total > 60) return false;
+            sprites = names.Select(name => Resources.Load<Sprite>(root + name)).ToArray();
+            ends = new float[durations.Length]; double elapsed = 0;
+            for (int i = 0; i < ends.Length; i++) ends[i] = (float)(elapsed += durations[i]);
+            return sprites.All(sprite => sprite != null);
+        }
+
+        // Allocate complete source phases to the actual route. This fits a whole
+        // number of double steps between start and stop without moving past a goal.
+        public void BeginNpcMotionRoute(float distance)
+        {
+            if (!UsesNpcStateMotion || !PositiveFinite(distance)) return;
+            StopNpcMotionImmediately();
+            float transitions = (NpcStartSeconds + NpcStopSeconds) * .5f;
+            int cycles = Mathf.Max(0, Mathf.RoundToInt((distance / NpcWalkSpeed - transitions) / NpcCycleSeconds));
+            npcRouteLength = distance; npcRouteDistance = 0;
+            npcRouteSpeed = distance / (transitions + cycles * NpcCycleSeconds);
+            npcRouteStartDistance = npcRouteSpeed * NpcStartSeconds * .5f;
+            npcRouteStopDistance = npcRouteSpeed * NpcStopSeconds * .5f;
+            npcRouteActive = true; npcRouteEnding = false;
+            Pose = "Start"; npcFrame = 0; fullSprite.sprite = npcStartSprites[0];
+        }
+
+        public void CompleteNpcMotionRoute()
+        {
+            if (!UsesNpcStateMotion || !npcRouteActive) return;
+            // Arrival tolerance can leave a small residual settling pose. An
+            // interruption uses the separate immediate-idle path instead.
+            if (Pose != "Stop") { StopNpcMotionImmediately(); return; }
+            npcRouteEnding = true; walking = false;
+        }
+
+        public void StopNpcMotionImmediately()
+        {
+            if (!UsesNpcStateMotion) return;
+            npcRouteActive = npcRouteEnding = npcWasWalking = walking = false;
+            npcStateTime = npcDistance = 0; npcFrame = -1; Pose = "Idle";
+            if (fullSprite != null) fullSprite.sprite = idleSprite;
+        }
+
+        static int FrameAtTime(float seconds, float[] ends)
+        {
+            int low = 0, high = ends.Length - 1;
+            while (low < high)
+            {
+                int middle = (low + high) / 2;
+                if (seconds < ends[middle]) high = middle; else low = middle + 1;
+            }
+            return low;
+        }
+
+        void UpdateNpcStateMotion(float distance, float direction, bool moving, float dt)
+        {
+            if (!npcRouteActive) { StopNpcMotionImmediately(); return; }
+            if (npcRouteEnding)
+            {
+                walking = false;
+                npcStateTime += dt;
+                if (npcStateTime >= NpcStopSeconds) { StopNpcMotionImmediately(); return; }
+                npcFrame = FrameAtTime(npcStateTime, npcStopEnds);
+                fullSprite.sprite = npcStopSprites[npcFrame];
+                return;
+            }
+            if (!moving) return;
+            // A render sample can precede its first interpolated displacement.
+            // Face the measured physics velocity now; advance poses only by travel.
+            var scale = transform.localScale; scale.x = Mathf.Abs(scale.x) * Mathf.Sign(direction); transform.localScale = scale;
+            if (distance <= .000001f) return;
+            walking = true;
+            npcRouteDistance = Mathf.Min(npcRouteLength, npcRouteDistance + distance);
+            Sprite[] sprites; float[] ends;
+            if (npcRouteDistance < npcRouteStartDistance)
+            {
+                Pose = "Start"; sprites = npcStartSprites; ends = npcStartEnds;
+                npcStateTime = NpcStartSeconds * Mathf.Sqrt(npcRouteDistance / npcRouteStartDistance);
+            }
+            else if (npcRouteDistance < npcRouteLength - npcRouteStopDistance)
+            {
+                Pose = "Walk"; sprites = walkFrames; ends = npcFrameEnds;
+                npcStateTime = Mathf.Repeat((npcRouteDistance - npcRouteStartDistance) / npcRouteSpeed, NpcCycleSeconds);
+                npcDistance = npcStateTime * NpcWalkSpeed;
+            }
+            else
+            {
+                Pose = "Stop"; sprites = npcStopSprites; ends = npcStopEnds;
+                npcStateTime = NpcStopSeconds * (1 - Mathf.Sqrt(Mathf.Clamp01((npcRouteLength - npcRouteDistance) / npcRouteStopDistance)));
+            }
+            npcFrame = FrameAtTime(npcStateTime, ends);
+            fullSprite.sprite = sprites[npcFrame];
         }
 
         float NpcStartDistance() => npcFrameEnds == null
@@ -332,6 +467,7 @@ namespace Seabreeze
             walking = moving;
             rig.localPosition = Vector3.zero;
             rig.localRotation = Quaternion.identity;
+            if (UsesNpcStateMotion) { UpdateNpcStateMotion(distance, direction, moving, dt); return; }
             if (moving)
             {
                 var scale = transform.localScale;
@@ -368,12 +504,14 @@ namespace Seabreeze
 
         bool BuildPlayerMotion()
         {
-            const string root = "Art/PlayerMotion/";
+            string root = Resources.Load<TextAsset>("Art/CastMotion/player/motion") != null
+                ? "Art/CastMotion/player/" : "Art/PlayerMotion/";
             var config = Resources.Load<TextAsset>(root + "motion");
             if (config == null) return false;
             PlayerMotionDefinition definition;
             try { definition = JsonUtility.FromJson<PlayerMotionDefinition>(config.text); }
             catch (System.ArgumentException) { Debug.LogError("Player motion manifest is invalid.", this); return false; }
+            if (definition != null && definition.version == 2) return BuildPlayerStateMotion(root, definition);
             if (definition == null || definition.version != 1 || definition.walk == null
                 || definition.walk.Length < 2 || definition.walk.Length > 64
                 || definition.walk.Any(string.IsNullOrWhiteSpace) || definition.walk.Distinct().Count() != definition.walk.Length
@@ -405,9 +543,100 @@ namespace Seabreeze
             return true;
         }
 
+        bool BuildPlayerStateMotion(string root, PlayerMotionDefinition definition)
+        {
+            if (!PositiveFinite(definition.canvasHeightUnits) || !PositiveFinite(definition.strideLength)
+                || !PositiveFinite(definition.cycleSeconds) || !PositiveFinite(definition.stopResponseSeconds)
+                || !LoadNpcClip(root, definition.walk, definition.frameDurations, out var walk, out var walkEnds)
+                || !LoadNpcClip(root, definition.start, definition.startDurations, out var start, out var startEnds)
+                || !LoadNpcClip(root, definition.stop, definition.stopDurations, out var stop, out var stopEnds)
+                || Mathf.Abs(walkEnds[walkEnds.Length - 1] - definition.cycleSeconds) > .0001f
+                || definition.stopFromWalk == null || definition.stopFromWalk.Length != walk.Length
+                || definition.stopFromStart == null || definition.stopFromStart.Length != start.Length
+                || definition.stopFromWalk.Concat(definition.stopFromStart).Any(i => i < 0 || i >= stop.Length))
+            {
+                Debug.LogError("Player video motion requires complete native clips and valid stop entries: " + root, this);
+                return false;
+            }
+            var idle = Resources.Load<Sprite>(root + definition.idle);
+            if (idle == null || walk.Concat(start).Concat(stop).Any(s => s.rect.size != idle.rect.size
+                || (s.pivot - idle.pivot).sqrMagnitude > .001f
+                || Mathf.Abs(s.rect.height / s.pixelsPerUnit - definition.canvasHeightUnits) > .002f))
+            {
+                Debug.LogError("Player video sprites require one canvas and foot pivot.", this); return false;
+            }
+            playerMotion = definition; idleSprite = idle; walkFrames = walk;
+            playerStartSprites = start; playerStopSprites = stop;
+            playerWalkEnds = walkEnds; playerStartEnds = startEnds; playerStopEnds = stopEnds;
+            fullSprite = Part("Character artwork", idle, Vector2.zero, Vector2.one, Color.white, 25, rig);
+            fullSprite.transform.localScale = Vector3.one; fullSprite.transform.localPosition = Vector3.zero;
+            ResetPlayerMotion(); return true;
+        }
+
+        public void SetPlayerMotionIntent(float axis)
+        {
+            playerIntentKnown = true; playerWantsMove = Mathf.Abs(axis) > .05f;
+        }
+
+        void AnimatePlayerState(float vx, bool grounded, float dt)
+        {
+            bool moving = Mathf.Abs(vx) > .015f;
+            bool requested = playerIntentKnown ? playerWantsMove : moving;
+            rig.localPosition = Vector3.zero; rig.localRotation = Quaternion.identity;
+            if (!grounded || (requested && !moving))
+            {
+                ResetPlayerMotion(); return;
+            }
+            if (requested && moving)
+            {
+                float direction = Mathf.Sign(vx);
+                var scale = transform.localScale; scale.x = Mathf.Abs(scale.x) * direction; transform.localScale = scale;
+                if (!playerWasWalking || Pose == "Idle" || Pose == "Stop" || direction != playerLastDirection)
+                { Pose = "Start"; playerStateTime = 0; playerDistance = 0; }
+                playerLastDirection = direction; walking = playerWasWalking = true;
+                float travel = Mathf.Abs(vx) * dt / Mathf.Max(.001f, Mathf.Abs(transform.lossyScale.x));
+                float advance = travel / playerMotion.strideLength * playerMotion.cycleSeconds;
+                playerStateTime += advance;
+                float startSeconds = playerStartEnds[playerStartEnds.Length - 1];
+                if (Pose == "Start" && playerStateTime >= startSeconds)
+                { playerStateTime -= startSeconds; Pose = "Walk"; }
+                if (Pose == "Walk")
+                {
+                    playerStateTime = Mathf.Repeat(playerStateTime, playerMotion.cycleSeconds);
+                    playerDistance = playerStateTime / playerMotion.cycleSeconds * playerMotion.strideLength;
+                    playerFrame = FrameAtTime(playerStateTime, playerWalkEnds); fullSprite.sprite = walkFrames[playerFrame];
+                }
+                else { playerFrame = FrameAtTime(playerStateTime, playerStartEnds); fullSprite.sprite = playerStartSprites[playerFrame]; }
+                return;
+            }
+            walking = false;
+            if (playerWasWalking)
+            {
+                int[] entries = Pose == "Start" ? playerMotion.stopFromStart : playerMotion.stopFromWalk;
+                int entry = entries[Mathf.Clamp(playerFrame, 0, entries.Length - 1)];
+                playerStateTime = entry == 0 ? 0 : playerStopEnds[entry - 1];
+                playerStopRate = (playerStopEnds[playerStopEnds.Length - 1] - playerStateTime) / playerMotion.stopResponseSeconds;
+                Pose = "Stop"; playerWasWalking = false;
+            }
+            if (Pose == "Stop")
+            {
+                playerStateTime += dt * playerStopRate;
+                if (playerStateTime < playerStopEnds[playerStopEnds.Length - 1])
+                { playerFrame = FrameAtTime(playerStateTime, playerStopEnds); fullSprite.sprite = playerStopSprites[playerFrame]; return; }
+            }
+            ResetPlayerMotion();
+        }
+
         public void ResetPlayerMotion()
         {
             if (playerMotion == null) return;
+            if (UsesPlayerStateMotion)
+            {
+                playerDistance = playerStateTime = 0; playerFrame = -1;
+                playerWasWalking = playerWasAirborne = walking = false; Pose = "Idle";
+                rig.localPosition = Vector3.zero; rig.localRotation = Quaternion.identity;
+                fullSprite.sprite = idleSprite; return;
+            }
             playerDistance = playerMotion.strideLength * playerMotion.startFrame / walkFrames.Length;
             playerSettleTime = 0;
             playerWasWalking = playerWasAirborne = walking = false;
@@ -420,6 +649,7 @@ namespace Seabreeze
         void AnimatePlayer(float vx, bool grounded, float dt)
         {
             if (dt <= 0) return;
+            if (UsesPlayerStateMotion) { AnimatePlayerState(vx, grounded, dt); return; }
             bool moving = Mathf.Abs(vx) > (playerWasWalking ? .03f : .08f);
             walking = moving;
             if (moving)

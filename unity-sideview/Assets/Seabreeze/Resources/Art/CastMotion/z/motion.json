@@ -1,0 +1,1613 @@
+{
+  "version": 2,
+  "characterId": "z",
+  "revision": "native-video-four-state",
+  "canvasHeightUnits": 2.662218999274837,
+  "startFrame": 0,
+  "walkSpeed": 1.1,
+  "strideLength": 0,
+  "cycleSeconds": 1.1666666666666667,
+  "idle": "z_idle_000",
+  "walk": [
+    "z_walk_000",
+    "z_walk_001",
+    "z_walk_002",
+    "z_walk_003",
+    "z_walk_004",
+    "z_walk_005",
+    "z_walk_006",
+    "z_walk_007",
+    "z_walk_008",
+    "z_walk_009",
+    "z_walk_010",
+    "z_walk_011",
+    "z_walk_012",
+    "z_walk_013",
+    "z_walk_014",
+    "z_walk_015",
+    "z_walk_016",
+    "z_walk_017",
+    "z_walk_018",
+    "z_walk_019",
+    "z_walk_020",
+    "z_walk_021",
+    "z_walk_022",
+    "z_walk_023",
+    "z_walk_024",
+    "z_walk_025",
+    "z_walk_026",
+    "z_walk_027"
+  ],
+  "frameDurations": [
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333
+  ],
+  "start": [
+    "z_start_000",
+    "z_start_001",
+    "z_start_002",
+    "z_start_003",
+    "z_start_004",
+    "z_start_005",
+    "z_start_006",
+    "z_start_007",
+    "z_start_008",
+    "z_start_009",
+    "z_start_010",
+    "z_start_011",
+    "z_start_012",
+    "z_start_013",
+    "z_start_014",
+    "z_start_015",
+    "z_start_016",
+    "z_start_017",
+    "z_start_018",
+    "z_start_019",
+    "z_start_020",
+    "z_start_021",
+    "z_start_022",
+    "z_start_023",
+    "z_start_024",
+    "z_start_025",
+    "z_start_026",
+    "z_start_027",
+    "z_start_028",
+    "z_start_029",
+    "z_start_030",
+    "z_start_031",
+    "z_start_032",
+    "z_start_033",
+    "z_start_034",
+    "z_start_035",
+    "z_start_036",
+    "z_start_037",
+    "z_start_038",
+    "z_start_039"
+  ],
+  "startDurations": [
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333
+  ],
+  "stop": [
+    "z_stop_000",
+    "z_stop_001",
+    "z_stop_002",
+    "z_stop_003",
+    "z_stop_004",
+    "z_stop_005",
+    "z_stop_006",
+    "z_stop_007",
+    "z_stop_008",
+    "z_stop_009",
+    "z_stop_010",
+    "z_stop_011",
+    "z_stop_012",
+    "z_stop_013",
+    "z_stop_014",
+    "z_stop_015",
+    "z_stop_016",
+    "z_stop_017",
+    "z_stop_018",
+    "z_stop_019",
+    "z_stop_020",
+    "z_stop_021",
+    "z_stop_022",
+    "z_stop_023",
+    "z_stop_024",
+    "z_stop_025",
+    "z_stop_026",
+    "z_stop_027",
+    "z_stop_028",
+    "z_stop_029"
+  ],
+  "stopDurations": [
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05
+  ],
+  "assets": [
+    {
+      "name": "z_idle_000",
+      "file": "z_idle_000.png",
+      "sha256": "89254d30b9470b3a4e9aa24f99b02dfed647ab7c0a711d6876fa6812533dfe4f",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "idle",
+      "sourceFrame": 35
+    },
+    {
+      "name": "z_start_000",
+      "file": "z_start_000.png",
+      "sha256": "875a280ebaa1a49a669a62d47458362e81aece5a339ac471ce9fff937b307639",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 36
+    },
+    {
+      "name": "z_start_001",
+      "file": "z_start_001.png",
+      "sha256": "34e9b7309e4c3beeca69407ec4f6595ea2f074e147a78fa5c35a02ef949aa6e7",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 37
+    },
+    {
+      "name": "z_start_002",
+      "file": "z_start_002.png",
+      "sha256": "cad08b11ed14cb981037b0699e0ca89b81724bc0b94260826720a42636eef94a",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 38
+    },
+    {
+      "name": "z_start_003",
+      "file": "z_start_003.png",
+      "sha256": "c4f71f86e483870fb6445866da8b9826da1bbfc6a0f44afb7c0fff124468dd30",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 39
+    },
+    {
+      "name": "z_start_004",
+      "file": "z_start_004.png",
+      "sha256": "ab98914422ec97bb9a32ea1884d47928325edd44dcce983c5e33b5cd3c617bd6",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 40
+    },
+    {
+      "name": "z_start_005",
+      "file": "z_start_005.png",
+      "sha256": "1b6d5dba045d95f34eebc5896840c4a703fff4ea1b03a2d5058ddf63855e6a94",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 41
+    },
+    {
+      "name": "z_start_006",
+      "file": "z_start_006.png",
+      "sha256": "609af193830b41e222a01235aed176d584fa01f7eaccea862e36fc3624f3dd75",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 42
+    },
+    {
+      "name": "z_start_007",
+      "file": "z_start_007.png",
+      "sha256": "67f4299aa4f4e9c9989aaac8a611f981fbc6c71e26391250d17cc87c5fa64e49",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 43
+    },
+    {
+      "name": "z_start_008",
+      "file": "z_start_008.png",
+      "sha256": "c8c6fca2b4495f61186935237e74906f67fb219a104bb2804ef63d645c770637",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 44
+    },
+    {
+      "name": "z_start_009",
+      "file": "z_start_009.png",
+      "sha256": "080a1e4e8f516ddecc114a074038a3b821023ddd217b6ae00bb557e07da880c1",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 45
+    },
+    {
+      "name": "z_start_010",
+      "file": "z_start_010.png",
+      "sha256": "dc9891accfb0c8f5b0a2c182b19c1f3bd2c957aac4a1e17429424d8045a7f83f",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 46
+    },
+    {
+      "name": "z_start_011",
+      "file": "z_start_011.png",
+      "sha256": "19e76728bcdf5cf66fbb095bce901a6621b1c0c6b9e7aef78f17d6d9ab09a046",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 47
+    },
+    {
+      "name": "z_start_012",
+      "file": "z_start_012.png",
+      "sha256": "884b67844112494d843b5b53d04461c7d75c737fac810297aa390b3aac487c56",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 48
+    },
+    {
+      "name": "z_start_013",
+      "file": "z_start_013.png",
+      "sha256": "7f58dbdb6783664bd5f9708ff9133d8db6f851de8885f6044bf42ee0a520504f",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 49
+    },
+    {
+      "name": "z_start_014",
+      "file": "z_start_014.png",
+      "sha256": "c93a1e71ee7afbcf916860532a5fc2d16ca1b0896e95713bc672e7cef28ad3cc",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 50
+    },
+    {
+      "name": "z_start_015",
+      "file": "z_start_015.png",
+      "sha256": "c59bf3db6c7d55b72f74788f1ba15adc2c58213ec04957444fbb7147623a4b3b",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 51
+    },
+    {
+      "name": "z_start_016",
+      "file": "z_start_016.png",
+      "sha256": "6203c39a82d2bd7973b808315bd95af1976cb54da98408a8528a52221e20254d",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 52
+    },
+    {
+      "name": "z_start_017",
+      "file": "z_start_017.png",
+      "sha256": "ebd4328a2c480627bc8325af529bc8a411ad81b732360737ef3c8418df5d21ef",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 53
+    },
+    {
+      "name": "z_start_018",
+      "file": "z_start_018.png",
+      "sha256": "26b578946d0a7d62349cd07c45fa82c5c9bd7889453ac936c94d0bd64aa7dcf0",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 54
+    },
+    {
+      "name": "z_start_019",
+      "file": "z_start_019.png",
+      "sha256": "4ce40876c659119efb8d57d740191f692b77f62bb5034a9e39e9c55a69f720eb",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 55
+    },
+    {
+      "name": "z_start_020",
+      "file": "z_start_020.png",
+      "sha256": "9379863eaf91050aebf535fc9b4bf62dfc5bc8eec6e643b59634448f0ab35031",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 56
+    },
+    {
+      "name": "z_start_021",
+      "file": "z_start_021.png",
+      "sha256": "730af8357d2d6b669a3cf34700c7b8d0c0569fad8f15f54096dceb581527b5cb",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 57
+    },
+    {
+      "name": "z_start_022",
+      "file": "z_start_022.png",
+      "sha256": "e7896895d14f425526f70f26d5966b209b044e11a3460a08280e7b9bd10ce97c",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 58
+    },
+    {
+      "name": "z_start_023",
+      "file": "z_start_023.png",
+      "sha256": "4e217026d76a69a5fd3041d4a912ad6bb06810e4858089daca2c62a9a33e051f",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 59
+    },
+    {
+      "name": "z_start_024",
+      "file": "z_start_024.png",
+      "sha256": "e4bde3a0c9be2588a22ede89d9d93a3b2d01ae444d7a6e193540679e0d46ae65",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 60
+    },
+    {
+      "name": "z_start_025",
+      "file": "z_start_025.png",
+      "sha256": "fb774429341df1f37ea9079d52c0e58ff15181c5159d4002a4109e1c67351997",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 61
+    },
+    {
+      "name": "z_start_026",
+      "file": "z_start_026.png",
+      "sha256": "192483b7bed80b3641b8cb19a7042f510800db0d5fc9e26c218f3b961fe18591",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 62
+    },
+    {
+      "name": "z_start_027",
+      "file": "z_start_027.png",
+      "sha256": "b9c400d5ec3a3ea05d7298c0180f5a28e6096b864de71ca066c3ddd7d7313341",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 63
+    },
+    {
+      "name": "z_start_028",
+      "file": "z_start_028.png",
+      "sha256": "69e6e03855723f8241da3e2a52be27c1d8b0082d6390c558f8c1b7acd200761b",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 64
+    },
+    {
+      "name": "z_start_029",
+      "file": "z_start_029.png",
+      "sha256": "8a6a985619e29c5bb830ef0fe1a16cef789b9d2e51bdc34265a1fd90081684e4",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 65
+    },
+    {
+      "name": "z_start_030",
+      "file": "z_start_030.png",
+      "sha256": "680d7c2284e6d47d130c61c361acad0bb7dedeafe74613fbc15b56d6af1603aa",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 66
+    },
+    {
+      "name": "z_start_031",
+      "file": "z_start_031.png",
+      "sha256": "0f020aac8454851fa13675a555192a87a389ff1fcc10747e798260c81dfb389e",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 67
+    },
+    {
+      "name": "z_start_032",
+      "file": "z_start_032.png",
+      "sha256": "ead2cb015229ffea1553b19cde1839af0b93b57a99ac2113969d3abe724c4369",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 68
+    },
+    {
+      "name": "z_start_033",
+      "file": "z_start_033.png",
+      "sha256": "72ac8aac815d35f6bee9cbe188d765097a23358e66c34dab3c028d8376d6b24f",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 69
+    },
+    {
+      "name": "z_start_034",
+      "file": "z_start_034.png",
+      "sha256": "708971396b1c34b19c93765a09d22e83222a4a12edcb10566b74e59dfd7871ad",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 70
+    },
+    {
+      "name": "z_start_035",
+      "file": "z_start_035.png",
+      "sha256": "df658676c5afcf266fac8a394e397cc2504c6f51135b13a3425d4eb68d1d310b",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 71
+    },
+    {
+      "name": "z_start_036",
+      "file": "z_start_036.png",
+      "sha256": "6a157dc72e7a74f3cd2283e9999b6afa7e72d2a2b6dccb1e425e1251d4f9ed74",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 72
+    },
+    {
+      "name": "z_start_037",
+      "file": "z_start_037.png",
+      "sha256": "c863ffa1194b8013f48b8dcf32ffc7246c3b3943be2adb4c6fb74b8713fd5d60",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 73
+    },
+    {
+      "name": "z_start_038",
+      "file": "z_start_038.png",
+      "sha256": "9b3974f738fc816cae67b429b3941850fa59731facc6585309610d355783d86b",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 74
+    },
+    {
+      "name": "z_start_039",
+      "file": "z_start_039.png",
+      "sha256": "72eba9346a70ffa988aac2ef05cb4517bbe2b3b5519963ed6648ac7b5ddd06e9",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "start",
+      "sourceFrame": 75
+    },
+    {
+      "name": "z_walk_000",
+      "file": "z_walk_000.png",
+      "sha256": "e8403fbc6335d52df3b19c24ca1b18181c1b6af4773246f313b85b8c6b5ba5a9",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 76
+    },
+    {
+      "name": "z_walk_001",
+      "file": "z_walk_001.png",
+      "sha256": "99a540063a509831b4fea1f6f67f8833cd8b465a27720d4e713832707d573f9f",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 77
+    },
+    {
+      "name": "z_walk_002",
+      "file": "z_walk_002.png",
+      "sha256": "4aaf76789e1ce5131a8f7a225ce4f844a73dd89d9da8da784a32a222a3c0ab9f",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 78
+    },
+    {
+      "name": "z_walk_003",
+      "file": "z_walk_003.png",
+      "sha256": "50c27ade077161bd2f4fc01f5b0e680b903b0f9f107326790b0117bad5b1107d",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 79
+    },
+    {
+      "name": "z_walk_004",
+      "file": "z_walk_004.png",
+      "sha256": "2146e1402858803be9ebff65d4c31cab030372c012205f763ea3dd60f4d97cd9",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 80
+    },
+    {
+      "name": "z_walk_005",
+      "file": "z_walk_005.png",
+      "sha256": "f9a0c204b32942122f2ba2e9f1ae384eda171b4bf4ba6a73ba7c09c2a2e2106d",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 81
+    },
+    {
+      "name": "z_walk_006",
+      "file": "z_walk_006.png",
+      "sha256": "f3c722cf0dbf30b796550b47812b7711edfe41ed44100e2d3c322f8ddf53412f",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 82
+    },
+    {
+      "name": "z_walk_007",
+      "file": "z_walk_007.png",
+      "sha256": "9044eeea20be021f5fcf2abcdf3c3a4eb7fb74b66891fd7d1a22176ec6de359c",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 83
+    },
+    {
+      "name": "z_walk_008",
+      "file": "z_walk_008.png",
+      "sha256": "266037760d477b31040ccc57dcfb541ddc47d573ad95534eaa09c26df6e127ea",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 84
+    },
+    {
+      "name": "z_walk_009",
+      "file": "z_walk_009.png",
+      "sha256": "8e61c7cc74e6617e951efe12d6bb1bd1518524f2fec934b5ffee5306cc300c76",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 85
+    },
+    {
+      "name": "z_walk_010",
+      "file": "z_walk_010.png",
+      "sha256": "7cf80109eef947876053581612a7ef57eab5d7427f752871186eb60188caf65e",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 86
+    },
+    {
+      "name": "z_walk_011",
+      "file": "z_walk_011.png",
+      "sha256": "208aa18d0b87e5db70c0a3acd4c74f49a66279c98b78ea5166f0412ffcbfff5f",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 87
+    },
+    {
+      "name": "z_walk_012",
+      "file": "z_walk_012.png",
+      "sha256": "371611fa9e21caeb76a8d66c6b3169f115b731f30440df9d9aebf5b0b2f0f032",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 88
+    },
+    {
+      "name": "z_walk_013",
+      "file": "z_walk_013.png",
+      "sha256": "ecea70eb084fd847d7cc6007eeae503e0a1eb909130166900aaec02bd2c21be0",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 89
+    },
+    {
+      "name": "z_walk_014",
+      "file": "z_walk_014.png",
+      "sha256": "0eb5bf64226ecdc8af1f31c7a3753752daae60e3e8f069ec413d5ed6f8935a10",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 90
+    },
+    {
+      "name": "z_walk_015",
+      "file": "z_walk_015.png",
+      "sha256": "cbd6ce0adf50727dc2cfc600adead859224a842081640a303c8e210539aa9776",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 91
+    },
+    {
+      "name": "z_walk_016",
+      "file": "z_walk_016.png",
+      "sha256": "f4a2a601aa1afc631fa143c9215fef98492bb27cdd76be8344712f247350a3e3",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 92
+    },
+    {
+      "name": "z_walk_017",
+      "file": "z_walk_017.png",
+      "sha256": "14a1bebfc49cb3106e86ae2a03422217069951934eb2cb31ea89b141abab40b5",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 93
+    },
+    {
+      "name": "z_walk_018",
+      "file": "z_walk_018.png",
+      "sha256": "5e8e09c81f1d93cdd011e8f13081ae5def3837dd728d16b8347b7b4b13ea4ebd",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 94
+    },
+    {
+      "name": "z_walk_019",
+      "file": "z_walk_019.png",
+      "sha256": "b76f5a40fc9303d7f293e8cb2ccea938a4849e5dcab938cd5069659114a5fd09",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 95
+    },
+    {
+      "name": "z_walk_020",
+      "file": "z_walk_020.png",
+      "sha256": "cab89c20a5b673ed7aa2c917a14746f803bb5025a726f15af59ff862c149bd7f",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 96
+    },
+    {
+      "name": "z_walk_021",
+      "file": "z_walk_021.png",
+      "sha256": "004089d2393068622c7a173708f880ff8c2ec3c89f647f2648889a02aa9b9c45",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 97
+    },
+    {
+      "name": "z_walk_022",
+      "file": "z_walk_022.png",
+      "sha256": "754172b6c4b4e2d6db59ab66486d7ba2e79200b860f0aaedbf6409f9368a4177",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 98
+    },
+    {
+      "name": "z_walk_023",
+      "file": "z_walk_023.png",
+      "sha256": "e6a4f1aa25ca172c6d573a728f8bafc8e75ffb4543100da4a6271aa82a01bbf3",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 99
+    },
+    {
+      "name": "z_walk_024",
+      "file": "z_walk_024.png",
+      "sha256": "b27c5696ada3625b7d7d97b9a84576d33852595addd046e64d90bf3047e855fd",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 100
+    },
+    {
+      "name": "z_walk_025",
+      "file": "z_walk_025.png",
+      "sha256": "d3247a1efe488961a266636f0b9f3dbc3a28b6898df64313f5b44a4d75fae8b5",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 101
+    },
+    {
+      "name": "z_walk_026",
+      "file": "z_walk_026.png",
+      "sha256": "feed4227a1cde05d0cadff67c40094d7b66d6acc3606d992878f9d5687c72a48",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 102
+    },
+    {
+      "name": "z_walk_027",
+      "file": "z_walk_027.png",
+      "sha256": "52a78e3bb278cedc94b0992e4641901519f8c95c073d2b1fcc0aa47bab44d2cc",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "walk",
+      "sourceFrame": 103
+    },
+    {
+      "name": "z_stop_000",
+      "file": "z_stop_000.png",
+      "sha256": "0038aa9f1714ec792017cac3437993f48b22bc3c4f05a3973f8b80bb5dbc91bd",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 195
+    },
+    {
+      "name": "z_stop_001",
+      "file": "z_stop_001.png",
+      "sha256": "7b074fdac38655240f4782de3b2156c62a5bb248f2e9b738362bd0146be7e9ee",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 196
+    },
+    {
+      "name": "z_stop_002",
+      "file": "z_stop_002.png",
+      "sha256": "905597f03d492bd41aa0bcf3acc1a235271153410eada0bd371c3cee2215047a",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 197
+    },
+    {
+      "name": "z_stop_003",
+      "file": "z_stop_003.png",
+      "sha256": "86d434a2f1ec2324c7f809b7e34ae7bd5d6eb23c13ca8da132b4d4fc460dd422",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 198
+    },
+    {
+      "name": "z_stop_004",
+      "file": "z_stop_004.png",
+      "sha256": "5352806dfa079ecadc6c007f99dd9aafef6398ef2ae4366814d8757c50b8cda8",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 199
+    },
+    {
+      "name": "z_stop_005",
+      "file": "z_stop_005.png",
+      "sha256": "e60ddb27047d00502600a8a3f63c49d3e04089e2c06b2d8d23cb6ccf4057748a",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 200
+    },
+    {
+      "name": "z_stop_006",
+      "file": "z_stop_006.png",
+      "sha256": "8694948a37b66c7ae6133e8a33ffb92d1c8ccbe3b78d351707c1fd548fee7012",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 201
+    },
+    {
+      "name": "z_stop_007",
+      "file": "z_stop_007.png",
+      "sha256": "cf413f92b51c17eec9bb8123efbfece1e246de91d6720cf62994eb93924edfbe",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 202
+    },
+    {
+      "name": "z_stop_008",
+      "file": "z_stop_008.png",
+      "sha256": "671e7e5f8127a67a35fdee367728f9ca91944e26cc7e9a36bfccf8270ecf4a6e",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 203
+    },
+    {
+      "name": "z_stop_009",
+      "file": "z_stop_009.png",
+      "sha256": "49a392a46bab6e5b2a245e23b7126dcda4923e170473773f13ba2f03fe573ca1",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 204
+    },
+    {
+      "name": "z_stop_010",
+      "file": "z_stop_010.png",
+      "sha256": "b05e9759454bd2b64218d7bb913bfd0b8d099e6ffd8db083cb6a1903ee452644",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 205
+    },
+    {
+      "name": "z_stop_011",
+      "file": "z_stop_011.png",
+      "sha256": "476f7cdd40fd966c6e915aa4a555e8a8377e7cd732d3f288888ea64c0c4a053a",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 206
+    },
+    {
+      "name": "z_stop_012",
+      "file": "z_stop_012.png",
+      "sha256": "3613f6a95d8304446c4200759f52880255e6c697bb8667e6d60b5cb3678cce98",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 207
+    },
+    {
+      "name": "z_stop_013",
+      "file": "z_stop_013.png",
+      "sha256": "9e6da570f207170778626c80a3bda7875f97445df23ac689c6d09f8862534a0b",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 208
+    },
+    {
+      "name": "z_stop_014",
+      "file": "z_stop_014.png",
+      "sha256": "76ea009decf4712c17cc221aa1c932d4688a23dd40fe6151fdda005fd7d4cdff",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 209
+    },
+    {
+      "name": "z_stop_015",
+      "file": "z_stop_015.png",
+      "sha256": "ff3cad33047180288c107dad482782a5439b762075aed489e00c50f7ef202124",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 210
+    },
+    {
+      "name": "z_stop_016",
+      "file": "z_stop_016.png",
+      "sha256": "52207e582b7caa5cee6661a9fe05b53b0376df0fa9b6352888f657b0a4ba88db",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 211
+    },
+    {
+      "name": "z_stop_017",
+      "file": "z_stop_017.png",
+      "sha256": "c1c88caa32917ba4f06305f9e3c9286f23a2b61fd4d2dec66c1d0f73960e5848",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 212
+    },
+    {
+      "name": "z_stop_018",
+      "file": "z_stop_018.png",
+      "sha256": "2a404d31e36ac5fd8f224f0df27ab3446846306fc08aca22e872e04b657e1c5f",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 213
+    },
+    {
+      "name": "z_stop_019",
+      "file": "z_stop_019.png",
+      "sha256": "9706e15c3152b8d7073b879219842efdfff82be066acc866e8b22fc600d8e6ea",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 214
+    },
+    {
+      "name": "z_stop_020",
+      "file": "z_stop_020.png",
+      "sha256": "4f1233551311cc5483aa836b98e8fdd1c0c62786eb30e8112a6d3a422c549d0a",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 215
+    },
+    {
+      "name": "z_stop_021",
+      "file": "z_stop_021.png",
+      "sha256": "fc8761f6af969f4b77cb7b1f0c34ac532643b961d5c52e89f39855cccc58918a",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 216
+    },
+    {
+      "name": "z_stop_022",
+      "file": "z_stop_022.png",
+      "sha256": "a9e877827cd7be2e82e5911411fdc8fbb93a64af8104b2124a7fd87322ac03be",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 217
+    },
+    {
+      "name": "z_stop_023",
+      "file": "z_stop_023.png",
+      "sha256": "df66f53a115281bee1e843df456c67f9abeda39397a5e3a1665b38292dd1188b",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 218
+    },
+    {
+      "name": "z_stop_024",
+      "file": "z_stop_024.png",
+      "sha256": "f30e094822e2b95294f3fed6f7590114d41a13350a763ba89456ffdb34de0e41",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 219
+    },
+    {
+      "name": "z_stop_025",
+      "file": "z_stop_025.png",
+      "sha256": "1b8d201731b9b3d6b7e8d9a93aa98fb9b6595bec45f02b4b333081ec83440293",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 220
+    },
+    {
+      "name": "z_stop_026",
+      "file": "z_stop_026.png",
+      "sha256": "3f3bba9b62b2282bdf5d554e06adaff598b7bedb1165bbb5d6309fd01ceebd68",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 221
+    },
+    {
+      "name": "z_stop_027",
+      "file": "z_stop_027.png",
+      "sha256": "0b83061d30de51b839f466c85253c9c122134d23c5780e13fea6ee27eee083bc",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 222
+    },
+    {
+      "name": "z_stop_028",
+      "file": "z_stop_028.png",
+      "sha256": "bb8304682f47ac530f526b02ba45769061861296cd176879d038758130c4ff4b",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 223
+    },
+    {
+      "name": "z_stop_029",
+      "file": "z_stop_029.png",
+      "sha256": "568579d574cf4df7b5d45040c2ab0e4f44aec529ff4a00197288f8f8901defbb",
+      "width": 1544,
+      "height": 2824,
+      "pixelsPerUnit": 1060.7692307692307,
+      "pivot": {
+        "x": 0.4792746113989637,
+        "y": 0.012039660056657242
+      },
+      "state": "stop",
+      "sourceFrame": 224
+    }
+  ],
+  "source": {
+    "videoSha256": "7cadfcc7733928c832acc98c0bf367870a578c0983799531d7c734a452a6e59f",
+    "review": "source~/video-extraction.json",
+    "nativePng": true,
+    "gpuCompression": "BC7 at native dimensions"
+  }
+}
