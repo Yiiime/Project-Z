@@ -39,6 +39,9 @@ namespace Seabreeze
         public void Initialize(MemoryGameController m,GameSession s,WorldDirector w){memory=m;session=s;world=w;nextDecision=Time.unscaledTime+4;}
         void Update()
         {
+            // This scene has authored, silent social groups until the player
+            // finishes the introductions. Autonomous AI must not move them away.
+            if(session?.FirstDay?.GatheringActive==true){if(sessions.Count>0)CancelAll("第一日广场分组");return;}
             foreach(var c in sessions.Values.ToArray())if(!WorldReady||!Present(c.first)||(!c.player&&c.stage!="选择是否交谈"&&!Present(c.second))||Time.unscaledTime-c.started>MemoryRuntimeConfig.Settings.conversationTimeout)Finish(c,false);
             if(!WorldReady||!memory.Client.CanGenerate||Time.unscaledTime<nextDecision||sessions.Values.Any(c=>!c.player))return;
             nextDecision=Time.unscaledTime+MemoryRuntimeConfig.Settings.decisionInterval;
