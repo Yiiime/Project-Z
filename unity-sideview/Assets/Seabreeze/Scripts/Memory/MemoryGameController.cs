@@ -107,6 +107,7 @@ namespace Seabreeze
         }
         public void RespondTask(string taskId,bool accepted)
         {
+            session.FirstDay?.BeginTask(accepted);
             Client.RespondTask(taskId,accepted,ReplyToCurrentConversation());
         }
         public void InviteTask(string taskId,string actorId,string text)

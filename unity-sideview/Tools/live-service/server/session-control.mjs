@@ -23,6 +23,7 @@ export class SessionControl {
     this.data.paceIndex??=-1;
     this.inputQueue=[];this.requests=new Set();this.disposed=false;
   }
+  get onboarding(){return ['arrival','first_evening'].includes(this.s.scene?.context?.mode);}
   get normal(){return ['opening','live'].includes(this.data.phase);}
   timing(){
     const d=this.data,at=d.endedAt??this.now(),elapsed=Math.max(0,at-d.startedAt);
@@ -30,7 +31,7 @@ export class SessionControl {
     const next=BEATS[index+1];
     return {targetMs:d.targetAt-d.startedAt,hardMs:d.hardAt-d.startedAt,targetRemainingMs:Math.max(0,d.targetAt-at),hardRemainingMs:Math.max(0,d.hardAt-at),beat:beat.id,beatLabel:beat.label,directive:d.extensionActive?'只完成已经约定的追加范围，不重开故事；范围完成就提出 finish_extension。':beat.directive,nextBeatInMs:next?Math.max(0,d.startedAt+next.at-at):null};
   }
-  snapshot(){const d=this.data;return {phase:d.phase,version:d.version,closeReason:d.closeReason,extensionUsed:d.extensionUsed,extensionActive:d.extensionActive,extensionScope:d.extensionScope,remainingMs:d.deadlineAt||d.extensionActive?Math.max(0,(d.deadlineAt||d.extensionDeadline)-this.now()):null,elapsedMs:Math.max(0,(d.endedAt??this.now())-d.startedAt),timing:this.timing()};}
+  snapshot(){const d=this.data;return {phase:d.phase,version:d.version,closeReason:d.closeReason,extensionUsed:d.extensionUsed,extensionActive:d.extensionActive,extensionScope:d.extensionScope,remainingMs:d.deadlineAt||d.extensionActive?Math.max(0,(d.deadlineAt||d.extensionDeadline)-this.now()):null,elapsedMs:Math.max(0,(d.endedAt??this.now())-d.startedAt),...(!this.onboarding?{timing:this.timing()}:{})};}
   advancePace(){
     const index=BEATS.findLastIndex(b=>this.now()-this.data.startedAt>=b.at);
     if(index<=this.data.paceIndex)return;
@@ -67,6 +68,7 @@ export class SessionControl {
   }
   decision(result,context){
     const d=result.sessionDecision;if(!d)return false;
+    if(this.s.scene?.context?.mode==='arrival' && d.intent!=='stop')return false;
     if(!this.normal)return true;
     if(context.host.sessionControl?.version!==this.data.version)return true;
     const player=context.host.inbox.find(m=>m.mine&&m.id===d.sourceMessageId);
@@ -107,7 +109,7 @@ export class SessionControl {
   begin(reason,announcement=''){
     const d=this.data,oldDeadline=d.deadlineAt;
     d.phase='closing';d.closeReason=reason;d.version++;d.extensionActive=false;
-    d.deadlineAt=Math.min(d.hardAt,oldDeadline||Infinity,this.now()+(reason==='player'?this.limits.playerClosingMs:this.limits.hostClosingMs));
+    d.deadlineAt=Math.min(this.onboarding?Infinity:d.hardAt,oldDeadline||Infinity,this.now()+(reason==='player'?this.limits.playerClosingMs:this.limits.hostClosingMs));
     this.pendingHandled=[];d.readyAt=null;this.announcement=reason==='host'?announcement:'';this.announcementId=null;this.farewellId=null;
     this.generating=false;for(const c of this.requests)c.abort();this.inputQueue=[];
     this.freeze();this.changed();
@@ -130,7 +132,7 @@ export class SessionControl {
   }
   async farewell(){
     if(this.generating||this.disposed||this.data.phase!=='closing'||!this.barrierReady)return;
-    this.generating=true;const version=this.data.version;let speech=FALLBACK;
+    this.generating=true;const version=this.data.version;let speech=this.s.scene?.context?null:FALLBACK;
     try{
       const reply=await this.request('session',this.context('farewell'));
       const evidence=this.s.engine.session.evidence();
@@ -138,11 +140,11 @@ export class SessionControl {
       if(review.decision==='allow')speech=reply.speech;
     }catch{/* A fixed short goodbye is valid even when the provider is unavailable. */}
     if(this.disposed||version!==this.data.version||this.data.phase!=='closing')return;
-    this.generating=false;this.data.phase='farewell';this.data.version++;
+    this.generating=false;if(!speech){this.end('farewell_unavailable');return;}this.data.farewellText=speech;this.data.phase='farewell';this.data.version++;
     this.say(speech,'farewell');
   }
   audioDisabled(){
-    if(this.data.phase==='farewell'&&!this.textFallback){this.textFallback=true;this.say(FALLBACK,'farewell');}
+    if(this.data.phase==='farewell'&&!this.textFallback){this.textFallback=true;this.say(this.data.farewellText||FALLBACK,'farewell');}
     else if(this.data.phase==='closing'&&this.announcementId){this.announcementId=null;this.data.readyAt=this.now()+this.limits.invitationMs;}
   }
   receipt(c,p){
@@ -159,7 +161,7 @@ export class SessionControl {
       if(c.payload.speechId===this.farewellId){
         if(p.status==='completed')this.end('farewell_completed');
         else if(['failed','interrupted','skipped'].includes(p.status)&&!this.textFallback){
-          this.textFallback=true;this.say(FALLBACK,'farewell');
+          this.textFallback=true;this.say(this.data.farewellText||FALLBACK,'farewell');
         }
       }
       if(this.normal&&p.status==='completed')this.opened();
@@ -168,12 +170,12 @@ export class SessionControl {
   }
   tick(){
     const d=this.data;if(this.disposed||d.phase==='ended')return;
-    if(this.now()>=d.hardAt){this.end('session_hard_limit');return;}
+    if(!this.onboarding&&this.now()>=d.hardAt){this.end('session_hard_limit');return;}
     if(d.deadlineAt&&this.now()>=d.deadlineAt){this.end('closing_timeout');return;}
     if(d.extensionActive&&this.now()>=d.extensionDeadline){this.begin('host');return;}
-    if(this.normal&&!d.extensionActive&&this.now()>=d.targetAt){this.begin('host','今晚的时间差不多了，我们把话题轻轻收住，准备和大家道个晚安。');return;}
-    if(this.normal&&this.now()>=d.hardAt-this.limits.hostClosingMs){this.begin('host');return;}
-    if(this.normal)this.advancePace();
+    if(!this.onboarding&&this.normal&&!d.extensionActive&&this.now()>=d.targetAt){this.begin('host',this.s.scene?.context?'':'今晚的时间差不多了，我们把话题轻轻收住，准备和大家道个晚安。');return;}
+    if(!this.onboarding&&this.normal&&this.now()>=d.hardAt-this.limits.hostClosingMs){this.begin('host');return;}
+    if(this.normal&&!this.onboarding)this.advancePace();
     if(d.phase==='closing'&&this.barrierReady&&!this.announcementId&&d.readyAt&&this.now()>=d.readyAt&&!this.inspecting)void this.farewell();
   }
   end(reason){

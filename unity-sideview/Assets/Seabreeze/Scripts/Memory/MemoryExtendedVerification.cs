@@ -121,7 +121,12 @@ namespace Seabreeze
             Memory.Conversations.CancelAll();yield return Travel(PlaceId.Street);
             for(int day=2;day<=7;day++)
             {
-                while(Game.State.day<day)Game.Clock.Advance();yield return Ready();
+                while(Game.State.day<day)
+                {
+                    for(int rest=0;rest<4&&!Game.Clock.LiveReady;rest++)Game.Clock.Advance();
+                    if(!Game.Clock.CompleteLiveSession(Guid.NewGuid().ToString()))throw new InvalidOperationException("Verification could not finish the four-rest day");
+                }
+                yield return Ready();
                 if(day==4)
                 {
                     string notice=null;Action<string> capture=message=>notice=message;

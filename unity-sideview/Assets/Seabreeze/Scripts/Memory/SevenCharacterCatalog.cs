@@ -37,7 +37,7 @@ namespace Seabreeze
             }
         }
         public static SevenCharacter Find(string id) => Actors.FirstOrDefault(a=>a.id==id);
-        public static string Name(string id) => id=="player"?"玩家":id=="z"?"Z":Find(id)?.displayName??id;
+        public static string Name(string id) => id=="player"?PlayerIdentity.DisplayName:id=="z"?"Z":Find(id)?.displayName??id;
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)] static void Reset(){actors=null;navigation=null;}
     }
 }

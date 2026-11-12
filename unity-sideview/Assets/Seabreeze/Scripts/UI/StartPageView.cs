@@ -274,7 +274,35 @@ namespace Seabreeze
             if (menuGroup != null) { menuGroup.interactable = !busy; menuGroup.blocksRaycasts = !busy; }
             if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(null);
         }
-        void Choose(bool fresh) { if (busy) return; ShowLoading(); enter?.Invoke(fresh); }
+        void Choose(bool fresh)
+        {
+            if (busy) return;
+            if (fresh) { ShowNameEntry(); return; }
+            ShowLoading(); enter?.Invoke(false);
+        }
+        void ShowNameEntry()
+        {
+            var card = ModalCard("你希望在游戏里的名字", 400);
+            var fieldRect = Rect("Player name", card, Vector2.up, Vector2.up, new Vector2(42,-128), new Vector2(616,72));
+            var fill = fieldRect.gameObject.AddComponent<Image>(); fill.color = new Color(.95f,.97f,1,.15f);
+            var field = fieldRect.gameObject.AddComponent<TMP_InputField>();
+            var text = Label("Name text", fieldRect, Vector2.zero, Vector2.zero, new Vector2(16,8), new Vector2(584,56), "", 26, White);
+            text.richText = false; field.textViewport = fieldRect; field.textComponent = text;
+            field.lineType = TMP_InputField.LineType.SingleLine; field.characterLimit = 48;
+            var hint = Label("Name hint", card, Vector2.up, Vector2.up, new Vector2(42,-220), new Vector2(616,40), "1–12 个字。岛上的朋友会这样称呼你。", 18, Quiet);
+            void AcceptName()
+            {
+                if (busy || !string.IsNullOrEmpty(EventSystem.current?.currentInputModule?.input?.compositionString)) return;
+                var name = PlayerIdentity.Normalize(field.text);
+                if (string.IsNullOrWhiteSpace(name)) { hint.text = "请先写下你的名字。"; field.ActivateInputField(); return; }
+                PlayerIdentity.PendingName = name;
+                ShowLoading(); enter?.Invoke(true);
+            }
+            var confirm = UIPrimitives.Button("Confirm player name", card, Vector2.zero, Vector2.zero, new Vector2(275,34), new Vector2(380,58), "确认，开始旅程", AcceptName, true);
+            UIPrimitives.Button("Cancel player name", card, Vector2.zero, Vector2.zero, new Vector2(42,34), new Vector2(210,58), "返回", CloseModal);
+            field.onSubmit.AddListener(_ => AcceptName());
+            field.text = ""; field.Select(); field.ActivateInputField();
+        }
         public void ShowLoading() { busy = true; CloseModal(); menuGroup.alpha = 1; group.interactable = false; status.text = "海风正在捎来你的故事…"; }
         public void ShowSaveNotice(string message) { if (notice != null) notice.text = message; if (!hasSave) confirmFresh = true; }
         public void ShowError(string message)

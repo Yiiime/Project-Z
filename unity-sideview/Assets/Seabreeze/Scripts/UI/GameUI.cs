@@ -160,7 +160,7 @@ namespace Seabreeze
             if(!initialized)return;
             dateText.text="第  "+session.Clock.Day+"  天";
             dateText.fontSize=26;
-            timeText.text=PeriodName(session.Clock.Period);
+            timeText.text=PeriodName(session.Clock.Period)+((session.FirstDay?.Active??false)?"":" · 休息 "+session.Clock.RestActions+"/4");
             string clock=session.Clock.TimeLabel;
             int clockStart=clock.IndexOfAny("0123456789".ToCharArray());
             if(clockStart>=0)clock=clock.Substring(clockStart);
@@ -305,6 +305,8 @@ namespace Seabreeze
         }
         void OpenOverlay(string mode)
         {
+            if (mode == "live" && !(session.FirstDay?.Phase == FirstDayPhase.EveningLive) && !session.Clock.LiveReady)
+            { session.Story.Notify("今天休息安排完成后，就可以进入直播。 "); return; }
             if(!initialized||IsTransitioning||overlayBusy||(session.Memory?.PlayerChatOpen??false))return;
             if(!IsPhonePage(mode))FinishPhoneClose();
             overlayBusy=true;Time.timeScale=0f;session.SetOverlay(true);HideInteraction();dialogueRoot.gameObject.SetActive(false);
@@ -356,6 +358,28 @@ namespace Seabreeze
             // A late callback from a closed room or a replaced save cannot advance a new day.
             if(source==null||source!=nativeLive||overlayMode!="live"||session.State!=owner)return;
             CloseOverlayThen(()=>session.Clock.CompleteLiveSession(sessionId));
+        }
+        public IEnumerator ShowLiveNotification()
+        {
+            while (overlayBusy || IsTransitioning || (session.Memory?.PlayerChatOpen ?? false)) yield return null;
+            OpenOverlay("phone");
+            while (overlayBusy) yield return null;
+            if (!HasOverlay) yield break;
+            overlayBusy = true; // Keep data refresh and clicks from replacing the animated icon.
+            var button = phonePage != null ? phonePage.Find("Phone app live") as RectTransform : null;
+            Vector2 original = button != null ? button.anchoredPosition : Vector2.zero;
+            var graphic = button != null ? button.GetComponent<Graphic>() : null;
+            Color originalColor = graphic != null ? graphic.color : Color.white;
+            var hover = button != null ? button.GetComponent<UIHoverFeedback>() : null;
+            if (hover != null) hover.enabled = false;
+            if (graphic != null) graphic.color = new Color(1,.88f,.55f);
+            for (float elapsed = 0; elapsed < 1; elapsed += Time.unscaledDeltaTime)
+            { if (button != null) button.anchoredPosition = original + Vector2.right * Mathf.Sin(elapsed * 65) * 4; yield return null; }
+            if (button != null) button.anchoredPosition = original;
+            if (graphic != null) graphic.color = originalColor;
+            if (hover != null) hover.enabled = true;
+            overlayBusy = false;
+            CloseOverlayImmediately();
         }
         public void CloseOverlay(){CloseOverlayThen(null);}
         public void CloseOverlayImmediately()

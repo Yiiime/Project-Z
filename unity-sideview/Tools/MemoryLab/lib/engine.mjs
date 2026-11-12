@@ -522,7 +522,9 @@ export class Engine {
       ],
       env = j.environment || {};
     if (j.mode === "player")
-      actions.push(...this.tasks.options(w.worldId, actor, j.event));
+      actions.push(...this.tasks.options(w.worldId, actor, j.event).filter(option =>
+        !w.firstDay || ['Complete','DailyReady'].includes(w.firstDay.phase) ||
+        w.firstDay.phase === 'WelcomeTask' && this.tasks.definition(option.parameters.task_id,w.worldId).dynamic));
     const present =
       env.present_characters ||
       Object.keys(w.actors).filter((id) => this.visible(w, actor, id));
@@ -696,7 +698,8 @@ export class Engine {
         j.mode === "player"
           ? this.tasks
               .list(w.worldId, j.actor)
-              .filter((t) => t.enabled || t.status !== "available")
+              .filter((t) => (t.enabled || t.status !== "available") &&
+                (!w.firstDay || ['Complete','DailyReady'].includes(w.firstDay.phase) || w.firstDay.phase === 'WelcomeTask' && t.dynamic))
               .map((t) => ({
                 ...t,
                 collaborators: t.collaborators.filter(
@@ -1139,7 +1142,7 @@ export class Engine {
     responder = "player",
     eventMeta = {},
   ) {
-    const d = this.tasks.definition(task);
+    const d = this.tasks.definition(task, world);
     this.tasks.respond(world, task, accept, responder);
     this.focus(world, d.owner, owner);
     const e = this.addEvent(world, {
@@ -1151,6 +1154,10 @@ export class Engine {
       ...eventMeta,
     });
     if (!accept) this.tasks.decline(world, task, e.id);
+    else if(d.dynamic) {
+      const current=this.world(world);current.welcomeAcceptance??={};
+      current.welcomeAcceptance[task]={eventId:e.id,photoIds:[...(current.firstDay?.photoIds||[])]};this.save(current);
+    }
     else if (
       [
         "map_blank",
@@ -1192,10 +1199,25 @@ export class Engine {
     return job;
   }
   taskReceipt(world, task, step, receipt, success, who, details = {}, eventMeta = {}) {
+    // The changing host snapshot is transport context, not immutable action evidence.
+    const { firstDay: hostContext, ...evidenceDetails } = details; details = evidenceDetails;
     const w = this.world(world);
     if (task === "departure_prep" && step === "notify" && success) {
       const e = this.event(world, details.message_event_id);
       if (!e?.visible.includes("z")) throw new TurnError("Z尚未实际收到消息");
+    }
+    const dynamic=this.tasks.definition(task,world);
+    if(dynamic.dynamic&&success&&!JSON.parse(this.tasks.state(world,task).progress)[step]?.succeeded) {
+      const goal=dynamic.steps.find(s=>s.id===step),accepted=w.welcomeAcceptance?.[task];
+      if(!goal||!accepted)throw new TurnError('迎新任务尚未由玩家实际接受');
+      if(goal.action==='talk_to') {
+        const events=this.records(w,'event'),source=this.event(world,details.evidence_id);
+        if(!source||source.speaker!==goal.target||source.recipient!=='player'||source.channel!=='private_player_chat'||
+          events.findIndex(e=>e.id===source.id)<=events.findIndex(e=>e.id===accepted.eventId))throw new TurnError('需要接受任务之后的实际交流');
+      } else if(goal.action==='take_photo') {
+        if(!w.firstDay?.photoIds?.includes(details.evidence_id)||accepted.photoIds.includes(details.evidence_id)||w.firstDay.place!==goal.target)
+          throw new TurnError('需要在指定地点实际拍摄一张新照片');
+      } else throw new TurnError('该实时任务动作没有执行器');
     }
     const changed = this.tasks.record(
       world,
@@ -1208,10 +1230,10 @@ export class Engine {
       Object.fromEntries(Object.values(w.actors).map((a) => [a.id, a.scene])),
     );
     if (!changed) {if(eventMeta.id)this.observe(world,"重复任务回执已确认，没有新进度。",[],{kind:"fact",wake:false,...eventMeta});return;}
-    const owner = this.tasks.definition(task).owner;
+    const owner = this.tasks.definition(task, world).owner;
     const event=this.observe(
       world,
-      `游戏确认任务“${this.tasks.definition(task).title}”的步骤${step}${success ? "已完成" : "失败"}。`,
+      `游戏确认任务“${this.tasks.definition(task, world).title}”的步骤${step}${success ? "已完成" : "失败"}。`,
       [...new Set([owner, "player", who])],
       { kind: "fact", ...eventMeta },
     );
@@ -1367,6 +1389,7 @@ export class Engine {
       this.tasks.restore(world, {});
       w.actors = this.initialActors(w.initialMetrics || {});
       delete w.zNarrated;
+      for (const key of ["firstDay","storyPlans","welcomeTriggers","welcomeAcceptance"]) delete w[key];
       w.seq=0;w.hour=0;w.day=1;w.period=0;w.tick=0;w.reflected={};w.memoryRevision=0;
     }
     w.epoch = epoch;

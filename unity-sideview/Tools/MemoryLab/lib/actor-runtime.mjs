@@ -68,6 +68,10 @@ export class ActorRuntime {
       infoEmotionRules;
     const baseSystem =
         this.catalog.prompt(context.actor_id) +
+        (context.environment.first_day ? '\n首日情境：这是玩家初次登岛。你依据自己的Skill和现场说话，没有固定台词。'+
+          'Harbor时Z自然欢迎玩家、介绍日常生活，并邀请一起去市民广场。MeetIslanders时先主动介绍自己，再接住玩家一轮回应；'+
+          '姓名只有在Z已向大家介绍（announced）后才由其他居民使用。WelcomeTask时如有现场生成的可发布任务，结合交流自然提出；'+
+          '任务未接受前只是邀请，不要求暗号，不编已完成；已拒绝就尊重。不要谈后期秘密，不念阶段名或内部字段。' : '') +
         "\n\n" +
         rules +
         (context.actor_id==='z' && context.interaction.mode==='player' ? "\n如果玩家明确点歌且你愿意接下，自然说清你会学或练哪首（用《歌名》）；拒绝或只聊音乐也如实说。仅对点歌请求，在info.day_song_reply填写accept（明确接下学或练，包括开始准备但不保证唱好）、decline（拒绝）或discuss（只是聊歌、没有接下）。这个决定须与本句台词一致，承诺练习并不保证一定唱好。答应后后台才开始准备，没有完成回执不要说已经练好。" : "") + (context.z_story ? "\n如果自然聊到这段回忆，可以使用 z_story.line 中的原话，只展开这一个新细节，给玩家留出追问空间。" : "") +

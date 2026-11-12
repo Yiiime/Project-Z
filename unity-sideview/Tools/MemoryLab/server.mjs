@@ -1,4 +1,5 @@
 import { SpeechService, SpeechError } from "./lib/speech.mjs";
+import {FirstDayAgent} from './lib/first-day.mjs';
 import {dayConversation} from "./lib/daytime.mjs";
 import {localSongSubmit,DaySongDispatch} from "./lib/day-song-dispatch.mjs";
 import http from "node:http";
@@ -77,6 +78,7 @@ export function createServer({
   }
   let configurationRevision = 1;
   const engine = new Engine(store, catalog, provider, { decide }),
+    firstDay = new FirstDayAgent(engine, provider, catalog),
     token = randomBytes(24).toString("hex");
   const daySongs=songSubmit ? new DaySongDispatch(songSubmit) : null;
   let background = false;
@@ -319,6 +321,7 @@ export function createServer({
           w.period = p.period;
           w.hour = target;
           engine.save(w);
+          if(p.details?.firstDay)firstDay.update(world,p.details.firstDay);
           if(daySongs){
             // A checkpoint can be rolled back, or reopened after an offline evening.
             daySongs.resetWorld(w.worldId);
@@ -329,7 +332,10 @@ export function createServer({
           result = gameResponse(world);
         } else {
           const w = checkRun(p);
-          if (["/api/game/speech","/api/game/speech/stream"].includes(url.pathname)) {
+          if(p.details?.firstDay)w.firstDay=firstDay.update(world,p.details.firstDay);
+          if(url.pathname === '/api/game/story/plan') {
+            result=gameResponse(world,{storyPlan:await firstDay.plan(world,p.runId,p.requestId)});
+          } else if (["/api/game/speech","/api/game/speech/stream"].includes(url.pathname)) {
             // Synthesize the committed server-side proposal, never caller-supplied text.
             const proposal = store.record(p.proposalId);
             const currentSpeech = () => {
@@ -551,6 +557,11 @@ export function createServer({
               } else
                 throw new TurnError("不支持该事件类型；剧情必须由引擎显式投递");
               const stored = engine.event(world, event.id);
+              if(stored && event.kind==='story_event' && event.verified && event.observers?.includes('z') &&
+                 (['player_introduced','fireworks_story','arrival_accepted'].some(key=>event.id===`story_${world}_${key}`) ||
+                  event.id.startsWith(`story_${world}_welcome_complete_`))) {
+                stored.publicActivity='firstday'; store.put('event',stored);
+              }
               if (stored) {
                 if(event.kind==="utterance" && stored.speaker==="z" && stored.channel==="private_player_chat")stored.daySongBridge=true;
                 stored.game_payload_hash = digest;
@@ -585,6 +596,7 @@ export function createServer({
             const isPlayer = recipient === "player";
             if (isPlayer && w.focus?.actor !== actor)
               throw new TurnError("该NPC未取得玩家对话占用");
+            if(isPlayer)await firstDay.prepareTask(world,actor,p.conversationId);
             const history = engine.memory.history(
                 w,
                 actor,
@@ -611,6 +623,7 @@ export function createServer({
               channel: p.channel || "face_to_face",
               environment: {
                 sceneId: p.scene,
+                ...(isPlayer && w.firstDay && w.firstDay.phase!=='Complete' ? {first_day:w.firstDay} : {}),
                 actual_audience: isPlayer ? [actor,"player"] : [...new Set([actor,recipient,...(p.observers||[])])],
                 ...(!isPlayer
                   ? {

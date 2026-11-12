@@ -31,6 +31,8 @@ public static class LiveDayVerification {
     static void Require(bool value,string message){if(!value)throw new Exception(message);}
     static void Send(string text){Field<TextField>(feature,"input").value=text;Invoke(feature,"Send");}
     static void Open(){
+        for(int rest=0;rest<4&&!game.Clock.LiveReady;rest++)game.Clock.Advance();
+        Require(game.Clock.LiveReady,"Four rests must precede a daily broadcast.");
         beforeDay=game.State.day;sawFarewell=sawExtension=extensionAccepted=false;callbacks=0;
         Invoke(ui,"OpenOverlay","live");
         var host=Field<NativeLiveHost>(ui,"nativeLive");Require(host!=null,"Native live room was not opened.");

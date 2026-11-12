@@ -140,6 +140,9 @@ test('ready song follows the reviewed intro despite chat arriving during speech 
  e.client.fetch=async(route,options)=>{if(route.endsWith('/play')){entered();await gate;}return fetch(route,options);};
  const finishing=finishIntro(f);await started;
  s.input(f.envelope({type:'viewer.message',payload:{text:'我等着听'}}));release();await finishing;
+ // Playback dispatch uses real local HTTP; wait for its observable commit,
+ // rather than assuming the 30 ms speech fixture delay covers the request.
+ for(let i=0;i<200&&!lastCommand(s,'media.prepare');i++)await new Promise(r=>setTimeout(r,10));
  assert.equal(e._state.agent.errorCode,null);
  assert.equal(f.singing.context('local-owner').tasks.find(x=>x.id===task.id).status,'scheduled');
  const prepare=lastCommand(s,'media.prepare');assert(prepare);

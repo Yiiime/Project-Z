@@ -311,6 +311,7 @@ namespace Seabreeze
             speechTitle.text=SevenCharacterCatalog.Name(speaker);speechText.text=text;speechTitle.color=SevenCharacterCatalog.Find(speaker)?.Accent??Paper;
             speechUntil=Time.unscaledTime+Mathf.Clamp(1.3f+text.Length*.05f,2.5f,6);speechPanel.gameObject.SetActive(true);
         }
+        public bool LineFullyVisible => !typing && !linePreparationActive;
         public void ResetView()
         {
             StopAllCoroutines();

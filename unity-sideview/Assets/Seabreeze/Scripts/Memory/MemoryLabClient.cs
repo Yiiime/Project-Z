@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 namespace Seabreeze
 {
     public sealed class MemoryLabClient : MonoBehaviour
@@ -100,7 +101,9 @@ namespace Seabreeze
         }
         public MemoryRequest RequestBase()
         {
-            return new MemoryRequest { worldId=session.State.memory.worldId,runId=RunId,requestId=Guid.NewGuid().ToString("N"),day=session.State.day,period=session.State.period };
+            var request = new MemoryRequest { worldId=session.State.memory.worldId,runId=RunId,requestId=Guid.NewGuid().ToString("N"),day=session.State.day,period=session.State.period, details = new JObject() };
+            if (session.FirstDay != null && (session.State.firstDay != null || session.Clock.LiveReady)) request.details["firstDay"] = session.FirstDay.Context();
+            return request;
         }
         void Update()
         {

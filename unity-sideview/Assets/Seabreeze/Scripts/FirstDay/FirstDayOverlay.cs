@@ -14,6 +14,7 @@ namespace Seabreeze
         TextMeshProUGUI body, actionLabel;
         Button accept;
         public bool Visible => card != null;
+        public RectTransform Surface => root;
         public bool IsModal { get; private set; }
         public void Initialize()
         {

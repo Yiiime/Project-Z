@@ -28,12 +28,17 @@ namespace Seabreeze
         public string resumeDialogue = "";
         public MemorySaveState memory;
         public FirstDayState firstDay;
+        public string playerName = "";
+        public int restActionDay, restActions;
         public PhoneSaveState phone = new PhoneSaveState();
 
         public void Sanitize()
         {
             version = 1;
             day = Math.Max(1, day);
+            playerName = PlayerIdentity.Normalize(playerName);
+            if (restActionDay != day) { restActionDay = day; restActions = Math.Max(0, Math.Min(3, period)); }
+            restActions = Math.Max(0, Math.Min(4, restActions));
             period = Math.Max(0, Math.Min(3, period));
             if (flags == null) flags = new List<string>();
             if (journal == null) journal = new List<string>();

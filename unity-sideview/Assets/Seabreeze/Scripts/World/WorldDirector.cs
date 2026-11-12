@@ -162,6 +162,7 @@ namespace Seabreeze
         bool RequestTravel(PlaceId place, string arrivalId, float? mapX)
         {
             var session = GameSession.Instance;
+            if (session?.FirstDay != null && !session.FirstDay.CanTravel(place)) { session.Story.Notify("先和广场上的朋友打个招呼吧。 "); return false; }
             if (!session || !session.IsReady || session.InputBlocked || IsTransitioning ||
                 !Application.CanStreamedLevelBeLoaded(place.ToString()))
                 return false;
@@ -189,6 +190,7 @@ namespace Seabreeze
 
         public void Travel(PlaceId place)
         {
+            if (GameSession.Instance?.FirstDay != null && !GameSession.Instance.FirstDay.CanTravel(place)) return;
             if (IsTransitioning)
                 return;
             pendingArrival = requestedPlace == place ? requestedArrival : null;

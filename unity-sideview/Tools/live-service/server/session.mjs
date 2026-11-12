@@ -1,3 +1,4 @@
+import {LiveScene,isSceneTool} from './live-scene.mjs';
 import {BroadcastMemory} from './broadcast-memory.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -16,6 +17,7 @@ class NativeConversationEngine extends CallConversationEngine {
  }
  _hostContext(...args){const context=super._hostContext(...args);if(this.sessionControl)context.host.sessionControl=this.sessionControl.snapshot();return context;}
  _recapTurn(){
+   if(this.liveScene?.context)return false;
    return this.sessionControl?.normal && this.broadcast?.nextItem() && !this._state.call.active &&
      !this._hasPendingPlayerChat() && !this._mediaPlaying() && !this.singingExecuting;
  }
@@ -32,15 +34,15 @@ class NativeConversationEngine extends CallConversationEngine {
  _maybeAssessTopic(){if(!this.sessionControl||this.sessionControl.normal)return super._maybeAssessTopic();}
  _canPresentMedia(){return (!this.sessionControl||this.sessionControl.normal)&&super._canPresentMedia();}
  _pumpSpeech(){if(this.sessionControl&&!this.sessionControl.normal){if(!this._mediaPlaying())return ConversationEngine.prototype._pumpSpeech.call(this);}else return super._pumpSpeech();}
- _executeTool(tool){if(this.sessionControl&&!this.sessionControl.normal)return false;return super._executeTool(tool);}
+ _executeTool(tool){if(this.sessionControl&&!this.sessionControl.normal)return false;if(isSceneTool(tool?.name))return this.liveScene?.execute(tool)||false;return super._executeTool(tool);}
 
- _message(text,options={}){return super._message(text,{...options,...(options.mine&&this._state.call?.active?{type:'call'}:{})});}
+ _message(text,options={}){return super._message(text,{...options,...(options.mine&&this.liveScene?.context?{name:this.liveScene.context.playerName}:{}),...(options.mine&&this._state.call?.active?{type:'call'}:{})});}
 }
 export class LiveSession extends EventEmitter {
- constructor({id=uid(),owner='local-owner',root,providers,artifacts,songRoot,capabilities={},memory=null,saved=null}){
+ constructor({id=uid(),owner='local-owner',root,providers,artifacts,songRoot,capabilities={},memory=null,story=null,saved=null}){
   super();Object.assign(this,{id,owner,root,providers,artifacts,songRoot});this.capabilities={audioEnabled:capabilities.audioEnabled===true,characterReady:capabilities.characterReady===true};
   this.epoch=saved?saved.epoch+1:1;this.lease=uid();this.leaseUntil=Date.now()+30000;this.phase='paused';this.seq=saved?.seq||0;this.revision=saved?.revision||0;this.events=saved?.events||[];this.commands=new Map(saved?.commands||[]);this.idempotency=new Map(saved?.idempotency||[]);this.artifactIds=new Set(saved?.artifactIds||[]);this.waiters=new Map();this.sent={};this.initializing=true;
-  this.engine=new NativeConversationEngine();
+  this.engine=new NativeConversationEngine();this.scene=new LiveScene(this,story,saved?.scene);this.engine.liveScene=this.scene;
   const binding=saved?.broadcast?.binding||memory;
   this.broadcast=binding?new BroadcastMemory(binding,saved?.broadcast):null;
   if(this.broadcast)this.broadcast.songTasks=()=>this.providers.singing?.daytimeTasks?.(this.owner,this.broadcast.binding) || [];
@@ -57,12 +59,15 @@ export class LiveSession extends EventEmitter {
   this.initializing=false;this.flush();
  }
  async initialize(){const config=await this.providers.config(this.id);this.engine.configureAgent({sentenceStreaming:true,generate:async(p,o)=>{
+    if(p.kind==='audience'&&this.scene.context?.mode==='arrival')return {requestId:p.requestId,status:'skip',items:[],source:'runtime'};
+    if(p.kind==='audience'&&this.scene.context?.mode==='first_evening'&&p.context.audience?.eligibleNpcIds)p.context.audience.eligibleNpcIds=p.context.audience.eligibleNpcIds.filter(id=>id!=='liyuan');
     const hostSide=p.kind==='host'||p.kind==='repair'||(p.kind==='review'&&p.context.candidate?.role==='host');
     const cue=p.context?.host?.inbox?.findLast(m=>m.mine)?.text;
     const memory=hostSide?this.broadcast?.recall(cue):null;
     const daytimeTasks=memory?.daySongs.length?this.broadcast.songTasks().filter(t=>
       this.broadcast.visibleSongs(cue).some(s=>s.sourceId===t.sourceId)):[];
-    const reply=await this.providers.generate(this.id,p,{...o,daytimeTasks,broadcastContext:memory,songSession:memory?this.engine.session.id:null});
+    const reply=await this.providers.generate(this.id,p,{...o,daytimeTasks,sceneContext:this.scene.binding(),broadcastContext:memory,songSession:memory?this.engine.session.id:null});
+      if(p.kind==='host'&&this.scene.context?.mode==='arrival')for(const line of reply.virtualAudience||[])this.command('virtual_audience.present',{name:line.name,text:line.text,messageId:uid()});
       const proposal=reply.z_state_update?.memories?.[0];
       if(p.kind==='host' && proposal && this.broadcast?.offer?.id===proposal.id &&
          this.broadcast.offer.step===proposal.step && this.broadcast.offer.source===this.broadcast.lastTopic?.id)
@@ -81,7 +86,7 @@ export class LiveSession extends EventEmitter {
   if(x.activeSpeech)e._public('speech.interrupted','服务端重启，上一句是否播完未确认。');
  }
  installAudience(){const a=this.engine.audience,original=a.publish;
-  a.publish=item=>{const c=this.command('audience.present',{messageId:item.messageId||uid(),npcId:item.npc_id,text:item.text,replyTo:item.evidence_refs});return new Promise((resolve,reject)=>this.waiters.set(c.commandId,{resolve:()=>{if(!this.sessionControl.normal){reject(Error('session_closing'));return;}original({...item,messageId:c.payload.messageId});resolve();},reject}));};
+  a.publish=item=>{if(this.scene.context?.mode==='arrival'||this.scene.context?.mode==='first_evening'&&item.npc_id==='liyuan')return Promise.reject(Error('audience_not_present'));const c=this.command('audience.present',{messageId:item.messageId||uid(),npcId:item.npc_id,text:item.text,replyTo:item.evidence_refs});return new Promise((resolve,reject)=>this.waiters.set(c.commandId,{resolve:()=>{if(!this.sessionControl.normal){reject(Error('session_closing'));return;}original({...item,messageId:c.payload.messageId});resolve();},reject}));};
   a._publishOne=async now=>{
    if(a.publishing)return;while(a.candidates.length){const n=a.candidates[0];if(n.token!==a.generation||now>=n.expiresAt||now-(a.cooldowns.get(n.item.npc_id)??-Infinity)<a.config.npcPublishCooldownMs||n.item.intent==='advance'&&!a._advanceAllowed()){a.candidates.shift();a._endSelection(n.work,'expired_or_ineligible');continue;}
     if(now<Math.max(n.notBefore,a.nextPublishAt))return;if(!a._allowed()){a._cancel();return;}a.candidates.shift();if(!a.canCommit()){a._endSelection(n.work,'host_priority');return;}
@@ -89,11 +94,11 @@ export class LiveSession extends EventEmitter {
    }
   };
  }
- persistData(){const e=this.engine;return {broadcast:this.broadcast?.save(),sessionControl:this.sessionControl.data,id:this.id,owner:this.owner,epoch:this.epoch,seq:this.seq,revision:this.revision,capabilities:this.capabilities,phase:this.phase,commands:[...this.commands],events:this.events,idempotency:[...this.idempotency].slice(-2000),artifactIds:[...this.artifactIds],engine:{state:e._state,clock:e._clock,speechId:e._speechId,messageId:e._messageId,inbox:e.inbox,facts:e.facts,memory:e.memory,session:{id:e.session.id,events:e.session.events,items:e.session.items,recentInitiatives:e.session.recentInitiatives},media:this.talent.snapshot(),activeSpeech:e._active?{id:e._active.id}:null}};}
+ persistData(){const e=this.engine;return {scene:this.scene.snapshot(),broadcast:this.broadcast?.save(),sessionControl:this.sessionControl.data,id:this.id,owner:this.owner,epoch:this.epoch,seq:this.seq,revision:this.revision,capabilities:this.capabilities,phase:this.phase,commands:[...this.commands],events:this.events,idempotency:[...this.idempotency].slice(-2000),artifactIds:[...this.artifactIds],engine:{state:e._state,clock:e._clock,speechId:e._speechId,messageId:e._messageId,inbox:e.inbox,facts:e.facts,memory:e.memory,session:{id:e.session.id,events:e.session.events,items:e.session.items,recentInitiatives:e.session.recentInitiatives},media:this.talent.snapshot(),activeSpeech:e._active?{id:e._active.id}:null}};}
  flush(){if(this.initializing)return;fs.mkdirSync(this.root,{recursive:true,mode:0o700});const target=path.join(this.root,this.id+'.json');fs.writeFileSync(target+'.tmp',JSON.stringify(this.persistData()),{mode:0o600});fs.renameSync(target+'.tmp',target);}
  event(type,payload,extra={}){const event={protocolVersion:1,eventId:uid(),sessionId:this.id,epoch:this.epoch,serverSeq:++this.seq,type,payload,...extra};this.events.push(event);this.events=this.events.slice(-1000);this.flush();this.emit('event',event);return event;}
  command(type,payload,taskId=null,resourceRevision=null){const command={commandId:uid(),type,taskId,resourceRevision,payload,epoch:this.epoch,status:'sent',issuedAt:new Date().toISOString(),expiresAt:new Date(Date.now()+120000).toISOString()};this.commands.set(command.commandId,command);if(this.commands.size>1200)for(const [id,c] of this.commands){if(terminal.has(c.status))this.commands.delete(id);if(this.commands.size<=1000)break;}const event=this.event(type,payload,{commandId:command.commandId,taskId,resourceRevision,issuedAt:command.issuedAt,expiresAt:command.expiresAt});Object.assign(command,{event});this.flush();return command;}
- snapshot(){const e=this.engine,p=e._state.play,t=p.tarot,d=p.drawing;return {memoryLast:this.broadcast?.last,memoryEvents:this.broadcast?.pending,protocolVersion:1,sessionId:this.id,epoch:this.epoch,executorLeaseId:this.lease,lastServerSeq:this.seq,sessionRevision:this.revision,phase:this.phase,sessionControl:this.sessionControl.snapshot(),capabilities:this.capabilities,call:{...copy(e._state.call),story:null,version:e.callVersion,busy:!!(e._state.currentSpeech||e.pending||e.callNeedsTurn||e._queue.length||e._continuations.length||["preparing","ready","starting","playing","paused"].includes(e._state.media?.phase)),voiceAvailable:!!this.providers.env.VOLC_ASR_API_KEY,thinkingAudio:this.thinkingAudio||null},room:{viewers:e._state.viewers,stageLabel:e._state.stageLabel,replyStatus:e._state.replyStatus,messages:copy(e._state.messages.filter(m=>m.type!=='call'&&!(m.mine&&m.name==='连麦来客'))),voiceAvailable:this.speech.available,voiceError:this.providers.voiceError||null},performance:{waiting:e._state.agent.source!=='unavailable'&&['pending','queued'].includes(e._state.replyStatus)},agent:{enabled:e.enabled,status:e._state.agent.source,errorCode:e._state.agent.errorCode},publicEvents:copy(e.facts),activeTask:p.active?{kind:p.active,taskId:p[p.active].id}:this.talent.snapshot(),voiceOwner:e._active?{speechId:String(e._active.id)}:this.talent.snapshot(),panels:{tarot:!!t?.open,drawing:!!d?.open},tarot:t?{id:t.id,revision:0,origin:t.origin,owner:t.owner,spread:t.spread,paused:t.paused,activeIndex:t.activeIndex,phase:t.phase,question:t.question,round:t.round,slots:copy(t.slots),candidates:copy(t.candidates),cards:['revealing','interpreting','completed'].includes(t.phase)?copy(t.cards):[]}:null,recentArtwork:d?{id:d.id,revision:d.revision,title:d.title,phase:d.phase,stage:d.stage,stageCount:d.stageCount,stages:copy(d.stages),owner:d.owner,reason:d.reason,artifactId:this.sent.drawingArtifact||null}:null,pendingCommands:[...this.commands.values()].filter(c=>c.epoch===this.epoch&&!terminal.has(c.status)).map(c=>c.event).filter(Boolean),recentCommandOutcomes:[...this.commands.values()].filter(c=>terminal.has(c.status)).slice(-30).map(c=>({commandId:c.commandId,status:c.status}))};}
+ snapshot(){const e=this.engine,p=e._state.play,t=p.tarot,d=p.drawing;return {story:this.scene.binding(),memoryLast:this.broadcast?.last,memoryEvents:this.broadcast?.pending,protocolVersion:1,sessionId:this.id,epoch:this.epoch,executorLeaseId:this.lease,lastServerSeq:this.seq,sessionRevision:this.revision,phase:this.phase,sessionControl:this.sessionControl.snapshot(),capabilities:this.capabilities,call:{...copy(e._state.call),story:null,version:e.callVersion,busy:!!(e._state.currentSpeech||e.pending||e.callNeedsTurn||e._queue.length||e._continuations.length||["preparing","ready","starting","playing","paused"].includes(e._state.media?.phase)),voiceAvailable:!!this.providers.env.VOLC_ASR_API_KEY,thinkingAudio:this.thinkingAudio||null},room:{viewers:e._state.viewers,stageLabel:e._state.stageLabel,replyStatus:e._state.replyStatus,messages:copy(e._state.messages.filter(m=>m.type!=='call'&&!(m.mine&&m.name==='连麦来客'))),voiceAvailable:this.speech.available,voiceError:this.providers.voiceError||null},performance:{waiting:e._state.agent.source!=='unavailable'&&['pending','queued'].includes(e._state.replyStatus)},agent:{enabled:e.enabled,status:e._state.agent.source,errorCode:e._state.agent.errorCode},publicEvents:copy(e.facts),activeTask:p.active?{kind:p.active,taskId:p[p.active].id}:this.talent.snapshot(),voiceOwner:e._active?{speechId:String(e._active.id)}:this.talent.snapshot(),panels:{tarot:!!t?.open,drawing:!!d?.open},tarot:t?{id:t.id,revision:0,origin:t.origin,owner:t.owner,spread:t.spread,paused:t.paused,activeIndex:t.activeIndex,phase:t.phase,question:t.question,round:t.round,slots:copy(t.slots),candidates:copy(t.candidates),cards:['revealing','interpreting','completed'].includes(t.phase)?copy(t.cards):[]}:null,recentArtwork:d?{id:d.id,revision:d.revision,title:d.title,phase:d.phase,stage:d.stage,stageCount:d.stageCount,stages:copy(d.stages),owner:d.owner,reason:d.reason,artifactId:this.sent.drawingArtifact||null}:null,pendingCommands:[...this.commands.values()].filter(c=>c.epoch===this.epoch&&!terminal.has(c.status)).map(c=>c.event).filter(Boolean),recentCommandOutcomes:[...this.commands.values()].filter(c=>terminal.has(c.status)).slice(-30).map(c=>({commandId:c.commandId,status:c.status}))};}
  changed(){if(this.initializing||this.closed)return;this.revision++;if(this.phase==='live')this.syncPresentation();this.flush();if(!this.stateTimer)this.stateTimer=setTimeout(()=>{this.stateTimer=null;if(!this.closed)this.event('session.state',this.snapshot());},50);}
  syncPresentation(){}
  async prepareThinking(){if(this.thinkingAudio||this.thinkingPending||!this.speech.enabled||!this.speech.available)return;this.thinkingPending=true;try{this.thinkingAudio=await this.speech.prepareAudio('我想想啊…','thinking',{});if(!this.closed)this.changed();}catch{}finally{this.thinkingPending=false;}}
@@ -115,7 +120,7 @@ export class LiveSession extends EventEmitter {
  cancelPresentation(kind,taskId){for(const c of this.commands.values())if(c.type===kind+'.present'&&c.taskId===taskId&&!terminal.has(c.status)){c.status='cancelled';this.command('execution.cancel',{targetCommandId:c.commandId,reason:'panel_hidden'},taskId,c.resourceRevision);}}
  cancelTask(taskId,reason){for(const c of [...this.commands.values()])if(c.taskId===taskId&&!terminal.has(c.status)){c.status='cancelled';this.waiters.get(c.commandId)?.reject(Error(reason));this.waiters.delete(c.commandId);this.command('execution.cancel',{targetCommandId:c.commandId,playbackId:c.payload.playbackId,reason},taskId,c.resourceRevision);}}
  check(body,lease=false){if(body.protocolVersion!==1)throw Error('unsupported_protocol');if(body.sessionId!==this.id||body.epoch!==this.epoch)throw Error('stale_epoch');if(lease&&(body.executorLeaseId!==this.lease||Date.now()>this.leaseUntil))throw Error('executor_lease_expired');}
- input(body){this.check(body);if(this.phase==='ended')throw Error('session_paused');const p=body.payload||{};let ok=false;
+ input(body){this.check(body);if(body.type==='story.accept_arrival'){if(!this.scene.accept())throw Error('state_conflict');this.changed();return {accepted:true};}if(this.phase==='ended')throw Error('session_paused');const p=body.payload||{};let ok=false;
   if(body.type==='viewer.message'&&!this.sessionControl.normal){
    if(this.sessionControl.data.phase!=='closing'||this.sessionControl.data.closeReason!=='host')throw Error('session_closing');
    if(typeof p.text!=='string'||!p.text.trim()||p.text.length>120)throw Error('invalid_input');
@@ -149,7 +154,7 @@ export class LiveSession extends EventEmitter {
   for(const k of ['artifactId','playbackId','speechId','stage','round','view'])if(c.payload[k]!==undefined&&p[k]!==c.payload[k]&& !['received','failed','skipped','interrupted'].includes(p.status))throw Error('invalid_evidence');
   if(p.status==='received'){c.received=true;this.flush();return {accepted:true};}
   if(this.phase!=='live'&&!['interrupted','failed','skipped','completed'].includes(p.status))throw Error('session_paused');
-  const allowed={'host.fade':['completed'],'host.present':['started','progress','completed'],'audience.present':['displayed'],'media.prepare':['ready'],'media.play':['started','progress','completed'],'media.pause':['completed'],'media.resume':['completed'],'execution.cancel':['completed'],'activity.release':['completed'],'session.ended':['completed']};
+  const allowed={'story.present':['displayed'],'virtual_audience.present':['displayed'],'host.fade':['completed'],'host.present':['started','progress','completed'],'audience.present':['displayed'],'media.prepare':['ready'],'media.play':['started','progress','completed'],'media.pause':['completed'],'media.resume':['completed'],'execution.cancel':['completed'],'activity.release':['completed'],'session.ended':['completed']};
   if(!(allowed[c.type]||[]).includes(p.status)&&!['failed','skipped','interrupted'].includes(p.status))throw Error('invalid_transition');
   if(p.status==='started'&&c.status!=='sent'||p.status==='progress'&&c.status!=='started'||p.status==='completed'&&['host.present','media.play'].includes(c.type)&&c.status!=='started')throw Error('invalid_transition');
   if(['started','progress','completed'].includes(p.status)&&['host.present','media.play'].includes(c.type)){
@@ -160,7 +165,9 @@ export class LiveSession extends EventEmitter {
   }
   if(c.payload.modality==='pcm-stream'&&['progress','completed'].includes(p.status)){const stream=this.speech.streams.get(c.payload.audioStreamId);if(!stream||p.positionMs>stream.bytes/48+5)throw Error('invalid_position');if(p.status==='completed'&&(!stream.done||stream.error||p.positionMs<stream.durationMs-5))throw Error('not_finished');}
   const failed=['failed','skipped','interrupted'].includes(p.status);
-  if(c.type==='host.present'){
+  if(c.type==='story.present'){this.scene.receipt(c,p);}
+  else if(c.type==='virtual_audience.present'){if(!failed){this.engine._message(c.payload.text,{name:c.payload.name});this.engine._public('npc.message',c.payload.text,{speakerRole:'audience',speakerId:'virtual_'+c.payload.messageId});}}
+  else if(c.type==='host.present'){
    if(failed)this.interruptSpeech(p.reason||p.status);
    else if(p.status==='progress'&&typeof p.text==='string'){if(!c.payload.text.startsWith(p.text)||p.text.length<(c.textLength||0))throw Error('invalid_progress');this.engine.recordSpeechProgress(Number(p.speechId),p.text);c.textLength=p.text.length;}
    else if(p.status==='completed'){if(!this.engine.completeSpeech(Number(p.speechId)))throw Error('state_conflict');}

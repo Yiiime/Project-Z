@@ -197,7 +197,7 @@ public sealed partial class LiveFeatureController {
         }
         var content=Box("message-content");
         row.Add(content);
-        content.Add(Text(mine?"我":name,"nickname"));
+        content.Add(Text(mine?Seabreeze.PlayerIdentity.DisplayName:name,"nickname"));
         content.Add(Text(value,"message-text"));
         chat.Add(row);
         while(chat.childCount>80)chat.RemoveAt(0);
