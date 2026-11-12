@@ -5,6 +5,7 @@ import { Policy, TurnError, canonical } from "./policy.mjs";
 import { TaskEngine } from "./tasks.mjs";
 import { MemoryBank } from "./memory.mjs";
 import { ActorRuntime } from "./actor-runtime.mjs";
+import { ensureRelations, applyRelationChange } from "./relationships.mjs";
 const encode = (v) => JSON.stringify(canonical(v));
 const metrics = ["affinity", "trust", "world_suspicion"];
 export class Engine {
@@ -31,6 +32,10 @@ export class Engine {
   world(id) {
     const w = this.store.experiment("world_" + id);
     if (!w) throw new TurnError("未知游戏进度");
+    for (const a of Object.values(w.actors)) {
+      a.name = this.catalog.actor(a.id).name;
+      ensureRelations(a, this.catalog);
+    }
     return w;
   }
   save(w) {
@@ -94,6 +99,7 @@ export class Engine {
         last_external_event: null,
         next_agenda_tick: 30,
       };
+      ensureRelations(actors[actor], this.catalog);
     }
     if (Object.keys(initial).some((id) => !actors[id]))
       throw new TurnError("初始角色无效");
@@ -531,12 +537,6 @@ export class Engine {
           !j.environment.social_opportunity.nearby_actors.includes(peer)
         )
           continue;
-        if (!a.peer_relations[peer])
-          a.peer_relations[peer] = {
-            affinity: 50,
-            trust: 50,
-            impression_formed: false,
-          };
         actions.push({
           id: "talk_" + peer,
           type: "communicate",
@@ -694,6 +694,7 @@ export class Engine {
         j.mode === "player"
           ? this.tasks
               .list(w.worldId, j.actor)
+              .filter((t) => t.enabled || t.status !== "available")
               .map((t) => ({
                 ...t,
                 collaborators: t.collaborators.filter(
@@ -878,9 +879,8 @@ export class Engine {
         actor.applied_event_ids.push(...change.source_event_ids);
       for (const relation of info.peer_relation_changes || []) {
         const peer = actor.peer_relations[relation.target_actor_id];
-        peer.affinity += relation.affinity_delta;
-        peer.trust += relation.trust_delta;
-        peer.impression_formed = true;
+        applyRelationChange(peer, relation,
+          this.event(world, p.context.interaction.source_event_id), p.context.turn_id);
         actor.applied_event_ids.push(...relation.source_event_ids);
       }
       actor.applied_event_ids = [...new Set(actor.applied_event_ids)];
@@ -1346,6 +1346,10 @@ export class Engine {
     w.encounters = {};
     w.wakes = {};
     w.responseRevision = 0;
+    for (const a of Object.values(w.actors)) {
+      a.name = this.catalog.actor(a.id).name;
+      ensureRelations(a, this.catalog);
+    }
     this.save(w);
     return this.checkpoint(world);
   }

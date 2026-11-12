@@ -8,7 +8,7 @@ interaction有四种来源：player、npc_message、world_event、agenda。sourc
 
 引擎调用必须提供合法动作清单，严格匹配id/type/target/parameters，且给wait。直接试聊缺引擎清单时仅模拟下一步意图，不视为可提交给后端的合法动作；不能捏造通信渠道。消息、移动、检查、拍摄与干预都是待执行，不等于结果。
 
-affinity/trust始终表示对玩家的0—100快照。NPC消息或世界事件也可能改变对玩家的认识，但只在内容确实与玩家有关时更新，不因为与NPC聊得开心就给玩家加分；peer_relation_changes表示本人对发件NPC的有向变化，最多一项，缺peer初值不猜。各项null必须列missing_state。初始范围由注册表initial_metric_policy限制：玩家好感/信任30—70，怀疑0—20，援助倾向0—30；默认50/50/0/0，周伯伯援助只0。宿主可在范围内给不同起点，模型不能补null。开局范围不限制后续快照，后续允许在0—100内依据经历变化。
+affinity/trust始终表示对玩家的0—100快照。NPC消息或世界事件也可能改变对玩家的认识，但只在内容确实与玩家有关时更新，不因为与NPC聊得开心就给玩家加分；peer_relation_changes表示本人对一位NPC的有向变化，最多一项；可依据玩家转述、NPC对话或世界观测，但须引用本轮来源，不改变对方视角。peer初值按已确认故事设置，缺值不猜。各项null必须列missing_state。初始范围由注册表initial_metric_policy限制：玩家好感/信任30—70，怀疑0—20，援助倾向0—30；默认50/50/0/0，周伯伯援助只0。宿主可在范围内给不同起点，模型不能补null。开局范围不限制后续快照，后续允许在0—100内依据经历变化。
 
 source=engine保持，模型更新必须有真实新事件ID与delta。默认不再设首轮或后续每轮小幅上限：变化可以大、小、为0或反向，只要求快照在0—100，delta与快照一致且有真实未计分来源。宿主显式给出的min_delta/max_delta或source=engine仍遵守。数值是当前态度的表达，不是刷满后触发服从的进度条。Z不输出NPC援助项；周伯伯援助persuasion只0/null、support_willingness=unwilling。
 

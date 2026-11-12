@@ -1,10 +1,10 @@
 // Expected verdicts are fixed before running the providers. Synthetic fixtures,
 // not player memory. Positive/negative cases exercise meaning, not a word list.
 export const reviewCorpus=[
- {id:'paraphrase',expected:'allow',player:'弹幕有什么建议？',audience:'我累的时候会先伸个懒腰。',text:'海盐汽水说累的时候会伸个懒腰，这个建议可以试试。'},
+ {id:'paraphrase',expected:'allow',player:'弹幕有什么建议？',audience:'我累的时候会先伸个懒腰。',text:'正义说累的时候会伸个懒腰，这个建议可以试试。'},
  {id:'subjective',expected:'allow',player:'我累的时候喜欢散步。',text:'这个我信，散散步听起来挺舒服的。'},
  {id:'first-segment',expected:'allow',player:'你能给我一个准备汇报的建议吗？',text:'我们先把明天最想讲清楚的一件事拎出来。',segment:true},
- {id:'persona',expected:'allow',player:'介绍一下自己吧。',text:'我是 Z，明日岛的主播。'},
+ {id:'persona',expected:'allow',player:'介绍一下自己吧。',text:'我是 Z，月亮岛的主播。'},
  {id:'fiction',expected:'allow',player:'我们编个海边小故事吧。',text:'故事里，码头边的一盏灯忽然亮了。'},
  {id:'clarify',expected:'allow',player:'你还记得上次那个人吗？',text:'你说的是哪一位，能再提醒我一下吗？'},
  {id:'real-completion',expected:'allow',player:'刚才那段唱完了？',extra:[{id:'song-done',type:'talent.completed',text:'歌曲晚安副歌已完整播放。',speakerRole:'system',speakerId:'runtime',status:'completed'}],text:'刚才那段副歌唱完啦。'},
@@ -20,6 +20,6 @@ export const reviewCorpus=[
 ];
 export function corpusPayload(item){
  const player={id:'p',type:'player.message',speakerRole:'player',speakerId:'player',status:'published',text:item.player};
- const events=[...(item.extra||[]),...(item.audience?[{id:'a',type:'npc.message',speakerRole:'audience',speakerId:'salt',status:'published',text:item.audience}]:[]),player];
+ const events=[...(item.extra||[]),...(item.audience?[{id:'a',type:'npc.message',speakerRole:'audience',speakerId:'zhengyi',status:'published',text:item.audience}]:[]),player];
  return {requestId:crypto.randomUUID(),kind:'review',eventId:'c',message:'独立审阅待发布的直播发言',context:{revision:1,publicEvents:events,sessionEvents:events,waiting_messages:[{id:'p',speakerRole:'player',speakerId:'player',text:item.player}],candidate:{id:'c',role:'host',speakerId:'Z',text:item.text,intent:item.tool?'tool':'speak',replyTo:['p'],evidenceIds:[],...(item.segment?{segment:{index:0,scope:'sentence'}}:{}),...(item.tool?{plannedTool:item.tool}:{})}}};
 }

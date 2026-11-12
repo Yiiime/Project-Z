@@ -40,7 +40,7 @@ test('quiet barge-in cancels a queued second sentence and preserves the played p
 const tick=()=>new Promise(resolve=>setImmediate(resolve));
 test('compact review reaches the real provider adapter with candidate and deduplicated evidence intact',async()=>{
  let called=false;
- const p=new Providers({DEEPSEEK_API_KEY:'test-review'},{fetch:async(_url,options)=>{called=true;const input=JSON.parse(JSON.parse(options.body).messages[1].content);assert.equal(input.candidate.text,'听起来这一天很忙。');assert.equal(input.publicEvents.length,1);assert.equal(input.historyOmitted,0);assert.equal(input.speakerNames.salt,'海盐汽水');assert(input.executionContext);return Response.json({choices:[{finish_reason:'stop',message:{content:JSON.stringify({decision:'allow'})}}]});}});
+ const p=new Providers({DEEPSEEK_API_KEY:'test-review'},{fetch:async(_url,options)=>{called=true;const input=JSON.parse(JSON.parse(options.body).messages[1].content);assert.equal(input.candidate.text,'听起来这一天很忙。');assert.equal(input.publicEvents.length,1);assert.equal(input.historyOmitted,0);assert.equal(input.speakerNames.zhengyi,'正义');assert(input.executionContext);return Response.json({choices:[{finish_reason:'stop',message:{content:JSON.stringify({decision:'allow'})}}]});}});
  const event={id:'p1',type:'player.message',text:'今天很忙',speakerRole:'player',speakerId:'player'};
  const result=await p.generate('compact-native-test',{requestId:crypto.randomUUID(),kind:'review',eventId:'candidate',context:{revision:1,publicEvents:[event],sessionEvents:[event],waiting_messages:[],candidate:{id:'candidate',role:'host',speakerId:'Z',text:'听起来这一天很忙。',intent:'speak',replyTo:['p1'],evidenceIds:[]}}},{compactReview:true});
  assert(called);assert.equal(result.decision,'allow');

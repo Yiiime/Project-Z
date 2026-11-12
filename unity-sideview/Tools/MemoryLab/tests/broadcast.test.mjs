@@ -38,6 +38,8 @@ test('Unity receipts and story stages follow the checkpoint, public recall canno
   const duplicate=await post('sync',{eventData:queued});
   assert.deepEqual(recovered.broadcast,duplicate.broadcast);
   assert.equal(recovered.broadcast.entries.filter(e=>e.id===queued.id&&e.day===1).length,1);
+  // Explicitly enable a retained legacy task to verify existing-save broadcast receipts.
+  engine.tasks.enable(session.worldId,'map_blank');
   engine.tasks.offer(session.worldId,'map_blank','liyuan');engine.tasks.respond(session.worldId,'map_blank',true);
   const visit=(n,succeeded)=>sync(n,'task_receipt',{day:2,period:0,taskId:'map_blank',stepId:'visit',receiptId:'walk_'+n,performerId:'player',succeeded});
   assert.deepEqual((await visit(7,false)).broadcast.today,[]);
