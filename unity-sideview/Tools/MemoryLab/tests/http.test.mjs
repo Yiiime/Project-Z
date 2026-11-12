@@ -77,6 +77,56 @@ async function setup(t, decide = reply) {
   return { app, post, base };
 }
 const base = { worldId: "native", runId: "r1", day: 1, period: 0 };
+test("bench task requires AI offer, acceptance and one nearby E receipt; restores without replay", async t => {
+  const taskId = "street_corner_bench";
+  const {app, post} = await setup(t, c => {
+    const output = reply(c);
+    const offer = c.available_actions.find(a => a.type === "offer_task" && a.parameters.task_id === taskId);
+    if (offer) {
+      output.action = {action_id:offer.id, type:offer.type, target:offer.target, parameters:offer.parameters, description:"发布长椅委托"};
+      output.dialogue = "能帮我看看咖啡店与花店之间的长椅吗？在楼梯左侧，走到旁边按 E 就好。";
+    }
+    return output;
+  });
+  await post("game/open", base, true);
+  await post("game/focus", {...base, actorId:"liting"}, true);
+  const line = (id, seq, text) => ({...event(id, seq), recipientId:"liting", text, locationId:"cafe"});
+  await post("game/sync", {...base, eventData:line("ask",1,"有什么委托能帮忙吗？")}, true);
+  const generated = await post("game/utterance", {...base, actorId:"liting",recipientId:"player",conversationId:"c1",scene:"Cafe",locationId:"cafe",requestId:"bench-offer"},true);
+  assert.equal(generated.code,200,generated.data.error);
+  assert.equal(app.engine.tasks.state("native",taskId).status,"available","AI proposal alone does not publish a task");
+  const publish = await post("game/sync", {...base,eventData:{...line("offer",2,generated.data.text),speakerId:"liting",recipientId:"player",proposalId:generated.data.proposalId}},true);
+  assert.equal(publish.code,200,publish.data.error);
+  assert.equal(app.engine.tasks.state("native",taskId).status,"offered");
+  const receipt = {kind:"task_receipt",taskId,stepId:"inspect",receiptId:"bench-once",succeeded:true,performerId:"player",interactionTarget:taskId,interactionPlace:"Street",interactionInput:"E",interactionX:-2.6,interactionY:0};
+  const send = (id,seq,extra,run=base) => post("game/sync", {...run,eventData:{id,seq,day:1,period:0,...extra}},true);
+  assert.equal((await send("too-early",3,receipt)).code,400);
+  assert.equal((await send("accept",3,{kind:"task_response",taskId,accepted:true,responderId:"player",conversationId:"c1"})).code,200);
+  const accepted = app.engine.checkpoint("native");
+  assert.equal((await send("wrong-place",4,{...receipt,interactionPlace:"Cafe"})).code,400);
+  assert.equal((await send("wrong-chair",4,{...receipt,interactionTarget:"bench"})).code,400);
+  assert.equal((await send("too-far",4,{...receipt,interactionX:12})).code,400);
+  assert.equal((await send("no-key",4,{...receipt,interactionInput:""})).code,400);
+  assert.equal(app.engine.tasks.state("native",taskId).status,"active");
+  const completed = await send("press-e",4,receipt);
+  assert.equal(completed.code,200,completed.data.error);
+  assert.equal(app.engine.tasks.state("native",taskId).status,"completed");
+  assert.equal(app.engine.tasks.state("native",taskId).reward_claimed,1);
+  assert.equal(app.engine.tasks.snapshot("native").receipts.length,1);
+  assert.equal((await send("press-e",4,receipt)).code,200);
+  assert.equal((await send("retry-e",5,receipt)).code,200);
+  assert.equal(app.engine.tasks.snapshot("native").receipts.length,1);
+  const snapshot = (await send("retry-e",5,receipt)).data.checkpoint;
+  const reopened = await post("game/open",{...base,runId:"restored",checkpoint:snapshot},true);
+  assert.equal(reopened.code,200,reopened.data.error);
+  assert.equal(app.engine.tasks.state("native",taskId).status,"completed");
+  assert.equal(app.engine.tasks.options("native","liting").some(a=>a.parameters.task_id===taskId),false);
+  const restoredActive = await post("game/open",{...base,runId:"active-save",checkpoint:accepted},true);
+  assert.equal(restoredActive.code,200,restoredActive.data.error);
+  assert.equal(app.engine.tasks.state("native",taskId).status,"active");
+  assert.equal((await send("press-e",4,receipt,{...base,runId:"active-save"})).code,200);
+  assert.equal(app.engine.tasks.snapshot("native").receipts.length,1);
+});
 test("Unity supplies actual bystanders to the model before generating NPC speech",async t=>{
   let observed=false;
   const {post}=await setup(t,c=>{observed=true;assert.deepEqual(c.environment.actual_audience,["linxu","axing","z"]);return reply(c);});

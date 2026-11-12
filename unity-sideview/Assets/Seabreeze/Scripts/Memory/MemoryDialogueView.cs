@@ -15,7 +15,7 @@ namespace Seabreeze
     {
         MemoryGameController memory; GameSession session;
         RectTransform taskPanel;bool taskLayoutVisible;
-        TextMeshProUGUI taskTitle;Button acceptTask,declineTask,inviteTask;string offeredTask,lastCheckpoint;readonly List<string> activeTasks=new List<string>();int selectedTask;
+        TextMeshProUGUI taskTitle;Button acceptTask,declineTask,inviteTask;string offeredTask,lastCheckpoint,lastTaskActor;readonly List<string> activeTasks=new List<string>();int selectedTask;
         RectTransform root,speechPanel,playerPanel,portrait,column,content;
         TextMeshProUGUI speechTitle,speechText,playerTitle,locationText,historyText,playerState,emptyPrompt;
         TMP_InputField input; Button send; ScrollRect historyScroll;
@@ -187,7 +187,7 @@ namespace Seabreeze
         }
         void RefreshTasks()
         {
-            string checkpoint=session.State.memory.checkpoint;if(checkpoint==lastCheckpoint)return;lastCheckpoint=checkpoint;activeTasks.Clear();offeredTask=null;
+            string checkpoint=session.State.memory.checkpoint;if(checkpoint==lastCheckpoint&&lastTaskActor==selectedActor)return;lastCheckpoint=checkpoint;lastTaskActor=selectedActor;activeTasks.Clear();offeredTask=null;
             if(string.IsNullOrEmpty(checkpoint))return;
             try {var snapshot=Newtonsoft.Json.Linq.JObject.Parse(checkpoint);foreach(var item in snapshot["tasks"]?["state"]??new Newtonsoft.Json.Linq.JArray()) {string id=(string)item["task"],state=(string)item["status"];if(state=="active")activeTasks.Add(id);if(state=="offered") {var book=Newtonsoft.Json.Linq.JObject.Parse(Resources.Load<TextAsset>("Memory/task-catalog").text);if(book["tasks"].Any(t=>(string)t["id"]==id&&(string)t["owner"]==selectedActor))offeredTask=id;}}}catch { }
             selectedTask=Mathf.Clamp(selectedTask,0,Mathf.Max(0,activeTasks.Count-1));
@@ -216,7 +216,7 @@ namespace Seabreeze
                 RefreshHistoryLayout();
             }
             acceptTask.interactable=declineTask.interactable=fullView&&offeredTask!=null&&memory.Client.CanGenerate;inviteTask.interactable=fullView&&activeTasks.Count>0&&memory.Client.CanGenerate;
-            taskTitle.text=offeredTask!=null?"NPC已提出："+offeredTask:activeTasks.Count>0?"玩家进行中："+activeTasks[selectedTask]:"";
+            taskTitle.text=offeredTask!=null?"待接受："+memory.GetComponent<WorldTaskController>().Title(offeredTask):activeTasks.Count>0?"进行中："+memory.GetComponent<WorldTaskController>().Title(activeTasks[selectedTask]):"";
             send.interactable=PlayerInputReady&&memory.PlayerChatOpen&&memory.Client.CanGenerate&&!memory.Conversations.Sending;
             playerState.text=memory.Conversations.Sending?"对方正在想怎么说…":memory.Client.CanGenerate?"":"暂时无法连接。Esc 返回后，可在暂停菜单设置对话服务。";
             playerState.color=new Color(.94f,.94f,1,.82f);

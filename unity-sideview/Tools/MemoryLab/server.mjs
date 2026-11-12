@@ -450,7 +450,7 @@ export function createServer({
                   },
                 );
               } else if (event.kind === "task_receipt") {
-                engine.taskReceipt(world,event.taskId,event.stepId,event.receiptId,event.succeeded,event.performerId,{participants:event.participants||[],voluntary_consents:event.voluntaryConsents||[],message_event_id:event.messageEventId},{id:event.id,seq:event.seq,hour:when});
+                engine.taskReceipt(world,event.taskId,event.stepId,event.receiptId,event.succeeded,event.performerId,{participants:event.participants||[],voluntary_consents:event.voluntaryConsents||[],message_event_id:event.messageEventId,interaction_target:event.interactionTarget,interaction_place:event.interactionPlace,interaction_input:event.interactionInput,interaction_x:event.interactionX,interaction_y:event.interactionY},{id:event.id,seq:event.seq,hour:when});
               } else if (event.kind === "action_result") {
                 engine.actionReceipt(
                   world,

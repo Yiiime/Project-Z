@@ -13,9 +13,12 @@ namespace Seabreeze
         public bool npc;
         public Vector3 promptOffset = new Vector3(0, 2.8f, 0);
         public bool Available => isDoor || (GameSession.Instance != null && GameSession.Instance.Story.IsAvailable(id));
+        public string Prompt => isDoor ? label : GameSession.Instance.Memory?.GetComponent<WorldTaskController>()?.Prompt(this) ?? GameSession.Instance.Story.PromptFor(id);
         public void Activate()
         {
             if (!Available)
+                return;
+            if (GameSession.Instance.Memory?.GetComponent<WorldTaskController>()?.Interact(this) == true)
                 return;
             if (isDoor)
             {

@@ -84,7 +84,7 @@ export class TaskEngine {
             },
           ]
         : []),
-      ...(t.status === "completed" && !t.reward_claimed
+      ...(t.status === "completed" && !t.reward_claimed && t.reward.kind !== "record_only"
         ? [
             {
               id: "reward_" + t.id,
@@ -248,6 +248,14 @@ export class TaskEngine {
       !receipt
     )
       throw new TurnError("回执不完整");
+    if (success && step.interaction) {
+      const rule = step.interaction;
+      if (who !== "player" || details.interaction_target !== rule.target ||
+          details.interaction_place !== rule.place || details.interaction_input !== rule.input ||
+          !Number.isFinite(details.interaction_x) || !Number.isFinite(details.interaction_y) ||
+          Math.hypot(details.interaction_x - rule.x, details.interaction_y - rule.y) >= rule.radius)
+        throw new TurnError("必须由玩家到目标附近按 E 交互后才能完成");
+    }
     if (who !== "player") {
       const p = this.collaborators(world, task).find((p) => p.actor_id === who);
       if (p?.status !== "willing" || !p.decision.step_ids.includes(stepId))
@@ -340,13 +348,14 @@ export class TaskEngine {
       .run(world, receipt, payload);
     this.db
       .prepare(
-        "UPDATE task_state SET progress=?,status=? WHERE session=? AND task=?",
+        "UPDATE task_state SET progress=?,status=?,reward_claimed=? WHERE session=? AND task=?",
       )
       .run(
         JSON.stringify(progress),
         d.steps.every((s) => progress[s.id]?.succeeded)
           ? "completed"
           : "active",
+        Number(d.reward.kind === "record_only" && d.steps.every((s) => progress[s.id]?.succeeded)),
         world,
         task,
       );

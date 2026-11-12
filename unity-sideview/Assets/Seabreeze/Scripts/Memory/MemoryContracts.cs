@@ -9,6 +9,8 @@ namespace Seabreeze
     {
         public string id,kind,conversationId,speakerId,recipientId,text,proposalId,location,locationId,title,gist,fulfilledId,channel,actionId,taskId,actorId,responderId,stepId,performerId,receiptId,messageEventId;
         public int seq,day,period; public bool verified,succeeded,accepted;
+        public string interactionTarget,interactionPlace,interactionInput;
+        public float interactionX,interactionY;
         public string[] observers=Array.Empty<string>(),discloseTo=Array.Empty<string>(),participants=Array.Empty<string>(),voluntaryConsents=Array.Empty<string>();
     }
     [Serializable] public sealed class MemoryRequest

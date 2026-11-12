@@ -1,6 +1,40 @@
 {
   "tasks": [
     {
+      "id": "street_corner_bench",
+      "owner": "liting",
+      "title": "街角的长椅",
+      "description": "李庭请你去咖啡店与花店之间、楼梯左侧的长椅看看。接受后，走到椅子旁按一次 E 即可完成，无需回来交任务。",
+      "enabled_on_start": true,
+      "steps": [
+        {
+          "id": "inspect",
+          "label": "到咖啡店与花店之间的长椅旁按 E 查看",
+          "performed_by": [
+            "player"
+          ],
+          "depends_on": [],
+          "interaction": {
+            "place": "Street",
+            "target": "street_corner_bench",
+            "x": -2.616667,
+            "y": 0,
+            "radius": 1.25,
+            "input": "E",
+            "prompt": "查看长椅",
+            "idle_text": "木椅安稳地靠在街角，风里有淡淡的花香和咖啡香。"
+          }
+        }
+      ],
+      "reward": {
+        "kind": "record_only",
+        "summary": "已替李庭查看街角的长椅，留下这次帮忙的经历。任务在现场完成，无需另行领取奖励。"
+      },
+      "assignee": "player",
+      "effect_class": "ordinary",
+      "offer_guidance": "当玩家向李庭问有什么能帮忙的、想接任务或提起街角椅子时，优先用 offer_task 发布这项轻量委托。说明楼梯左侧的位置和按 E 查看；不要仅用台词声称已发布或完成。"
+    },
+    {
       "id": "map_blank",
       "owner": "liyuan",
       "title": "地图上的空白 · 一起探索",
