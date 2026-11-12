@@ -1,0 +1,1629 @@
+{
+  "version": 2,
+  "characterId": "zhengyi",
+  "revision": "native-video-four-state",
+  "canvasHeightUnits": 2.6956217162872154,
+  "startFrame": 0,
+  "walkSpeed": 1.1,
+  "strideLength": 0,
+  "cycleSeconds": 1.25,
+  "idle": "zhengyi_idle_000",
+  "walk": [
+    "zhengyi_walk_000",
+    "zhengyi_walk_001",
+    "zhengyi_walk_002",
+    "zhengyi_walk_003",
+    "zhengyi_walk_004",
+    "zhengyi_walk_005",
+    "zhengyi_walk_006",
+    "zhengyi_walk_007",
+    "zhengyi_walk_008",
+    "zhengyi_walk_009",
+    "zhengyi_walk_010",
+    "zhengyi_walk_011",
+    "zhengyi_walk_012",
+    "zhengyi_walk_013",
+    "zhengyi_walk_014",
+    "zhengyi_walk_015",
+    "zhengyi_walk_016",
+    "zhengyi_walk_017",
+    "zhengyi_walk_018",
+    "zhengyi_walk_019",
+    "zhengyi_walk_020",
+    "zhengyi_walk_021",
+    "zhengyi_walk_022",
+    "zhengyi_walk_023",
+    "zhengyi_walk_024",
+    "zhengyi_walk_025",
+    "zhengyi_walk_026",
+    "zhengyi_walk_027",
+    "zhengyi_walk_028",
+    "zhengyi_walk_029"
+  ],
+  "frameDurations": [
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05
+  ],
+  "start": [
+    "zhengyi_start_000",
+    "zhengyi_start_001",
+    "zhengyi_start_002",
+    "zhengyi_start_003",
+    "zhengyi_start_004",
+    "zhengyi_start_005",
+    "zhengyi_start_006",
+    "zhengyi_start_007",
+    "zhengyi_start_008",
+    "zhengyi_start_009",
+    "zhengyi_start_010",
+    "zhengyi_start_011",
+    "zhengyi_start_012",
+    "zhengyi_start_013",
+    "zhengyi_start_014",
+    "zhengyi_start_015",
+    "zhengyi_start_016",
+    "zhengyi_start_017",
+    "zhengyi_start_018",
+    "zhengyi_start_019",
+    "zhengyi_start_020",
+    "zhengyi_start_021",
+    "zhengyi_start_022",
+    "zhengyi_start_023",
+    "zhengyi_start_024",
+    "zhengyi_start_025",
+    "zhengyi_start_026"
+  ],
+  "startDurations": [
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05
+  ],
+  "stop": [
+    "zhengyi_stop_000",
+    "zhengyi_stop_001",
+    "zhengyi_stop_002",
+    "zhengyi_stop_003",
+    "zhengyi_stop_004",
+    "zhengyi_stop_005",
+    "zhengyi_stop_006",
+    "zhengyi_stop_007",
+    "zhengyi_stop_008",
+    "zhengyi_stop_009",
+    "zhengyi_stop_010",
+    "zhengyi_stop_011",
+    "zhengyi_stop_012",
+    "zhengyi_stop_013",
+    "zhengyi_stop_014",
+    "zhengyi_stop_015",
+    "zhengyi_stop_016",
+    "zhengyi_stop_017",
+    "zhengyi_stop_018",
+    "zhengyi_stop_019",
+    "zhengyi_stop_020",
+    "zhengyi_stop_021",
+    "zhengyi_stop_022",
+    "zhengyi_stop_023",
+    "zhengyi_stop_024",
+    "zhengyi_stop_025",
+    "zhengyi_stop_026",
+    "zhengyi_stop_027",
+    "zhengyi_stop_028",
+    "zhengyi_stop_029",
+    "zhengyi_stop_030",
+    "zhengyi_stop_031",
+    "zhengyi_stop_032",
+    "zhengyi_stop_033",
+    "zhengyi_stop_034",
+    "zhengyi_stop_035",
+    "zhengyi_stop_036",
+    "zhengyi_stop_037",
+    "zhengyi_stop_038",
+    "zhengyi_stop_039",
+    "zhengyi_stop_040",
+    "zhengyi_stop_041"
+  ],
+  "stopDurations": [
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05
+  ],
+  "assets": [
+    {
+      "name": "zhengyi_idle_000",
+      "file": "zhengyi_idle_000.png",
+      "sha256": "a391b8a804e405a6b2f7bcef7f2361fdc204e619db0ba54b72fa177f7d9135cf",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "idle",
+      "sourceFrame": 35
+    },
+    {
+      "name": "zhengyi_start_000",
+      "file": "zhengyi_start_000.png",
+      "sha256": "3d3bbf1230040f0e0921f59e2cdfad764efab000c1e5f297a1dbea6d691618e3",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 36
+    },
+    {
+      "name": "zhengyi_start_001",
+      "file": "zhengyi_start_001.png",
+      "sha256": "e3c9183b18fd87563b290763588483fa1818721440098728e1609a4028ca0479",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 37
+    },
+    {
+      "name": "zhengyi_start_002",
+      "file": "zhengyi_start_002.png",
+      "sha256": "d42f562c2fe53100aa108c5bf11929410accdaef9e9d8edab01d2040e2707224",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 38
+    },
+    {
+      "name": "zhengyi_start_003",
+      "file": "zhengyi_start_003.png",
+      "sha256": "6ae2cc283988eb843a9535686b00e3f36601bae1752c576a180a17114a25aea5",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 39
+    },
+    {
+      "name": "zhengyi_start_004",
+      "file": "zhengyi_start_004.png",
+      "sha256": "6d297fe44c66525593891861dd02c13ff40bb4202f776f38257593919674e6a1",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 40
+    },
+    {
+      "name": "zhengyi_start_005",
+      "file": "zhengyi_start_005.png",
+      "sha256": "4e91717d4186a2c7e1d7de9cafd442b6762badb5d63701700529f436603c501a",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 41
+    },
+    {
+      "name": "zhengyi_start_006",
+      "file": "zhengyi_start_006.png",
+      "sha256": "f35e04e8bea57553f252ed103837dd6f415d707d2ac2d4a20961a5ee50a604de",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 42
+    },
+    {
+      "name": "zhengyi_start_007",
+      "file": "zhengyi_start_007.png",
+      "sha256": "551b50095236a044a4fd5345c98777d9538be0a401fec23e65b77c1bea1d7f97",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 43
+    },
+    {
+      "name": "zhengyi_start_008",
+      "file": "zhengyi_start_008.png",
+      "sha256": "8d7808274f73beb783e372b96cfdecdc72ef32fc7c7762a6e386180c847945dc",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 44
+    },
+    {
+      "name": "zhengyi_start_009",
+      "file": "zhengyi_start_009.png",
+      "sha256": "30c3e5425cdba6d170521acd4eb079e69e14384965d53acf454b351b5486b12d",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 45
+    },
+    {
+      "name": "zhengyi_start_010",
+      "file": "zhengyi_start_010.png",
+      "sha256": "27bbf0d6932ce27029d075dab1e5d39fce2ff0fa58660767a53787d6608a7069",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 46
+    },
+    {
+      "name": "zhengyi_start_011",
+      "file": "zhengyi_start_011.png",
+      "sha256": "7d6ed0706a3ce1b1430c039583e1b59f76165407de1867fb93d271f01b7ac3c1",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 47
+    },
+    {
+      "name": "zhengyi_start_012",
+      "file": "zhengyi_start_012.png",
+      "sha256": "44d7c7d2866ca6127cbdee83b6e6342ea9112b62bc61d21790a26c25eb3b54d3",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 48
+    },
+    {
+      "name": "zhengyi_start_013",
+      "file": "zhengyi_start_013.png",
+      "sha256": "ec41ad4fe4e2e9a54a544ee1522cfa87665b3412e6c30e1d811e602c482e7c63",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 49
+    },
+    {
+      "name": "zhengyi_start_014",
+      "file": "zhengyi_start_014.png",
+      "sha256": "39753c22ffe23990cea7297dd06e2de95805ccb92329db292b124b88fd382bed",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 50
+    },
+    {
+      "name": "zhengyi_start_015",
+      "file": "zhengyi_start_015.png",
+      "sha256": "bfa519032d5d33ea87ac48566ce66928ebb98295d2ff94982a6edd3e22d4c8bf",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 51
+    },
+    {
+      "name": "zhengyi_start_016",
+      "file": "zhengyi_start_016.png",
+      "sha256": "7df2c22d7d491a15c07d1a9c09d92da2b6a37b7c93c190c3dfd957f2a3f114cd",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 52
+    },
+    {
+      "name": "zhengyi_start_017",
+      "file": "zhengyi_start_017.png",
+      "sha256": "2508f1d81884b895bc90fa89c6ff7c18e5b13b0c8386cbf772411a3c7c3abf2d",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 53
+    },
+    {
+      "name": "zhengyi_start_018",
+      "file": "zhengyi_start_018.png",
+      "sha256": "55e3c2fb1a3bc543926e2d271ba38fab87513dc28da198c86aaa613e981ed730",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 54
+    },
+    {
+      "name": "zhengyi_start_019",
+      "file": "zhengyi_start_019.png",
+      "sha256": "13a7f1b0fc00b4eb5f05362aa68737e66c418c38d0644cb8ad80933f276e9c9a",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 55
+    },
+    {
+      "name": "zhengyi_start_020",
+      "file": "zhengyi_start_020.png",
+      "sha256": "5869b1a821e2eeec709974df235661bcbf45d6215d11864345461625ae917f2d",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 56
+    },
+    {
+      "name": "zhengyi_start_021",
+      "file": "zhengyi_start_021.png",
+      "sha256": "1ecfad11e03d7558f1a26b38e038c6ee4ab9ec65a3b9f54854ebaf1abe55f64d",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 57
+    },
+    {
+      "name": "zhengyi_start_022",
+      "file": "zhengyi_start_022.png",
+      "sha256": "068640d3ef9aad0eb95af5af2eb58911419b2059a121fe5295e749f61f7e4747",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 58
+    },
+    {
+      "name": "zhengyi_start_023",
+      "file": "zhengyi_start_023.png",
+      "sha256": "7ef33b248533586646b6144a83e860fa30b105d83fbc71b7690be0dd3f046d1c",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 59
+    },
+    {
+      "name": "zhengyi_start_024",
+      "file": "zhengyi_start_024.png",
+      "sha256": "c1c350abea3d8838f378b3b89459e0c420aa25af48f5f405989e4d19694d37c4",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 60
+    },
+    {
+      "name": "zhengyi_start_025",
+      "file": "zhengyi_start_025.png",
+      "sha256": "94bf30f33b2b42b94b0e33046187c2d3b9800cee2b52239276822b7df72cd466",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 61
+    },
+    {
+      "name": "zhengyi_start_026",
+      "file": "zhengyi_start_026.png",
+      "sha256": "48091df532923be4d72505512160206429ff8cbf001e7b2780a67f1141e36275",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "start",
+      "sourceFrame": 62
+    },
+    {
+      "name": "zhengyi_walk_000",
+      "file": "zhengyi_walk_000.png",
+      "sha256": "9d6ee54f20d1eed8c47ae5ab4e7e0b2035663ae43926c3fdbdba824d2861c884",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 63
+    },
+    {
+      "name": "zhengyi_walk_001",
+      "file": "zhengyi_walk_001.png",
+      "sha256": "6f4d8771377994bee8ff40b377e3686573996015670860a7d7c2a73c7163d4bd",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 64
+    },
+    {
+      "name": "zhengyi_walk_002",
+      "file": "zhengyi_walk_002.png",
+      "sha256": "e9fffbe840ba5e197fb303c9180ab4fd8679dfade352a1ba04e58ab107548417",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 65
+    },
+    {
+      "name": "zhengyi_walk_003",
+      "file": "zhengyi_walk_003.png",
+      "sha256": "ac83f0074cc912b4fdc9fca0ab93382494bd375b02eaebe6591a764c6052e593",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 66
+    },
+    {
+      "name": "zhengyi_walk_004",
+      "file": "zhengyi_walk_004.png",
+      "sha256": "0f8c1fcaad8dfc4ac2bd97b2fd8089bcdf7e0ad9efdcdf78972145090a769d7d",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 67
+    },
+    {
+      "name": "zhengyi_walk_005",
+      "file": "zhengyi_walk_005.png",
+      "sha256": "ad924bfc4ed9728b557dc7091e5bda66ce82fe492630534bbd8b1bc63e7f63bb",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 68
+    },
+    {
+      "name": "zhengyi_walk_006",
+      "file": "zhengyi_walk_006.png",
+      "sha256": "72f540c5086d8a4f711980612678e462280000aecac8f992b6efa5379606eecf",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 69
+    },
+    {
+      "name": "zhengyi_walk_007",
+      "file": "zhengyi_walk_007.png",
+      "sha256": "d33c6a5d5c5cfe2d4825ab7b5e33b11eeed8cf346dd54ea943bc6e858e3304a9",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 70
+    },
+    {
+      "name": "zhengyi_walk_008",
+      "file": "zhengyi_walk_008.png",
+      "sha256": "6805a95d3c6861f4747a905f47bd447dd931f371e5a0850523bc651d88bbc9a5",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 71
+    },
+    {
+      "name": "zhengyi_walk_009",
+      "file": "zhengyi_walk_009.png",
+      "sha256": "3c265e76d01d14cea5dca4aea9badefd89eaf120d8f2a9ecc831ab3851c959d4",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 72
+    },
+    {
+      "name": "zhengyi_walk_010",
+      "file": "zhengyi_walk_010.png",
+      "sha256": "c8b837d6ae455b3ee62b7741553c5e6933cc582d5ea54e8ef243e59ea1f302e3",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 73
+    },
+    {
+      "name": "zhengyi_walk_011",
+      "file": "zhengyi_walk_011.png",
+      "sha256": "a9cb795e4c63166afccb02d7164c3477ba2ad976a632e09428f2ba6637b93b2d",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 74
+    },
+    {
+      "name": "zhengyi_walk_012",
+      "file": "zhengyi_walk_012.png",
+      "sha256": "43cfb970a3626028911be88d0b43585413c22a4861669a752edcc14b42102b08",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 75
+    },
+    {
+      "name": "zhengyi_walk_013",
+      "file": "zhengyi_walk_013.png",
+      "sha256": "51eeb5c27be7b0ded5b914517e0e394ba139a328737f749e1fb627ba9df5f355",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 76
+    },
+    {
+      "name": "zhengyi_walk_014",
+      "file": "zhengyi_walk_014.png",
+      "sha256": "8437aac3ae7e4e00810f43d98656f4914d8f99de0a862f1e3a18e02f4efbac50",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 77
+    },
+    {
+      "name": "zhengyi_walk_015",
+      "file": "zhengyi_walk_015.png",
+      "sha256": "9c35277368144c88bc4c01497add2bb5aea419a0c9a7a4a81dd17f62bbb3318e",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 78
+    },
+    {
+      "name": "zhengyi_walk_016",
+      "file": "zhengyi_walk_016.png",
+      "sha256": "ab16adeab2dafc7ae0ef3fd0d86be86222d5832184af072da820b57c7826269f",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 79
+    },
+    {
+      "name": "zhengyi_walk_017",
+      "file": "zhengyi_walk_017.png",
+      "sha256": "6a367735637d32c895999a74bd53b05b0b7fb438f8883292b9125844cdcbe62b",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 80
+    },
+    {
+      "name": "zhengyi_walk_018",
+      "file": "zhengyi_walk_018.png",
+      "sha256": "675e2c4106857eb8dc0d4530a4cb9bac1be28a815870a651aa23664ab4be305f",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 81
+    },
+    {
+      "name": "zhengyi_walk_019",
+      "file": "zhengyi_walk_019.png",
+      "sha256": "9a9854a3f8172dee7093b7fc45aab7806804cd1fd72a2545e79ac31aa700e344",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 82
+    },
+    {
+      "name": "zhengyi_walk_020",
+      "file": "zhengyi_walk_020.png",
+      "sha256": "7a31b09df8ccead9ff42117b4bad6cc45585edc4044618872a0a27bee4acb6ff",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 83
+    },
+    {
+      "name": "zhengyi_walk_021",
+      "file": "zhengyi_walk_021.png",
+      "sha256": "b0f600d7cd6d0f5bdc52639a9c54a0064ceb688bc9b9da6b07bcc66b9d8235a4",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 84
+    },
+    {
+      "name": "zhengyi_walk_022",
+      "file": "zhengyi_walk_022.png",
+      "sha256": "a8968270c080619e2238a3b347c87ca5f46e11707b0cfcd75cab4db0b581e13d",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 85
+    },
+    {
+      "name": "zhengyi_walk_023",
+      "file": "zhengyi_walk_023.png",
+      "sha256": "a6a1d659010d9f9626be50bdf53a2f81bc06161af787d5d85d845dc79366258c",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 86
+    },
+    {
+      "name": "zhengyi_walk_024",
+      "file": "zhengyi_walk_024.png",
+      "sha256": "a144310527e47cb7a4526f78006c119c4e8382a978265f54551054bd2c8a1142",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 87
+    },
+    {
+      "name": "zhengyi_walk_025",
+      "file": "zhengyi_walk_025.png",
+      "sha256": "007919bfc9dd9a82e8c8a82c7994edfae957ee060cfa801fcbc314333b0464ab",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 88
+    },
+    {
+      "name": "zhengyi_walk_026",
+      "file": "zhengyi_walk_026.png",
+      "sha256": "cf8f1a05ff9abb098017f243b915239a4972cd0322b517cd86d8d5b22cdcee4a",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 89
+    },
+    {
+      "name": "zhengyi_walk_027",
+      "file": "zhengyi_walk_027.png",
+      "sha256": "65fa9fb664a84e83a6f654c0b63b69d950c5737f2f1085c4fc43294800dc44eb",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 90
+    },
+    {
+      "name": "zhengyi_walk_028",
+      "file": "zhengyi_walk_028.png",
+      "sha256": "0335ca62a970956f0e2260140261762885bd1c6209f3ed08dbc5a7e873808227",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 91
+    },
+    {
+      "name": "zhengyi_walk_029",
+      "file": "zhengyi_walk_029.png",
+      "sha256": "89a761e55ad868e4c09f9d2d25fbaec3c208df9d0cdd7816e60f2b2966080ab0",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "walk",
+      "sourceFrame": 92
+    },
+    {
+      "name": "zhengyi_stop_000",
+      "file": "zhengyi_stop_000.png",
+      "sha256": "514e453b159a1c06f807034e90d6f142ff56666dd7f557c5c36dfd8b4fbfeabd",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 181
+    },
+    {
+      "name": "zhengyi_stop_001",
+      "file": "zhengyi_stop_001.png",
+      "sha256": "8ee509ff077683eb3648e39b02d482821bf09a704256de108d80f283d36e9fed",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 182
+    },
+    {
+      "name": "zhengyi_stop_002",
+      "file": "zhengyi_stop_002.png",
+      "sha256": "f0d28e04df3aa73a8d2162837381506ff64f6855c01675ba5b6abb2ec44c72e3",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 183
+    },
+    {
+      "name": "zhengyi_stop_003",
+      "file": "zhengyi_stop_003.png",
+      "sha256": "20aaf09aa4e02b05082c7e743bd97dd42b3cec03ffd5dd31bdd4db008c44be4c",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 184
+    },
+    {
+      "name": "zhengyi_stop_004",
+      "file": "zhengyi_stop_004.png",
+      "sha256": "c37a021bcfbe1c950e5299065a8103916c0f5eb065c31d2edfc5d6f25a4a6f8e",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 185
+    },
+    {
+      "name": "zhengyi_stop_005",
+      "file": "zhengyi_stop_005.png",
+      "sha256": "fe130607820b8181450f9d381afd8b6cb53b3bc3ec5b72cf59f9fef09e580d0d",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 186
+    },
+    {
+      "name": "zhengyi_stop_006",
+      "file": "zhengyi_stop_006.png",
+      "sha256": "eebd005dcbeb614ae03511c0facc40f3ebefeb308cda886679331314693ef01c",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 187
+    },
+    {
+      "name": "zhengyi_stop_007",
+      "file": "zhengyi_stop_007.png",
+      "sha256": "9ebff39b6a3f38d968babef12744601aeea5e8a03348f1fb9c167ec8baec1ad3",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 188
+    },
+    {
+      "name": "zhengyi_stop_008",
+      "file": "zhengyi_stop_008.png",
+      "sha256": "3d0a75a837887a2b3747eff3237a0a518e080502f5fdd3cd297ff90d9de08d20",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 189
+    },
+    {
+      "name": "zhengyi_stop_009",
+      "file": "zhengyi_stop_009.png",
+      "sha256": "ab14cbe9af30a6f982d197bae2136ac42415d1924eaa237dc4029acd9c67c5d7",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 190
+    },
+    {
+      "name": "zhengyi_stop_010",
+      "file": "zhengyi_stop_010.png",
+      "sha256": "77949f8471b03376a04ce7914cac0423f01e116607933965cdbaff6c588e04b2",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 191
+    },
+    {
+      "name": "zhengyi_stop_011",
+      "file": "zhengyi_stop_011.png",
+      "sha256": "d1c0525e70afbc97599d8bb8e0ac70434656eeb3c0541bb31f23fd2d72619e2d",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 192
+    },
+    {
+      "name": "zhengyi_stop_012",
+      "file": "zhengyi_stop_012.png",
+      "sha256": "c19f48e3e9a99f335307312afb9c03329309d9f935ad7f76a2bf18017bc33eec",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 193
+    },
+    {
+      "name": "zhengyi_stop_013",
+      "file": "zhengyi_stop_013.png",
+      "sha256": "c8125107550c754d9c7ac6dd82546cdf95c63a7a2ca287309c2d28a8cd7051a2",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 194
+    },
+    {
+      "name": "zhengyi_stop_014",
+      "file": "zhengyi_stop_014.png",
+      "sha256": "dd002b0d9c4c11a471d1d4b27045fff518e9cd698bf93d3947dab471b9a23f4e",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 195
+    },
+    {
+      "name": "zhengyi_stop_015",
+      "file": "zhengyi_stop_015.png",
+      "sha256": "b59c61ae907f10abdb8403ceac7f4e4a7030babbef521b7d7cd8ac5d35a8f2f2",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 196
+    },
+    {
+      "name": "zhengyi_stop_016",
+      "file": "zhengyi_stop_016.png",
+      "sha256": "b802a33f663f07f631c05cb51e5de9f6c66171e1dc325bfd16df70f0a8c38130",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 197
+    },
+    {
+      "name": "zhengyi_stop_017",
+      "file": "zhengyi_stop_017.png",
+      "sha256": "31be467efe05dc99532f5f483627f097e33034323daab12b270728d5c82f20ac",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 198
+    },
+    {
+      "name": "zhengyi_stop_018",
+      "file": "zhengyi_stop_018.png",
+      "sha256": "f9901b70eb73b96bb302d776e042f5c4b0d693566845bd09de34b116721ea15b",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 199
+    },
+    {
+      "name": "zhengyi_stop_019",
+      "file": "zhengyi_stop_019.png",
+      "sha256": "87b64a4d1b71197f180351dc9c441c817282c9b98082b4cdfae2eec3b505d72a",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 200
+    },
+    {
+      "name": "zhengyi_stop_020",
+      "file": "zhengyi_stop_020.png",
+      "sha256": "0ac2b8c27de546eec73f3ae78bcdee4a3b9ad11e246e28f706549e038602a14a",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 201
+    },
+    {
+      "name": "zhengyi_stop_021",
+      "file": "zhengyi_stop_021.png",
+      "sha256": "15d4f27df01083bd2716c1459d662a04f69e8134f51e6f62f9469774a90b9be4",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 202
+    },
+    {
+      "name": "zhengyi_stop_022",
+      "file": "zhengyi_stop_022.png",
+      "sha256": "bef5b4f651615458c231c43e88190e14b9a2fbbfd718168d7be7110161d541be",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 203
+    },
+    {
+      "name": "zhengyi_stop_023",
+      "file": "zhengyi_stop_023.png",
+      "sha256": "e8a4af5ecd6c62d7b511ef8b35e2aede26b44b9267466bfd5d61d1132d0efc76",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 204
+    },
+    {
+      "name": "zhengyi_stop_024",
+      "file": "zhengyi_stop_024.png",
+      "sha256": "09e7a2f2290c2d847c9360527f7d5429bebfef1b7eb2b52910ab61d117e48abe",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 205
+    },
+    {
+      "name": "zhengyi_stop_025",
+      "file": "zhengyi_stop_025.png",
+      "sha256": "aa160acbac4a22c2a6079a7ca3716268dbda780e94e010ff5a3048a0778f24e0",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 206
+    },
+    {
+      "name": "zhengyi_stop_026",
+      "file": "zhengyi_stop_026.png",
+      "sha256": "ccff9e76969afd73dead0685c41e58e1af218f08168466251724d0f4ad2f8d08",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 207
+    },
+    {
+      "name": "zhengyi_stop_027",
+      "file": "zhengyi_stop_027.png",
+      "sha256": "13ab93da960cc5dcdb6dd9457ffad5d3518bd283cc5f4c0c7e60b5ed70ddc063",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 208
+    },
+    {
+      "name": "zhengyi_stop_028",
+      "file": "zhengyi_stop_028.png",
+      "sha256": "7459ce23cdcef04168c90ee5f5ecb456f1ba813df145c7b5504cfb86ef5717d4",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 209
+    },
+    {
+      "name": "zhengyi_stop_029",
+      "file": "zhengyi_stop_029.png",
+      "sha256": "73520a7555008fedbd03d15aed7653692b967406cb7c3b664d29987a73c5104a",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 210
+    },
+    {
+      "name": "zhengyi_stop_030",
+      "file": "zhengyi_stop_030.png",
+      "sha256": "75b3839d619c6de170751aacb82f0377ed9b0d41822c9384d25204696cf5b72d",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 211
+    },
+    {
+      "name": "zhengyi_stop_031",
+      "file": "zhengyi_stop_031.png",
+      "sha256": "2989a02b94e1b3e5eb595114f032890c19c6253fc13f85393a7eecd7e3bbe168",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 212
+    },
+    {
+      "name": "zhengyi_stop_032",
+      "file": "zhengyi_stop_032.png",
+      "sha256": "2b974e42b020c4b4c4afdc46f4e35ec837cf6e8814e886d7336f2fdb48f4d109",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 213
+    },
+    {
+      "name": "zhengyi_stop_033",
+      "file": "zhengyi_stop_033.png",
+      "sha256": "1501e70ef7b5b2f5696ba2fe5f0d728f557fbc19ef1bec48817833f2a429ff72",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 214
+    },
+    {
+      "name": "zhengyi_stop_034",
+      "file": "zhengyi_stop_034.png",
+      "sha256": "c80eb76b995a42f15dfb1753724d7152f8c245c406bbdd56ba0c5e235160dc72",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 215
+    },
+    {
+      "name": "zhengyi_stop_035",
+      "file": "zhengyi_stop_035.png",
+      "sha256": "a359cc526029a32765161bab3fcb6544b881870e840c28891b7a056f70e933b1",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 216
+    },
+    {
+      "name": "zhengyi_stop_036",
+      "file": "zhengyi_stop_036.png",
+      "sha256": "c31cd2b373351ff31983e8d2e5a33cdf2cb47bf06a42a00610962b5bf9c039ef",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 217
+    },
+    {
+      "name": "zhengyi_stop_037",
+      "file": "zhengyi_stop_037.png",
+      "sha256": "31f714d677b9367bdbf475216998cb2dbebfab963257aaab7dec4fbb80a03986",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 218
+    },
+    {
+      "name": "zhengyi_stop_038",
+      "file": "zhengyi_stop_038.png",
+      "sha256": "b5f3e5b5ea7f821517cc4edc51aa4d0d46c0a981ec4f4b98a20743ee0ca70e0f",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 219
+    },
+    {
+      "name": "zhengyi_stop_039",
+      "file": "zhengyi_stop_039.png",
+      "sha256": "663c17fbbfb8a7725fd1237fb2e1f185466e5cb06bdec25a149f7f37db98e6ac",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 220
+    },
+    {
+      "name": "zhengyi_stop_040",
+      "file": "zhengyi_stop_040.png",
+      "sha256": "404017ecf1a3cc820f1e81cf612f8b0d248593e47c7fab1c40c6c5aeb20edd91",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 221
+    },
+    {
+      "name": "zhengyi_stop_041",
+      "file": "zhengyi_stop_041.png",
+      "sha256": "79fdb00b8f7a772dfec2101c591474206f6f35c63c8a83feb49fe20994f1ccb9",
+      "width": 984,
+      "height": 1776,
+      "pixelsPerUnit": 658.8461538461538,
+      "pivot": {
+        "x": 0.47459349593495936,
+        "y": 0.019144144144144115
+      },
+      "state": "stop",
+      "sourceFrame": 222
+    }
+  ],
+  "source": {
+    "videoSha256": "adcafd725281b1418f4920610d10e06246a19d22f76234f239acc393ed375560",
+    "review": "source~/video-extraction.json",
+    "nativePng": true,
+    "gpuCompression": "BC7 at native dimensions"
+  }
+}

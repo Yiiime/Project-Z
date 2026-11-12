@@ -119,6 +119,7 @@ namespace Seabreeze.Editor
         [MenuItem("Seabreeze/Verify Player Motion")]
         public static void Run()
         {
+            if (Resources.Load<TextAsset>("Art/CastMotion/player/motion") != null) { CastMotionVerification.Run(); return; }
             if (EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isCompiling)
                 throw new InvalidOperationException("Run from Edit mode after compilation.");
             if (!Application.isBatchMode)

@@ -65,6 +65,13 @@ namespace Seabreeze
             }
             previousVisualPosition = position;
             hasVisualSample = true;
+            visual.SetPlayerMotionIntent(MoveAxis);
+            if (visual.UsesPlayerStateMotion && (GameSession.Instance == null || GameSession.Instance.InputBlocked
+                || (WorldDirector.Instance != null && WorldDirector.Instance.IsTransitioning)))
+            {
+                visual.ResetPlayerMotion();
+                return;
+            }
             visual.Animate(dt > .000001f ? dx / dt : 0, Grounded, body.linearVelocity.y, dt);
         }
 

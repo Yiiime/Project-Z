@@ -1,0 +1,4160 @@
+{
+  "version": 1,
+  "characterId": "z",
+  "characterName": "Z",
+  "runtimeTarget": true,
+  "source": {
+    "characterId": "z",
+    "characterName": "Z",
+    "sourceLabel": "Z",
+    "sourceVideo": "source/source-video.mp4",
+    "originalFile": "Z行走动画.mp4",
+    "sourceSha256": "7cadfcc7733928c832acc98c0bf367870a578c0983799531d7c734a452a6e59f",
+    "runtimeTarget": true
+  },
+  "video": {
+    "kind": "vide",
+    "timescale": 15360,
+    "durationTicks": 153856,
+    "durationSeconds": 10.016666666666667,
+    "samples": 241
+  },
+  "size": [
+    1792,
+    3184
+  ],
+  "canvas": {
+    "size": [
+      1544,
+      2824
+    ],
+    "sourceCropTopLeft": [
+      156,
+      201,
+      1544,
+      2824
+    ],
+    "sourceForegroundUnion": [
+      188,
+      225,
+      1666,
+      3000
+    ],
+    "pixelScale": 1,
+    "standingHeightPixels": 2758,
+    "footAnchorSource": [
+      896.0,
+      2991
+    ],
+    "footAnchorTopLeft": [
+      740.0,
+      2790
+    ],
+    "unityPivotNormalizedBottomLeft": [
+      0.4792746113989637,
+      0.012039660056657242
+    ]
+  },
+  "states": {
+    "idle": {
+      "startFrame": 35,
+      "endFrameExclusive": 36,
+      "loop": false,
+      "holdLastFrame": true,
+      "frameCount": 1,
+      "sourceStartSeconds": 1.4666666666666666,
+      "sourceEndSecondsExclusive": 1.5,
+      "durationSeconds": 0.03333333333333333,
+      "frames": [
+        {
+          "state": "idle",
+          "index": 0,
+          "file": "frames/idle/z_idle_000.png",
+          "sourceFrame": 35,
+          "sourcePtsTicks": 22528,
+          "sourceSeconds": 1.4666666666666666,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "89254d30b9470b3a4e9aa24f99b02dfed647ab7c0a711d6876fa6812533dfe4f",
+          "solidBounds": [
+            290,
+            32,
+            1125,
+            2790
+          ],
+          "opaqueInteriorPixels": 1327735,
+          "edgeRecoveryPixels": 28022,
+          "shadowClassifiedPixels": 529870,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 0,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        }
+      ]
+    },
+    "start": {
+      "startFrame": 36,
+      "endFrameExclusive": 76,
+      "loop": false,
+      "holdLastFrame": false,
+      "frameCount": 40,
+      "sourceStartSeconds": 1.5,
+      "sourceEndSecondsExclusive": 3.1666666666666665,
+      "durationSeconds": 1.6666666666666667,
+      "frames": [
+        {
+          "state": "start",
+          "index": 0,
+          "file": "frames/start/z_start_000.png",
+          "sourceFrame": 36,
+          "sourcePtsTicks": 23040,
+          "sourceSeconds": 1.5,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "875a280ebaa1a49a669a62d47458362e81aece5a339ac471ce9fff937b307639",
+          "solidBounds": [
+            290,
+            32,
+            1125,
+            2790
+          ],
+          "opaqueInteriorPixels": 1327519,
+          "edgeRecoveryPixels": 28100,
+          "shadowClassifiedPixels": 529895,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 1,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 1,
+          "file": "frames/start/z_start_001.png",
+          "sourceFrame": 37,
+          "sourcePtsTicks": 23808,
+          "sourceSeconds": 1.55,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "34e9b7309e4c3beeca69407ec4f6595ea2f074e147a78fa5c35a02ef949aa6e7",
+          "solidBounds": [
+            290,
+            32,
+            1124,
+            2790
+          ],
+          "opaqueInteriorPixels": 1327849,
+          "edgeRecoveryPixels": 28403,
+          "shadowClassifiedPixels": 529933,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 1,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 2,
+          "file": "frames/start/z_start_002.png",
+          "sourceFrame": 38,
+          "sourcePtsTicks": 24320,
+          "sourceSeconds": 1.5833333333333333,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "cad08b11ed14cb981037b0699e0ca89b81724bc0b94260826720a42636eef94a",
+          "solidBounds": [
+            290,
+            32,
+            1123,
+            2790
+          ],
+          "opaqueInteriorPixels": 1327263,
+          "edgeRecoveryPixels": 28255,
+          "shadowClassifiedPixels": 530137,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 2,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 3,
+          "file": "frames/start/z_start_003.png",
+          "sourceFrame": 39,
+          "sourcePtsTicks": 25088,
+          "sourceSeconds": 1.6333333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "c4f71f86e483870fb6445866da8b9826da1bbfc6a0f44afb7c0fff124468dd30",
+          "solidBounds": [
+            290,
+            32,
+            1123,
+            2790
+          ],
+          "opaqueInteriorPixels": 1327631,
+          "edgeRecoveryPixels": 28886,
+          "shadowClassifiedPixels": 530101,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 2,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 4,
+          "file": "frames/start/z_start_004.png",
+          "sourceFrame": 40,
+          "sourcePtsTicks": 25600,
+          "sourceSeconds": 1.6666666666666667,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "ab98914422ec97bb9a32ea1884d47928325edd44dcce983c5e33b5cd3c617bd6",
+          "solidBounds": [
+            290,
+            32,
+            1121,
+            2790
+          ],
+          "opaqueInteriorPixels": 1327511,
+          "edgeRecoveryPixels": 28781,
+          "shadowClassifiedPixels": 530270,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 3,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 5,
+          "file": "frames/start/z_start_005.png",
+          "sourceFrame": 41,
+          "sourcePtsTicks": 26368,
+          "sourceSeconds": 1.7166666666666666,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "1b6d5dba045d95f34eebc5896840c4a703fff4ea1b03a2d5058ddf63855e6a94",
+          "solidBounds": [
+            290,
+            33,
+            1119,
+            2790
+          ],
+          "opaqueInteriorPixels": 1326771,
+          "edgeRecoveryPixels": 29472,
+          "shadowClassifiedPixels": 530791,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 3,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 6,
+          "file": "frames/start/z_start_006.png",
+          "sourceFrame": 42,
+          "sourcePtsTicks": 26880,
+          "sourceSeconds": 1.75,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "609af193830b41e222a01235aed176d584fa01f7eaccea862e36fc3624f3dd75",
+          "solidBounds": [
+            290,
+            34,
+            1116,
+            2790
+          ],
+          "opaqueInteriorPixels": 1325335,
+          "edgeRecoveryPixels": 28719,
+          "shadowClassifiedPixels": 532167,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 4,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 7,
+          "file": "frames/start/z_start_007.png",
+          "sourceFrame": 43,
+          "sourcePtsTicks": 27648,
+          "sourceSeconds": 1.8,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "67f4299aa4f4e9c9989aaac8a611f981fbc6c71e26391250d17cc87c5fa64e49",
+          "solidBounds": [
+            289,
+            36,
+            1112,
+            2789
+          ],
+          "opaqueInteriorPixels": 1323519,
+          "edgeRecoveryPixels": 29863,
+          "shadowClassifiedPixels": 533430,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 4,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 8,
+          "file": "frames/start/z_start_008.png",
+          "sourceFrame": 44,
+          "sourcePtsTicks": 28160,
+          "sourceSeconds": 1.8333333333333333,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "c8c6fca2b4495f61186935237e74906f67fb219a104bb2804ef63d645c770637",
+          "solidBounds": [
+            286,
+            38,
+            1107,
+            2789
+          ],
+          "opaqueInteriorPixels": 1322243,
+          "edgeRecoveryPixels": 29742,
+          "shadowClassifiedPixels": 534087,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 5,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 9,
+          "file": "frames/start/z_start_009.png",
+          "sourceFrame": 45,
+          "sourcePtsTicks": 28928,
+          "sourceSeconds": 1.8833333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "080a1e4e8f516ddecc114a074038a3b821023ddd217b6ae00bb557e07da880c1",
+          "solidBounds": [
+            281,
+            40,
+            1099,
+            2787
+          ],
+          "opaqueInteriorPixels": 1324587,
+          "edgeRecoveryPixels": 30043,
+          "shadowClassifiedPixels": 533435,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 5,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 10,
+          "file": "frames/start/z_start_010.png",
+          "sourceFrame": 46,
+          "sourcePtsTicks": 29440,
+          "sourceSeconds": 1.9166666666666667,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "dc9891accfb0c8f5b0a2c182b19c1f3bd2c957aac4a1e17429424d8045a7f83f",
+          "solidBounds": [
+            277,
+            43,
+            1091,
+            2786
+          ],
+          "opaqueInteriorPixels": 1339913,
+          "edgeRecoveryPixels": 29063,
+          "shadowClassifiedPixels": 530405,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 6,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 11,
+          "file": "frames/start/z_start_011.png",
+          "sourceFrame": 47,
+          "sourcePtsTicks": 30208,
+          "sourceSeconds": 1.9666666666666666,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "19e76728bcdf5cf66fbb095bce901a6621b1c0c6b9e7aef78f17d6d9ab09a046",
+          "solidBounds": [
+            273,
+            44,
+            1089,
+            2784
+          ],
+          "opaqueInteriorPixels": 1366160,
+          "edgeRecoveryPixels": 29781,
+          "shadowClassifiedPixels": 525443,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 6,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 12,
+          "file": "frames/start/z_start_012.png",
+          "sourceFrame": 48,
+          "sourcePtsTicks": 30720,
+          "sourceSeconds": 2.0,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "884b67844112494d843b5b53d04461c7d75c737fac810297aa390b3aac487c56",
+          "solidBounds": [
+            271,
+            43,
+            1110,
+            2781
+          ],
+          "opaqueInteriorPixels": 1402545,
+          "edgeRecoveryPixels": 29454,
+          "shadowClassifiedPixels": 514370,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 7,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 13,
+          "file": "frames/start/z_start_013.png",
+          "sourceFrame": 49,
+          "sourcePtsTicks": 31488,
+          "sourceSeconds": 2.05,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "7f58dbdb6783664bd5f9708ff9133d8db6f851de8885f6044bf42ee0a520504f",
+          "solidBounds": [
+            267,
+            40,
+            1130,
+            2772
+          ],
+          "opaqueInteriorPixels": 1463140,
+          "edgeRecoveryPixels": 30290,
+          "shadowClassifiedPixels": 491933,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 7,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 14,
+          "file": "frames/start/z_start_014.png",
+          "sourceFrame": 50,
+          "sourcePtsTicks": 32000,
+          "sourceSeconds": 2.0833333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "c93a1e71ee7afbcf916860532a5fc2d16ca1b0896e95713bc672e7cef28ad3cc",
+          "solidBounds": [
+            261,
+            37,
+            1149,
+            2770
+          ],
+          "opaqueInteriorPixels": 1511409,
+          "edgeRecoveryPixels": 31657,
+          "shadowClassifiedPixels": 478229,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 8,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 15,
+          "file": "frames/start/z_start_015.png",
+          "sourceFrame": 51,
+          "sourcePtsTicks": 32768,
+          "sourceSeconds": 2.1333333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "c59bf3db6c7d55b72f74788f1ba15adc2c58213ec04957444fbb7147623a4b3b",
+          "solidBounds": [
+            251,
+            37,
+            1180,
+            2768
+          ],
+          "opaqueInteriorPixels": 1550152,
+          "edgeRecoveryPixels": 33152,
+          "shadowClassifiedPixels": 471556,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 8,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 16,
+          "file": "frames/start/z_start_016.png",
+          "sourceFrame": 52,
+          "sourcePtsTicks": 33280,
+          "sourceSeconds": 2.1666666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "6203c39a82d2bd7973b808315bd95af1976cb54da98408a8528a52221e20254d",
+          "solidBounds": [
+            239,
+            40,
+            1251,
+            2769
+          ],
+          "opaqueInteriorPixels": 1581126,
+          "edgeRecoveryPixels": 33435,
+          "shadowClassifiedPixels": 465891,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 9,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 17,
+          "file": "frames/start/z_start_017.png",
+          "sourceFrame": 53,
+          "sourcePtsTicks": 34048,
+          "sourceSeconds": 2.216666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "ebd4328a2c480627bc8325af529bc8a411ad81b732360737ef3c8418df5d21ef",
+          "solidBounds": [
+            221,
+            45,
+            1345,
+            2769
+          ],
+          "opaqueInteriorPixels": 1607048,
+          "edgeRecoveryPixels": 34259,
+          "shadowClassifiedPixels": 462200,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 9,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 18,
+          "file": "frames/start/z_start_018.png",
+          "sourceFrame": 54,
+          "sourcePtsTicks": 34560,
+          "sourceSeconds": 2.25,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "26b578946d0a7d62349cd07c45fa82c5c9bd7889453ac936c94d0bd64aa7dcf0",
+          "solidBounds": [
+            201,
+            52,
+            1415,
+            2769
+          ],
+          "opaqueInteriorPixels": 1626067,
+          "edgeRecoveryPixels": 34469,
+          "shadowClassifiedPixels": 456067,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 10,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 19,
+          "file": "frames/start/z_start_019.png",
+          "sourceFrame": 55,
+          "sourcePtsTicks": 35328,
+          "sourceSeconds": 2.3,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "4ce40876c659119efb8d57d740191f692b77f62bb5034a9e39e9c55a69f720eb",
+          "solidBounds": [
+            177,
+            58,
+            1451,
+            2771
+          ],
+          "opaqueInteriorPixels": 1641689,
+          "edgeRecoveryPixels": 35662,
+          "shadowClassifiedPixels": 451938,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 10,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 20,
+          "file": "frames/start/z_start_020.png",
+          "sourceFrame": 56,
+          "sourcePtsTicks": 35840,
+          "sourceSeconds": 2.3333333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "9379863eaf91050aebf535fc9b4bf62dfc5bc8eec6e643b59634448f0ab35031",
+          "solidBounds": [
+            158,
+            65,
+            1453,
+            2777
+          ],
+          "opaqueInteriorPixels": 1654538,
+          "edgeRecoveryPixels": 35199,
+          "shadowClassifiedPixels": 446886,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 11,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 21,
+          "file": "frames/start/z_start_021.png",
+          "sourceFrame": 57,
+          "sourcePtsTicks": 36608,
+          "sourceSeconds": 2.3833333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "730af8357d2d6b669a3cf34700c7b8d0c0569fad8f15f54096dceb581527b5cb",
+          "solidBounds": [
+            138,
+            68,
+            1425,
+            2780
+          ],
+          "opaqueInteriorPixels": 1661021,
+          "edgeRecoveryPixels": 35821,
+          "shadowClassifiedPixels": 444137,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 11,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 22,
+          "file": "frames/start/z_start_022.png",
+          "sourceFrame": 58,
+          "sourcePtsTicks": 37120,
+          "sourceSeconds": 2.4166666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "e7896895d14f425526f70f26d5966b209b044e11a3460a08280e7b9bd10ce97c",
+          "solidBounds": [
+            99,
+            66,
+            1379,
+            2782
+          ],
+          "opaqueInteriorPixels": 1650492,
+          "edgeRecoveryPixels": 35236,
+          "shadowClassifiedPixels": 448169,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 12,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 23,
+          "file": "frames/start/z_start_023.png",
+          "sourceFrame": 59,
+          "sourcePtsTicks": 37888,
+          "sourceSeconds": 2.466666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "4e217026d76a69a5fd3041d4a912ad6bb06810e4858089daca2c62a9a33e051f",
+          "solidBounds": [
+            75,
+            59,
+            1323,
+            2782
+          ],
+          "opaqueInteriorPixels": 1619693,
+          "edgeRecoveryPixels": 35803,
+          "shadowClassifiedPixels": 457537,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 12,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 24,
+          "file": "frames/start/z_start_024.png",
+          "sourceFrame": 60,
+          "sourcePtsTicks": 38400,
+          "sourceSeconds": 2.5,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "e4bde3a0c9be2588a22ede89d9d93a3b2d01ae444d7a6e193540679e0d46ae65",
+          "solidBounds": [
+            83,
+            54,
+            1267,
+            2786
+          ],
+          "opaqueInteriorPixels": 1580472,
+          "edgeRecoveryPixels": 34608,
+          "shadowClassifiedPixels": 464843,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 13,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 25,
+          "file": "frames/start/z_start_025.png",
+          "sourceFrame": 61,
+          "sourcePtsTicks": 39168,
+          "sourceSeconds": 2.55,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "fb774429341df1f37ea9079d52c0e58ff15181c5159d4002a4109e1c67351997",
+          "solidBounds": [
+            127,
+            48,
+            1213,
+            2789
+          ],
+          "opaqueInteriorPixels": 1522935,
+          "edgeRecoveryPixels": 34244,
+          "shadowClassifiedPixels": 477743,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 13,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 26,
+          "file": "frames/start/z_start_026.png",
+          "sourceFrame": 62,
+          "sourcePtsTicks": 39680,
+          "sourceSeconds": 2.5833333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "192483b7bed80b3641b8cb19a7042f510800db0d5fc9e26c218f3b961fe18591",
+          "solidBounds": [
+            141,
+            42,
+            1151,
+            2790
+          ],
+          "opaqueInteriorPixels": 1468645,
+          "edgeRecoveryPixels": 33847,
+          "shadowClassifiedPixels": 482648,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 14,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 27,
+          "file": "frames/start/z_start_027.png",
+          "sourceFrame": 63,
+          "sourcePtsTicks": 40448,
+          "sourceSeconds": 2.6333333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "b9c400d5ec3a3ea05d7298c0180f5a28e6096b864de71ca066c3ddd7d7313341",
+          "solidBounds": [
+            165,
+            36,
+            1117,
+            2790
+          ],
+          "opaqueInteriorPixels": 1434902,
+          "edgeRecoveryPixels": 33562,
+          "shadowClassifiedPixels": 483084,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 14,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 28,
+          "file": "frames/start/z_start_028.png",
+          "sourceFrame": 64,
+          "sourcePtsTicks": 40960,
+          "sourceSeconds": 2.6666666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "69e6e03855723f8241da3e2a52be27c1d8b0082d6390c558f8c1b7acd200761b",
+          "solidBounds": [
+            191,
+            31,
+            1098,
+            2791
+          ],
+          "opaqueInteriorPixels": 1415120,
+          "edgeRecoveryPixels": 31393,
+          "shadowClassifiedPixels": 496025,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 15,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 29,
+          "file": "frames/start/z_start_029.png",
+          "sourceFrame": 65,
+          "sourcePtsTicks": 41728,
+          "sourceSeconds": 2.716666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "8a6a985619e29c5bb830ef0fe1a16cef789b9d2e51bdc34265a1fd90081684e4",
+          "solidBounds": [
+            225,
+            29,
+            1133,
+            2790
+          ],
+          "opaqueInteriorPixels": 1402290,
+          "edgeRecoveryPixels": 31640,
+          "shadowClassifiedPixels": 519969,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 15,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 30,
+          "file": "frames/start/z_start_030.png",
+          "sourceFrame": 66,
+          "sourcePtsTicks": 42240,
+          "sourceSeconds": 2.75,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "680d7c2284e6d47d130c61c361acad0bb7dedeafe74613fbc15b56d6af1603aa",
+          "solidBounds": [
+            253,
+            31,
+            1158,
+            2790
+          ],
+          "opaqueInteriorPixels": 1452926,
+          "edgeRecoveryPixels": 31472,
+          "shadowClassifiedPixels": 483897,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 16,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 31,
+          "file": "frames/start/z_start_031.png",
+          "sourceFrame": 67,
+          "sourcePtsTicks": 43008,
+          "sourceSeconds": 2.8,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "0f020aac8454851fa13675a555192a87a389ff1fcc10747e798260c81dfb389e",
+          "solidBounds": [
+            268,
+            35,
+            1173,
+            2792
+          ],
+          "opaqueInteriorPixels": 1492399,
+          "edgeRecoveryPixels": 33992,
+          "shadowClassifiedPixels": 464003,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 16,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 32,
+          "file": "frames/start/z_start_032.png",
+          "sourceFrame": 68,
+          "sourcePtsTicks": 43520,
+          "sourceSeconds": 2.8333333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "ead2cb015229ffea1553b19cde1839af0b93b57a99ac2113969d3abe724c4369",
+          "solidBounds": [
+            261,
+            41,
+            1323,
+            2792
+          ],
+          "opaqueInteriorPixels": 1533034,
+          "edgeRecoveryPixels": 33462,
+          "shadowClassifiedPixels": 452367,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 17,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 33,
+          "file": "frames/start/z_start_033.png",
+          "sourceFrame": 69,
+          "sourcePtsTicks": 44288,
+          "sourceSeconds": 2.8833333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "72ac8aac815d35f6bee9cbe188d765097a23358e66c34dab3c028d8376d6b24f",
+          "solidBounds": [
+            235,
+            49,
+            1444,
+            2791
+          ],
+          "opaqueInteriorPixels": 1583437,
+          "edgeRecoveryPixels": 34756,
+          "shadowClassifiedPixels": 446737,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 17,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 34,
+          "file": "frames/start/z_start_034.png",
+          "sourceFrame": 70,
+          "sourcePtsTicks": 44800,
+          "sourceSeconds": 2.9166666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "708971396b1c34b19c93765a09d22e83222a4a12edcb10566b74e59dfd7871ad",
+          "solidBounds": [
+            204,
+            58,
+            1505,
+            2789
+          ],
+          "opaqueInteriorPixels": 1620384,
+          "edgeRecoveryPixels": 34916,
+          "shadowClassifiedPixels": 443114,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 18,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 35,
+          "file": "frames/start/z_start_035.png",
+          "sourceFrame": 71,
+          "sourcePtsTicks": 45568,
+          "sourceSeconds": 2.966666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "df658676c5afcf266fac8a394e397cc2504c6f51135b13a3425d4eb68d1d310b",
+          "solidBounds": [
+            155,
+            65,
+            1501,
+            2789
+          ],
+          "opaqueInteriorPixels": 1644588,
+          "edgeRecoveryPixels": 35488,
+          "shadowClassifiedPixels": 440968,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 18,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 36,
+          "file": "frames/start/z_start_036.png",
+          "sourceFrame": 72,
+          "sourcePtsTicks": 46080,
+          "sourceSeconds": 3.0,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "6a157dc72e7a74f3cd2283e9999b6afa7e72d2a2b6dccb1e425e1251d4f9ed74",
+          "solidBounds": [
+            92,
+            69,
+            1456,
+            2787
+          ],
+          "opaqueInteriorPixels": 1655518,
+          "edgeRecoveryPixels": 34788,
+          "shadowClassifiedPixels": 439148,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 19,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 37,
+          "file": "frames/start/z_start_037.png",
+          "sourceFrame": 73,
+          "sourcePtsTicks": 46848,
+          "sourceSeconds": 3.05,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "c863ffa1194b8013f48b8dcf32ffc7246c3b3943be2adb4c6fb74b8713fd5d60",
+          "solidBounds": [
+            55,
+            62,
+            1397,
+            2784
+          ],
+          "opaqueInteriorPixels": 1636434,
+          "edgeRecoveryPixels": 34791,
+          "shadowClassifiedPixels": 447256,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 19,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 38,
+          "file": "frames/start/z_start_038.png",
+          "sourceFrame": 74,
+          "sourcePtsTicks": 47360,
+          "sourceSeconds": 3.0833333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "9b3974f738fc816cae67b429b3941850fa59731facc6585309610d355783d86b",
+          "solidBounds": [
+            48,
+            57,
+            1335,
+            2781
+          ],
+          "opaqueInteriorPixels": 1598147,
+          "edgeRecoveryPixels": 34621,
+          "shadowClassifiedPixels": 456887,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 20,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 39,
+          "file": "frames/start/z_start_039.png",
+          "sourceFrame": 75,
+          "sourcePtsTicks": 48128,
+          "sourceSeconds": 3.1333333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "72eba9346a70ffa988aac2ef05cb4517bbe2b3b5519963ed6648ac7b5ddd06e9",
+          "solidBounds": [
+            93,
+            52,
+            1273,
+            2770
+          ],
+          "opaqueInteriorPixels": 1559015,
+          "edgeRecoveryPixels": 34767,
+          "shadowClassifiedPixels": 472450,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 20,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        }
+      ]
+    },
+    "walk": {
+      "startFrame": 76,
+      "endFrameExclusive": 104,
+      "loop": true,
+      "holdLastFrame": false,
+      "frameCount": 28,
+      "sourceStartSeconds": 3.1666666666666665,
+      "sourceEndSecondsExclusive": 4.333333333333333,
+      "durationSeconds": 1.1666666666666667,
+      "frames": [
+        {
+          "state": "walk",
+          "index": 0,
+          "file": "frames/walk/z_walk_000.png",
+          "sourceFrame": 76,
+          "sourcePtsTicks": 48640,
+          "sourceSeconds": 3.1666666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "e8403fbc6335d52df3b19c24ca1b18181c1b6af4773246f313b85b8c6b5ba5a9",
+          "solidBounds": [
+            113,
+            46,
+            1216,
+            2773
+          ],
+          "opaqueInteriorPixels": 1525862,
+          "edgeRecoveryPixels": 33647,
+          "shadowClassifiedPixels": 482854,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 21,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 1,
+          "file": "frames/walk/z_walk_001.png",
+          "sourceFrame": 77,
+          "sourcePtsTicks": 49408,
+          "sourceSeconds": 3.216666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "99a540063a509831b4fea1f6f67f8833cd8b465a27720d4e713832707d573f9f",
+          "solidBounds": [
+            126,
+            40,
+            1186,
+            2774
+          ],
+          "opaqueInteriorPixels": 1485318,
+          "edgeRecoveryPixels": 34314,
+          "shadowClassifiedPixels": 490466,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 21,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 2,
+          "file": "frames/walk/z_walk_002.png",
+          "sourceFrame": 78,
+          "sourcePtsTicks": 49920,
+          "sourceSeconds": 3.25,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "4aaf76789e1ce5131a8f7a225ce4f844a73dd89d9da8da784a32a222a3c0ab9f",
+          "solidBounds": [
+            145,
+            34,
+            1156,
+            2775
+          ],
+          "opaqueInteriorPixels": 1465712,
+          "edgeRecoveryPixels": 34162,
+          "shadowClassifiedPixels": 483259,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 22,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 3,
+          "file": "frames/walk/z_walk_003.png",
+          "sourceFrame": 79,
+          "sourcePtsTicks": 50688,
+          "sourceSeconds": 3.3,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "50c27ade077161bd2f4fc01f5b0e680b903b0f9f107326790b0117bad5b1107d",
+          "solidBounds": [
+            165,
+            30,
+            1128,
+            2775
+          ],
+          "opaqueInteriorPixels": 1425403,
+          "edgeRecoveryPixels": 31333,
+          "shadowClassifiedPixels": 518760,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 22,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 4,
+          "file": "frames/walk/z_walk_004.png",
+          "sourceFrame": 80,
+          "sourcePtsTicks": 51200,
+          "sourceSeconds": 3.3333333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "2146e1402858803be9ebff65d4c31cab030372c012205f763ea3dd60f4d97cd9",
+          "solidBounds": [
+            183,
+            30,
+            1143,
+            2777
+          ],
+          "opaqueInteriorPixels": 1455506,
+          "edgeRecoveryPixels": 30559,
+          "shadowClassifiedPixels": 507362,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 23,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 5,
+          "file": "frames/walk/z_walk_005.png",
+          "sourceFrame": 81,
+          "sourcePtsTicks": 51968,
+          "sourceSeconds": 3.3833333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "f9a0c204b32942122f2ba2e9f1ae384eda171b4bf4ba6a73ba7c09c2a2e2106d",
+          "solidBounds": [
+            198,
+            34,
+            1159,
+            2778
+          ],
+          "opaqueInteriorPixels": 1533513,
+          "edgeRecoveryPixels": 34743,
+          "shadowClassifiedPixels": 469442,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 23,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 6,
+          "file": "frames/walk/z_walk_006.png",
+          "sourceFrame": 82,
+          "sourcePtsTicks": 52480,
+          "sourceSeconds": 3.4166666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "f3c722cf0dbf30b796550b47812b7711edfe41ed44100e2d3c322f8ddf53412f",
+          "solidBounds": [
+            209,
+            40,
+            1321,
+            2778
+          ],
+          "opaqueInteriorPixels": 1580286,
+          "edgeRecoveryPixels": 35567,
+          "shadowClassifiedPixels": 460035,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 24,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 7,
+          "file": "frames/walk/z_walk_007.png",
+          "sourceFrame": 83,
+          "sourcePtsTicks": 53248,
+          "sourceSeconds": 3.466666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "9044eeea20be021f5fcf2abcdf3c3a4eb7fb74b66891fd7d1a22176ec6de359c",
+          "solidBounds": [
+            209,
+            47,
+            1451,
+            2779
+          ],
+          "opaqueInteriorPixels": 1610002,
+          "edgeRecoveryPixels": 36938,
+          "shadowClassifiedPixels": 457244,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 24,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 8,
+          "file": "frames/walk/z_walk_008.png",
+          "sourceFrame": 84,
+          "sourcePtsTicks": 53760,
+          "sourceSeconds": 3.5,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "266037760d477b31040ccc57dcfb541ddc47d573ad95534eaa09c26df6e127ea",
+          "solidBounds": [
+            198,
+            54,
+            1507,
+            2779
+          ],
+          "opaqueInteriorPixels": 1637890,
+          "edgeRecoveryPixels": 36823,
+          "shadowClassifiedPixels": 449847,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 25,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 9,
+          "file": "frames/walk/z_walk_009.png",
+          "sourceFrame": 85,
+          "sourcePtsTicks": 54528,
+          "sourceSeconds": 3.55,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "8e61c7cc74e6617e951efe12d6bb1bd1518524f2fec934b5ffee5306cc300c76",
+          "solidBounds": [
+            169,
+            62,
+            1493,
+            2777
+          ],
+          "opaqueInteriorPixels": 1663208,
+          "edgeRecoveryPixels": 37165,
+          "shadowClassifiedPixels": 444808,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 25,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 10,
+          "file": "frames/walk/z_walk_010.png",
+          "sourceFrame": 86,
+          "sourcePtsTicks": 55040,
+          "sourceSeconds": 3.5833333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "7cf80109eef947876053581612a7ef57eab5d7427f752871186eb60188caf65e",
+          "solidBounds": [
+            105,
+            65,
+            1443,
+            2780
+          ],
+          "opaqueInteriorPixels": 1671688,
+          "edgeRecoveryPixels": 37271,
+          "shadowClassifiedPixels": 444325,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 26,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 11,
+          "file": "frames/walk/z_walk_011.png",
+          "sourceFrame": 87,
+          "sourcePtsTicks": 55808,
+          "sourceSeconds": 3.6333333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "208aa18d0b87e5db70c0a3acd4c74f49a66279c98b78ea5166f0412ffcbfff5f",
+          "solidBounds": [
+            63,
+            62,
+            1381,
+            2782
+          ],
+          "opaqueInteriorPixels": 1657269,
+          "edgeRecoveryPixels": 38176,
+          "shadowClassifiedPixels": 451285,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 26,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 12,
+          "file": "frames/walk/z_walk_012.png",
+          "sourceFrame": 88,
+          "sourcePtsTicks": 56320,
+          "sourceSeconds": 3.6666666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "371611fa9e21caeb76a8d66c6b3169f115b731f30440df9d9aebf5b0b2f0f032",
+          "solidBounds": [
+            55,
+            56,
+            1315,
+            2784
+          ],
+          "opaqueInteriorPixels": 1627039,
+          "edgeRecoveryPixels": 37606,
+          "shadowClassifiedPixels": 458300,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 27,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 13,
+          "file": "frames/walk/z_walk_013.png",
+          "sourceFrame": 89,
+          "sourcePtsTicks": 57088,
+          "sourceSeconds": 3.716666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "ecea70eb084fd847d7cc6007eeae503e0a1eb909130166900aaec02bd2c21be0",
+          "solidBounds": [
+            109,
+            50,
+            1251,
+            2788
+          ],
+          "opaqueInteriorPixels": 1573677,
+          "edgeRecoveryPixels": 36299,
+          "shadowClassifiedPixels": 474016,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 27,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 14,
+          "file": "frames/walk/z_walk_014.png",
+          "sourceFrame": 90,
+          "sourcePtsTicks": 57600,
+          "sourceSeconds": 3.75,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "0eb5bf64226ecdc8af1f31c7a3753752daae60e3e8f069ec413d5ed6f8935a10",
+          "solidBounds": [
+            134,
+            44,
+            1185,
+            2790
+          ],
+          "opaqueInteriorPixels": 1511646,
+          "edgeRecoveryPixels": 36041,
+          "shadowClassifiedPixels": 482831,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 28,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 15,
+          "file": "frames/walk/z_walk_015.png",
+          "sourceFrame": 91,
+          "sourcePtsTicks": 58368,
+          "sourceSeconds": 3.8,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "cbd6ce0adf50727dc2cfc600adead859224a842081640a303c8e210539aa9776",
+          "solidBounds": [
+            153,
+            39,
+            1159,
+            2790
+          ],
+          "opaqueInteriorPixels": 1454903,
+          "edgeRecoveryPixels": 36291,
+          "shadowClassifiedPixels": 485912,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 28,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 16,
+          "file": "frames/walk/z_walk_016.png",
+          "sourceFrame": 92,
+          "sourcePtsTicks": 58880,
+          "sourceSeconds": 3.8333333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "f4a2a601aa1afc631fa143c9215fef98492bb27cdd76be8344712f247350a3e3",
+          "solidBounds": [
+            176,
+            33,
+            1135,
+            2790
+          ],
+          "opaqueInteriorPixels": 1432845,
+          "edgeRecoveryPixels": 34954,
+          "shadowClassifiedPixels": 482880,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 29,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 17,
+          "file": "frames/walk/z_walk_017.png",
+          "sourceFrame": 93,
+          "sourcePtsTicks": 59648,
+          "sourceSeconds": 3.8833333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "14a1bebfc49cb3106e86ae2a03422217069951934eb2cb31ea89b141abab40b5",
+          "solidBounds": [
+            205,
+            29,
+            1118,
+            2791
+          ],
+          "opaqueInteriorPixels": 1406311,
+          "edgeRecoveryPixels": 34171,
+          "shadowClassifiedPixels": 514937,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 29,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 18,
+          "file": "frames/walk/z_walk_018.png",
+          "sourceFrame": 94,
+          "sourcePtsTicks": 60160,
+          "sourceSeconds": 3.9166666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "5e8e09c81f1d93cdd011e8f13081ae5def3837dd728d16b8347b7b4b13ea4ebd",
+          "solidBounds": [
+            235,
+            29,
+            1149,
+            2792
+          ],
+          "opaqueInteriorPixels": 1436775,
+          "edgeRecoveryPixels": 33327,
+          "shadowClassifiedPixels": 497774,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 30,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 19,
+          "file": "frames/walk/z_walk_019.png",
+          "sourceFrame": 95,
+          "sourcePtsTicks": 60928,
+          "sourceSeconds": 3.966666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "b76f5a40fc9303d7f293e8cb2ccea938a4849e5dcab938cd5069659114a5fd09",
+          "solidBounds": [
+            251,
+            32,
+            1165,
+            2792
+          ],
+          "opaqueInteriorPixels": 1484353,
+          "edgeRecoveryPixels": 35371,
+          "shadowClassifiedPixels": 469143,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 30,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 20,
+          "file": "frames/walk/z_walk_020.png",
+          "sourceFrame": 96,
+          "sourcePtsTicks": 61440,
+          "sourceSeconds": 4.0,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "cab89c20a5b673ed7aa2c917a14746f803bb5025a726f15af59ff862c149bd7f",
+          "solidBounds": [
+            253,
+            36,
+            1287,
+            2792
+          ],
+          "opaqueInteriorPixels": 1522161,
+          "edgeRecoveryPixels": 35530,
+          "shadowClassifiedPixels": 456105,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 31,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 21,
+          "file": "frames/walk/z_walk_021.png",
+          "sourceFrame": 97,
+          "sourcePtsTicks": 62208,
+          "sourceSeconds": 4.05,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "004089d2393068622c7a173708f880ff8c2ec3c89f647f2648889a02aa9b9c45",
+          "solidBounds": [
+            234,
+            44,
+            1416,
+            2790
+          ],
+          "opaqueInteriorPixels": 1572575,
+          "edgeRecoveryPixels": 36240,
+          "shadowClassifiedPixels": 449139,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 31,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 22,
+          "file": "frames/walk/z_walk_022.png",
+          "sourceFrame": 98,
+          "sourcePtsTicks": 62720,
+          "sourceSeconds": 4.083333333333333,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "754172b6c4b4e2d6db59ab66486d7ba2e79200b860f0aaedbf6409f9368a4177",
+          "solidBounds": [
+            205,
+            53,
+            1495,
+            2789
+          ],
+          "opaqueInteriorPixels": 1613714,
+          "edgeRecoveryPixels": 36404,
+          "shadowClassifiedPixels": 445683,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 32,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 23,
+          "file": "frames/walk/z_walk_023.png",
+          "sourceFrame": 99,
+          "sourcePtsTicks": 63488,
+          "sourceSeconds": 4.133333333333334,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "e6a4f1aa25ca172c6d573a728f8bafc8e75ffb4543100da4a6271aa82a01bbf3",
+          "solidBounds": [
+            164,
+            61,
+            1500,
+            2787
+          ],
+          "opaqueInteriorPixels": 1641552,
+          "edgeRecoveryPixels": 37364,
+          "shadowClassifiedPixels": 442859,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 32,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 24,
+          "file": "frames/walk/z_walk_024.png",
+          "sourceFrame": 100,
+          "sourcePtsTicks": 64000,
+          "sourceSeconds": 4.166666666666667,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "b27c5696ada3625b7d7d97b9a84576d33852595addd046e64d90bf3047e855fd",
+          "solidBounds": [
+            103,
+            66,
+            1464,
+            2787
+          ],
+          "opaqueInteriorPixels": 1658084,
+          "edgeRecoveryPixels": 36595,
+          "shadowClassifiedPixels": 439781,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 33,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 25,
+          "file": "frames/walk/z_walk_025.png",
+          "sourceFrame": 101,
+          "sourcePtsTicks": 64768,
+          "sourceSeconds": 4.216666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "d3247a1efe488961a266636f0b9f3dbc3a28b6898df64313f5b44a4d75fae8b5",
+          "solidBounds": [
+            53,
+            64,
+            1411,
+            2784
+          ],
+          "opaqueInteriorPixels": 1649029,
+          "edgeRecoveryPixels": 37071,
+          "shadowClassifiedPixels": 445037,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 33,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 26,
+          "file": "frames/walk/z_walk_026.png",
+          "sourceFrame": 102,
+          "sourcePtsTicks": 65280,
+          "sourceSeconds": 4.25,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "feed4227a1cde05d0cadff67c40094d7b66d6acc3606d992878f9d5687c72a48",
+          "solidBounds": [
+            40,
+            57,
+            1347,
+            2780
+          ],
+          "opaqueInteriorPixels": 1613038,
+          "edgeRecoveryPixels": 36832,
+          "shadowClassifiedPixels": 455090,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 34,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 27,
+          "file": "frames/walk/z_walk_027.png",
+          "sourceFrame": 103,
+          "sourcePtsTicks": 66048,
+          "sourceSeconds": 4.3,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "52a78e3bb278cedc94b0992e4641901519f8c95c073d2b1fcc0aa47bab44d2cc",
+          "solidBounds": [
+            75,
+            51,
+            1285,
+            2771
+          ],
+          "opaqueInteriorPixels": 1568600,
+          "edgeRecoveryPixels": 37574,
+          "shadowClassifiedPixels": 469374,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 34,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        }
+      ]
+    },
+    "stop": {
+      "startFrame": 195,
+      "endFrameExclusive": 225,
+      "loop": false,
+      "holdLastFrame": true,
+      "frameCount": 30,
+      "sourceStartSeconds": 8.133333333333333,
+      "sourceEndSecondsExclusive": 9.383333333333333,
+      "durationSeconds": 1.25,
+      "frames": [
+        {
+          "state": "stop",
+          "index": 0,
+          "file": "frames/stop/z_stop_000.png",
+          "sourceFrame": 195,
+          "sourcePtsTicks": 124928,
+          "sourceSeconds": 8.133333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "0038aa9f1714ec792017cac3437993f48b22bc3c4f05a3973f8b80bb5dbc91bd",
+          "solidBounds": [
+            143,
+            39,
+            1219,
+            2770
+          ],
+          "opaqueInteriorPixels": 1487283,
+          "edgeRecoveryPixels": 34657,
+          "shadowClassifiedPixels": 472956,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 35,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 1,
+          "file": "frames/stop/z_stop_001.png",
+          "sourceFrame": 196,
+          "sourcePtsTicks": 125440,
+          "sourceSeconds": 8.166666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "7b074fdac38655240f4782de3b2156c62a5bb248f2e9b738362bd0146be7e9ee",
+          "solidBounds": [
+            172,
+            39,
+            1196,
+            2771
+          ],
+          "opaqueInteriorPixels": 1466020,
+          "edgeRecoveryPixels": 34447,
+          "shadowClassifiedPixels": 475224,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 35,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 2,
+          "file": "frames/stop/z_stop_002.png",
+          "sourceFrame": 197,
+          "sourcePtsTicks": 126208,
+          "sourceSeconds": 8.216666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "905597f03d492bd41aa0bcf3acc1a235271153410eada0bd371c3cee2215047a",
+          "solidBounds": [
+            203,
+            39,
+            1173,
+            2772
+          ],
+          "opaqueInteriorPixels": 1445971,
+          "edgeRecoveryPixels": 33039,
+          "shadowClassifiedPixels": 476464,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 36,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 3,
+          "file": "frames/stop/z_stop_003.png",
+          "sourceFrame": 198,
+          "sourcePtsTicks": 126720,
+          "sourceSeconds": 8.25,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "86d434a2f1ec2324c7f809b7e34ae7bd5d6eb23c13ca8da132b4d4fc460dd422",
+          "solidBounds": [
+            230,
+            40,
+            1155,
+            2772
+          ],
+          "opaqueInteriorPixels": 1428798,
+          "edgeRecoveryPixels": 33896,
+          "shadowClassifiedPixels": 475457,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 36,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 4,
+          "file": "frames/stop/z_stop_004.png",
+          "sourceFrame": 199,
+          "sourcePtsTicks": 127488,
+          "sourceSeconds": 8.3,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "5352806dfa079ecadc6c007f99dd9aafef6398ef2ae4366814d8757c50b8cda8",
+          "solidBounds": [
+            258,
+            40,
+            1159,
+            2772
+          ],
+          "opaqueInteriorPixels": 1415565,
+          "edgeRecoveryPixels": 33577,
+          "shadowClassifiedPixels": 473321,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 37,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 5,
+          "file": "frames/stop/z_stop_005.png",
+          "sourceFrame": 200,
+          "sourcePtsTicks": 128000,
+          "sourceSeconds": 8.333333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "e60ddb27047d00502600a8a3f63c49d3e04089e2c06b2d8d23cb6ccf4057748a",
+          "solidBounds": [
+            286,
+            40,
+            1165,
+            2774
+          ],
+          "opaqueInteriorPixels": 1405240,
+          "edgeRecoveryPixels": 33718,
+          "shadowClassifiedPixels": 470902,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 37,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 6,
+          "file": "frames/stop/z_stop_006.png",
+          "sourceFrame": 201,
+          "sourcePtsTicks": 128768,
+          "sourceSeconds": 8.383333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "8694948a37b66c7ae6133e8a33ffb92d1c8ccbe3b78d351707c1fd548fee7012",
+          "solidBounds": [
+            317,
+            40,
+            1177,
+            2776
+          ],
+          "opaqueInteriorPixels": 1397263,
+          "edgeRecoveryPixels": 32493,
+          "shadowClassifiedPixels": 470847,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 38,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 7,
+          "file": "frames/stop/z_stop_007.png",
+          "sourceFrame": 202,
+          "sourcePtsTicks": 129280,
+          "sourceSeconds": 8.416666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "cf413f92b51c17eec9bb8123efbfece1e246de91d6720cf62994eb93924edfbe",
+          "solidBounds": [
+            346,
+            40,
+            1189,
+            2781
+          ],
+          "opaqueInteriorPixels": 1385939,
+          "edgeRecoveryPixels": 32518,
+          "shadowClassifiedPixels": 478428,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 38,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 8,
+          "file": "frames/stop/z_stop_008.png",
+          "sourceFrame": 203,
+          "sourcePtsTicks": 130048,
+          "sourceSeconds": 8.466666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "671e7e5f8127a67a35fdee367728f9ca91944e26cc7e9a36bfccf8270ecf4a6e",
+          "solidBounds": [
+            357,
+            38,
+            1203,
+            2785
+          ],
+          "opaqueInteriorPixels": 1375613,
+          "edgeRecoveryPixels": 31941,
+          "shadowClassifiedPixels": 487384,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 39,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 9,
+          "file": "frames/stop/z_stop_009.png",
+          "sourceFrame": 204,
+          "sourcePtsTicks": 130560,
+          "sourceSeconds": 8.5,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "49a392a46bab6e5b2a245e23b7126dcda4923e170473773f13ba2f03fe573ca1",
+          "solidBounds": [
+            361,
+            36,
+            1215,
+            2785
+          ],
+          "opaqueInteriorPixels": 1368119,
+          "edgeRecoveryPixels": 31505,
+          "shadowClassifiedPixels": 495108,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 39,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 10,
+          "file": "frames/stop/z_stop_010.png",
+          "sourceFrame": 205,
+          "sourcePtsTicks": 131328,
+          "sourceSeconds": 8.55,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "b05e9759454bd2b64218d7bb913bfd0b8d099e6ffd8db083cb6a1903ee452644",
+          "solidBounds": [
+            364,
+            34,
+            1227,
+            2782
+          ],
+          "opaqueInteriorPixels": 1357197,
+          "edgeRecoveryPixels": 30358,
+          "shadowClassifiedPixels": 507135,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 40,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 11,
+          "file": "frames/stop/z_stop_011.png",
+          "sourceFrame": 206,
+          "sourcePtsTicks": 131840,
+          "sourceSeconds": 8.583333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "476f7cdd40fd966c6e915aa4a555e8a8377e7cd732d3f288888ea64c0c4a053a",
+          "solidBounds": [
+            364,
+            33,
+            1236,
+            2782
+          ],
+          "opaqueInteriorPixels": 1344766,
+          "edgeRecoveryPixels": 31205,
+          "shadowClassifiedPixels": 518885,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 40,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 12,
+          "file": "frames/stop/z_stop_012.png",
+          "sourceFrame": 207,
+          "sourcePtsTicks": 132608,
+          "sourceSeconds": 8.633333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "3613f6a95d8304446c4200759f52880255e6c697bb8667e6d60b5cb3678cce98",
+          "solidBounds": [
+            359,
+            33,
+            1241,
+            2784
+          ],
+          "opaqueInteriorPixels": 1338950,
+          "edgeRecoveryPixels": 30500,
+          "shadowClassifiedPixels": 524964,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 41,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 13,
+          "file": "frames/stop/z_stop_013.png",
+          "sourceFrame": 208,
+          "sourcePtsTicks": 133120,
+          "sourceSeconds": 8.666666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "9e6da570f207170778626c80a3bda7875f97445df23ac689c6d09f8862534a0b",
+          "solidBounds": [
+            358,
+            33,
+            1245,
+            2786
+          ],
+          "opaqueInteriorPixels": 1336967,
+          "edgeRecoveryPixels": 31058,
+          "shadowClassifiedPixels": 526557,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 41,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 14,
+          "file": "frames/stop/z_stop_014.png",
+          "sourceFrame": 209,
+          "sourcePtsTicks": 133888,
+          "sourceSeconds": 8.716666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "76ea009decf4712c17cc221aa1c932d4688a23dd40fe6151fdda005fd7d4cdff",
+          "solidBounds": [
+            352,
+            33,
+            1247,
+            2788
+          ],
+          "opaqueInteriorPixels": 1337021,
+          "edgeRecoveryPixels": 30372,
+          "shadowClassifiedPixels": 527061,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 42,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 15,
+          "file": "frames/stop/z_stop_015.png",
+          "sourceFrame": 210,
+          "sourcePtsTicks": 134400,
+          "sourceSeconds": 8.75,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "ff3cad33047180288c107dad482782a5439b762075aed489e00c50f7ef202124",
+          "solidBounds": [
+            345,
+            33,
+            1244,
+            2790
+          ],
+          "opaqueInteriorPixels": 1337526,
+          "edgeRecoveryPixels": 31222,
+          "shadowClassifiedPixels": 526881,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 42,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 16,
+          "file": "frames/stop/z_stop_016.png",
+          "sourceFrame": 211,
+          "sourcePtsTicks": 135168,
+          "sourceSeconds": 8.8,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "52207e582b7caa5cee6661a9fe05b53b0376df0fa9b6352888f657b0a4ba88db",
+          "solidBounds": [
+            340,
+            33,
+            1239,
+            2790
+          ],
+          "opaqueInteriorPixels": 1339385,
+          "edgeRecoveryPixels": 30765,
+          "shadowClassifiedPixels": 526886,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 43,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 17,
+          "file": "frames/stop/z_stop_017.png",
+          "sourceFrame": 212,
+          "sourcePtsTicks": 135680,
+          "sourceSeconds": 8.833333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "c1c88caa32917ba4f06305f9e3c9286f23a2b61fd4d2dec66c1d0f73960e5848",
+          "solidBounds": [
+            335,
+            32,
+            1231,
+            2791
+          ],
+          "opaqueInteriorPixels": 1341651,
+          "edgeRecoveryPixels": 31224,
+          "shadowClassifiedPixels": 526694,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 43,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 18,
+          "file": "frames/stop/z_stop_018.png",
+          "sourceFrame": 213,
+          "sourcePtsTicks": 136448,
+          "sourceSeconds": 8.883333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "2a404d31e36ac5fd8f224f0df27ab3446846306fc08aca22e872e04b657e1c5f",
+          "solidBounds": [
+            328,
+            32,
+            1220,
+            2791
+          ],
+          "opaqueInteriorPixels": 1344012,
+          "edgeRecoveryPixels": 29996,
+          "shadowClassifiedPixels": 526730,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 44,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 19,
+          "file": "frames/stop/z_stop_019.png",
+          "sourceFrame": 214,
+          "sourcePtsTicks": 136960,
+          "sourceSeconds": 8.916666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "9706e15c3152b8d7073b879219842efdfff82be066acc866e8b22fc600d8e6ea",
+          "solidBounds": [
+            325,
+            32,
+            1205,
+            2790
+          ],
+          "opaqueInteriorPixels": 1343863,
+          "edgeRecoveryPixels": 30367,
+          "shadowClassifiedPixels": 526891,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 44,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 20,
+          "file": "frames/stop/z_stop_020.png",
+          "sourceFrame": 215,
+          "sourcePtsTicks": 137728,
+          "sourceSeconds": 8.966666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "4f1233551311cc5483aa836b98e8fdd1c0c62786eb30e8112a6d3a422c549d0a",
+          "solidBounds": [
+            322,
+            32,
+            1191,
+            2790
+          ],
+          "opaqueInteriorPixels": 1342983,
+          "edgeRecoveryPixels": 30007,
+          "shadowClassifiedPixels": 527389,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 45,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 21,
+          "file": "frames/stop/z_stop_021.png",
+          "sourceFrame": 216,
+          "sourcePtsTicks": 138240,
+          "sourceSeconds": 9.0,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "fc8761f6af969f4b77cb7b1f0c34ac532643b961d5c52e89f39855cccc58918a",
+          "solidBounds": [
+            319,
+            32,
+            1174,
+            2791
+          ],
+          "opaqueInteriorPixels": 1341059,
+          "edgeRecoveryPixels": 30140,
+          "shadowClassifiedPixels": 527875,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 45,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 22,
+          "file": "frames/stop/z_stop_022.png",
+          "sourceFrame": 217,
+          "sourcePtsTicks": 139008,
+          "sourceSeconds": 9.05,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "a9e877827cd7be2e82e5911411fdc8fbb93a64af8104b2124a7fd87322ac03be",
+          "solidBounds": [
+            310,
+            32,
+            1158,
+            2791
+          ],
+          "opaqueInteriorPixels": 1337742,
+          "edgeRecoveryPixels": 29819,
+          "shadowClassifiedPixels": 528689,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 46,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 23,
+          "file": "frames/stop/z_stop_023.png",
+          "sourceFrame": 218,
+          "sourcePtsTicks": 139520,
+          "sourceSeconds": 9.083333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "df66f53a115281bee1e843df456c67f9abeda39397a5e3a1665b38292dd1188b",
+          "solidBounds": [
+            300,
+            32,
+            1141,
+            2791
+          ],
+          "opaqueInteriorPixels": 1334191,
+          "edgeRecoveryPixels": 30199,
+          "shadowClassifiedPixels": 529240,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 46,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 24,
+          "file": "frames/stop/z_stop_024.png",
+          "sourceFrame": 219,
+          "sourcePtsTicks": 140288,
+          "sourceSeconds": 9.133333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "f30e094822e2b95294f3fed6f7590114d41a13350a763ba89456ffdb34de0e41",
+          "solidBounds": [
+            291,
+            32,
+            1127,
+            2791
+          ],
+          "opaqueInteriorPixels": 1331559,
+          "edgeRecoveryPixels": 29938,
+          "shadowClassifiedPixels": 529506,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 47,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 25,
+          "file": "frames/stop/z_stop_025.png",
+          "sourceFrame": 220,
+          "sourcePtsTicks": 140800,
+          "sourceSeconds": 9.166666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "1b8d201731b9b3d6b7e8d9a93aa98fb9b6595bec45f02b4b333081ec83440293",
+          "solidBounds": [
+            283,
+            32,
+            1116,
+            2790
+          ],
+          "opaqueInteriorPixels": 1329061,
+          "edgeRecoveryPixels": 30463,
+          "shadowClassifiedPixels": 529674,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 47,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 26,
+          "file": "frames/stop/z_stop_026.png",
+          "sourceFrame": 221,
+          "sourcePtsTicks": 141568,
+          "sourceSeconds": 9.216666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "3f3bba9b62b2282bdf5d554e06adaff598b7bedb1165bbb5d6309fd01ceebd68",
+          "solidBounds": [
+            278,
+            32,
+            1108,
+            2790
+          ],
+          "opaqueInteriorPixels": 1326796,
+          "edgeRecoveryPixels": 30050,
+          "shadowClassifiedPixels": 529828,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 48,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 27,
+          "file": "frames/stop/z_stop_027.png",
+          "sourceFrame": 222,
+          "sourcePtsTicks": 142080,
+          "sourceSeconds": 9.25,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "0b83061d30de51b839f466c85253c9c122134d23c5780e13fea6ee27eee083bc",
+          "solidBounds": [
+            276,
+            32,
+            1103,
+            2790
+          ],
+          "opaqueInteriorPixels": 1326042,
+          "edgeRecoveryPixels": 30036,
+          "shadowClassifiedPixels": 529847,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 48,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 28,
+          "file": "frames/stop/z_stop_028.png",
+          "sourceFrame": 223,
+          "sourcePtsTicks": 142848,
+          "sourceSeconds": 9.3,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "bb8304682f47ac530f526b02ba45769061861296cd176879d038758130c4ff4b",
+          "solidBounds": [
+            276,
+            32,
+            1103,
+            2790
+          ],
+          "opaqueInteriorPixels": 1325707,
+          "edgeRecoveryPixels": 30021,
+          "shadowClassifiedPixels": 529860,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 49,
+            "rectTopLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1544,
+              2824
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 29,
+          "file": "frames/stop/z_stop_029.png",
+          "sourceFrame": 224,
+          "sourcePtsTicks": 143360,
+          "sourceSeconds": 9.333333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "568579d574cf4df7b5d45040c2ab0e4f44aec529ff4a00197288f8f8901defbb",
+          "solidBounds": [
+            279,
+            32,
+            1105,
+            2790
+          ],
+          "opaqueInteriorPixels": 1325711,
+          "edgeRecoveryPixels": 30064,
+          "shadowClassifiedPixels": 529862,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 49,
+            "rectTopLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ],
+            "rectUnityBottomLeft": [
+              1550,
+              2,
+              1544,
+              2824
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "atlas": [
+    {
+      "file": "atlas/z_idle_00.png",
+      "state": "idle",
+      "size": [
+        1548,
+        2828
+      ],
+      "usedCells": 1
+    },
+    {
+      "file": "atlas/z_start_00.png",
+      "state": "start",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_start_01.png",
+      "state": "start",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_start_02.png",
+      "state": "start",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_start_03.png",
+      "state": "start",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_start_04.png",
+      "state": "start",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_start_05.png",
+      "state": "start",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_start_06.png",
+      "state": "start",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_start_07.png",
+      "state": "start",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_start_08.png",
+      "state": "start",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_start_09.png",
+      "state": "start",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_start_10.png",
+      "state": "start",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_start_11.png",
+      "state": "start",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_start_12.png",
+      "state": "start",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_start_13.png",
+      "state": "start",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_start_14.png",
+      "state": "start",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_start_15.png",
+      "state": "start",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_start_16.png",
+      "state": "start",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_start_17.png",
+      "state": "start",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_start_18.png",
+      "state": "start",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_start_19.png",
+      "state": "start",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_walk_00.png",
+      "state": "walk",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_walk_01.png",
+      "state": "walk",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_walk_02.png",
+      "state": "walk",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_walk_03.png",
+      "state": "walk",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_walk_04.png",
+      "state": "walk",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_walk_05.png",
+      "state": "walk",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_walk_06.png",
+      "state": "walk",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_walk_07.png",
+      "state": "walk",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_walk_08.png",
+      "state": "walk",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_walk_09.png",
+      "state": "walk",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_walk_10.png",
+      "state": "walk",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_walk_11.png",
+      "state": "walk",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_walk_12.png",
+      "state": "walk",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_walk_13.png",
+      "state": "walk",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_stop_00.png",
+      "state": "stop",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_stop_01.png",
+      "state": "stop",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_stop_02.png",
+      "state": "stop",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_stop_03.png",
+      "state": "stop",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_stop_04.png",
+      "state": "stop",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_stop_05.png",
+      "state": "stop",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_stop_06.png",
+      "state": "stop",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_stop_07.png",
+      "state": "stop",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_stop_08.png",
+      "state": "stop",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_stop_09.png",
+      "state": "stop",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_stop_10.png",
+      "state": "stop",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_stop_11.png",
+      "state": "stop",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_stop_12.png",
+      "state": "stop",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_stop_13.png",
+      "state": "stop",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/z_stop_14.png",
+      "state": "stop",
+      "size": [
+        3096,
+        2828
+      ],
+      "usedCells": 2
+    }
+  ],
+  "processing": {
+    "ffmpegAlphaFilter": "format=yuva444p,chromakey=0x89b289:0.035:0.028,format=rgba",
+    "localDespill": true,
+    "redraw": false,
+    "interpolation": false,
+    "perFrameScale": false,
+    "perFrameAlignment": false,
+    "detachedOpaqueHairPreserved": true,
+    "solidNeutralMaterialProtection": true
+  },
+  "notes": [
+    "Native contiguous frames only; shared native crop for all states.",
+    "Walk boundary reference is excluded from the loop.",
+    "Small source body yaw, hair/cloth movement and sole-height variation are retained.",
+    "No redraw, retargeting, optical flow or image interpolation."
+  ],
+  "reviewChain": [
+    {
+      "state": "idle",
+      "holdSeconds": 1
+    },
+    {
+      "state": "start"
+    },
+    {
+      "state": "walk",
+      "repeats": 2
+    },
+    {
+      "state": "stop"
+    },
+    {
+      "state": "idle",
+      "holdSeconds": 1
+    }
+  ]
+}

@@ -1,0 +1,4109 @@
+{
+  "version": 1,
+  "characterId": "liting",
+  "characterName": "李庭",
+  "runtimeTarget": true,
+  "source": {
+    "characterId": "liting",
+    "characterName": "李庭",
+    "sourceLabel": "李庭",
+    "sourceVideo": "source/source-video.mp4",
+    "originalFile": "李庭行走动画.mp4",
+    "sourceSha256": "dd33b2361d52e7ee991c2d436ec1f2dd408d735ca8f886d4dfb66e3e128b6b27",
+    "runtimeTarget": true
+  },
+  "video": {
+    "kind": "vide",
+    "timescale": 15360,
+    "durationTicks": 153856,
+    "durationSeconds": 10.016666666666667,
+    "samples": 241
+  },
+  "size": [
+    1792,
+    3184
+  ],
+  "canvas": {
+    "size": [
+      1480,
+      2920
+    ],
+    "sourceCropTopLeft": [
+      224,
+      156,
+      1480,
+      2920
+    ],
+    "sourceForegroundUnion": [
+      256,
+      180,
+      1668,
+      3052
+    ],
+    "pixelScale": 1,
+    "standingHeightPixels": 2863,
+    "footAnchorSource": [
+      896.0,
+      3050
+    ],
+    "footAnchorTopLeft": [
+      672.0,
+      2894
+    ],
+    "unityPivotNormalizedBottomLeft": [
+      0.4540540540540541,
+      0.008904109589041087
+    ]
+  },
+  "states": {
+    "idle": {
+      "startFrame": 46,
+      "endFrameExclusive": 47,
+      "loop": false,
+      "holdLastFrame": true,
+      "frameCount": 1,
+      "sourceStartSeconds": 1.9166666666666667,
+      "sourceEndSecondsExclusive": 1.9666666666666666,
+      "durationSeconds": 0.05,
+      "frames": [
+        {
+          "state": "idle",
+          "index": 0,
+          "file": "frames/idle/liting_idle_000.png",
+          "sourceFrame": 46,
+          "sourcePtsTicks": 29440,
+          "sourceSeconds": 1.9166666666666667,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "aa25f0561432c7da3462e20a4ccdc5d70b0e491645ce9d21ba39a02b6c971be8",
+          "solidBounds": [
+            452,
+            31,
+            958,
+            2894
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 0,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        }
+      ]
+    },
+    "start": {
+      "startFrame": 47,
+      "endFrameExclusive": 70,
+      "loop": false,
+      "holdLastFrame": false,
+      "frameCount": 23,
+      "sourceStartSeconds": 1.9666666666666666,
+      "sourceEndSecondsExclusive": 2.9166666666666665,
+      "durationSeconds": 0.95,
+      "frames": [
+        {
+          "state": "start",
+          "index": 0,
+          "file": "frames/start/liting_start_000.png",
+          "sourceFrame": 47,
+          "sourcePtsTicks": 30208,
+          "sourceSeconds": 1.9666666666666666,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "1617d9f63cb3c3e8a2550e98908c2b6471a8682c9519fe3e3c81b1a081aea658",
+          "solidBounds": [
+            451,
+            31,
+            946,
+            2894
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 1,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 1,
+          "file": "frames/start/liting_start_001.png",
+          "sourceFrame": 48,
+          "sourcePtsTicks": 30720,
+          "sourceSeconds": 2.0,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "cf10523228d35de9ab3300896864bbfe6f9ca04eb8ed869afd7cea2cfaba4953",
+          "solidBounds": [
+            433,
+            31,
+            976,
+            2894
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 1,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 2,
+          "file": "frames/start/liting_start_002.png",
+          "sourceFrame": 49,
+          "sourcePtsTicks": 31488,
+          "sourceSeconds": 2.05,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "bd46e17fcba022873ff5270580d635f0b71d94422d27e62e9f07b007ce80fbde",
+          "solidBounds": [
+            414,
+            30,
+            1008,
+            2894
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 2,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 3,
+          "file": "frames/start/liting_start_003.png",
+          "sourceFrame": 50,
+          "sourcePtsTicks": 32000,
+          "sourceSeconds": 2.0833333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "508a3ee4a978cdde4db9d75917f7cbe4097773648f10cfb96d285ca226e2476a",
+          "solidBounds": [
+            389,
+            29,
+            1041,
+            2893
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 2,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 4,
+          "file": "frames/start/liting_start_004.png",
+          "sourceFrame": 51,
+          "sourcePtsTicks": 32768,
+          "sourceSeconds": 2.1333333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "63c60a0b04a102bd0ed2100e33a44d4e0db7231f9850d145bf39068fc3c67dea",
+          "solidBounds": [
+            365,
+            27,
+            1069,
+            2893
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 3,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 5,
+          "file": "frames/start/liting_start_005.png",
+          "sourceFrame": 52,
+          "sourcePtsTicks": 33280,
+          "sourceSeconds": 2.1666666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "f8d7c4af5d95e023416616efcee55d697c10bdd90deb5478569969c7fc66c692",
+          "solidBounds": [
+            343,
+            27,
+            1091,
+            2893
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 3,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 6,
+          "file": "frames/start/liting_start_006.png",
+          "sourceFrame": 53,
+          "sourcePtsTicks": 34048,
+          "sourceSeconds": 2.216666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "c8b8736f4e821463a299e78cc4422f4ffe2421b1b88c2b75ca2d47e7324dcb1e",
+          "solidBounds": [
+            315,
+            28,
+            1104,
+            2892
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 4,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 7,
+          "file": "frames/start/liting_start_007.png",
+          "sourceFrame": 54,
+          "sourcePtsTicks": 34560,
+          "sourceSeconds": 2.25,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "69bea5ca044c7ee89bccb1ea689af8b19b62414cff15b30efa0e35acfe7bd086",
+          "solidBounds": [
+            287,
+            30,
+            1107,
+            2893
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 4,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 8,
+          "file": "frames/start/liting_start_008.png",
+          "sourceFrame": 55,
+          "sourcePtsTicks": 35328,
+          "sourceSeconds": 2.3,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "af8e2d19392a13d8a9cc685c9dafbd83e647a3503301b4a1e3478822b578d4eb",
+          "solidBounds": [
+            259,
+            34,
+            1148,
+            2892
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 5,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 9,
+          "file": "frames/start/liting_start_009.png",
+          "sourceFrame": 56,
+          "sourcePtsTicks": 35840,
+          "sourceSeconds": 2.3333333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "1e7ae822116c8d026c7fd8b911466a461571401856a61300850ee03eee5d84d0",
+          "solidBounds": [
+            200,
+            40,
+            1323,
+            2892
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 5,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 10,
+          "file": "frames/start/liting_start_010.png",
+          "sourceFrame": 57,
+          "sourcePtsTicks": 36608,
+          "sourceSeconds": 2.3833333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "b5263a75a977d52284463042909e91ade50f44eef89fe17b6ce445fc5005f2ae",
+          "solidBounds": [
+            199,
+            41,
+            1323,
+            2892
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 6,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 11,
+          "file": "frames/start/liting_start_011.png",
+          "sourceFrame": 58,
+          "sourcePtsTicks": 37120,
+          "sourceSeconds": 2.4166666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "9a637e5c6b5c402d8538ed9915ecebbe5a685a6560ec0542fcd2215bd2ad03df",
+          "solidBounds": [
+            171,
+            45,
+            1379,
+            2891
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 6,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 12,
+          "file": "frames/start/liting_start_012.png",
+          "sourceFrame": 59,
+          "sourcePtsTicks": 37888,
+          "sourceSeconds": 2.466666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "22ce15337e855b94861d1b1282ef078ebb692d10e39e01893d1b656d39f164e2",
+          "solidBounds": [
+            143,
+            49,
+            1399,
+            2892
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 7,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 13,
+          "file": "frames/start/liting_start_013.png",
+          "sourceFrame": 60,
+          "sourcePtsTicks": 38400,
+          "sourceSeconds": 2.5,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "b0dfa3736ee90ffa2d4a596f5409a69a8b3e61171f7703a0f77fae7492f2ffda",
+          "solidBounds": [
+            90,
+            56,
+            1417,
+            2891
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 7,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 14,
+          "file": "frames/start/liting_start_014.png",
+          "sourceFrame": 61,
+          "sourcePtsTicks": 39168,
+          "sourceSeconds": 2.55,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "b9cd1c82d3c1f88173bb8257735e56fbcce279288db80ea913afebe9f142c5b2",
+          "solidBounds": [
+            61,
+            60,
+            1408,
+            2889
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 8,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 15,
+          "file": "frames/start/liting_start_015.png",
+          "sourceFrame": 62,
+          "sourcePtsTicks": 39680,
+          "sourceSeconds": 2.5833333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "95ae36bab1574164eaa88bf6b3f24e190ff7e2ebc9d35dd8a19761a230ae1356",
+          "solidBounds": [
+            61,
+            60,
+            1408,
+            2889
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 8,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 16,
+          "file": "frames/start/liting_start_016.png",
+          "sourceFrame": 63,
+          "sourcePtsTicks": 40448,
+          "sourceSeconds": 2.6333333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "88b29ac8daecb9facb5d67e0382e89b053566e686e1e0799d27b253905f716c6",
+          "solidBounds": [
+            41,
+            56,
+            1391,
+            2886
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 9,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 17,
+          "file": "frames/start/liting_start_017.png",
+          "sourceFrame": 64,
+          "sourcePtsTicks": 40960,
+          "sourceSeconds": 2.6666666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "db869dc46f4530e00ee184322ac2c21fd06949fb471bf609b853ff106a8405b7",
+          "solidBounds": [
+            36,
+            51,
+            1330,
+            2886
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 9,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 18,
+          "file": "frames/start/liting_start_018.png",
+          "sourceFrame": 65,
+          "sourcePtsTicks": 41728,
+          "sourceSeconds": 2.716666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "561a57b96bc725a9ce1b98f2969a153811b6b39884f1f6f71d9464b27854a271",
+          "solidBounds": [
+            55,
+            46,
+            1283,
+            2878
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 10,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 19,
+          "file": "frames/start/liting_start_019.png",
+          "sourceFrame": 66,
+          "sourcePtsTicks": 42240,
+          "sourceSeconds": 2.75,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "1e418b18e510c92a50038b353b6e5860c431de4e494b27eebb5c860169aa77a5",
+          "solidBounds": [
+            79,
+            42,
+            1242,
+            2869
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 10,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 20,
+          "file": "frames/start/liting_start_020.png",
+          "sourceFrame": 67,
+          "sourcePtsTicks": 43008,
+          "sourceSeconds": 2.8,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "f2a0247fbb2890f0cf8a36255d50b99ab6955a687b213f836bccdabe78929f2f",
+          "solidBounds": [
+            79,
+            41,
+            1242,
+            2868
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 11,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 21,
+          "file": "frames/start/liting_start_021.png",
+          "sourceFrame": 68,
+          "sourcePtsTicks": 43520,
+          "sourceSeconds": 2.8333333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "47febc6f83ca5ce71a86f4c639b27837db62fadbbe8a5252b47965f8ddc5c408",
+          "solidBounds": [
+            147,
+            35,
+            1157,
+            2865
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 11,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 22,
+          "file": "frames/start/liting_start_022.png",
+          "sourceFrame": 69,
+          "sourcePtsTicks": 44288,
+          "sourceSeconds": 2.8833333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "5f45e66ed98817a8b941f9be91b4b87966063cad059d0632c68f06bfa4ae5dda",
+          "solidBounds": [
+            207,
+            31,
+            1113,
+            2865
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 12,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        }
+      ]
+    },
+    "walk": {
+      "startFrame": 70,
+      "endFrameExclusive": 109,
+      "loop": true,
+      "holdLastFrame": false,
+      "frameCount": 39,
+      "sourceStartSeconds": 2.9166666666666665,
+      "sourceEndSecondsExclusive": 4.55,
+      "durationSeconds": 1.6333333333333333,
+      "frames": [
+        {
+          "state": "walk",
+          "index": 0,
+          "file": "frames/walk/liting_walk_000.png",
+          "sourceFrame": 70,
+          "sourcePtsTicks": 44800,
+          "sourceSeconds": 2.9166666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "32c8bddca7ee634f87f8449b16d76f72c79c1c02aacc58b50d71605e1dc898e8",
+          "solidBounds": [
+            273,
+            28,
+            1069,
+            2864
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 13,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 1,
+          "file": "frames/walk/liting_walk_001.png",
+          "sourceFrame": 71,
+          "sourcePtsTicks": 45568,
+          "sourceSeconds": 2.966666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "d2ba8367e20b6ac56c44407e76d72995fd36238f0ac631d692ad6897893a1e20",
+          "solidBounds": [
+            336,
+            27,
+            1022,
+            2864
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 13,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 2,
+          "file": "frames/walk/liting_walk_002.png",
+          "sourceFrame": 72,
+          "sourcePtsTicks": 46080,
+          "sourceSeconds": 3.0,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "ed319c3c5d854df93dbd63693133b40404e25cf66245a92955e146294e6e1ad7",
+          "solidBounds": [
+            423,
+            26,
+            1007,
+            2866
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 14,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 3,
+          "file": "frames/walk/liting_walk_003.png",
+          "sourceFrame": 73,
+          "sourcePtsTicks": 46848,
+          "sourceSeconds": 3.05,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "2d5c574be272a555d452bc791202997b05a7b8c59d0c1d345c5e3213ca9a3263",
+          "solidBounds": [
+            465,
+            26,
+            1027,
+            2864
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 14,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 4,
+          "file": "frames/walk/liting_walk_004.png",
+          "sourceFrame": 74,
+          "sourcePtsTicks": 47360,
+          "sourceSeconds": 3.0833333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "62b9d2b33fb6020954d06a400a115beae2d376bf4c439c4def036fa3e49de9d4",
+          "solidBounds": [
+            447,
+            28,
+            1051,
+            2865
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 15,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 5,
+          "file": "frames/walk/liting_walk_005.png",
+          "sourceFrame": 75,
+          "sourcePtsTicks": 48128,
+          "sourceSeconds": 3.1333333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "95def5ab0cfe54d45d0b0774b6c9895a9861ccc89efaed0fbcca6ff123645520",
+          "solidBounds": [
+            403,
+            31,
+            1117,
+            2865
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 15,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 6,
+          "file": "frames/walk/liting_walk_006.png",
+          "sourceFrame": 76,
+          "sourcePtsTicks": 48640,
+          "sourceSeconds": 3.1666666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "a4e5dcce67b2d34a4b24c40b790cbe65659fe0b862224784fa72f4b05e06b955",
+          "solidBounds": [
+            357,
+            34,
+            1209,
+            2864
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 16,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 7,
+          "file": "frames/walk/liting_walk_007.png",
+          "sourceFrame": 77,
+          "sourcePtsTicks": 49408,
+          "sourceSeconds": 3.216666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "749aeba1e9dc670ab0347491b7fad753debe35eac403ef11809002b6e2222602",
+          "solidBounds": [
+            315,
+            38,
+            1283,
+            2864
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 16,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 8,
+          "file": "frames/walk/liting_walk_008.png",
+          "sourceFrame": 78,
+          "sourcePtsTicks": 49920,
+          "sourceSeconds": 3.25,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "d8afe19b5d09f677e8a4b0f7dc35505789c1ab7a1265094f7605456341930028",
+          "solidBounds": [
+            271,
+            43,
+            1339,
+            2865
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 17,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 9,
+          "file": "frames/walk/liting_walk_009.png",
+          "sourceFrame": 79,
+          "sourcePtsTicks": 50688,
+          "sourceSeconds": 3.3,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "4630c32f9d6ac685734704b271393f9ab3ad2a7b11741be651824f296ce95787",
+          "solidBounds": [
+            227,
+            48,
+            1375,
+            2866
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 17,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 10,
+          "file": "frames/walk/liting_walk_010.png",
+          "sourceFrame": 80,
+          "sourcePtsTicks": 51200,
+          "sourceSeconds": 3.3333333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "20e2adfa391cbf06fa85da9b89c9b00ce5b840d91fc6632b45ceb22fdd9b6e7e",
+          "solidBounds": [
+            145,
+            56,
+            1369,
+            2877
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 18,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 11,
+          "file": "frames/walk/liting_walk_011.png",
+          "sourceFrame": 81,
+          "sourcePtsTicks": 51968,
+          "sourceSeconds": 3.3833333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "95331cb8b35f4eff8934743e73c1a021e64f76cca324f985cb53606c0093ba30",
+          "solidBounds": [
+            145,
+            57,
+            1369,
+            2877
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 18,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 12,
+          "file": "frames/walk/liting_walk_012.png",
+          "sourceFrame": 82,
+          "sourcePtsTicks": 52480,
+          "sourceSeconds": 3.4166666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "35567a12a0608cf2c4163fd1beccc1b4a6e7d8742374add77a80242762a7228e",
+          "solidBounds": [
+            109,
+            58,
+            1349,
+            2880
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 19,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 13,
+          "file": "frames/walk/liting_walk_013.png",
+          "sourceFrame": 83,
+          "sourcePtsTicks": 53248,
+          "sourceSeconds": 3.466666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "9fb1d2feb4f1b57b3a8a5912e3708ae62e3e0ae2928bc571337a685f5e9f3651",
+          "solidBounds": [
+            80,
+            56,
+            1319,
+            2881
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 19,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 14,
+          "file": "frames/walk/liting_walk_014.png",
+          "sourceFrame": 84,
+          "sourcePtsTicks": 53760,
+          "sourceSeconds": 3.5,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "e33066e4645af0b674312443c7f8269a309618092ea2f077ccf8feb13a4bea84",
+          "solidBounds": [
+            49,
+            50,
+            1237,
+            2890
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 20,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 15,
+          "file": "frames/walk/liting_walk_015.png",
+          "sourceFrame": 85,
+          "sourcePtsTicks": 54528,
+          "sourceSeconds": 3.55,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "30bd2cc5477b8a9b25b59e1972288e52f73af29409a0a1944b1b80aac1ffa9c5",
+          "solidBounds": [
+            72,
+            45,
+            1196,
+            2891
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 20,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 16,
+          "file": "frames/walk/liting_walk_016.png",
+          "sourceFrame": 86,
+          "sourcePtsTicks": 55040,
+          "sourceSeconds": 3.5833333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "350948547dd25b8d0f378001f3a60e7b6f5d1c6853565fbfca226629dc5d5fff",
+          "solidBounds": [
+            72,
+            45,
+            1195,
+            2891
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 21,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 17,
+          "file": "frames/walk/liting_walk_017.png",
+          "sourceFrame": 87,
+          "sourcePtsTicks": 55808,
+          "sourceSeconds": 3.6333333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "87e6174d07792ec9068e62afa2007f8e8579a641adc6d6bfa2b156bf4aa3999f",
+          "solidBounds": [
+            94,
+            39,
+            1157,
+            2891
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 21,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 18,
+          "file": "frames/walk/liting_walk_018.png",
+          "sourceFrame": 88,
+          "sourcePtsTicks": 56320,
+          "sourceSeconds": 3.6666666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "f78a7d44f12ce67c97cc168089393c0a70eeea0f8a5174e3a48ee1790eb0082e",
+          "solidBounds": [
+            182,
+            34,
+            1078,
+            2892
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 22,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 19,
+          "file": "frames/walk/liting_walk_019.png",
+          "sourceFrame": 89,
+          "sourcePtsTicks": 57088,
+          "sourceSeconds": 3.716666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "36e863be07c149fb9dbfd8de3e9e731537df5c116e7ba58ff2928eb0f8f618ad",
+          "solidBounds": [
+            248,
+            30,
+            1036,
+            2891
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 22,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 20,
+          "file": "frames/walk/liting_walk_020.png",
+          "sourceFrame": 90,
+          "sourcePtsTicks": 57600,
+          "sourceSeconds": 3.75,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "6fb275d9fbb4e411b1711325820e8d7c7713b6e4ffbd88e934c6a870e371def1",
+          "solidBounds": [
+            322,
+            28,
+            1003,
+            2891
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 23,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 21,
+          "file": "frames/walk/liting_walk_021.png",
+          "sourceFrame": 91,
+          "sourcePtsTicks": 58368,
+          "sourceSeconds": 3.8,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "bafae1e59a79c1713fe16fac7d3035d94659abb7b695ce71b63f561c89ba90ef",
+          "solidBounds": [
+            322,
+            28,
+            1003,
+            2891
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 23,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 22,
+          "file": "frames/walk/liting_walk_022.png",
+          "sourceFrame": 92,
+          "sourcePtsTicks": 58880,
+          "sourceSeconds": 3.8333333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "15605d332323711adc569633697826fd2176ba3ccc8c9922d7b12822361e775f",
+          "solidBounds": [
+            459,
+            27,
+            1060,
+            2892
+          ],
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 24,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 23,
+          "file": "frames/walk/liting_walk_023.png",
+          "sourceFrame": 93,
+          "sourcePtsTicks": 59648,
+          "sourceSeconds": 3.8833333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "3ab823232b6df2cef6676cc9b95469179fa530c1dcb8a01ef198dcdb93890663",
+          "solidBounds": [
+            440,
+            27,
+            1085,
+            2891
+          ],
+          "opaqueInteriorPixels": 1170953,
+          "edgeRecoveryPixels": 17681,
+          "shadowClassifiedPixels": 457360,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 24,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 24,
+          "file": "frames/walk/liting_walk_024.png",
+          "sourceFrame": 94,
+          "sourcePtsTicks": 60160,
+          "sourceSeconds": 3.9166666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "853463c5e0ebdb1675169f3970f40e4a6039ca50fe4bce89b6ccde07aded185a",
+          "solidBounds": [
+            401,
+            30,
+            1099,
+            2891
+          ],
+          "opaqueInteriorPixels": 1213083,
+          "edgeRecoveryPixels": 20471,
+          "shadowClassifiedPixels": 428053,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 25,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 25,
+          "file": "frames/walk/liting_walk_025.png",
+          "sourceFrame": 95,
+          "sourcePtsTicks": 60928,
+          "sourceSeconds": 3.966666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "b6174a51c721b6d061d54daf76791dfa6e10fb3dd2fb17f42bae5e9b6f187c74",
+          "solidBounds": [
+            360,
+            33,
+            1182,
+            2891
+          ],
+          "opaqueInteriorPixels": 1224640,
+          "edgeRecoveryPixels": 21042,
+          "shadowClassifiedPixels": 423526,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 25,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 26,
+          "file": "frames/walk/liting_walk_026.png",
+          "sourceFrame": 96,
+          "sourcePtsTicks": 61440,
+          "sourceSeconds": 4.0,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "86e25834979d7d0e7b3d233636843d0b4fb742dbfc41bc226febb4fbad1c32a8",
+          "solidBounds": [
+            319,
+            37,
+            1275,
+            2891
+          ],
+          "opaqueInteriorPixels": 1235027,
+          "edgeRecoveryPixels": 20380,
+          "shadowClassifiedPixels": 419957,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 26,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 27,
+          "file": "frames/walk/liting_walk_027.png",
+          "sourceFrame": 97,
+          "sourcePtsTicks": 62208,
+          "sourceSeconds": 4.05,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "8854a353772bb5ea7971ba80a00c3e88cd9b49a80cac816cb2bd82efc3d7e3f6",
+          "solidBounds": [
+            277,
+            43,
+            1351,
+            2891
+          ],
+          "opaqueInteriorPixels": 1246251,
+          "edgeRecoveryPixels": 20175,
+          "shadowClassifiedPixels": 416666,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 26,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 28,
+          "file": "frames/walk/liting_walk_028.png",
+          "sourceFrame": 98,
+          "sourcePtsTicks": 62720,
+          "sourceSeconds": 4.083333333333333,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "a382e2d54fd094346aeed3119247e5388cfe5be72b4a93b544673796e7fffbe3",
+          "solidBounds": [
+            235,
+            47,
+            1403,
+            2891
+          ],
+          "opaqueInteriorPixels": 1255376,
+          "edgeRecoveryPixels": 20304,
+          "shadowClassifiedPixels": 416415,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 27,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 29,
+          "file": "frames/walk/liting_walk_029.png",
+          "sourceFrame": 99,
+          "sourcePtsTicks": 63488,
+          "sourceSeconds": 4.133333333333334,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "578e68055c33d7b5f982b9abf2882dd8abf98f6bb58ba16da0f383ee23dfba96",
+          "solidBounds": [
+            193,
+            51,
+            1434,
+            2890
+          ],
+          "opaqueInteriorPixels": 1266849,
+          "edgeRecoveryPixels": 20882,
+          "shadowClassifiedPixels": 416620,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 27,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 30,
+          "file": "frames/walk/liting_walk_030.png",
+          "sourceFrame": 100,
+          "sourcePtsTicks": 64000,
+          "sourceSeconds": 4.166666666666667,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "535aa67f655ad8e0cb144cfae7157966a739a03b9444f866521e9017733211f4",
+          "solidBounds": [
+            154,
+            55,
+            1427,
+            2890
+          ],
+          "opaqueInteriorPixels": 1276671,
+          "edgeRecoveryPixels": 20183,
+          "shadowClassifiedPixels": 415331,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 28,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 31,
+          "file": "frames/walk/liting_walk_031.png",
+          "sourceFrame": 101,
+          "sourcePtsTicks": 64768,
+          "sourceSeconds": 4.216666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "75440f9f26252bf8bd58d1cb5a43e695add4ef8636ff339db62c1a807f33c025",
+          "solidBounds": [
+            119,
+            59,
+            1417,
+            2888
+          ],
+          "opaqueInteriorPixels": 1282783,
+          "edgeRecoveryPixels": 20109,
+          "shadowClassifiedPixels": 415352,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 28,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 32,
+          "file": "frames/walk/liting_walk_032.png",
+          "sourceFrame": 102,
+          "sourcePtsTicks": 65280,
+          "sourceSeconds": 4.25,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "fee0deed3caccdac33b4eda7e0704f8ff4848f15b56ff0fcef47b15c2618c2cf",
+          "solidBounds": [
+            87,
+            57,
+            1400,
+            2884
+          ],
+          "opaqueInteriorPixels": 1279541,
+          "edgeRecoveryPixels": 20793,
+          "shadowClassifiedPixels": 418132,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 29,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 33,
+          "file": "frames/walk/liting_walk_033.png",
+          "sourceFrame": 103,
+          "sourcePtsTicks": 66048,
+          "sourceSeconds": 4.3,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "951548fe7d5366646933f6462261603f70fdcb00007600123549432fc5f78eb5",
+          "solidBounds": [
+            74,
+            51,
+            1367,
+            2883
+          ],
+          "opaqueInteriorPixels": 1261734,
+          "edgeRecoveryPixels": 20698,
+          "shadowClassifiedPixels": 423315,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 29,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 34,
+          "file": "frames/walk/liting_walk_034.png",
+          "sourceFrame": 104,
+          "sourcePtsTicks": 66560,
+          "sourceSeconds": 4.333333333333333,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "6f9a9c07a2b9e29a8fa91f1378323829955c5f880fe8243c63aa02bd796ca8f1",
+          "solidBounds": [
+            78,
+            45,
+            1285,
+            2880
+          ],
+          "opaqueInteriorPixels": 1213506,
+          "edgeRecoveryPixels": 20736,
+          "shadowClassifiedPixels": 434290,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 30,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 35,
+          "file": "frames/walk/liting_walk_035.png",
+          "sourceFrame": 105,
+          "sourcePtsTicks": 67328,
+          "sourceSeconds": 4.383333333333334,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "ebcbf32efa34f324b883ab8746dc1c65e572d595baab5467809490a7cf1db198",
+          "solidBounds": [
+            78,
+            45,
+            1285,
+            2880
+          ],
+          "opaqueInteriorPixels": 1213577,
+          "edgeRecoveryPixels": 20930,
+          "shadowClassifiedPixels": 434309,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 30,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 36,
+          "file": "frames/walk/liting_walk_036.png",
+          "sourceFrame": 106,
+          "sourcePtsTicks": 67840,
+          "sourceSeconds": 4.416666666666667,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "40db5b9b7ddd37720eda4f21a62d164e3fd4bbadda5df99b879a4e1d6a3eb9bb",
+          "solidBounds": [
+            96,
+            39,
+            1243,
+            2870
+          ],
+          "opaqueInteriorPixels": 1199819,
+          "edgeRecoveryPixels": 21232,
+          "shadowClassifiedPixels": 441066,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 31,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 37,
+          "file": "frames/walk/liting_walk_037.png",
+          "sourceFrame": 107,
+          "sourcePtsTicks": 68608,
+          "sourceSeconds": 4.466666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "24be8d8a17179566cae6b8c05ad49b0b1dcb6c2ca6a1e2b77c66f20207ac83d2",
+          "solidBounds": [
+            125,
+            35,
+            1201,
+            2865
+          ],
+          "opaqueInteriorPixels": 1180546,
+          "edgeRecoveryPixels": 21110,
+          "shadowClassifiedPixels": 449613,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 31,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 38,
+          "file": "frames/walk/liting_walk_038.png",
+          "sourceFrame": 108,
+          "sourcePtsTicks": 69120,
+          "sourceSeconds": 4.5,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "43ab25717777e6b4da8693d5eddb2f1a85dba09d63f6d9161474463460c38bd8",
+          "solidBounds": [
+            233,
+            30,
+            1113,
+            2864
+          ],
+          "opaqueInteriorPixels": 1134645,
+          "edgeRecoveryPixels": 18816,
+          "shadowClassifiedPixels": 448999,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 32,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        }
+      ]
+    },
+    "stop": {
+      "startFrame": 188,
+      "endFrameExclusive": 226,
+      "loop": false,
+      "holdLastFrame": true,
+      "frameCount": 38,
+      "sourceStartSeconds": 7.833333333333333,
+      "sourceEndSecondsExclusive": 9.416666666666666,
+      "durationSeconds": 1.5833333333333333,
+      "frames": [
+        {
+          "state": "stop",
+          "index": 0,
+          "file": "frames/stop/liting_stop_000.png",
+          "sourceFrame": 188,
+          "sourcePtsTicks": 120320,
+          "sourceSeconds": 7.833333333333333,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "9c8374f8691d74911a904a4bdbb2f220c8b687974a5c0a591fb2862c7fd542f7",
+          "solidBounds": [
+            305,
+            26,
+            1083,
+            2864
+          ],
+          "opaqueInteriorPixels": 1110333,
+          "edgeRecoveryPixels": 17825,
+          "shadowClassifiedPixels": 448579,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 33,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 1,
+          "file": "frames/stop/liting_stop_001.png",
+          "sourceFrame": 189,
+          "sourcePtsTicks": 121088,
+          "sourceSeconds": 7.883333333333334,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "bba3d23fe09a3a8332424ff3a83a7d3808f5f271a408363328512d370f9e5733",
+          "solidBounds": [
+            378,
+            25,
+            1046,
+            2864
+          ],
+          "opaqueInteriorPixels": 1069282,
+          "edgeRecoveryPixels": 17330,
+          "shadowClassifiedPixels": 477073,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 33,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 2,
+          "file": "frames/stop/liting_stop_002.png",
+          "sourceFrame": 190,
+          "sourcePtsTicks": 121600,
+          "sourceSeconds": 7.916666666666667,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "5e0a6e08cd84f5fa0121b1cf9dd66dfeecca8c55b4b7da27274d52c1b6a98491",
+          "solidBounds": [
+            453,
+            26,
+            1008,
+            2863
+          ],
+          "opaqueInteriorPixels": 1053854,
+          "edgeRecoveryPixels": 16907,
+          "shadowClassifiedPixels": 503530,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 34,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 3,
+          "file": "frames/stop/liting_stop_003.png",
+          "sourceFrame": 191,
+          "sourcePtsTicks": 122368,
+          "sourceSeconds": 7.966666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "5947ed2973ca45c8210a0668ea5426c557cd562b7b1d3bae4b1cf4e5fbada1f4",
+          "solidBounds": [
+            462,
+            28,
+            1019,
+            2863
+          ],
+          "opaqueInteriorPixels": 1086152,
+          "edgeRecoveryPixels": 16194,
+          "shadowClassifiedPixels": 509400,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 34,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 4,
+          "file": "frames/stop/liting_stop_004.png",
+          "sourceFrame": 192,
+          "sourcePtsTicks": 122880,
+          "sourceSeconds": 8.0,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "83cde3e5f77d47f72bcfbbce7ae6b9ddabc65b839adf25c803b7edcef06486d4",
+          "solidBounds": [
+            465,
+            30,
+            1046,
+            2864
+          ],
+          "opaqueInteriorPixels": 1164923,
+          "edgeRecoveryPixels": 16036,
+          "shadowClassifiedPixels": 469872,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 35,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 5,
+          "file": "frames/stop/liting_stop_005.png",
+          "sourceFrame": 193,
+          "sourcePtsTicks": 123648,
+          "sourceSeconds": 8.05,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "c53b82cdf62f2c406628363eb8da0123e06f8a2ffd35189586b00ea5864a30cd",
+          "solidBounds": [
+            454,
+            34,
+            1149,
+            2864
+          ],
+          "opaqueInteriorPixels": 1241328,
+          "edgeRecoveryPixels": 17333,
+          "shadowClassifiedPixels": 433892,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 35,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 6,
+          "file": "frames/stop/liting_stop_006.png",
+          "sourceFrame": 194,
+          "sourcePtsTicks": 124160,
+          "sourceSeconds": 8.083333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "3792fab66d22c4e386105096276a6965608f4497066c863ab9c53e6cdf9a5528",
+          "solidBounds": [
+            429,
+            39,
+            1234,
+            2863
+          ],
+          "opaqueInteriorPixels": 1267492,
+          "edgeRecoveryPixels": 20013,
+          "shadowClassifiedPixels": 424653,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 36,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 7,
+          "file": "frames/stop/liting_stop_007.png",
+          "sourceFrame": 195,
+          "sourcePtsTicks": 124928,
+          "sourceSeconds": 8.133333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "2def2155928f4ee3ca5e8ec92a1e0b4dbf458de65a95c4929cdd6299051871dd",
+          "solidBounds": [
+            396,
+            43,
+            1300,
+            2864
+          ],
+          "opaqueInteriorPixels": 1284846,
+          "edgeRecoveryPixels": 21486,
+          "shadowClassifiedPixels": 418145,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 36,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 8,
+          "file": "frames/stop/liting_stop_008.png",
+          "sourceFrame": 196,
+          "sourcePtsTicks": 125440,
+          "sourceSeconds": 8.166666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "a3eea01fdf6fff1c213cc98f351ad682941c8552f41f8840b37038adf5ddf16b",
+          "solidBounds": [
+            366,
+            46,
+            1337,
+            2864
+          ],
+          "opaqueInteriorPixels": 1299355,
+          "edgeRecoveryPixels": 21319,
+          "shadowClassifiedPixels": 415215,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 37,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 9,
+          "file": "frames/stop/liting_stop_009.png",
+          "sourceFrame": 197,
+          "sourcePtsTicks": 126208,
+          "sourceSeconds": 8.216666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "32e53a15b16aa698a667abc593707ddf2f82c097c10ef9240343a305ce79a626",
+          "solidBounds": [
+            337,
+            50,
+            1349,
+            2873
+          ],
+          "opaqueInteriorPixels": 1316888,
+          "edgeRecoveryPixels": 21348,
+          "shadowClassifiedPixels": 411146,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 37,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 10,
+          "file": "frames/stop/liting_stop_010.png",
+          "sourceFrame": 198,
+          "sourcePtsTicks": 126720,
+          "sourceSeconds": 8.25,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "3c531b4d6595480e09011a94bd7b52dbb7aada4726653d05ee6e625d0d8ebbbd",
+          "solidBounds": [
+            311,
+            54,
+            1337,
+            2877
+          ],
+          "opaqueInteriorPixels": 1325881,
+          "edgeRecoveryPixels": 21745,
+          "shadowClassifiedPixels": 411492,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 38,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 11,
+          "file": "frames/stop/liting_stop_011.png",
+          "sourceFrame": 199,
+          "sourcePtsTicks": 127488,
+          "sourceSeconds": 8.3,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "1994651a86f9e4194a9c0ceea6da587c2ec597fabbea12ca299add168d42c0f9",
+          "solidBounds": [
+            285,
+            56,
+            1319,
+            2881
+          ],
+          "opaqueInteriorPixels": 1333343,
+          "edgeRecoveryPixels": 22306,
+          "shadowClassifiedPixels": 410709,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 38,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 12,
+          "file": "frames/stop/liting_stop_012.png",
+          "sourceFrame": 200,
+          "sourcePtsTicks": 128000,
+          "sourceSeconds": 8.333333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "1ec222593f7e2b0649995043637cc2b4ca69a1acd051e735dbe283871a37a4b6",
+          "solidBounds": [
+            244,
+            54,
+            1267,
+            2889
+          ],
+          "opaqueInteriorPixels": 1328476,
+          "edgeRecoveryPixels": 21069,
+          "shadowClassifiedPixels": 411697,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 39,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 13,
+          "file": "frames/stop/liting_stop_013.png",
+          "sourceFrame": 201,
+          "sourcePtsTicks": 128768,
+          "sourceSeconds": 8.383333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "691377de25648fb1db3a69859727e42554b2fed99f0a7395312accfe86669ffa",
+          "solidBounds": [
+            243,
+            53,
+            1266,
+            2889
+          ],
+          "opaqueInteriorPixels": 1328036,
+          "edgeRecoveryPixels": 20981,
+          "shadowClassifiedPixels": 411815,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 39,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 14,
+          "file": "frames/stop/liting_stop_014.png",
+          "sourceFrame": 202,
+          "sourcePtsTicks": 129280,
+          "sourceSeconds": 8.416666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "30c77f7292310bacdc66e966154f8cba1803c1989842ce84c2d63d778a4023c9",
+          "solidBounds": [
+            225,
+            50,
+            1243,
+            2891
+          ],
+          "opaqueInteriorPixels": 1320821,
+          "edgeRecoveryPixels": 21437,
+          "shadowClassifiedPixels": 415454,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 40,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 15,
+          "file": "frames/stop/liting_stop_015.png",
+          "sourceFrame": 203,
+          "sourcePtsTicks": 130048,
+          "sourceSeconds": 8.466666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "53d565ae6c15074c51752a2558468ce488dc7dada45d0c552d19601cd5808ac7",
+          "solidBounds": [
+            210,
+            47,
+            1223,
+            2891
+          ],
+          "opaqueInteriorPixels": 1315447,
+          "edgeRecoveryPixels": 21659,
+          "shadowClassifiedPixels": 418503,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 40,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 16,
+          "file": "frames/stop/liting_stop_016.png",
+          "sourceFrame": 204,
+          "sourcePtsTicks": 130560,
+          "sourceSeconds": 8.5,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "a34e9de6843c62f98c48088e609fa6a81c0f614d6ca4cc0b13370f9f6726b176",
+          "solidBounds": [
+            186,
+            43,
+            1183,
+            2892
+          ],
+          "opaqueInteriorPixels": 1296325,
+          "edgeRecoveryPixels": 20833,
+          "shadowClassifiedPixels": 425060,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 41,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 17,
+          "file": "frames/stop/liting_stop_017.png",
+          "sourceFrame": 205,
+          "sourcePtsTicks": 131328,
+          "sourceSeconds": 8.55,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "7d955c78d531f11dffdfa6951e293e3984f2efd987e0e020f7d9c4c6f8b58e17",
+          "solidBounds": [
+            175,
+            40,
+            1162,
+            2892
+          ],
+          "opaqueInteriorPixels": 1281778,
+          "edgeRecoveryPixels": 20918,
+          "shadowClassifiedPixels": 429891,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 41,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 18,
+          "file": "frames/stop/liting_stop_018.png",
+          "sourceFrame": 206,
+          "sourcePtsTicks": 131840,
+          "sourceSeconds": 8.583333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "5e5ed1ab05c334f4a46d352db9585a39b0fce7269083b8dedfd37f41614903a4",
+          "solidBounds": [
+            175,
+            39,
+            1162,
+            2893
+          ],
+          "opaqueInteriorPixels": 1281332,
+          "edgeRecoveryPixels": 20615,
+          "shadowClassifiedPixels": 430125,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 42,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 19,
+          "file": "frames/stop/liting_stop_019.png",
+          "sourceFrame": 207,
+          "sourcePtsTicks": 132608,
+          "sourceSeconds": 8.633333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "83e35f4131a3010b9ac5e4c1c9f9e078d1e0cdaa66abfe096590838ce2fbe0aa",
+          "solidBounds": [
+            169,
+            36,
+            1143,
+            2893
+          ],
+          "opaqueInteriorPixels": 1267463,
+          "edgeRecoveryPixels": 20758,
+          "shadowClassifiedPixels": 434229,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 42,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 20,
+          "file": "frames/stop/liting_stop_020.png",
+          "sourceFrame": 208,
+          "sourcePtsTicks": 133120,
+          "sourceSeconds": 8.666666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "8312f999490369129dfd2d5e486b4edc5d1a5cd06eadf4d20813445ea9ca4242",
+          "solidBounds": [
+            168,
+            33,
+            1106,
+            2893
+          ],
+          "opaqueInteriorPixels": 1239321,
+          "edgeRecoveryPixels": 20489,
+          "shadowClassifiedPixels": 442481,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 43,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 21,
+          "file": "frames/stop/liting_stop_021.png",
+          "sourceFrame": 209,
+          "sourcePtsTicks": 133888,
+          "sourceSeconds": 8.716666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "3792b5fa24bc7533d924807236298ecbf0beb95a4ba27212658e3dac5e4d443e",
+          "solidBounds": [
+            169,
+            30,
+            1088,
+            2893
+          ],
+          "opaqueInteriorPixels": 1224877,
+          "edgeRecoveryPixels": 20362,
+          "shadowClassifiedPixels": 446217,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 43,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 22,
+          "file": "frames/stop/liting_stop_022.png",
+          "sourceFrame": 210,
+          "sourcePtsTicks": 134400,
+          "sourceSeconds": 8.75,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "eec6fad328429369782f66398c584041896a6e5bc33e12501ae296fe575cb20c",
+          "solidBounds": [
+            180,
+            28,
+            1070,
+            2893
+          ],
+          "opaqueInteriorPixels": 1212178,
+          "edgeRecoveryPixels": 20199,
+          "shadowClassifiedPixels": 447181,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 44,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 23,
+          "file": "frames/stop/liting_stop_023.png",
+          "sourceFrame": 211,
+          "sourcePtsTicks": 135168,
+          "sourceSeconds": 8.8,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "9c0182a970de0abb28c579867f42eb370655104d1234053cb0d4f1dfec48dfb2",
+          "solidBounds": [
+            180,
+            28,
+            1069,
+            2893
+          ],
+          "opaqueInteriorPixels": 1211165,
+          "edgeRecoveryPixels": 19778,
+          "shadowClassifiedPixels": 447359,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 44,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 24,
+          "file": "frames/stop/liting_stop_024.png",
+          "sourceFrame": 212,
+          "sourcePtsTicks": 135680,
+          "sourceSeconds": 8.833333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "3a821130d4898606361a85c4e707190656528bb127fd0853ef7b79ffa35fd769",
+          "solidBounds": [
+            237,
+            28,
+            1040,
+            2893
+          ],
+          "opaqueInteriorPixels": 1182401,
+          "edgeRecoveryPixels": 18676,
+          "shadowClassifiedPixels": 442195,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 45,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 25,
+          "file": "frames/stop/liting_stop_025.png",
+          "sourceFrame": 213,
+          "sourcePtsTicks": 136448,
+          "sourceSeconds": 8.883333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "c72a9dd16dc2e61dd90469d7e027a8020729cc1adc6c219ea1efd7675bb23c7b",
+          "solidBounds": [
+            277,
+            28,
+            1025,
+            2893
+          ],
+          "opaqueInteriorPixels": 1153340,
+          "edgeRecoveryPixels": 17647,
+          "shadowClassifiedPixels": 448387,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 45,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 26,
+          "file": "frames/stop/liting_stop_026.png",
+          "sourceFrame": 214,
+          "sourcePtsTicks": 136960,
+          "sourceSeconds": 8.916666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "9af1da8b176e61f2b7b1e89eaf16d2f3f853174d2bddd41dc80caf05e9b82125",
+          "solidBounds": [
+            314,
+            29,
+            1013,
+            2893
+          ],
+          "opaqueInteriorPixels": 1120858,
+          "edgeRecoveryPixels": 17596,
+          "shadowClassifiedPixels": 462050,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 46,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 27,
+          "file": "frames/stop/liting_stop_027.png",
+          "sourceFrame": 215,
+          "sourcePtsTicks": 137728,
+          "sourceSeconds": 8.966666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "72b22c6c243e95382d7b0833fb7042f9a16b9197274f54dd2efb21f5522a81d9",
+          "solidBounds": [
+            349,
+            29,
+            1001,
+            2893
+          ],
+          "opaqueInteriorPixels": 1094027,
+          "edgeRecoveryPixels": 17230,
+          "shadowClassifiedPixels": 474106,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 46,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 28,
+          "file": "frames/stop/liting_stop_028.png",
+          "sourceFrame": 216,
+          "sourcePtsTicks": 138240,
+          "sourceSeconds": 9.0,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "14860fde0957874a94f4392b7e4e441eac78e2235c44c293dac08e6f9f555245",
+          "solidBounds": [
+            382,
+            29,
+            989,
+            2894
+          ],
+          "opaqueInteriorPixels": 1074950,
+          "edgeRecoveryPixels": 16858,
+          "shadowClassifiedPixels": 483864,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 47,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 29,
+          "file": "frames/stop/liting_stop_029.png",
+          "sourceFrame": 217,
+          "sourcePtsTicks": 139008,
+          "sourceSeconds": 9.05,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "808fdba187432a0605460ebe2cc62354fc30d027bc4f2bac0e8112d85264d8f8",
+          "solidBounds": [
+            414,
+            30,
+            975,
+            2894
+          ],
+          "opaqueInteriorPixels": 1058410,
+          "edgeRecoveryPixels": 16708,
+          "shadowClassifiedPixels": 493496,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 47,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 30,
+          "file": "frames/stop/liting_stop_030.png",
+          "sourceFrame": 218,
+          "sourcePtsTicks": 139520,
+          "sourceSeconds": 9.083333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "9c77936b1ae532833c8d1cadc4f27b0c9ce8939a94e56dd12b0e04b1bad4446d",
+          "solidBounds": [
+            441,
+            31,
+            961,
+            2894
+          ],
+          "opaqueInteriorPixels": 1044057,
+          "edgeRecoveryPixels": 16358,
+          "shadowClassifiedPixels": 501525,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 48,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 31,
+          "file": "frames/stop/liting_stop_031.png",
+          "sourceFrame": 219,
+          "sourcePtsTicks": 140288,
+          "sourceSeconds": 9.133333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "88395ecc27e62e12c02a7d4d2ce75161c8fd7c94e221264a1a122196966a176e",
+          "solidBounds": [
+            453,
+            31,
+            951,
+            2894
+          ],
+          "opaqueInteriorPixels": 1036341,
+          "edgeRecoveryPixels": 16194,
+          "shadowClassifiedPixels": 505778,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 48,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 32,
+          "file": "frames/stop/liting_stop_032.png",
+          "sourceFrame": 220,
+          "sourcePtsTicks": 140800,
+          "sourceSeconds": 9.166666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "61cfd8ba629294d385c83988ecd0c7ba9c4bc4eb230bd413874fc98a31acd89f",
+          "solidBounds": [
+            453,
+            31,
+            942,
+            2894
+          ],
+          "opaqueInteriorPixels": 1034835,
+          "edgeRecoveryPixels": 15962,
+          "shadowClassifiedPixels": 504608,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 49,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 33,
+          "file": "frames/stop/liting_stop_033.png",
+          "sourceFrame": 221,
+          "sourcePtsTicks": 141568,
+          "sourceSeconds": 9.216666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "838789279448ff0bf97596ac0ca0d00ec2165cf78d2fc2e5de97ea361031f5f4",
+          "solidBounds": [
+            451,
+            31,
+            944,
+            2894
+          ],
+          "opaqueInteriorPixels": 1037235,
+          "edgeRecoveryPixels": 15747,
+          "shadowClassifiedPixels": 497727,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 49,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 34,
+          "file": "frames/stop/liting_stop_034.png",
+          "sourceFrame": 222,
+          "sourcePtsTicks": 142080,
+          "sourceSeconds": 9.25,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "3c22248febf1a98f4ff5cefcf53d249668d16fd29218babd1f2f7bdbf5a5d99f",
+          "solidBounds": [
+            451,
+            31,
+            954,
+            2894
+          ],
+          "opaqueInteriorPixels": 1037877,
+          "edgeRecoveryPixels": 15720,
+          "shadowClassifiedPixels": 493332,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 50,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 35,
+          "file": "frames/stop/liting_stop_035.png",
+          "sourceFrame": 223,
+          "sourcePtsTicks": 142848,
+          "sourceSeconds": 9.3,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "f064e1dfc524f0ba1397fb7e2e0a4502f6183654812c2e3b22bd6e75c87705e2",
+          "solidBounds": [
+            451,
+            31,
+            958,
+            2894
+          ],
+          "opaqueInteriorPixels": 1037546,
+          "edgeRecoveryPixels": 15599,
+          "shadowClassifiedPixels": 491703,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 50,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 36,
+          "file": "frames/stop/liting_stop_036.png",
+          "sourceFrame": 224,
+          "sourcePtsTicks": 143360,
+          "sourceSeconds": 9.333333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "0d33a06a3996aad96d0cb6286945c0086895da9950487b27b78666cf02cb3389",
+          "solidBounds": [
+            451,
+            31,
+            959,
+            2894
+          ],
+          "opaqueInteriorPixels": 1038041,
+          "edgeRecoveryPixels": 15533,
+          "shadowClassifiedPixels": 491231,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 51,
+            "rectTopLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              1480,
+              2920
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 37,
+          "file": "frames/stop/liting_stop_037.png",
+          "sourceFrame": 225,
+          "sourcePtsTicks": 144128,
+          "sourceSeconds": 9.383333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "d705492bb750356dd80ad8883be795cb94513145fb2edc6ef413d50988a31c72",
+          "solidBounds": [
+            451,
+            31,
+            959,
+            2894
+          ],
+          "opaqueInteriorPixels": 1037975,
+          "edgeRecoveryPixels": 15485,
+          "shadowClassifiedPixels": 491285,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 51,
+            "rectTopLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ],
+            "rectUnityBottomLeft": [
+              1486,
+              2,
+              1480,
+              2920
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "atlas": [
+    {
+      "file": "atlas/liting_idle_00.png",
+      "state": "idle",
+      "size": [
+        1484,
+        2924
+      ],
+      "usedCells": 1
+    },
+    {
+      "file": "atlas/liting_start_00.png",
+      "state": "start",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_start_01.png",
+      "state": "start",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_start_02.png",
+      "state": "start",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_start_03.png",
+      "state": "start",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_start_04.png",
+      "state": "start",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_start_05.png",
+      "state": "start",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_start_06.png",
+      "state": "start",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_start_07.png",
+      "state": "start",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_start_08.png",
+      "state": "start",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_start_09.png",
+      "state": "start",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_start_10.png",
+      "state": "start",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_start_11.png",
+      "state": "start",
+      "size": [
+        1484,
+        2924
+      ],
+      "usedCells": 1
+    },
+    {
+      "file": "atlas/liting_walk_00.png",
+      "state": "walk",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_walk_01.png",
+      "state": "walk",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_walk_02.png",
+      "state": "walk",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_walk_03.png",
+      "state": "walk",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_walk_04.png",
+      "state": "walk",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_walk_05.png",
+      "state": "walk",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_walk_06.png",
+      "state": "walk",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_walk_07.png",
+      "state": "walk",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_walk_08.png",
+      "state": "walk",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_walk_09.png",
+      "state": "walk",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_walk_10.png",
+      "state": "walk",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_walk_11.png",
+      "state": "walk",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_walk_12.png",
+      "state": "walk",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_walk_13.png",
+      "state": "walk",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_walk_14.png",
+      "state": "walk",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_walk_15.png",
+      "state": "walk",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_walk_16.png",
+      "state": "walk",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_walk_17.png",
+      "state": "walk",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_walk_18.png",
+      "state": "walk",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_walk_19.png",
+      "state": "walk",
+      "size": [
+        1484,
+        2924
+      ],
+      "usedCells": 1
+    },
+    {
+      "file": "atlas/liting_stop_00.png",
+      "state": "stop",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_stop_01.png",
+      "state": "stop",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_stop_02.png",
+      "state": "stop",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_stop_03.png",
+      "state": "stop",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_stop_04.png",
+      "state": "stop",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_stop_05.png",
+      "state": "stop",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_stop_06.png",
+      "state": "stop",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_stop_07.png",
+      "state": "stop",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_stop_08.png",
+      "state": "stop",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_stop_09.png",
+      "state": "stop",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_stop_10.png",
+      "state": "stop",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_stop_11.png",
+      "state": "stop",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_stop_12.png",
+      "state": "stop",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_stop_13.png",
+      "state": "stop",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_stop_14.png",
+      "state": "stop",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_stop_15.png",
+      "state": "stop",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_stop_16.png",
+      "state": "stop",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_stop_17.png",
+      "state": "stop",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    },
+    {
+      "file": "atlas/liting_stop_18.png",
+      "state": "stop",
+      "size": [
+        2968,
+        2924
+      ],
+      "usedCells": 2
+    }
+  ],
+  "processing": {
+    "ffmpegAlphaFilter": "format=yuva444p,chromakey=0x688953:0.035:0.028,format=rgba",
+    "localDespill": true,
+    "redraw": false,
+    "interpolation": false,
+    "perFrameScale": false,
+    "perFrameAlignment": false,
+    "solidNeutralMaterialProtection": true,
+    "detachedOpaqueComponentsPreserved": true
+  },
+  "notes": [
+    "Native contiguous frames only; shared native crop for all states.",
+    "Walk boundary reference is excluded from the loop.",
+    "Small source body yaw, hair/cloth movement and sole-height variation are retained.",
+    "No redraw, retargeting, optical flow or image interpolation."
+  ],
+  "reviewChain": [
+    {
+      "state": "idle",
+      "holdSeconds": 1
+    },
+    {
+      "state": "start"
+    },
+    {
+      "state": "walk",
+      "repeats": 2
+    },
+    {
+      "state": "stop"
+    },
+    {
+      "state": "idle",
+      "holdSeconds": 1
+    }
+  ]
+}
