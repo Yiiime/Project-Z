@@ -4,6 +4,7 @@ using UnityEngine.UI;
 namespace Seabreeze
 {
     /// <summary>Small, independent ambient layers over existing painted scenery; no world simulation.</summary>
+    [RequireComponent(typeof(CanvasRenderer))]
     public sealed class StartPageAtmosphere : MaskableGraphic
     {
         public Rect ImageUV = new Rect(0, 0, 1, 1);

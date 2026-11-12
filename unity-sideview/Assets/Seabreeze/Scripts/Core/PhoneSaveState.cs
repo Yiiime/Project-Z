@@ -16,6 +16,8 @@ namespace Seabreeze
         // A save-owned album survives loading and never mixes photographs from a new game.
         public string albumId = "";
         public List<PhoneSavedPhoto> photos = new List<PhoneSavedPhoto>();
+        // Accepted private exchanges only. Pending / failed requests are never history.
+        public List<PhoneChatExchange> chatExchanges = new List<PhoneChatExchange>();
 
         public void Sanitize()
         {
@@ -27,14 +29,24 @@ namespace Seabreeze
             if (memories == null) memories = new List<PhoneSavedMemory>();
             if (albumId == null) albumId = "";
             if (photos == null) photos = new List<PhoneSavedPhoto>();
+            if (chatExchanges == null) chatExchanges = new List<PhoneChatExchange>();
             readMessageIds.RemoveAll(string.IsNullOrEmpty);
             favoriteMemoryIds.RemoveAll(string.IsNullOrEmpty);
             metPeople.RemoveAll(p => p == null || string.IsNullOrEmpty(p.actorId));
             memories.RemoveAll(m => m == null || string.IsNullOrEmpty(m.id));
             photos.RemoveAll(p => p == null || string.IsNullOrEmpty(p.id));
+            chatExchanges.RemoveAll(e => e == null || string.IsNullOrEmpty(e.requestId)
+                || string.IsNullOrEmpty(e.actorId) || string.IsNullOrWhiteSpace(e.reply));
             foreach (var memory in memories)
                 if (memory.actorIds == null) memory.actorIds = Array.Empty<string>();
         }
+    }
+
+    [Serializable]
+    public sealed class PhoneChatExchange
+    {
+        public string requestId, threadId, actorId, message, reply, receivedUtc;
+        public int day, period;
     }
 
     [Serializable]

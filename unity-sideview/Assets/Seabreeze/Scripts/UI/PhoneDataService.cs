@@ -39,10 +39,10 @@ namespace Seabreeze
     public sealed class PhoneKnownFact { public string Text, Source; }
 
     /// <summary>
-    /// Read-only projection of player-visible game state. Phone actions only change
-    /// phone preferences; task decisions and receipts remain owned by the game engine.
+    /// Projection of player-visible game state, preferences and accepted phone chats.
+    /// Task decisions and receipts remain owned by the game engine.
     /// </summary>
-    public sealed class PhoneDataService : MonoBehaviour
+    public sealed partial class PhoneDataService : MonoBehaviour
     {
         readonly List<PhoneMessage> messages = new List<PhoneMessage>();
         readonly List<PhoneTask> tasks = new List<PhoneTask>();
@@ -70,6 +70,7 @@ namespace Seabreeze
 
         public void Initialize(GameSession owner)
         {
+            ResetChatRequests();
             if (session != null) session.Changed -= Invalidate;
             session = owner;
             if (session != null) session.Changed += Invalidate;
@@ -78,7 +79,7 @@ namespace Seabreeze
             Refresh();
         }
 
-        void OnDestroy() { if (session != null) session.Changed -= Invalidate; }
+        void OnDestroy() { ResetChatRequests(); if (session != null) session.Changed -= Invalidate; }
         void Invalidate() { dirty = true; }
         void Update()
         {
@@ -102,6 +103,7 @@ namespace Seabreeze
                 bool stateChanged = state != session.State;
                 if (stateChanged)
                 {
+                    ResetChatRequests();
                     state = session.State;
                     checkpointText = null;
                     checkpoint = null;
@@ -115,6 +117,7 @@ namespace Seabreeze
                 bool worldChanged = !string.IsNullOrEmpty(phone.worldId) && !string.IsNullOrEmpty(worldId) && phone.worldId != worldId;
                 if (worldChanged)
                 {
+                    ResetChatRequests();
                     phone = state.phone = new PhoneSaveState();
                     checkpoint = null;
                     checkpointText = null;

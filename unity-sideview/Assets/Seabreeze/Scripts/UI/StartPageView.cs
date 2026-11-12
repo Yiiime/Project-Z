@@ -19,14 +19,13 @@ namespace Seabreeze
         StartPageConfig config;
         Texture2D gradient;
         TMP_FontAsset titleFont;
-        GameObject modal, landing;
-        bool menuOpened;
+        GameObject modal;
         TextMeshProUGUI status, notice;
         Button primary;
         Action<bool> enter;
         bool hasSave, busy, dismissed, confirmFresh, motion = true;
         int lastModalClosedFrame = -1;
-        float elapsed, originalVolume;
+        float elapsed;
         Button soundButton, motionButton;
         static readonly Color White = new Color(.95f, .96f, .94f);
         static readonly Color Quiet = new Color(.76f, .83f, .85f);
@@ -34,13 +33,13 @@ namespace Seabreeze
 
         public void Initialize(bool canContinue, SaveData preview, Action<bool> enterGame)
         {
-            hasSave = canContinue; enter = enterGame; originalVolume = AudioListener.volume;
+            hasSave = canContinue; enter = enterGame;
             config = Resources.Load<StartPageConfig>("UI/StartPage");
             var go = new GameObject("Island start page", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster), typeof(CanvasGroup));
             go.transform.SetParent(transform, false); root = (RectTransform)go.transform;
             var canvas = go.GetComponent<Canvas>(); canvas.renderMode = RenderMode.ScreenSpaceOverlay; canvas.sortingOrder = 320;
             var scaler = go.GetComponent<CanvasScaler>(); scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1920, 1080); scaler.matchWidthOrHeight = 1;
+            scaler.referenceResolution = new Vector2(1920, 1080); scaler.matchWidthOrHeight = .5f;
             group = go.GetComponent<CanvasGroup>();
             background = Stretch("Painted coast", root, Vector2.zero, Vector2.zero).gameObject.AddComponent<RawImage>();
             background.texture = config != null ? config.background : Resources.Load<Texture2D>("Art/street_day");
@@ -52,15 +51,17 @@ namespace Seabreeze
             gradient = MakeGradient(config != null ? config.shade : new Color(.045f, .10f, .17f, .76f));
             shade.texture = gradient; shade.raycastTarget = false;
 
-            var small = Label("Edition", root, Vector2.up, Vector2.up, new Vector2(64, -44), new Vector2(520, 30),
-                "Z  /  A LITTLE LIFE BY THE SEA", 14, Quiet);
-            small.characterSpacing = 4;
-            menu = Rect("Title and invitations", root, new Vector2(.085f, .5f), new Vector2(0, .5f), Vector2.zero, new Vector2(570, 690));
+            var small = Label("Edition", root, Vector2.up, Vector2.up, new Vector2(64, -44), new Vector2(610, 30),
+                "Z  /  A STORY OF EVERYDAY CONNECTIONS", 13, Quiet);
+            small.characterSpacing = 3;
+            menu = Rect("Title and invitations", root, new Vector2(.085f, .5f), new Vector2(0, .5f), Vector2.zero, new Vector2(650, 780));
             menuGroup = menu.gameObject.AddComponent<CanvasGroup>(); menuGroup.alpha = 0;
-            var eyebrow = Label("Chapter", menu, Vector2.up, Vector2.up, Vector2.zero, new Vector2(550, 32), "海风吹来，故事慢慢开始。", 21, Warm);
-            eyebrow.characterSpacing = 3;
-            Label("Game name", menu, Vector2.up, Vector2.up, new Vector2(-4, -60), new Vector2(550, 90), "来自月亮的", 67, White);
-            var z = Label("Z", menu, Vector2.up, Vector2.up, new Vector2(-3, -130), new Vector2(160, 130), "Z", 130, White);
+            Line(menu, Vector2.up, Vector2.up, new Vector2(0, -15), new Vector2(34, 1), Warm);
+            var eyebrow = Label("Chapter", menu, Vector2.up, Vector2.up, new Vector2(50, 0), new Vector2(550, 32), "一封写给慢生活的信", 18, Warm);
+            eyebrow.characterSpacing = 4;
+            var name = Label("Game name", menu, Vector2.up, Vector2.up, new Vector2(-3, -62), new Vector2(620, 90), "来自月亮的", 62, White);
+            name.characterSpacing = 5;
+            var z = Label("Z", menu, Vector2.up, Vector2.up, new Vector2(-5, -133), new Vector2(190, 252), "Z", 230, White);
             var titleSource = Resources.Load<Font>("UI/FinalKit/BodoniModa");
             if (titleSource != null)
             {
@@ -68,26 +69,35 @@ namespace Seabreeze
                     512, 512, AtlasPopulationMode.Dynamic, false);
                 if (titleFont != null) { titleFont.TryAddCharacters("Z"); z.font = titleFont; }
             }
-            Line(menu, Vector2.up, Vector2.up, new Vector2(0, -291), new Vector2(58, 1), Warm);
-            Label("Invitation", menu, Vector2.up, Vector2.up, new Vector2(0, -316), new Vector2(530, 70),
-                "在小岛住下来。\n和某个人，把平凡的一天过成回忆。", 22, new Color(.84f, .89f, .88f));
+            var seal = Rect("Moon signature", menu, Vector2.up, new Vector2(.5f, .5f), new Vector2(246, -247), new Vector2(132, 132))
+                .gameObject.AddComponent<StartPageMoonGraphic>();
+            seal.color = new Color(Warm.r, Warm.g, Warm.b, .78f);
+            var subtitle = Label("English title", menu, Vector2.up, Vector2.up, new Vector2(338, -210), new Vector2(290, 40), "FROM THE MOON", 15, Quiet);
+            subtitle.characterSpacing = 4;
+            Label("Signature", menu, Vector2.up, Vector2.up, new Vector2(338, -250), new Vector2(305, 70), "愿每一次相遇，\n都有回声。", 20, White);
+            Label("Invitation", menu, Vector2.up, Vector2.up, new Vector2(0, -408), new Vector2(610, 75),
+                "让匆忙的日子，慢下来。\n在海风里，找回久违的陪伴。", 23, new Color(.85f, .9f, .9f));
 
-            primary = MenuButton("Enter island", new Vector2(0, -427), new Vector2(442, 76), "开始故事", () => { if (hasSave || confirmFresh) ConfirmNew(); else Choose(true); }, true);
-            Label("Arrow", primary.transform, new Vector2(1, .5f), new Vector2(1, .5f), new Vector2(-25, 0), new Vector2(40, 35), "→", 27, Warm, TextAlignmentOptions.Center);
-            string progress = hasSave && preview != null ? $"上次停在：第 {preview.day} 天 · {GameClock.PeriodName((TimePeriod)preview.period)}  /  {GameUI.PlaceName(ParsePlace(preview.place))}" : "从 Z 的直播间开始，赴一场小岛之约。";
-            status = Label("Save preview", menu, Vector2.up, Vector2.up, new Vector2(2, -518), new Vector2(540, 38), progress, 17, Quiet);
-            if (hasSave) MenuButton("Continue island life", new Vector2(0, -575), new Vector2(218, 54), "继续旅程", () => Choose(false), false);
-            MenuButton("Controls", new Vector2(hasSave ? 233 : 0, -575), new Vector2(194, 54), "如何游玩", ShowControls, false);
-            notice = Label("Save notice", menu, Vector2.up, Vector2.up, new Vector2(0, -646), new Vector2(560, 68), "", 16, Warm);
+            primary = MenuButton("Enter island", new Vector2(0, -524), new Vector2(460, 78), "开始游戏", () => { if (hasSave || confirmFresh) ConfirmNew(); else Choose(true); }, true);
+            Label("Arrow", primary.transform, new Vector2(1, .5f), new Vector2(1, .5f), new Vector2(-26, 0), new Vector2(40, 35), "→", 29, new Color(.15f,.24f,.28f), TextAlignmentOptions.Center);
+            string progress = hasSave && preview != null ? $"上次停在：第 {preview.day} 天 · {GameClock.PeriodName((TimePeriod)preview.period)}  /  {GameUI.PlaceName(ParsePlace(preview.place))}" : "从 Z 的直播间，赴一场小岛之约。";
+            status = Label("Save preview", menu, Vector2.up, Vector2.up, new Vector2(2, -615), new Vector2(620, 38), progress, 16, Quiet);
+            if (hasSave) MenuButton("Continue island life", new Vector2(0, -672), new Vector2(220, 52), "继续旅程", () => Choose(false), false);
+            MenuButton("Controls", new Vector2(hasSave ? 240 : 0, -672), new Vector2(220, 52), "如何游玩", ShowControls, false);
+            notice = Label("Save notice", menu, Vector2.up, Vector2.up, new Vector2(0, -741), new Vector2(640, 65), "", 16, Warm);
 
-            Label("Shoreline", root, Vector2.zero, Vector2.zero, new Vector2(64, 37), new Vector2(650, 30), "海浪，微风，还有尚未说完的话。", 17, Quiet);
-            var version = Label("Demo", root, Vector2.one, Vector2.one, new Vector2(-58, -46), new Vector2(450, 26), "小岛生活 · DEMO", 15, White, TextAlignmentOptions.Right);
+            Line(root, new Vector2(1,0), new Vector2(1,0), new Vector2(-64,150), new Vector2(270,1), new Color(.94f,.94f,.88f,.38f));
+            var coast = Label("Coast caption", root, new Vector2(1,0), new Vector2(1,0), new Vector2(-64,171), new Vector2(380,34), "海风，正在等你。", 21, White, TextAlignmentOptions.Right);
+            coast.characterSpacing = 3;
+            Label("Coast detail", root, new Vector2(1,0), new Vector2(1,0), new Vector2(-64,111), new Vector2(380,25), "MOON ISLAND  /  海滨步道", 13, Quiet, TextAlignmentOptions.Right);
+            Label("Shoreline", root, Vector2.zero, Vector2.zero, new Vector2(64, 36), new Vector2(700, 28), "一段关于相遇的故事     ·     按 Enter 开始", 15, Quiet);
+            var version = Label("Demo", root, Vector2.one, Vector2.one, new Vector2(-64, -44), new Vector2(450, 26), "小岛生活  /  DEMO", 13, White, TextAlignmentOptions.Right);
             version.characterSpacing = 3;
             soundButton = CornerButton("Sound", -58, MusicDirector.Instance==null||MusicDirector.Instance.MusicEnabled ? "音乐 · 开" : "音乐 · 关", ToggleSound);
             motionButton = CornerButton("Motion", -190, "动效 · 开", ToggleMotion);
             CornerButton("Exit", -322, "退出", ConfirmQuit);
             LayoutBackground();
-            BuildLanding();
+            StartCoroutine(RevealMenu());
         }
 
         static PlaceId ParsePlace(string id) => Enum.TryParse(id, out PlaceId p) ? p : PlaceId.Street;
@@ -95,14 +105,14 @@ namespace Seabreeze
         Button MenuButton(string name, Vector2 pos, Vector2 size, string caption, Action action, bool accent)
         {
             var image = Panel(name, menu, Vector2.up, Vector2.up, pos, size,
-                accent ? new Color(.12f, .23f, .30f, .76f) : new Color(.09f, .17f, .24f, .30f), true);
-            ((RoundedPanel)image).CornerRadius = accent ? 10 : 6;
-            ((RoundedPanel)image).SetBorder(accent ? new Color(.77f, .87f, .84f, .5f) : new Color(.65f, .80f, .82f, .18f), 1);
+                accent ? new Color(.91f, .88f, .77f, .97f) : new Color(.09f, .17f, .24f, .25f), true);
+            ((RoundedPanel)image).CornerRadius = accent ? 5 : 4;
+            ((RoundedPanel)image).SetBorder(accent ? new Color(.98f, .95f, .84f, .8f) : new Color(.65f, .80f, .82f, .18f), 1);
             var b = image.gameObject.AddComponent<Button>(); b.targetGraphic = image;
             b.onClick.AddListener(() => { if (!busy) action(); });
-            var colors = b.colors; colors.normalColor = Color.white; colors.highlightedColor = new Color(1.25f, 1.24f, 1.18f);
+            var colors = b.colors; colors.normalColor = Color.white; colors.highlightedColor = new Color(1.10f, 1.12f, 1.13f);
             colors.selectedColor = colors.highlightedColor; colors.pressedColor = new Color(.8f, .9f, .94f); colors.fadeDuration = .18f; b.colors = colors;
-            Label("Label", image.transform, new Vector2(0, .5f), new Vector2(0, .5f), new Vector2(24, 0), size - new Vector2(45, 14), caption, accent ? 27 : 20, White, TextAlignmentOptions.MidlineLeft);
+            Label("Label", image.transform, new Vector2(0, .5f), new Vector2(0, .5f), new Vector2(24, 0), size - new Vector2(45, 14), caption, accent ? 26 : 19, accent ? new Color(.13f,.21f,.25f) : White, TextAlignmentOptions.MidlineLeft);
             return b;
         }
         Button CornerButton(string name, float x, string caption, Action action)
@@ -115,22 +125,6 @@ namespace Seabreeze
         {
             MusicDirector.Instance?.ToggleMusic();
             soundButton.GetComponentInChildren<TextMeshProUGUI>().text = MusicDirector.Instance == null || MusicDirector.Instance.MusicEnabled ? "音乐 · 开" : "音乐 · 关";
-        }
-        void BuildLanding()
-        {
-            menu.gameObject.SetActive(false);
-            var cover = Rect("Universal title landing", root, new Vector2(.5f,.5f), new Vector2(.5f,.5f), new Vector2(0,40), new Vector2(1000,620));
-            landing=cover.gameObject;
-            Label("Title",cover,Vector2.up,Vector2.up,new Vector2(0,-80),new Vector2(1000,95),"来自月亮的 Z",76,White,TextAlignmentOptions.Center);
-            Label("Philosophy",cover,Vector2.up,Vector2.up,new Vector2(130,-227),new Vector2(740,110),"让匆忙的日子，慢下来。\n找回一些原初的情感联系和交流。",24,new Color(.86f,.92f,.93f),TextAlignmentOptions.Center);
-            var open=UIPrimitives.Button("Open story menu",cover,new Vector2(.5f,0),new Vector2(.5f,0),new Vector2(0,110),new Vector2(360,70),"进入小岛  →",OpenMenu,true,25);
-            Label("Begin hint",cover,new Vector2(.5f,0),new Vector2(.5f,0),new Vector2(0,55),new Vector2(800,35),"Enter / 点击进入  ·  一段关于相遇的故事",17,Quiet,TextAlignmentOptions.Center);
-        }
-        void OpenMenu()
-        {
-            if(menuOpened)return;
-            menuOpened=true;if(landing!=null)Destroy(landing);menu.gameObject.SetActive(true);
-            StartCoroutine(RevealMenu());
         }
         void ToggleMotion()
         {
@@ -155,7 +149,7 @@ namespace Seabreeze
             if (busy) return;
             if (GameInput.Pressed(Key.Escape)) { if (modal != null) CloseModal(); else ConfirmQuit(); }
             if (GameInput.Pressed(Key.Enter) && modal == null && Time.frameCount > lastModalClosedFrame && EventSystem.current != null && EventSystem.current.currentSelectedGameObject == null)
-                { if(!menuOpened)OpenMenu();else primary.onClick.Invoke(); }
+                primary.onClick.Invoke();
         }
         void LayoutBackground()
         {
@@ -172,7 +166,7 @@ namespace Seabreeze
         }
         void ConfirmNew()
         {
-            ShowModal("重新开始小岛生活？", hasSave ? "当前小岛进度会被新的一天替换。\n如果只是想接着探索，请返回并选择「继续旅程」。" : "确认后将开启第一天的小岛生活。\n无法读取的旧存档会被新进度替换。",
+            ShowModal("重新开始小岛生活？", hasSave ? "将从 Z 的直播邀请重新开始，替换当前旅程进度。\n如果只是想接着探索，请返回并选择「继续旅程」。" : "确认后将从 Z 的直播间开启新的旅程。\n无法读取的旧存档会被新进度替换。",
                 "确认重新开始", () => Choose(true));
         }
         void ConfirmQuit() => ShowModal("今天，先到这里。", "关闭游戏后，你仍可以从上次保存的进度继续。", "退出游戏", Quit);
@@ -218,14 +212,14 @@ namespace Seabreeze
         }
         static Texture2D MakeGradient(Color tint)
         {
-            const int w = 128, h = 64;
+            const int w = 256, h = 128;
             var texture = new Texture2D(w, h, TextureFormat.RGBA32, false) { name = "Title soft light", wrapMode = TextureWrapMode.Clamp, filterMode = FilterMode.Bilinear, hideFlags = HideFlags.DontSave };
             var pixels = new Color[w * h];
             for (int y = 0; y < h; y++) for (int x = 0; x < w; x++)
             {
                 float u = (float)x / (w - 1), v = (float)y / (h - 1);
-                float left = Mathf.Lerp(1, .12f, Mathf.SmoothStep(0, 1, Mathf.InverseLerp(.16f, .76f, u)));
-                float bottom = .4f * (1 - Mathf.SmoothStep(0, 1, Mathf.InverseLerp(0, .22f, v)));
+                float left = Mathf.Lerp(1.13f, .08f, Mathf.SmoothStep(0, 1, Mathf.InverseLerp(.20f, .74f, u)));
+                float bottom = .52f * (1 - Mathf.SmoothStep(0, 1, Mathf.InverseLerp(0, .22f, v)));
                 pixels[y * w + x] = new Color(tint.r, tint.g, tint.b, Mathf.Clamp01(tint.a * left + bottom));
             }
             texture.SetPixels(pixels); texture.Apply(false, true); return texture;

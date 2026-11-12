@@ -174,8 +174,6 @@ namespace Seabreeze
             if (!session) return;
             if (MemoryRuntimeConfig.Enabled)
             {
-                phone.Add("小岛通讯\n走近岛民按 E 交谈，也可以旁听附近正在发生的交流。");
-                phone.Add("月亮岛\n人物按各自经历形成判断。剧情消息由引擎明确投递。");
                 return;
             }
             phone.Add("汐风镇天气\n" + session.Clock.WeatherLabel + "。傍晚海堤风大，记得带件外套。");

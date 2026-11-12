@@ -16,7 +16,8 @@ namespace Seabreeze
         public bool IsPlaying { get; private set; }
         public string CurrentFilm { get; private set; }
         GameSession session;
-        RectTransform root, credits;
+        RectTransform root;
+        EndingPresentationView ending;
         CanvasGroup group;
         GameObject modal;
         RawImage picture;
@@ -40,25 +41,10 @@ namespace Seabreeze
         {
             if (IsPlaying) return;
             Begin("credits", after); inCredits = true;
-            var stars = Stretch("Quiet night", root, Vector2.zero, Vector2.zero).gameObject.AddComponent<StartPageAtmosphere>();
-            stars.Sea = new Rect(.15f, .05f, .7f, .12f); stars.Sky = new Rect(.05f, .6f, .9f, .35f);
-            var curtain = Stretch("Credit darkness", root, Vector2.zero, Vector2.zero).gameObject.AddComponent<Image>();
-            curtain.color = new Color(.02f, .04f, .075f, .72f); curtain.raycastTarget = false;
-            credits = Rect("Rolling cast", root, new Vector2(.5f,.5f), new Vector2(.5f,1), new Vector2(0,-560), new Vector2(1240,2200));
-            Credit("THE FIRST DAY",0,17,muted);
-            Credit("来自月亮的 Z",70,62,paper);
-            Credit("第一日 · 海风里认识你",172,25,muted);
-            Credit("希望在这个越来越快速的时代，\n找回一些原初的情感联系和交流。",340,30,paper,130);
-            Credit("共同创作",600,20,muted);
-            Credit("李霆懿    郑绎    杨力源\n刘洋    代子晴    周泓杰",660,34,paper,130);
-            Credit("技术总监",885,20,muted); Credit("余星亮",945,34,paper);
-            Credit("友情支持",1110,20,muted); Credit("阮黎光    程路维    夏雨欣",1170,32,paper);
-            Credit("游戏指导",1330,20,muted); Credit("卫彤",1390,34,paper);
-            Credit("特别鸣谢",1550,20,muted); Credit("祝青青",1610,34,paper);
-            Credit("也谢谢愿意在这里停留的你。",1850,30,paper);
-            Credit("晚安。明天，海风还会来。",1950,24,muted);
-            hint = Label("Credit controls",root,Vector2.zero,Vector2.zero,new Vector2(54,32),new Vector2(1100,30),"空格 · 加快报幕     Esc · 返回确认",17,muted);
-            var finishButton = UIPrimitives.Button("Leave credits",root,new Vector2(1,0),new Vector2(1,0),new Vector2(-48,26),new Vector2(220,48),"明天见 →",ConfirmSkip,false,19);
+            ending = root.gameObject.AddComponent<EndingPresentationView>();
+            ending.Initialize(root, session?.State?.phone);
+            hint = Label("Credit controls",root,Vector2.zero,Vector2.zero,new Vector2(54,32),new Vector2(1100,30),"空格 · 加快片尾     Esc · 返回确认",17,muted);
+            var finishButton = UIPrimitives.Button("Leave credits",root,new Vector2(1,0),new Vector2(1,0),new Vector2(-48,26),new Vector2(220,48),"回到小岛 →",ConfirmSkip,false,19);
             finishButton.GetComponent<Image>().color = new Color(.10f,.16f,.22f,.7f);
         }
 
@@ -131,8 +117,8 @@ namespace Seabreeze
             if (inCredits)
             {
                 creditsTime += Time.unscaledDeltaTime * (keyboard != null && keyboard.spaceKey.isPressed ? 3 : 1);
-                credits.anchoredPosition = new Vector2(0,-560 + creditsTime*70);
-                if (creditsTime >= 46) Finish();
+                ending?.Render(creditsTime);
+                if (creditsTime >= EndingPresentationView.Duration) Finish();
             }
             // A native decoder can stop without reporting an error or end event.
             // Once playback was requested, watch progress even if isPlaying becomes false.
@@ -143,11 +129,6 @@ namespace Seabreeze
             }
         }
 
-        void Credit(string text,float top,float size,Color color,float height=80)
-        {
-            var line = Label("Credit",credits,Vector2.up,Vector2.up,new Vector2(0,-top),new Vector2(1240,height),text,size,color,TextAlignmentOptions.Center);
-            line.lineSpacing = 18;
-        }
         void EndOfFilm(VideoPlayer source) { if (player != null && source == player && !failed) Finish(); }
         void FilmError(VideoPlayer source,string message)
         {
@@ -158,7 +139,7 @@ namespace Seabreeze
         {
             if (!IsPlaying || confirming || failed) return;
             confirming = true; if (player != null && player.isPlaying) player.Pause();
-            ShowModal(inCredits ? "要结束报幕吗？" : "跳过这段影片？",inCredits ? "每一份陪伴，都让这座小岛多了一点温度。" : "故事会继续；这段相遇已经成为第一天的回忆。",inCredits ? "明天见" : "继续故事",Finish,"继续观看",Resume);
+            ShowModal(inCredits ? "要结束片尾吗？" : "跳过这段影片？",inCredits ? "每一份陪伴，都让这座小岛多了一点温度。" : "故事会继续；这段相遇已经成为第一天的回忆。",inCredits ? "回到小岛" : "继续故事",Finish,"继续观看",Resume);
         }
         void ShowFailure(string reason)
         {
@@ -195,7 +176,7 @@ namespace Seabreeze
             if (target != null) { target.Release(); Destroy(target); target=null; }
             if (root != null) { root.gameObject.SetActive(false); Destroy(root.gameObject); root=null; }
             if (IsPlaying) Time.timeScale=previousScale;
-            IsPlaying=false; playbackStarted=false; CurrentFilm=null; credits=null; modal=null; picture=null; status=null; hint=null;
+            IsPlaying=false; playbackStarted=false; CurrentFilm=null; ending=null; modal=null; picture=null; status=null; hint=null;
         }
         void OnDestroy() { Cancel(); }
     }

@@ -36,9 +36,9 @@ namespace Seabreeze
                         var remaining = SevenCharacterCatalog.Actors.Where(a=>!session.State.firstDay.greeted.Contains(a.id)).Select(a=>a.displayName);
                         return GreetedCount < Cast.Length ? $"认识岛民 {GreetedCount}/{Cast.Length} · 靠近按 E\n还没聊过："+string.Join("、",remaining) : "大家都认识啦。再和 Z 交谈，邀请她一起看烟花。";
                     case FirstDayPhase.Fireworks: return "把今晚的光，留在心里。";
-                    case FirstDayPhase.Home: return "这是留给你的海边小屋。靠近左侧的床按 E，结束第一天。";
-                    case FirstDayPhase.Bedtime: return "第一天结束 · 谢谢你来到小岛。";
-                    case FirstDayPhase.Complete: return "第一天的故事已完成。可以继续散步、交谈，或按 P 留下一张照片。";
+                    case FirstDayPhase.Home: return "这是留给你的海边小屋。靠近左侧的床按 E，和小岛道一声晚安。";
+                    case FirstDayPhase.Bedtime: return "故事落幕 · 谢谢你来到小岛。";
+                    case FirstDayPhase.Complete: return "这段故事已落幕。可以继续散步、交谈，或按 P 留下一张照片。";
                     default: return "";
                 }
             }
@@ -62,7 +62,7 @@ namespace Seabreeze
         IEnumerator ResumeWhenReady(){yield return null;while(world.IsTransitioning)yield return null;Resume();}
         public void Resume()
         {
-            if(resuming||!Active)return;
+            if(resuming||session.IsAtTitle||!Active)return;
             resuming=true;
             switch(Phase)
             {
@@ -186,7 +186,7 @@ namespace Seabreeze
         }
         public string Prompt(string id)
         {
-            if(id=="firstday_bed")return Phase==FirstDayPhase.Complete?"休息，迎接新的一天":"睡个好觉 · 结束第一天";
+            if(id=="firstday_bed")return Phase==FirstDayPhase.Complete?"休息，迎接新的一天":"睡个好觉 · 播放片尾";
             if(id=="firstday_home_door")return "回海边小屋";
             if(id=="z"&&Phase==FirstDayPhase.MeetIslanders&&GreetedCount==Cast.Length)return "邀请 Z 一起看烟花";
             return null;
@@ -197,7 +197,7 @@ namespace Seabreeze
             {
                 if(Phase==FirstDayPhase.Complete){session.State.period=3;session.Clock.Advance();return true;}
                 if(Phase!=FirstDayPhase.Home)return true;
-                busy=true;invitations.Show("把今天，轻轻放下。","海风还在窗外。今晚认识的那些名字，好像已经没有那么陌生了。\n\n躺下后将结束第一天，并播放制作名单。","晚安，小岛",()=>{SetPhase(FirstDayPhase.Bedtime,"在烟花结束后的夜里，第一次在小岛睡着。");ShowCredits();},()=>busy=false);return true;
+                busy=true;invitations.Show("把今天，轻轻放下。","海风还在窗外。今晚认识的那些名字，好像已经没有那么陌生了。\n\n躺下后将播放游戏片尾，回望岛上的风景与相遇。","晚安，小岛",()=>{SetPhase(FirstDayPhase.Bedtime,"在烟花结束后的夜里，第一次在小岛睡着。");ShowCredits();},()=>busy=false);return true;
             }
             if(id=="firstday_home_door"){StartCoroutine(ReturnHome());return true;}
             if(!Active)return false;
@@ -246,7 +246,7 @@ namespace Seabreeze
             yield return Travel(PlaceId.PlayerHome,4.2f);
             if(!travelSucceeded)yield break;
             GameUI.Instance.SetTitleVisible(false);busy=false;Time.timeScale=1;session.Memory?.Spawner.Reload();
-            session.Story.Notify("欢迎回家。走近左侧的床，按 E 结束第一天。");
+            session.Story.Notify("欢迎回家。走近左侧的床，按 E 和小岛道一声晚安。");
         }
         IEnumerator ReturnHome(){yield return Travel(PlaceId.PlayerHome,4.2f);
             if(!travelSucceeded)yield break;busy=false;}
@@ -258,9 +258,9 @@ namespace Seabreeze
             {
                 MusicDirector.Instance?.SetMoodOverride(null);
                 session.State.day=2;session.State.period=0;session.State.firstDay.phase=FirstDayPhase.Complete;session.Clock.Refresh();
-                SetPhase(FirstDayPhase.Complete,"第一天结束。希望在这个越来越快速的时代，找回一些原初的情感联系和交流。");
+                SetPhase(FirstDayPhase.Complete,"故事落幕。希望在这个越来越快速的时代，找回一些原初的情感联系和交流。");
                 busy=false;Time.timeScale=1;GameUI.Instance.SetTitleVisible(false);session.Memory?.Spawner.Reload();session.NotifyChanged();session.Save();
-                session.Story.Notify("第一日故事已完成。现在可以继续小岛生活，照片和回忆都留在手机里。");
+                session.Story.Notify("片尾已结束。现在可以继续小岛生活，照片和回忆都留在手机里。");
             });
         }
         void OnDestroy(){if(openingLive!=null)openingLive.Close();}
