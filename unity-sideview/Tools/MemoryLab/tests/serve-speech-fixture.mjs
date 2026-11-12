@@ -6,7 +6,7 @@ for(let i=0;i<tone.length/2;i++)tone.writeInt16LE(Math.round(Math.sin(i*2*Math.P
 const speech=new SpeechService({config:()=>({enabled:true,apiKey:"fixture",voices:new Proxy({},{get:()=>({speaker:"fixture",resourceId:"seed-tts-2.0"})})}),
   fetch:async(_url,{body,signal})=>{
     const text=JSON.parse(body).req_params.text;
-    if(text.includes("延迟"))await new Promise((done,fail)=>{const timer=setTimeout(done,3000);signal.addEventListener("abort",()=>{clearTimeout(timer);fail(Error("cancelled"));},{once:true});});
+    await new Promise((done,fail)=>{const timer=setTimeout(done,text.includes("延迟")?3000:800);signal.addEventListener("abort",()=>{clearTimeout(timer);fail(Error("cancelled"));},{once:true});});
     if(text.includes("故障"))return new Response("unavailable",{status:503});
     return new Response('data: '+JSON.stringify({code:0,data:tone.toString("base64")})+'\n\ndata: {"code":20000000}\n\n',{headers:{"content-type":"text/event-stream"}});
   }});

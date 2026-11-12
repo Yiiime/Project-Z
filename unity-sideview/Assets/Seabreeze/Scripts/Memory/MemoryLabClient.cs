@@ -26,6 +26,19 @@ namespace Seabreeze
         public string SpeechStatus {get;private set;}="";
         public bool SpeechPlaying => speechSource!=null&&speechSource.isPlaying;
         public bool SpeechBusy {get;private set;}
+        readonly float[] speechSamples=new float[512];
+        public float SpeechAmplitude
+        {
+            get
+            {
+                if(!SpeechPlaying)return 0;
+                speechSource.GetOutputData(speechSamples,0);
+                float energy=0;foreach(float sample in speechSamples)energy+=sample*sample;
+                return Mathf.Clamp01(Mathf.Sqrt(energy/speechSamples.Length)*8);
+            }
+        }
+        public float SpeechDuration => speechClip!=null?speechClip.length:0;
+        public float SpeechPosition => speechSource!=null&&speechClip!=null?(float)speechSource.timeSamples/speechClip.frequency:0;
 
         int acknowledgedRevision;
         bool opened,opening,syncing,checking,focusing;int focusVersion;
@@ -157,13 +170,13 @@ namespace Seabreeze
         public void ConfirmTaskStep(string task,string step,string performer,Newtonsoft.Json.Linq.JObject evidence)
         {session.Memory.Append(new MemoryEvent{kind="task_receipt",taskId=task,stepId=step,performerId=performer,receiptId=Guid.NewGuid().ToString("N"),succeeded=true,participants=evidence?["participants"]?.ToObject<string[]>()??Array.Empty<string>(),voluntaryConsents=evidence?["voluntary_consents"]?.ToObject<string[]>()??Array.Empty<string>(),messageEventId=(string)evidence?["message_event_id"]});}
         // Only the coordinator's private player reply path starts speech.
-        public void Speak(MemoryReply line,string conversation,string actor)
+        public void Speak(MemoryReply line,string conversation,string actor,Func<bool> presentationReady=null)
         {
             StopSpeech();
             if(line==null||string.IsNullOrEmpty(line.proposalId)||AudioListener.volume<=.01f)return;
             speechConversation=conversation;speechProposal=line.proposalId;SpeechBusy=true;SpeechStatus="正在准备语音…";
             int version=speechVersion;
-            speechRoutine=StartCoroutine(SpeakAfterDelivered(line,conversation,actor,version));
+            speechRoutine=StartCoroutine(SpeakAfterDelivered(line,conversation,actor,version,presentationReady));
         }
         public void StopSpeech(bool notify=true)
         {
@@ -180,13 +193,13 @@ namespace Seabreeze
                 StartCoroutine(Send("/api/game/speech/cancel",request,3,_=>{},_=>{}));
             }
         }
-        IEnumerator SpeakAfterDelivered(MemoryReply line,string conversation,string actor,int version)
+        IEnumerator SpeakAfterDelivered(MemoryReply line,string conversation,string actor,int version,Func<bool> presentationReady)
         {
             // CommitLine appends to the journal. Voice must wait for its receipt.
             float deadline=Time.realtimeSinceStartup+45;
             while(!Synchronized&&version==speechVersion&&Time.realtimeSinceStartup<deadline)yield return null;
             if(version!=speechVersion)yield break;
-            if(!Synchronized){SpeechBusy=false;SpeechStatus="文字已显示，语音等待同步超时。";yield break;}
+            if(!Synchronized){SpeechBusy=false;SpeechStatus="语音等待同步超时，继续显示文字。";yield break;}
             var request=RequestBase();request.conversationId=conversation;request.proposalId=line.proposalId;request.actorId=actor;
             var cts=new CancellationTokenSource(TimeSpan.FromSeconds(40));speechCancellation=cts;
             var task=FetchSpeech(request,cts);
@@ -201,10 +214,14 @@ namespace Seabreeze
             {
                 speechClip=DecodeSpeech(reply.audio);
                 if(speechSource==null){speechSource=gameObject.AddComponent<AudioSource>();speechSource.playOnAwake=false;speechSource.spatialBlend=0;}
-                speechSource.clip=speechClip;speechSource.Play();SpeechStatus="正在说话…";
+                speechSource.clip=speechClip;
                 if(!string.IsNullOrEmpty(reply.speechWarning))Debug.LogWarning("TTS: "+reply.speechWarning);
             }
             catch {SpeechBusy=false;SpeechStatus="语音数据无效，文字对话可继续。";yield break;}
+            // Let any existing portrait preparation finish before voice and captions start.
+            while(version==speechVersion&&presentationReady!=null&&!presentationReady())yield return null;
+            if(version!=speechVersion)yield break;
+            speechSource.Play();SpeechStatus="正在说话…";
             while(version==speechVersion&&speechSource!=null&&speechSource.isPlaying)yield return null;
             if(version==speechVersion)
             {

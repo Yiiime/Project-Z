@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace Seabreeze.Editor
 {
@@ -36,6 +37,7 @@ namespace Seabreeze.Editor
             EditorApplication.ExecuteMenuItem("Window/General/Game");
             EditorApplication.EnterPlaymode();
         }
+        static TextMeshProUGUI Caption(MemoryGameController m) => m.View.GetComponentsInChildren<TextMeshProUGUI>().Last(t=>t.name=="Message"&&t.text.StartsWith("语音验证："));
         static void Require(bool ok,string message){if(!ok)throw new Exception(message);}
         static void Tick()
         {
@@ -62,14 +64,25 @@ namespace Seabreeze.Editor
                     Require(m.BeginPlayerChat(actor,false),"Could not open player chat");phase=1;return;
                 }
                 if(phase==1&&m.View.PlayerInputReady&&m.Client.CanGenerate){m.Conversations.SendPlayer("你好。");phase=2;return;}
+                if(phase==2&&m.Client.SpeechBusy&&!m.Client.SpeechPlaying)
+                {
+                    Require(Caption(m).maxVisibleCharacters==0,"Caption ran ahead while audio was pending");
+                    report["captionWaitsForAudio"]=true;
+                }
                 if(phase==2&&m.Client.SpeechPlaying)
                 {
                     Require(m.LastReply?.actorId==actor,"Wrong speaker");Require(m.Client.Synchronized,"Voice before dialogue commit");
                     report["committedReplyPlayback"]=true;changed=EditorApplication.timeSinceStartup;phase=3;return;
                 }
-                if(phase==3&&EditorApplication.timeSinceStartup-changed>.3)
+                if(phase==3&&EditorApplication.timeSinceStartup-changed>.8)
                 {
                     Require(m.Client.GetComponents<AudioSource>().Any(a=>a.isPlaying&&a.timeSamples>0),"Audio sample cursor did not advance");
+                    var caption=Caption(m);int count=caption.textInfo.characterCount;
+                    Require(caption.maxVisibleCharacters>0&&caption.maxVisibleCharacters<count,"Caption did not follow audio progressively");
+                    int expected=MemoryDialogueView.SpeechVisibleCharacters(count,m.Client.SpeechPosition,m.Client.SpeechDuration);
+                    Require(Mathf.Abs(caption.maxVisibleCharacters-expected)<=1,"Caption drifted from playback clock");
+                    Require(m.View.GetComponentInChildren<Live2DCharacterView>().HasSpeechDrive,"Portrait is not audio driven");
+                    report["captionTracksAudioWithBoundedLead"]=true;report["portraitUsesAudioDrive"]=true;
                     var mute=m.View.GetComponentsInChildren<Button>().First(b=>b.name=="声音");mute.onClick.Invoke();
                     Require(!m.Client.SpeechPlaying&&!m.Client.SpeechBusy,"Mute did not stop voice");mute.onClick.Invoke();
                     report["muteStopsPlayback"]=true;m.Conversations.SendPlayer("再说一句。");phase=4;return;
@@ -96,7 +109,19 @@ namespace Seabreeze.Editor
                     Require(m.Client.CanGenerate,"Speech failure blocked text input");report["failureKeepsTextAvailable"]=true;
                     m.Conversations.SendPlayer("恢复语音。");phase=11;return;
                 }
-                if(phase==11&&m.Client.SpeechPlaying)
+                if(phase==11&&m.Client.SpeechPlaying){phase=12;return;}
+                if(phase==12&&!m.Client.SpeechBusy)
+                {
+                    // Let the view observe playback completion on the next frame.
+                    changed=EditorApplication.timeSinceStartup;phase=13;return;
+                }
+                if(phase==13&&EditorApplication.timeSinceStartup-changed>.2)
+                {
+                    Require(Caption(m).maxVisibleCharacters>=Caption(m).textInfo.characterCount,"Caption incomplete after playback");
+                    Require(!m.View.GetComponentInChildren<Live2DCharacterView>().HasSpeechDrive,"Portrait speech drive survived playback");
+                    report["playbackCompletesCaptionAndMouth"]=true;m.Conversations.SendPlayer("重载语音。");phase=14;return;
+                }
+                if(phase==14&&m.Client.SpeechPlaying)
                 {
                     Require(game.Save(),"Could not save isolated state");game.LoadSavedGame();
                     Require(!m.Client.SpeechPlaying,"Reload did not stop voice");report["reloadStopsPlayback"]=true;

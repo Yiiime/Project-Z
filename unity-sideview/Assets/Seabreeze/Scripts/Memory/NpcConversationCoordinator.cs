@@ -118,7 +118,7 @@ namespace Seabreeze
             {
                 memory.ShowResult(line);
                 string dialogue=line.result?.dialogue??line.text;string expression=line.result?.expression??line.expression;
-                if(!string.IsNullOrEmpty(dialogue)){memory.CommitLine(c.id,c.first.npcId,"player",dialogue,line.proposalId,"private_player_chat",expression);CommittedNpcLines++;memory.Client.Speak(line,c.id,c.first.npcId);}
+                if(!string.IsNullOrEmpty(dialogue)){memory.CommitLine(c.id,c.first.npcId,"player",dialogue,line.proposalId,"private_player_chat",expression);CommittedNpcLines++;memory.View.FollowSpeech();memory.Client.Speak(line,c.id,c.first.npcId,()=>memory.View.ReadyForSpeech);}
                 else memory.Client.CommitDecision(line,c.first.npcId,new[]{c.first.npcId,"player"},request.locationId);
                 LastRecalledMemoryIds=line.recalledMemoryIds??Array.Empty<string>();
             }

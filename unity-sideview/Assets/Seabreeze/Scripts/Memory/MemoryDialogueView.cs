@@ -33,11 +33,31 @@ namespace Seabreeze
         const float LiyuanSmilePreparationSeconds=.25f;
         const float LiyuanBawlPreparationSeconds=2f;
         float charactersPerSecond;
+        bool followingSpeech,speechStarted;string portraitSpeechToken;
+        public bool ReadyForSpeech => PlayerInputReady&&!linePreparationActive;
+        // Follow the audio sample clock, with a small bounded reading lead.
+        public static int SpeechVisibleCharacters(int count,float position,float duration)
+        {
+            if(count<=0||duration<=0)return 0;
+            float ahead=Mathf.Min(position*1.04f+.12f,position+.35f);
+            return Mathf.Clamp(Mathf.FloorToInt(count*ahead/duration),0,count);
+        }
+        public void FollowSpeech()
+        {
+            followingSpeech=true;speechStarted=false;
+            portraitSpeechToken=Guid.NewGuid().ToString("N");
+            character?.SetState(portraitEmotion,false);
+        }
         float ExpressionClock => selectedActor == "xiaoxiaoqing" ? Time.realtimeSinceStartup : Time.unscaledTime;
         Coroutine linePreparation;
         bool linePreparationActive;
         string selectedActor,lastSpeaker,portraitEmotion; bool entering,typing; float revealed,speechUntil,expressionEndsAt;
 
+        void EndFollowingSpeech()
+        {
+            if(portraitSpeechToken!=null)character?.EndSpeechDrive(portraitSpeechToken,0);
+            portraitSpeechToken=null;followingSpeech=false;
+        }
         public bool Closing {get;private set;}
         public bool PlayerInputReady => !entering&&!Closing&&playerPanel!=null&&playerPanel.gameObject.activeSelf;
         internal TMP_InputField DialogueInput => input;
@@ -156,8 +176,9 @@ namespace Seabreeze
         void ApplyPortrait(string actorId)
         {
             var definition=SevenCharacterCatalog.Find(actorId);
-            charactersPerSecond = definition != null && definition.dialogueCharactersPerSecond > 0
-                ? definition.dialogueCharactersPerSecond : Style.TypewriterSpeed;
+            // No audio timing exists when muted/offline; keep a calm readable fallback.
+            charactersPerSecond = Mathf.Min(6,definition != null && definition.dialogueCharactersPerSecond > 0
+                ? definition.dialogueCharactersPerSecond : Style.TypewriterSpeed);
             bool final=actorId=="zhou_bobo"&&memory.ZhouboPortraitFinal;
             string path=final?definition?.previewPortrait:definition?.portrait;
             var profile=!string.IsNullOrEmpty(path)?Resources.Load<Live2DModelProfile>(path):null;
@@ -198,10 +219,10 @@ namespace Seabreeze
         {
             bool hadPendingLine=typing||linePreparationActive;
             CancelPendingLinePreparation();
-            if(hadPendingLine&&!string.IsNullOrEmpty(portraitEmotion))expressionEndsAt=ExpressionClock+ExpressionHoldSeconds;
+            if(hadPendingLine&&!followingSpeech&&!string.IsNullOrEmpty(portraitEmotion))expressionEndsAt=ExpressionClock+ExpressionHoldSeconds;
             typing=false;
             if(historyText!=null)historyText.maxVisibleCharacters=int.MaxValue;
-            if(character!=null)character.SetState(portraitEmotion,false);
+            if(character!=null)character.SetState(portraitEmotion,followingSpeech&&memory.Client.SpeechPlaying);
         }
         void BeginPortraitLine(string speaker,string expression)
         {
@@ -239,7 +260,7 @@ namespace Seabreeze
                 linePreparation=null;linePreparationActive=false;yield break;
             }
             linePreparation=null;linePreparationActive=false;
-            if(character!=null)character.SetState(portraitEmotion,true);
+            if(character!=null)character.SetState(portraitEmotion,!followingSpeech||memory.Client.SpeechPlaying);
             typing=true;
         }
         void CancelPendingLinePreparation()
@@ -275,14 +296,14 @@ namespace Seabreeze
         }
         void ResetPortraitIdle()
         {
-            CancelPendingLinePreparation();expressionEndsAt=0;portraitEmotion=null;character?.ResetToDefault();
+            EndFollowingSpeech();speechStarted=false;CancelPendingLinePreparation();expressionEndsAt=0;portraitEmotion=null;character?.ResetToDefault();
         }
 
         public void ShowLine(string speaker,string text,Vector3 position,bool playerConversation,string expression=null)
         {
             if(playerConversation)
             {
-                FinishTyping();AddBubble(text,speaker=="player");lastSpeaker=speaker;revealed=0;
+                EndFollowingSpeech();speechStarted=false;FinishTyping();AddBubble(text,speaker=="player");lastSpeaker=speaker;revealed=0;
                 BeginPortraitLine(speaker,expression);
                 typing=speaker!="player"&&!linePreparationActive;historyText.maxVisibleCharacters=(typing||linePreparationActive)?0:int.MaxValue;return;
             }
@@ -325,6 +346,30 @@ namespace Seabreeze
             send.interactable=PlayerInputReady&&memory.PlayerChatOpen&&memory.Client.CanGenerate&&!memory.Conversations.Sending;
             playerState.text=memory.Conversations.Sending?"对方正在想怎么说…":memory.Client.CanGenerate?memory.Client.SpeechStatus:"暂时无法连接。Esc 返回后，可在暂停菜单设置对话服务。";
             playerState.color=new Color(.94f,.94f,1,.82f);
+            if(followingSpeech&&PlayerInputReady)
+            {
+                bool playing=memory.Client.SpeechPlaying;
+                if(playing)
+                {
+                    speechStarted=true;
+                    if(typing)
+                    {
+                        revealed=Mathf.Max(revealed,SpeechVisibleCharacters(historyText.textInfo.characterCount,memory.Client.SpeechPosition,memory.Client.SpeechDuration));
+                        historyText.maxVisibleCharacters=Mathf.FloorToInt(revealed);
+                        if(historyText.maxVisibleCharacters>=historyText.textInfo.characterCount)FinishTyping();
+                    }
+                }
+                character.SetState(portraitEmotion,playing);
+                if(playing)
+                {
+                    if(!character.HasSpeechDrive)character.BeginSpeechDrive(portraitSpeechToken,0);
+                    character.SetSpeechAmplitude(portraitSpeechToken,0,memory.Client.SpeechAmplitude);
+                }
+                if(memory.Client.SpeechBusy)return;
+                EndFollowingSpeech();
+                if(speechStarted){FinishTyping();expressionEndsAt=ExpressionClock+ExpressionHoldSeconds;}
+                speechStarted=false;
+            }
             if(typing&&PlayerInputReady){revealed+=Time.unscaledDeltaTime*charactersPerSecond;historyText.maxVisibleCharacters=Mathf.FloorToInt(revealed);if(historyText.maxVisibleCharacters>=historyText.textInfo.characterCount)FinishTyping();else character.SetState(portraitEmotion,lastSpeaker==selectedActor);}
 
         }
