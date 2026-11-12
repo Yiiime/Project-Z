@@ -178,6 +178,10 @@ namespace Seabreeze
             var view=Stretch("Photo lightbox",overlayRoot,Vector2.zero,Vector2.zero);phoneLightbox=view.gameObject;
             var cover=view.gameObject.AddComponent<Image>();cover.color=new Color(.025f,.045f,.075f,.96f);cover.raycastTarget=true;
             var image=Stretch("Full photo",view,new Vector2(70,110),new Vector2(-70,-100)).gameObject.AddComponent<Image>();image.raycastTarget=false;
+            // Image.preserveAspect uses the pivot to align its letterboxed content.
+            // Keep the photo centred without changing the surrounding safe margins.
+            image.rectTransform.pivot=Vector2.one*.5f;
+            image.rectTransform.offsetMin=new Vector2(70,110);image.rectTransform.offsetMax=new Vector2(-70,-100);
             if(!image.gameObject.AddComponent<PhotoImageView>().Load(photoPath))
             {
                 image.color=Color.clear;

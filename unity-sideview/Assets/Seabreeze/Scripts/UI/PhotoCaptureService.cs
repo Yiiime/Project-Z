@@ -117,10 +117,15 @@ namespace Seabreeze
         {
             int width = Mathf.Min(512, source.width);
             int height = Mathf.Max(1, Mathf.RoundToInt(source.height * (width / (float)source.width)));
-            var target = RenderTexture.GetTemporary(width, height, 0, RenderTextureFormat.ARGB32);
+            // ScreenCapture's texture already contains display-ready pixels. A default
+            // sRGB render target in a Linear project would encode those values a second
+            // time, making only the resized thumbnail look washed out.
+            var target = RenderTexture.GetTemporary(width, height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
             var previous = RenderTexture.active;
+            bool previousSrgbWrite = GL.sRGBWrite;
             try
             {
+                GL.sRGBWrite = false;
                 Graphics.Blit(source, target);
                 RenderTexture.active = target;
                 var result = new Texture2D(width, height, TextureFormat.RGB24, false);
@@ -128,7 +133,7 @@ namespace Seabreeze
                 result.Apply(false, false);
                 return result;
             }
-            finally { RenderTexture.active = previous; RenderTexture.ReleaseTemporary(target); }
+            finally { GL.sRGBWrite = previousSrgbWrite; RenderTexture.active = previous; RenderTexture.ReleaseTemporary(target); }
         }
 
         static void WriteAtomically(string path, byte[] bytes)
