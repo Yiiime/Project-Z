@@ -88,12 +88,15 @@ namespace Seabreeze
             FinalKitAssets.Icon("pin",hud,TL,TL,new Vector2(44,-169),new Vector2(18,20));
             placeText=Label("Place",hud,TL,TL,new Vector2(72,-165),new Vector2(420,32),"",20,Paper);
             bottomStrip=Stretch("Exploration footer",hud,Vector2.zero,Vector2.zero);
-            var musicButton=Panel("Music toggle",bottomStrip,BL,BL,new Vector2(30,18),new Vector2(580,48),new Color(.05f,.10f,.18f,.28f),true);
-            ((RoundedPanel)musicButton).CornerRadius=24;
+            var musicButton=Panel("Music toggle",bottomStrip,BL,BL,new Vector2(30,18),new Vector2(300,44),new Color(.05f,.10f,.18f,.28f),true);
+            ((RoundedPanel)musicButton).CornerRadius=22;
             var musicAction=musicButton.gameObject.AddComponent<Button>();musicAction.targetGraphic=musicButton;musicAction.onClick.AddListener(()=>{MusicDirector.Instance?.ToggleMusic();RefreshHUD();});
             UIHoverFeedback.Attach(musicAction);
-            FinalKitAssets.Icon("waveform",bottomStrip,BL,BL,new Vector2(44,28),new Vector2(20,24));
-            ambienceText=Label("Ambience",bottomStrip,BL,BL,new Vector2(76,26),new Vector2(1120,30),"",18,new Color(.79f,.78f,.86f),TextAlignmentOptions.MidlineLeft);
+            FinalKitAssets.Icon("waveform",musicButton.transform,BL,BL,new Vector2(14,10),new Vector2(20,24));
+            ambienceText=Label("Ambience",musicButton.transform,BL,BL,new Vector2(46,7),new Vector2(236,30),"",18,new Color(.79f,.78f,.86f),TextAlignmentOptions.MidlineLeft);
+            ambienceText.textWrappingMode=TextWrappingModes.NoWrap;
+            ambienceText.overflowMode=TextOverflowModes.Ellipsis;
+            ambienceText.richText=false;
             firstDayTaskSurface=Panel("First day task glass",hud,TL,TL,new Vector2(32,-211),new Vector2(624,100),new Color(.055f,.10f,.18f,.73f));
             ((RoundedPanel)firstDayTaskSurface).CornerRadius=16;
             objectiveText=Label("Current thought",firstDayTaskSurface.transform,TL,TL,new Vector2(16,-12),new Vector2(590,80),"",19,Paper);
@@ -168,7 +171,7 @@ namespace Seabreeze
             objectiveText.text=session.Story.Objective;
             objectiveText.gameObject.SetActive(session.FirstDay!=null&&session.FirstDay.Active);
             firstDayTaskSurface.gameObject.SetActive(objectiveText.gameObject.activeSelf);
-            ambienceText.text=MusicDirector.Instance==null?"海风，和远处的浪":MusicDirector.Instance.MusicEnabled?"♪  "+MusicDirector.Instance.CurrentTitle+"  ·  点击关闭音乐":"音乐已关闭  ·  点击开启";
+            ambienceText.text=MusicDirector.Instance==null?"海风，和远处的浪":MusicDirector.Instance.MusicEnabled?MusicDirector.Instance.CurrentTitle:"音乐已关闭";
         }
         static IslandMapCatalog placeCatalog;
         public static string PlaceName(PlaceId id)

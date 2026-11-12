@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace Seabreeze
 {
-    /// <summary>Source-image water motion, isolated from the painted land and all menu text.</summary>
+    /// <summary>Continuous coastal ambience; architecture and menu text remain stationary.</summary>
     [RequireComponent(typeof(RawImage))]
     public sealed class StartPageCoastalMotion : MonoBehaviour
     {
@@ -17,10 +17,10 @@ namespace Seabreeze
             picture = GetComponent<RawImage>();
             var shader = Resources.Load<Shader>("UI/CoastalTitle");
             if (shader == null || !shader.isSupported) return;
-            ownedMaterial = new Material(shader) { name = "Title water · instance", hideFlags = HideFlags.DontSave };
+            ownedMaterial = new Material(shader) { name = "Title coastal ambience · instance", hideFlags = HideFlags.DontSave };
             var sea = config != null ? config.sea : new Rect(.65f, .015f, .35f, .17f);
             ownedMaterial.SetVector("_SeaRect", new Vector4(sea.xMin, sea.yMin, sea.xMax, sea.yMax));
-            ownedMaterial.SetFloat("_WaveStrength", .00065f);
+            ownedMaterial.SetFloat("_WaveStrength", .0022f);
             picture.material = ownedMaterial;
         }
 

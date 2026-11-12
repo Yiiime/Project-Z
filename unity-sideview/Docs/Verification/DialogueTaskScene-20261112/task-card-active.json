@@ -1,0 +1,14 @@
+{
+  "actor": "liting",
+  "cards": [
+    {
+      "id": "bar_box",
+      "owner": "liting",
+      "title": "吧台最里面的盒子",
+      "detail": "进行中 · 实际取回送修的收音机零件"
+    }
+  ],
+  "portraitMax": "(0.45, 0.84)",
+  "columnMin": "(0.46, 0.12)",
+  "columnOffset": "(0.00, 0.00)"
+}
