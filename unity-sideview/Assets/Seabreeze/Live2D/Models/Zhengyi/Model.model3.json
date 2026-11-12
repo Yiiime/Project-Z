@@ -1,0 +1,99 @@
+{
+  "Version": 3,
+  "FileReferences": {
+    "Moc": "Model.moc3",
+    "Textures": [
+      "texture_00.png",
+      "texture_01.png"
+    ],
+    "DisplayInfo": "Model.cdi3.json",
+    "Physics": "Model.physics3.json",
+    "Expressions": [
+      {
+        "Name": "smile",
+        "File": "smile.exp3.json"
+      },
+      {
+        "Name": "surprise",
+        "File": "surprise.exp3.json"
+      },
+      {
+        "Name": "angry",
+        "File": "angry.exp3.json"
+      },
+      {
+        "Name": "troubled",
+        "File": "troubled.exp3.json"
+      },
+      {
+        "Name": "wave",
+        "File": "wave.exp3.json"
+      },
+      {
+        "Name": "explain",
+        "File": "explain.exp3.json"
+      },
+      {
+        "Name": "point",
+        "File": "point.exp3.json"
+      },
+      {
+        "Name": "blush",
+        "File": "blush.exp3.json"
+      },
+      {
+        "Name": "bawl",
+        "File": "bawl.exp3.json"
+      },
+      {
+        "Name": "bawl_tears_preview",
+        "File": "bawl-tears.exp3.json"
+      },
+      {
+        "Name": "neutral",
+        "File": "neutral.exp3.json"
+      },
+      {
+        "Name": "surprise-six",
+        "File": "surprise-six.exp3.json"
+      },
+      {
+        "Name": "shock-six",
+        "File": "shock-six.exp3.json"
+      },
+      {
+        "Name": "puzzled-six",
+        "File": "puzzled-six.exp3.json"
+      },
+      {
+        "Name": "curious-six",
+        "File": "curious-six.exp3.json"
+      },
+      {
+        "Name": "angry-six",
+        "File": "angry-six.exp3.json"
+      },
+      {
+        "Name": "shy-six",
+        "File": "shy-six.exp3.json"
+      }
+    ]
+  },
+  "Groups": [
+    {
+      "Target": "Parameter",
+      "Name": "EyeBlink",
+      "Ids": [
+        "ParamEyeLOpen",
+        "ParamEyeROpen"
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Name": "LipSync",
+      "Ids": [
+        "ParamMouthOpenY"
+      ]
+    }
+  ]
+}

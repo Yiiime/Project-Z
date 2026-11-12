@@ -1,0 +1,119 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20658eea1de5e4e48acec160054bac1e, type: 3}
+  m_Name: Liuyang
+  m_EditorClassIdentifier: Assembly-CSharp::Seabreeze.Live2DModelProfile
+  prefab: {fileID: 3026982718132582530, guid: dc88041f09f0b41c089aeb00e0b2a332, type: 3}
+  characterId: c01
+  rendererIndex: 1
+  renderLayer: 30
+  modelPosition: {x: 0, y: 0, z: 0}
+  modelScale: 1
+  cameraCenter: {x: 0, y: 0}
+  orthographicSize: 2
+  autoFrame: 1
+  visibleHeight: 0.78
+  verticalFocus: 0.62
+  uvRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  textureHeight: 1200
+  defaultEmotion: neutral
+  expressions:
+  - emotion: neutral
+    expression: {fileID: 11400000, guid: 07d0c0091737a4bfc89ec6a30ee5b4c2, type: 2}
+  - emotion: smile
+    expression: {fileID: 11400000, guid: 19bbe6cf25b65479bba3b7af6f03079f, type: 2}
+  - emotion: smile_talk
+    expression: {fileID: 11400000, guid: ec535f2e995f742b78ea579b3c421b7b, type: 2}
+  - emotion: bawl
+    expression: {fileID: 11400000, guid: 419974a34de9e4777a45bef9a5ccdb91, type: 2}
+  - emotion: bawl_dry
+    expression: {fileID: 11400000, guid: 419974a34de9e4777a45bef9a5ccdb91, type: 2}
+  - emotion: bawl_tear
+    expression: {fileID: 11400000, guid: 49a74f4ace3e44e3391568632c881ad7, type: 2}
+  - emotion: cry
+    expression: {fileID: 11400000, guid: 419974a34de9e4777a45bef9a5ccdb91, type: 2}
+  - emotion: bawling
+    expression: {fileID: 11400000, guid: 419974a34de9e4777a45bef9a5ccdb91, type: 2}
+  - emotion: puzzled
+    expression: {fileID: 11400000, guid: db356fcd3c6b04d3b9e7200bf89750f7, type: 2}
+  - emotion: troubled
+    expression: {fileID: 11400000, guid: db356fcd3c6b04d3b9e7200bf89750f7, type: 2}
+  - emotion: question
+    expression: {fileID: 11400000, guid: db356fcd3c6b04d3b9e7200bf89750f7, type: 2}
+  - emotion: sigh
+    expression: {fileID: 11400000, guid: c208dec2e1d894f2ca49609f00a3715e, type: 2}
+  - emotion: sigh_before
+    expression: {fileID: 11400000, guid: c33f81e3f76a24ce1a53b3df792b08ab, type: 2}
+  - emotion: sigh_after
+    expression: {fileID: 11400000, guid: c208dec2e1d894f2ca49609f00a3715e, type: 2}
+  animatorController: {fileID: 0}
+  idleState: Idle
+  talkState: Talk
+  proceduralIdle: 1
+  proceduralTalk: 1
+  expressionFadeSeconds: 0.24
+  clearExpressionOnInterrupt: 1
+  discreteExpressionParameters: 0
+  expressionIndexParameter: 
+  expressionMixParameter: 
+  expressionTransitions:
+  - finalEmotion: sigh
+    introEmotion: sigh_before
+    introSeconds: 1.2
+  mouthParameter: ParamMouthOpenY
+  neutralSpeechParameter: 
+  talkMouthAmplitude: 1
+  allowSpeechWithMouthVariant: 1
+  speechAddsToExpressionTarget: 1
+  speechPeak: 0.44
+  speechRest: 0
+  speechExpressions:
+  - emotion: neutral
+    peak: 0.44
+  - emotion: smile
+    peak: 0.4
+  - emotion: smile_talk
+    peak: 0.4
+  - emotion: puzzled
+    peak: 0.44
+  - emotion: troubled
+    peak: 0.44
+  - emotion: question
+    peak: 0.44
+  - emotion: sigh
+    peak: 0.44
+  - emotion: bawl
+    peak: 0
+  - emotion: bawl_dry
+    peak: 0
+  - emotion: bawl_tear
+    peak: 0
+  - emotion: cry
+    peak: 0
+  tearExpression: bawl_tear
+  tearStartSeconds: 1.1
+  breathParameter: ParamBreath
+  leftEyeParameter: ParamEyeLOpen
+  rightEyeParameter: ParamEyeROpen
+  authoringNotes: "\u7559\u6D0B c01 \u6000\u8868 v05-r03 puzzled-sigh-v02\uFF0CProject
+    Z \u72EC\u7ACB\u6A21\u578B\u63A5\u5165\u3002\u670D\u52A1\u7AEF\u53EA\u8F93\u51FA
+    troubled \u6216 sigh\uFF1Btroubled \u5728 Unity \u4FA7\u7ED1\u5B9A puzzled\uFF0Csigh
+    \u6309 sigh_before\u2192sigh_after 1.20 \u79D2\u6E10\u5165\u3002ParamEyeLOpen/ParamEyeROpen\u3001ParamMouthOpenY
+    \u4E3A\u6E38\u620F\u53EF\u8BFB\u53D6\u901A\u9053\uFF1B\u57FA\u7840\u5BF9\u767D\u5CF0\u503C\u7EA6
+    0.44\uFF0C\u53F9\u6C14\u672B\u6001\u773C\u5F00\u5EA6 0.62\u3001\u53E3\u578B 0.24\u3002\u5927\u54ED\u6CBF\u7528
+    bawl_dry\u2192bawl_tear\uFF0C\u5634\u4FDD\u6301\u95ED\u5408\uFF1B\u6362\u53E5\u3001\u6253\u65AD\u548C\u9000\u573A\u6E05\u7406
+    ParamSmile\u3001ParamBawl\u3001ParamTear\u3001ParamPuzzled\u3001ParamSigh\u3001ParamSighRelease\u3002"

@@ -1,0 +1,13 @@
+{
+  "Type": "Live2D Expression",
+  "FadeInTime": 0.18,
+  "FadeOutTime": 0.3,
+  "Parameters": [
+    { "Id": "ParamAngleY", "Value": -3.0, "Blend": "Overwrite" },
+    { "Id": "ParamBrowForm", "Value": -1.0, "Blend": "Overwrite" },
+    { "Id": "ParamMouthVariant", "Value": -1.0, "Blend": "Overwrite" },
+    { "Id": "ParamFxQuestion", "Value": 0.0, "Blend": "Overwrite" },
+    { "Id": "ParamFxExclamation", "Value": 0.0, "Blend": "Overwrite" },
+    { "Id": "ParamFxAnger", "Value": 1.0, "Blend": "Overwrite" }
+  ]
+}

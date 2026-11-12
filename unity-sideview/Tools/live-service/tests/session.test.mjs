@@ -176,7 +176,7 @@ test('five minutes of audience display receipts follow room, call and singing pa
  t.diagnostic(JSON.stringify(sample));assert.deepEqual([...phases].sort(),['call','chat','opening','performing']);
  assert(sample.opening>=3&&sample.opening<=4);assert(sample.chatMinute>=12&&sample.chatMinute<=18);
  assert(sample.callMinute>=8&&sample.callMinute<=12);assert(sample.song36s>=8&&sample.song36s<=12);
- assert.equal(sample.names,8);assert(new Set(period(60000,120000).map(x=>x[1])).size>=5);
+ assert.equal(sample.names,7);assert(new Set(period(60000,120000).map(x=>x[1])).size>=5);
  assert(!e.inbox.some(m=>!m.mine));
  const before=serial;s.control(envelope(s,{action:'end'}));e._clock+=30000;a.tick();await frame();assert.equal(serial,before);
 });

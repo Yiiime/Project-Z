@@ -1,0 +1,103 @@
+{
+  "Version": 3,
+  "FileReferences": {
+    "Moc": "LiuyangV05PocketWatchExprPuzzledSighV02.moc3",
+    "Textures": [
+      "texture_00.png",
+      "texture_01.png"
+    ],
+    "DisplayInfo": "LiuyangV05PocketWatchExprPuzzledSighV02.cdi3.json",
+    "Motions": {
+      "Idle": [
+        {
+          "File": "motions/Idle.motion3.json",
+          "FadeInTime": 0.4,
+          "FadeOutTime": 0.4
+        }
+      ],
+      "SmileDialogue": [
+        {
+          "File": "motions/SmileDialogue.motion3.json",
+          "Sound": "sounds/SmileDialogue.wav",
+          "FadeInTime": 0,
+          "FadeOutTime": 0
+        }
+      ],
+      "BawlDialogue": [
+        {
+          "File": "motions/BawlDialogue.motion3.json",
+          "Sound": "sounds/BawlDialogue.wav",
+          "FadeInTime": 0,
+          "FadeOutTime": 0
+        }
+      ],
+      "PuzzledDialogue": [
+        {
+          "File": "motions/PuzzledDialogue.motion3.json",
+          "Sound": "sounds/PuzzledDialogue.wav",
+          "FadeInTime": 0,
+          "FadeOutTime": 0
+        }
+      ],
+      "SighDialogue": [
+        {
+          "File": "motions/SighDialogue.motion3.json",
+          "Sound": "sounds/SighDialogue.wav",
+          "FadeInTime": 0,
+          "FadeOutTime": 0
+        }
+      ]
+    },
+    "Expressions": [
+      {
+        "Name": "clear",
+        "File": "expressions/clear.exp3.json"
+      },
+      {
+        "Name": "smile",
+        "File": "expressions/smile.exp3.json"
+      },
+      {
+        "Name": "smile_talk",
+        "File": "expressions/smile_talk.exp3.json"
+      },
+      {
+        "Name": "bawl_dry",
+        "File": "expressions/bawl_dry.exp3.json"
+      },
+      {
+        "Name": "bawl_tear",
+        "File": "expressions/bawl_tear.exp3.json"
+      },
+      {
+        "Name": "puzzled",
+        "File": "expressions/puzzled.exp3.json"
+      },
+      {
+        "Name": "sigh_before",
+        "File": "expressions/sigh_before.exp3.json"
+      },
+      {
+        "Name": "sigh_after",
+        "File": "expressions/sigh_after.exp3.json"
+      }
+    ]
+  },
+  "Groups": [
+    {
+      "Target": "Parameter",
+      "Name": "EyeBlink",
+      "Ids": [
+        "ParamEyeLOpen",
+        "ParamEyeROpen"
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Name": "LipSync",
+      "Ids": [
+        "ParamMouthOpenY"
+      ]
+    }
+  ]
+}

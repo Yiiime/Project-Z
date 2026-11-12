@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "baseCommit": "8ce036924524d00b954b7b36f2ff3cac94d5e423",
+  "characters": [
+    {
+      "id": "zhengyi",
+      "name": "正义",
+      "kind": 1,
+      "folder": "Assets/Seabreeze/Resources/Art/CastMotion/zhengyi",
+      "frameCount": 100
+    },
+    {
+      "id": "zhou_bobo",
+      "name": "周伯伯",
+      "kind": 3,
+      "folder": "Assets/Seabreeze/Resources/Art/CastMotion/zhou_bobo",
+      "frameCount": 128
+    },
+    {
+      "id": "axing",
+      "name": "阿星",
+      "kind": 3,
+      "folder": "Assets/Seabreeze/Resources/Art/CastMotion/axing",
+      "frameCount": 95
+    },
+    {
+      "id": "player",
+      "name": "主角",
+      "kind": 0,
+      "folder": "Assets/Seabreeze/Resources/Art/CastMotion/player",
+      "frameCount": 86
+    },
+    {
+      "id": "z",
+      "name": "Z",
+      "kind": 1,
+      "folder": "Assets/Seabreeze/Resources/Art/CastMotion/z",
+      "frameCount": 99
+    },
+    {
+      "id": "liting",
+      "name": "李庭",
+      "kind": 1,
+      "folder": "Assets/Seabreeze/Resources/Art/CastMotion/liting",
+      "frameCount": 101
+    },
+    {
+      "id": "xiaoxiaoqing",
+      "name": "晴野",
+      "kind": 2,
+      "folder": "Assets/Seabreeze/Resources/Art/CastMotion/xiaoxiaoqing",
+      "frameCount": 138
+    },
+    {
+      "id": "linxu",
+      "name": "留洋",
+      "kind": 3,
+      "folder": "Assets/Seabreeze/Resources/Art/CastMotion/linxu",
+      "frameCount": 112
+    },
+    {
+      "id": "liyuan",
+      "name": "梨园",
+      "kind": 3,
+      "folder": "Assets/Seabreeze/Resources/Art/CastMotion/liyuan",
+      "frameCount": 102
+    }
+  ],
+  "deferredCharacter": "chenchen"
+}

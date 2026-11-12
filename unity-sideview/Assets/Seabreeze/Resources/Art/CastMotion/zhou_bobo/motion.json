@@ -1,0 +1,2077 @@
+{
+  "version": 2,
+  "characterId": "zhou_bobo",
+  "revision": "native-video-four-state",
+  "canvasHeightUnits": 2.688266825491364,
+  "startFrame": 0,
+  "walkSpeed": 1.1,
+  "strideLength": 0,
+  "cycleSeconds": 1.4166666666666667,
+  "idle": "zhou_bobo_idle_000",
+  "walk": [
+    "zhou_bobo_walk_000",
+    "zhou_bobo_walk_001",
+    "zhou_bobo_walk_002",
+    "zhou_bobo_walk_003",
+    "zhou_bobo_walk_004",
+    "zhou_bobo_walk_005",
+    "zhou_bobo_walk_006",
+    "zhou_bobo_walk_007",
+    "zhou_bobo_walk_008",
+    "zhou_bobo_walk_009",
+    "zhou_bobo_walk_010",
+    "zhou_bobo_walk_011",
+    "zhou_bobo_walk_012",
+    "zhou_bobo_walk_013",
+    "zhou_bobo_walk_014",
+    "zhou_bobo_walk_015",
+    "zhou_bobo_walk_016",
+    "zhou_bobo_walk_017",
+    "zhou_bobo_walk_018",
+    "zhou_bobo_walk_019",
+    "zhou_bobo_walk_020",
+    "zhou_bobo_walk_021",
+    "zhou_bobo_walk_022",
+    "zhou_bobo_walk_023",
+    "zhou_bobo_walk_024",
+    "zhou_bobo_walk_025",
+    "zhou_bobo_walk_026",
+    "zhou_bobo_walk_027",
+    "zhou_bobo_walk_028",
+    "zhou_bobo_walk_029",
+    "zhou_bobo_walk_030",
+    "zhou_bobo_walk_031",
+    "zhou_bobo_walk_032",
+    "zhou_bobo_walk_033"
+  ],
+  "frameDurations": [
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333
+  ],
+  "start": [
+    "zhou_bobo_start_000",
+    "zhou_bobo_start_001",
+    "zhou_bobo_start_002",
+    "zhou_bobo_start_003",
+    "zhou_bobo_start_004",
+    "zhou_bobo_start_005",
+    "zhou_bobo_start_006",
+    "zhou_bobo_start_007",
+    "zhou_bobo_start_008",
+    "zhou_bobo_start_009",
+    "zhou_bobo_start_010",
+    "zhou_bobo_start_011",
+    "zhou_bobo_start_012",
+    "zhou_bobo_start_013",
+    "zhou_bobo_start_014",
+    "zhou_bobo_start_015",
+    "zhou_bobo_start_016",
+    "zhou_bobo_start_017",
+    "zhou_bobo_start_018",
+    "zhou_bobo_start_019",
+    "zhou_bobo_start_020",
+    "zhou_bobo_start_021",
+    "zhou_bobo_start_022",
+    "zhou_bobo_start_023",
+    "zhou_bobo_start_024",
+    "zhou_bobo_start_025",
+    "zhou_bobo_start_026",
+    "zhou_bobo_start_027",
+    "zhou_bobo_start_028",
+    "zhou_bobo_start_029",
+    "zhou_bobo_start_030",
+    "zhou_bobo_start_031",
+    "zhou_bobo_start_032",
+    "zhou_bobo_start_033",
+    "zhou_bobo_start_034",
+    "zhou_bobo_start_035",
+    "zhou_bobo_start_036",
+    "zhou_bobo_start_037",
+    "zhou_bobo_start_038",
+    "zhou_bobo_start_039",
+    "zhou_bobo_start_040",
+    "zhou_bobo_start_041",
+    "zhou_bobo_start_042",
+    "zhou_bobo_start_043",
+    "zhou_bobo_start_044",
+    "zhou_bobo_start_045"
+  ],
+  "startDurations": [
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333
+  ],
+  "stop": [
+    "zhou_bobo_stop_000",
+    "zhou_bobo_stop_001",
+    "zhou_bobo_stop_002",
+    "zhou_bobo_stop_003",
+    "zhou_bobo_stop_004",
+    "zhou_bobo_stop_005",
+    "zhou_bobo_stop_006",
+    "zhou_bobo_stop_007",
+    "zhou_bobo_stop_008",
+    "zhou_bobo_stop_009",
+    "zhou_bobo_stop_010",
+    "zhou_bobo_stop_011",
+    "zhou_bobo_stop_012",
+    "zhou_bobo_stop_013",
+    "zhou_bobo_stop_014",
+    "zhou_bobo_stop_015",
+    "zhou_bobo_stop_016",
+    "zhou_bobo_stop_017",
+    "zhou_bobo_stop_018",
+    "zhou_bobo_stop_019",
+    "zhou_bobo_stop_020",
+    "zhou_bobo_stop_021",
+    "zhou_bobo_stop_022",
+    "zhou_bobo_stop_023",
+    "zhou_bobo_stop_024",
+    "zhou_bobo_stop_025",
+    "zhou_bobo_stop_026",
+    "zhou_bobo_stop_027",
+    "zhou_bobo_stop_028",
+    "zhou_bobo_stop_029",
+    "zhou_bobo_stop_030",
+    "zhou_bobo_stop_031",
+    "zhou_bobo_stop_032",
+    "zhou_bobo_stop_033",
+    "zhou_bobo_stop_034",
+    "zhou_bobo_stop_035",
+    "zhou_bobo_stop_036",
+    "zhou_bobo_stop_037",
+    "zhou_bobo_stop_038",
+    "zhou_bobo_stop_039",
+    "zhou_bobo_stop_040",
+    "zhou_bobo_stop_041",
+    "zhou_bobo_stop_042",
+    "zhou_bobo_stop_043",
+    "zhou_bobo_stop_044",
+    "zhou_bobo_stop_045",
+    "zhou_bobo_stop_046"
+  ],
+  "stopDurations": [
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333
+  ],
+  "assets": [
+    {
+      "name": "zhou_bobo_idle_000",
+      "file": "zhou_bobo_idle_000.png",
+      "sha256": "44632ad167126d885909bf159c8861f1546a5f467f97ef4d491c4b2fbafd0293",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "idle",
+      "sourceFrame": 35
+    },
+    {
+      "name": "zhou_bobo_start_000",
+      "file": "zhou_bobo_start_000.png",
+      "sha256": "4cbb7bf5c350369d0dce5345602570e29a8337033871c2fc36876ff3abb64065",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 36
+    },
+    {
+      "name": "zhou_bobo_start_001",
+      "file": "zhou_bobo_start_001.png",
+      "sha256": "cc48f01d8fe7466c3f628c1a605cf1fa7082cb2b6725f32aeaf1acbefabb112e",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 37
+    },
+    {
+      "name": "zhou_bobo_start_002",
+      "file": "zhou_bobo_start_002.png",
+      "sha256": "59dd18dd9ff56faa2824cc9e8d48251cb6212756f7e33f3e493a0a386fc68dec",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 38
+    },
+    {
+      "name": "zhou_bobo_start_003",
+      "file": "zhou_bobo_start_003.png",
+      "sha256": "b629d7dd789a2676cf8dcf2240c300636f58c8a058c7dfca918b740ddd2040fe",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 39
+    },
+    {
+      "name": "zhou_bobo_start_004",
+      "file": "zhou_bobo_start_004.png",
+      "sha256": "af65db5c1a9b154d637c038bb23d7fd6de1d033044f5ec2ae6a603ac56afa88d",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 40
+    },
+    {
+      "name": "zhou_bobo_start_005",
+      "file": "zhou_bobo_start_005.png",
+      "sha256": "a744bf847288d6f5dda79596ce5de418988100f6db979e64c0456aa15ee61822",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 41
+    },
+    {
+      "name": "zhou_bobo_start_006",
+      "file": "zhou_bobo_start_006.png",
+      "sha256": "e9d69d2598f8714dcb91a2823c33c3c3163faa72e175870190102aa45e30d9a7",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 42
+    },
+    {
+      "name": "zhou_bobo_start_007",
+      "file": "zhou_bobo_start_007.png",
+      "sha256": "e14697fcf4a6355fe9a1a4463b9a1c1a910c7929c107ab1a494e487ac2149e0e",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 43
+    },
+    {
+      "name": "zhou_bobo_start_008",
+      "file": "zhou_bobo_start_008.png",
+      "sha256": "895b5fa53ebbda41a533d3e0a48e6095134402895228cf96aee0630a30958a14",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 44
+    },
+    {
+      "name": "zhou_bobo_start_009",
+      "file": "zhou_bobo_start_009.png",
+      "sha256": "9523955a6429ff44057fb79709f2ccb1abdb10ad85210d0ddc587cbd84d84f67",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 45
+    },
+    {
+      "name": "zhou_bobo_start_010",
+      "file": "zhou_bobo_start_010.png",
+      "sha256": "707c6d3c743eec35427d141ea1110440892c79b8fb15d152850ede93ba3298f0",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 46
+    },
+    {
+      "name": "zhou_bobo_start_011",
+      "file": "zhou_bobo_start_011.png",
+      "sha256": "d701714914309d5ec02ef4625555b9a0e1280ab4a156969b8de3f1e112450e22",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 47
+    },
+    {
+      "name": "zhou_bobo_start_012",
+      "file": "zhou_bobo_start_012.png",
+      "sha256": "e4725d413c4f19227cd2e3a1c5f5177012506673011fb26b88d55d00e6544971",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 48
+    },
+    {
+      "name": "zhou_bobo_start_013",
+      "file": "zhou_bobo_start_013.png",
+      "sha256": "3d70246a4c9176b46fc50220dd42e156ea079e31b08dafd37b1964bbe407b42d",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 49
+    },
+    {
+      "name": "zhou_bobo_start_014",
+      "file": "zhou_bobo_start_014.png",
+      "sha256": "c304e24dffa009cf0a63342c24735b903998db9c838ca201244c0ded21afb657",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 50
+    },
+    {
+      "name": "zhou_bobo_start_015",
+      "file": "zhou_bobo_start_015.png",
+      "sha256": "8b80e2f7a814bdda7da409b4140b6ab645ad695736fa0baea20d99360ad2f871",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 51
+    },
+    {
+      "name": "zhou_bobo_start_016",
+      "file": "zhou_bobo_start_016.png",
+      "sha256": "1698573a6d326728556466ea396b8bb07beb059e6b695d2672287b55da6e3f6d",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 52
+    },
+    {
+      "name": "zhou_bobo_start_017",
+      "file": "zhou_bobo_start_017.png",
+      "sha256": "3d1f41a01ea14a11cf6275762bcabbb294e7d9e0301b65511958aac32059d15f",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 53
+    },
+    {
+      "name": "zhou_bobo_start_018",
+      "file": "zhou_bobo_start_018.png",
+      "sha256": "84d87af5c08af9322eb281b50212634351c530921c41d5473814deb54c4c7265",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 54
+    },
+    {
+      "name": "zhou_bobo_start_019",
+      "file": "zhou_bobo_start_019.png",
+      "sha256": "6f0545ce0fbc5c4c5f8588dfd33e514348eb98cfcd81498fccd6a0ccb3f9d751",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 55
+    },
+    {
+      "name": "zhou_bobo_start_020",
+      "file": "zhou_bobo_start_020.png",
+      "sha256": "c1f4f3db9fc1ee4abb4015ce58475be067af7032f114e9fed8d83949b23a80fb",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 56
+    },
+    {
+      "name": "zhou_bobo_start_021",
+      "file": "zhou_bobo_start_021.png",
+      "sha256": "c890b5b9ed2899988c612a7f3cc8c6d7937ebcfabced70d90cac10932b4b8423",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 57
+    },
+    {
+      "name": "zhou_bobo_start_022",
+      "file": "zhou_bobo_start_022.png",
+      "sha256": "aad3ac6877de2971cb6e57e75a7644ed0c5aaec542b1e5515d93b6ea145b581a",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 58
+    },
+    {
+      "name": "zhou_bobo_start_023",
+      "file": "zhou_bobo_start_023.png",
+      "sha256": "f63a091f46c3f58b745d2d52659ff98e6b86b212a1307790d5cf6e2966d3a806",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 59
+    },
+    {
+      "name": "zhou_bobo_start_024",
+      "file": "zhou_bobo_start_024.png",
+      "sha256": "f09374c99fa167d866fd6941ec9b6d943853e7b290eafa17e547fb5991cc4f49",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 60
+    },
+    {
+      "name": "zhou_bobo_start_025",
+      "file": "zhou_bobo_start_025.png",
+      "sha256": "579e94772b417beb95607098cdde5e247b8c6ef463f43fd810fb69cbd0c6fc8a",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 61
+    },
+    {
+      "name": "zhou_bobo_start_026",
+      "file": "zhou_bobo_start_026.png",
+      "sha256": "b14ca16dbada267ed8cadf230469b12f906caf6224c1e7475fc430d8e9949153",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 62
+    },
+    {
+      "name": "zhou_bobo_start_027",
+      "file": "zhou_bobo_start_027.png",
+      "sha256": "87901f39944e9e7b70b4b0d5507e614d265f2de18cbb770d3bc06c550130bf22",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 63
+    },
+    {
+      "name": "zhou_bobo_start_028",
+      "file": "zhou_bobo_start_028.png",
+      "sha256": "ae8b65b3bc15589817044084c5b8d2203f4e5b1c4ac203eca7708fbe99ed9be1",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 64
+    },
+    {
+      "name": "zhou_bobo_start_029",
+      "file": "zhou_bobo_start_029.png",
+      "sha256": "24aec475ae9cb2e32f46cbf381516ed6f77e6f0be112952baadbf8ca07b1a3a2",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 65
+    },
+    {
+      "name": "zhou_bobo_start_030",
+      "file": "zhou_bobo_start_030.png",
+      "sha256": "9897a6a097bc10b200f315724d052de9ef23fb89f7247117128e70ad8c26808c",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 66
+    },
+    {
+      "name": "zhou_bobo_start_031",
+      "file": "zhou_bobo_start_031.png",
+      "sha256": "6359f4b1c96921bc457a83932db12d64f876a87e8a31c821e5d286944c6e4399",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 67
+    },
+    {
+      "name": "zhou_bobo_start_032",
+      "file": "zhou_bobo_start_032.png",
+      "sha256": "ffa01d311a3305d81f2f877c2e6846ce61276630f90d3c9faa9c2450b03641a4",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 68
+    },
+    {
+      "name": "zhou_bobo_start_033",
+      "file": "zhou_bobo_start_033.png",
+      "sha256": "04eebd39dbe5a9428576d3bf8603bc62246633ac7a11409ab020a6c0dc6eb48e",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 69
+    },
+    {
+      "name": "zhou_bobo_start_034",
+      "file": "zhou_bobo_start_034.png",
+      "sha256": "c1de612197d020f93a6638c40ee9514ce6f30c142a4656f0bb17871bd83f65a4",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 70
+    },
+    {
+      "name": "zhou_bobo_start_035",
+      "file": "zhou_bobo_start_035.png",
+      "sha256": "fba4bf8c70e1f4b9e7daac5a17ca12a32ac6ba4ec8579e290ddb3a870146eff3",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 71
+    },
+    {
+      "name": "zhou_bobo_start_036",
+      "file": "zhou_bobo_start_036.png",
+      "sha256": "5d54cb9d979d65d27cea444cf0a43d6a1f5d9a0bd6f84bca09f4827d3c62dc53",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 72
+    },
+    {
+      "name": "zhou_bobo_start_037",
+      "file": "zhou_bobo_start_037.png",
+      "sha256": "ac447082ada480a43fc1c4ebbc21ebd8f0854e55a0c755e1ec72f22a4ff71ab6",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 73
+    },
+    {
+      "name": "zhou_bobo_start_038",
+      "file": "zhou_bobo_start_038.png",
+      "sha256": "7937de04cd78b9a285b79cddbbbf5875125e06fcce5af161555d0338ad4091b2",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 74
+    },
+    {
+      "name": "zhou_bobo_start_039",
+      "file": "zhou_bobo_start_039.png",
+      "sha256": "972828e90df38b3d3e78ca70b131e8d0cdfbe3493a2fbc3dc9f79bca77b72464",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 75
+    },
+    {
+      "name": "zhou_bobo_start_040",
+      "file": "zhou_bobo_start_040.png",
+      "sha256": "65d33301649b8dfc377c3a1be10003cb8a16f40f269bcd49d0419f35657e5b4a",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 76
+    },
+    {
+      "name": "zhou_bobo_start_041",
+      "file": "zhou_bobo_start_041.png",
+      "sha256": "4fbf974d7f4b7317c261a434cace503a9ccef3e5e367a4fd32b08f128516507c",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 77
+    },
+    {
+      "name": "zhou_bobo_start_042",
+      "file": "zhou_bobo_start_042.png",
+      "sha256": "b8464d5fe42082b18a9660016d6ef7e39a3c2035fbd4f649e3b288dbc1e51297",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 78
+    },
+    {
+      "name": "zhou_bobo_start_043",
+      "file": "zhou_bobo_start_043.png",
+      "sha256": "c60400a45a617780f739f8a1d2143f320acb06617660c416dc7dc866450835da",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 79
+    },
+    {
+      "name": "zhou_bobo_start_044",
+      "file": "zhou_bobo_start_044.png",
+      "sha256": "ca76019af339933c4eed49480c5b70cd12196d5ac6284eceb375b43f63dd145c",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 80
+    },
+    {
+      "name": "zhou_bobo_start_045",
+      "file": "zhou_bobo_start_045.png",
+      "sha256": "2d081042e19f1faf13a09347b4c1aa189f00589fd8f394df81caf8fd8dbe4958",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "start",
+      "sourceFrame": 81
+    },
+    {
+      "name": "zhou_bobo_walk_000",
+      "file": "zhou_bobo_walk_000.png",
+      "sha256": "9d3ad98a1b1dc9b12e3a2936fab396962449cf742b633e4294e5777902bf4f19",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 82
+    },
+    {
+      "name": "zhou_bobo_walk_001",
+      "file": "zhou_bobo_walk_001.png",
+      "sha256": "00ebf48db74b8d33f5fe29621fe02c7fe246b0b7e124fde02a1f2952930a827d",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 83
+    },
+    {
+      "name": "zhou_bobo_walk_002",
+      "file": "zhou_bobo_walk_002.png",
+      "sha256": "d9a2fcb6d3c73d1ffe175bd4fefea01c2d218d5122e896c39f598c228395c5dd",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 84
+    },
+    {
+      "name": "zhou_bobo_walk_003",
+      "file": "zhou_bobo_walk_003.png",
+      "sha256": "fa8de955ae214cfa3102e364548eabf2c3c91491d7822bdb4a26df94417bbe63",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 85
+    },
+    {
+      "name": "zhou_bobo_walk_004",
+      "file": "zhou_bobo_walk_004.png",
+      "sha256": "a3643d7bb848fd730d3a4bc83a6c020786fdf13f3f8db7d0c1ff5124396c1141",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 86
+    },
+    {
+      "name": "zhou_bobo_walk_005",
+      "file": "zhou_bobo_walk_005.png",
+      "sha256": "878ea53f5dee53eb16db692773316ab87e4cc796e5bbf5f781fb6c0e8b894604",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 87
+    },
+    {
+      "name": "zhou_bobo_walk_006",
+      "file": "zhou_bobo_walk_006.png",
+      "sha256": "45846925efec7b4ab5690984e631c0bf30bfa61530cc9744b0c4b86b3fbb4f35",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 88
+    },
+    {
+      "name": "zhou_bobo_walk_007",
+      "file": "zhou_bobo_walk_007.png",
+      "sha256": "d4edf4fa33babba7896bc764791decf1620a38b4f48aa1a023ce101e8884a19e",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 89
+    },
+    {
+      "name": "zhou_bobo_walk_008",
+      "file": "zhou_bobo_walk_008.png",
+      "sha256": "099339e80299a7db5a2c6de79e136af7fb61706e6502797d360703d4f5ca2c0c",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 90
+    },
+    {
+      "name": "zhou_bobo_walk_009",
+      "file": "zhou_bobo_walk_009.png",
+      "sha256": "eb559d9a3448af5c19a7ea86f046fed6fdf79131c744efd11950d1c190f2f1d6",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 91
+    },
+    {
+      "name": "zhou_bobo_walk_010",
+      "file": "zhou_bobo_walk_010.png",
+      "sha256": "e207d57d04e309f25ecc02c418ca8299857bebb276905b0f9b58f91261232ee0",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 92
+    },
+    {
+      "name": "zhou_bobo_walk_011",
+      "file": "zhou_bobo_walk_011.png",
+      "sha256": "2347017f74c9b88d392d1383a5c49429daaa988c83d802d70aa696d18dc31b38",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 93
+    },
+    {
+      "name": "zhou_bobo_walk_012",
+      "file": "zhou_bobo_walk_012.png",
+      "sha256": "a5b8e2e19e7c36a1b506dd91edf1cefbc081557f4d8e736438268121eda0b0c3",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 94
+    },
+    {
+      "name": "zhou_bobo_walk_013",
+      "file": "zhou_bobo_walk_013.png",
+      "sha256": "446f4bd6384549822e5f57089bc9920e9d44681e4eaaa393209d2eba2d5666b8",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 95
+    },
+    {
+      "name": "zhou_bobo_walk_014",
+      "file": "zhou_bobo_walk_014.png",
+      "sha256": "dc929fdc0de737ea4f68e70a6985b8b20dc1eb753267fb06c7f42b2060794c3e",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 96
+    },
+    {
+      "name": "zhou_bobo_walk_015",
+      "file": "zhou_bobo_walk_015.png",
+      "sha256": "fce58ce927d1514197e521676ed2c69a9de57099adbebca31fd22740ee35ebcb",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 97
+    },
+    {
+      "name": "zhou_bobo_walk_016",
+      "file": "zhou_bobo_walk_016.png",
+      "sha256": "fe27c66868c611a346812fa73f1815bc7c8f85828a6157b92c75ba23e94f33da",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 98
+    },
+    {
+      "name": "zhou_bobo_walk_017",
+      "file": "zhou_bobo_walk_017.png",
+      "sha256": "ed0c190e792ec56a7397c4982837e40f80f3c7900718a24e872c77d8361c5f11",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 99
+    },
+    {
+      "name": "zhou_bobo_walk_018",
+      "file": "zhou_bobo_walk_018.png",
+      "sha256": "3f34403f9e34da031d5c4aaf13c51a1109aec8b667015a929a9775f3508c55f4",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 100
+    },
+    {
+      "name": "zhou_bobo_walk_019",
+      "file": "zhou_bobo_walk_019.png",
+      "sha256": "53ec52f63ec409931e82fec21089fb209bc20ce5b8bcb60aa970cb5fbfdcde61",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 101
+    },
+    {
+      "name": "zhou_bobo_walk_020",
+      "file": "zhou_bobo_walk_020.png",
+      "sha256": "5ce923fb70b4d4aab64be504782454dd167d00ca866cc6166ccd969eb1589868",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 102
+    },
+    {
+      "name": "zhou_bobo_walk_021",
+      "file": "zhou_bobo_walk_021.png",
+      "sha256": "8658075a83cfa551da9691ae6dd257b83559609adedbdaffaba3290cc60dabb6",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 103
+    },
+    {
+      "name": "zhou_bobo_walk_022",
+      "file": "zhou_bobo_walk_022.png",
+      "sha256": "6bb5072d050e7846a1c871430f5f9497c0d32c6bb514e931f7707ff442957850",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 104
+    },
+    {
+      "name": "zhou_bobo_walk_023",
+      "file": "zhou_bobo_walk_023.png",
+      "sha256": "6a2c4665c8287666c6d7fb70c7ae6855753caab4405d2507d3cb9d5920d846ab",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 105
+    },
+    {
+      "name": "zhou_bobo_walk_024",
+      "file": "zhou_bobo_walk_024.png",
+      "sha256": "054bc0100e761a733c4b08f631ed5b650bf622f0b207b53b4ce55dd166aa592a",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 106
+    },
+    {
+      "name": "zhou_bobo_walk_025",
+      "file": "zhou_bobo_walk_025.png",
+      "sha256": "a02cfd05719de6c727f7862753ec0798186dd3d18ba322db4e1b27641f64a0cd",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 107
+    },
+    {
+      "name": "zhou_bobo_walk_026",
+      "file": "zhou_bobo_walk_026.png",
+      "sha256": "22ab1f555719a22e346f567710ba29306918a32d1470b1eb4c3eb2fbcb9c76bb",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 108
+    },
+    {
+      "name": "zhou_bobo_walk_027",
+      "file": "zhou_bobo_walk_027.png",
+      "sha256": "44f567238947385db63ac9290a586150c555c4efb8aa2012e7a8b7ef7638bc62",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 109
+    },
+    {
+      "name": "zhou_bobo_walk_028",
+      "file": "zhou_bobo_walk_028.png",
+      "sha256": "a5ac83185dde5cfab8255617bb2987b4ec052cf204b2c028623f5a864a7eb454",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 110
+    },
+    {
+      "name": "zhou_bobo_walk_029",
+      "file": "zhou_bobo_walk_029.png",
+      "sha256": "b7687ffc5679a896117d7b636ff210aca0cf6c8f2d6b37a6814ea46c22bae089",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 111
+    },
+    {
+      "name": "zhou_bobo_walk_030",
+      "file": "zhou_bobo_walk_030.png",
+      "sha256": "1f8ec4969fc05e23a225aa16e9f8954250f4f3746176f99f88d440b2e260f7d1",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 112
+    },
+    {
+      "name": "zhou_bobo_walk_031",
+      "file": "zhou_bobo_walk_031.png",
+      "sha256": "a798f6c0c310965badcff948764277c6be958494ddc9f14ffc11f0a85827f7f9",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 113
+    },
+    {
+      "name": "zhou_bobo_walk_032",
+      "file": "zhou_bobo_walk_032.png",
+      "sha256": "6abeb4aacf943c40f09011983b860d66ab3f16d37a3ed82ce72cd9825e3d2136",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 114
+    },
+    {
+      "name": "zhou_bobo_walk_033",
+      "file": "zhou_bobo_walk_033.png",
+      "sha256": "d7e2115ed3f8f69106de8c2f5639fa16273c55fc7d127c570ff66749f54ace6c",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "walk",
+      "sourceFrame": 115
+    },
+    {
+      "name": "zhou_bobo_stop_000",
+      "file": "zhou_bobo_stop_000.png",
+      "sha256": "266bb21ff452b736ff859c3493d5adfb53adad11eac7e0085b3a084b7e7a130a",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 181
+    },
+    {
+      "name": "zhou_bobo_stop_001",
+      "file": "zhou_bobo_stop_001.png",
+      "sha256": "f341597856dd8971b21c561d2cd48d6b76b670ff9519a34f12a89d792b7e2849",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 182
+    },
+    {
+      "name": "zhou_bobo_stop_002",
+      "file": "zhou_bobo_stop_002.png",
+      "sha256": "6749955004a6ff69d46fe559519808d13cd49279dee81ee07f896b611999c581",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 183
+    },
+    {
+      "name": "zhou_bobo_stop_003",
+      "file": "zhou_bobo_stop_003.png",
+      "sha256": "5adcee703ed94050d8ceb0f3da4e71a157859478dfd06524da569aba9fe9fcfb",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 184
+    },
+    {
+      "name": "zhou_bobo_stop_004",
+      "file": "zhou_bobo_stop_004.png",
+      "sha256": "83e45b4143c1cc84ae57797f7c3c4c1c7e940f72d068d415e972fc4b93f3a9f6",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 185
+    },
+    {
+      "name": "zhou_bobo_stop_005",
+      "file": "zhou_bobo_stop_005.png",
+      "sha256": "673f605332835a21fc8dca9b2128b2aa90db2e2c3f2691891cfc6a10925f6669",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 186
+    },
+    {
+      "name": "zhou_bobo_stop_006",
+      "file": "zhou_bobo_stop_006.png",
+      "sha256": "7d34f664d90f83642486467ebc2d903a5d776512953eaab24546e4e47835fd8a",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 187
+    },
+    {
+      "name": "zhou_bobo_stop_007",
+      "file": "zhou_bobo_stop_007.png",
+      "sha256": "8c1158cd688667a57054010c817549e66553ca81df963b55f75212f62a2734d1",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 188
+    },
+    {
+      "name": "zhou_bobo_stop_008",
+      "file": "zhou_bobo_stop_008.png",
+      "sha256": "be5b1c650604f261441d5e65644d5335b7da15704866f94f57d7218beb1eab38",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 189
+    },
+    {
+      "name": "zhou_bobo_stop_009",
+      "file": "zhou_bobo_stop_009.png",
+      "sha256": "1c23431f96e018286de4e793affd71f9e64f4bc6fd52da92d623af145fe6eacd",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 190
+    },
+    {
+      "name": "zhou_bobo_stop_010",
+      "file": "zhou_bobo_stop_010.png",
+      "sha256": "c0c81ff1cefe9259e0df5cc9e5fb87cb858bdcb56aee15decb1e171eef3d5522",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 191
+    },
+    {
+      "name": "zhou_bobo_stop_011",
+      "file": "zhou_bobo_stop_011.png",
+      "sha256": "7704233464aa001b6174e7d2493934bf7f95b7f6452a2b8e1f0c77d14416a18a",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 192
+    },
+    {
+      "name": "zhou_bobo_stop_012",
+      "file": "zhou_bobo_stop_012.png",
+      "sha256": "8c3a77be8ef20bacf252b97aaa36b39ec15a2a7d4e1dc1a13e719cdb14d89661",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 193
+    },
+    {
+      "name": "zhou_bobo_stop_013",
+      "file": "zhou_bobo_stop_013.png",
+      "sha256": "134f44dd6851da83fabeef9bd1923b359f0726b89083b26875349a8b0ddd2498",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 194
+    },
+    {
+      "name": "zhou_bobo_stop_014",
+      "file": "zhou_bobo_stop_014.png",
+      "sha256": "3cb8770ea0cf5c691b288cc7db74e5463eccb061e3c5d87061dc125df109b458",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 195
+    },
+    {
+      "name": "zhou_bobo_stop_015",
+      "file": "zhou_bobo_stop_015.png",
+      "sha256": "ed5dff761b9d7762620021b32babbb6f0900c732a33c836d81fca60f24ac9de2",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 196
+    },
+    {
+      "name": "zhou_bobo_stop_016",
+      "file": "zhou_bobo_stop_016.png",
+      "sha256": "ad248fc0acf67394f3d39b72594a92ba7835efbb4aeca6f61b50a94fced70540",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 197
+    },
+    {
+      "name": "zhou_bobo_stop_017",
+      "file": "zhou_bobo_stop_017.png",
+      "sha256": "292d462a484258d427dfdeb320b668a96d785a29ed605b065cef19961be453e4",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 198
+    },
+    {
+      "name": "zhou_bobo_stop_018",
+      "file": "zhou_bobo_stop_018.png",
+      "sha256": "0adb22bedf4c24556eafb9b877b7cec95155cae10132b7619a75deda0fd93f79",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 199
+    },
+    {
+      "name": "zhou_bobo_stop_019",
+      "file": "zhou_bobo_stop_019.png",
+      "sha256": "21bb269dab5f103265f68c06f6aed45616b1ce213b29c2053697190ae2f83c19",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 200
+    },
+    {
+      "name": "zhou_bobo_stop_020",
+      "file": "zhou_bobo_stop_020.png",
+      "sha256": "69a158e9af5a811e357edf8051e62815d09428037033789be750d74c6b6c07c9",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 201
+    },
+    {
+      "name": "zhou_bobo_stop_021",
+      "file": "zhou_bobo_stop_021.png",
+      "sha256": "4e59045157d5c2a31a1445696d9dc10d5351e9ad2baf9c5f85fe6bc54a661b34",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 202
+    },
+    {
+      "name": "zhou_bobo_stop_022",
+      "file": "zhou_bobo_stop_022.png",
+      "sha256": "48c7d32fa3d620a24060296f1e248520be71f19bef807abab005748ca6deea49",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 203
+    },
+    {
+      "name": "zhou_bobo_stop_023",
+      "file": "zhou_bobo_stop_023.png",
+      "sha256": "b8c58c8415d89c31bb86dd4c465171426e5266337488a62c3cca9ed883dfad1d",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 204
+    },
+    {
+      "name": "zhou_bobo_stop_024",
+      "file": "zhou_bobo_stop_024.png",
+      "sha256": "c355914c1b1c5575b8d8e4f67dfff56ce0561406c88acdbe5f70a9cb9456deb7",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 205
+    },
+    {
+      "name": "zhou_bobo_stop_025",
+      "file": "zhou_bobo_stop_025.png",
+      "sha256": "0dde72923ddaaeaaaf87caf9ee9e2ef643f6bc4ab3cf6108ca1d980781bbd34c",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 206
+    },
+    {
+      "name": "zhou_bobo_stop_026",
+      "file": "zhou_bobo_stop_026.png",
+      "sha256": "d4f1c9208bac8d4cbf9b1ce3a3559161ce493ebad2f331272edb180cf9589bfc",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 207
+    },
+    {
+      "name": "zhou_bobo_stop_027",
+      "file": "zhou_bobo_stop_027.png",
+      "sha256": "00eb5261d0cb5e851acfa88ce6da941d73a65afaa362ce8d3e885c3f9bfdee21",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 208
+    },
+    {
+      "name": "zhou_bobo_stop_028",
+      "file": "zhou_bobo_stop_028.png",
+      "sha256": "7e3888ed871610f0b42d8cd258cf170603ade22f2c139d39fb9ae26005cd9180",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 209
+    },
+    {
+      "name": "zhou_bobo_stop_029",
+      "file": "zhou_bobo_stop_029.png",
+      "sha256": "197734f30832ecf5dadcb3d5a32ac16aebe798e7a87b055a566bdfa6eccb4bb2",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 210
+    },
+    {
+      "name": "zhou_bobo_stop_030",
+      "file": "zhou_bobo_stop_030.png",
+      "sha256": "799940381144c38953c11e612a4a4c902f69d883a61623258c8a44726cf9749e",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 211
+    },
+    {
+      "name": "zhou_bobo_stop_031",
+      "file": "zhou_bobo_stop_031.png",
+      "sha256": "d45da96bf7a056ab20103ab5c7496bf6af5db273143f08e7fbc746ce8429718b",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 212
+    },
+    {
+      "name": "zhou_bobo_stop_032",
+      "file": "zhou_bobo_stop_032.png",
+      "sha256": "3eda04ce7f68550a4d10380c09386c87e46f23877f115dcf8d60c28cedab6376",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 213
+    },
+    {
+      "name": "zhou_bobo_stop_033",
+      "file": "zhou_bobo_stop_033.png",
+      "sha256": "308592006fc31383ae9162e3b72303429a3a3c75905efb8e3c49688e012b68ae",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 214
+    },
+    {
+      "name": "zhou_bobo_stop_034",
+      "file": "zhou_bobo_stop_034.png",
+      "sha256": "a74967d89a405421ea25863fc1a0fff9c338f9273f23f289d028b0a8efeffd9c",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 215
+    },
+    {
+      "name": "zhou_bobo_stop_035",
+      "file": "zhou_bobo_stop_035.png",
+      "sha256": "35d04581e833630e13a4f6e619431f3d748dfdb6ad692c5857e5e1e47d7ef4bc",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 216
+    },
+    {
+      "name": "zhou_bobo_stop_036",
+      "file": "zhou_bobo_stop_036.png",
+      "sha256": "41c8052a07e92b068b67882f8768a12f76cecdb06a27d8b065bf24f83b69f8ff",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 217
+    },
+    {
+      "name": "zhou_bobo_stop_037",
+      "file": "zhou_bobo_stop_037.png",
+      "sha256": "0b3057820c063002b67eb191ba95b78ae6eb93fd34384eff58f22556aad70e0d",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 218
+    },
+    {
+      "name": "zhou_bobo_stop_038",
+      "file": "zhou_bobo_stop_038.png",
+      "sha256": "0305462229c5a6bd5951ed71b11c6f076c3cfd21eebbf40ccfed231f965d4144",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 219
+    },
+    {
+      "name": "zhou_bobo_stop_039",
+      "file": "zhou_bobo_stop_039.png",
+      "sha256": "7a2341acb6b85a0d1bbdabef55feb3b7c31e832614babe69c3e95cee5ac5e013",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 220
+    },
+    {
+      "name": "zhou_bobo_stop_040",
+      "file": "zhou_bobo_stop_040.png",
+      "sha256": "9ed865e8b44b5ce57efa6cdf6b23747bec769bd59b3e1369cb2bb8c1ccb0b974",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 221
+    },
+    {
+      "name": "zhou_bobo_stop_041",
+      "file": "zhou_bobo_stop_041.png",
+      "sha256": "c88ba2f9bac93fccb4d4cf3826894d6dacfdaf157b0dace6a565bc5f68d95d0b",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 222
+    },
+    {
+      "name": "zhou_bobo_stop_042",
+      "file": "zhou_bobo_stop_042.png",
+      "sha256": "b99910562381be8bdaca742e11ac130ad73bc3bf13a01d1a8559fb163a7dd8d3",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 223
+    },
+    {
+      "name": "zhou_bobo_stop_043",
+      "file": "zhou_bobo_stop_043.png",
+      "sha256": "40082d2ecdd920efb282f8bdcc8bab90abb33a63b5122f9f4b92a633e69df33c",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 224
+    },
+    {
+      "name": "zhou_bobo_stop_044",
+      "file": "zhou_bobo_stop_044.png",
+      "sha256": "2ec43a421d1b6c84b95cc6f132039f17617bf833271936d8336b4de3a4b9efd5",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 225
+    },
+    {
+      "name": "zhou_bobo_stop_045",
+      "file": "zhou_bobo_stop_045.png",
+      "sha256": "5aaf14e914aa2352e7c870d53ed777333b6c39f5b2293f665dea333312ebee95",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 226
+    },
+    {
+      "name": "zhou_bobo_stop_046",
+      "file": "zhou_bobo_stop_046.png",
+      "sha256": "5fbba34935bac244d01b972d664c7785e48a55ce18b12d3d6bff0c7ac068b536",
+      "width": 928,
+      "height": 1736,
+      "pixelsPerUnit": 645.7692307692307,
+      "pivot": {
+        "x": 0.47198275862068967,
+        "y": 0.016705069124423932
+      },
+      "state": "stop",
+      "sourceFrame": 227
+    }
+  ],
+  "source": {
+    "videoSha256": "788fd88553e4dc9919140a44fa17606cabfcb5a7c270ec8babc5097333c716d8",
+    "review": "source~/video-extraction.json",
+    "nativePng": true,
+    "gpuCompression": "BC7 at native dimensions"
+  }
+}

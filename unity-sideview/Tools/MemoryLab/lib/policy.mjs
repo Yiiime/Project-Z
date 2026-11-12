@@ -314,16 +314,19 @@ export class Policy {
     for (const p of info.peer_relation_changes || []) {
       const peer = c.character_state.peer_relations[p.target_actor_id];
       if (
-        mode !== "npc_message" ||
-        p.target_actor_id !== c.interaction.source_actor_id ||
+        c.environment.intent_only ||
+        p.target_actor_id === c.actor_id ||
+        !this.catalog.actors.has(p.target_actor_id) ||
         !peer ||
         peer.affinity == null ||
         peer.trust == null
       )
-        throw new TurnError("NPC关系只能更新实际来信者");
+        throw new TurnError("只能更新本人对既有NPC的关系，走近前不更新关系");
       this.validateSources(p.source_event_ids, c, true);
       if (!p.source_event_ids.includes(c.interaction.source_event_id))
-        throw new TurnError("NPC关系须引用实际来信");
+        throw new TurnError("NPC关系须引用本轮真实获得的信息");
+      if (!p.affinity_delta && !p.trust_delta)
+        throw new TurnError("关系没有变化时不填写变化项");
       for (const k of ["affinity", "trust"])
         if (
           Math.abs(p[k + "_delta"]) >
@@ -357,6 +360,7 @@ export class Policy {
       s.$defs.output.properties.dialogue = { const: "" };
       p.social_decision = false;
       p.changes.const = {};
+      p.peer_relation_changes = false;
     }
     if (c.interaction.mode === "player") p.social_decision = false;
     else if (

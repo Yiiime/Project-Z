@@ -1,0 +1,6875 @@
+[
+  {
+    "frame": 358,
+    "t": 0.009030342,
+    "place": "Street",
+    "transition": true,
+    "alpha": 0.9868145,
+    "npcs": [
+      {
+        "id": "npc_mio",
+        "active": false,
+        "x": -2.0,
+        "ready": false
+      },
+      {
+        "id": "npc_chen",
+        "active": false,
+        "x": 8.0,
+        "ready": false
+      },
+      {
+        "id": "z",
+        "active": true,
+        "x": 1.94473147,
+        "ready": true
+      },
+      {
+        "id": "zhengyi",
+        "active": true,
+        "x": 10.5444441,
+        "ready": true
+      },
+      {
+        "id": "xiaoxiaoqing",
+        "active": true,
+        "x": -7.455033,
+        "ready": true
+      },
+      {
+        "id": "linxu",
+        "active": true,
+        "x": 4.543678,
+        "ready": true
+      },
+      {
+        "id": "zhou_bobo",
+        "active": true,
+        "x": -11.4572487,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 359,
+    "t": 0.023024559,
+    "place": "Street",
+    "transition": true,
+    "alpha": 1.0,
+    "npcs": [
+      {
+        "id": "npc_mio",
+        "active": false,
+        "x": -2.0,
+        "ready": false
+      },
+      {
+        "id": "npc_chen",
+        "active": false,
+        "x": 8.0,
+        "ready": false
+      },
+      {
+        "id": "z",
+        "active": true,
+        "x": 1.94473147,
+        "ready": true
+      },
+      {
+        "id": "zhengyi",
+        "active": true,
+        "x": 10.5444441,
+        "ready": true
+      },
+      {
+        "id": "xiaoxiaoqing",
+        "active": true,
+        "x": -7.455033,
+        "ready": true
+      },
+      {
+        "id": "linxu",
+        "active": true,
+        "x": 4.543678,
+        "ready": true
+      },
+      {
+        "id": "zhou_bobo",
+        "active": true,
+        "x": -11.4572487,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 360,
+    "t": 0.0279560089,
+    "place": "Street",
+    "transition": true,
+    "alpha": 1.0,
+    "npcs": [
+      {
+        "id": "npc_mio",
+        "active": false,
+        "x": -2.0,
+        "ready": false
+      },
+      {
+        "id": "npc_chen",
+        "active": false,
+        "x": 8.0,
+        "ready": false
+      },
+      {
+        "id": "z",
+        "active": true,
+        "x": 1.94473147,
+        "ready": true
+      },
+      {
+        "id": "zhengyi",
+        "active": true,
+        "x": 10.5444441,
+        "ready": true
+      },
+      {
+        "id": "xiaoxiaoqing",
+        "active": true,
+        "x": -7.455033,
+        "ready": true
+      },
+      {
+        "id": "linxu",
+        "active": true,
+        "x": 4.543678,
+        "ready": true
+      },
+      {
+        "id": "zhou_bobo",
+        "active": true,
+        "x": -11.4572487,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 361,
+    "t": 0.43191433,
+    "place": "Cafe",
+    "transition": true,
+    "alpha": 1.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 362,
+    "t": 0.583797455,
+    "place": "Cafe",
+    "transition": true,
+    "alpha": 1.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 363,
+    "t": 0.656993866,
+    "place": "Cafe",
+    "transition": true,
+    "alpha": 0.5661222,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 364,
+    "t": 0.6579857,
+    "place": "Cafe",
+    "transition": true,
+    "alpha": 0.35705933,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 365,
+    "t": 0.752759933,
+    "place": "Cafe",
+    "transition": true,
+    "alpha": 0.3113492,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 366,
+    "t": 0.7541542,
+    "place": "Cafe",
+    "transition": true,
+    "alpha": 0.0833355561,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 367,
+    "t": 0.7703848,
+    "place": "Cafe",
+    "transition": true,
+    "alpha": 0.03599414,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 368,
+    "t": 0.7887211,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 369,
+    "t": 0.810438156,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 370,
+    "t": 0.826583862,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 371,
+    "t": 0.843434334,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 372,
+    "t": 0.8614292,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 373,
+    "t": 0.876790047,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 374,
+    "t": 0.8940325,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 375,
+    "t": 0.9102621,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 376,
+    "t": 0.926808357,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 377,
+    "t": 0.943279266,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 378,
+    "t": 0.9598551,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 379,
+    "t": 0.9767256,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 380,
+    "t": 0.993409157,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 381,
+    "t": 1.01298523,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 382,
+    "t": 1.026886,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 383,
+    "t": 1.04317474,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 384,
+    "t": 1.06000423,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 385,
+    "t": 1.07677364,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 386,
+    "t": 1.093606,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 387,
+    "t": 1.10994244,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 388,
+    "t": 1.12682343,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 389,
+    "t": 1.14354134,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 390,
+    "t": 1.15994263,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 391,
+    "t": 1.17707825,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 392,
+    "t": 1.19376945,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 393,
+    "t": 1.210021,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 394,
+    "t": 1.22655869,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 395,
+    "t": 1.24313354,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 396,
+    "t": 1.26010323,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 397,
+    "t": 1.27626038,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 398,
+    "t": 1.29329491,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 399,
+    "t": 1.30961609,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 400,
+    "t": 1.32607365,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 401,
+    "t": 1.34287643,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 402,
+    "t": 1.35940647,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 403,
+    "t": 1.377451,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 404,
+    "t": 1.3928318,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 405,
+    "t": 1.4097805,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 406,
+    "t": 1.42647934,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 407,
+    "t": 1.44319344,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 408,
+    "t": 1.45982456,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 409,
+    "t": 1.47641659,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 410,
+    "t": 1.49271488,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 411,
+    "t": 1.50206661,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 412,
+    "t": 1.52051163,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 413,
+    "t": 1.543705,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 414,
+    "t": 1.55939484,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 415,
+    "t": 1.57086086,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 416,
+    "t": 1.5874939,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 417,
+    "t": 1.60883045,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 418,
+    "t": 1.62070656,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 419,
+    "t": 1.64276886,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 420,
+    "t": 1.65860558,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 421,
+    "t": 1.675333,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 422,
+    "t": 1.68549633,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 423,
+    "t": 1.70106411,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 424,
+    "t": 1.72595119,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 425,
+    "t": 1.7368412,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 426,
+    "t": 1.753808,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 427,
+    "t": 1.76864052,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 428,
+    "t": 1.78428173,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 429,
+    "t": 1.80993652,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 430,
+    "t": 1.8260603,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 431,
+    "t": 1.83580875,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 432,
+    "t": 1.85157967,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 433,
+    "t": 1.86812782,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 434,
+    "t": 1.88431644,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 435,
+    "t": 1.90391731,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 436,
+    "t": 1.926053,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 437,
+    "t": 1.93695736,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 438,
+    "t": 1.95218849,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 439,
+    "t": 1.96765614,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 440,
+    "t": 1.99267387,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 441,
+    "t": 2.00885,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 442,
+    "t": 2.018959,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 443,
+    "t": 2.034668,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 444,
+    "t": 2.05949688,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 445,
+    "t": 2.07030678,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 446,
+    "t": 2.0855217,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 447,
+    "t": 2.10165119,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 448,
+    "t": 2.11780262,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 449,
+    "t": 2.1356287,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 450,
+    "t": 2.15106678,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 451,
+    "t": 2.16763973,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 452,
+    "t": 2.192604,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 453,
+    "t": 2.20889568,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 454,
+    "t": 2.220477,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 455,
+    "t": 2.2428875,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 456,
+    "t": 2.25378323,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 457,
+    "t": 2.27594566,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 458,
+    "t": 2.28741169,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 459,
+    "t": 2.309412,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 460,
+    "t": 2.32052422,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 461,
+    "t": 2.34273052,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 462,
+    "t": 2.36697674,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 463,
+    "t": 2.36786175,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 464,
+    "t": 2.38540649,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 465,
+    "t": 2.401103,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 466,
+    "t": 2.42530823,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 467,
+    "t": 2.43694878,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 468,
+    "t": 2.45955181,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 469,
+    "t": 2.47527218,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 470,
+    "t": 2.48551655,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 471,
+    "t": 2.501049,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 472,
+    "t": 2.52028179,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 473,
+    "t": 2.53710651,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 474,
+    "t": 2.55938244,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 475,
+    "t": 2.56891632,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 476,
+    "t": 2.58435154,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 477,
+    "t": 2.603921,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 478,
+    "t": 2.626031,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 479,
+    "t": 2.63703442,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 480,
+    "t": 2.65394974,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 481,
+    "t": 2.67040157,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 482,
+    "t": 2.68724537,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 483,
+    "t": 2.70329475,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 484,
+    "t": 2.717558,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 485,
+    "t": 2.74281216,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 486,
+    "t": 2.75235176,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 487,
+    "t": 2.767561,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 488,
+    "t": 2.79276848,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 489,
+    "t": 2.8020668,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 490,
+    "t": 2.81761932,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 491,
+    "t": 2.84255981,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 492,
+    "t": 2.85856438,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 493,
+    "t": 2.86870861,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 494,
+    "t": 2.88434124,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 495,
+    "t": 2.909274,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 496,
+    "t": 2.92038155,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 497,
+    "t": 2.93528748,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 498,
+    "t": 2.950963,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 499,
+    "t": 2.97599983,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 500,
+    "t": 2.99193859,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 501,
+    "t": 3.00869179,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 502,
+    "t": 3.020543,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 503,
+    "t": 3.03718662,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 504,
+    "t": 3.051981,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 505,
+    "t": 3.0677824,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 506,
+    "t": 3.09260941,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 507,
+    "t": 3.1038084,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 508,
+    "t": 3.11870956,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 509,
+    "t": 3.134245,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 510,
+    "t": 3.15380573,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 511,
+    "t": 3.17040253,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 512,
+    "t": 3.19276714,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 513,
+    "t": 3.20228767,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 514,
+    "t": 3.2175045,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 515,
+    "t": 3.237383,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 516,
+    "t": 3.2593174,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 517,
+    "t": 3.26883984,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 518,
+    "t": 3.28449535,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 519,
+    "t": 3.30113316,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 520,
+    "t": 3.32642365,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 521,
+    "t": 3.33726025,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 522,
+    "t": 3.35100842,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 523,
+    "t": 3.3699007,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 524,
+    "t": 3.38492012,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 525,
+    "t": 3.40440559,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 526,
+    "t": 3.4261446,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 527,
+    "t": 3.43546486,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 528,
+    "t": 3.45099545,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 529,
+    "t": 3.467637,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 530,
+    "t": 3.4925766,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 531,
+    "t": 3.50859356,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 532,
+    "t": 3.525857,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 533,
+    "t": 3.53706074,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 534,
+    "t": 3.559434,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 535,
+    "t": 3.57049,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 536,
+    "t": 3.58730125,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 537,
+    "t": 3.60246086,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 538,
+    "t": 3.61782074,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 539,
+    "t": 3.63716221,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 540,
+    "t": 3.65947914,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.00031233,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 541,
+    "t": 3.668808,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0005312,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 542,
+    "t": 3.68442249,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.00093722,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 543,
+    "t": 3.70944786,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.00203657,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 544,
+    "t": 3.72036266,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.00253439,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 545,
+    "t": 3.735445,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.00350428,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 546,
+    "t": 3.75106621,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.00473785,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 547,
+    "t": 3.77073383,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.00650549,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 548,
+    "t": 3.79274654,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.00887227,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 549,
+    "t": 3.80215263,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.009984,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 550,
+    "t": 3.81769,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.012176,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 551,
+    "t": 3.83544636,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.01493263,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 552,
+    "t": 3.851057,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.01757026,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 553,
+    "t": 3.87091637,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.021202,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 554,
+    "t": 3.88419914,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.0238,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 555,
+    "t": 3.90862942,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.02822042,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 556,
+    "t": 3.92523479,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.032264,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 557,
+    "t": 3.95031738,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.03662872,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 558,
+    "t": 3.9513464,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.04043818,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 559,
+    "t": 3.97050858,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.04589319,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 560,
+    "t": 3.99312878,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.05267429,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 561,
+    "t": 4.01007557,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.05797338,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 562,
+    "t": 4.02652454,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.06365943,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 563,
+    "t": 4.04324341,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.06956649,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 564,
+    "t": 4.05960846,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.07583666,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 565,
+    "t": 4.075988,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.08239651,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 566,
+    "t": 4.08739853,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.08700752,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 567,
+    "t": 4.109515,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.096387,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 568,
+    "t": 4.12029076,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.10108685,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 569,
+    "t": 4.134343,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.107467,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 570,
+    "t": 4.159771,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.11938572,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 571,
+    "t": 4.170699,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.124879,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 572,
+    "t": 4.19277668,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.1361866,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 573,
+    "t": 4.20951271,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.14483166,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 574,
+    "t": 4.22643375,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.15399981,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 575,
+    "t": 4.235737,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.15933657,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 576,
+    "t": 4.25103855,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.16797256,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 577,
+    "t": 4.276128,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.18284941,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 578,
+    "t": 4.285391,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.1884737,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 579,
+    "t": 4.30077457,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.19816542,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 580,
+    "t": 4.320592,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.21082258,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 581,
+    "t": 4.342806,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.22569,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 582,
+    "t": 4.35232162,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.23235273,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 583,
+    "t": 4.36765862,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.24307466,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 584,
+    "t": 4.38426971,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.25480485,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 585,
+    "t": 4.40238667,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.2681632,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 586,
+    "t": 4.41833,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.280025,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 587,
+    "t": 4.434799,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.29271936,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 588,
+    "t": 4.452265,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.306436,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 589,
+    "t": 4.46768665,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.31879449,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 590,
+    "t": 4.49278164,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.33939981,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 591,
+    "t": 4.503976,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.34870362,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 592,
+    "t": 4.52610874,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.367718,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 593,
+    "t": 4.53544426,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.37578535,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 594,
+    "t": 4.5514307,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.38973975,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 595,
+    "t": 4.569561,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.40617251,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 596,
+    "t": 4.58463669,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.42012167,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 597,
+    "t": 4.60162449,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.43595767,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 598,
+    "t": 4.61794567,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.451823,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 599,
+    "t": 4.63491631,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.46839142,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 600,
+    "t": 4.651125,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.48453426,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 601,
+    "t": 4.667753,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.50128627,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 602,
+    "t": 4.693491,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.527502,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 603,
+    "t": 4.70972538,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.54460287,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 604,
+    "t": 4.726225,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.562236,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 605,
+    "t": 4.742984,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.5804708,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 606,
+    "t": 4.7597065,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.598494,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 607,
+    "t": 4.7706356,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.61051369,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 608,
+    "t": 4.786892,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.62782335,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 609,
+    "t": 4.80106258,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.64323854,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 610,
+    "t": 4.826168,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.6696887,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 611,
+    "t": 4.835931,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.67988682,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 612,
+    "t": 4.851062,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.69569826,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 613,
+    "t": 4.876049,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.721396,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 614,
+    "t": 4.88538265,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.730861,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 615,
+    "t": 4.900982,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.746548,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 616,
+    "t": 4.920697,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.76598239,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 617,
+    "t": 4.942581,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.78737473,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 618,
+    "t": 4.95255566,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.796926,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 619,
+    "t": 4.967842,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.81161451,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 620,
+    "t": 4.98456669,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.827526,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 621,
+    "t": 5.00142574,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.843234,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 622,
+    "t": 5.01864433,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.85892653,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 623,
+    "t": 5.03480339,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.87384939,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 624,
+    "t": 5.051342,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.88884974,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 625,
+    "t": 5.06793,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.90382934,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 626,
+    "t": 5.09304142,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.92592144,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 627,
+    "t": 5.109496,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.94037366,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 628,
+    "t": 5.12774372,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.950008,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 629,
+    "t": 5.14310837,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.96893024,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 630,
+    "t": 5.15974236,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.9827652,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 631,
+    "t": 5.176181,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -2.99619436,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 632,
+    "t": 5.19287,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.00972366,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 633,
+    "t": 5.2024,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.017566,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 634,
+    "t": 5.217574,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.02960253,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 635,
+    "t": 5.243147,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.0493598,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 636,
+    "t": 5.26005268,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.06232381,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 637,
+    "t": 5.276208,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.07465172,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 638,
+    "t": 5.28720665,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.082841,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 639,
+    "t": 5.30997658,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.09955287,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 640,
+    "t": 5.326316,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.11168623,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 641,
+    "t": 5.3429184,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.123717,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 642,
+    "t": 5.35249233,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.1303153,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 643,
+    "t": 5.368311,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.1412642,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 644,
+    "t": 5.3846817,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.15263271,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 645,
+    "t": 5.401471,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.163878,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 646,
+    "t": 5.417966,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.17486954,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 647,
+    "t": 5.44201946,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.18751836,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 648,
+    "t": 5.452056,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.196938,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 649,
+    "t": 5.469508,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.20745826,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 650,
+    "t": 5.492976,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.22260284,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 651,
+    "t": 5.504101,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.22941375,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 652,
+    "t": 5.526573,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.24258542,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 653,
+    "t": 5.5439415,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.25303125,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 654,
+    "t": 5.559557,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.26181388,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 655,
+    "t": 5.57620049,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.27105832,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 656,
+    "t": 5.593215,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.280371,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 657,
+    "t": 5.60940075,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.28924584,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 658,
+    "t": 5.62062645,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.295194,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 659,
+    "t": 5.6347723,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.30254483,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 660,
+    "t": 5.65142345,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.31105661,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 661,
+    "t": 5.67627239,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.3234458,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 662,
+    "t": 5.68718052,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.328829,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 663,
+    "t": 5.703233,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.336464,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 664,
+    "t": 5.717881,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.343279,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 665,
+    "t": 5.73481655,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.35092735,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 666,
+    "t": 5.7513237,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.3583045,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 667,
+    "t": 5.768016,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.36560369,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 668,
+    "t": 5.793128,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.37619042,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 669,
+    "t": 5.80235672,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.38012242,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 670,
+    "t": 5.8179493,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.3861866,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 671,
+    "t": 5.834587,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.392342,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 672,
+    "t": 5.859708,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.40097523,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 673,
+    "t": 5.87622261,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.406244,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 674,
+    "t": 5.892934,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.41121984,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 675,
+    "t": 5.903535,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.414289,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 676,
+    "t": 5.91789436,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.418075,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 677,
+    "t": 5.943141,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.422986,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 678,
+    "t": 5.95948029,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.42816162,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 679,
+    "t": 5.96900558,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.4302597,
+        "ready": true
+      }
+    ]
+  },
+  {
+    "frame": 680,
+    "t": 5.9843235,
+    "place": "Cafe",
+    "transition": false,
+    "alpha": 0.0,
+    "npcs": [
+      {
+        "id": "npc_aya",
+        "active": false,
+        "x": 2.4,
+        "ready": false
+      },
+      {
+        "id": "liting",
+        "active": true,
+        "x": -3.43349957,
+        "ready": true
+      }
+    ]
+  }
+]

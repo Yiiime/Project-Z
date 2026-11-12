@@ -1,0 +1,105 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20658eea1de5e4e48acec160054bac1e, type: 3}
+  m_Name: Axing
+  m_EditorClassIdentifier: Assembly-CSharp::Seabreeze.Live2DModelProfile
+  prefab: {fileID: 3954980612758703625, guid: 6981475f826ca4cd3bd5f15c91498f12, type: 3}
+  portraitDisplayMaterial: {fileID: 2100000, guid: ede5a7024fa14b329c1175ee01435313, type: 2}
+  characterId: axing
+  rendererIndex: 1
+  renderLayer: 30
+  modelPosition: {x: 0, y: 0, z: 0}
+  modelScale: 1
+  cameraCenter: {x: 0, y: 0}
+  orthographicSize: 2
+  autoFrame: 1
+  visibleHeight: 0.78
+  verticalFocus: 0.62
+  uvRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  textureHeight: 1200
+  defaultEmotion: neutral
+  expressions:
+  - emotion: neutral
+    expression: {fileID: 0}
+  - emotion: repair
+    expression: {fileID: 11400000, guid: 89958aee8d018404fba7113d32cc074b, type: 2}
+  - emotion: puzzled
+    expression: {fileID: 11400000, guid: 0494742cb8bcb45d6aea3a4136988b90, type: 2}
+  - emotion: angry
+    expression: {fileID: 11400000, guid: e425a067bdf474e79b9287922ffc7418, type: 2}
+  - emotion: surprise
+    expression: {fileID: 11400000, guid: e1b8b92444df945d1981b76630986358, type: 2}
+  - emotion: sigh
+    expression: {fileID: 11400000, guid: 614d5747c8204407ba024050bfaf5789, type: 2}
+  - emotion: smile
+    expression: {fileID: 11400000, guid: cfbec55b0ab61455fb54363adb9ddbb3, type: 2}
+  - emotion: happy
+    expression: {fileID: 11400000, guid: cfbec55b0ab61455fb54363adb9ddbb3, type: 2}
+  - emotion: troubled
+    expression: {fileID: 11400000, guid: 292192561704d4dd089d5505744a8da4, type: 2}
+  - emotion: blush
+    expression: {fileID: 11400000, guid: ece6828929693426997809f1fadd1a48, type: 2}
+  - emotion: wave
+    expression: {fileID: 11400000, guid: e37aa8c3a330b4eb2ac387bc77923c1d, type: 2}
+  - emotion: explain
+    expression: {fileID: 11400000, guid: e0a4ebc41c6734124878f026e373e24a, type: 2}
+  - emotion: point
+    expression: {fileID: 11400000, guid: 2145fa66148874ee49272306a3e7a120, type: 2}
+  - emotion: inspect
+    expression: {fileID: 11400000, guid: bc1e30261b2354a619778b1bdc929838, type: 2}
+  portraitMotions:
+  - emotion: repair
+    clip: {fileID: 7400000, guid: f24890a017d1c4cb185a48bb4f5c3fa4, type: 2}
+  - emotion: puzzled
+    clip: {fileID: 7400000, guid: 5d0318506316b4295982ac5ac5f66b8e, type: 2}
+  - emotion: angry
+    clip: {fileID: 7400000, guid: 38526e848f5bc47369f54a3ef0a3c8b7, type: 2}
+  - emotion: surprise
+    clip: {fileID: 7400000, guid: d1d60acb81ae44d32855e3ed8bf0bbd3, type: 2}
+  - emotion: sigh
+    clip: {fileID: 7400000, guid: 80ae7fcead06b4c3aa46b803218e555d, type: 2}
+  - emotion: smile
+    clip: {fileID: 7400000, guid: 056459bb5189640e88f9ac2946031200, type: 2}
+  animatorController: {fileID: 9100000, guid: 9732d4d1a417f41ecb833ab9183f1dd8, type: 2}
+  idleState: Idle
+  talkState: Idle
+  proceduralIdle: 0
+  proceduralTalk: 1
+  expressionFadeSeconds: 0.2
+  clearExpressionOnInterrupt: 1
+  discreteExpressionParameters: 0
+  expressionIndexParameter: ParamExpression
+  expressionMixParameter: ParamExpressionMix
+  expressionTransitions: []
+  mouthParameter: ParamMouthOpenY
+  neutralSpeechParameter: ParamMouthOpenY
+  talkMouthAmplitude: 1
+  allowSpeechWithMouthVariant: 0
+  speechAddsToExpressionTarget: 0
+  speechPeak: 0.78
+  speechRest: 0.08
+  speechExpressions: []
+  tearExpression: 
+  tearStartSeconds: 1.1
+  breathParameter: ParamBreath
+  leftEyeParameter: ParamEyeLOpen
+  rightEyeParameter: ParamEyeROpen
+  authoringNotes: "\u963F\u661F v13 \u7709\u95F4\u4FEE\u6B63\u7248\u3002repair/puzzled/angry/surprise/sigh/smile
+    are the stable dialogue keys. These six keys bind the authored motion3 curves
+    through Model.controller and portraitMotions; the matching exp3 files remain
+    as endpoint compatibility faces only. The model's ParamMouthOpenY drives speech,
+    and every interrupted action returns to Idle. Source runtime: live2d-halfbody/\u89D2\u8272/\u963F\u661F_v13_\u7709\u95F4\u4FEE\u6B63/runtime."

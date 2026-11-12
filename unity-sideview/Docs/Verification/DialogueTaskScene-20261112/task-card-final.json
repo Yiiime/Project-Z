@@ -1,0 +1,14 @@
+{
+  "actor": "liting",
+  "cards": [
+    {
+      "id": "bar_box",
+      "owner": "liting",
+      "title": "吧台最里面的盒子",
+      "detail": "待回应 · 接受后记入任务"
+    }
+  ],
+  "portraitMax": "(0.45, 0.84)",
+  "columnMin": "(0.46, 0.12)",
+  "columnOffset": "(0.00, 0.00)"
+}

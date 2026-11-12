@@ -57,6 +57,7 @@ namespace Seabreeze
             if (visual == null || !visual.activeSelf || WorldDirector.Instance == null || WorldDirector.Instance.Player == null)
                 return;
             if (Movement != null && Movement.IsMoving) return;
+            if (Visual != null && Visual.UsesNpcStateMotion && Visual.Pose != "Idle") return;
             if (ConversationPartner != null)
             {
                 float direction = ConversationPartner.position.x - transform.position.x;

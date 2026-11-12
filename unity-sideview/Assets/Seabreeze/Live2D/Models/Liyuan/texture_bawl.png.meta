@@ -1,0 +1,1053 @@
+fileFormatVersion: 2
+guid: ddeff58f996464e3eb3a61a7a57d5b3d
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -3050645752420888833
+    second: texture_bawl_0
+  - first:
+      213: 8930647115321469881
+    second: texture_bawl_1
+  - first:
+      213: 1249276994094213075
+    second: texture_bawl_2
+  - first:
+      213: -5555288086247767113
+    second: texture_bawl_3
+  - first:
+      213: -7710116767919231689
+    second: texture_bawl_4
+  - first:
+      213: -176545878424388548
+    second: texture_bawl_5
+  - first:
+      213: 737659340052216754
+    second: texture_bawl_6
+  - first:
+      213: 1058892891882307570
+    second: texture_bawl_7
+  - first:
+      213: 8636396941054554188
+    second: texture_bawl_8
+  - first:
+      213: -5804733736090688724
+    second: texture_bawl_9
+  - first:
+      213: -247302074444033333
+    second: texture_bawl_10
+  - first:
+      213: -7779421026616472686
+    second: texture_bawl_11
+  - first:
+      213: 1200989451041475585
+    second: texture_bawl_12
+  - first:
+      213: 1137865730392473761
+    second: texture_bawl_13
+  - first:
+      213: -6732710903384895671
+    second: texture_bawl_14
+  - first:
+      213: -5296920144168482170
+    second: texture_bawl_15
+  - first:
+      213: 1872712136433892411
+    second: texture_bawl_16
+  - first:
+      213: 8695215476848142968
+    second: texture_bawl_17
+  - first:
+      213: 7196014318727687843
+    second: texture_bawl_18
+  - first:
+      213: -4721688022555365910
+    second: texture_bawl_19
+  - first:
+      213: -8663819507660126201
+    second: texture_bawl_20
+  - first:
+      213: -6976416180425633239
+    second: texture_bawl_21
+  - first:
+      213: 4594197358800378931
+    second: texture_bawl_22
+  - first:
+      213: -198396849313243854
+    second: texture_bawl_23
+  - first:
+      213: -958699191286840985
+    second: texture_bawl_24
+  - first:
+      213: 3995446176329363918
+    second: texture_bawl_25
+  - first:
+      213: 2376637990566320157
+    second: texture_bawl_26
+  - first:
+      213: -4340206843463965831
+    second: texture_bawl_27
+  - first:
+      213: 8971329867345402295
+    second: texture_bawl_28
+  - first:
+      213: 7240877918572966573
+    second: texture_bawl_29
+  - first:
+      213: 4517116693308478560
+    second: texture_bawl_30
+  - first:
+      213: -3411543872980078604
+    second: texture_bawl_31
+  - first:
+      213: 3904209429987739073
+    second: texture_bawl_32
+  - first:
+      213: 68638670769894654
+    second: texture_bawl_33
+  - first:
+      213: 1458796650619348096
+    second: texture_bawl_34
+  - first:
+      213: -604070733175559244
+    second: texture_bawl_35
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 0
+    wrapV: 0
+    wrapW: 0
+  nPOTScale: 1
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 0
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 0
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 1
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 1
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: texture_bawl_0
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 404
+        width: 129
+        height: 103
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ffe0667e9dde9a5d0800000000000000
+      internalID: -3050645752420888833
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_1
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 405
+        width: 124
+        height: 102
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9bb6a1b1c3800fb70800000000000000
+      internalID: 8930647115321469881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_2
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 411
+        width: 13
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d7ad03aec2565110800000000000000
+      internalID: 1249276994094213075
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_3
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 409
+        width: 28
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b30e323be6a7e2b0800000000000000
+      internalID: -5555288086247767113
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_4
+      rect:
+        serializedVersion: 2
+        x: 292
+        y: 409
+        width: 100
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73d246746a9200590800000000000000
+      internalID: -7710116767919231689
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_5
+      rect:
+        serializedVersion: 2
+        x: 375
+        y: 413
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c3c74fd7578cc8df0800000000000000
+      internalID: -176545878424388548
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_6
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 404
+        width: 11
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2bbbf01f241bc3a00800000000000000
+      internalID: 737659340052216754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_7
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 308
+        width: 95
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ffb4d39971f1be00800000000000000
+      internalID: 1058892891882307570
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_8
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 370
+        width: 101
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c40b3d2a245aad770800000000000000
+      internalID: 8636396941054554188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_9
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 371
+        width: 104
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c23a69cfb61717fa0800000000000000
+      internalID: -5804733736090688724
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_10
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 377
+        width: 89
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc2db84d218619cf0800000000000000
+      internalID: -247302074444033333
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_11
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 321
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29b025e1bc1f90490800000000000000
+      internalID: -7779421026616472686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_12
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 302
+        width: 38
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 10c8158ea85caa010800000000000000
+      internalID: 1200989451041475585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_13
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 301
+        width: 32
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a042266ad28acf00800000000000000
+      internalID: 1137865730392473761
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_14
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 297
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94f0854da1b9092a0800000000000000
+      internalID: -6732710903384895671
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_15
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 269
+        width: 86
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68a0a33713f8d76b0800000000000000
+      internalID: -5296920144168482170
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_16
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 246
+        width: 81
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b3c74ba14c53df910800000000000000
+      internalID: 1872712136433892411
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_17
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 281
+        width: 38
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87a230f286c9ba870800000000000000
+      internalID: 8695215476848142968
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_18
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 275
+        width: 66
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ae636295e06dd360800000000000000
+      internalID: 7196014318727687843
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_19
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 282
+        width: 57
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aedee5392c1397eb0800000000000000
+      internalID: -4721688022555365910
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_20
+      rect:
+        serializedVersion: 2
+        x: 363
+        y: 268
+        width: 74
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70881d78f0ee3c780800000000000000
+      internalID: -8663819507660126201
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_21
+      rect:
+        serializedVersion: 2
+        x: 443
+        y: 249
+        width: 36
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9225170527ace2f90800000000000000
+      internalID: -6976416180425633239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_22
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 204
+        width: 31
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 33c955f182ed1cf30800000000000000
+      internalID: 4594197358800378931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_23
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 139
+        width: 53
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23d9020ed172f3df0800000000000000
+      internalID: -198396849313243854
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_24
+      rect:
+        serializedVersion: 2
+        x: 123
+        y: 143
+        width: 47
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 761c4e83a2402b2f0800000000000000
+      internalID: -958699191286840985
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_25
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 150
+        width: 40
+        height: 89
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec1fd4be02da27730800000000000000
+      internalID: 3995446176329363918
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_26
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 140
+        width: 41
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d18576319a38bf020800000000000000
+      internalID: 2376637990566320157
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_27
+      rect:
+        serializedVersion: 2
+        x: 306
+        y: 213
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9736c9b0fdc74c3c0800000000000000
+      internalID: -4340206843463965831
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_28
+      rect:
+        serializedVersion: 2
+        x: 322
+        y: 212
+        width: 18
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b999f17bf0908c70800000000000000
+      internalID: 8971329867345402295
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_29
+      rect:
+        serializedVersion: 2
+        x: 379
+        y: 215
+        width: 32
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da2f2866a14cc7460800000000000000
+      internalID: 7240877918572966573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_30
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 143
+        width: 14
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06493a923b500be30800000000000000
+      internalID: 4517116693308478560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_31
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 138
+        width: 30
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ffac533ce2c7a0d0800000000000000
+      internalID: -3411543872980078604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_32
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 144
+        width: 12
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c5462b8ac98e2630800000000000000
+      internalID: 3904209429987739073
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_33
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 112
+        width: 24
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ef43815e18ad3f000800000000000000
+      internalID: 68638670769894654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_34
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 106
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 08422bf13dfae3410800000000000000
+      internalID: 1458796650619348096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: texture_bawl_35
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 106
+        width: 11
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4bb6cd16ed8ed97f0800000000000000
+      internalID: -604070733175559244
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      texture_bawl_0: -3050645752420888833
+      texture_bawl_1: 8930647115321469881
+      texture_bawl_10: -247302074444033333
+      texture_bawl_11: -7779421026616472686
+      texture_bawl_12: 1200989451041475585
+      texture_bawl_13: 1137865730392473761
+      texture_bawl_14: -6732710903384895671
+      texture_bawl_15: -5296920144168482170
+      texture_bawl_16: 1872712136433892411
+      texture_bawl_17: 8695215476848142968
+      texture_bawl_18: 7196014318727687843
+      texture_bawl_19: -4721688022555365910
+      texture_bawl_2: 1249276994094213075
+      texture_bawl_20: -8663819507660126201
+      texture_bawl_21: -6976416180425633239
+      texture_bawl_22: 4594197358800378931
+      texture_bawl_23: -198396849313243854
+      texture_bawl_24: -958699191286840985
+      texture_bawl_25: 3995446176329363918
+      texture_bawl_26: 2376637990566320157
+      texture_bawl_27: -4340206843463965831
+      texture_bawl_28: 8971329867345402295
+      texture_bawl_29: 7240877918572966573
+      texture_bawl_3: -5555288086247767113
+      texture_bawl_30: 4517116693308478560
+      texture_bawl_31: -3411543872980078604
+      texture_bawl_32: 3904209429987739073
+      texture_bawl_33: 68638670769894654
+      texture_bawl_34: 1458796650619348096
+      texture_bawl_35: -604070733175559244
+      texture_bawl_4: -7710116767919231689
+      texture_bawl_5: -176545878424388548
+      texture_bawl_6: 737659340052216754
+      texture_bawl_7: 1058892891882307570
+      texture_bawl_8: 8636396941054554188
+      texture_bawl_9: -5804733736090688724
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

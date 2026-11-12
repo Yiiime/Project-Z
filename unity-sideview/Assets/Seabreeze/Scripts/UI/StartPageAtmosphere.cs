@@ -31,28 +31,30 @@ namespace Seabreeze
             Vector2 Point(Vector2 uv) => new Vector2(r.xMin + (uv.x - ImageUV.x) / ImageUV.width * r.width,
                 r.yMin + (uv.y - ImageUV.y) / ImageUV.height * r.height);
             // Broken, low contrast highlights. Each glint has its own period and moves with the tide.
-            for (int i = 0; i < 26; i++)
+            for (int i = 0; i < 38; i++)
             {
                 float seed = Mathf.Repeat(i * .618034f, 1);
-                float pulse = Mathf.Pow(.5f + .5f * Mathf.Sin(elapsed * (.65f + seed * .35f) + i * 2.4f), 3);
-                float x = Sea.x + Mathf.Repeat(seed + elapsed * .0008f, 1) * Sea.width;
+                float pulse = Mathf.Pow(.5f + .5f * Mathf.Sin(elapsed * (.85f + seed * .35f) + i * 2.4f), 3);
+                float progress = Mathf.Repeat(seed + elapsed * .004f, 1);
+                float x = Sea.x + progress * Sea.width;
+                float edgeFade = Mathf.SmoothStep(0, 1, Mathf.Min(progress, 1 - progress) * 16);
                 float y = Sea.y + Mathf.Repeat(i * .38196f, 1) * Sea.height;
                 Vector2 p = Point(new Vector2(x, y));
                 float depth = 1 - Mathf.InverseLerp(Sea.yMin, Sea.yMax, y);
-                float width = (2 + 10 * depth) * (.65f + .35f * seed) * r.height / 1080;
+                float width = (4 + 15 * depth) * (.65f + .35f * seed) * r.height / 1080;
                 Glint(vh, p, width, (0.7f + depth * .5f) * r.height / 1080,
-                    new Color(.94f, .97f, .90f, (.05f + depth * .09f) * pulse));
+                    new Color(.94f, .97f, .90f, (.08f + depth * .15f) * pulse * edgeFade));
             }
             // Distant birds travel slowly; wing beats are curves, not a flipped sprite sequence.
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 3; i++)
             {
-                float progress = Mathf.Repeat(elapsed / (64 + i * 6) + i * .16f, 1);
+                float progress = Mathf.Repeat(elapsed / (28 + i * 5) + .18f + i * .23f, 1);
                 Vector2 p = Point(new Vector2(Sky.x + progress * Sky.width,
                     Sky.y + Sky.height * (.30f + i * .18f + .04f * Mathf.Sin(elapsed * .3f + i))));
-                float span = (5 + i) * r.height / 1080;
-                float wingCycle = Mathf.Repeat(elapsed + i * 4.7f, 12 + i * 2);
+                float span = (7 + i * 1.5f) * r.height / 1080;
+                float wingCycle = Mathf.Repeat(elapsed + i * 4.7f, 7 + i * 2);
                 float burst = Mathf.SmoothStep(0, 1, wingCycle / .4f) * (1 - Mathf.SmoothStep(0, 1, (wingCycle - 1.8f) / .8f));
-                float flap = Mathf.Sin(elapsed * 3.5f + i) * span * .24f * burst;
+                float flap = Mathf.Sin(elapsed * 4.2f + i) * span * .38f * burst;
                 float opacity = Mathf.SmoothStep(0, 1, Mathf.Min(progress, 1 - progress) * 12) * .65f;
                 var c = new Color(.93f, .96f, .97f, opacity);
                 Segment(vh, p + new Vector2(-span, flap + 1), p + new Vector2(-span * .45f, 2), .95f, c);

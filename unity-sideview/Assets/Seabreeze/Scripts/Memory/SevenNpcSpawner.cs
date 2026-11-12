@@ -6,17 +6,43 @@ namespace Seabreeze
     public sealed class SevenNpcSpawner : MonoBehaviour
     {
         GameSession session; WorldDirector world; WorldScene stage;
+        bool prepared;
         readonly List<NpcPresence> actors=new List<NpcPresence>();
         readonly List<NpcData> data=new List<NpcData>();
         public IReadOnlyList<NpcPresence> Actors => actors;
-        public void Initialize(GameSession s,WorldDirector w){session=s;world=w;}
+        public void Initialize(GameSession s,WorldDirector w)
+        {
+            session=s;world=w;
+            // Also support a bootstrap that attached the scene before creating Memory.
+            if(world!=null&&!world.IsTransitioning)PrepareStage(world.Stage);
+        }
         public NpcPresence Find(string id)=>actors.FirstOrDefault(a=>a!=null&&a.npcId==id&&a.IsPresent);
         void Update()
         {
             if(world==null||world.Stage==null||world.IsTransitioning||session?.State?.memory==null)return;
-            if(stage!=world.Stage){Clear();stage=world.Stage;Spawn();}
+            PrepareStage(world.Stage);
         }
         public void Reload(){Clear();stage=null;}
+        public void PrepareStage(WorldScene destination)
+        {
+            if(destination==null||world==null||session?.State?.memory==null||stage==destination)return;
+            // Preparation belongs inside the opaque part of a scene transition.
+            // Movement still observes WorldDirector.IsTransitioning and stays blocked.
+            Clear();stage=destination;
+            try{Spawn();prepared=true;}
+            catch(System.Exception error)
+            {
+                Clear();
+                Debug.LogException(new System.InvalidOperationException("NPC preparation failed in "+destination.place+".",error),this);
+            }
+        }
+        public bool IsStageReady(WorldScene expected)
+        {
+            if(expected==null||stage!=expected||!prepared)return false;
+            foreach(var actor in actors)
+                if(actor==null||actor.Movement==null||!actor.Movement.IsReady)return false;
+            return true; // An intentionally empty location needs no extra frame.
+        }
         void Spawn()
         {
             foreach(var old in stage.GetComponentsInChildren<NpcPresence>(true))old.gameObject.SetActive(false);
@@ -48,7 +74,8 @@ namespace Seabreeze
         }
         void Clear()
         {
-            foreach(var npc in actors)if(npc!=null){if(world!=null)world.Interactables.Remove(npc.GetComponent<Interactable>());Destroy(npc.gameObject);}
+            prepared=false;
+            foreach(var npc in actors)if(npc!=null){if(world!=null)world.Interactables.Remove(npc.GetComponent<Interactable>());npc.gameObject.SetActive(false);Destroy(npc.gameObject);}
             actors.Clear();foreach(var d in data)if(d!=null)Destroy(d);data.Clear();
         }
         void OnDestroy(){Clear();}

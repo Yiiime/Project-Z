@@ -1,0 +1,13 @@
+{
+  "Type": "Live2D Expression",
+  "Name": "dialogue_smile",
+  "FadeInTime": 0.2,
+  "FadeOutTime": 0.35,
+  "Parameters": [
+    {
+      "Id": "ParamDialogueSmile",
+      "Value": 1.0,
+      "Blend": "Overwrite"
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+Model.moc3 filter=lfs diff=lfs merge=lfs -text
+Model.asset filter=lfs diff=lfs merge=lfs -text

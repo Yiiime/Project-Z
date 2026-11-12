@@ -10,17 +10,20 @@
       "locationId": "z_home",
       "x": 3.4,
       "color": "#C5AFD9",
-      "portrait": "Memory/Portraits/Z"
+      "portrait": "Memory/Portraits/ZFinal-v03",
+      "motion": "Art/CastMotion/z"
     },
     {
       "id": "liyuan",
       "displayName": "梨园",
-      "occupation": "地图绘制与路线勘察，经营地图业务",
+      "occupation": "独居岛民，常住森林小屋",
       "appearance": 3,
       "place": "Lighthouse",
       "locationId": "liyuan_home",
       "x": -4,
-      "color": "#97BCCB"
+      "color": "#97BCCB",
+      "portrait": "Memory/Portraits/Liyuan",
+      "motion": "Art/CastMotion/liyuan"
     },
     {
       "id": "liting",
@@ -30,48 +33,58 @@
       "place": "Cafe",
       "locationId": "cafe",
       "x": -2,
-      "color": "#A8CFAD"
+      "color": "#A8CFAD",
+      "portrait": "Memory/Portraits/Liting",
+      "motion": "Art/CastMotion/liting"
     },
     {
       "id": "axing",
       "displayName": "阿星",
-      "occupation": "技术员，负责设备维护",
+      "occupation": "工程师，负责设备维护",
       "appearance": 3,
       "place": "Lighthouse",
       "locationId": "axing_lab",
       "x": 2,
-      "color": "#9FD8CA"
+      "color": "#9FD8CA",
+      "portrait": "Memory/Portraits/Axing",
+      "motion": "Art/CastMotion/axing"
     },
     {
       "id": "zhengyi",
       "displayName": "正义",
-      "motion": "Art/ZhengyiMotion",
-      "occupation": "警察",
+      "motion": "Art/CastMotion/zhengyi",
+      "occupation": "岛上巡警",
       "appearance": 1,
       "place": "Street",
       "locationId": "visitor_center",
       "x": 12,
-      "color": "#91BFE2"
+      "color": "#91BFE2",
+      "portrait": "Memory/Portraits/Zhengyi"
     },
     {
       "id": "xiaoxiaoqing",
-      "displayName": "小小晴",
-      "occupation": "花店老板，照顾植物与制作花束",
+      "displayName": "晴野",
+      "occupation": "花店店长，负责花艺与植被养护",
       "appearance": 2,
       "place": "Street",
       "locationId": "flower_shop",
       "x": -6,
-      "color": "#EDA6B4"
+      "color": "#EDA6B4",
+      "portrait": "Memory/Portraits/Qingye",
+      "dialogueCharactersPerSecond": 13,
+      "motion": "Art/CastMotion/xiaoxiaoqing"
     },
     {
       "id": "linxu",
-      "displayName": "林序",
+      "displayName": "留洋",
       "occupation": "船长",
       "appearance": 3,
       "place": "Street",
       "locationId": "dock",
       "x": 6,
-      "color": "#E4B972"
+      "color": "#E4B972",
+      "portrait": "Memory/Portraits/Liuyang",
+      "motion": "Art/CastMotion/linxu"
     },
     {
       "id": "zhou_bobo",
@@ -81,7 +94,10 @@
       "place": "Street",
       "locationId": "photo_studio",
       "x": -10,
-      "color": "#C5AFD9"
+      "color": "#C5AFD9",
+      "portrait": "Memory/Portraits/ZhouboDaily",
+      "previewPortrait": "Memory/Portraits/ZhouboFinal-v03",
+      "motion": "Art/CastMotion/zhou_bobo"
     }
   ]
 }

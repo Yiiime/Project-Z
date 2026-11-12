@@ -1,0 +1,1549 @@
+{
+  "version": 2,
+  "characterId": "axing",
+  "revision": "native-video-four-state",
+  "canvasHeightUnits": 2.6850056369785795,
+  "startFrame": 0,
+  "walkSpeed": 1.1,
+  "strideLength": 0,
+  "cycleSeconds": 1.3333333333333333,
+  "idle": "axing_idle_000",
+  "walk": [
+    "axing_walk_000",
+    "axing_walk_001",
+    "axing_walk_002",
+    "axing_walk_003",
+    "axing_walk_004",
+    "axing_walk_005",
+    "axing_walk_006",
+    "axing_walk_007",
+    "axing_walk_008",
+    "axing_walk_009",
+    "axing_walk_010",
+    "axing_walk_011",
+    "axing_walk_012",
+    "axing_walk_013",
+    "axing_walk_014",
+    "axing_walk_015",
+    "axing_walk_016",
+    "axing_walk_017",
+    "axing_walk_018",
+    "axing_walk_019",
+    "axing_walk_020",
+    "axing_walk_021",
+    "axing_walk_022",
+    "axing_walk_023",
+    "axing_walk_024",
+    "axing_walk_025",
+    "axing_walk_026",
+    "axing_walk_027",
+    "axing_walk_028",
+    "axing_walk_029",
+    "axing_walk_030",
+    "axing_walk_031"
+  ],
+  "frameDurations": [
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333
+  ],
+  "start": [
+    "axing_start_000",
+    "axing_start_001",
+    "axing_start_002",
+    "axing_start_003",
+    "axing_start_004",
+    "axing_start_005",
+    "axing_start_006",
+    "axing_start_007",
+    "axing_start_008",
+    "axing_start_009",
+    "axing_start_010",
+    "axing_start_011",
+    "axing_start_012",
+    "axing_start_013",
+    "axing_start_014",
+    "axing_start_015",
+    "axing_start_016",
+    "axing_start_017",
+    "axing_start_018",
+    "axing_start_019",
+    "axing_start_020",
+    "axing_start_021",
+    "axing_start_022",
+    "axing_start_023",
+    "axing_start_024",
+    "axing_start_025"
+  ],
+  "startDurations": [
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333
+  ],
+  "stop": [
+    "axing_stop_000",
+    "axing_stop_001",
+    "axing_stop_002",
+    "axing_stop_003",
+    "axing_stop_004",
+    "axing_stop_005",
+    "axing_stop_006",
+    "axing_stop_007",
+    "axing_stop_008",
+    "axing_stop_009",
+    "axing_stop_010",
+    "axing_stop_011",
+    "axing_stop_012",
+    "axing_stop_013",
+    "axing_stop_014",
+    "axing_stop_015",
+    "axing_stop_016",
+    "axing_stop_017",
+    "axing_stop_018",
+    "axing_stop_019",
+    "axing_stop_020",
+    "axing_stop_021",
+    "axing_stop_022",
+    "axing_stop_023",
+    "axing_stop_024",
+    "axing_stop_025",
+    "axing_stop_026",
+    "axing_stop_027",
+    "axing_stop_028",
+    "axing_stop_029",
+    "axing_stop_030",
+    "axing_stop_031",
+    "axing_stop_032",
+    "axing_stop_033",
+    "axing_stop_034",
+    "axing_stop_035"
+  ],
+  "stopDurations": [
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05
+  ],
+  "assets": [
+    {
+      "name": "axing_idle_000",
+      "file": "axing_idle_000.png",
+      "sha256": "34d05e599804423108b5316512831452f6f50fd14a780e74b4f1b191529a0f9c",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "idle",
+      "sourceFrame": 39
+    },
+    {
+      "name": "axing_start_000",
+      "file": "axing_start_000.png",
+      "sha256": "1f8f50a793170aa6721141cee0c08cffa3e55ea8b90e67aa2c9fe8fbe8242f97",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 40
+    },
+    {
+      "name": "axing_start_001",
+      "file": "axing_start_001.png",
+      "sha256": "b050040dd9c704bf6041342b0f10245e9a334a78dff8d0c9d5564600a7352414",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 41
+    },
+    {
+      "name": "axing_start_002",
+      "file": "axing_start_002.png",
+      "sha256": "4df5f7838f5cc2b37d1a638349003668aa2fcf74e6c46be39d77f4ee608efbfe",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 42
+    },
+    {
+      "name": "axing_start_003",
+      "file": "axing_start_003.png",
+      "sha256": "36582f1cc7fcbc10f564742135ed983febe344d0e9488503428282901f563a33",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 43
+    },
+    {
+      "name": "axing_start_004",
+      "file": "axing_start_004.png",
+      "sha256": "e88ed3589c5bf39e45f8eefbdc64ecca2c1c42d70f6e39fb9a37efb6c4ee51fc",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 44
+    },
+    {
+      "name": "axing_start_005",
+      "file": "axing_start_005.png",
+      "sha256": "d40017081a5f5b0d7b6c01e6acfd01dd38e31c5c0c1d7848106064f9a0067b99",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 45
+    },
+    {
+      "name": "axing_start_006",
+      "file": "axing_start_006.png",
+      "sha256": "b2097b2704a7ce2f620d25a804d56449acfa23b749318ec0506b28697483170f",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 46
+    },
+    {
+      "name": "axing_start_007",
+      "file": "axing_start_007.png",
+      "sha256": "7b36fd153234e70791d81b6f8f5e33e6027e68b98ed497abfc22acce68fd410c",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 47
+    },
+    {
+      "name": "axing_start_008",
+      "file": "axing_start_008.png",
+      "sha256": "e1a04c9c0b9bcfa1e8a0e75b83f21584c7d6a94803074323caff58ff78270cc0",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 48
+    },
+    {
+      "name": "axing_start_009",
+      "file": "axing_start_009.png",
+      "sha256": "4d6b7b358f51bc056bd5d8fc7b20189d8f3ab343150ad25ecbb33acf9a5bad80",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 49
+    },
+    {
+      "name": "axing_start_010",
+      "file": "axing_start_010.png",
+      "sha256": "d07bb39e261c6e27c493ecbeafa9f557c42e21b1f1a934323d6fc6266a3dc108",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 50
+    },
+    {
+      "name": "axing_start_011",
+      "file": "axing_start_011.png",
+      "sha256": "ab213857a7d62ebf428b96fc2d1f5715da34dc386e5aab5705b86705b26cfc73",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 51
+    },
+    {
+      "name": "axing_start_012",
+      "file": "axing_start_012.png",
+      "sha256": "ced0cf3bcf8e4ccce14e906503e197d8c781f3e04988c1f6b3c5b8e63a36c579",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 52
+    },
+    {
+      "name": "axing_start_013",
+      "file": "axing_start_013.png",
+      "sha256": "d2dfc0d75776ea542ffa51774cd2a25954de14f513839323e71d894500db1a46",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 53
+    },
+    {
+      "name": "axing_start_014",
+      "file": "axing_start_014.png",
+      "sha256": "e7086558fa6013f8feebd06488635336589633ae6718f8b04e37b95fdf4c8062",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 54
+    },
+    {
+      "name": "axing_start_015",
+      "file": "axing_start_015.png",
+      "sha256": "49274d4f42f465d60dfaee71ec4c92f33d70b3391d5b576605c5d1bb8a362a5b",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 55
+    },
+    {
+      "name": "axing_start_016",
+      "file": "axing_start_016.png",
+      "sha256": "ea60535861c0c775865afd6f975c1c61aaf5745538d9f494618d1ce208c743c6",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 56
+    },
+    {
+      "name": "axing_start_017",
+      "file": "axing_start_017.png",
+      "sha256": "90876a1ceaf3a942280bf8f5d3df814a3d4163612e66a623312bfcb80a9b8d9f",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 57
+    },
+    {
+      "name": "axing_start_018",
+      "file": "axing_start_018.png",
+      "sha256": "b1ad3c3e80bdc6a6bb6b8944bbced7ef4461170c3b49754b70bc7095da23194a",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 58
+    },
+    {
+      "name": "axing_start_019",
+      "file": "axing_start_019.png",
+      "sha256": "c4de73bf115d953762ab0c3d491a84753433ca4733e3e34fe0da6ae4dc527d8b",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 59
+    },
+    {
+      "name": "axing_start_020",
+      "file": "axing_start_020.png",
+      "sha256": "7bda019cc91cc6a5d35bf23117641b3cc84016eb1adc6570fa69ea4495aa8374",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 60
+    },
+    {
+      "name": "axing_start_021",
+      "file": "axing_start_021.png",
+      "sha256": "cfa7ac8a04cdb755276c1df3077c9cf92f0ee40400b65018129244b4c4ac6cef",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 61
+    },
+    {
+      "name": "axing_start_022",
+      "file": "axing_start_022.png",
+      "sha256": "34baae307aea10d45433d94bce810081d3acb03706cfeff33273900d558d1bf2",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 62
+    },
+    {
+      "name": "axing_start_023",
+      "file": "axing_start_023.png",
+      "sha256": "e2fee702769b5dd8875cc588ef2ff2ffa6f7c64a429f42523645f665f63145dd",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 63
+    },
+    {
+      "name": "axing_start_024",
+      "file": "axing_start_024.png",
+      "sha256": "07e0341904816fe74f528eec79d1736ac617a090a99a10db4fda9cbd120a376a",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 64
+    },
+    {
+      "name": "axing_start_025",
+      "file": "axing_start_025.png",
+      "sha256": "e08f7d9f15d406001f44b902b8c19853103e7040a96bf587d6a44b5e31ccf571",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "start",
+      "sourceFrame": 65
+    },
+    {
+      "name": "axing_walk_000",
+      "file": "axing_walk_000.png",
+      "sha256": "c3373ff99fac056a80dbf23452de21b6beecf66c87368a7a515ac27e7ba4c21f",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 66
+    },
+    {
+      "name": "axing_walk_001",
+      "file": "axing_walk_001.png",
+      "sha256": "72cbe7e7b014a66acf4a3a1d609af0f193532a7faf547c167ed3d515f230025b",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 67
+    },
+    {
+      "name": "axing_walk_002",
+      "file": "axing_walk_002.png",
+      "sha256": "f848190d8a8a32471900acfee3a19d52a2357e0af74c2d9674c3704cee4245c1",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 68
+    },
+    {
+      "name": "axing_walk_003",
+      "file": "axing_walk_003.png",
+      "sha256": "347ac1459de3aa763b915fcf364626beadaff4bfb2d7a13900799da951725dcd",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 69
+    },
+    {
+      "name": "axing_walk_004",
+      "file": "axing_walk_004.png",
+      "sha256": "67f177c3f28b7c11127e080e178402bc8e324338bfe937367529fdd241a70e5e",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 70
+    },
+    {
+      "name": "axing_walk_005",
+      "file": "axing_walk_005.png",
+      "sha256": "8a70f147c71bdc50d7abcaad98d46d63a1d8d791fc84af1bbcee0c577d7444b3",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 71
+    },
+    {
+      "name": "axing_walk_006",
+      "file": "axing_walk_006.png",
+      "sha256": "86618665bc75f7d853b35821c3474da4835e44c64952c8cd97f267f25c7c3375",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 72
+    },
+    {
+      "name": "axing_walk_007",
+      "file": "axing_walk_007.png",
+      "sha256": "be0deeed42ab12ee971cc021c56b30f30771cb533626ccebea1e6bc4c99485f5",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 73
+    },
+    {
+      "name": "axing_walk_008",
+      "file": "axing_walk_008.png",
+      "sha256": "0fb7c71ce8707aeee2f23b54d1ed1cfac15de6edd1e25400e9ed1853ab8949e3",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 74
+    },
+    {
+      "name": "axing_walk_009",
+      "file": "axing_walk_009.png",
+      "sha256": "1ac83a6288499424538e35211977c94ce06cb354c29c234e4cdd9e56d6f103f6",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 75
+    },
+    {
+      "name": "axing_walk_010",
+      "file": "axing_walk_010.png",
+      "sha256": "cb01d69d99778948b71a9c92a330af04064492d78519b4c54eea46da5333ea40",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 76
+    },
+    {
+      "name": "axing_walk_011",
+      "file": "axing_walk_011.png",
+      "sha256": "c4381c2585160acf9b2cd26289c6fc9632b0ddae83b47233edd502788f23ce4d",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 77
+    },
+    {
+      "name": "axing_walk_012",
+      "file": "axing_walk_012.png",
+      "sha256": "ed0fcda7b22ab33b74ccbeb77dac134377a0e67083f6e75931d1ac5ea3e32c3c",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 78
+    },
+    {
+      "name": "axing_walk_013",
+      "file": "axing_walk_013.png",
+      "sha256": "c4b1dc2f45000da9647c211bbeedd2c9e5bc2e1b9ff6a109a288780b15f7a2be",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 79
+    },
+    {
+      "name": "axing_walk_014",
+      "file": "axing_walk_014.png",
+      "sha256": "c06f3b78a5473c03d0e221301a81264b3d28284b89a4dca17a76e9e876e11604",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 80
+    },
+    {
+      "name": "axing_walk_015",
+      "file": "axing_walk_015.png",
+      "sha256": "6314acc906a136b550b5b0a4a2e97811a65fd725c58e21c13952a58219716ca8",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 81
+    },
+    {
+      "name": "axing_walk_016",
+      "file": "axing_walk_016.png",
+      "sha256": "96f0f85a45dbc5f04a37b18d5029a9e371d8cffbb675e3f88f81b2dee3e8e6b6",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 82
+    },
+    {
+      "name": "axing_walk_017",
+      "file": "axing_walk_017.png",
+      "sha256": "3cc7851e6a784be3e34fe248e7c89b0e1f644eb9678f397b69064d6494cd1a83",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 83
+    },
+    {
+      "name": "axing_walk_018",
+      "file": "axing_walk_018.png",
+      "sha256": "eb4b07b4d9c41686f0d80378603488c2b169d01ae48bd0881b2b967ecf757845",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 84
+    },
+    {
+      "name": "axing_walk_019",
+      "file": "axing_walk_019.png",
+      "sha256": "69301c6a27a69de0f2524375dd3c976c531046ed6349bf0d24ce109243944bdb",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 85
+    },
+    {
+      "name": "axing_walk_020",
+      "file": "axing_walk_020.png",
+      "sha256": "0ab9989dde39fee4ee6f44379c74b2bcecfa344612b467d431762b12580199c4",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 86
+    },
+    {
+      "name": "axing_walk_021",
+      "file": "axing_walk_021.png",
+      "sha256": "994a636c233ed89f8f892d79679bf543058f99a6128216cf4f2b975eb8d9013c",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 87
+    },
+    {
+      "name": "axing_walk_022",
+      "file": "axing_walk_022.png",
+      "sha256": "c75211721f6543d96ae384568896652197c69f68b8ca6ee315af01849ca5791f",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 88
+    },
+    {
+      "name": "axing_walk_023",
+      "file": "axing_walk_023.png",
+      "sha256": "a71f7105218ae95e95080aae36e82f004dbedb4d605f528c19fb221a624fbf32",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 89
+    },
+    {
+      "name": "axing_walk_024",
+      "file": "axing_walk_024.png",
+      "sha256": "50b4c5a0d01191bb4e06fef35987b85ab9edf7b077937e3613d4370cfd8355d7",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 90
+    },
+    {
+      "name": "axing_walk_025",
+      "file": "axing_walk_025.png",
+      "sha256": "f48536f2d260c270a96937060d511d9171d0592e52eb8c2d841b25719303581f",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 91
+    },
+    {
+      "name": "axing_walk_026",
+      "file": "axing_walk_026.png",
+      "sha256": "337f07b2a7db69f9061d1f6510ac3cc9f275708bc42e6ad9bd97372fcc3bce6d",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 92
+    },
+    {
+      "name": "axing_walk_027",
+      "file": "axing_walk_027.png",
+      "sha256": "484f0e8331fffd9dfbd139fbd9b5ec38737dac4c1a908f8b849e6215b4387c8d",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 93
+    },
+    {
+      "name": "axing_walk_028",
+      "file": "axing_walk_028.png",
+      "sha256": "e1e97ac8747d54d9a8f99425cd051008c3b09cf35b58e8927e9d0e2b6acea8e7",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 94
+    },
+    {
+      "name": "axing_walk_029",
+      "file": "axing_walk_029.png",
+      "sha256": "52bd3aba79008af4b6def7103ef693a36830cc20c27e13a3f5b8c9945ede5dd9",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 95
+    },
+    {
+      "name": "axing_walk_030",
+      "file": "axing_walk_030.png",
+      "sha256": "ff868950ec567e7768cb4d19b70d4c3a49b8f94e80d19d948f13d445cb5bbd8e",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 96
+    },
+    {
+      "name": "axing_walk_031",
+      "file": "axing_walk_031.png",
+      "sha256": "653d07a4160466f2c47eec10c6bb189e8338fe5757a7c4536ddf553c267de706",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "walk",
+      "sourceFrame": 97
+    },
+    {
+      "name": "axing_stop_000",
+      "file": "axing_stop_000.png",
+      "sha256": "26e430bef21a2720b09bd62c09da7c9d528c1600e1c364482eb2a639eff3250c",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 185
+    },
+    {
+      "name": "axing_stop_001",
+      "file": "axing_stop_001.png",
+      "sha256": "4589d2e3fd94cfdf509dee7cf24533cb6b413f2b4954617d49f251ab3beb9fa0",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 186
+    },
+    {
+      "name": "axing_stop_002",
+      "file": "axing_stop_002.png",
+      "sha256": "b19f7050f2831f62175839ca13abfaf45816fe9fe106b0d361dc9b0035a78c40",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 187
+    },
+    {
+      "name": "axing_stop_003",
+      "file": "axing_stop_003.png",
+      "sha256": "695f5d65dff9684e897b18fe5951b52f3d7969f86a62a8634603aa0b8af15baf",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 188
+    },
+    {
+      "name": "axing_stop_004",
+      "file": "axing_stop_004.png",
+      "sha256": "a6aeabdac7d08be079613653c0d8c325a3aedaa0f13e6c61993ed8573efd2c1f",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 189
+    },
+    {
+      "name": "axing_stop_005",
+      "file": "axing_stop_005.png",
+      "sha256": "be8c62343651eaafb12ad5db83181e43efcd1d4f22e8f76f4de5929047552fd4",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 190
+    },
+    {
+      "name": "axing_stop_006",
+      "file": "axing_stop_006.png",
+      "sha256": "a81bae9ae6b7d6c6c7dca6937416051042ffe73fbca4bec4e279e424a23a8c8e",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 191
+    },
+    {
+      "name": "axing_stop_007",
+      "file": "axing_stop_007.png",
+      "sha256": "bd10fa6d2cb61a102cf898c9724e59bb41167f95a93546fecad02675b2283fb2",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 192
+    },
+    {
+      "name": "axing_stop_008",
+      "file": "axing_stop_008.png",
+      "sha256": "4f0cff4016b61f31d1e7440f0860e837e3725cd100c06b1833ceecc4aa31e4eb",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 193
+    },
+    {
+      "name": "axing_stop_009",
+      "file": "axing_stop_009.png",
+      "sha256": "9f24fbb3e89369d26d6c08a83679083ccf1adc9cfb417ba16c22dae37347d5d7",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 194
+    },
+    {
+      "name": "axing_stop_010",
+      "file": "axing_stop_010.png",
+      "sha256": "8f7d3eb2322ff627280a60215a39c01971e9892e8a29c0eab9ab55cb4fb8bfd2",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 195
+    },
+    {
+      "name": "axing_stop_011",
+      "file": "axing_stop_011.png",
+      "sha256": "f7703239446f109f5c05ac689cb6dbb9c28710960d53aa244eb3bac426eb63fa",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 196
+    },
+    {
+      "name": "axing_stop_012",
+      "file": "axing_stop_012.png",
+      "sha256": "3d679ade709812f4a2412bb9ef352bfc3e3e4552b6f404bc29bcc7b2d7771772",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 197
+    },
+    {
+      "name": "axing_stop_013",
+      "file": "axing_stop_013.png",
+      "sha256": "a3bd1aad33454b5436a0eb5db002417950844dc48f501299eb670ebaf54e4b77",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 198
+    },
+    {
+      "name": "axing_stop_014",
+      "file": "axing_stop_014.png",
+      "sha256": "4bf823200be56d82aa8c02591a2ad0cf08c0d2d87d26099e6b43967dd888e43b",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 199
+    },
+    {
+      "name": "axing_stop_015",
+      "file": "axing_stop_015.png",
+      "sha256": "37b3e42f2b899539aae168ef5554edc3a03dbfb701015320044c43a11418068a",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 200
+    },
+    {
+      "name": "axing_stop_016",
+      "file": "axing_stop_016.png",
+      "sha256": "0da2cd8f1767b3b96d6288c182a135728d8f0374131fe7ee0945724ef203c663",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 201
+    },
+    {
+      "name": "axing_stop_017",
+      "file": "axing_stop_017.png",
+      "sha256": "8b720487c4ba6f389724fcf7273de704419c1f2cb92d9d3dc74cd9d261d7612e",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 202
+    },
+    {
+      "name": "axing_stop_018",
+      "file": "axing_stop_018.png",
+      "sha256": "5ccd0f6305368a67a0666d3e91d62401eac429f4d00fdd75acb72e59e620ba0b",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 203
+    },
+    {
+      "name": "axing_stop_019",
+      "file": "axing_stop_019.png",
+      "sha256": "d12915fb1301a1456df75ef7612313674cb630c2f6d27768a06c1435449091a7",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 204
+    },
+    {
+      "name": "axing_stop_020",
+      "file": "axing_stop_020.png",
+      "sha256": "14f40afa048470cf425628b24e378fa4f4957b7ce65f24e832e354d8cebc18a0",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 205
+    },
+    {
+      "name": "axing_stop_021",
+      "file": "axing_stop_021.png",
+      "sha256": "ea5f1b27fe65bac71c9f59ca846ca9fddd67d01b55d86fc23d9d3ecd4e555cd6",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 206
+    },
+    {
+      "name": "axing_stop_022",
+      "file": "axing_stop_022.png",
+      "sha256": "ca5533596a77bbe5c889b23dbe3f11f7cb7fe285c651005c4e351ce964560a58",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 207
+    },
+    {
+      "name": "axing_stop_023",
+      "file": "axing_stop_023.png",
+      "sha256": "2c8dd1f9984fb41a4709ceba67c77ff4588a51e972ac430f59b4e92ec30892c8",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 208
+    },
+    {
+      "name": "axing_stop_024",
+      "file": "axing_stop_024.png",
+      "sha256": "9e8c6b8f4781e559ef16404061ae2b936f78ee068f4f3231c5aaec122ba38196",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 209
+    },
+    {
+      "name": "axing_stop_025",
+      "file": "axing_stop_025.png",
+      "sha256": "83cfb1f969e358c87c368712d0d95cb47e57c30fe986437d1214cee26c88ec35",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 210
+    },
+    {
+      "name": "axing_stop_026",
+      "file": "axing_stop_026.png",
+      "sha256": "e28ae1d0fe5c9bc96bd8cc76965a452034463b51ac299f0189b6bc13baaae03d",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 211
+    },
+    {
+      "name": "axing_stop_027",
+      "file": "axing_stop_027.png",
+      "sha256": "fc3c6185804d85364be55330f2a13be2e61af0284998990ddc1feb9e7e62c5e2",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 212
+    },
+    {
+      "name": "axing_stop_028",
+      "file": "axing_stop_028.png",
+      "sha256": "19d706633a541442aad1d83f0ee26fb8cd5622be2bea6f4a9219e0984d00d753",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 213
+    },
+    {
+      "name": "axing_stop_029",
+      "file": "axing_stop_029.png",
+      "sha256": "55011bb929f3134d51bc20dd0059d287afc3c67ce5244d6c2a66c553012120dc",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 214
+    },
+    {
+      "name": "axing_stop_030",
+      "file": "axing_stop_030.png",
+      "sha256": "4ede7d47ed75391f56a68d2dfde9dedffc351a16d1084c72f36aaf194e3397c8",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 215
+    },
+    {
+      "name": "axing_stop_031",
+      "file": "axing_stop_031.png",
+      "sha256": "f7e114503f4d5471ffbaac3c3d15612cafee22ec6d59f135c9b123bb9c037aa6",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 216
+    },
+    {
+      "name": "axing_stop_032",
+      "file": "axing_stop_032.png",
+      "sha256": "8b743ef2397400bc4646de74b3bb05ac9f4178e6c03933cea583c766fb694f83",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 217
+    },
+    {
+      "name": "axing_stop_033",
+      "file": "axing_stop_033.png",
+      "sha256": "9bf574d229fbdb90b5cc8355a904d2dced9de7c1939ab4f0690c8c0a6986adfd",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 218
+    },
+    {
+      "name": "axing_stop_034",
+      "file": "axing_stop_034.png",
+      "sha256": "4187b9e596c843454e10c329a124b36912641302d0ff9351a6e909e4b3c993ef",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 219
+    },
+    {
+      "name": "axing_stop_035",
+      "file": "axing_stop_035.png",
+      "sha256": "1a6334b7f30a0fabdf67878593f96716427b35728b4f4cf2b79ba0c9a41bc215",
+      "width": 944,
+      "height": 1832,
+      "pixelsPerUnit": 682.3076923076923,
+      "pivot": {
+        "x": 0.4809322033898305,
+        "y": 0.013100436681222738
+      },
+      "state": "stop",
+      "sourceFrame": 220
+    }
+  ],
+  "source": {
+    "videoSha256": "d6af931b78375a058b593bc431154962093685ee37b893022054f2ed52f65de1",
+    "review": "source~/video-extraction.json",
+    "nativePng": true,
+    "gpuCompression": "BC7 at native dimensions"
+  }
+}

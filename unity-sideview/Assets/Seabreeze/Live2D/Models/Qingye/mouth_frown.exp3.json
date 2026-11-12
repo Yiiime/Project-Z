@@ -1,0 +1,12 @@
+{
+ "Type": "Live2D Expression",
+ "FadeInTime": 0.15,
+ "FadeOutTime": 0.15,
+ "Parameters": [
+  {
+   "Id": "ParamMouthVariant",
+   "Value": -2,
+   "Blend": "Overwrite"
+  }
+ ]
+}

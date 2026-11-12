@@ -70,7 +70,7 @@ namespace ZLive.ModelPerformance
         Away,
     }
 
-    /// <summary>从最终 Z Model.cdi3 读取的 32 个参数及其用途。</summary>
+    /// <summary>直播表演控制器使用的稳定参数白名单。模型可附带额外参数，口型由 CharacterPresenter 按资源选择。</summary>
     [Serializable]
     public sealed class ZParameterDescriptor
     {
@@ -109,7 +109,7 @@ namespace ZLive.ModelPerformance
             new ZParameterDescriptor("ParamEyeBallX", "gaze", "视线 X"),
             new ZParameterDescriptor("ParamEyeBallY", "gaze", "视线 Y"),
             new ZParameterDescriptor("ParamBrowForm", "face", "angry/troubled.exp3：眉形"),
-            new ZParameterDescriptor("ParamMouthOpenY", "mouth", "嘴部开合（叹气由 companion material binding 控制；聊天语音不覆盖）"),
+            new ZParameterDescriptor("ParamMouthOpenY", "mouth", "旧模型嘴部开合（叹气由 companion material binding 控制；V3 使用 ParamZSpeech）"),
             new ZParameterDescriptor("ParamMouthVariant", "face", "预览表情/ surprise.exp3：嘴型变体"),
             new ZParameterDescriptor("ParamHairSideL", "hair", "左侧发丝（控制器不主动写）"),
             new ZParameterDescriptor("ParamHairSideR", "hair", "右侧发丝（控制器不主动写）"),
@@ -441,7 +441,7 @@ namespace ZLive.ModelPerformance
             expressionElapsed = 0f;
             foreach (var binding in s_expressionBindings)
                 SetTargetToDefault(binding.parameterId);
-            SetTargetToDefault("ParamMouthOpenY");
+            SetLegacyMouthToDefault();
 
             foreach (var binding in s_expressionBindings)
             {
@@ -622,7 +622,7 @@ namespace ZLive.ModelPerformance
             SetGaze(ZGaze.Player);
             SetTargetToDefault("ParamEyeLOpen");
             SetTargetToDefault("ParamEyeROpen");
-            SetTargetToDefault("ParamMouthOpenY");
+            SetLegacyMouthToDefault();
             SetMotionPreset(ZMotionPreset.Idle);
         }
 
@@ -646,7 +646,7 @@ namespace ZLive.ModelPerformance
             SetGaze(ZGaze.Player);
             SetTargetToDefault("ParamEyeLOpen");
             SetTargetToDefault("ParamEyeROpen");
-            SetTargetToDefault("ParamMouthOpenY");
+            SetLegacyMouthToDefault();
         }
 
         private static ZFaceExpression GetPreviewExpression(ZMotionPreset motion)
@@ -752,7 +752,7 @@ namespace ZLive.ModelPerformance
                     break;
                 case ZFaceExpression.Sigh:
                     SetPreviewFaceParameters(0f, 0.28f, 0f, 0f, 0f);
-                    SetTarget("ParamMouthOpenY", 0f);
+                    SetLegacyMouthTarget(0f);
                     SetPreviewEyeOpen(0f, 0f);
                     break;
             }
@@ -1444,7 +1444,7 @@ namespace ZLive.ModelPerformance
             SetPreviewEyeOpen(eyeOpen, eyeOpen);
             SetTarget("ParamMouthVariant", 0f);
             SetTarget("ParamMouthForm", 0f);
-            SetTarget("ParamMouthOpenY", 0f);
+            SetLegacyMouthTarget(0f);
             if (elapsed <= 1.20f)
             {
                 SetPreviewEyeOpen(0f, 0f);
@@ -1457,7 +1457,7 @@ namespace ZLive.ModelPerformance
             if (!previewPresentationActive)
                 return;
 
-            SetTargetToDefault("ParamMouthOpenY");
+            SetLegacyMouthToDefault();
 
             // 预览表情只由本控制器写入。眼睛微笑不叠加到害羞、眨眼等单眼动作，
             // 避免全局 EyeSmile 与独立眼睑曲线发生重影。
@@ -1573,7 +1573,7 @@ namespace ZLive.ModelPerformance
             SetTargetToDefault("ParamCheek");
             SetTargetToDefault("ParamMouthVariant");
             SetTargetToDefault("ParamMouthForm");
-            SetTargetToDefault("ParamMouthOpenY");
+            SetLegacyMouthToDefault();
         }
 
         private static float EaseInOut(float value)
@@ -1702,6 +1702,21 @@ namespace ZLive.ModelPerformance
                 value = Mathf.Clamp(value, parameter.MinimumValue, parameter.MaximumValue);
             targets[id] = value;
             activeWriters.Add(id);
+        }
+
+        private bool UsesNativeSpeechParameter => cubismModel != null && cubismModel.Parameters != null &&
+            cubismModel.Parameters.FindById("ParamZSpeech") != null;
+
+        private void SetLegacyMouthToDefault()
+        {
+            if (!UsesNativeSpeechParameter)
+                SetTargetToDefault("ParamMouthOpenY");
+        }
+
+        private void SetLegacyMouthTarget(float value)
+        {
+            if (!UsesNativeSpeechParameter)
+                SetTarget("ParamMouthOpenY", value);
         }
 
         private void SetTargetToDefault(string id)

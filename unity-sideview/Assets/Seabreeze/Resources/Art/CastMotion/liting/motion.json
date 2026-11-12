@@ -1,0 +1,1645 @@
+{
+  "version": 2,
+  "characterId": "liting",
+  "revision": "native-video-four-state",
+  "canvasHeightUnits": 2.6517638840377225,
+  "startFrame": 0,
+  "walkSpeed": 1.1,
+  "strideLength": 0,
+  "cycleSeconds": 1.6333333333333333,
+  "idle": "liting_idle_000",
+  "walk": [
+    "liting_walk_000",
+    "liting_walk_001",
+    "liting_walk_002",
+    "liting_walk_003",
+    "liting_walk_004",
+    "liting_walk_005",
+    "liting_walk_006",
+    "liting_walk_007",
+    "liting_walk_008",
+    "liting_walk_009",
+    "liting_walk_010",
+    "liting_walk_011",
+    "liting_walk_012",
+    "liting_walk_013",
+    "liting_walk_014",
+    "liting_walk_015",
+    "liting_walk_016",
+    "liting_walk_017",
+    "liting_walk_018",
+    "liting_walk_019",
+    "liting_walk_020",
+    "liting_walk_021",
+    "liting_walk_022",
+    "liting_walk_023",
+    "liting_walk_024",
+    "liting_walk_025",
+    "liting_walk_026",
+    "liting_walk_027",
+    "liting_walk_028",
+    "liting_walk_029",
+    "liting_walk_030",
+    "liting_walk_031",
+    "liting_walk_032",
+    "liting_walk_033",
+    "liting_walk_034",
+    "liting_walk_035",
+    "liting_walk_036",
+    "liting_walk_037",
+    "liting_walk_038"
+  ],
+  "frameDurations": [
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05
+  ],
+  "start": [
+    "liting_start_000",
+    "liting_start_001",
+    "liting_start_002",
+    "liting_start_003",
+    "liting_start_004",
+    "liting_start_005",
+    "liting_start_006",
+    "liting_start_007",
+    "liting_start_008",
+    "liting_start_009",
+    "liting_start_010",
+    "liting_start_011",
+    "liting_start_012",
+    "liting_start_013",
+    "liting_start_014",
+    "liting_start_015",
+    "liting_start_016",
+    "liting_start_017",
+    "liting_start_018",
+    "liting_start_019",
+    "liting_start_020",
+    "liting_start_021",
+    "liting_start_022"
+  ],
+  "startDurations": [
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333
+  ],
+  "stop": [
+    "liting_stop_000",
+    "liting_stop_001",
+    "liting_stop_002",
+    "liting_stop_003",
+    "liting_stop_004",
+    "liting_stop_005",
+    "liting_stop_006",
+    "liting_stop_007",
+    "liting_stop_008",
+    "liting_stop_009",
+    "liting_stop_010",
+    "liting_stop_011",
+    "liting_stop_012",
+    "liting_stop_013",
+    "liting_stop_014",
+    "liting_stop_015",
+    "liting_stop_016",
+    "liting_stop_017",
+    "liting_stop_018",
+    "liting_stop_019",
+    "liting_stop_020",
+    "liting_stop_021",
+    "liting_stop_022",
+    "liting_stop_023",
+    "liting_stop_024",
+    "liting_stop_025",
+    "liting_stop_026",
+    "liting_stop_027",
+    "liting_stop_028",
+    "liting_stop_029",
+    "liting_stop_030",
+    "liting_stop_031",
+    "liting_stop_032",
+    "liting_stop_033",
+    "liting_stop_034",
+    "liting_stop_035",
+    "liting_stop_036",
+    "liting_stop_037"
+  ],
+  "stopDurations": [
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333
+  ],
+  "assets": [
+    {
+      "name": "liting_idle_000",
+      "file": "liting_idle_000.png",
+      "sha256": "aa25f0561432c7da3462e20a4ccdc5d70b0e491645ce9d21ba39a02b6c971be8",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "idle",
+      "sourceFrame": 46
+    },
+    {
+      "name": "liting_start_000",
+      "file": "liting_start_000.png",
+      "sha256": "1617d9f63cb3c3e8a2550e98908c2b6471a8682c9519fe3e3c81b1a081aea658",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "start",
+      "sourceFrame": 47
+    },
+    {
+      "name": "liting_start_001",
+      "file": "liting_start_001.png",
+      "sha256": "cf10523228d35de9ab3300896864bbfe6f9ca04eb8ed869afd7cea2cfaba4953",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "start",
+      "sourceFrame": 48
+    },
+    {
+      "name": "liting_start_002",
+      "file": "liting_start_002.png",
+      "sha256": "bd46e17fcba022873ff5270580d635f0b71d94422d27e62e9f07b007ce80fbde",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "start",
+      "sourceFrame": 49
+    },
+    {
+      "name": "liting_start_003",
+      "file": "liting_start_003.png",
+      "sha256": "508a3ee4a978cdde4db9d75917f7cbe4097773648f10cfb96d285ca226e2476a",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "start",
+      "sourceFrame": 50
+    },
+    {
+      "name": "liting_start_004",
+      "file": "liting_start_004.png",
+      "sha256": "63c60a0b04a102bd0ed2100e33a44d4e0db7231f9850d145bf39068fc3c67dea",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "start",
+      "sourceFrame": 51
+    },
+    {
+      "name": "liting_start_005",
+      "file": "liting_start_005.png",
+      "sha256": "f8d7c4af5d95e023416616efcee55d697c10bdd90deb5478569969c7fc66c692",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "start",
+      "sourceFrame": 52
+    },
+    {
+      "name": "liting_start_006",
+      "file": "liting_start_006.png",
+      "sha256": "c8b8736f4e821463a299e78cc4422f4ffe2421b1b88c2b75ca2d47e7324dcb1e",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "start",
+      "sourceFrame": 53
+    },
+    {
+      "name": "liting_start_007",
+      "file": "liting_start_007.png",
+      "sha256": "69bea5ca044c7ee89bccb1ea689af8b19b62414cff15b30efa0e35acfe7bd086",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "start",
+      "sourceFrame": 54
+    },
+    {
+      "name": "liting_start_008",
+      "file": "liting_start_008.png",
+      "sha256": "af8e2d19392a13d8a9cc685c9dafbd83e647a3503301b4a1e3478822b578d4eb",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "start",
+      "sourceFrame": 55
+    },
+    {
+      "name": "liting_start_009",
+      "file": "liting_start_009.png",
+      "sha256": "1e7ae822116c8d026c7fd8b911466a461571401856a61300850ee03eee5d84d0",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "start",
+      "sourceFrame": 56
+    },
+    {
+      "name": "liting_start_010",
+      "file": "liting_start_010.png",
+      "sha256": "b5263a75a977d52284463042909e91ade50f44eef89fe17b6ce445fc5005f2ae",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "start",
+      "sourceFrame": 57
+    },
+    {
+      "name": "liting_start_011",
+      "file": "liting_start_011.png",
+      "sha256": "9a637e5c6b5c402d8538ed9915ecebbe5a685a6560ec0542fcd2215bd2ad03df",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "start",
+      "sourceFrame": 58
+    },
+    {
+      "name": "liting_start_012",
+      "file": "liting_start_012.png",
+      "sha256": "22ce15337e855b94861d1b1282ef078ebb692d10e39e01893d1b656d39f164e2",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "start",
+      "sourceFrame": 59
+    },
+    {
+      "name": "liting_start_013",
+      "file": "liting_start_013.png",
+      "sha256": "b0dfa3736ee90ffa2d4a596f5409a69a8b3e61171f7703a0f77fae7492f2ffda",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "start",
+      "sourceFrame": 60
+    },
+    {
+      "name": "liting_start_014",
+      "file": "liting_start_014.png",
+      "sha256": "b9cd1c82d3c1f88173bb8257735e56fbcce279288db80ea913afebe9f142c5b2",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "start",
+      "sourceFrame": 61
+    },
+    {
+      "name": "liting_start_015",
+      "file": "liting_start_015.png",
+      "sha256": "95ae36bab1574164eaa88bf6b3f24e190ff7e2ebc9d35dd8a19761a230ae1356",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "start",
+      "sourceFrame": 62
+    },
+    {
+      "name": "liting_start_016",
+      "file": "liting_start_016.png",
+      "sha256": "88b29ac8daecb9facb5d67e0382e89b053566e686e1e0799d27b253905f716c6",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "start",
+      "sourceFrame": 63
+    },
+    {
+      "name": "liting_start_017",
+      "file": "liting_start_017.png",
+      "sha256": "db869dc46f4530e00ee184322ac2c21fd06949fb471bf609b853ff106a8405b7",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "start",
+      "sourceFrame": 64
+    },
+    {
+      "name": "liting_start_018",
+      "file": "liting_start_018.png",
+      "sha256": "561a57b96bc725a9ce1b98f2969a153811b6b39884f1f6f71d9464b27854a271",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "start",
+      "sourceFrame": 65
+    },
+    {
+      "name": "liting_start_019",
+      "file": "liting_start_019.png",
+      "sha256": "1e418b18e510c92a50038b353b6e5860c431de4e494b27eebb5c860169aa77a5",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "start",
+      "sourceFrame": 66
+    },
+    {
+      "name": "liting_start_020",
+      "file": "liting_start_020.png",
+      "sha256": "f2a0247fbb2890f0cf8a36255d50b99ab6955a687b213f836bccdabe78929f2f",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "start",
+      "sourceFrame": 67
+    },
+    {
+      "name": "liting_start_021",
+      "file": "liting_start_021.png",
+      "sha256": "47febc6f83ca5ce71a86f4c639b27837db62fadbbe8a5252b47965f8ddc5c408",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "start",
+      "sourceFrame": 68
+    },
+    {
+      "name": "liting_start_022",
+      "file": "liting_start_022.png",
+      "sha256": "5f45e66ed98817a8b941f9be91b4b87966063cad059d0632c68f06bfa4ae5dda",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "start",
+      "sourceFrame": 69
+    },
+    {
+      "name": "liting_walk_000",
+      "file": "liting_walk_000.png",
+      "sha256": "32c8bddca7ee634f87f8449b16d76f72c79c1c02aacc58b50d71605e1dc898e8",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 70
+    },
+    {
+      "name": "liting_walk_001",
+      "file": "liting_walk_001.png",
+      "sha256": "d2ba8367e20b6ac56c44407e76d72995fd36238f0ac631d692ad6897893a1e20",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 71
+    },
+    {
+      "name": "liting_walk_002",
+      "file": "liting_walk_002.png",
+      "sha256": "ed319c3c5d854df93dbd63693133b40404e25cf66245a92955e146294e6e1ad7",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 72
+    },
+    {
+      "name": "liting_walk_003",
+      "file": "liting_walk_003.png",
+      "sha256": "2d5c574be272a555d452bc791202997b05a7b8c59d0c1d345c5e3213ca9a3263",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 73
+    },
+    {
+      "name": "liting_walk_004",
+      "file": "liting_walk_004.png",
+      "sha256": "62b9d2b33fb6020954d06a400a115beae2d376bf4c439c4def036fa3e49de9d4",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 74
+    },
+    {
+      "name": "liting_walk_005",
+      "file": "liting_walk_005.png",
+      "sha256": "95def5ab0cfe54d45d0b0774b6c9895a9861ccc89efaed0fbcca6ff123645520",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 75
+    },
+    {
+      "name": "liting_walk_006",
+      "file": "liting_walk_006.png",
+      "sha256": "a4e5dcce67b2d34a4b24c40b790cbe65659fe0b862224784fa72f4b05e06b955",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 76
+    },
+    {
+      "name": "liting_walk_007",
+      "file": "liting_walk_007.png",
+      "sha256": "749aeba1e9dc670ab0347491b7fad753debe35eac403ef11809002b6e2222602",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 77
+    },
+    {
+      "name": "liting_walk_008",
+      "file": "liting_walk_008.png",
+      "sha256": "d8afe19b5d09f677e8a4b0f7dc35505789c1ab7a1265094f7605456341930028",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 78
+    },
+    {
+      "name": "liting_walk_009",
+      "file": "liting_walk_009.png",
+      "sha256": "4630c32f9d6ac685734704b271393f9ab3ad2a7b11741be651824f296ce95787",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 79
+    },
+    {
+      "name": "liting_walk_010",
+      "file": "liting_walk_010.png",
+      "sha256": "20e2adfa391cbf06fa85da9b89c9b00ce5b840d91fc6632b45ceb22fdd9b6e7e",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 80
+    },
+    {
+      "name": "liting_walk_011",
+      "file": "liting_walk_011.png",
+      "sha256": "95331cb8b35f4eff8934743e73c1a021e64f76cca324f985cb53606c0093ba30",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 81
+    },
+    {
+      "name": "liting_walk_012",
+      "file": "liting_walk_012.png",
+      "sha256": "35567a12a0608cf2c4163fd1beccc1b4a6e7d8742374add77a80242762a7228e",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 82
+    },
+    {
+      "name": "liting_walk_013",
+      "file": "liting_walk_013.png",
+      "sha256": "9fb1d2feb4f1b57b3a8a5912e3708ae62e3e0ae2928bc571337a685f5e9f3651",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 83
+    },
+    {
+      "name": "liting_walk_014",
+      "file": "liting_walk_014.png",
+      "sha256": "e33066e4645af0b674312443c7f8269a309618092ea2f077ccf8feb13a4bea84",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 84
+    },
+    {
+      "name": "liting_walk_015",
+      "file": "liting_walk_015.png",
+      "sha256": "30bd2cc5477b8a9b25b59e1972288e52f73af29409a0a1944b1b80aac1ffa9c5",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 85
+    },
+    {
+      "name": "liting_walk_016",
+      "file": "liting_walk_016.png",
+      "sha256": "350948547dd25b8d0f378001f3a60e7b6f5d1c6853565fbfca226629dc5d5fff",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 86
+    },
+    {
+      "name": "liting_walk_017",
+      "file": "liting_walk_017.png",
+      "sha256": "87e6174d07792ec9068e62afa2007f8e8579a641adc6d6bfa2b156bf4aa3999f",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 87
+    },
+    {
+      "name": "liting_walk_018",
+      "file": "liting_walk_018.png",
+      "sha256": "f78a7d44f12ce67c97cc168089393c0a70eeea0f8a5174e3a48ee1790eb0082e",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 88
+    },
+    {
+      "name": "liting_walk_019",
+      "file": "liting_walk_019.png",
+      "sha256": "36e863be07c149fb9dbfd8de3e9e731537df5c116e7ba58ff2928eb0f8f618ad",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 89
+    },
+    {
+      "name": "liting_walk_020",
+      "file": "liting_walk_020.png",
+      "sha256": "6fb275d9fbb4e411b1711325820e8d7c7713b6e4ffbd88e934c6a870e371def1",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 90
+    },
+    {
+      "name": "liting_walk_021",
+      "file": "liting_walk_021.png",
+      "sha256": "bafae1e59a79c1713fe16fac7d3035d94659abb7b695ce71b63f561c89ba90ef",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 91
+    },
+    {
+      "name": "liting_walk_022",
+      "file": "liting_walk_022.png",
+      "sha256": "15605d332323711adc569633697826fd2176ba3ccc8c9922d7b12822361e775f",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 92
+    },
+    {
+      "name": "liting_walk_023",
+      "file": "liting_walk_023.png",
+      "sha256": "3ab823232b6df2cef6676cc9b95469179fa530c1dcb8a01ef198dcdb93890663",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 93
+    },
+    {
+      "name": "liting_walk_024",
+      "file": "liting_walk_024.png",
+      "sha256": "853463c5e0ebdb1675169f3970f40e4a6039ca50fe4bce89b6ccde07aded185a",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 94
+    },
+    {
+      "name": "liting_walk_025",
+      "file": "liting_walk_025.png",
+      "sha256": "b6174a51c721b6d061d54daf76791dfa6e10fb3dd2fb17f42bae5e9b6f187c74",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 95
+    },
+    {
+      "name": "liting_walk_026",
+      "file": "liting_walk_026.png",
+      "sha256": "86e25834979d7d0e7b3d233636843d0b4fb742dbfc41bc226febb4fbad1c32a8",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 96
+    },
+    {
+      "name": "liting_walk_027",
+      "file": "liting_walk_027.png",
+      "sha256": "8854a353772bb5ea7971ba80a00c3e88cd9b49a80cac816cb2bd82efc3d7e3f6",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 97
+    },
+    {
+      "name": "liting_walk_028",
+      "file": "liting_walk_028.png",
+      "sha256": "a382e2d54fd094346aeed3119247e5388cfe5be72b4a93b544673796e7fffbe3",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 98
+    },
+    {
+      "name": "liting_walk_029",
+      "file": "liting_walk_029.png",
+      "sha256": "578e68055c33d7b5f982b9abf2882dd8abf98f6bb58ba16da0f383ee23dfba96",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 99
+    },
+    {
+      "name": "liting_walk_030",
+      "file": "liting_walk_030.png",
+      "sha256": "535aa67f655ad8e0cb144cfae7157966a739a03b9444f866521e9017733211f4",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 100
+    },
+    {
+      "name": "liting_walk_031",
+      "file": "liting_walk_031.png",
+      "sha256": "75440f9f26252bf8bd58d1cb5a43e695add4ef8636ff339db62c1a807f33c025",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 101
+    },
+    {
+      "name": "liting_walk_032",
+      "file": "liting_walk_032.png",
+      "sha256": "fee0deed3caccdac33b4eda7e0704f8ff4848f15b56ff0fcef47b15c2618c2cf",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 102
+    },
+    {
+      "name": "liting_walk_033",
+      "file": "liting_walk_033.png",
+      "sha256": "951548fe7d5366646933f6462261603f70fdcb00007600123549432fc5f78eb5",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 103
+    },
+    {
+      "name": "liting_walk_034",
+      "file": "liting_walk_034.png",
+      "sha256": "6f9a9c07a2b9e29a8fa91f1378323829955c5f880fe8243c63aa02bd796ca8f1",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 104
+    },
+    {
+      "name": "liting_walk_035",
+      "file": "liting_walk_035.png",
+      "sha256": "ebcbf32efa34f324b883ab8746dc1c65e572d595baab5467809490a7cf1db198",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 105
+    },
+    {
+      "name": "liting_walk_036",
+      "file": "liting_walk_036.png",
+      "sha256": "40db5b9b7ddd37720eda4f21a62d164e3fd4bbadda5df99b879a4e1d6a3eb9bb",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 106
+    },
+    {
+      "name": "liting_walk_037",
+      "file": "liting_walk_037.png",
+      "sha256": "24be8d8a17179566cae6b8c05ad49b0b1dcb6c2ca6a1e2b77c66f20207ac83d2",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 107
+    },
+    {
+      "name": "liting_walk_038",
+      "file": "liting_walk_038.png",
+      "sha256": "43ab25717777e6b4da8693d5eddb2f1a85dba09d63f6d9161474463460c38bd8",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "walk",
+      "sourceFrame": 108
+    },
+    {
+      "name": "liting_stop_000",
+      "file": "liting_stop_000.png",
+      "sha256": "9c8374f8691d74911a904a4bdbb2f220c8b687974a5c0a591fb2862c7fd542f7",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 188
+    },
+    {
+      "name": "liting_stop_001",
+      "file": "liting_stop_001.png",
+      "sha256": "bba3d23fe09a3a8332424ff3a83a7d3808f5f271a408363328512d370f9e5733",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 189
+    },
+    {
+      "name": "liting_stop_002",
+      "file": "liting_stop_002.png",
+      "sha256": "5e0a6e08cd84f5fa0121b1cf9dd66dfeecca8c55b4b7da27274d52c1b6a98491",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 190
+    },
+    {
+      "name": "liting_stop_003",
+      "file": "liting_stop_003.png",
+      "sha256": "5947ed2973ca45c8210a0668ea5426c557cd562b7b1d3bae4b1cf4e5fbada1f4",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 191
+    },
+    {
+      "name": "liting_stop_004",
+      "file": "liting_stop_004.png",
+      "sha256": "83cde3e5f77d47f72bcfbbce7ae6b9ddabc65b839adf25c803b7edcef06486d4",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 192
+    },
+    {
+      "name": "liting_stop_005",
+      "file": "liting_stop_005.png",
+      "sha256": "c53b82cdf62f2c406628363eb8da0123e06f8a2ffd35189586b00ea5864a30cd",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 193
+    },
+    {
+      "name": "liting_stop_006",
+      "file": "liting_stop_006.png",
+      "sha256": "3792fab66d22c4e386105096276a6965608f4497066c863ab9c53e6cdf9a5528",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 194
+    },
+    {
+      "name": "liting_stop_007",
+      "file": "liting_stop_007.png",
+      "sha256": "2def2155928f4ee3ca5e8ec92a1e0b4dbf458de65a95c4929cdd6299051871dd",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 195
+    },
+    {
+      "name": "liting_stop_008",
+      "file": "liting_stop_008.png",
+      "sha256": "a3eea01fdf6fff1c213cc98f351ad682941c8552f41f8840b37038adf5ddf16b",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 196
+    },
+    {
+      "name": "liting_stop_009",
+      "file": "liting_stop_009.png",
+      "sha256": "32e53a15b16aa698a667abc593707ddf2f82c097c10ef9240343a305ce79a626",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 197
+    },
+    {
+      "name": "liting_stop_010",
+      "file": "liting_stop_010.png",
+      "sha256": "3c531b4d6595480e09011a94bd7b52dbb7aada4726653d05ee6e625d0d8ebbbd",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 198
+    },
+    {
+      "name": "liting_stop_011",
+      "file": "liting_stop_011.png",
+      "sha256": "1994651a86f9e4194a9c0ceea6da587c2ec597fabbea12ca299add168d42c0f9",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 199
+    },
+    {
+      "name": "liting_stop_012",
+      "file": "liting_stop_012.png",
+      "sha256": "1ec222593f7e2b0649995043637cc2b4ca69a1acd051e735dbe283871a37a4b6",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 200
+    },
+    {
+      "name": "liting_stop_013",
+      "file": "liting_stop_013.png",
+      "sha256": "691377de25648fb1db3a69859727e42554b2fed99f0a7395312accfe86669ffa",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 201
+    },
+    {
+      "name": "liting_stop_014",
+      "file": "liting_stop_014.png",
+      "sha256": "30c77f7292310bacdc66e966154f8cba1803c1989842ce84c2d63d778a4023c9",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 202
+    },
+    {
+      "name": "liting_stop_015",
+      "file": "liting_stop_015.png",
+      "sha256": "53d565ae6c15074c51752a2558468ce488dc7dada45d0c552d19601cd5808ac7",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 203
+    },
+    {
+      "name": "liting_stop_016",
+      "file": "liting_stop_016.png",
+      "sha256": "a34e9de6843c62f98c48088e609fa6a81c0f614d6ca4cc0b13370f9f6726b176",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 204
+    },
+    {
+      "name": "liting_stop_017",
+      "file": "liting_stop_017.png",
+      "sha256": "7d955c78d531f11dffdfa6951e293e3984f2efd987e0e020f7d9c4c6f8b58e17",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 205
+    },
+    {
+      "name": "liting_stop_018",
+      "file": "liting_stop_018.png",
+      "sha256": "5e5ed1ab05c334f4a46d352db9585a39b0fce7269083b8dedfd37f41614903a4",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 206
+    },
+    {
+      "name": "liting_stop_019",
+      "file": "liting_stop_019.png",
+      "sha256": "83e35f4131a3010b9ac5e4c1c9f9e078d1e0cdaa66abfe096590838ce2fbe0aa",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 207
+    },
+    {
+      "name": "liting_stop_020",
+      "file": "liting_stop_020.png",
+      "sha256": "8312f999490369129dfd2d5e486b4edc5d1a5cd06eadf4d20813445ea9ca4242",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 208
+    },
+    {
+      "name": "liting_stop_021",
+      "file": "liting_stop_021.png",
+      "sha256": "3792b5fa24bc7533d924807236298ecbf0beb95a4ba27212658e3dac5e4d443e",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 209
+    },
+    {
+      "name": "liting_stop_022",
+      "file": "liting_stop_022.png",
+      "sha256": "eec6fad328429369782f66398c584041896a6e5bc33e12501ae296fe575cb20c",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 210
+    },
+    {
+      "name": "liting_stop_023",
+      "file": "liting_stop_023.png",
+      "sha256": "9c0182a970de0abb28c579867f42eb370655104d1234053cb0d4f1dfec48dfb2",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 211
+    },
+    {
+      "name": "liting_stop_024",
+      "file": "liting_stop_024.png",
+      "sha256": "3a821130d4898606361a85c4e707190656528bb127fd0853ef7b79ffa35fd769",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 212
+    },
+    {
+      "name": "liting_stop_025",
+      "file": "liting_stop_025.png",
+      "sha256": "c72a9dd16dc2e61dd90469d7e027a8020729cc1adc6c219ea1efd7675bb23c7b",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 213
+    },
+    {
+      "name": "liting_stop_026",
+      "file": "liting_stop_026.png",
+      "sha256": "9af1da8b176e61f2b7b1e89eaf16d2f3f853174d2bddd41dc80caf05e9b82125",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 214
+    },
+    {
+      "name": "liting_stop_027",
+      "file": "liting_stop_027.png",
+      "sha256": "72b22c6c243e95382d7b0833fb7042f9a16b9197274f54dd2efb21f5522a81d9",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 215
+    },
+    {
+      "name": "liting_stop_028",
+      "file": "liting_stop_028.png",
+      "sha256": "14860fde0957874a94f4392b7e4e441eac78e2235c44c293dac08e6f9f555245",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 216
+    },
+    {
+      "name": "liting_stop_029",
+      "file": "liting_stop_029.png",
+      "sha256": "808fdba187432a0605460ebe2cc62354fc30d027bc4f2bac0e8112d85264d8f8",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 217
+    },
+    {
+      "name": "liting_stop_030",
+      "file": "liting_stop_030.png",
+      "sha256": "9c77936b1ae532833c8d1cadc4f27b0c9ce8939a94e56dd12b0e04b1bad4446d",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 218
+    },
+    {
+      "name": "liting_stop_031",
+      "file": "liting_stop_031.png",
+      "sha256": "88395ecc27e62e12c02a7d4d2ce75161c8fd7c94e221264a1a122196966a176e",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 219
+    },
+    {
+      "name": "liting_stop_032",
+      "file": "liting_stop_032.png",
+      "sha256": "61cfd8ba629294d385c83988ecd0c7ba9c4bc4eb230bd413874fc98a31acd89f",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 220
+    },
+    {
+      "name": "liting_stop_033",
+      "file": "liting_stop_033.png",
+      "sha256": "838789279448ff0bf97596ac0ca0d00ec2165cf78d2fc2e5de97ea361031f5f4",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 221
+    },
+    {
+      "name": "liting_stop_034",
+      "file": "liting_stop_034.png",
+      "sha256": "3c22248febf1a98f4ff5cefcf53d249668d16fd29218babd1f2f7bdbf5a5d99f",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 222
+    },
+    {
+      "name": "liting_stop_035",
+      "file": "liting_stop_035.png",
+      "sha256": "f064e1dfc524f0ba1397fb7e2e0a4502f6183654812c2e3b22bd6e75c87705e2",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 223
+    },
+    {
+      "name": "liting_stop_036",
+      "file": "liting_stop_036.png",
+      "sha256": "0d33a06a3996aad96d0cb6286945c0086895da9950487b27b78666cf02cb3389",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 224
+    },
+    {
+      "name": "liting_stop_037",
+      "file": "liting_stop_037.png",
+      "sha256": "d705492bb750356dd80ad8883be795cb94513145fb2edc6ef413d50988a31c72",
+      "width": 1480,
+      "height": 2920,
+      "pixelsPerUnit": 1101.1538461538462,
+      "pivot": {
+        "x": 0.4540540540540541,
+        "y": 0.008904109589041087
+      },
+      "state": "stop",
+      "sourceFrame": 225
+    }
+  ],
+  "source": {
+    "videoSha256": "dd33b2361d52e7ee991c2d436ec1f2dd408d735ca8f886d4dfb66e3e128b6b27",
+    "review": "source~/video-extraction.json",
+    "nativePng": true,
+    "gpuCompression": "BC7 at native dimensions"
+  }
+}

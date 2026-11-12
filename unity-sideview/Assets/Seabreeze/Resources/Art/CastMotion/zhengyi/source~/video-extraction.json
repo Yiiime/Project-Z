@@ -1,0 +1,3880 @@
+{
+  "version": 1,
+  "characterId": "zhengyi",
+  "characterName": "正义",
+  "runtimeTarget": true,
+  "source": {
+    "characterId": "zhengyi",
+    "characterName": "正义",
+    "sourceLabel": "正义",
+    "sourceVideo": "source/source-video.mp4",
+    "originalFile": "正义行走动画.mp4",
+    "sourceSha256": "adcafd725281b1418f4920610d10e06246a19d22f76234f239acc393ed375560",
+    "runtimeTarget": true
+  },
+  "video": {
+    "kind": "vide",
+    "timescale": 15360,
+    "durationTicks": 153856,
+    "durationSeconds": 10.016666666666667,
+    "samples": 241
+  },
+  "size": [
+    1080,
+    1920
+  ],
+  "canvas": {
+    "size": [
+      984,
+      1776
+    ],
+    "sourceCropTopLeft": [
+      73,
+      82,
+      984,
+      1776
+    ],
+    "sourceForegroundUnion": [
+      105,
+      106,
+      1018,
+      1832
+    ],
+    "pixelScale": 1,
+    "standingHeightPixels": 1713,
+    "footAnchorSource": [
+      540.0,
+      1824
+    ],
+    "footAnchorTopLeft": [
+      467.0,
+      1742
+    ],
+    "unityPivotNormalizedBottomLeft": [
+      0.47459349593495936,
+      0.019144144144144115
+    ]
+  },
+  "states": {
+    "idle": {
+      "startFrame": 35,
+      "endFrameExclusive": 36,
+      "loop": false,
+      "holdLastFrame": true,
+      "frameCount": 1,
+      "sourceStartSeconds": 1.4666666666666666,
+      "sourceEndSecondsExclusive": 1.5,
+      "durationSeconds": 0.03333333333333333,
+      "frames": [
+        {
+          "state": "idle",
+          "index": 0,
+          "file": "frames/idle/zhengyi_idle_000.png",
+          "sourceFrame": 35,
+          "sourcePtsTicks": 22528,
+          "sourceSeconds": 1.4666666666666666,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "a391b8a804e405a6b2f7bcef7f2361fdc204e619db0ba54b72fa177f7d9135cf",
+          "solidBounds": [
+            224,
+            29,
+            602,
+            1742
+          ],
+          "opaqueInteriorPixels": 361122,
+          "edgeRecoveryPixels": 10980,
+          "shadowClassifiedPixels": 223054,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 0,
+            "rectTopLeft": [
+              2,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              984,
+              1776
+            ]
+          }
+        }
+      ]
+    },
+    "start": {
+      "startFrame": 36,
+      "endFrameExclusive": 63,
+      "loop": false,
+      "holdLastFrame": false,
+      "frameCount": 27,
+      "sourceStartSeconds": 1.5,
+      "sourceEndSecondsExclusive": 2.6333333333333333,
+      "durationSeconds": 1.1333333333333333,
+      "frames": [
+        {
+          "state": "start",
+          "index": 0,
+          "file": "frames/start/zhengyi_start_000.png",
+          "sourceFrame": 36,
+          "sourcePtsTicks": 23040,
+          "sourceSeconds": 1.5,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "3d3bbf1230040f0e0921f59e2cdfad764efab000c1e5f297a1dbea6d691618e3",
+          "solidBounds": [
+            223,
+            29,
+            602,
+            1742
+          ],
+          "opaqueInteriorPixels": 360326,
+          "edgeRecoveryPixels": 11116,
+          "shadowClassifiedPixels": 223155,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 1,
+            "rectTopLeft": [
+              2,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 1,
+          "file": "frames/start/zhengyi_start_001.png",
+          "sourceFrame": 37,
+          "sourcePtsTicks": 23808,
+          "sourceSeconds": 1.55,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "e3c9183b18fd87563b290763588483fa1818721440098728e1609a4028ca0479",
+          "solidBounds": [
+            222,
+            30,
+            601,
+            1742
+          ],
+          "opaqueInteriorPixels": 358955,
+          "edgeRecoveryPixels": 11583,
+          "shadowClassifiedPixels": 223219,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 1,
+            "rectTopLeft": [
+              990,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 2,
+          "file": "frames/start/zhengyi_start_002.png",
+          "sourceFrame": 38,
+          "sourcePtsTicks": 24320,
+          "sourceSeconds": 1.5833333333333333,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "d42f562c2fe53100aa108c5bf11929410accdaef9e9d8edab01d2040e2707224",
+          "solidBounds": [
+            222,
+            31,
+            601,
+            1743
+          ],
+          "opaqueInteriorPixels": 356352,
+          "edgeRecoveryPixels": 11259,
+          "shadowClassifiedPixels": 223745,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 1,
+            "rectTopLeft": [
+              1978,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              1978,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 3,
+          "file": "frames/start/zhengyi_start_003.png",
+          "sourceFrame": 39,
+          "sourcePtsTicks": 25088,
+          "sourceSeconds": 1.6333333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "6ae2cc283988eb843a9535686b00e3f36601bae1752c576a180a17114a25aea5",
+          "solidBounds": [
+            220,
+            31,
+            600,
+            1743
+          ],
+          "opaqueInteriorPixels": 351511,
+          "edgeRecoveryPixels": 11496,
+          "shadowClassifiedPixels": 224190,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 1,
+            "rectTopLeft": [
+              2966,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2966,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 4,
+          "file": "frames/start/zhengyi_start_004.png",
+          "sourceFrame": 40,
+          "sourcePtsTicks": 25600,
+          "sourceSeconds": 1.6666666666666667,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "6d297fe44c66525593891861dd02c13ff40bb4202f776f38257593919674e6a1",
+          "solidBounds": [
+            219,
+            33,
+            600,
+            1742
+          ],
+          "opaqueInteriorPixels": 354208,
+          "edgeRecoveryPixels": 11351,
+          "shadowClassifiedPixels": 224603,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 1,
+            "rectTopLeft": [
+              2,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 5,
+          "file": "frames/start/zhengyi_start_005.png",
+          "sourceFrame": 41,
+          "sourcePtsTicks": 26368,
+          "sourceSeconds": 1.7166666666666666,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "4e91717d4186a2c7e1d7de9cafd442b6762badb5d63701700529f436603c501a",
+          "solidBounds": [
+            216,
+            34,
+            601,
+            1741
+          ],
+          "opaqueInteriorPixels": 366939,
+          "edgeRecoveryPixels": 11722,
+          "shadowClassifiedPixels": 223411,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 1,
+            "rectTopLeft": [
+              990,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 6,
+          "file": "frames/start/zhengyi_start_006.png",
+          "sourceFrame": 42,
+          "sourcePtsTicks": 26880,
+          "sourceSeconds": 1.75,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "f35e04e8bea57553f252ed103837dd6f415d707d2ac2d4a20961a5ee50a604de",
+          "solidBounds": [
+            214,
+            35,
+            609,
+            1739
+          ],
+          "opaqueInteriorPixels": 380859,
+          "edgeRecoveryPixels": 11593,
+          "shadowClassifiedPixels": 222441,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 1,
+            "rectTopLeft": [
+              1978,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              1978,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 7,
+          "file": "frames/start/zhengyi_start_007.png",
+          "sourceFrame": 43,
+          "sourcePtsTicks": 27648,
+          "sourceSeconds": 1.8,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "551b50095236a044a4fd5345c98777d9538be0a401fec23e65b77c1bea1d7f97",
+          "solidBounds": [
+            211,
+            35,
+            619,
+            1739
+          ],
+          "opaqueInteriorPixels": 395713,
+          "edgeRecoveryPixels": 11971,
+          "shadowClassifiedPixels": 220769,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 1,
+            "rectTopLeft": [
+              2966,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2966,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 8,
+          "file": "frames/start/zhengyi_start_008.png",
+          "sourceFrame": 44,
+          "sourcePtsTicks": 28160,
+          "sourceSeconds": 1.8333333333333333,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "8d7808274f73beb783e372b96cfdecdc72ef32fc7c7762a6e386180c847945dc",
+          "solidBounds": [
+            209,
+            35,
+            632,
+            1739
+          ],
+          "opaqueInteriorPixels": 410980,
+          "edgeRecoveryPixels": 11638,
+          "shadowClassifiedPixels": 219024,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 2,
+            "rectTopLeft": [
+              2,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 9,
+          "file": "frames/start/zhengyi_start_009.png",
+          "sourceFrame": 45,
+          "sourcePtsTicks": 28928,
+          "sourceSeconds": 1.8833333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "30c3e5425cdba6d170521acd4eb079e69e14384965d53acf454b351b5486b12d",
+          "solidBounds": [
+            206,
+            33,
+            652,
+            1735
+          ],
+          "opaqueInteriorPixels": 433660,
+          "edgeRecoveryPixels": 13364,
+          "shadowClassifiedPixels": 212693,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 2,
+            "rectTopLeft": [
+              990,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 10,
+          "file": "frames/start/zhengyi_start_010.png",
+          "sourceFrame": 46,
+          "sourcePtsTicks": 29440,
+          "sourceSeconds": 1.9166666666666667,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "27bbf0d6932ce27029d075dab1e5d39fce2ff0fa58660767a53787d6608a7069",
+          "solidBounds": [
+            203,
+            32,
+            664,
+            1731
+          ],
+          "opaqueInteriorPixels": 454556,
+          "edgeRecoveryPixels": 14734,
+          "shadowClassifiedPixels": 205049,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 2,
+            "rectTopLeft": [
+              1978,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              1978,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 11,
+          "file": "frames/start/zhengyi_start_011.png",
+          "sourceFrame": 47,
+          "sourcePtsTicks": 30208,
+          "sourceSeconds": 1.9666666666666666,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "7d6ed0706a3ce1b1430c039583e1b59f76165407de1867fb93d271f01b7ac3c1",
+          "solidBounds": [
+            200,
+            32,
+            677,
+            1726
+          ],
+          "opaqueInteriorPixels": 468740,
+          "edgeRecoveryPixels": 16805,
+          "shadowClassifiedPixels": 195631,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 2,
+            "rectTopLeft": [
+              2966,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2966,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 12,
+          "file": "frames/start/zhengyi_start_012.png",
+          "sourceFrame": 48,
+          "sourcePtsTicks": 30720,
+          "sourceSeconds": 2.0,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "44d7c7d2866ca6127cbdee83b6e6342ea9112b62bc61d21790a26c25eb3b54d3",
+          "solidBounds": [
+            196,
+            32,
+            695,
+            1726
+          ],
+          "opaqueInteriorPixels": 477339,
+          "edgeRecoveryPixels": 16987,
+          "shadowClassifiedPixels": 191136,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 2,
+            "rectTopLeft": [
+              2,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 13,
+          "file": "frames/start/zhengyi_start_013.png",
+          "sourceFrame": 49,
+          "sourcePtsTicks": 31488,
+          "sourceSeconds": 2.05,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "ec41ad4fe4e2e9a54a544ee1522cfa87665b3412e6c30e1d811e602c482e7c63",
+          "solidBounds": [
+            192,
+            33,
+            749,
+            1726
+          ],
+          "opaqueInteriorPixels": 484279,
+          "edgeRecoveryPixels": 17778,
+          "shadowClassifiedPixels": 188612,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 2,
+            "rectTopLeft": [
+              990,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 14,
+          "file": "frames/start/zhengyi_start_014.png",
+          "sourceFrame": 50,
+          "sourcePtsTicks": 32000,
+          "sourceSeconds": 2.0833333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "39753c22ffe23990cea7297dd06e2de95805ccb92329db292b124b88fd382bed",
+          "solidBounds": [
+            186,
+            35,
+            813,
+            1726
+          ],
+          "opaqueInteriorPixels": 487255,
+          "edgeRecoveryPixels": 18718,
+          "shadowClassifiedPixels": 186844,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 2,
+            "rectTopLeft": [
+              1978,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              1978,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 15,
+          "file": "frames/start/zhengyi_start_015.png",
+          "sourceFrame": 51,
+          "sourcePtsTicks": 32768,
+          "sourceSeconds": 2.1333333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "bfa519032d5d33ea87ac48566ce66928ebb98295d2ff94982a6edd3e22d4c8bf",
+          "solidBounds": [
+            180,
+            39,
+            869,
+            1726
+          ],
+          "opaqueInteriorPixels": 490715,
+          "edgeRecoveryPixels": 19082,
+          "shadowClassifiedPixels": 185409,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 2,
+            "rectTopLeft": [
+              2966,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2966,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 16,
+          "file": "frames/start/zhengyi_start_016.png",
+          "sourceFrame": 52,
+          "sourcePtsTicks": 33280,
+          "sourceSeconds": 2.1666666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "7df2c22d7d491a15c07d1a9c09d92da2b6a37b7c93c190c3dfd957f2a3f114cd",
+          "solidBounds": [
+            174,
+            43,
+            902,
+            1729
+          ],
+          "opaqueInteriorPixels": 494017,
+          "edgeRecoveryPixels": 19028,
+          "shadowClassifiedPixels": 184973,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 3,
+            "rectTopLeft": [
+              2,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 17,
+          "file": "frames/start/zhengyi_start_017.png",
+          "sourceFrame": 53,
+          "sourcePtsTicks": 34048,
+          "sourceSeconds": 2.216666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "2508f1d81884b895bc90fa89c6ff7c18e5b13b0c8386cbf772411a3c7c3abf2d",
+          "solidBounds": [
+            150,
+            48,
+            912,
+            1732
+          ],
+          "opaqueInteriorPixels": 495723,
+          "edgeRecoveryPixels": 19569,
+          "shadowClassifiedPixels": 185146,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 3,
+            "rectTopLeft": [
+              990,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 18,
+          "file": "frames/start/zhengyi_start_018.png",
+          "sourceFrame": 54,
+          "sourcePtsTicks": 34560,
+          "sourceSeconds": 2.25,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "55e3c2fb1a3bc543926e2d271ba38fab87513dc28da198c86aaa613e981ed730",
+          "solidBounds": [
+            126,
+            51,
+            903,
+            1735
+          ],
+          "opaqueInteriorPixels": 496459,
+          "edgeRecoveryPixels": 19412,
+          "shadowClassifiedPixels": 185407,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 3,
+            "rectTopLeft": [
+              1978,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              1978,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 19,
+          "file": "frames/start/zhengyi_start_019.png",
+          "sourceFrame": 55,
+          "sourcePtsTicks": 35328,
+          "sourceSeconds": 2.3,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "13a7f1b0fc00b4eb5f05362aa68737e66c418c38d0644cb8ad80933f276e9c9a",
+          "solidBounds": [
+            101,
+            53,
+            883,
+            1736
+          ],
+          "opaqueInteriorPixels": 495599,
+          "edgeRecoveryPixels": 19416,
+          "shadowClassifiedPixels": 185443,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 3,
+            "rectTopLeft": [
+              2966,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2966,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 20,
+          "file": "frames/start/zhengyi_start_020.png",
+          "sourceFrame": 56,
+          "sourcePtsTicks": 35840,
+          "sourceSeconds": 2.3333333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "5869b1a821e2eeec709974df235661bcbf45d6215d11864345461625ae917f2d",
+          "solidBounds": [
+            80,
+            53,
+            855,
+            1737
+          ],
+          "opaqueInteriorPixels": 493737,
+          "edgeRecoveryPixels": 19011,
+          "shadowClassifiedPixels": 186582,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 3,
+            "rectTopLeft": [
+              2,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 21,
+          "file": "frames/start/zhengyi_start_021.png",
+          "sourceFrame": 57,
+          "sourcePtsTicks": 36608,
+          "sourceSeconds": 2.3833333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "1ecfad11e03d7558f1a26b38e038c6ee4ab9ec65a3b9f54854ebaf1abe55f64d",
+          "solidBounds": [
+            76,
+            49,
+            825,
+            1737
+          ],
+          "opaqueInteriorPixels": 485944,
+          "edgeRecoveryPixels": 19408,
+          "shadowClassifiedPixels": 190172,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 3,
+            "rectTopLeft": [
+              990,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 22,
+          "file": "frames/start/zhengyi_start_022.png",
+          "sourceFrame": 58,
+          "sourcePtsTicks": 37120,
+          "sourceSeconds": 2.4166666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "068640d3ef9aad0eb95af5af2eb58911419b2059a121fe5295e749f61f7e4747",
+          "solidBounds": [
+            85,
+            45,
+            790,
+            1739
+          ],
+          "opaqueInteriorPixels": 472636,
+          "edgeRecoveryPixels": 17574,
+          "shadowClassifiedPixels": 194989,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 3,
+            "rectTopLeft": [
+              1978,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              1978,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 23,
+          "file": "frames/start/zhengyi_start_023.png",
+          "sourceFrame": 59,
+          "sourcePtsTicks": 37888,
+          "sourceSeconds": 2.466666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "7ef33b248533586646b6144a83e860fa30b105d83fbc71b7690be0dd3f046d1c",
+          "solidBounds": [
+            110,
+            40,
+            754,
+            1740
+          ],
+          "opaqueInteriorPixels": 449174,
+          "edgeRecoveryPixels": 16548,
+          "shadowClassifiedPixels": 200654,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 3,
+            "rectTopLeft": [
+              2966,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2966,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 24,
+          "file": "frames/start/zhengyi_start_024.png",
+          "sourceFrame": 60,
+          "sourcePtsTicks": 38400,
+          "sourceSeconds": 2.5,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "c1c350abea3d8838f378b3b89459e0c420aa25af48f5f405989e4d19694d37c4",
+          "solidBounds": [
+            146,
+            37,
+            716,
+            1740
+          ],
+          "opaqueInteriorPixels": 425884,
+          "edgeRecoveryPixels": 15445,
+          "shadowClassifiedPixels": 203009,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 4,
+            "rectTopLeft": [
+              2,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 25,
+          "file": "frames/start/zhengyi_start_025.png",
+          "sourceFrame": 61,
+          "sourcePtsTicks": 39168,
+          "sourceSeconds": 2.55,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "94bf30f33b2b42b94b0e33046187c2d3b9800cee2b52239276822b7df72cd466",
+          "solidBounds": [
+            198,
+            32,
+            681,
+            1740
+          ],
+          "opaqueInteriorPixels": 417692,
+          "edgeRecoveryPixels": 15937,
+          "shadowClassifiedPixels": 204922,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 4,
+            "rectTopLeft": [
+              990,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "start",
+          "index": 26,
+          "file": "frames/start/zhengyi_start_026.png",
+          "sourceFrame": 62,
+          "sourcePtsTicks": 39680,
+          "sourceSeconds": 2.5833333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "48091df532923be4d72505512160206429ff8cbf001e7b2780a67f1141e36275",
+          "solidBounds": [
+            207,
+            29,
+            678,
+            1740
+          ],
+          "opaqueInteriorPixels": 419434,
+          "edgeRecoveryPixels": 14695,
+          "shadowClassifiedPixels": 205671,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 4,
+            "rectTopLeft": [
+              1978,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              1978,
+              2,
+              984,
+              1776
+            ]
+          }
+        }
+      ]
+    },
+    "walk": {
+      "startFrame": 63,
+      "endFrameExclusive": 93,
+      "loop": true,
+      "holdLastFrame": false,
+      "frameCount": 30,
+      "sourceStartSeconds": 2.6333333333333333,
+      "sourceEndSecondsExclusive": 3.8833333333333333,
+      "durationSeconds": 1.25,
+      "frames": [
+        {
+          "state": "walk",
+          "index": 0,
+          "file": "frames/walk/zhengyi_walk_000.png",
+          "sourceFrame": 63,
+          "sourcePtsTicks": 40448,
+          "sourceSeconds": 2.6333333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "9d6ee54f20d1eed8c47ae5ab4e7e0b2035663ae43926c3fdbdba824d2861c884",
+          "solidBounds": [
+            210,
+            27,
+            702,
+            1740
+          ],
+          "opaqueInteriorPixels": 421948,
+          "edgeRecoveryPixels": 14513,
+          "shadowClassifiedPixels": 220042,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 5,
+            "rectTopLeft": [
+              2,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 1,
+          "file": "frames/walk/zhengyi_walk_001.png",
+          "sourceFrame": 64,
+          "sourcePtsTicks": 40960,
+          "sourceSeconds": 2.6666666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "6f4d8771377994bee8ff40b377e3686573996015670860a7d7c2a73c7163d4bd",
+          "solidBounds": [
+            208,
+            27,
+            719,
+            1741
+          ],
+          "opaqueInteriorPixels": 459286,
+          "edgeRecoveryPixels": 16011,
+          "shadowClassifiedPixels": 204388,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 5,
+            "rectTopLeft": [
+              990,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 2,
+          "file": "frames/walk/zhengyi_walk_002.png",
+          "sourceFrame": 65,
+          "sourcePtsTicks": 41728,
+          "sourceSeconds": 2.716666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "e9fffbe840ba5e197fb303c9180ab4fd8679dfade352a1ba04e58ab107548417",
+          "solidBounds": [
+            204,
+            29,
+            728,
+            1740
+          ],
+          "opaqueInteriorPixels": 469595,
+          "edgeRecoveryPixels": 18916,
+          "shadowClassifiedPixels": 192660,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 5,
+            "rectTopLeft": [
+              1978,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              1978,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 3,
+          "file": "frames/walk/zhengyi_walk_003.png",
+          "sourceFrame": 66,
+          "sourcePtsTicks": 42240,
+          "sourceSeconds": 2.75,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "ac83f0074cc912b4fdc9fca0ab93382494bd375b02eaebe6591a764c6052e593",
+          "solidBounds": [
+            196,
+            33,
+            812,
+            1740
+          ],
+          "opaqueInteriorPixels": 476271,
+          "edgeRecoveryPixels": 18678,
+          "shadowClassifiedPixels": 190782,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 5,
+            "rectTopLeft": [
+              2966,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2966,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 4,
+          "file": "frames/walk/zhengyi_walk_004.png",
+          "sourceFrame": 67,
+          "sourcePtsTicks": 43008,
+          "sourceSeconds": 2.8,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "0f8c1fcaad8dfc4ac2bd97b2fd8089bcdf7e0ad9efdcdf78972145090a769d7d",
+          "solidBounds": [
+            187,
+            37,
+            884,
+            1739
+          ],
+          "opaqueInteriorPixels": 483430,
+          "edgeRecoveryPixels": 18492,
+          "shadowClassifiedPixels": 187953,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 5,
+            "rectTopLeft": [
+              2,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 5,
+          "file": "frames/walk/zhengyi_walk_005.png",
+          "sourceFrame": 68,
+          "sourcePtsTicks": 43520,
+          "sourceSeconds": 2.8333333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "ad924bfc4ed9728b557dc7091e5bda66ce82fe492630534bbd8b1bc63e7f63bb",
+          "solidBounds": [
+            177,
+            42,
+            924,
+            1740
+          ],
+          "opaqueInteriorPixels": 489831,
+          "edgeRecoveryPixels": 18913,
+          "shadowClassifiedPixels": 187387,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 5,
+            "rectTopLeft": [
+              990,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 6,
+          "file": "frames/walk/zhengyi_walk_006.png",
+          "sourceFrame": 69,
+          "sourcePtsTicks": 44288,
+          "sourceSeconds": 2.8833333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "72f540c5086d8a4f711980612678e462280000aecac8f992b6efa5379606eecf",
+          "solidBounds": [
+            150,
+            47,
+            934,
+            1739
+          ],
+          "opaqueInteriorPixels": 493998,
+          "edgeRecoveryPixels": 18803,
+          "shadowClassifiedPixels": 186572,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 5,
+            "rectTopLeft": [
+              1978,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              1978,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 7,
+          "file": "frames/walk/zhengyi_walk_007.png",
+          "sourceFrame": 70,
+          "sourcePtsTicks": 44800,
+          "sourceSeconds": 2.9166666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "d33c6a5d5c5cfe2d4825ab7b5e33b11eeed8cf346dd54ea943bc6e858e3304a9",
+          "solidBounds": [
+            117,
+            51,
+            919,
+            1739
+          ],
+          "opaqueInteriorPixels": 495397,
+          "edgeRecoveryPixels": 18752,
+          "shadowClassifiedPixels": 185487,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 5,
+            "rectTopLeft": [
+              2966,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2966,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 8,
+          "file": "frames/walk/zhengyi_walk_008.png",
+          "sourceFrame": 71,
+          "sourcePtsTicks": 45568,
+          "sourceSeconds": 2.966666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "6805a95d3c6861f4747a905f47bd447dd931f371e5a0850523bc651d88bbc9a5",
+          "solidBounds": [
+            86,
+            53,
+            894,
+            1737
+          ],
+          "opaqueInteriorPixels": 493821,
+          "edgeRecoveryPixels": 18869,
+          "shadowClassifiedPixels": 185513,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 6,
+            "rectTopLeft": [
+              2,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 9,
+          "file": "frames/walk/zhengyi_walk_009.png",
+          "sourceFrame": 72,
+          "sourcePtsTicks": 46080,
+          "sourceSeconds": 3.0,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "3c265e76d01d14cea5dca4aea9badefd89eaf120d8f2a9ecc831ab3851c959d4",
+          "solidBounds": [
+            60,
+            51,
+            860,
+            1737
+          ],
+          "opaqueInteriorPixels": 489299,
+          "edgeRecoveryPixels": 18835,
+          "shadowClassifiedPixels": 185664,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 6,
+            "rectTopLeft": [
+              990,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 10,
+          "file": "frames/walk/zhengyi_walk_010.png",
+          "sourceFrame": 73,
+          "sourcePtsTicks": 46848,
+          "sourceSeconds": 3.05,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "c8b837d6ae455b3ee62b7741553c5e6933cc582d5ea54e8ef243e59ea1f302e3",
+          "solidBounds": [
+            62,
+            47,
+            820,
+            1733
+          ],
+          "opaqueInteriorPixels": 474508,
+          "edgeRecoveryPixels": 18623,
+          "shadowClassifiedPixels": 189028,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 6,
+            "rectTopLeft": [
+              1978,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              1978,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 11,
+          "file": "frames/walk/zhengyi_walk_011.png",
+          "sourceFrame": 74,
+          "sourcePtsTicks": 47360,
+          "sourceSeconds": 3.0833333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "a9cb795e4c63166afccb02d7164c3477ba2ad976a632e09428f2ba6637b93b2d",
+          "solidBounds": [
+            78,
+            42,
+            782,
+            1726
+          ],
+          "opaqueInteriorPixels": 458231,
+          "edgeRecoveryPixels": 17374,
+          "shadowClassifiedPixels": 194111,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 6,
+            "rectTopLeft": [
+              2966,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2966,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 12,
+          "file": "frames/walk/zhengyi_walk_012.png",
+          "sourceFrame": 75,
+          "sourcePtsTicks": 48128,
+          "sourceSeconds": 3.1333333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "43cfb970a3626028911be88d0b43585413c22a4861669a752edcc14b42102b08",
+          "solidBounds": [
+            114,
+            37,
+            742,
+            1726
+          ],
+          "opaqueInteriorPixels": 435149,
+          "edgeRecoveryPixels": 16749,
+          "shadowClassifiedPixels": 198632,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 6,
+            "rectTopLeft": [
+              2,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 13,
+          "file": "frames/walk/zhengyi_walk_013.png",
+          "sourceFrame": 76,
+          "sourcePtsTicks": 48640,
+          "sourceSeconds": 3.1666666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "51eeb5c27be7b0ded5b914517e0e394ba139a328737f749e1fb627ba9df5f355",
+          "solidBounds": [
+            162,
+            33,
+            704,
+            1727
+          ],
+          "opaqueInteriorPixels": 411999,
+          "edgeRecoveryPixels": 16501,
+          "shadowClassifiedPixels": 200546,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 6,
+            "rectTopLeft": [
+              990,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 14,
+          "file": "frames/walk/zhengyi_walk_014.png",
+          "sourceFrame": 77,
+          "sourcePtsTicks": 49408,
+          "sourceSeconds": 3.216666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "8437aac3ae7e4e00810f43d98656f4914d8f99de0a862f1e3a18e02f4efbac50",
+          "solidBounds": [
+            210,
+            30,
+            666,
+            1726
+          ],
+          "opaqueInteriorPixels": 404868,
+          "edgeRecoveryPixels": 16109,
+          "shadowClassifiedPixels": 201792,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 6,
+            "rectTopLeft": [
+              1978,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              1978,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 15,
+          "file": "frames/walk/zhengyi_walk_015.png",
+          "sourceFrame": 78,
+          "sourcePtsTicks": 49920,
+          "sourceSeconds": 3.25,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "9c35277368144c88bc4c01497add2bb5aea419a0c9a7a4a81dd17f62bbb3318e",
+          "solidBounds": [
+            213,
+            27,
+            679,
+            1727
+          ],
+          "opaqueInteriorPixels": 400194,
+          "edgeRecoveryPixels": 14352,
+          "shadowClassifiedPixels": 211271,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 6,
+            "rectTopLeft": [
+              2966,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2966,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 16,
+          "file": "frames/walk/zhengyi_walk_016.png",
+          "sourceFrame": 79,
+          "sourcePtsTicks": 50688,
+          "sourceSeconds": 3.3,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "ab16adeab2dafc7ae0ef3fd0d86be86222d5832184af072da820b57c7826269f",
+          "solidBounds": [
+            212,
+            27,
+            696,
+            1726
+          ],
+          "opaqueInteriorPixels": 428353,
+          "edgeRecoveryPixels": 13865,
+          "shadowClassifiedPixels": 217196,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 7,
+            "rectTopLeft": [
+              2,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 17,
+          "file": "frames/walk/zhengyi_walk_017.png",
+          "sourceFrame": 80,
+          "sourcePtsTicks": 51200,
+          "sourceSeconds": 3.3333333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "6a367735637d32c895999a74bd53b05b0b7fb438f8883292b9125844cdcbe62b",
+          "solidBounds": [
+            208,
+            29,
+            701,
+            1727
+          ],
+          "opaqueInteriorPixels": 472199,
+          "edgeRecoveryPixels": 17395,
+          "shadowClassifiedPixels": 194318,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 7,
+            "rectTopLeft": [
+              990,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 18,
+          "file": "frames/walk/zhengyi_walk_018.png",
+          "sourceFrame": 81,
+          "sourcePtsTicks": 51968,
+          "sourceSeconds": 3.3833333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "675e2c4106857eb8dc0d4530a4cb9bac1be28a815870a651aa23664ab4be305f",
+          "solidBounds": [
+            198,
+            33,
+            793,
+            1726
+          ],
+          "opaqueInteriorPixels": 486835,
+          "edgeRecoveryPixels": 18669,
+          "shadowClassifiedPixels": 187141,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 7,
+            "rectTopLeft": [
+              1978,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              1978,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 19,
+          "file": "frames/walk/zhengyi_walk_019.png",
+          "sourceFrame": 82,
+          "sourcePtsTicks": 52480,
+          "sourceSeconds": 3.4166666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "9a9854a3f8172dee7093b7fc45aab7806804cd1fd72a2545e79ac31aa700e344",
+          "solidBounds": [
+            188,
+            38,
+            866,
+            1727
+          ],
+          "opaqueInteriorPixels": 492205,
+          "edgeRecoveryPixels": 19163,
+          "shadowClassifiedPixels": 186415,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 7,
+            "rectTopLeft": [
+              2966,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2966,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 20,
+          "file": "frames/walk/zhengyi_walk_020.png",
+          "sourceFrame": 83,
+          "sourcePtsTicks": 53248,
+          "sourceSeconds": 3.466666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "7a31b09df8ccead9ff42117b4bad6cc45585edc4044618872a0a27bee4acb6ff",
+          "solidBounds": [
+            177,
+            43,
+            910,
+            1726
+          ],
+          "opaqueInteriorPixels": 495192,
+          "edgeRecoveryPixels": 20370,
+          "shadowClassifiedPixels": 184324,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 7,
+            "rectTopLeft": [
+              2,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 21,
+          "file": "frames/walk/zhengyi_walk_021.png",
+          "sourceFrame": 84,
+          "sourcePtsTicks": 53760,
+          "sourceSeconds": 3.5,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "b0f600d7cd6d0f5bdc52639a9c54a0064ceb688bc9b9da6b07bcc66b9d8235a4",
+          "solidBounds": [
+            150,
+            48,
+            922,
+            1730
+          ],
+          "opaqueInteriorPixels": 498667,
+          "edgeRecoveryPixels": 19710,
+          "shadowClassifiedPixels": 183805,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 7,
+            "rectTopLeft": [
+              990,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 22,
+          "file": "frames/walk/zhengyi_walk_022.png",
+          "sourceFrame": 85,
+          "sourcePtsTicks": 54528,
+          "sourceSeconds": 3.55,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "a8968270c080619e2238a3b347c87ca5f46e11707b0cfcd75cab4db0b581e13d",
+          "solidBounds": [
+            116,
+            52,
+            909,
+            1734
+          ],
+          "opaqueInteriorPixels": 499205,
+          "edgeRecoveryPixels": 19782,
+          "shadowClassifiedPixels": 184104,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 7,
+            "rectTopLeft": [
+              1978,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              1978,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 23,
+          "file": "frames/walk/zhengyi_walk_023.png",
+          "sourceFrame": 86,
+          "sourcePtsTicks": 55040,
+          "sourceSeconds": 3.5833333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "a6a1d659010d9f9626be50bdf53a2f81bc06161af787d5d85d845dc79366258c",
+          "solidBounds": [
+            85,
+            52,
+            881,
+            1735
+          ],
+          "opaqueInteriorPixels": 496923,
+          "edgeRecoveryPixels": 19441,
+          "shadowClassifiedPixels": 185598,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 7,
+            "rectTopLeft": [
+              2966,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2966,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 24,
+          "file": "frames/walk/zhengyi_walk_024.png",
+          "sourceFrame": 87,
+          "sourcePtsTicks": 55808,
+          "sourceSeconds": 3.6333333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "a144310527e47cb7a4526f78006c119c4e8382a978265f54551054bd2c8a1142",
+          "solidBounds": [
+            66,
+            49,
+            844,
+            1737
+          ],
+          "opaqueInteriorPixels": 491869,
+          "edgeRecoveryPixels": 19036,
+          "shadowClassifiedPixels": 188483,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 8,
+            "rectTopLeft": [
+              2,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 25,
+          "file": "frames/walk/zhengyi_walk_025.png",
+          "sourceFrame": 88,
+          "sourcePtsTicks": 56320,
+          "sourceSeconds": 3.6666666666666665,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "007919bfc9dd9a82e8c8a82c7994edfae957ee060cfa801fcbc314333b0464ab",
+          "solidBounds": [
+            63,
+            47,
+            803,
+            1739
+          ],
+          "opaqueInteriorPixels": 483198,
+          "edgeRecoveryPixels": 18473,
+          "shadowClassifiedPixels": 192044,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 8,
+            "rectTopLeft": [
+              990,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 26,
+          "file": "frames/walk/zhengyi_walk_026.png",
+          "sourceFrame": 89,
+          "sourcePtsTicks": 57088,
+          "sourceSeconds": 3.716666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "cf8f1a05ff9abb098017f243b915239a4972cd0322b517cd86d8d5b22cdcee4a",
+          "solidBounds": [
+            89,
+            41,
+            763,
+            1739
+          ],
+          "opaqueInteriorPixels": 461118,
+          "edgeRecoveryPixels": 16816,
+          "shadowClassifiedPixels": 199040,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 8,
+            "rectTopLeft": [
+              1978,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              1978,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 27,
+          "file": "frames/walk/zhengyi_walk_027.png",
+          "sourceFrame": 90,
+          "sourcePtsTicks": 57600,
+          "sourceSeconds": 3.75,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "65fa9fb664a84e83a6f654c0b63b69d950c5737f2f1085c4fc43294800dc44eb",
+          "solidBounds": [
+            125,
+            35,
+            721,
+            1740
+          ],
+          "opaqueInteriorPixels": 432252,
+          "edgeRecoveryPixels": 16485,
+          "shadowClassifiedPixels": 203777,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 8,
+            "rectTopLeft": [
+              2966,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2966,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 28,
+          "file": "frames/walk/zhengyi_walk_028.png",
+          "sourceFrame": 91,
+          "sourcePtsTicks": 58368,
+          "sourceSeconds": 3.8,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "0335ca62a970956f0e2260140261762885bd1c6209f3ed08dbc5a7e873808227",
+          "solidBounds": [
+            176,
+            30,
+            680,
+            1739
+          ],
+          "opaqueInteriorPixels": 419832,
+          "edgeRecoveryPixels": 15532,
+          "shadowClassifiedPixels": 203871,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 8,
+            "rectTopLeft": [
+              2,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "walk",
+          "index": 29,
+          "file": "frames/walk/zhengyi_walk_029.png",
+          "sourceFrame": 92,
+          "sourcePtsTicks": 58880,
+          "sourceSeconds": 3.8333333333333335,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "89a761e55ad868e4c09f9d2d25fbaec3c208df9d0cdd7816e60f2b2966080ab0",
+          "solidBounds": [
+            204,
+            27,
+            664,
+            1740
+          ],
+          "opaqueInteriorPixels": 417842,
+          "edgeRecoveryPixels": 13649,
+          "shadowClassifiedPixels": 205325,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 8,
+            "rectTopLeft": [
+              990,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              2,
+              984,
+              1776
+            ]
+          }
+        }
+      ]
+    },
+    "stop": {
+      "startFrame": 181,
+      "endFrameExclusive": 223,
+      "loop": false,
+      "holdLastFrame": true,
+      "frameCount": 42,
+      "sourceStartSeconds": 7.55,
+      "sourceEndSecondsExclusive": 9.3,
+      "durationSeconds": 1.75,
+      "frames": [
+        {
+          "state": "stop",
+          "index": 0,
+          "file": "frames/stop/zhengyi_stop_000.png",
+          "sourceFrame": 181,
+          "sourcePtsTicks": 115968,
+          "sourceSeconds": 7.55,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "514e453b159a1c06f807034e90d6f142ff56666dd7f557c5c36dfd8b4fbfeabd",
+          "solidBounds": [
+            205,
+            26,
+            696,
+            1740
+          ],
+          "opaqueInteriorPixels": 418270,
+          "edgeRecoveryPixels": 13872,
+          "shadowClassifiedPixels": 217853,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 9,
+            "rectTopLeft": [
+              2,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 1,
+          "file": "frames/stop/zhengyi_stop_001.png",
+          "sourceFrame": 182,
+          "sourcePtsTicks": 116480,
+          "sourceSeconds": 7.583333333333333,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "8ee509ff077683eb3648e39b02d482821bf09a704256de108d80f283d36e9fed",
+          "solidBounds": [
+            206,
+            26,
+            710,
+            1740
+          ],
+          "opaqueInteriorPixels": 451866,
+          "edgeRecoveryPixels": 14926,
+          "shadowClassifiedPixels": 206132,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 9,
+            "rectTopLeft": [
+              990,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 2,
+          "file": "frames/stop/zhengyi_stop_002.png",
+          "sourceFrame": 183,
+          "sourcePtsTicks": 117248,
+          "sourceSeconds": 7.633333333333334,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "f0d28e04df3aa73a8d2162837381506ff64f6855c01675ba5b6abb2ec44c72e3",
+          "solidBounds": [
+            202,
+            28,
+            717,
+            1740
+          ],
+          "opaqueInteriorPixels": 465987,
+          "edgeRecoveryPixels": 16737,
+          "shadowClassifiedPixels": 193088,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 9,
+            "rectTopLeft": [
+              1978,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              1978,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 3,
+          "file": "frames/stop/zhengyi_stop_003.png",
+          "sourceFrame": 184,
+          "sourcePtsTicks": 117760,
+          "sourceSeconds": 7.666666666666667,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "20aaf09aa4e02b05082c7e743bd97dd42b3cec03ffd5dd31bdd4db008c44be4c",
+          "solidBounds": [
+            195,
+            31,
+            796,
+            1740
+          ],
+          "opaqueInteriorPixels": 472305,
+          "edgeRecoveryPixels": 17321,
+          "shadowClassifiedPixels": 188453,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 9,
+            "rectTopLeft": [
+              2966,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2966,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 4,
+          "file": "frames/stop/zhengyi_stop_004.png",
+          "sourceFrame": 185,
+          "sourcePtsTicks": 118528,
+          "sourceSeconds": 7.716666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "c37a021bcfbe1c950e5299065a8103916c0f5eb065c31d2edfc5d6f25a4a6f8e",
+          "solidBounds": [
+            187,
+            35,
+            868,
+            1740
+          ],
+          "opaqueInteriorPixels": 479929,
+          "edgeRecoveryPixels": 17403,
+          "shadowClassifiedPixels": 185801,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 9,
+            "rectTopLeft": [
+              2,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 5,
+          "file": "frames/stop/zhengyi_stop_005.png",
+          "sourceFrame": 186,
+          "sourcePtsTicks": 119040,
+          "sourceSeconds": 7.75,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "fe130607820b8181450f9d381afd8b6cb53b3bc3ec5b72cf59f9fef09e580d0d",
+          "solidBounds": [
+            178,
+            40,
+            906,
+            1740
+          ],
+          "opaqueInteriorPixels": 486503,
+          "edgeRecoveryPixels": 17914,
+          "shadowClassifiedPixels": 184685,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 9,
+            "rectTopLeft": [
+              990,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 6,
+          "file": "frames/stop/zhengyi_stop_006.png",
+          "sourceFrame": 187,
+          "sourcePtsTicks": 119808,
+          "sourceSeconds": 7.8,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "eebd005dcbeb614ae03511c0facc40f3ebefeb308cda886679331314693ef01c",
+          "solidBounds": [
+            170,
+            44,
+            920,
+            1739
+          ],
+          "opaqueInteriorPixels": 490680,
+          "edgeRecoveryPixels": 18201,
+          "shadowClassifiedPixels": 183227,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 9,
+            "rectTopLeft": [
+              1978,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              1978,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 7,
+          "file": "frames/stop/zhengyi_stop_007.png",
+          "sourceFrame": 188,
+          "sourcePtsTicks": 120320,
+          "sourceSeconds": 7.833333333333333,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "9ebff39b6a3f38d968babef12744601aeea5e8a03348f1fb9c167ec8baec1ad3",
+          "solidBounds": [
+            164,
+            47,
+            916,
+            1739
+          ],
+          "opaqueInteriorPixels": 494342,
+          "edgeRecoveryPixels": 18359,
+          "shadowClassifiedPixels": 182002,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 9,
+            "rectTopLeft": [
+              2966,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2966,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 8,
+          "file": "frames/stop/zhengyi_stop_008.png",
+          "sourceFrame": 189,
+          "sourcePtsTicks": 121088,
+          "sourceSeconds": 7.883333333333334,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "3d0a75a837887a2b3747eff3237a0a518e080502f5fdd3cd297ff90d9de08d20",
+          "solidBounds": [
+            145,
+            49,
+            900,
+            1739
+          ],
+          "opaqueInteriorPixels": 495971,
+          "edgeRecoveryPixels": 17893,
+          "shadowClassifiedPixels": 182231,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 10,
+            "rectTopLeft": [
+              2,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 9,
+          "file": "frames/stop/zhengyi_stop_009.png",
+          "sourceFrame": 190,
+          "sourcePtsTicks": 121600,
+          "sourceSeconds": 7.916666666666667,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "ab14cbe9af30a6f982d197bae2136ac42415d1924eaa237dc4029acd9c67c5d7",
+          "solidBounds": [
+            124,
+            48,
+            878,
+            1737
+          ],
+          "opaqueInteriorPixels": 495135,
+          "edgeRecoveryPixels": 18164,
+          "shadowClassifiedPixels": 182048,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 10,
+            "rectTopLeft": [
+              990,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 10,
+          "file": "frames/stop/zhengyi_stop_010.png",
+          "sourceFrame": 191,
+          "sourcePtsTicks": 122368,
+          "sourceSeconds": 7.966666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "77949f8471b03376a04ce7914cac0423f01e116607933965cdbaff6c588e04b2",
+          "solidBounds": [
+            104,
+            47,
+            858,
+            1737
+          ],
+          "opaqueInteriorPixels": 492196,
+          "edgeRecoveryPixels": 18337,
+          "shadowClassifiedPixels": 182340,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 10,
+            "rectTopLeft": [
+              1978,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              1978,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 11,
+          "file": "frames/stop/zhengyi_stop_011.png",
+          "sourceFrame": 192,
+          "sourcePtsTicks": 122880,
+          "sourceSeconds": 8.0,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "d1c0525e70afbc97599d8bb8e0ac70434656eeb3c0541bb31f23fd2d72619e2d",
+          "solidBounds": [
+            87,
+            45,
+            836,
+            1737
+          ],
+          "opaqueInteriorPixels": 488084,
+          "edgeRecoveryPixels": 18345,
+          "shadowClassifiedPixels": 182828,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 10,
+            "rectTopLeft": [
+              2966,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2966,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 12,
+          "file": "frames/stop/zhengyi_stop_012.png",
+          "sourceFrame": 193,
+          "sourcePtsTicks": 123648,
+          "sourceSeconds": 8.05,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "c19f48e3e9a99f335307312afb9c03329309d9f935ad7f76a2bf18017bc33eec",
+          "solidBounds": [
+            77,
+            42,
+            814,
+            1736
+          ],
+          "opaqueInteriorPixels": 479885,
+          "edgeRecoveryPixels": 17862,
+          "shadowClassifiedPixels": 185074,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 10,
+            "rectTopLeft": [
+              2,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 13,
+          "file": "frames/stop/zhengyi_stop_013.png",
+          "sourceFrame": 194,
+          "sourcePtsTicks": 124160,
+          "sourceSeconds": 8.083333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "c8125107550c754d9c7ac6dd82546cdf95c63a7a2ca287309c2d28a8cd7051a2",
+          "solidBounds": [
+            70,
+            40,
+            795,
+            1736
+          ],
+          "opaqueInteriorPixels": 471661,
+          "edgeRecoveryPixels": 18014,
+          "shadowClassifiedPixels": 186096,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 10,
+            "rectTopLeft": [
+              990,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 14,
+          "file": "frames/stop/zhengyi_stop_014.png",
+          "sourceFrame": 195,
+          "sourcePtsTicks": 124928,
+          "sourceSeconds": 8.133333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "dd002b0d9c4c11a471d1d4b27045fff518e9cd698bf93d3947dab471b9a23f4e",
+          "solidBounds": [
+            71,
+            38,
+            776,
+            1734
+          ],
+          "opaqueInteriorPixels": 462934,
+          "edgeRecoveryPixels": 17266,
+          "shadowClassifiedPixels": 188142,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 10,
+            "rectTopLeft": [
+              1978,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              1978,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 15,
+          "file": "frames/stop/zhengyi_stop_015.png",
+          "sourceFrame": 196,
+          "sourcePtsTicks": 125440,
+          "sourceSeconds": 8.166666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "b59c61ae907f10abdb8403ceac7f4e4a7030babbef521b7d7cd8ac5d35a8f2f2",
+          "solidBounds": [
+            78,
+            37,
+            758,
+            1730
+          ],
+          "opaqueInteriorPixels": 453515,
+          "edgeRecoveryPixels": 16748,
+          "shadowClassifiedPixels": 191075,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 10,
+            "rectTopLeft": [
+              2966,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2966,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 16,
+          "file": "frames/stop/zhengyi_stop_016.png",
+          "sourceFrame": 197,
+          "sourcePtsTicks": 126208,
+          "sourceSeconds": 8.216666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "b802a33f663f07f631c05cb51e5de9f6c66171e1dc325bfd16df70f0a8c38130",
+          "solidBounds": [
+            88,
+            35,
+            742,
+            1728
+          ],
+          "opaqueInteriorPixels": 441836,
+          "edgeRecoveryPixels": 16476,
+          "shadowClassifiedPixels": 195742,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 11,
+            "rectTopLeft": [
+              2,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 17,
+          "file": "frames/stop/zhengyi_stop_017.png",
+          "sourceFrame": 198,
+          "sourcePtsTicks": 126720,
+          "sourceSeconds": 8.25,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "31be467efe05dc99532f5f483627f097e33034323daab12b270728d5c82f20ac",
+          "solidBounds": [
+            102,
+            34,
+            727,
+            1729
+          ],
+          "opaqueInteriorPixels": 431829,
+          "edgeRecoveryPixels": 16575,
+          "shadowClassifiedPixels": 198360,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 11,
+            "rectTopLeft": [
+              990,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 18,
+          "file": "frames/stop/zhengyi_stop_018.png",
+          "sourceFrame": 199,
+          "sourcePtsTicks": 127488,
+          "sourceSeconds": 8.3,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "f9901b70eb73b96bb302d776e042f5c4b0d693566845bd09de34b116721ea15b",
+          "solidBounds": [
+            117,
+            33,
+            712,
+            1729
+          ],
+          "opaqueInteriorPixels": 421766,
+          "edgeRecoveryPixels": 16409,
+          "shadowClassifiedPixels": 200054,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 11,
+            "rectTopLeft": [
+              1978,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              1978,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 19,
+          "file": "frames/stop/zhengyi_stop_019.png",
+          "sourceFrame": 200,
+          "sourcePtsTicks": 128000,
+          "sourceSeconds": 8.333333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "87b64a4d1b71197f180351dc9c441c817282c9b98082b4cdfae2eec3b505d72a",
+          "solidBounds": [
+            138,
+            32,
+            698,
+            1729
+          ],
+          "opaqueInteriorPixels": 412645,
+          "edgeRecoveryPixels": 16215,
+          "shadowClassifiedPixels": 199567,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 11,
+            "rectTopLeft": [
+              2966,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2966,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 20,
+          "file": "frames/stop/zhengyi_stop_020.png",
+          "sourceFrame": 201,
+          "sourcePtsTicks": 128768,
+          "sourceSeconds": 8.383333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "0ac2b8c27de546eec73f3ae78bcdee4a3b9ad11e246e28f706549e038602a14a",
+          "solidBounds": [
+            167,
+            31,
+            686,
+            1729
+          ],
+          "opaqueInteriorPixels": 403161,
+          "edgeRecoveryPixels": 15785,
+          "shadowClassifiedPixels": 199174,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 11,
+            "rectTopLeft": [
+              2,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 21,
+          "file": "frames/stop/zhengyi_stop_021.png",
+          "sourceFrame": 202,
+          "sourcePtsTicks": 129280,
+          "sourceSeconds": 8.416666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "15d4f27df01083bd2716c1459d662a04f69e8134f51e6f62f9469774a90b9be4",
+          "solidBounds": [
+            197,
+            31,
+            674,
+            1729
+          ],
+          "opaqueInteriorPixels": 398712,
+          "edgeRecoveryPixels": 15727,
+          "shadowClassifiedPixels": 197571,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 11,
+            "rectTopLeft": [
+              990,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 22,
+          "file": "frames/stop/zhengyi_stop_022.png",
+          "sourceFrame": 203,
+          "sourcePtsTicks": 130048,
+          "sourceSeconds": 8.466666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "bef5b4f651615458c231c43e88190e14b9a2fbbfd718168d7be7110161d541be",
+          "solidBounds": [
+            229,
+            31,
+            662,
+            1729
+          ],
+          "opaqueInteriorPixels": 394832,
+          "edgeRecoveryPixels": 14868,
+          "shadowClassifiedPixels": 196317,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 11,
+            "rectTopLeft": [
+              1978,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              1978,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 23,
+          "file": "frames/stop/zhengyi_stop_023.png",
+          "sourceFrame": 204,
+          "sourcePtsTicks": 130560,
+          "sourceSeconds": 8.5,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "e8a4af5ecd6c62d7b511ef8b35e2aede26b44b9267466bfd5d61d1132d0efc76",
+          "solidBounds": [
+            253,
+            31,
+            652,
+            1730
+          ],
+          "opaqueInteriorPixels": 387926,
+          "edgeRecoveryPixels": 13750,
+          "shadowClassifiedPixels": 199963,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 11,
+            "rectTopLeft": [
+              2966,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2966,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 24,
+          "file": "frames/stop/zhengyi_stop_024.png",
+          "sourceFrame": 205,
+          "sourcePtsTicks": 131328,
+          "sourceSeconds": 8.55,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "09e7a2f2290c2d847c9360527f7d5429bebfef1b7eb2b52910ab61d117e48abe",
+          "solidBounds": [
+            260,
+            32,
+            650,
+            1729
+          ],
+          "opaqueInteriorPixels": 376493,
+          "edgeRecoveryPixels": 12786,
+          "shadowClassifiedPixels": 207097,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 12,
+            "rectTopLeft": [
+              2,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 25,
+          "file": "frames/stop/zhengyi_stop_025.png",
+          "sourceFrame": 206,
+          "sourcePtsTicks": 131840,
+          "sourceSeconds": 8.583333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "aa160acbac4a22c2a6079a7ca3716268dbda780e94e010ff5a3048a0778f24e0",
+          "solidBounds": [
+            264,
+            32,
+            654,
+            1729
+          ],
+          "opaqueInteriorPixels": 366949,
+          "edgeRecoveryPixels": 13049,
+          "shadowClassifiedPixels": 212794,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 12,
+            "rectTopLeft": [
+              990,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 26,
+          "file": "frames/stop/zhengyi_stop_026.png",
+          "sourceFrame": 207,
+          "sourcePtsTicks": 132608,
+          "sourceSeconds": 8.633333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "ccff9e76969afd73dead0685c41e58e1af218f08168466251724d0f4ad2f8d08",
+          "solidBounds": [
+            265,
+            33,
+            654,
+            1733
+          ],
+          "opaqueInteriorPixels": 359225,
+          "edgeRecoveryPixels": 12819,
+          "shadowClassifiedPixels": 217182,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 12,
+            "rectTopLeft": [
+              1978,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              1978,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 27,
+          "file": "frames/stop/zhengyi_stop_027.png",
+          "sourceFrame": 208,
+          "sourcePtsTicks": 133120,
+          "sourceSeconds": 8.666666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "13ab93da960cc5dcdb6dd9457ffad5d3518bd283cc5f4c0c7e60b5ed70ddc063",
+          "solidBounds": [
+            264,
+            33,
+            652,
+            1739
+          ],
+          "opaqueInteriorPixels": 354295,
+          "edgeRecoveryPixels": 12058,
+          "shadowClassifiedPixels": 220704,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 12,
+            "rectTopLeft": [
+              2966,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2966,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 28,
+          "file": "frames/stop/zhengyi_stop_028.png",
+          "sourceFrame": 209,
+          "sourcePtsTicks": 133888,
+          "sourceSeconds": 8.716666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "7459ce23cdcef04168c90ee5f5ecb456f1ba813df145c7b5504cfb86ef5717d4",
+          "solidBounds": [
+            262,
+            33,
+            646,
+            1741
+          ],
+          "opaqueInteriorPixels": 351147,
+          "edgeRecoveryPixels": 11225,
+          "shadowClassifiedPixels": 222432,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 12,
+            "rectTopLeft": [
+              2,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 29,
+          "file": "frames/stop/zhengyi_stop_029.png",
+          "sourceFrame": 210,
+          "sourcePtsTicks": 134400,
+          "sourceSeconds": 8.75,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "73520a7555008fedbd03d15aed7653692b967406cb7c3b664d29987a73c5104a",
+          "solidBounds": [
+            259,
+            32,
+            639,
+            1742
+          ],
+          "opaqueInteriorPixels": 349884,
+          "edgeRecoveryPixels": 11274,
+          "shadowClassifiedPixels": 222283,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 12,
+            "rectTopLeft": [
+              990,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 30,
+          "file": "frames/stop/zhengyi_stop_030.png",
+          "sourceFrame": 211,
+          "sourcePtsTicks": 135168,
+          "sourceSeconds": 8.8,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "75b3839d619c6de170751aacb82f0377ed9b0d41822c9384d25204696cf5b72d",
+          "solidBounds": [
+            255,
+            31,
+            631,
+            1742
+          ],
+          "opaqueInteriorPixels": 349877,
+          "edgeRecoveryPixels": 11371,
+          "shadowClassifiedPixels": 222298,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 12,
+            "rectTopLeft": [
+              1978,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              1978,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 31,
+          "file": "frames/stop/zhengyi_stop_031.png",
+          "sourceFrame": 212,
+          "sourcePtsTicks": 135680,
+          "sourceSeconds": 8.833333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "2989a02b94e1b3e5eb595114f032890c19c6253fc13f85393a7eecd7e3bbe168",
+          "solidBounds": [
+            251,
+            31,
+            623,
+            1742
+          ],
+          "opaqueInteriorPixels": 352650,
+          "edgeRecoveryPixels": 11386,
+          "shadowClassifiedPixels": 222045,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 12,
+            "rectTopLeft": [
+              2966,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2966,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 32,
+          "file": "frames/stop/zhengyi_stop_032.png",
+          "sourceFrame": 213,
+          "sourcePtsTicks": 136448,
+          "sourceSeconds": 8.883333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "2b974e42b020c4b4c4afdc46f4e35ec837cf6e8814e886d7336f2fdb48f4d109",
+          "solidBounds": [
+            246,
+            29,
+            615,
+            1742
+          ],
+          "opaqueInteriorPixels": 354764,
+          "edgeRecoveryPixels": 11176,
+          "shadowClassifiedPixels": 222382,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 13,
+            "rectTopLeft": [
+              2,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 33,
+          "file": "frames/stop/zhengyi_stop_033.png",
+          "sourceFrame": 214,
+          "sourcePtsTicks": 136960,
+          "sourceSeconds": 8.916666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "1501e70ef7b5b2f5696ba2fe5f0d728f557fbc19ef1bec48817833f2a429ff72",
+          "solidBounds": [
+            242,
+            29,
+            607,
+            1742
+          ],
+          "opaqueInteriorPixels": 356852,
+          "edgeRecoveryPixels": 11445,
+          "shadowClassifiedPixels": 222062,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 13,
+            "rectTopLeft": [
+              990,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 34,
+          "file": "frames/stop/zhengyi_stop_034.png",
+          "sourceFrame": 215,
+          "sourcePtsTicks": 137728,
+          "sourceSeconds": 8.966666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "c80eb76b995a42f15dfb1753724d7152f8c245c406bbdd56ba0c5e235160dc72",
+          "solidBounds": [
+            238,
+            29,
+            603,
+            1742
+          ],
+          "opaqueInteriorPixels": 358456,
+          "edgeRecoveryPixels": 11428,
+          "shadowClassifiedPixels": 221962,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 13,
+            "rectTopLeft": [
+              1978,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              1978,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 35,
+          "file": "frames/stop/zhengyi_stop_035.png",
+          "sourceFrame": 216,
+          "sourcePtsTicks": 138240,
+          "sourceSeconds": 9.0,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "a359cc526029a32765161bab3fcb6544b881870e840c28891b7a056f70e933b1",
+          "solidBounds": [
+            234,
+            28,
+            603,
+            1742
+          ],
+          "opaqueInteriorPixels": 359774,
+          "edgeRecoveryPixels": 11666,
+          "shadowClassifiedPixels": 221957,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 13,
+            "rectTopLeft": [
+              2966,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2966,
+              1782,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 36,
+          "file": "frames/stop/zhengyi_stop_036.png",
+          "sourceFrame": 217,
+          "sourcePtsTicks": 139008,
+          "sourceSeconds": 9.05,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "c31cd2b373351ff31983e8d2e5a33cdf2cb47bf06a42a00610962b5bf9c039ef",
+          "solidBounds": [
+            230,
+            28,
+            603,
+            1742
+          ],
+          "opaqueInteriorPixels": 360501,
+          "edgeRecoveryPixels": 11264,
+          "shadowClassifiedPixels": 222444,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 13,
+            "rectTopLeft": [
+              2,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 37,
+          "file": "frames/stop/zhengyi_stop_037.png",
+          "sourceFrame": 218,
+          "sourcePtsTicks": 139520,
+          "sourceSeconds": 9.083333333333334,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "31f714d677b9367bdbf475216998cb2dbebfab963257aaab7dec4fbb80a03986",
+          "solidBounds": [
+            228,
+            28,
+            603,
+            1742
+          ],
+          "opaqueInteriorPixels": 361396,
+          "edgeRecoveryPixels": 11140,
+          "shadowClassifiedPixels": 222331,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 13,
+            "rectTopLeft": [
+              990,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 38,
+          "file": "frames/stop/zhengyi_stop_038.png",
+          "sourceFrame": 219,
+          "sourcePtsTicks": 140288,
+          "sourceSeconds": 9.133333333333333,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "b5f3e5b5ea7f821517cc4edc51aa4d0d46c0a981ec4f4b98a20743ee0ca70e0f",
+          "solidBounds": [
+            225,
+            28,
+            603,
+            1742
+          ],
+          "opaqueInteriorPixels": 361683,
+          "edgeRecoveryPixels": 11171,
+          "shadowClassifiedPixels": 222349,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 13,
+            "rectTopLeft": [
+              1978,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              1978,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 39,
+          "file": "frames/stop/zhengyi_stop_039.png",
+          "sourceFrame": 220,
+          "sourcePtsTicks": 140800,
+          "sourceSeconds": 9.166666666666666,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "663c17fbbfb8a7725fd1237fb2e1f185466e5cb06bdec25a149f7f37db98e6ac",
+          "solidBounds": [
+            224,
+            28,
+            603,
+            1742
+          ],
+          "opaqueInteriorPixels": 361926,
+          "edgeRecoveryPixels": 11250,
+          "shadowClassifiedPixels": 222394,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 13,
+            "rectTopLeft": [
+              2966,
+              1782,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2966,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 40,
+          "file": "frames/stop/zhengyi_stop_040.png",
+          "sourceFrame": 221,
+          "sourcePtsTicks": 141568,
+          "sourceSeconds": 9.216666666666667,
+          "durationTicks": 512,
+          "durationSeconds": 0.03333333333333333,
+          "sha256": "404017ecf1a3cc820f1e81cf612f8b0d248593e47c7fab1c40c6c5aeb20edd91",
+          "solidBounds": [
+            224,
+            28,
+            602,
+            1742
+          ],
+          "opaqueInteriorPixels": 361833,
+          "edgeRecoveryPixels": 11200,
+          "shadowClassifiedPixels": 222674,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 14,
+            "rectTopLeft": [
+              2,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              2,
+              2,
+              984,
+              1776
+            ]
+          }
+        },
+        {
+          "state": "stop",
+          "index": 41,
+          "file": "frames/stop/zhengyi_stop_041.png",
+          "sourceFrame": 222,
+          "sourcePtsTicks": 142080,
+          "sourceSeconds": 9.25,
+          "durationTicks": 768,
+          "durationSeconds": 0.05,
+          "sha256": "79fdb00b8f7a772dfec2101c591474206f6f35c63c8a83feb49fe20994f1ccb9",
+          "solidBounds": [
+            224,
+            28,
+            602,
+            1742
+          ],
+          "opaqueInteriorPixels": 362028,
+          "edgeRecoveryPixels": 11176,
+          "shadowClassifiedPixels": 222510,
+          "opaqueInteriorRgbChanged": 0,
+          "atlas": {
+            "page": 14,
+            "rectTopLeft": [
+              990,
+              2,
+              984,
+              1776
+            ],
+            "rectUnityBottomLeft": [
+              990,
+              2,
+              984,
+              1776
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "atlas": [
+    {
+      "file": "atlas/zhengyi_idle_00.png",
+      "state": "idle",
+      "size": [
+        988,
+        1780
+      ],
+      "usedCells": 1
+    },
+    {
+      "file": "atlas/zhengyi_start_00.png",
+      "state": "start",
+      "size": [
+        3952,
+        3560
+      ],
+      "usedCells": 8
+    },
+    {
+      "file": "atlas/zhengyi_start_01.png",
+      "state": "start",
+      "size": [
+        3952,
+        3560
+      ],
+      "usedCells": 8
+    },
+    {
+      "file": "atlas/zhengyi_start_02.png",
+      "state": "start",
+      "size": [
+        3952,
+        3560
+      ],
+      "usedCells": 8
+    },
+    {
+      "file": "atlas/zhengyi_start_03.png",
+      "state": "start",
+      "size": [
+        2964,
+        1780
+      ],
+      "usedCells": 3
+    },
+    {
+      "file": "atlas/zhengyi_walk_00.png",
+      "state": "walk",
+      "size": [
+        3952,
+        3560
+      ],
+      "usedCells": 8
+    },
+    {
+      "file": "atlas/zhengyi_walk_01.png",
+      "state": "walk",
+      "size": [
+        3952,
+        3560
+      ],
+      "usedCells": 8
+    },
+    {
+      "file": "atlas/zhengyi_walk_02.png",
+      "state": "walk",
+      "size": [
+        3952,
+        3560
+      ],
+      "usedCells": 8
+    },
+    {
+      "file": "atlas/zhengyi_walk_03.png",
+      "state": "walk",
+      "size": [
+        3952,
+        3560
+      ],
+      "usedCells": 6
+    },
+    {
+      "file": "atlas/zhengyi_stop_00.png",
+      "state": "stop",
+      "size": [
+        3952,
+        3560
+      ],
+      "usedCells": 8
+    },
+    {
+      "file": "atlas/zhengyi_stop_01.png",
+      "state": "stop",
+      "size": [
+        3952,
+        3560
+      ],
+      "usedCells": 8
+    },
+    {
+      "file": "atlas/zhengyi_stop_02.png",
+      "state": "stop",
+      "size": [
+        3952,
+        3560
+      ],
+      "usedCells": 8
+    },
+    {
+      "file": "atlas/zhengyi_stop_03.png",
+      "state": "stop",
+      "size": [
+        3952,
+        3560
+      ],
+      "usedCells": 8
+    },
+    {
+      "file": "atlas/zhengyi_stop_04.png",
+      "state": "stop",
+      "size": [
+        3952,
+        3560
+      ],
+      "usedCells": 8
+    },
+    {
+      "file": "atlas/zhengyi_stop_05.png",
+      "state": "stop",
+      "size": [
+        1976,
+        1780
+      ],
+      "usedCells": 2
+    }
+  ],
+  "processing": {
+    "ffmpegAlphaFilter": "format=yuva444p,chromakey=0x88a971:0.035:0.028,format=rgba",
+    "localDespill": true,
+    "redraw": false,
+    "interpolation": false,
+    "perFrameScale": false,
+    "perFrameAlignment": false,
+    "solidNeutralMaterialProtection": true
+  },
+  "notes": [
+    "Native contiguous frames only; shared native crop for all states.",
+    "Walk boundary reference is excluded from the loop.",
+    "Small source body yaw, hair/cloth movement and sole-height variation are retained.",
+    "No redraw, retargeting, optical flow or image interpolation."
+  ],
+  "reviewChain": [
+    {
+      "state": "idle",
+      "holdSeconds": 1
+    },
+    {
+      "state": "start"
+    },
+    {
+      "state": "walk",
+      "repeats": 2
+    },
+    {
+      "state": "stop"
+    },
+    {
+      "state": "idle",
+      "holdSeconds": 1
+    }
+  ]
+}

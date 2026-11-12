@@ -1,0 +1,1660 @@
+{
+  "version": 2,
+  "characterId": "liyuan",
+  "revision": "approved-sideview-native-four-states",
+  "startFrame": 0,
+  "canvasHeightUnits": 2.689020070838253,
+  "walkSpeed": 1.1,
+  "cycleSeconds": 1.55,
+  "frameDurations": [
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05
+  ],
+  "idle": "liyuan_idle_000",
+  "walk": [
+    "liyuan_walk_000",
+    "liyuan_walk_001",
+    "liyuan_walk_002",
+    "liyuan_walk_003",
+    "liyuan_walk_004",
+    "liyuan_walk_005",
+    "liyuan_walk_006",
+    "liyuan_walk_007",
+    "liyuan_walk_008",
+    "liyuan_walk_009",
+    "liyuan_walk_010",
+    "liyuan_walk_011",
+    "liyuan_walk_012",
+    "liyuan_walk_013",
+    "liyuan_walk_014",
+    "liyuan_walk_015",
+    "liyuan_walk_016",
+    "liyuan_walk_017",
+    "liyuan_walk_018",
+    "liyuan_walk_019",
+    "liyuan_walk_020",
+    "liyuan_walk_021",
+    "liyuan_walk_022",
+    "liyuan_walk_023",
+    "liyuan_walk_024",
+    "liyuan_walk_025",
+    "liyuan_walk_026",
+    "liyuan_walk_027",
+    "liyuan_walk_028",
+    "liyuan_walk_029",
+    "liyuan_walk_030",
+    "liyuan_walk_031",
+    "liyuan_walk_032",
+    "liyuan_walk_033",
+    "liyuan_walk_034",
+    "liyuan_walk_035",
+    "liyuan_walk_036"
+  ],
+  "start": [
+    "liyuan_start_000",
+    "liyuan_start_001",
+    "liyuan_start_002",
+    "liyuan_start_003",
+    "liyuan_start_004",
+    "liyuan_start_005",
+    "liyuan_start_006",
+    "liyuan_start_007",
+    "liyuan_start_008",
+    "liyuan_start_009",
+    "liyuan_start_010",
+    "liyuan_start_011",
+    "liyuan_start_012",
+    "liyuan_start_013",
+    "liyuan_start_014",
+    "liyuan_start_015",
+    "liyuan_start_016",
+    "liyuan_start_017",
+    "liyuan_start_018",
+    "liyuan_start_019",
+    "liyuan_start_020",
+    "liyuan_start_021",
+    "liyuan_start_022",
+    "liyuan_start_023",
+    "liyuan_start_024",
+    "liyuan_start_025",
+    "liyuan_start_026",
+    "liyuan_start_027",
+    "liyuan_start_028",
+    "liyuan_start_029"
+  ],
+  "startDurations": [
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333
+  ],
+  "stop": [
+    "liyuan_stop_000",
+    "liyuan_stop_001",
+    "liyuan_stop_002",
+    "liyuan_stop_003",
+    "liyuan_stop_004",
+    "liyuan_stop_005",
+    "liyuan_stop_006",
+    "liyuan_stop_007",
+    "liyuan_stop_008",
+    "liyuan_stop_009",
+    "liyuan_stop_010",
+    "liyuan_stop_011",
+    "liyuan_stop_012",
+    "liyuan_stop_013",
+    "liyuan_stop_014",
+    "liyuan_stop_015",
+    "liyuan_stop_016",
+    "liyuan_stop_017",
+    "liyuan_stop_018",
+    "liyuan_stop_019",
+    "liyuan_stop_020",
+    "liyuan_stop_021",
+    "liyuan_stop_022",
+    "liyuan_stop_023",
+    "liyuan_stop_024",
+    "liyuan_stop_025",
+    "liyuan_stop_026",
+    "liyuan_stop_027",
+    "liyuan_stop_028",
+    "liyuan_stop_029",
+    "liyuan_stop_030",
+    "liyuan_stop_031",
+    "liyuan_stop_032",
+    "liyuan_stop_033"
+  ],
+  "stopDurations": [
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333,
+    0.05,
+    0.03333333333333333
+  ],
+  "assets": [
+    {
+      "file": "liyuan_idle_000.png",
+      "sha256": "5971956bd631a1562d3adbb4ed229ec08089ff9b18f5576f4326be08f54e65ca",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "idle",
+      "sourceFrame": 39,
+      "name": "liyuan_idle_000"
+    },
+    {
+      "file": "liyuan_start_000.png",
+      "sha256": "efa19fa28e2c37fe23ddbf61875a17d4107cb7b41204a942c913854c205112f1",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 40,
+      "name": "liyuan_start_000"
+    },
+    {
+      "file": "liyuan_start_001.png",
+      "sha256": "150a60d2150e9c8c2d6930121cfe9e2f0009e3939f5b409212e24f3d53af663a",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 41,
+      "name": "liyuan_start_001"
+    },
+    {
+      "file": "liyuan_start_002.png",
+      "sha256": "65fe69752ee003b0d29b88c1ed49b6f14f237669a16277da5c188b40451194e9",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 42,
+      "name": "liyuan_start_002"
+    },
+    {
+      "file": "liyuan_start_003.png",
+      "sha256": "8c46eb8a7bfb3a9af6d8cbf2e60322a7847d8210e9c796f3b49185cd6f9e9516",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 43,
+      "name": "liyuan_start_003"
+    },
+    {
+      "file": "liyuan_start_004.png",
+      "sha256": "29475f055e711a32308b5a70761125598ec96b2a4ed0a96d4eb5f07445af37e4",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 44,
+      "name": "liyuan_start_004"
+    },
+    {
+      "file": "liyuan_start_005.png",
+      "sha256": "b1c2398932a88899f8ced3680a40753fd0cde7c79cf50ed5a8298689049cfafc",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 45,
+      "name": "liyuan_start_005"
+    },
+    {
+      "file": "liyuan_start_006.png",
+      "sha256": "28c53e5cdfa75a7e3a0f1616992b87737ecda15b45d0330dffdc9a8960189db7",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 46,
+      "name": "liyuan_start_006"
+    },
+    {
+      "file": "liyuan_start_007.png",
+      "sha256": "61d385c90ddeafbfe08097670dede141d17c34222190750352f13a0a3c1ee612",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 47,
+      "name": "liyuan_start_007"
+    },
+    {
+      "file": "liyuan_start_008.png",
+      "sha256": "184a4b86d45ee455ce888d121f735cc7b681ad8fc4b09579db3cae4e106b30d5",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 48,
+      "name": "liyuan_start_008"
+    },
+    {
+      "file": "liyuan_start_009.png",
+      "sha256": "b782378684a3c532cd559a23638216a15f0706ddef712cc31970031cded574d4",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 49,
+      "name": "liyuan_start_009"
+    },
+    {
+      "file": "liyuan_start_010.png",
+      "sha256": "ac01baf2c0f61698ca4c14f816eb964b16056e7f325cbdc3f9636bf009da95c3",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 50,
+      "name": "liyuan_start_010"
+    },
+    {
+      "file": "liyuan_start_011.png",
+      "sha256": "997dc1884fec4a49858250acf433254787e98c594614f551044946c9227d2574",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 51,
+      "name": "liyuan_start_011"
+    },
+    {
+      "file": "liyuan_start_012.png",
+      "sha256": "90bb237be8060da289c0637862d89f2e4a7144b8fb36dccecdf72c956f48c3f8",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 52,
+      "name": "liyuan_start_012"
+    },
+    {
+      "file": "liyuan_start_013.png",
+      "sha256": "07cc38283c6fef636035d6dd549606d4dae8a028df42c59deb788c8575c1c1eb",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 53,
+      "name": "liyuan_start_013"
+    },
+    {
+      "file": "liyuan_start_014.png",
+      "sha256": "6811266f55ccfc87f7010c851b02b95b7c34903759976deea796608e2de0beb7",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 54,
+      "name": "liyuan_start_014"
+    },
+    {
+      "file": "liyuan_start_015.png",
+      "sha256": "0f2eb8b2996edd7c2ce359bc050cf778b4b74a644194e99bf48e1d3cf2c8cbf8",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 55,
+      "name": "liyuan_start_015"
+    },
+    {
+      "file": "liyuan_start_016.png",
+      "sha256": "8418d32dc6985a63257d8c4d1c9a6fae6b6392e56190ed342f65d650c2ba5d58",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 56,
+      "name": "liyuan_start_016"
+    },
+    {
+      "file": "liyuan_start_017.png",
+      "sha256": "80adf0b82db65cf923466f3bec6a968d265394825a385e8b7c1fddf222a3eb42",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 57,
+      "name": "liyuan_start_017"
+    },
+    {
+      "file": "liyuan_start_018.png",
+      "sha256": "18f14fd264df1a917b18068fb0f85e33902fdc145ebda13a2563d88c8a2ed107",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 58,
+      "name": "liyuan_start_018"
+    },
+    {
+      "file": "liyuan_start_019.png",
+      "sha256": "9f7225d5cfb7969ef2608f82433ac42b2a634fa3a7548a12c4993d233a069fa5",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 59,
+      "name": "liyuan_start_019"
+    },
+    {
+      "file": "liyuan_start_020.png",
+      "sha256": "2890bf2ec1c6c428ac303caeffef78b1d29b3e0b2db1a6e1740724323f0714a1",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 60,
+      "name": "liyuan_start_020"
+    },
+    {
+      "file": "liyuan_start_021.png",
+      "sha256": "d6455bb97c228cfbedf50e790a2647a4404b382582fe7461a2d59630dc852942",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 61,
+      "name": "liyuan_start_021"
+    },
+    {
+      "file": "liyuan_start_022.png",
+      "sha256": "f649c5d90730035608be102c2b8c54599c15fda90068e48c2d5589079bbc5942",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 62,
+      "name": "liyuan_start_022"
+    },
+    {
+      "file": "liyuan_start_023.png",
+      "sha256": "378c7e90205907e4e95f4eef80b32278ec22c133e0535fd83d4518b37bd7dd83",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 63,
+      "name": "liyuan_start_023"
+    },
+    {
+      "file": "liyuan_start_024.png",
+      "sha256": "1b90069aed9c4ead0f199005f2907cfe0af3640bbfdc33ce69d556114935fb2d",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 64,
+      "name": "liyuan_start_024"
+    },
+    {
+      "file": "liyuan_start_025.png",
+      "sha256": "aa2d7ae03dce6874e0603f68fe9edd34695e7efbd33ebb073dd0e866a3d8f0fb",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 65,
+      "name": "liyuan_start_025"
+    },
+    {
+      "file": "liyuan_start_026.png",
+      "sha256": "4900b9ed493e01d81df09c960b7b51ffa670e3913aaae4753e92f5fff5ad20b0",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 66,
+      "name": "liyuan_start_026"
+    },
+    {
+      "file": "liyuan_start_027.png",
+      "sha256": "657f9d68f240aab76efed35264a3acac1c74fb39f9827a6f4ebbf893a4d37dfe",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 67,
+      "name": "liyuan_start_027"
+    },
+    {
+      "file": "liyuan_start_028.png",
+      "sha256": "a27f0de6812b7469efd34d9a00ae461cebe3984d30eefc8561132396cf5cb0b9",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 68,
+      "name": "liyuan_start_028"
+    },
+    {
+      "file": "liyuan_start_029.png",
+      "sha256": "7b56bcbcc9b6639c019e4d5d63189c5f01160e0ba4fae3fe6d51e601b0183b5f",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "start",
+      "sourceFrame": 69,
+      "name": "liyuan_start_029"
+    },
+    {
+      "file": "liyuan_walk_000.png",
+      "sha256": "5a403bd0fe792edd8a07190a0fd71c239f09011588eca430e4526a0855528e0e",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 70,
+      "name": "liyuan_walk_000"
+    },
+    {
+      "file": "liyuan_walk_001.png",
+      "sha256": "530435dbec6cfd2ba7eb09c74c7c7dae9df8c3ccea4ce4d65c024c404593c9cb",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 71,
+      "name": "liyuan_walk_001"
+    },
+    {
+      "file": "liyuan_walk_002.png",
+      "sha256": "df4ef85305240e18254d84f090706fb4f2fb03b88921d3876bd0870ac434f3da",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 72,
+      "name": "liyuan_walk_002"
+    },
+    {
+      "file": "liyuan_walk_003.png",
+      "sha256": "5624731eb350ab23a3b46691e1f1b41a8e456ae7461f3bb6809a264eff078b29",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 73,
+      "name": "liyuan_walk_003"
+    },
+    {
+      "file": "liyuan_walk_004.png",
+      "sha256": "5047a8083fdb24d1963eeecfa65efb7be129c97af6982c7aeeb75684e1348cd8",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 74,
+      "name": "liyuan_walk_004"
+    },
+    {
+      "file": "liyuan_walk_005.png",
+      "sha256": "ea9c5ccde408c28705a6634cbb6b3d87d810d55c13579fa227fd31e4a44ed5c4",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 75,
+      "name": "liyuan_walk_005"
+    },
+    {
+      "file": "liyuan_walk_006.png",
+      "sha256": "6442457b2884a25150230a3fea3e117f8dabe663bdcc406b8f2dc47a9a81bbec",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 76,
+      "name": "liyuan_walk_006"
+    },
+    {
+      "file": "liyuan_walk_007.png",
+      "sha256": "a2ad602b61fa23f85eee59f3fc9b75330f959c3b48805ff37444578ff1d84624",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 77,
+      "name": "liyuan_walk_007"
+    },
+    {
+      "file": "liyuan_walk_008.png",
+      "sha256": "51f45785b346b6769044a31b0b9b2df7ad1fb44aafb6761154deb50e4a57f00e",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 78,
+      "name": "liyuan_walk_008"
+    },
+    {
+      "file": "liyuan_walk_009.png",
+      "sha256": "1be0d47580926d6690ebfdaa8d2f1f798caea777e52f77966edd11c8366f96f7",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 79,
+      "name": "liyuan_walk_009"
+    },
+    {
+      "file": "liyuan_walk_010.png",
+      "sha256": "7445a2fa47146535be17fd0e993f7dbc7e36e21e65c843220b2327f9d40124c9",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 80,
+      "name": "liyuan_walk_010"
+    },
+    {
+      "file": "liyuan_walk_011.png",
+      "sha256": "f999b694f53333ea610c042f809a989a5f2adc1ec5933b7ab381544554ab0952",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 81,
+      "name": "liyuan_walk_011"
+    },
+    {
+      "file": "liyuan_walk_012.png",
+      "sha256": "17e67db5e89fd397cf502290009bd0372c1af699154704a88d0cbc3bf295326c",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 82,
+      "name": "liyuan_walk_012"
+    },
+    {
+      "file": "liyuan_walk_013.png",
+      "sha256": "250d8c8088b5ae008676e996fc7a7e5051c0615b73cb7cd19fb9e9c94085e2be",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 83,
+      "name": "liyuan_walk_013"
+    },
+    {
+      "file": "liyuan_walk_014.png",
+      "sha256": "cf138e92774e394b4dba19740dd6b28fbb6ba38444f86bf533e0b1edfd10c1e6",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 84,
+      "name": "liyuan_walk_014"
+    },
+    {
+      "file": "liyuan_walk_015.png",
+      "sha256": "d6b4ea290d39b56911c47130ccc87115118e132e787449026ddbe13876d45773",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 85,
+      "name": "liyuan_walk_015"
+    },
+    {
+      "file": "liyuan_walk_016.png",
+      "sha256": "20b504743645b8d9cf508a3ea5985951e5aef295dfc88af1186311047604fa09",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 86,
+      "name": "liyuan_walk_016"
+    },
+    {
+      "file": "liyuan_walk_017.png",
+      "sha256": "93488bcb303f45da557a76758f3b4f5cc80bf90198a1833825d682069605587a",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 87,
+      "name": "liyuan_walk_017"
+    },
+    {
+      "file": "liyuan_walk_018.png",
+      "sha256": "7f14f271c760599e746be9dff9339811a93899ddde3107aa595d2d1d029887c0",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 88,
+      "name": "liyuan_walk_018"
+    },
+    {
+      "file": "liyuan_walk_019.png",
+      "sha256": "94925b1b1202de26b2fc09cd5ef19ffa56563684492d7d6d92624dd1af9fd63e",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 89,
+      "name": "liyuan_walk_019"
+    },
+    {
+      "file": "liyuan_walk_020.png",
+      "sha256": "66437e8760e9a463469db6513666783f38d3cdf2c5d3198ce757984006086ec9",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 90,
+      "name": "liyuan_walk_020"
+    },
+    {
+      "file": "liyuan_walk_021.png",
+      "sha256": "13ccfeb758c9d5e4a6d2e44cd1000fb22ea54ace8c38878fff27de36181d870c",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 91,
+      "name": "liyuan_walk_021"
+    },
+    {
+      "file": "liyuan_walk_022.png",
+      "sha256": "ec2be6ccf2493cfd0f98e68a2491488c9a421e5120b156c209202c44dad2c39b",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 92,
+      "name": "liyuan_walk_022"
+    },
+    {
+      "file": "liyuan_walk_023.png",
+      "sha256": "51483fcec58eeb2c79fc0b9832f4a43bc4ce9a3a47b084866ae197b112d3d820",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 93,
+      "name": "liyuan_walk_023"
+    },
+    {
+      "file": "liyuan_walk_024.png",
+      "sha256": "c82eb9a758a70ed959cf1ed0cfe097c2667f9aa8726091f13cd6183df3f8623e",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 94,
+      "name": "liyuan_walk_024"
+    },
+    {
+      "file": "liyuan_walk_025.png",
+      "sha256": "217b45fa6551faabdf9573f40549d49a8eeeee3ad101afa536f3406f8e9a7b33",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 95,
+      "name": "liyuan_walk_025"
+    },
+    {
+      "file": "liyuan_walk_026.png",
+      "sha256": "81665706d80270d001fe33601e0e7ef20b08c4bc9e17af4a07e72052f20b8863",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 96,
+      "name": "liyuan_walk_026"
+    },
+    {
+      "file": "liyuan_walk_027.png",
+      "sha256": "14bccd5c6813294bef15752df615671e65beded7faf89a7d63da9203de2bd03e",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 97,
+      "name": "liyuan_walk_027"
+    },
+    {
+      "file": "liyuan_walk_028.png",
+      "sha256": "f5b2533729b1ee528ab5d02d93e3e8d06b631cb4ac8d0a9c2a2b47a31cd57030",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 98,
+      "name": "liyuan_walk_028"
+    },
+    {
+      "file": "liyuan_walk_029.png",
+      "sha256": "149fe3b0ef64429df3ca3b1b025e3f82cdecc6522304f776e75ed86bcbcba95a",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 99,
+      "name": "liyuan_walk_029"
+    },
+    {
+      "file": "liyuan_walk_030.png",
+      "sha256": "e5304b8b6d0159f18a5cb17a6327dc498659549a4f1bf80151e5a5d3e8671b43",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 100,
+      "name": "liyuan_walk_030"
+    },
+    {
+      "file": "liyuan_walk_031.png",
+      "sha256": "82541bb676ae63f43f883cd344e464f7d6c1bedb3b022f805135a30a92c63e08",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 101,
+      "name": "liyuan_walk_031"
+    },
+    {
+      "file": "liyuan_walk_032.png",
+      "sha256": "fc78d2c41691cfc4fde763ac51469729d56de58b64617f849097557a8d91ecf0",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 102,
+      "name": "liyuan_walk_032"
+    },
+    {
+      "file": "liyuan_walk_033.png",
+      "sha256": "22a4a98d5ca7c738ea7119dfd6ed9d5b91f2b672f70f77abd10f003c6110546d",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 103,
+      "name": "liyuan_walk_033"
+    },
+    {
+      "file": "liyuan_walk_034.png",
+      "sha256": "33f2f59928efb3aafcb8ddda2e076f3cf44bf2fb6d8f6dee40a1a7216d4c7d50",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 104,
+      "name": "liyuan_walk_034"
+    },
+    {
+      "file": "liyuan_walk_035.png",
+      "sha256": "3c4aff2f7b97f2de21b8de5a0c0ca402259eaf04dfb4fce2fad52fe5e8cbcbd6",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 105,
+      "name": "liyuan_walk_035"
+    },
+    {
+      "file": "liyuan_walk_036.png",
+      "sha256": "c93328f559ebcf26663845512894c925466900a3e8c213a869b2a9345351b390",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "walk",
+      "sourceFrame": 106,
+      "name": "liyuan_walk_036"
+    },
+    {
+      "file": "liyuan_stop_000.png",
+      "sha256": "700a340f8dddb23cb801b2139c4b85f9aa0bb7ec23304f0ecca21dd7e61810ec",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 180,
+      "name": "liyuan_stop_000"
+    },
+    {
+      "file": "liyuan_stop_001.png",
+      "sha256": "6ccf68b8c1b4aa997e489b750a24dcee67cd2e39667e65320b73f14ee70b4b13",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 181,
+      "name": "liyuan_stop_001"
+    },
+    {
+      "file": "liyuan_stop_002.png",
+      "sha256": "a4f48262038bbc460a42f6e97c206159c609f93dd0b7ba1eb3b4e9d67b14a36c",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 182,
+      "name": "liyuan_stop_002"
+    },
+    {
+      "file": "liyuan_stop_003.png",
+      "sha256": "ea30b9cbd6eac18df7888ed2032f22a7a2660e8ce00049b0343eca99fa01e1c3",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 183,
+      "name": "liyuan_stop_003"
+    },
+    {
+      "file": "liyuan_stop_004.png",
+      "sha256": "5e853e356d2b861c733e227c5a294c554a8e974f08f7b65c6ead9e57400fdb61",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 184,
+      "name": "liyuan_stop_004"
+    },
+    {
+      "file": "liyuan_stop_005.png",
+      "sha256": "c0e12afad31245ac6b90ba060c88d3579a25c3341a370300a660114dcbb4af4f",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 185,
+      "name": "liyuan_stop_005"
+    },
+    {
+      "file": "liyuan_stop_006.png",
+      "sha256": "06aefaa1ea33400535018369d581f46a935187fcbf39efd4d7d6a3003530004b",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 186,
+      "name": "liyuan_stop_006"
+    },
+    {
+      "file": "liyuan_stop_007.png",
+      "sha256": "6abc6cadee697e85ff20c33a10af1ac13ea9fe581a819b860decb7bb390ffce8",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 187,
+      "name": "liyuan_stop_007"
+    },
+    {
+      "file": "liyuan_stop_008.png",
+      "sha256": "1b87c376f9d89fba377b18102e79b318636d520003ddced567db85d12086bb69",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 188,
+      "name": "liyuan_stop_008"
+    },
+    {
+      "file": "liyuan_stop_009.png",
+      "sha256": "2c5d310293017be7417cba36a931f13470ab2e9a501863c88327d60ffabb58e0",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 189,
+      "name": "liyuan_stop_009"
+    },
+    {
+      "file": "liyuan_stop_010.png",
+      "sha256": "02a57337e6fc9cf4e13d88338dca331d047b8367f087a2d0545ea52574f192f2",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 190,
+      "name": "liyuan_stop_010"
+    },
+    {
+      "file": "liyuan_stop_011.png",
+      "sha256": "5c6135945c1ce50b3a0d8236ea3c261293367b8fd3c87b14c7730b8e95144019",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 191,
+      "name": "liyuan_stop_011"
+    },
+    {
+      "file": "liyuan_stop_012.png",
+      "sha256": "54417a034eba752cbb9a30cec9f65a63bce59d44fb85c3f66b7de065526a97ce",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 192,
+      "name": "liyuan_stop_012"
+    },
+    {
+      "file": "liyuan_stop_013.png",
+      "sha256": "6fd5959ff921efad01d68c63c6ad83b85aadd88fbef513247818282fe7ca4761",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 193,
+      "name": "liyuan_stop_013"
+    },
+    {
+      "file": "liyuan_stop_014.png",
+      "sha256": "3e229471c6bb934ddc5110ddacbedd1cd08367f29012204d7038e80901ea6aed",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 194,
+      "name": "liyuan_stop_014"
+    },
+    {
+      "file": "liyuan_stop_015.png",
+      "sha256": "6a40ff067821917366f40d714f30a77cac9d59a25b5acf6a932a9ccb7e623671",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 195,
+      "name": "liyuan_stop_015"
+    },
+    {
+      "file": "liyuan_stop_016.png",
+      "sha256": "d0e4c743c399a92740989ef9e2a74e3a94b889efc95b31d6a9f8e5aa2af7a8a8",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 196,
+      "name": "liyuan_stop_016"
+    },
+    {
+      "file": "liyuan_stop_017.png",
+      "sha256": "a301c141455854c265ca64eeb1ddd62ab399c583a53d74aca797fadf0210e8c1",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 197,
+      "name": "liyuan_stop_017"
+    },
+    {
+      "file": "liyuan_stop_018.png",
+      "sha256": "dfc3b38f8de6be2a41a17776679f6a567642aa402dc9f1c5062d7d594da92ce5",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 198,
+      "name": "liyuan_stop_018"
+    },
+    {
+      "file": "liyuan_stop_019.png",
+      "sha256": "19986e6283f3cdcc3a616d6c1ee0500ecd607c79892c6aead95f7d7a3b0b9e24",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 199,
+      "name": "liyuan_stop_019"
+    },
+    {
+      "file": "liyuan_stop_020.png",
+      "sha256": "1932f1c24f9060c426896010627fefe1c601b9670a9d5f5453444cde1f84c52b",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 200,
+      "name": "liyuan_stop_020"
+    },
+    {
+      "file": "liyuan_stop_021.png",
+      "sha256": "63ae8a8427d533f69d72bea29e1ca64e55d95512e1fa486d0386f549634e8a5e",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 201,
+      "name": "liyuan_stop_021"
+    },
+    {
+      "file": "liyuan_stop_022.png",
+      "sha256": "416edc8aa6801624a1b3acf60fe2701defa057add34fbeb9b93528f29be6b46a",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 202,
+      "name": "liyuan_stop_022"
+    },
+    {
+      "file": "liyuan_stop_023.png",
+      "sha256": "a06b374225e041b66da60ec0c57d7569217aa2c21a5e6bd589c73edfaf3f1d39",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 203,
+      "name": "liyuan_stop_023"
+    },
+    {
+      "file": "liyuan_stop_024.png",
+      "sha256": "5a2edcad3bcc3c5b2d1965524e82fe7bbddafbafb2283a6cc28abbb6c6bf35b4",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 204,
+      "name": "liyuan_stop_024"
+    },
+    {
+      "file": "liyuan_stop_025.png",
+      "sha256": "7576126de674a96e57f8b49b513968a52ce0ff80ddf7ab455de5b89bd9690291",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 205,
+      "name": "liyuan_stop_025"
+    },
+    {
+      "file": "liyuan_stop_026.png",
+      "sha256": "d19046220f8b602ebf76af99e17e87aadda0bc2978161fc066fcb11c2c3ea345",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 206,
+      "name": "liyuan_stop_026"
+    },
+    {
+      "file": "liyuan_stop_027.png",
+      "sha256": "c00421c86e2fddf81fcb3b0b71b8d9385f2c2fe433054d3e6dea7fe6e4120be6",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 207,
+      "name": "liyuan_stop_027"
+    },
+    {
+      "file": "liyuan_stop_028.png",
+      "sha256": "71a68565043c42eabe2d115a290463a4843ac5078182af1c68e115220cf46668",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 208,
+      "name": "liyuan_stop_028"
+    },
+    {
+      "file": "liyuan_stop_029.png",
+      "sha256": "40a47f9e2785a9a8a6617f819a8b4bd40d5783219ae7b76a2762f0cdc85b43f3",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 209,
+      "name": "liyuan_stop_029"
+    },
+    {
+      "file": "liyuan_stop_030.png",
+      "sha256": "9023d38db16a30e830ac0baf2b4b2de12edd5e36ea34c6ae609b57131c4ff49a",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 210,
+      "name": "liyuan_stop_030"
+    },
+    {
+      "file": "liyuan_stop_031.png",
+      "sha256": "4eaa32ca6add94f3c710f979c9395b1bbb581260f125129d92f1eaf1f662c2d7",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 211,
+      "name": "liyuan_stop_031"
+    },
+    {
+      "file": "liyuan_stop_032.png",
+      "sha256": "3570c8e9c00a7babdead17364b65438d858ca93e5e4f6a567568f76648b640cb",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 212,
+      "name": "liyuan_stop_032"
+    },
+    {
+      "file": "liyuan_stop_033.png",
+      "sha256": "03ef63cd68deddfc93bcb684c59d693fc4ca59cd86cf2c1d5f397c6421f381d8",
+      "width": 984,
+      "height": 1752,
+      "pixelsPerUnit": 651.5384615384615,
+      "pivot": {
+        "x": 0.4898373983739837,
+        "y": 0.014840182648401812
+      },
+      "state": "stop",
+      "sourceFrame": 213,
+      "name": "liyuan_stop_033"
+    }
+  ],
+  "source": {
+    "videoSha256": "5df6ef987e4b5f3cb667d01bf32fa0ec4bd2ba9943772257779e95d9e05e3d44",
+    "reviewedConfig": "source~/approved-video.json",
+    "preserveCharacterId": true,
+    "immediateInteractionIdle": true
+  }
+}
