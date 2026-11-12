@@ -1,8 +1,8 @@
 // Explicit, bounded capability probe. Does not alter the live demo or song catalog.
-import https from 'node:https';
+import {connectVivi,VIVI_AUDIO_BYTES} from './vivi-transport.mjs';
 import {Z_VOICE_PROFILE} from '../server/shared/ui/talent-config.js';
 import fs from 'node:fs/promises';
-import { randomBytes, createHash, randomUUID } from 'node:crypto';
+import { randomUUID } from 'node:crypto';
 import { setTimeout as delay } from 'node:timers/promises';
 const root = new URL('../', import.meta.url);
 let secret = process.env.VOLC_TTS_API_KEY?.trim() || '';
@@ -57,12 +57,12 @@ if (generate) {
   console.log(JSON.stringify({ stage: 'spoken_request_prepared', durationSeconds: report.queryDurationSeconds }));
 }
 const clean = value => String(value).split(secret).join('[REDACTED]').slice(0, 2400);
-let socket, finished = false, pending = Buffer.alloc(0), fragments = [], fragmentBytes = 0;
+let socket, finished = false;
 const audioChunks = []; let audioBytes = 0, closeTimer, generationDone = false;
 const output = argument('--output-dir') ? new URL('file://' + (await import('node:path')).resolve(argument('--output-dir')) + '/') : new URL('../output/singing-candidates/', root);
 async function finish(outcome) {
   if (finished) return;
-  finished = true; clearTimeout(deadline); clearTimeout(closeTimer); socket?.destroy(); request.destroy();
+  finished = true; clearTimeout(deadline); clearTimeout(closeTimer); socket?.terminate();
   report.outcome = outcome;
   await fs.mkdir(output, { recursive: true });
   if (audioBytes) {
@@ -87,16 +87,7 @@ async function uploadQuery() {
   }
   if (!finished) { send({ type: 'input_audio_buffer.commit' }); send({ type: 'input_audio_mute.commit' }); console.log('Spoken song request uploaded. Waiting for full response.'); }
 }
-function send(payload, opcode = 1) {
-  const data = Buffer.isBuffer(payload) ? payload : Buffer.from(JSON.stringify(payload));
-  const mask = randomBytes(4), n = data.length;
-  const header = Buffer.alloc(n < 126 ? 2 : 4);
-  header[0] = 0x80 | opcode; header[1] = 0x80 | (n < 126 ? n : 126);
-  if (n >= 126) header.writeUInt16BE(n, 2);
-  const masked = Buffer.from(data);
-  for (let i = 0; i < n; i++) masked[i] ^= mask[i % 4];
-  socket.write(Buffer.concat([header, mask, masked]));
-}
+function send(payload) { socket.send(JSON.stringify(payload)); }
 function message(data) {
   let event;
   try { event = JSON.parse(data.toString()); } catch { return void finish('invalid_server_json'); }
@@ -107,7 +98,7 @@ function message(data) {
     else send({ type: 'session.close' });
   } else if (event.type === 'response.output_audio.delta' && generate) {
     const part = Buffer.from(event.delta || '', 'base64'); audioBytes += part.length;
-    if (audioBytes > 180 * 48000) return void finish('audio_limit');
+    if (audioBytes > VIVI_AUDIO_BYTES) return void finish('audio_limit');
     audioChunks.push(part);
   } else if (event.type === 'response.output_text.delta') {
     report.transcript = (report.transcript || '') + (event.delta || '');
@@ -117,47 +108,20 @@ function message(data) {
   } else if (event.type === 'session.closed') void finish(generate ? (generationDone ? 'candidate_generated' : 'closed_without_audio_completion') : 'session_permission_verified');
   else if (event.type === 'error' || event.error) void finish('provider_error');
 }
-function receive(data) {
-  pending = Buffer.concat([pending, data]);
-  while (pending.length >= 2 && !finished) {
-    const final = !!(pending[0] & 128), op = pending[0] & 15, masked = !!(pending[1] & 128);
-    let len = pending[1] & 127, offset = 2;
-    if (len === 126) { if (pending.length < 4) return; len = pending.readUInt16BE(2); offset = 4; }
-    if (len === 127) { if (pending.length < 10) return; const wide = pending.readBigUInt64BE(2); if (wide > 4194304n) return void finish('frame_limit'); len = Number(wide); offset = 10; }
-    if (masked || len > 4194304) return void finish('invalid_server_frame');
-    if (pending.length < offset + len) return;
-    const payload = pending.subarray(offset, offset + len); pending = pending.subarray(offset + len);
-    if (op === 8) return void finish(report.sessionCreated ? 'session_permission_verified' : 'server_closed');
-    if (op === 9) { send(payload, 10); continue; }
-    if (op === 10) continue;
-    if (![0, 1].includes(op)) return void finish('unexpected_frame');
-    fragmentBytes += payload.length;
-    if (fragmentBytes > 4194304) return void finish('message_limit');
-    fragments.push(payload);
-    if (final) { const complete = Buffer.concat(fragments); fragments = []; fragmentBytes = 0; message(complete); }
-  }
-}
-const wsKey = randomBytes(16).toString('base64');
-const request = https.request({ hostname: 'openspeech.bytedance.com', path: report.endpoint, method: 'GET', headers: {
-  'X-Api-Key': secret, Connection: 'Upgrade', Upgrade: 'websocket', 'Sec-WebSocket-Version': '13', 'Sec-WebSocket-Key': wsKey,
-} });
 const deadline = setTimeout(() => void finish('timeout'), generate ? 180000 : 25000);
-request.on('upgrade', (response, stream, head) => {
-  socket = stream; report.httpStatus = response.statusCode;
-  const accept = createHash('sha1').update(wsKey + '258EAFA5-E914-47DA-95CA-C5AB0DC85B11').digest('base64');
-  if (response.headers['sec-websocket-accept'] !== accept) return void finish('invalid_handshake');
-  socket.on('data', receive); socket.on('error', error => { report.networkError = error.code || 'socket_error'; void finish('network_error'); });
-  socket.on('end', () => void finish(report.sessionCreated ? 'session_permission_verified' : 'connection_ended'));
+socket=connectVivi('wss://openspeech.bytedance.com'+report.endpoint,secret);
+socket.on('message',(data,isBinary)=>{if(!finished){if(isBinary)void finish('unexpected_frame');else message(data);}});
+socket.on('error',err=>{if(!finished){report.networkError=err.code||'socket_error';void finish('network_error');}});
+socket.on('close',()=>{if(!finished)void finish(generate?(generationDone?'candidate_generated':'connection_ended'):(report.sessionCreated?'session_permission_verified':'connection_ended'));});
+socket.on('open',()=>{
+  report.httpStatus=101;
   send({ type: 'session.create', session: { model: report.model,
     instructions: '你是 Z，保持 Vivi 2.0 的声音。用户点歌时从曲库检索准确版本，按要求单人无伴奏清唱，不模仿原唱，不添加开场白和结束语。',
     audio: { input: { format: { type: 'pcm', rate: 16000 } }, output: { format: { type: 'pcm_s16le', rate: 24000 }, voice: report.voice } } },
     extension: { dialog: { extra: { enable_music: true } } } });
-  if (head.length) receive(head);
 });
-request.on('response', response => {
+socket.on('unexpected-response', (_request,response) => {
   report.httpStatus = response.statusCode; let body = '';
   response.on('data', chunk => { if (body.length < 8192) body += chunk.toString(); });
   response.on('end', () => { report.providerResponse = clean(body); void finish('handshake_rejected'); });
 });
-request.on('error', error => { if (!finished) { report.networkError = error.code || 'request_error'; void finish('network_error'); } });
-request.end();

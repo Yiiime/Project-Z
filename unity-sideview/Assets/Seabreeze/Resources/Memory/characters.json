@@ -16,7 +16,7 @@
     {
       "id": "liyuan",
       "displayName": "梨园",
-      "occupation": "地图绘制与路线勘察，经营地图业务",
+      "occupation": "独居岛民，常住森林小屋",
       "appearance": 3,
       "place": "Lighthouse",
       "locationId": "liyuan_home",
@@ -38,7 +38,7 @@
     {
       "id": "axing",
       "displayName": "阿星",
-      "occupation": "技术员，负责设备维护",
+      "occupation": "工程师，负责设备维护",
       "appearance": 3,
       "place": "Lighthouse",
       "locationId": "axing_lab",
@@ -50,7 +50,7 @@
       "id": "zhengyi",
       "displayName": "正义",
       "motion": "Art/CastMotion/zhengyi",
-      "occupation": "警察",
+      "occupation": "岛上巡警",
       "appearance": 1,
       "place": "Street",
       "locationId": "visitor_center",
@@ -59,8 +59,8 @@
     },
     {
       "id": "xiaoxiaoqing",
-      "displayName": "小小晴",
-      "occupation": "花店老板，照顾植物与制作花束",
+      "displayName": "晴野",
+      "occupation": "花店店长，负责花艺与植被养护",
       "appearance": 2,
       "place": "Street",
       "locationId": "flower_shop",
@@ -70,7 +70,7 @@
     },
     {
       "id": "linxu",
-      "displayName": "林序",
+      "displayName": "留洋",
       "occupation": "船长",
       "appearance": 3,
       "place": "Street",

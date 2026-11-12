@@ -46,14 +46,14 @@
     },
     {
       "id": "xiaoxiaoqing",
-      "name": "小小晴",
+      "name": "晴野",
       "kind": 2,
       "folder": "Assets/Seabreeze/Resources/Art/CastMotion/xiaoxiaoqing",
       "frameCount": 138
     },
     {
       "id": "linxu",
-      "name": "林序",
+      "name": "留洋",
       "kind": 3,
       "folder": "Assets/Seabreeze/Resources/Art/CastMotion/linxu",
       "frameCount": 112

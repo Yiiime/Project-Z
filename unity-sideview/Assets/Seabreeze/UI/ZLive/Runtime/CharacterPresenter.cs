@@ -9,6 +9,8 @@ using Live2D.Cubism.Framework;
 using Live2D.Cubism.Framework.Physics;
 namespace ZLive {
 public sealed class CharacterPresenter:MonoBehaviour {
+    Seabreeze.Live2DModelProfile portraitProfile;
+    public bool UsingStoryPortrait {get;private set;}
     Camera portraitCamera;CubismModel cubismModel;
     JObject config;bool textSpeaking;public LiveCharacterPerformance Performance{get;private set;}
     public AudioSource Audio;public bool Paused;public bool Ready{get;private set;}public RenderTexture Texture{get;private set;}
@@ -21,7 +23,10 @@ public sealed class CharacterPresenter:MonoBehaviour {
     readonly Dictionary<string,CubismParameter> parameters=new Dictionary<string,CubismParameter>();
     void Awake(){config=JObject.Parse(Resources.Load<TextAsset>("character").text);Performance=new LiveCharacterPerformance(config);}
     public void Initialize(){
-        var prefab=Resources.Load<GameObject>("ZLiveModel");if(prefab==null){Debug.LogError("[ZLive] Z 模型未准备，请运行 Seabreeze > Prepare Live Z Model。");return;}var model=Instantiate(prefab,transform);model.name="Z · Live2D";cubismModel=model.GetComponent<CubismModel>();
+        portraitProfile=Resources.Load<Seabreeze.Live2DModelProfile>("Memory/Portraits/Z");
+        var prefab=portraitProfile!=null?portraitProfile.prefab:null;
+        UsingStoryPortrait=prefab!=null&&prefab.GetComponent<CubismModel>()?.Moc!=null;
+        if(!UsingStoryPortrait)prefab=Resources.Load<GameObject>("ZLiveModel");if(prefab==null){Debug.LogError("[ZLive] Z 模型未准备，请运行 Seabreeze > Prepare Live Z Model。");return;}var model=Instantiate(prefab,transform);model.name="Z · Live2D";cubismModel=model.GetComponent<CubismModel>();
         foreach(var t in model.GetComponentsInChildren<Transform>(true))t.gameObject.layer=30;
         foreach(var p in model.GetComponentsInChildren<CubismParameter>(true))parameters[p.Id]=p;
         var animator=model.GetComponent<Animator>();if(animator!=null)animator.enabled=false;
@@ -65,6 +70,10 @@ public sealed class CharacterPresenter:MonoBehaviour {
         ZPerformance.CancelCurrentPerformance();
         ZPerformance.SetExpression(ZLivePerformanceMap.Expression(moodName));
         pendingGesture=ZLivePerformanceMap.Gesture(action);
+        if(UsingStoryPortrait){
+            var key=moodName=="happy"&&pendingGesture=="wave"?"happy_wave":moodName;
+            ZPerformance.SetPortraitExpression(portraitProfile.FindExpression(key));
+        }
         pendingMotion=ZLivePerformanceMap.Motion(moodName,action);
         if(transition=="sudden")StartZGesture();
     }

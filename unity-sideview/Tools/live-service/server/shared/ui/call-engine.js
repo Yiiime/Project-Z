@@ -1,15 +1,15 @@
 import {approveCallCandidate} from './call-review.js';
 import {ConversationEngine} from './conversation-engine.js';
-import {CALL_STORY} from './call-contract.js';
 
 // One host, one speech owner. Call mode only changes scheduling and context.
+import {AUDIENCE_NAMES} from '../audience-roster.js';
 export class CallConversationEngine extends ConversationEngine {
   constructor(){super();const mayCommit=this.audience.canCommit,mayAdvance=this.audience.canAdvance;this.callContinuationBudget=0;this.audience.canCommit=()=>this._state.call?.active||mayCommit();this.audience.canAdvance=()=>mayAdvance()&&(!this._state.call?.active||this._state.call.input==='idle'&&this._state.call.audienceUntil>this._clock);this.callVersion=0;this.callNeedsTurn=false;this.callReviewRetries=0;this.callAudience=[];this._state.call=this._emptyCall();}
   _emptyCall(){return {active:false,id:null,input:'idle',joinedAt:null,story:null,audienceUntil:0,turns:0};}
   joinCall(){
     if(this._destroyed||this._state.paused||!this.enabled||this._state.call.active)return false;
     this.interruptCall('join');this._cancelCallActivity();
-    this.savedCallPolicy={handoff:this.handoffEnabled,topic:this.topicEnabled,audience:{...this.audience.config}};this.audience.setConfig({...this.audience.config,handoff:false,intervalMs:5000,publishGapMs:5000,maxConcurrent:1});this.audience.dialogue.setConcurrent(true);this.handoffEnabled=false;this.topicEnabled=false;
+    this.savedCallPolicy={handoff:this.handoffEnabled,topic:this.topicEnabled,audience:{...this.audience.config}};this.audience.setConfig({...this.audience.config,handoff:false});this.audience.dialogue.setConcurrent(true);this.handoffEnabled=false;this.topicEnabled=false;
     this.inbox=this.inbox.filter(m=>m.mine);this.audience.dialogue.setWaiting(this.inbox);
     this.callAudience=[];this.callAudienceUsed=new Set();this.callAudienceSpeech=new Map();this.callAudienceNextAt=this._clock+20000;this.callAudienceLastTurn=0;this._state.call={...this._emptyCall(),active:true,id:crypto.randomUUID(),joinedAt:Date.now()};
     this._public('call.joined','一位来客进入了连麦席，当前尚未提供语音；先打招呼，陪伴聊天为主。');
@@ -53,7 +53,7 @@ export class CallConversationEngine extends ConversationEngine {
   _cancelCallActivity(){if(this._state.media){this.talent?.cancel('call_boundary');this.talent?.finish(true);}if(this._state.play.active)this.finishActivity(true);}
   endCall(){
     if(!this._state.call.active)return false;
-    this.interruptCall('hangup');this._cancelCallActivity();this._state.call=this._emptyCall();this.callAudience=[];this.audience.dialogue.setConcurrent(false);
+    this.interruptCall('hangup');this._cancelCallActivity();this._state.call=this._emptyCall();this.callAudience=[];this.audience.dialogue.setConcurrent(!!this.savedCallPolicy?.audience?.phases);
     if(this.savedCallPolicy?.audience)this.audience.setConfig(this.savedCallPolicy.audience);this.handoffEnabled=this.savedCallPolicy?.handoff??false;this.topicEnabled=this.savedCallPolicy?.topic??false;
     // Never answer an abandoned guest turn after hangup.
     for(const m of this.inbox)this._setReceipt(m.id,'seen');this.inbox=[];this.audience.dialogue.setWaiting([]);
@@ -88,30 +88,17 @@ export class CallConversationEngine extends ConversationEngine {
     this._state.call.audienceUntil=this._clock+12000;
     return this.sendMessage('我想听听弹幕的想法，挑一条和我们刚才话题有关的回应，再回来继续聊。');
   }
-  offerCallStory(){
-    const c=this._state.call;if(!c.active||c.story||this._state.play.active||this._state.media)return false;
-    c.story={id:CALL_STORY.id,step:0,status:'offered',choices:[],revision:1};
-    this._public('call.story.offered','明信片的可选话题卡已展示，等待连麦来客选择，也可跳过。');this._emitState();return true;
-  }
-  chooseCallStory(choice,revision){
-    const c=this._state.call,s=c.story;if(!c.active||this._state.paused||!s||s.status!=='offered'||s.revision!==revision)return false;
-    const item=CALL_STORY.steps[s.step]?.choices.find(x=>x.id===choice);if(!item)return false;
-    this.interruptCall('story_choice');c.input='idle';s.choices.push(choice);s.revision++;
-    if(choice==='skip')s.status='skipped';else if(s.step===CALL_STORY.steps.length-1)s.status='completed';else s.step++;
-    this._public('call.story.choice',item.result+' 这是连麦小游戏，不改变主线剧情，也不表示已生成图片。');
-    this._wakeCall();this._emitState();return true;
-  }
   _callAudienceEligible(){const c=this._state.call;return this.enabled&&!this._destroyed&&!this._state.paused&&c?.active&&c.input==='idle'&&!this.callYield&&!this._mediaPlaying()&&(c.audienceUntil>this._clock||(c.turns-this.callAudienceLastTurn>=2&&this._clock>=this.callAudienceNextAt));}
   _callAudienceCandidates(context){
     if(!this._callAudienceEligible())return [];
-    const evidence=[...context.publicEvents,...(context.host.session?.evidence||[])],seen=new Set(),names={wind:'晚风来信',moon:'月亮邮差',salt:'海盐汽水'};
+    const evidence=[...context.publicEvents,...(context.host.session?.evidence||[])],seen=new Set(),names=AUDIENCE_NAMES;
     const topic=context.host.inbox.filter(m=>m.mine).map(m=>m.text).join(' ')+(context.host.session?.evidence||[]).filter(e=>e.type==='player.message').slice(-2).map(e=>e.text).join(' ');
     const pairs=text=>new Set(Array.from({length:Math.max(0,text.length-1)},(_,i)=>text.slice(i,i+2)));const terms=pairs(topic);
     return this.callAudience.filter(m=>{if(this._clock-m.at>60000||this.callAudienceUsed.has(m.id)||!names[m.speakerId]||!evidence.some(e=>e.type==='npc.message'&&e.id===m.id&&e.text===m.text&&e.speakerId===m.speakerId))return false;const text=m.text.replace(/\s|[，。！？]/g,'');if(seen.has(text))return false;seen.add(text);return true;})
       .map(m=>({...m,score:[...pairs(m.text)].filter(t=>terms.has(t)).length})).sort((a,b)=>b.score-a.score||b.at-a.at).slice(0,5).map(m=>({id:m.id,npcId:m.speakerId,name:names[m.speakerId],text:m.text}));
   }
   _hostContext(inbox,turn){const context=super._hostContext(inbox,turn),c=this._state.call;
-    if(c.active){const audienceCandidates=this._callAudienceCandidates(context);context.call={active:true,id:c.id,input:c.input,turns:c.turns,audienceOpen:audienceCandidates.length>0,audienceCandidates,audienceReason:audienceCandidates.length?(c.audienceUntil>this._clock?'invited':'cadence'):'none',story:c.story?{id:c.story.id,step:c.story.step,status:c.story.status,choices:[...c.story.choices]}:null};
+    if(c.active){const audienceCandidates=this._callAudienceCandidates(context);context.call={active:true,id:c.id,input:c.input,turns:c.turns,audienceOpen:audienceCandidates.length>0,audienceCandidates,audienceReason:audienceCandidates.length?(c.audienceUntil>this._clock?'invited':'cadence'):'none'};
       if(audienceCandidates.length){this.callAudienceNextAt=this._clock+20000;c.audienceUntil=0;}
     }if(c.active&&this.callRevisionFeedback)context.host.revisionFeedback={...this.callRevisionFeedback};if(c.active&&this.callQualityFeedback?.length)context.host.qualityFeedback=[...this.callQualityFeedback];return context;
   }
@@ -217,7 +204,6 @@ export class CallConversationEngine extends ConversationEngine {
   _public(type,text,metadata={}){super._public(type,text,metadata);if(this._state.call?.active&&/^(talent\.(completed|failed|interrupted)|drawing\.)/.test(type))this._wakeCall();}
   async _pollSinging(){const previous=this.singingSnapshot;await super._pollSinging();if(this._state.call?.active&&previous!==this.singingSnapshot)this._wakeCall();}
   _executeTool(tool){
-    if(tool?.name==='offer_call_story'){const ok=this.offerCallStory();this._toolEvent(JSON.stringify({tool:tool.name,status:ok?'offered':'unavailable'}));return ok;}
     if(this._state.call?.active&&!this._canPresentMedia())return false;
     return super._executeTool(tool);
   }

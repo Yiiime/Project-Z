@@ -27,6 +27,7 @@ export class ActorRuntime {
       ? "本轮仅决定是否走近，还没有发生交谈。只可选schedule_meeting或wait；dialogue必须为空字符串。info复制character_state.info的基础数值、emotion与support_willingness（如有），changes为{}、memory_updates与knowledge_updates为[]。完全省略social_decision、communication、agenda_update、task_participation、task_followup。想找人聊天仅通过schedule_meeting表示，不是engage通信决定。"
       : "本轮是实际回应阶段。无内容的可选info字段请完全省略，不要用null或空对象占位。";
     phaseRules += " 如填写agenda_update，goal_id只能取allowed_goals，next_action_id只能取本轮allowed_next_action_ids；计划中的未来动作当前不可执行时填null，不要引用旧回合动作或编造ID。";
+    phaseRules += " peer_relations是本人对各NPC的有向看法，和info中对玩家的好感、信任分开。背景关系已有初值，并非陌生人。玩家转述、NPC来信和亲眼见证都可能改变你对某位NPC的看法；确有新理由时用peer_relation_changes，只改本人这一侧，引用本轮source_event_id，0至100内自主决定增减。传闻只是说法，不能因此变成已证实事实或把别人的关系反向改掉；没有变化时省略。好感高不代表同意帮助，结合人物动机、风险、Z本人的愿望与真实能力决定。";
     if(context.environment.actual_audience?.length)
       phaseRules += " 实际能听见本句话的人是"+context.environment.actual_audience.join("、")+"。台词和shared_claim_ids只能使用允许向这些听众全体分享的信息；旁边有人时不要转述只准对方知道的事情。";
     if(!context.environment.intent_only && context.interaction.mode !== "player")
@@ -42,7 +43,7 @@ export class ActorRuntime {
           content:
             this.catalog.prompt(context.actor_id) +
             "\n\n" +
-            rules +
+            rules + (context.actor_id==='z' && context.interaction.mode==='player' ? "\n如果玩家明确点歌且你愿意接下，自然说清你会学或练哪首（用《歌名》）；拒绝或只聊音乐也如实说。仅对点歌请求，在info.day_song_reply填写accept（明确接下学或练，包括开始准备但不保证唱好）、decline（拒绝）或discuss（只是聊歌、没有接下）。这个决定须与本句台词一致，承诺练习并不保证一定唱好。答应后后台才开始准备，没有完成回执不要说已经练好。" : "") + (context.z_story ? "\n如果自然聊到这段回忆，可以使用 z_story.line 中的原话，只展开这一个新细节，给玩家留出追问空间。" : "") +
             "\n本轮阶段规则（优先于通用相遇规则）：" + phaseRules +
             "\n输出JSON契约：" +
             JSON.stringify(contract),

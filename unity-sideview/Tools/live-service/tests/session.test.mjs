@@ -8,7 +8,7 @@ import {ArtifactStore,loadEnvironment,Providers} from '../server/providers.mjs';
 import {LiveSession} from '../server/session.mjs';
 import {normalizeAgentInput,parseAgentReply,buildAgentRequest} from '../server/shared/worker/agent-director.js';
 const frame=()=>new Promise(r=>setImmediate(r));
-async function fixture(t){const root=fs.mkdtempSync(path.join(os.tmpdir(),'z-unity-test-'));const providers={env:{},config:async()=>({enabled:false}),generate:async()=>({action:'wait',speech:'',mood:'neutral',handledIds:[],wakeAfterMs:120000,memory:''})};const s=new LiveSession({root:path.join(root,'sessions'),providers,artifacts:new ArtifactStore(path.join(root,'artifacts')),songRoot:fileURLToPath(new URL('../server/assets/songs',import.meta.url))});await s.initialize();clearInterval(s.engine._timer);t.after(()=>{s.close();fs.rmSync(root,{recursive:true,force:true});});s.control(envelope(s,{action:'resume'}));return s;}
+async function fixture(t,memory=null){const root=fs.mkdtempSync(path.join(os.tmpdir(),'z-unity-test-'));const providers={env:{},config:async()=>({enabled:false}),generate:async()=>({action:'wait',speech:'',mood:'neutral',handledIds:[],wakeAfterMs:120000,memory:''})};const s=new LiveSession({root:path.join(root,'sessions'),memory,providers,artifacts:new ArtifactStore(path.join(root,'artifacts')),songRoot:fileURLToPath(new URL('../server/assets/songs',import.meta.url))});await s.initialize();clearInterval(s.engine._timer);t.after(()=>{s.close();fs.rmSync(root,{recursive:true,force:true});});s.control(envelope(s,{action:'resume'}));return s;}
 const envelope=(s,extra={})=>({protocolVersion:1,sessionId:s.id,epoch:s.epoch,...extra});
 const receipt=(s,c,status,extra={})=>s.receipt(envelope(s,{executorLeaseId:s.lease,commandId:c.commandId,taskId:c.taskId,resourceRevision:c.resourceRevision,payload:{...Object.fromEntries(['artifactId','playbackId','speechId','stage','round','view','modality'].filter(k=>c.payload[k]!==undefined).map(k=>[k,c.payload[k]])),status,...extra}}));
 const latest=(s,type)=>[...s.commands.values()].filter(c=>c.type===type).at(-1);
@@ -143,4 +143,75 @@ test('old activities and unfinished voice performances never resume after restar
   assert.equal(restored.engine.memory,'');assert.deepEqual(restored.engine.session.items,[]);
   assert(!state.pendingCommands.some(c=>['drawing.present','tarot.present','media.prepare','media.play'].includes(c.type)));
  }
+});
+
+test('five minutes of audience display receipts follow room, call and singing pace',async t=>{
+ const s=await fixture(t),e=s.engine,a=e.audience,frameTime=160;
+ const policy=await new Providers({DEEPSEEK_API_KEY:'fixture-only'}).config(s.id);
+ let serial=0,showing=null;
+ const displays=[],phases=new Set();
+ const client={generate:async p=>{
+   normalizeAgentInput(p);
+   if(p.kind==='review')return {decision:'allow',candidateId:p.context.candidate.id,revision:p.context.revision,promptVersion:policy.review.version};
+   assert.equal(p.kind,'audience');phases.add(p.context.phase);
+   const npc=p.context.audience.eligibleNpcIds[0];
+   return {status:'ready',items:[{npc_id:npc,text:'今晚的歌单 '+(++serial),intent:'atmosphere',evidence_refs:[p.eventId]}]};
+ },cancel(){}};
+ e.configureAgent(client,{...policy,singingBackground:false});a.random=()=>0.5;
+ s.on('event',event=>{if(event.type==='audience.present'){assert.equal(showing,null);showing=s.commands.get(event.commandId);}});
+ for(let ms=0;ms<300000;ms+=frameTime){
+   e._clock=ms;
+   if(ms===120000)assert(e.joinCall());
+   if(ms===180000){e._state.media={kind:'singing',phase:'playing'};e._public('talent.playing','点的歌开始播放了。');}
+   if(ms===216000){e._state.media=null;e._public('talent.completed','这首歌唱完了。');assert(e.endCall());}
+   if(showing){
+     assert(!e.facts.some(f=>f.id===showing.payload.messageId),'generation alone is not public');
+     receipt(s,showing,'displayed');displays.push([ms,showing.payload.npcId]);showing=null;
+   }
+   a.tick();await frame();
+ }
+ const period=(a,b)=>displays.filter(([t])=>a<=t&&t<b),count=(a,b)=>period(a,b).length;
+ const since=new Map();for(const [when,npc] of displays){assert(when-(since.get(npc)??-Infinity)>=20000);since.set(npc,when);}
+ const sample={opening:count(0,15000),chatMinute:count(60000,120000),callMinute:count(120000,180000),song36s:count(180000,216000),total:displays.length,names:since.size};
+ t.diagnostic(JSON.stringify(sample));assert.deepEqual([...phases].sort(),['call','chat','opening','performing']);
+ assert(sample.opening>=3&&sample.opening<=4);assert(sample.chatMinute>=12&&sample.chatMinute<=18);
+ assert(sample.callMinute>=8&&sample.callMinute<=12);assert(sample.song36s>=8&&sample.song36s<=12);
+ assert.equal(sample.names,7);assert(new Set(period(60000,120000).map(x=>x[1])).size>=5);
+ assert(!e.inbox.some(m=>!m.mine));
+ const before=serial;s.control(envelope(s,{action:'end'}));e._clock+=30000;a.tick();await frame();assert.equal(serial,before);
+});
+
+
+test('daytime recap opens on a host turn with no chat, is saved only on delivery and survives refresh/restart',async t=>{
+ const memory={worldId:'a'.repeat(32),runId:'b'.repeat(32),day:2,today:['上午在咖啡店附近和岛上的朋友说了会儿话']};
+ const s=await fixture(t,memory);s.engine._tick();await frame();
+ const first=latest(s,'host.present');assert.match(first.payload.text,/晚上好/);assert.doesNotMatch(first.payload.text,/咖啡店|朋友/);
+ assert(!s.engine.facts.some(e=>['player.message','npc.message'].includes(e.type)));
+ assert(!s.broadcast.recapSpoken);receipt(s,first,'interrupted',{reason:'aborted'});
+ assert(s.broadcast.opening());s.engine._clock+=5000;s.engine._tick();await frame();
+ const c=latest(s,'host.present');assert.notEqual(first.commandId,c.commandId);
+ receipt(s,c,'started',{durationMs:2000,positionMs:0});receipt(s,c,'completed',{positionMs:2000});
+ assert(s.broadcast.recapSpoken);assert.equal(s.broadcast.pending.filter(r=>r.recapDay===2).length,1);
+ s.broadcast.refresh(memory);s.engine._tick();assert.equal(latest(s,'host.present').commandId,c.commandId);
+ const restored=new LiveSession({root:s.root,providers:s.providers,artifacts:s.artifacts,songRoot:s.songRoot,saved:s.persistData()});
+ t.after(()=>restored.close());assert.equal(restored.broadcast.opening(),null);
+});
+test('an empty day stays quiet; a late daytime checkpoint schedules its own host turn',async t=>{
+ const m={worldId:'a'.repeat(32),runId:'b'.repeat(32),day:1};
+ const s=await fixture(t,m);s.engine._tick();assert(!latest(s,'host.present'));
+ s.heartbeat(envelope(s,{executorLeaseId:s.lease,memory:{...m,today:['和岛上的朋友说了会儿话']}}));
+ s.engine._tick();await frame();assert.match(latest(s,'host.present').payload.text,/晚上好/);
+});
+
+test('a verified outing leaves a quiet beat before the host brings up her song without chat',async t=>{
+ const memory={worldId:'a'.repeat(32),runId:'b'.repeat(32),day:1,
+   today:['和岛上的朋友一起去看了地图上还没有标出来的地方','聊到了咖啡拉花'],songs:[{title:'夏夜最后的烟火',sourceId:'p'}]};
+ const s=await fixture(t,memory);await frame();
+ const e=s.engine,first=latest(s,'host.present');
+ assert.match(first.payload.text,/地图/);assert.doesNotMatch(first.payload.text,/咖啡|歌/);
+ receipt(s,first,'started',{durationMs:2000,positionMs:0});receipt(s,first,'completed',{positionMs:2000});
+ e._clock+=10000;e._tick();await frame();assert.equal(latest(s,'host.present'),first);
+ e._clock+=4500;e._tick();await frame();const song=latest(s,'host.present');
+ assert.match(song.payload.text,/还答应学一首歌.*夏夜最后的烟火/);
+ assert(!e.facts.some(f=>['npc.message','player.message'].includes(f.type)));
 });

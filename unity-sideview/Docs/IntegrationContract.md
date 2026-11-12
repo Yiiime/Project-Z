@@ -112,8 +112,8 @@ The local cast integration starts from `8ce0369` (PR #50). Current actor IDs, pu
 | 李庭 / `liting` | `Art/CastMotion/liting` |
 | 阿星 / `axing` | `Art/CastMotion/axing` |
 | 正义 / `zhengyi` | `Art/CastMotion/zhengyi` |
-| 小小晴 / `xiaoxiaoqing` | `Art/CastMotion/xiaoxiaoqing` (input video named 晴野) |
-| 林序 / `linxu` | `Art/CastMotion/linxu` (input video named 船长) |
+| 晴野 / `xiaoxiaoqing` | `Art/CastMotion/xiaoxiaoqing` (stable ID retained) |
+| 留洋 / `linxu` | `Art/CastMotion/linxu` (input video named 船长) |
 | 周伯伯 / `zhou_bobo` | `Art/CastMotion/zhou_bobo` |
 
 Version-2 motion manifests declare `idle`, `start`, `walk`, `stop`, the original per-frame duration arrays, a shared canvas height and a shared foot pivot. The walk's `cycleSeconds` equals the sum of `frameDurations`. Original PNGs remain at their extracted dimensions. Standalone textures use native-resolution BC7 and bilinear filtering. Mipmaps are disabled because this Unity version expands these non-power-of-two textures to RGBA32; the importer checks the actual texture format. Source clips, intervals, hashes and atlas coordinates are recorded under `source~`; these are provenance, not runtime content or model context.
@@ -124,4 +124,4 @@ The player keeps speed 4.2, acceleration 28, deceleration 36, its collider/gravi
 
 `Seabreeze.Editor.CastMotionVerification.Import` checks every source hash, pixel dimension, pivot and duration. `ClockOnly` checks eight NPCs at 30/60/120 FPS and the player. `Run` requires a visible Game view and an explicit isolated simulated service; use `-castOutput <directory> -castExit 1`. It checks current IDs, real player input, long and short routes for each actor, facing, A2A, E dialogue, save/load and frame times. Existing player/Zhengyi verification entry points delegate to the cast verifier when this profile is installed.
 
-Local playable output: `Builds/CastMotionReview/`. Service and save data are isolated in that package's `ReviewData`; model credentials are local-only. No push or merge is part of this delivery.
+Local playable output: `Builds/CastMotionReview/`. Service and save data are isolated in that package's `ReviewData`; model credentials are local-only. Delivery uses the repository PR checks and merge queue.
