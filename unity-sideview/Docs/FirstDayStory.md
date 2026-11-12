@@ -48,7 +48,7 @@
 | 邀请烟花 | 分组占用释放，不残留同伴引用或移动 |
 | 烟花影片结束 | 正常进入海边小屋，恢复操作 |
 
-`tools/team/z check` 静态检查通过。Unity 启动时的已知 `UnityEditor.Search.SearchDatabase` 索引异常单列在 `report.editorIssues`，不混作游戏脚本错误；本次完整试玩无游戏运行错误。
+`tools/team/z check` 静态检查通过。同步主线 `6939902` 的 NPC 预加载、任务卡和切场景更新后，以上六项完整试玩再次全部通过。Unity 启动时的已知 `UnityEditor.Search.SearchDatabase` 索引异常单列在 `report.editorIssues`，不混作游戏脚本错误；本次完整试玩无游戏运行错误。
 
 ## 状态与职责
 
