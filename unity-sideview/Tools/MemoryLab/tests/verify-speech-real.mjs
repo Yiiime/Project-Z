@@ -10,10 +10,16 @@ mkdirSync(out,{recursive:true});
 const speech=new SpeechService(),catalog=new Catalog(),report=[];
 for(const [id,actor] of catalog.actors) {
   if(process.env.Z_TTS_PROBE_ACTOR && id!==process.env.Z_TTS_PROBE_ACTOR)continue;
-  const start=Date.now();
+  const start=Date.now();let firstAudioMs=null,playableMs=null,firstSubtitleMs=null,received=0,subtitleWords=0;
   try {
     const audio=await speech.synthesize({worldId:"probe-"+id,runId:"isolated",proposalId:"line-"+id,
-      conversationId:"probe",actorId:id,text:"你好，我是"+actor.name+"。",delivery:""});
+      conversationId:"probe",actorId:id,text:process.env.Z_TTS_PROBE_TEXT||"你好，我是"+actor.name+"。",delivery:""},undefined,event=>{
+        if(event.type==="audio"){
+          firstAudioMs??=Date.now()-start;received+=Buffer.byteLength(event.audio.base64,"base64");
+          if(received>=14400)playableMs??=Date.now()-start;
+        }
+        if(event.type==="subtitle"){firstSubtitleMs??=Date.now()-start;subtitleWords+=event.words.length;}
+      });
     const pcm=Buffer.from(audio.base64,"base64"),header=Buffer.alloc(44);
     header.write("RIFF");header.writeUInt32LE(36+pcm.length,4);header.write("WAVEfmt ",8);header.writeUInt32LE(16,16);
     header.writeUInt16LE(1,20);header.writeUInt16LE(1,22);header.writeUInt32LE(24000,24);header.writeUInt32LE(48000,28);
@@ -21,7 +27,7 @@ for(const [id,actor] of catalog.actors) {
     let peak=0;for(let n=0;n<pcm.length;n+=2)peak=Math.max(peak,Math.abs(pcm.readInt16LE(n)));
     if(!peak)throw Error("silent_audio");
     writeFileSync(join(out,id+".wav"),Buffer.concat([header,pcm]));
-    report.push({actor:id,ok:true,milliseconds:Date.now()-start,seconds:pcm.length/48000,peak});
+    report.push({actor:id,ok:true,milliseconds:Date.now()-start,firstAudioMs,playableMs:playableMs??Date.now()-start,firstSubtitleMs,subtitleWords,seconds:pcm.length/48000,peak});
     console.log(id+": audio received ("+(Date.now()-start)+" ms)");
   } catch(e) {report.push({actor:id,ok:false,code:e.code||"probe_failed",milliseconds:Date.now()-start});console.log(id+": "+(e.code||"probe_failed"));}
 }

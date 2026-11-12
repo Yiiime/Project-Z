@@ -24,10 +24,11 @@ namespace Seabreeze
         {
             public RectTransform Row,Panel;
             public TextMeshProUGUI Text;
+            public bool IsPlayer;
         }
         readonly List<ChatBubble> history=new List<ChatBubble>();
         DialogueSceneBackdrop backdrop;
-        float previousColumnWidth;
+        float previousColumnWidth;int lastLayoutCharacters=-1;
         static readonly Color BubbleInk=new Color(.145f,.149f,.208f,1);
         const float ExpressionHoldSeconds=1.2f;
         const float LiyuanSmilePreparationSeconds=.25f;
@@ -35,13 +36,6 @@ namespace Seabreeze
         float charactersPerSecond;
         bool followingSpeech,speechStarted;string portraitSpeechToken;
         public bool ReadyForSpeech => PlayerInputReady&&!linePreparationActive;
-        // Follow the audio sample clock, with a small bounded reading lead.
-        public static int SpeechVisibleCharacters(int count,float position,float duration)
-        {
-            if(count<=0||duration<=0)return 0;
-            float ahead=Mathf.Min(position*1.04f+.12f,position+.35f);
-            return Mathf.Clamp(Mathf.FloorToInt(count*ahead/duration),0,count);
-        }
         public void FollowSpeech()
         {
             followingSpeech=true;speechStarted=false;
@@ -143,9 +137,9 @@ namespace Seabreeze
             var row=Rect(isPlayer?"Player message":"NPC message",content,Vector2.up,Vector2.up,Vector2.zero,Vector2.zero);row.anchorMax=Vector2.one;
             var anchor=isPlayer?Vector2.one:Vector2.up;
             var panel=FinalKitAssets.Bubble(isPlayer?"bubble-player":"bubble-npc",row,anchor,anchor,Vector2.zero,new Vector2(334,86));panel.raycastTarget=true;
-            var text=Label("Message",panel.transform,Vector2.up,Vector2.up,new Vector2(34,-22),new Vector2(260,36),message,24,BubbleInk);text.richText=false;text.lineSpacing=5;
+            var text=Label("Message",panel.transform,Vector2.up,Vector2.up,new Vector2(34,-22),new Vector2(260,36),message,24,BubbleInk);text.richText=false;text.lineSpacing=5;text.maxVisibleCharacters=isPlayer?int.MaxValue:0;
             var reveal=panel.gameObject.AddComponent<Button>();reveal.targetGraphic=panel;reveal.transition=Selectable.Transition.None;reveal.navigation=new Navigation{mode=Navigation.Mode.None};reveal.onClick.AddListener(FinishTyping);
-            history.Add(new ChatBubble{Row=row,Panel=panel.rectTransform,Text=text});historyText=text;
+            history.Add(new ChatBubble{Row=row,Panel=panel.rectTransform,Text=text,IsPlayer=isPlayer});historyText=text;
             if(history.Count>12){Destroy(history[0].Row.gameObject);history.RemoveAt(0);}
             RefreshHistoryLayout();
         }
@@ -206,14 +200,26 @@ namespace Seabreeze
             previousColumnWidth=column.rect.width;
             foreach(var bubble in history)
             {
+                bubble.Text.ForceMeshUpdate(true);
+                int count=Mathf.Min(bubble.Text.maxVisibleCharacters,bubble.Text.textInfo.characterCount);
+                bool visible=bubble.IsPlayer||count>0;
+                bubble.Row.gameObject.SetActive(visible);
+                if(!visible){bubble.Row.sizeDelta=new Vector2(-16,0);continue;}
+                string shown=bubble.Text.text;
+                if(count<bubble.Text.textInfo.characterCount){var last=bubble.Text.textInfo.characterInfo[count-1];shown=shown.Substring(0,last.index+last.stringLength);}
                 float maxWidth=Mathf.Min(594,width*.88f);
-                float bubbleWidth=Mathf.Clamp(bubble.Text.GetPreferredValues(bubble.Text.text).x+68,128,maxWidth);
-                float textHeight=Mathf.Max(34,bubble.Text.GetPreferredValues(bubble.Text.text,bubbleWidth-68,0).y);
+                float bubbleWidth=Mathf.Clamp(bubble.Text.GetPreferredValues(shown).x+68,bubble.IsPlayer?128:84,maxWidth);
+                float textHeight=Mathf.Max(32,bubble.Text.GetPreferredValues(shown,bubbleWidth-68,0).y);
                 bubble.Row.anchoredPosition=new Vector2(8,-y);bubble.Row.sizeDelta=new Vector2(-16,textHeight+52);
                 bubble.Panel.sizeDelta=new Vector2(bubbleWidth,textHeight+52);bubble.Text.rectTransform.sizeDelta=new Vector2(bubbleWidth-68,textHeight);
                 bubble.Text.ForceMeshUpdate();y+=textHeight+62;
             }
             content.sizeDelta=new Vector2(0,Mathf.Max(historyScroll.viewport.rect.height,y+8));historyScroll.verticalNormalizedPosition=0;
+            lastLayoutCharacters=historyText!=null?historyText.maxVisibleCharacters:-1;
+        }
+        void RefreshTypingLayout()
+        {
+            if(historyText!=null&&lastLayoutCharacters!=historyText.maxVisibleCharacters)RefreshHistoryLayout();
         }
         void FinishTyping()
         {
@@ -221,7 +227,7 @@ namespace Seabreeze
             CancelPendingLinePreparation();
             if(hadPendingLine&&!followingSpeech&&!string.IsNullOrEmpty(portraitEmotion))expressionEndsAt=ExpressionClock+ExpressionHoldSeconds;
             typing=false;
-            if(historyText!=null)historyText.maxVisibleCharacters=int.MaxValue;
+            if(historyText!=null){historyText.maxVisibleCharacters=int.MaxValue;RefreshTypingLayout();}
             if(character!=null)character.SetState(portraitEmotion,followingSpeech&&memory.Client.SpeechPlaying);
         }
         void BeginPortraitLine(string speaker,string expression)
@@ -305,7 +311,7 @@ namespace Seabreeze
             {
                 EndFollowingSpeech();speechStarted=false;FinishTyping();AddBubble(text,speaker=="player");lastSpeaker=speaker;revealed=0;
                 BeginPortraitLine(speaker,expression);
-                typing=speaker!="player"&&!linePreparationActive;historyText.maxVisibleCharacters=(typing||linePreparationActive)?0:int.MaxValue;return;
+                typing=speaker!="player"&&!linePreparationActive;historyText.maxVisibleCharacters=(typing||linePreparationActive)?0:int.MaxValue;RefreshTypingLayout();return;
             }
             speechTitle.text=SevenCharacterCatalog.Name(speaker);speechText.text=text;speechTitle.color=SevenCharacterCatalog.Find(speaker)?.Accent??Paper;
             speechUntil=Time.unscaledTime+Mathf.Clamp(1.3f+text.Length*.05f,2.5f,6);speechPanel.gameObject.SetActive(true);
@@ -354,7 +360,9 @@ namespace Seabreeze
                     speechStarted=true;
                     if(typing)
                     {
-                        revealed=Mathf.Max(revealed,SpeechVisibleCharacters(historyText.textInfo.characterCount,memory.Client.SpeechPosition,memory.Client.SpeechDuration));
+                        int visible=0,end=memory.Client.SpeechCaptionEnd;
+                        while(visible<historyText.textInfo.characterCount&&historyText.textInfo.characterInfo[visible].index<end)visible++;
+                        revealed=Mathf.Max(revealed,visible);
                         historyText.maxVisibleCharacters=Mathf.FloorToInt(revealed);
                         if(historyText.maxVisibleCharacters>=historyText.textInfo.characterCount)FinishTyping();
                     }
@@ -365,12 +373,14 @@ namespace Seabreeze
                     if(!character.HasSpeechDrive)character.BeginSpeechDrive(portraitSpeechToken,0);
                     character.SetSpeechAmplitude(portraitSpeechToken,0,memory.Client.SpeechAmplitude);
                 }
+                RefreshTypingLayout();
                 if(memory.Client.SpeechBusy)return;
                 EndFollowingSpeech();
                 if(speechStarted){FinishTyping();expressionEndsAt=ExpressionClock+ExpressionHoldSeconds;}
                 speechStarted=false;
             }
             if(typing&&PlayerInputReady){revealed+=Time.unscaledDeltaTime*charactersPerSecond;historyText.maxVisibleCharacters=Mathf.FloorToInt(revealed);if(historyText.maxVisibleCharacters>=historyText.textInfo.characterCount)FinishTyping();else character.SetState(portraitEmotion,lastSpeaker==selectedActor);}
+            RefreshTypingLayout();
 
         }
     }

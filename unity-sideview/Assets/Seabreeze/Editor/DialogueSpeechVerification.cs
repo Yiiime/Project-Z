@@ -15,7 +15,7 @@ namespace Seabreeze.Editor
     {
         const string Key="Z.DialogueSpeechVerification";
         static int phase;static double deadline,changed,nextDiagnostic;static string output,actor;
-        static JObject report;
+        static JObject report;static float pausedCursor;static double pausedAt;
         static DialogueSpeechVerification()
         {
             EditorApplication.update+=Tick;
@@ -32,12 +32,13 @@ namespace Seabreeze.Editor
             if(i<0||i+1>=args.Length)throw new Exception("Pass -speechVerificationOutput");
             string path=Path.GetFullPath(args[i+1]),save=Environment.GetEnvironmentVariable("Z_MEMORY_SAVE_ROOT")??"";
             if(!path.StartsWith("/private/tmp/",StringComparison.Ordinal)||!save.StartsWith("/private/tmp/",StringComparison.Ordinal))throw new Exception("Use isolated temporary output and save directories");
+            Require(Newtonsoft.Json.JsonConvert.DeserializeObject<MemorySpeechPacket>("{\"type\":\"done\",\"firstSubtitleMs\":null}").firstSubtitleMs==null,"Optional subtitle timing was rejected");
             SessionState.SetString(Key+".Output",path);SessionState.SetBool(Key,true);
             EditorSceneManager.OpenScene("Assets/Seabreeze/Scenes/Street.unity");
             EditorApplication.ExecuteMenuItem("Window/General/Game");
             EditorApplication.EnterPlaymode();
         }
-        static TextMeshProUGUI Caption(MemoryGameController m) => m.View.GetComponentsInChildren<TextMeshProUGUI>().Last(t=>t.name=="Message"&&t.text.StartsWith("语音验证："));
+        static TextMeshProUGUI Caption(MemoryGameController m) => m.View.GetComponentsInChildren<TextMeshProUGUI>(true).Last(t=>t.name=="Message"&&t.text.StartsWith("语音验证："));
         static void Require(bool ok,string message){if(!ok)throw new Exception(message);}
         static void Tick()
         {
@@ -68,10 +69,15 @@ namespace Seabreeze.Editor
                 {
                     Require(Caption(m).maxVisibleCharacters==0,"Caption ran ahead while audio was pending");
                     report["captionWaitsForAudio"]=true;
+                    Require(!Caption(m).transform.parent.gameObject.activeInHierarchy,"Empty NPC bubble reserved space while waiting");
+                    report["emptyNpcBubbleHidden"]=true;
                 }
                 if(phase==2&&m.Client.SpeechPlaying)
                 {
                     Require(m.LastReply?.actorId==actor,"Wrong speaker");Require(m.Client.Synchronized,"Voice before dialogue commit");
+                    Require(!m.Client.SpeechStreamComplete,"Playback waited for the complete stream");
+                    report["playbackBeforeStreamEnd"]=true;
+                    report["firstAudioMs"]=m.Client.SpeechFirstAudioMs;report["playbackStartMs"]=m.Client.SpeechPlaybackStartMs;
                     report["committedReplyPlayback"]=true;changed=EditorApplication.timeSinceStartup;phase=3;return;
                 }
                 if(phase==3&&EditorApplication.timeSinceStartup-changed>.8)
@@ -79,9 +85,13 @@ namespace Seabreeze.Editor
                     Require(m.Client.GetComponents<AudioSource>().Any(a=>a.isPlaying&&a.timeSamples>0),"Audio sample cursor did not advance");
                     var caption=Caption(m);int count=caption.textInfo.characterCount;
                     Require(caption.maxVisibleCharacters>0&&caption.maxVisibleCharacters<count,"Caption did not follow audio progressively");
-                    int expected=MemoryDialogueView.SpeechVisibleCharacters(count,m.Client.SpeechPosition,m.Client.SpeechDuration);
+                    int expected=m.Client.SpeechCaptionEnd;
                     Require(Mathf.Abs(caption.maxVisibleCharacters-expected)<=1,"Caption drifted from playback clock");
                     Require(m.View.GetComponentInChildren<Live2DCharacterView>().HasSpeechDrive,"Portrait is not audio driven");
+                    var panel=(RectTransform)caption.transform.parent;
+                    float fullHeight=caption.GetPreferredValues(caption.text,panel.rect.width-68,0).y+52;
+                    Require(panel.rect.height<fullHeight-10,"NPC bubble reserved the full multi-line height");
+                    report["bubbleFitsVisibleText"]=true;
                     report["captionTracksAudioWithBoundedLead"]=true;report["portraitUsesAudioDrive"]=true;
                     var mute=m.View.GetComponentsInChildren<Button>().First(b=>b.name=="声音");mute.onClick.Invoke();
                     Require(!m.Client.SpeechPlaying&&!m.Client.SpeechBusy,"Mute did not stop voice");mute.onClick.Invoke();
@@ -107,9 +117,15 @@ namespace Seabreeze.Editor
                 if(phase==10&&!m.Conversations.Sending&&!m.Client.SpeechBusy&&m.Client.SpeechStatus.Contains("失败"))
                 {
                     Require(m.Client.CanGenerate,"Speech failure blocked text input");report["failureKeepsTextAvailable"]=true;
-                    m.Conversations.SendPlayer("恢复语音。");phase=11;return;
+                    m.Conversations.SendPlayer("恢复卡顿语音。");phase=11;return;
                 }
                 if(phase==11&&m.Client.SpeechPlaying){phase=12;return;}
+                if(phase==12&&m.Client.SpeechStatus.Contains("缓冲"))
+                {
+                    if(pausedAt==0){pausedAt=EditorApplication.timeSinceStartup;pausedCursor=m.Client.SpeechPosition;}
+                    else if(EditorApplication.timeSinceStartup-pausedAt>.15)
+                    {Require(Mathf.Abs(m.Client.SpeechPosition-pausedCursor)<.02f,"Caption/audio clock advanced during underrun");report["underrunFreezesClock"]=true;}
+                }
                 if(phase==12&&!m.Client.SpeechBusy)
                 {
                     // Let the view observe playback completion on the next frame.
@@ -119,6 +135,7 @@ namespace Seabreeze.Editor
                 {
                     Require(Caption(m).maxVisibleCharacters>=Caption(m).textInfo.characterCount,"Caption incomplete after playback");
                     Require(!m.View.GetComponentInChildren<Live2DCharacterView>().HasSpeechDrive,"Portrait speech drive survived playback");
+                    Require((bool?)report["underrunFreezesClock"]==true,"Underrun path was not exercised");
                     report["playbackCompletesCaptionAndMouth"]=true;m.Conversations.SendPlayer("重载语音。");phase=14;return;
                 }
                 if(phase==14&&m.Client.SpeechPlaying)

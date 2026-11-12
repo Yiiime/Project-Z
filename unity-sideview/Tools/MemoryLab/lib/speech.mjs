@@ -40,14 +40,14 @@ export function speechPayload(voice, text, delivery) {
   const metadata = speechDelivery(delivery);
   if (metadata.delivery && voice.resourceId === "seed-icl-2.0" && voice.model !== "seed-tts-2.0-expressive")
     throw new SpeechError("tts_configuration_error");
-  const req_params = { text, speaker: voice.speaker, audio_params: { format: "pcm", sample_rate: 24000 } };
+  const req_params = { text, speaker: voice.speaker, audio_params: { format: "pcm", sample_rate: 24000, enable_subtitle: true } };
   if (voice.resourceId === "seed-icl-2.0" && voice.model) req_params.model = voice.model;
   if (metadata.delivery) req_params.additions = JSON.stringify({ context_texts: [metadata.delivery] });
   return { req_params };
 }
 
 // SSE may split UTF-8, event separators and base64 across arbitrary network chunks.
-export async function readSpeechAudio(response, signal) {
+export async function readSpeechAudio(response, signal, onEvent = () => {}) {
   if (!response.ok) {
     throw new SpeechError([401,403].includes(response.status) ? "tts_permission_denied" : response.status === 429 ? "tts_rate_limited" : "tts_failed");
   }
@@ -55,7 +55,7 @@ export async function readSpeechAudio(response, signal) {
     throw new SpeechError("tts_invalid_audio");
   const reader = response.body.getReader(), decoder = new TextDecoder();
   let pending = "", data = [], bytes = 0, wire = 0, complete = false;
-  const chunks = [];
+  const chunks = []; let carry = Buffer.alloc(0), wordCount = 0;
   const abort = () => { void reader.cancel().catch(() => {}); };
   signal?.addEventListener("abort", abort, { once: true });
   function event() {
@@ -72,6 +72,19 @@ export async function readSpeechAudio(response, signal) {
       const chunk = Buffer.from(packet.data, "base64"); bytes += chunk.length;
       if (bytes > MAX_AUDIO) throw new SpeechError("tts_invalid_audio");
       chunks.push(chunk);
+      const aligned = carry.length ? Buffer.concat([carry,chunk]) : chunk;
+      const end = aligned.length - aligned.length % 2;
+      // Bound each downstream record, and never expose half a PCM sample.
+      for (let offset=0;offset<end;offset+=16384)
+        onEvent({type:"audio",audio:{format:"pcm_s16le",sampleRate:24000,channels:1,base64:aligned.subarray(offset,Math.min(end,offset+16384)).toString("base64")}});
+      carry = aligned.subarray(end);
+    }
+    if (packet.sentence?.words) {
+      if (!Array.isArray(packet.sentence.words) || (wordCount += packet.sentence.words.length) > 4000) throw new SpeechError("tts_invalid_audio");
+      const words=packet.sentence.words.filter(w=>typeof w.word==="string"&&w.word.length<=2000&&
+        Number.isFinite(w.startTime)&&Number.isFinite(w.endTime)&&w.startTime>=0&&w.endTime>=w.startTime&&w.endTime<=180)
+        .map(({word,startTime,endTime})=>({word,startTime,endTime}));
+      if(words.length)onEvent({type:"subtitle",words});
     }
     if (packet.code === 20000000) complete = true;
   }
@@ -122,12 +135,21 @@ export class SpeechService {
         attempt.cancelled = true; attempt.controller.abort(); attempt.audio = null;
       }
   }
-  async synthesize(input, signal) {
+  async synthesize(input, signal, onEvent) {
+    if(signal?.aborted)throw new SpeechError("tts_cancelled");
     const key = [input.worldId,input.runId,input.proposalId].join(":");
     let attempt = this.attempts.get(key);
     if (attempt) {
       if (attempt.cancelled) throw new SpeechError("tts_cancelled");
-      if (attempt.promise) return attempt.promise;
+      if (attempt.error) throw new SpeechError(attempt.error);
+      if (onEvent) for (const event of attempt.events) onEvent(event);
+      if (attempt.promise) {
+        if(onEvent)attempt.listeners.add(onEvent);
+        const disconnect=()=>{attempt.cancelled=true;attempt.controller.abort();};
+        signal?.addEventListener("abort",disconnect,{once:true});
+        if(signal?.aborted)disconnect();
+        try{return await attempt.promise;}finally{attempt.listeners.delete(onEvent);signal?.removeEventListener("abort",disconnect);}
+      }
       if (attempt.audio) return attempt.audio;
       throw new SpeechError(attempt.error || "tts_failed");
     }
@@ -145,7 +167,7 @@ export class SpeechService {
       else throw new SpeechError("tts_rate_limited");
     }
     const controller = new AbortController();
-    attempt = { proposal: input.proposalId, world: input.worldId, conversation: input.conversationId, controller, at: Date.now(), cancelled: false };
+    attempt = { proposal: input.proposalId, world: input.worldId, conversation: input.conversationId, controller, at: Date.now(), cancelled: false, events:[], listeners:new Set(onEvent?[onEvent]:[]) };
     this.attempts.set(key,attempt); this.active.set(key,attempt);
     const disconnect = () => { attempt.cancelled = true; controller.abort(); };
     signal?.addEventListener("abort",disconnect,{once:true});
@@ -158,14 +180,21 @@ export class SpeechService {
         const response = await this.fetch(ENDPOINT,{method:"POST",redirect:"error",signal:controller.signal,
           headers:{"Content-Type":"application/json","Accept":"text/event-stream","X-Api-Key":config.apiKey,
             "X-Api-Resource-Id":voice.resourceId,"X-Api-Request-Id":randomUUID()},body:JSON.stringify(payload)});
-        const audio = await readSpeechAudio(response,controller.signal);
+        let eventBytes=0;
+        const audio = await readSpeechAudio(response,controller.signal,event=>{
+          if(controller.signal.aborted)throw new SpeechError("tts_cancelled");
+          eventBytes+=JSON.stringify(event).length;
+          if(eventBytes>MAX_WIRE||attempt.events.length>=4096)throw new SpeechError("tts_invalid_audio");
+          attempt.events.push(event);
+          for(const listener of attempt.listeners)listener(event);
+        });
         if (controller.signal.aborted) throw new SpeechError("tts_cancelled");
         attempt.audio = audio; return audio;
       } catch (e) {
         attempt.error = timedOut ? "tts_timeout" : controller.signal.aborted ? "tts_cancelled" : e instanceof SpeechError ? e.code : "tts_failed";
         throw new SpeechError(attempt.error);
       } finally {
-        clearTimeout(timer);signal?.removeEventListener("abort",disconnect);this.active.delete(key);
+        clearTimeout(timer);signal?.removeEventListener("abort",disconnect);this.active.delete(key);attempt.listeners.clear();
       }
     })();
     try { return await attempt.promise; } finally { attempt.promise = null; }

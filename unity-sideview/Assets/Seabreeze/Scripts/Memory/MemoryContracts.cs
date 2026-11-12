@@ -22,6 +22,16 @@ namespace Seabreeze
     {
         public string format,base64; public int sampleRate,channels;
     }
+    [Serializable] public sealed class MemorySpeechWord
+    {
+        public string word;public float startTime,endTime;
+    }
+    [Serializable] public sealed class MemorySpeechPacket
+    {
+        public string type,runId,proposalId,error,speechError,speechWarning;
+        public MemorySpeechAudio audio;public MemorySpeechWord[] words;
+        public int totalSamples;public float? firstAudioMs,firstSubtitleMs,completeMs;
+    }
     [Serializable] public sealed class MemoryReply
     {
         public bool ok,configured,verified,endConversation;

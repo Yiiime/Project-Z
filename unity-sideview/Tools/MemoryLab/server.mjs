@@ -329,7 +329,7 @@ export function createServer({
           result = gameResponse(world);
         } else {
           const w = checkRun(p);
-          if (url.pathname === "/api/game/speech") {
+          if (["/api/game/speech","/api/game/speech/stream"].includes(url.pathname)) {
             // Synthesize the committed server-side proposal, never caller-supplied text.
             const proposal = store.record(p.proposalId);
             const currentSpeech = () => {
@@ -348,12 +348,41 @@ export function createServer({
             const controller = new AbortController();
             const closed = () => { if (!res.writableEnded) controller.abort(); };
             res.once("close", closed);
+            const streaming=url.pathname.endsWith("/stream"),started=performance.now();
+            let firstAudioMs=null,firstSubtitleMs=null;
+            const write=packet=>{
+              if(res.writableLength>8*1024*1024){controller.abort();res.destroy();}
+              if(controller.signal.aborted||res.destroyed)throw new SpeechError("tts_cancelled");
+              res.write(JSON.stringify(packet)+"\n");
+            };
+            if(streaming){
+              res.writeHead(200,{"Content-Type":"application/x-ndjson; charset=utf-8","Cache-Control":"no-store","X-Accel-Buffering":"no"});
+              res.flushHeaders();
+              write({type:"start",runId:p.runId,proposalId:p.proposalId,speechWarning:proposal.speech_warning||""});
+            }
             try {
               const audio = await speech.synthesize({worldId:world,runId:p.runId,proposalId:p.proposalId,
-                actorId:p.actorId,conversationId:p.conversationId,text:proposal.output.dialogue,delivery:proposal.delivery},controller.signal);
+                actorId:p.actorId,conversationId:p.conversationId,text:proposal.output.dialogue,delivery:proposal.delivery},controller.signal,streaming?packet=>{
+                  if(!currentSpeech())throw new SpeechError("tts_cancelled");
+                  if(packet.type==="audio"&&firstAudioMs===null)firstAudioMs=Math.round(performance.now()-started);
+                  if(packet.type==="subtitle"&&firstSubtitleMs===null)firstSubtitleMs=Math.round(performance.now()-started);
+                  write(packet);
+                }:undefined);
               if (!currentSpeech()) throw new SpeechError("tts_cancelled");
+              if(streaming){
+                write({type:"done",totalSamples:Buffer.byteLength(audio.base64,"base64")/2,
+                  firstAudioMs,firstSubtitleMs,completeMs:Math.round(performance.now()-started)});
+                res.end();return;
+              }
               return respond(res,{ok:true,runId:p.runId,proposalId:p.proposalId,audio,
                 speechWarning:proposal.speech_warning || ""});
+            } catch(error){
+              if(!streaming)throw error;
+              if(!res.destroyed&&!controller.signal.aborted){
+                const safe=error instanceof SpeechError?error:new SpeechError("tts_cancelled");
+                write({type:"error",error:safe.message,speechError:safe.code});res.end();
+              }
+              return;
             } finally { res.removeListener("close",closed); }
           } else if (url.pathname === "/api/game/speech/cancel") {
             speech.cancel(world,p.conversationId,p.proposalId);

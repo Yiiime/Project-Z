@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Net.Http;
 using System.IO;
 using System.Text;
@@ -37,7 +38,34 @@ namespace Seabreeze
                 return Mathf.Clamp01(Mathf.Sqrt(energy/speechSamples.Length)*8);
             }
         }
-        public float SpeechDuration => speechClip!=null?speechClip.length:0;
+        const int SpeechRate=24000,MaxSpeechSamples=2*1024*1024,SpeechPrebuffer=7200;
+        int receivedSpeechSamples,subtitleTextCursor;bool speechStreamComplete;
+        string spokenText="";float captionRate=5;
+        readonly Dictionary<string,float> actorCaptionRates=new Dictionary<string,float>();
+        struct SpeechCue { public int start,end;public float from,to; }
+        readonly List<SpeechCue> speechCues=new List<SpeechCue>();
+        public bool SpeechStreamComplete => speechStreamComplete;
+        public float SpeechFirstAudioMs {get;private set;}=-1;
+        public float SpeechPlaybackStartMs {get;private set;}=-1;
+        public float SpeechCompleteMs {get;private set;}=-1;
+        public float SpeechDuration => speechStreamComplete?(float)receivedSpeechSamples/SpeechRate:0;
+        public int SpeechCaptionEnd
+        {
+            get
+            {
+                float position=SpeechPosition,ahead=Mathf.Min(position*1.04f+.12f,position+.35f);
+                foreach(var cue in speechCues)
+                {
+                    if(ahead<cue.from)return cue.start;
+                    if(ahead<cue.to)return Mathf.FloorToInt(Mathf.Lerp(cue.start,cue.end,Mathf.InverseLerp(cue.from,cue.to,ahead)));
+                }
+                float estimated;
+                if(speechCues.Count>0){var last=speechCues[speechCues.Count-1];estimated=last.end+Mathf.Max(0,ahead-last.to)*captionRate;}
+                else if(SpeechDuration>0)estimated=spokenText.Length*ahead/SpeechDuration;
+                else estimated=ahead*captionRate;
+                return Mathf.Clamp(Mathf.FloorToInt(estimated),0,Mathf.Max(0,spokenText.Length-(speechStreamComplete?0:1)));
+            }
+        }
         public float SpeechPosition => speechSource!=null&&speechClip!=null?(float)speechSource.timeSamples/speechClip.frequency:0;
 
         int acknowledgedRevision;
@@ -174,6 +202,8 @@ namespace Seabreeze
         {
             StopSpeech();
             if(line==null||string.IsNullOrEmpty(line.proposalId)||AudioListener.volume<=.01f)return;
+            spokenText=line.result?.dialogue??line.text??"";
+            captionRate=actorCaptionRates.TryGetValue(actor,out float rate)?rate:5;
             speechConversation=conversation;speechProposal=line.proposalId;SpeechBusy=true;SpeechStatus="正在准备语音…";
             int version=speechVersion;
             speechRoutine=StartCoroutine(SpeakAfterDelivered(line,conversation,actor,version,presentationReady));
@@ -187,6 +217,8 @@ namespace Seabreeze
             if(speechSource!=null){speechSource.Stop();speechSource.clip=null;}
             if(speechClip!=null){Destroy(speechClip);speechClip=null;}
             speechConversation=speechProposal="";SpeechBusy=false;SpeechStatus="";
+            receivedSpeechSamples=subtitleTextCursor=0;speechStreamComplete=false;speechCues.Clear();
+            SpeechFirstAudioMs=SpeechPlaybackStartMs=SpeechCompleteMs=-1;
             if(notify&&opened&&!string.IsNullOrEmpty(proposal))
             {
                 var request=RequestBase();request.conversationId=conversation;request.proposalId=proposal;
@@ -202,66 +234,137 @@ namespace Seabreeze
             if(!Synchronized){SpeechBusy=false;SpeechStatus="语音等待同步超时，继续显示文字。";yield break;}
             var request=RequestBase();request.conversationId=conversation;request.proposalId=line.proposalId;request.actorId=actor;
             var cts=new CancellationTokenSource(TimeSpan.FromSeconds(40));speechCancellation=cts;
-            var task=FetchSpeech(request,cts);
-            while(!task.IsCompleted&&version==speechVersion)yield return null;
-            if(version!=speechVersion)yield break;
-            speechCancellation=null;
-            if(task.IsCanceled||task.IsFaulted){SpeechBusy=false;SpeechStatus="语音连接中断，文字对话可继续。";yield break;}
-            var reply=task.Result;
-            if(!reply.ok){SpeechBusy=false;SpeechStatus=reply.error??"语音暂不可用，文字对话可继续。";yield break;}
-            if(reply.runId!=RunId||reply.proposalId!=line.proposalId){SpeechBusy=false;SpeechStatus="";yield break;}
-            try
+            var packets=new ConcurrentQueue<MemorySpeechPacket>();
+            var clock=System.Diagnostics.Stopwatch.StartNew();
+            var task=FetchSpeechStream(request,packets,cts);
+            bool started=false,paused=false;string failure=null;
+            while(version==speechVersion)
             {
-                speechClip=DecodeSpeech(reply.audio);
-                if(speechSource==null){speechSource=gameObject.AddComponent<AudioSource>();speechSource.playOnAwake=false;speechSource.spatialBlend=0;}
-                speechSource.clip=speechClip;
-                if(!string.IsNullOrEmpty(reply.speechWarning))Debug.LogWarning("TTS: "+reply.speechWarning);
+                while(packets.TryDequeue(out var packet))
+                {
+                    try
+                    {
+                        if(packet.type=="audio")
+                        {
+                            var samples=DecodeSpeechSamples(packet.audio);
+                            if(samples.Length==0||receivedSpeechSamples+samples.Length>MaxSpeechSamples)throw new InvalidDataException();
+                            if(speechClip==null)
+                            {
+                                speechClip=AudioClip.Create("NPC streamed dialogue",MaxSpeechSamples,1,SpeechRate,false);
+                                if(speechSource==null){speechSource=gameObject.AddComponent<AudioSource>();speechSource.playOnAwake=false;speechSource.spatialBlend=0;}
+                                speechSource.clip=speechClip;
+                            }
+                            if(!speechClip.SetData(samples,receivedSpeechSamples))throw new InvalidDataException();
+                            receivedSpeechSamples+=samples.Length;
+                            if(SpeechFirstAudioMs<0)SpeechFirstAudioMs=(float)clock.Elapsed.TotalMilliseconds;
+                        }
+                        else if(packet.type=="subtitle")
+                        {
+                            foreach(var word in packet.words??Array.Empty<MemorySpeechWord>())
+                            {
+                                if(string.IsNullOrEmpty(word.word)||float.IsNaN(word.startTime)||float.IsNaN(word.endTime)||word.startTime<0||word.endTime<word.startTime||word.endTime>180)continue;
+                                int index=spokenText.IndexOf(word.word,subtitleTextCursor,StringComparison.Ordinal);
+                                if(index<0)continue;
+                                speechCues.Add(new SpeechCue{start=index,end=index+word.word.Length,from=word.startTime,to=word.endTime});
+                                subtitleTextCursor=index+word.word.Length;
+                            }
+                        }
+                        else if(packet.type=="done")
+                        {
+                            if(receivedSpeechSamples==0||packet.totalSamples!=receivedSpeechSamples)throw new InvalidDataException();
+                            speechStreamComplete=true;SpeechCompleteMs=(float)clock.Elapsed.TotalMilliseconds;
+                            actorCaptionRates[actor]=Mathf.Clamp(spokenText.Length/SpeechDuration,3,8);
+                        }
+                        else if(packet.type=="start"&&!string.IsNullOrEmpty(packet.speechWarning))Debug.LogWarning("TTS: "+packet.speechWarning);
+                    }
+                    catch{failure="语音数据无效，文字对话可继续。";break;}
+                }
+                if(failure!=null)break;
+                if(task.IsCompleted)
+                {
+                    failure=task.IsFaulted||task.IsCanceled?"语音连接中断，文字对话可继续。":task.Result;
+                    if(failure!=null)break;
+                    if(!speechStreamComplete){failure="语音返回不完整，文字对话可继续。";break;}
+                }
+                if(!started&&receivedSpeechSamples>0&&(receivedSpeechSamples>=SpeechPrebuffer||speechStreamComplete)&&
+                    (presentationReady==null||presentationReady()))
+                {
+                    speechSource.Play();started=true;SpeechPlaybackStartMs=(float)clock.Elapsed.TotalMilliseconds;SpeechStatus="正在说话…";
+                }
+                if(started)
+                {
+                    int remaining=receivedSpeechSamples-speechSource.timeSamples;
+                    if(speechStreamComplete&&(remaining<=0||(!paused&&!speechSource.isPlaying)))break;
+                    // Keep the sample clock and captions frozen during a network underrun.
+                    if(!paused&&!speechStreamComplete&&remaining<SpeechRate/10){speechSource.Pause();speechSource.timeSamples=Mathf.Min(speechSource.timeSamples,receivedSpeechSamples);paused=true;SpeechStatus="语音缓冲中…";}
+                    if(paused&&(remaining>=SpeechPrebuffer||speechStreamComplete))
+                    {speechSource.timeSamples=Mathf.Min(speechSource.timeSamples,Mathf.Max(0,receivedSpeechSamples-1));speechSource.UnPause();paused=false;SpeechStatus="正在说话…";}
+                }
+                yield return null;
             }
-            catch {SpeechBusy=false;SpeechStatus="语音数据无效，文字对话可继续。";yield break;}
-            // Let any existing portrait preparation finish before voice and captions start.
-            while(version==speechVersion&&presentationReady!=null&&!presentationReady())yield return null;
             if(version!=speechVersion)yield break;
-            speechSource.Play();SpeechStatus="正在说话…";
-            while(version==speechVersion&&speechSource!=null&&speechSource.isPlaying)yield return null;
-            if(version==speechVersion)
-            {
-                SpeechBusy=false;SpeechStatus="";speechSource.clip=null;
-                if(speechClip!=null){Destroy(speechClip);speechClip=null;}
-                speechRoutine=null;
-            }
+            try{cts.Cancel();}catch(ObjectDisposedException){}
+            speechCancellation=null;SpeechBusy=false;SpeechStatus=failure??"";
+            if(speechSource!=null){speechSource.Stop();speechSource.clip=null;}
+            if(speechClip!=null){Destroy(speechClip);speechClip=null;}
+            speechRoutine=null;
+            Debug.Log($"TTS timing: actor={actor} firstAudioMs={SpeechFirstAudioMs:F0} playbackStartMs={SpeechPlaybackStartMs:F0} completeMs={SpeechCompleteMs:F0}");
         }
-        async Task<MemoryReply> FetchSpeech(MemoryRequest input,CancellationTokenSource cts)
+        async Task<string> FetchSpeechStream(MemoryRequest input,ConcurrentQueue<MemorySpeechPacket> packets,CancellationTokenSource cts)
         {
             try
             {
-                using(var request=new HttpRequestMessage(HttpMethod.Post,MemoryRuntimeConfig.Settings.serviceUrl+"/api/game/speech"))
+                // Each localhost audio response owns its connection. Unity/Mono may leave a
+                // cancelled streaming connection unusable; never reuse it for another turn.
+                // The Node-to-provider HTTPS pool remains reusable across turns.
+                using(var speechHttp=new HttpClient(new HttpClientHandler { UseProxy=false,AllowAutoRedirect=false }) { Timeout=Timeout.InfiniteTimeSpan })
+                using(var request=new HttpRequestMessage(HttpMethod.Post,MemoryRuntimeConfig.Settings.serviceUrl+"/api/game/speech/stream"))
                 {
                     request.Headers.Add("X-Z-Memory","1");request.Content=new StringContent(JsonConvert.SerializeObject(input),Encoding.UTF8,"application/json");
-                    using(var response=await http.SendAsync(request,HttpCompletionOption.ResponseHeadersRead,cts.Token))
+                    using(var response=await speechHttp.SendAsync(request,HttpCompletionOption.ResponseHeadersRead,cts.Token))
                     using(var stream=await response.Content.ReadAsStreamAsync())
-                    using(var buffer=new MemoryStream())
+                    using(var cancellation=cts.Token.Register(()=>stream.Dispose()))
+                    using(var reader=new StreamReader(stream,Encoding.UTF8))
                     {
-                        if(response.Content.Headers.ContentLength>6000000)throw new InvalidDataException();
-                        var bytes=new byte[16384];int count;
-                        while((count=await stream.ReadAsync(bytes,0,bytes.Length,cts.Token))>0)
-                        {if(buffer.Length+count>6000000)throw new InvalidDataException();buffer.Write(bytes,0,count);}
-                        var reply=JsonConvert.DeserializeObject<MemoryReply>(Encoding.UTF8.GetString(buffer.ToArray()));
-                        if(reply==null)throw new InvalidDataException();
-                        if(!response.IsSuccessStatusCode)reply.ok=false;
-                        return reply;
+                        if(!response.IsSuccessStatusCode||response.Content.Headers.ContentType?.MediaType!="application/x-ndjson")return "语音请求失败，文字对话可继续。";
+                        bool began=false,done=false;int wire=0,records=0;
+                        string text;
+                        while((text=await reader.ReadLineAsync())!=null)
+                        {
+                            cts.Token.ThrowIfCancellationRequested();
+                            wire+=text.Length;
+                            if(text.Length>1000000||wire>8000000||++records>4098||done)throw new InvalidDataException();
+                            var packet=JsonConvert.DeserializeObject<MemorySpeechPacket>(text);
+                            if(packet==null)throw new InvalidDataException();
+                            if(!began)
+                            {
+                                if(packet.type!="start"||packet.runId!=input.runId||packet.proposalId!=input.proposalId)throw new InvalidDataException();
+                                began=true;
+                            }
+                            else if(packet.type=="error")return "语音生成失败，文字对话可继续。";
+                            else if(packet.type=="done")done=true;
+                            else if(packet.type!="audio"&&packet.type!="subtitle")throw new InvalidDataException();
+                            packets.Enqueue(packet);
+                        }
+                        return done?null:"语音返回不完整，文字对话可继续。";
                     }
                 }
             }
-            catch {return new MemoryReply{ok=false,error=cts.IsCancellationRequested?"语音已取消或等待超时。":"语音连接失败，文字对话可继续。"};}
-            finally {cts.Dispose();}
+            catch(Exception error){Debug.LogWarning("TTS stream transport: "+error.GetType().Name);return cts.IsCancellationRequested?"语音已取消或等待超时。":"语音连接失败，文字对话可继续。";}
+            finally{cts.Dispose();}
         }
-        public static AudioClip DecodeSpeech(MemorySpeechAudio audio)
+        static float[] DecodeSpeechSamples(MemorySpeechAudio audio)
         {
             if(audio==null||audio.format!="pcm_s16le"||audio.sampleRate!=24000||audio.channels!=1||string.IsNullOrEmpty(audio.base64)||audio.base64.Length>5600000)throw new InvalidDataException();
             var bytes=Convert.FromBase64String(audio.base64);
             if(bytes.Length==0||bytes.Length>4*1024*1024||bytes.Length%2!=0)throw new InvalidDataException();
             var samples=new float[bytes.Length/2];
             for(int i=0;i<samples.Length;i++)samples[i]=(short)(bytes[i*2]|bytes[i*2+1]<<8)/32768f;
+            return samples;
+        }
+        public static AudioClip DecodeSpeech(MemorySpeechAudio audio)
+        {
+            var samples=DecodeSpeechSamples(audio);
             var clip=AudioClip.Create("NPC dialogue",samples.Length,1,24000,false);
             if(!clip.SetData(samples,0)){Destroy(clip);throw new InvalidDataException();}
             return clip;

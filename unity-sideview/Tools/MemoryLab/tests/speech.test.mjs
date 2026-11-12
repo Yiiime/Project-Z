@@ -85,7 +85,7 @@ async function setup(t,{delivery,request,realRuntime=false}={}) {
   const base="http://127.0.0.1:"+app.server.address().port;
   t.after(async()=>{speech.cancel();app.server.close();app.server.closeAllConnections();await once(app.server,"close");app.store.close();});
   const post=async(path,body)=>{const r=await fetch(base+"/api/game/"+path,{method:"POST",headers:{"Content-Type":"application/json","X-Z-Memory":"1"},body:JSON.stringify(body)});return {code:r.status,...await r.json()};};
-  return {app,speech,seen,post};
+  return {app,speech,seen,post,url:base};
 }
 const base={worldId:"speech-test",runId:"run1",day:1,period:0};
 async function proposed(post,actor="z",conversation="c1",seq=1) {
@@ -161,4 +161,85 @@ test("advancing the game clock rejects a previously committed line even while fo
   const clock=await post("sync",{...base,period:1,eventData:{id:"clock-next",seq:3,day:1,period:1,kind:"clock"}});
   assert.equal(clock.ok,true,clock.error);
   assert.equal((await post("speech",{...p.request,period:1})).ok,false);assert.equal(seen.length,0);
+});
+
+test("stream parser forwards aligned PCM and subtitles before terminal success",async()=>{
+  let release;const gate=new Promise(r=>release=r),events=[];let finished=false;
+  const enc=new TextEncoder();
+  const response=new Response(new ReadableStream({async start(c){
+    const emit=p=>c.enqueue(enc.encode("data: "+JSON.stringify(p)+"\n\n"));
+    emit({code:0,data:Buffer.from([1]).toString("base64")});
+    emit({code:0,data:Buffer.from([2,3,4]).toString("base64")});
+    emit({code:0,sentence:{words:[{word:"你好",startTime:0,endTime:.5}]}});
+    await gate;emit({code:20000000});c.close();
+  }}),{headers:{"content-type":"text/event-stream"}});
+  const task=readSpeechAudio(response,undefined,event=>events.push(event)).then(r=>{finished=true;return r;});
+  while(!events.some(e=>e.type==="subtitle"))await new Promise(r=>setImmediate(r));
+  assert.equal(finished,false);assert.equal(events[0].type,"audio");
+  assert.deepEqual(Buffer.from(events[0].audio.base64,"base64"),Buffer.from([1,2,3,4]));
+  assert.equal(events[1].words[0].endTime,.5);release();await task;
+});
+test("streaming duplicate replays received packets without another paid request",async()=>{
+  let release,calls=0;const gate=new Promise(r=>release=r);const enc=new TextEncoder();
+  const speech=new SpeechService({config,fetch:async()=>{calls++;return new Response(new ReadableStream({async start(c){
+    c.enqueue(enc.encode('data: '+JSON.stringify({code:0,data:audio.toString("base64")})+'\n\n'));
+    await gate;c.enqueue(enc.encode('data: {"code":20000000}\n\n'));c.close();
+  }}),{headers:{"content-type":"text/event-stream"}});}});
+  const input={worldId:"w",runId:"r",proposalId:"stream",conversationId:"c",actorId:"z",text:"你好。"};
+  const first=[],second=[];const a=speech.synthesize(input,undefined,e=>first.push(e));
+  while(!first.length)await new Promise(r=>setImmediate(r));
+  const b=speech.synthesize(input,undefined,e=>second.push(e));
+  assert.deepEqual(second,first);release();await Promise.all([a,b]);assert.equal(calls,1);
+});
+async function streamRecords(response,until=()=>false){
+  const reader=response.body.getReader(),decoder=new TextDecoder(),records=[];let pending="";
+  while(true){const {value,done}=await reader.read();if(done)break;pending+=decoder.decode(value,{stream:true});
+    let i;while((i=pending.indexOf("\n"))>=0){records.push(JSON.parse(pending.slice(0,i)));pending=pending.slice(i+1);}
+    if(until(records))return {records,reader,pending};
+  }return {records,reader,pending};
+}
+test("HTTP stream delivers before completion and rejects uncommitted requests",async t=>{
+  let release,finished=false;const gate=new Promise(r=>release=r),enc=new TextEncoder();
+  t.after(()=>release());
+  const {post,url}=await setup(t,{request:async()=>new Response(new ReadableStream({async start(c){
+    c.enqueue(enc.encode('data: '+JSON.stringify({code:0,data:audio.toString("base64")})+'\n\n'));
+    await gate;finished=true;c.enqueue(enc.encode('data: {"code":20000000}\n\n'));c.close();
+  }}),{headers:{"content-type":"text/event-stream"}})});
+  await post("open",base);const p=await proposed(post);
+  assert.equal((await post("speech/stream",p.request)).ok,false);await commit(post,p);
+  const response=await fetch(url+"/api/game/speech/stream",{method:"POST",headers:{"Content-Type":"application/json","X-Z-Memory":"1"},body:JSON.stringify(p.request)});
+  assert.match(response.headers.get("content-type"),/ndjson/);
+  const part=await streamRecords(response,rs=>rs.some(r=>r.type==="audio"));
+  assert.equal(part.records[0].type,"start");assert.equal(finished,false);
+  assert.equal(part.records.some(r=>r.type==="done"),false);release();
+  let rest=part.pending;while(true){const r=await part.reader.read();if(r.done)break;rest+=new TextDecoder().decode(r.value);}
+  const last=JSON.parse(rest.trim().split("\n").at(-1));assert.equal(last.type,"done");assert.equal(last.totalSamples,audio.length/2);
+  assert(last.completeMs>=last.firstAudioMs);
+});
+test("late failure ends partial audio with error and never success",async t=>{
+  const enc=new TextEncoder();const {post,url}=await setup(t,{request:async()=>new Response(new ReadableStream({start(c){
+    c.enqueue(enc.encode('data: '+JSON.stringify({code:0,data:audio.toString("base64")})+'\n\ndata: {"code":55000000,"message":"fixture-secret-do-not-leak"}\n\n'));c.close();
+  }}),{headers:{"content-type":"text/event-stream"}})});
+  await post("open",base);const p=await proposed(post);await commit(post,p);
+  const response=await fetch(url+"/api/game/speech/stream",{method:"POST",headers:{"Content-Type":"application/json","X-Z-Memory":"1"},body:JSON.stringify(p.request)});
+  const {records}=await streamRecords(response);
+  assert(records.some(r=>r.type==="audio"));assert.equal(records.at(-1).type,"error");
+  assert(!records.some(r=>r.type==="done"));assert(!JSON.stringify(records).includes("fixture-secret"));
+});
+test("disconnecting a partial HTTP stream aborts its upstream synthesis",async t=>{
+  let upstreamSignal;
+  const enc=new TextEncoder();const {post,url,speech}=await setup(t,{request:async(_url,{signal})=>{
+    upstreamSignal=signal;
+    return new Response(new ReadableStream({start(c){
+      c.enqueue(enc.encode('data: '+JSON.stringify({code:0,data:audio.toString("base64")})+'\n\n'));
+      signal.addEventListener("abort",()=>{try{c.error(Error("cancelled"));}catch{}},{once:true});
+    }}),{headers:{"content-type":"text/event-stream"}});
+  }});
+  await post("open",base);const p=await proposed(post);await commit(post,p);
+  const response=await fetch(url+"/api/game/speech/stream",{method:"POST",headers:{"Content-Type":"application/json","X-Z-Memory":"1"},body:JSON.stringify(p.request)});
+  const part=await streamRecords(response,rs=>rs.some(r=>r.type==="audio"));await part.reader.cancel();
+  for(let n=0;n<100&&!upstreamSignal.aborted;n++)await new Promise(r=>setTimeout(r,10));
+  assert(upstreamSignal.aborted);
+  for(let n=0;n<100&&speech.active.size;n++)await new Promise(r=>setTimeout(r,10));
+  assert.equal(speech.active.size,0);
 });
