@@ -1,0 +1,281 @@
+{
+  "islandDialogue": "李庭是咖啡店老板。",
+  "privateFieldsHidden": true,
+  "backendPartsRetained": true,
+  "participants": [
+    "z",
+    "liyuan",
+    "liting",
+    "axing",
+    "zhengyi",
+    "xiaoxiaoqing",
+    "linxu",
+    "zhou_bobo"
+  ],
+  "liveMessages": [
+    {
+      "id": "z-msg-1",
+      "name": "Z",
+      "text": "晚上好呀，你们来啦。今晚想从哪儿聊起？",
+      "type": "z",
+      "mine": false,
+      "color": "#8c78a1",
+      "source": "daytime_recap"
+    },
+    {
+      "id": "z-msg-2",
+      "name": "小岛来客",
+      "text": "大家好，这次见面的暗号叫蓝色风筝。想听听大家平时做什么。",
+      "type": "chat",
+      "mine": true,
+      "replyStatus": "pending"
+    },
+    {
+      "id": "2276c9ff-3c29-4f39-a78c-205ed00e9594",
+      "name": "梨园",
+      "text": "今晚的小屋打卡 1",
+      "type": "chat",
+      "mine": false,
+      "source": "agent-audience"
+    },
+    {
+      "id": "c590ac75-d56e-4ed7-bdf1-5c43951db56f",
+      "name": "李庭",
+      "text": "今晚的小屋打卡 2",
+      "type": "chat",
+      "mine": false,
+      "source": "agent-audience"
+    },
+    {
+      "id": "a9b42036-e39a-4052-86ef-b10ef0cd9b17",
+      "name": "阿星",
+      "text": "今晚的小屋打卡 3",
+      "type": "chat",
+      "mine": false,
+      "source": "agent-audience"
+    },
+    {
+      "id": "b0c8fcb3-6aac-4a51-a974-130b0c89bf68",
+      "name": "正义",
+      "text": "今晚的小屋打卡 4",
+      "type": "chat",
+      "mine": false,
+      "source": "agent-audience"
+    },
+    {
+      "id": "1a887520-dddd-4a7b-a60d-5dde887269f8",
+      "name": "周伯伯",
+      "text": "今晚的小屋打卡 7",
+      "type": "chat",
+      "mine": false,
+      "source": "agent-audience"
+    },
+    {
+      "id": "c674c635-f394-43f0-8b03-67d2db46b7aa",
+      "name": "晴野",
+      "text": "今晚的小屋打卡 8",
+      "type": "chat",
+      "mine": false,
+      "source": "agent-audience"
+    },
+    {
+      "id": "2d7aac3c-f7a0-409b-9bd1-8986b32fd09c",
+      "name": "留洋",
+      "text": "今晚的小屋打卡 9",
+      "type": "chat",
+      "mine": false,
+      "source": "agent-audience"
+    },
+    {
+      "id": "32173da4-d1ff-4c45-8389-bde4129cba6e",
+      "name": "梨园",
+      "text": "今晚的小屋打卡 10",
+      "type": "chat",
+      "mine": false,
+      "source": "agent-audience"
+    },
+    {
+      "id": "529d5304-ec36-44ee-9bb0-4973e501faee",
+      "name": "李庭",
+      "text": "今晚的小屋打卡 11",
+      "type": "chat",
+      "mine": false,
+      "source": "agent-audience"
+    },
+    {
+      "id": "95b2d4cf-807e-452c-bfa7-18adeb710c8c",
+      "name": "阿星",
+      "text": "今晚的小屋打卡 12",
+      "type": "chat",
+      "mine": false,
+      "source": "agent-audience"
+    },
+    {
+      "id": "0dce6a46-3486-4504-b562-a68543c485bc",
+      "name": "正义",
+      "text": "今晚的小屋打卡 13",
+      "type": "chat",
+      "mine": false,
+      "source": "agent-audience"
+    },
+    {
+      "id": "528b75b6-ed48-4f33-bcaf-a7f19c9f7d11",
+      "name": "周伯伯",
+      "text": "今晚的小屋打卡 14",
+      "type": "chat",
+      "mine": false,
+      "source": "agent-audience"
+    },
+    {
+      "id": "a57d6bf2-0574-4a1e-8f94-ab2f3f3ef3c5",
+      "name": "晴野",
+      "text": "今晚的小屋打卡 15",
+      "type": "chat",
+      "mine": false,
+      "source": "agent-audience"
+    },
+    {
+      "id": "44342e00-8299-40db-9ed4-9660622bc84a",
+      "name": "留洋",
+      "text": "今晚的小屋打卡 16",
+      "type": "chat",
+      "mine": false,
+      "source": "agent-audience"
+    },
+    {
+      "id": "6898cca1-dfdb-421f-b06e-afae3f310785",
+      "name": "梨园",
+      "text": "今晚的小屋打卡 17",
+      "type": "chat",
+      "mine": false,
+      "source": "agent-audience"
+    },
+    {
+      "id": "dcda35d3-57a5-4823-a609-435ced2d6604",
+      "name": "李庭",
+      "text": "今晚的小屋打卡 18",
+      "type": "chat",
+      "mine": false,
+      "source": "agent-audience"
+    },
+    {
+      "id": "8bf04eb3-0838-4c24-802e-7c9e888ff507",
+      "name": "阿星",
+      "text": "今晚的小屋打卡 19",
+      "type": "chat",
+      "mine": false,
+      "source": "agent-audience"
+    }
+  ],
+  "deliveredLiveEvents": [
+    {
+      "id": "room_13c96b05cfc50006c30fb9b2_opened",
+      "speaker": "engine",
+      "text": "Z的直播开始，七位岛民和玩家都已进入直播间。岛民保持在线，通过弹幕交流；没有任何岛外秘密因此自动公开。"
+    },
+    {
+      "id": "live_98e3833adb870333207bca0df541e69c81399a57",
+      "speaker": "z",
+      "text": "晚上好呀，你们来啦。今晚想从哪儿聊起？"
+    },
+    {
+      "id": "live_756e151744282371c7e1f0b7060e31a1fe4d7ce9",
+      "speaker": "player",
+      "text": "大家好，这次见面的暗号叫蓝色风筝。想听听大家平时做什么。"
+    },
+    {
+      "id": "live_015f44288d41bccc8ee1d41d3734de9feedc5ea3",
+      "speaker": "liyuan",
+      "text": "今晚的小屋打卡 1"
+    },
+    {
+      "id": "live_2073336b29adfe6de1d3d4657d85552e74cfe2ff",
+      "speaker": "liting",
+      "text": "今晚的小屋打卡 2"
+    },
+    {
+      "id": "live_d4d07083ee6cc0be563cfb005f89273e9a53f062",
+      "speaker": "axing",
+      "text": "今晚的小屋打卡 3"
+    },
+    {
+      "id": "live_85dd8b29c709a1fd4078b9db73e72f8b6daeeff1",
+      "speaker": "zhengyi",
+      "text": "今晚的小屋打卡 4"
+    },
+    {
+      "id": "live_51397ee88a1997d4137f0fdf8405864b147658fd",
+      "speaker": "zhou_bobo",
+      "text": "今晚的小屋打卡 7"
+    },
+    {
+      "id": "live_19a11e272870d8fc2dc3450030f36e88bf8301ca",
+      "speaker": "xiaoxiaoqing",
+      "text": "今晚的小屋打卡 8"
+    },
+    {
+      "id": "live_68c3fed70e9bb2fb4f4d21eaa308c46f073e2fe5",
+      "speaker": "linxu",
+      "text": "今晚的小屋打卡 9"
+    },
+    {
+      "id": "live_d6f07690c03fac7e08220af892fe79f790645446",
+      "speaker": "liyuan",
+      "text": "今晚的小屋打卡 10"
+    },
+    {
+      "id": "live_6b999f0005efdd210189cc7d50117355f7a8fe3d",
+      "speaker": "liting",
+      "text": "今晚的小屋打卡 11"
+    },
+    {
+      "id": "live_775aa4d11647c79d814b49f71fe7b3708611ffc7",
+      "speaker": "axing",
+      "text": "今晚的小屋打卡 12"
+    },
+    {
+      "id": "live_2e05bec006048b7228d9f29aec29236f6040b85e",
+      "speaker": "zhengyi",
+      "text": "今晚的小屋打卡 13"
+    },
+    {
+      "id": "live_633ec5639cee0643ef520844f8aab00ed0fe1792",
+      "speaker": "zhou_bobo",
+      "text": "今晚的小屋打卡 14"
+    },
+    {
+      "id": "live_53e1efb6c120ee9aba9c694ef64d22f3684f395f",
+      "speaker": "xiaoxiaoqing",
+      "text": "今晚的小屋打卡 15"
+    },
+    {
+      "id": "live_ad5caa74353a3e3d2b57102c70f6aeb98f89cef9",
+      "speaker": "linxu",
+      "text": "今晚的小屋打卡 16"
+    },
+    {
+      "id": "live_1e96b6888dbe883e9af798fc298a405d74bfd43a",
+      "speaker": "liyuan",
+      "text": "今晚的小屋打卡 17"
+    },
+    {
+      "id": "live_b7a74a68078218106752dcf5a6156448cc8d39c9",
+      "speaker": "liting",
+      "text": "今晚的小屋打卡 18"
+    },
+    {
+      "id": "live_74ab3e79a2f55b23dbbe00fec5c35c91c2b0be7b",
+      "speaker": "axing",
+      "text": "今晚的小屋打卡 19"
+    },
+    {
+      "id": "live_593d5b07423818ea2277cad6c7816dc96d9829c2",
+      "speaker": "zhengyi",
+      "text": "今晚的小屋打卡 20"
+    }
+  ],
+  "memoryRestoredAfterExit": true,
+  "afterLiveDialogue": "你刚才说的暗号是蓝色风筝。",
+  "passed": true,
+  "phase": 12
+}

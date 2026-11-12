@@ -39,7 +39,7 @@ export class DialogueReview {
     const role=event.speakerRole||(event.type.startsWith('speech.')?'host':event.type==='player.message'?'player':event.type==='npc.message'?'audience':'system');
     const entry={id:event.id,type:event.type,text:event.text,speakerRole:role,speakerId:event.speakerId||(role==='host'?'Z':role),
       sequence:++this.revision,occurredAt:this.now(),status:event.status||(event.type==='speech.completed'?'completed':'published'),
-      speechId:event.speechId||null,replyTo:[...(event.replyTo||[])]};
+      speechId:event.speechId||null,replyTo:[...(event.replyTo||[])],...(event.recipientIds?{recipientIds:[...event.recipientIds]}:{})};
     const index=this.events.findIndex(e=>e.id===entry.id);
     if(index>=0)this.events[index]=entry;else this.events.push(entry);
     this.events=this.events.slice(-40);
@@ -50,7 +50,7 @@ export class DialogueReview {
     return clone(entry);
   }
   setWaiting(messages) {
-    const next=messages.map(m=>({id:m.id,speakerRole:m.mine?'player':'audience',speakerId:m.speakerId||this.events.find(e=>e.id===m.id)?.speakerId||m.name,text:m.text}));
+    const next=messages.map(m=>({id:m.id,speakerRole:m.mine?'player':'audience',speakerId:m.speakerId||this.events.find(e=>e.id===m.id)?.speakerId||m.name,text:m.text,...(m.recipientIds?{recipientIds:[...(m.pendingRecipientIds||m.recipientIds)]}:{})}));
     if(JSON.stringify(next)!==JSON.stringify(this.waiting)){this.waiting=clone(next);this.revision++;}
   }
   snapshot() {return {revision:this.revision,publicEvents:clone(this.events),waiting_messages:clone(this.waiting)};}

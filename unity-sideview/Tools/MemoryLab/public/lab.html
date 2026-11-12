@@ -1,0 +1,12 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>月亮岛 · 角色交互实验室</title><link rel="stylesheet" href="/lab.css"></head><body>
+<header><div><span class="eyebrow">MOON ISLAND / CHARACTER LAB</span><h1>角色交互实验室</h1><p>同一套人设、记忆与决策后端 · 独立测试存档</p></div><div class="head-actions"><span id="connection">连接中…</span><a href="/settings" target="_blank">模型设置 ↗</a><button id="new">新建测试</button></div></header>
+<div id="error" role="alert" hidden></div>
+<main><aside class="panel"><h2>当前角色</h2><select id="actor" aria-label="当前角色"></select><p id="identity" class="muted"></p><div id="metrics"></div><p id="save" class="muted"></p><button id="release">结束玩家交谈</button>
+<hr><h2>NPC交流</h2><label>另一位NPC<select id="target" aria-label="交流对象"></select></label><label>测试地点<select id="place" aria-label="测试地点"></select></label><button id="arrange">将双方布置到此处</button><p class="hint">布置测试环境，不代表角色实际走到了这里。双方空闲时，由NPC决定是否交谈。</p><button id="encounter" class="primary">给双方一次交流机会</button><button id="continue">继续下一轮NPC交流</button><p id="a2a" class="muted"></p>
+</aside>
+<section class="panel conversation"><div class="section-top"><h2 id="chat-title">与角色对话</h2><span id="busy" aria-live="polite"></span></div><div id="transcript" aria-live="polite"></div><form id="chat"><textarea id="message" rows="3" maxlength="4000" placeholder="可以聊旧事、转述消息、出示证据，或询问是否愿意帮助Z……" aria-label="对话内容"></textarea><div class="section-top"><span class="hint">Enter发送 · Shift+Enter换行</span><button class="primary" type="submit">发送</button></div></form><div id="pending"></div>
+<details><summary>投递剧情消息</summary><p class="hint">只发给勾选的角色。其他NPC不会自动知道。</p><textarea id="event-text" rows="2" placeholder="输入引擎提供的信息" aria-label="剧情消息"></textarea><div id="recipients"></div><label><input id="verified" type="checkbox">引擎确认的事实（未勾选则只记录观察信息）</label><button id="event-send">投递给选中角色</button></details>
+<details open><summary>任务与协作</summary><p class="hint">可以接受、拒绝、邀请NPC协作。这里不模拟收拾物品等动作，也不手动标记任务完成。</p><div id="tasks"></div></details></section>
+<section class="panel inspector"><div class="section-top"><h2>后台观察</h2><div><button id="refresh">刷新</button><button id="download">导出JSON</button></div></div><p class="hint">观察者视角，可看完整数据；不代表每个NPC都知道这些信息。Action与Info只显示在此测试工具中。</p><nav id="tabs" aria-label="数据分类"></nav><div id="data-view"></div></section></main>
+<footer>独立网页不修改Unity界面 · 数值变化由NPC判断，后台校验来源并保存 · 未执行的动作始终保留为待执行</footer>
+<script>window.LAB_TOKEN="__TOKEN__";</script><script type="module" src="/lab.js"></script></body></html>

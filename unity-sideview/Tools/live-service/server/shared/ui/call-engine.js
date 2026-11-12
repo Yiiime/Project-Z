@@ -1,3 +1,4 @@
+import {utteranceMetadata} from '../utterance.js';
 import {approveCallCandidate} from './call-review.js';
 import {ConversationEngine} from './conversation-engine.js';
 
@@ -67,21 +68,21 @@ export class CallConversationEngine extends ConversationEngine {
     if(input!=='idle')this.interruptCall('guest_input');
     this._state.call.input=input;this._emitState();return true;
   }
-  sendMessage(value){
-    if(!this._state.call.active)return super.sendMessage(value);
+  sendMessage(value,routing={}){
+    if(!this._state.call.active)return super.sendMessage(value,routing);
     const text=String(value||'').trim();if(!text||text.length>360||this._destroyed||this._state.paused)return false;
     if(/(?:弹幕.{0,6}(?:怎么|想法|意见|建议)|(?:看看|问问|读|听听|回应).{0,4}(?:弹幕|大家|观众))/.test(text))this._state.call.audienceUntil=this._clock+15000;
     if(!this.callYield)this.interruptCall('guest_message');this._state.call.input='idle';this._state.call.turns++;this.callReviewRetries=0;this.callContinuationBudget=1;
     const m=this._message(text,{name:'连麦来客',mine:true,type:'chat'});this._receive(m,true);this._wakeCall();return true;
   }
-  _receive(m,mine,speakerId){
-    if(this._state.call?.active&&!mine){
+  _receive(m,mine,speakerId,routing={}){
+    if(this._state.call?.active&&!mine&&!routing.recipientIds?.includes('z')){
       this.callAudience.push({...m,speakerId,at:this._clock});this.callAudience=this.callAudience.slice(-12);
-      this._public('npc.message',m.text,{id:m.id,speakerRole:'audience',speakerId:speakerId||m.name});
+      this._public('npc.message',m.text,{id:m.id,speakerRole:'audience',speakerId:speakerId||m.name,...routing});
       // Reactions are public evidence, not additional guest requests. The host scheduler chooses a safe gap.
       this._emitState();return;
     }
-    super._receive(m,mine,speakerId);if(this._state.call?.active&&mine)this._wakeCall();
+    super._receive(m,mine,speakerId,routing);if(this._state.call?.active&&mine)this._wakeCall();
   }
   inviteAudience(){
     if(!this._state.call.active||this._state.paused)return false;
@@ -108,7 +109,7 @@ export class CallConversationEngine extends ConversationEngine {
   }
   _onHostSpeechCommitted(speechId,result){this.callRevisionFeedback=null;if(this._state.call?.active&&result.audienceMessageIds?.length)this.callAudienceSpeech.set(speechId,[...result.audienceMessageIds]);}
   _warmCandidate(requestId,result){
-    if(this._state.call?.active&&['speak','tool'].includes(result?.action)&&result.speech)return this.speechAudio?.warmSpeech(requestId,result.speech,result.mood,{streaming:true});
+    if(this._state.call?.active&&['speak','tool'].includes(result?.action)&&result.speech)return this.speechAudio?.warmSpeech(requestId,result.speech,result.mood,{streaming:true,delivery:result.delivery});
     return super._warmCandidate(requestId,result);
   }
   _approveCallCandidate(options){return approveCallCandidate(this,options);}
@@ -137,9 +138,9 @@ export class CallConversationEngine extends ConversationEngine {
     signal.addEventListener('abort',abort,{once:true});
     const play=async sentence=>{
       if(!valid())throw Error('stale_sentence');
-      const result={action:'speak',speech:sentence.text,mood:sentence.mood,gesture:sentence.gesture,transition:sentence.transition,handledIds:sentence.handledIds,audienceMessageIds:sentence.audienceMessageIds};
+      const result={...utteranceMetadata('z',sentence,{allowLegacy:true}),action:'speak',speech:sentence.text,mood:sentence.mood,gesture:sentence.gesture,transition:sentence.transition,handledIds:sentence.handledIds,audienceMessageIds:sentence.audienceMessageIds};
       this._validateCallReply(result,context);
-      const initial={id:requestId+'-s'+sentence.index,role:'host',speakerId:'Z',text:sentence.text,intent:'speak',replyTo:sentence.handledIds,evidenceIds:[],segment:{index:sentence.index,scope:'sentence'}};
+      const initial={id:requestId+'-s'+sentence.index,role:'host',speakerId:'Z',...utteranceMetadata('z',sentence,{allowLegacy:true}),text:sentence.text,intent:'speak',replyTo:sentence.handledIds,evidenceIds:[],segment:{index:sentence.index,scope:'sentence'}};
       warmKey=initial.id;
       const approved=await this._approveCallCandidate({candidate:initial,result,context,signal,valid,budget,beforeRepair:()=>generationDone});
       const {ticket,candidate}=approved;const candidateId=candidate.id;warmKey=candidateId;repairedAny||=approved.repaired;
@@ -150,7 +151,7 @@ export class CallConversationEngine extends ConversationEngine {
         timer=setTimeout(cancel,90000);
         const committed=this.audience.dialogue.commit(ticket,()=>{
           const speechId=this._speechId+1;owned.add(speechId);this.speechLinks.set(speechId,[...sentence.handledIds]);
-          this._say(spokenText,sentence.mood,sentence.index===0?sentence.gesture:'none',{source:'deepseek',transition:sentence.transition,preparedAudioKey:candidateId,onComplete:()=>{
+          this._say(spokenText,sentence.mood,sentence.index===0?sentence.gesture:'none',{...utteranceMetadata('z',candidate,{allowLegacy:true}),source:'deepseek',transition:sentence.transition,preparedAudioKey:candidateId,onComplete:()=>{
             waitCancel=null;clearTimeout(timer);signal.removeEventListener('abort',cancel);spoken.push({speechId,text:spokenText});resolve();
           }});
           warmKey=null;

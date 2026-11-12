@@ -1,3 +1,4 @@
+import {utteranceMetadata} from '../utterance.js';
 import {DialogueReview} from './dialogue-review.js';
 /** Continuous audience cadence. Public facts and one explicitly marked committed host preview stay separate. */
 import {AUDIENCE_NAMES} from '../audience-roster.js';
@@ -23,7 +24,7 @@ export class AudienceDirector {
     this.setConfig(config);
   }
   setConfig(policyAudience = {}) {
-    const config = {...DEFAULTS,handoff:policyAudience?.handoff===true};
+    const config = {...DEFAULTS,handoff:policyAudience?.handoff===true,singleActorRequests:policyAudience?.singleActorRequests===true};
     if (policyAudience && typeof policyAudience === 'object') {
       for (const key of ['intervalMs', 'generationDeadlineMs', 'firstPublishDelayMs', 'candidateTtlMs', 'npcPublishCooldownMs', 'publishGapMs']) {
         const value = policyAudience[key];
@@ -82,7 +83,7 @@ export class AudienceDirector {
       || typeof event.text !== 'string' || !event.text.trim() || event.text.length > 1600
       || !replace&&this.seenEvents.includes(event.id)) return false;
     // Fresh facts update the next request; they do not starve an in-flight response.
-    const entry=this.dialogue.record({id:event.id,type:event.type,text:event.text,speakerRole:event.speakerRole,speakerId:event.speakerId,status:event.status,speechId:event.speechId,replyTo:event.replyTo});
+    const entry=this.dialogue.record({id:event.id,type:event.type,text:event.text,speakerRole:event.speakerRole,speakerId:event.speakerId,status:event.status,speechId:event.speechId,replyTo:event.replyTo,...(event.recipientIds?{recipientIds:event.recipientIds}:{})});
     const existing=this.events.findIndex(e=>e.id===entry.id);
     if(existing>=0)this.events[existing]=entry;else this.events.push(entry);
     this.events = this.events.slice(-12);
@@ -111,11 +112,11 @@ export class AudienceDirector {
     if(slots<=0)return;
     const reserved=new Set([...this.requests.values(),...this.pool,...(this.selected?[this.selected]:[])].flatMap(w=>w.eligibleNpcIds||[w.item.npc_id]));
     const eligibleNpcIds = [...NPC_IDS].filter(npc => !reserved.has(npc)&&now - (this.cooldowns.get(npc) ?? -Infinity) >= this.config.npcPublishCooldownMs)
-      .sort((a,b)=>(this.attempted.get(a)??-Infinity)-(this.attempted.get(b)??-Infinity));
+      .sort((a,b)=>Number(this.dialogue.waiting.some(m=>m.recipientIds?.includes(b)))-Number(this.dialogue.waiting.some(m=>m.recipientIds?.includes(a)))||(this.attempted.get(a)??-Infinity)-(this.attempted.get(b)??-Infinity));
     this.lastRequestAt=now;this.nextRequestAt=now+this.config.intervalMs;
     if(!eligibleNpcIds.length)return;
     // Parallel requests use distinct viewers; drafts never see each other's text.
-    const groups=this.config.maxConcurrent===1?[eligibleNpcIds]:eligibleNpcIds.slice(0,slots).map(npc=>[npc]);
+    const groups=this.config.maxConcurrent===1&&!this.config.singleActorRequests?[eligibleNpcIds]:eligibleNpcIds.slice(0,slots).map(npc=>[npc]);
     for(const group of groups){if(group.length===1)this.attempted.set(group[0],now);this._generate(group,now);}
   }
   _generate(eligibleNpcIds,now) {
@@ -152,7 +153,8 @@ export class AudienceDirector {
         || item.evidence_refs.some(ref => typeof ref !== 'string' || !known.has(ref))) continue;
       if (now - (this.cooldowns.get(item.npc_id) ?? -Infinity) < this.config.npcPublishCooldownMs
         || item.intent === 'advance' && (!request.allowAdvance || !this._advanceAllowed())) continue;
-      this.pool.push({...request,item:{npc_id:item.npc_id,text:item.text.trim(),intent:item.intent,evidence_refs:[...item.evidence_refs]}});
+      let metadata;try{metadata=utteranceMetadata(item.npc_id,item,{allowLegacy:true});}catch{continue;}
+      this.pool.push({...request,item:{...metadata,npc_id:item.npc_id,text:item.text.trim(),intent:item.intent,recipientIds:item.recipientIds,reply_to:item.reply_to??null,...(item.characterProposalId?{characterProposalId:item.characterProposalId}:{}),evidence_refs:[...item.evidence_refs]}});
       this.dialogue.log({stage:'audience.pool.ready',requestId:request.payload.requestId,size:this.pool.length});
       break; // A lane supplies one candidate; no rewrite loop after rejection.
     }
@@ -176,7 +178,7 @@ export class AudienceDirector {
     if(this.recentMessages.some(m=>m.text===work.item.text)){this._endSelection(work,'repeated_text');return;}
     this.reviewPending=work;
     const refs=work.item.evidence_refs.map(ref=>ref===work.sourcePreview?.id?work.sourcePreview.publicEventId:ref);
-    const candidate={id:work.payload.requestId,role:'audience',speakerId:work.item.npc_id,text:work.item.text,intent:work.item.intent,replyTo:[],evidenceIds:refs};
+    const candidate={id:work.payload.requestId,role:'audience',speakerId:work.item.npc_id,...utteranceMetadata(work.item.npc_id,work.item,{allowLegacy:true}),text:work.item.text,intent:work.item.intent,replyTo:[],evidenceIds:refs};
     // The reviewer sees actual public text only, never the private preview.
     const ticket=await this.dialogue.inspect(candidate,{signal:work.controller.signal,generationContext:work.payload.context});
     if(this.reviewPending===work)this.reviewPending=null;

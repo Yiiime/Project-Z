@@ -1,3 +1,4 @@
+import {utteranceMetadata} from '../utterance.js';
 /**
  * Interactive local storyline with an optional asynchronous text generator.
  *
@@ -384,7 +385,7 @@ export class LiveEngine extends EventTarget {
   _say(text, mood = 'warm', gesture = 'explain', options = {}) {
     const phase = this._phase;
     this._queue.push({
-      text, mood, gesture, transition: ['smooth','sudden'].includes(options.transition)?options.transition:'auto',
+      ...utteranceMetadata('z',options,{allowLegacy:true}),text, mood, gesture, transition: ['smooth','sudden'].includes(options.transition)?options.transition:'auto',
       duration: options.duration || Math.min(14500, Math.max(3600, Array.from(text).length * 155)),
       priority: options.priority || 0, order: this._order++,
       scope: options.scope || 'phase', phase,
@@ -457,7 +458,7 @@ export class LiveEngine extends EventTarget {
       if (!item.resume) this._message(item.text, { name: 'Z', type: 'z', color: '#8c78a1', source: item.source });
       else this._emitState();
       this._event('speak', {
-        id: speechId, speechId, text: item.text, mood: item.mood, gesture: item.gesture, duration: item.duration,
+        ...utteranceMetadata('z',item,{allowLegacy:true}),id: speechId, speechId, text: item.text, mood: item.mood, gesture: item.gesture, duration: item.duration,
         scope: item.scope, replyTo: item.replyTo, source: item.source, transition:item.transition,
         resume: Boolean(item.resume), utteranceKey: String(item.order),
         preparedAudioKey:item.preparedAudioKey,

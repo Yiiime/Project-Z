@@ -1,16 +1,16 @@
 {
-  "version": 1,
-  "note": "测试场景导航锚点，与共享地图的静态知识分开。未绑定节点不提供移动动作。",
+  "version": 2,
+  "note": "正式地图锚点；跨场景路线读取 Content/IslandMap 的真实门与到达点。未有正式对应场景的知识地点不提供动作。",
   "anchors": [
     {
       "id": "z_home",
-      "place": "Street",
-      "x": 3.4
+      "place": "ZHome",
+      "x": 0
     },
     {
       "id": "liyuan_home",
-      "place": "Lighthouse",
-      "x": -4
+      "place": "CabinInterior",
+      "x": 0
     },
     {
       "id": "cafe",
@@ -19,33 +19,33 @@
     },
     {
       "id": "axing_lab",
-      "place": "Lighthouse",
-      "x": 2
+      "place": "ResearchInterior",
+      "x": 0
     },
     {
       "id": "visitor_center",
-      "place": "Street",
-      "x": 12
+      "place": "VisitorCenter",
+      "x": 0
     },
     {
       "id": "flower_shop",
-      "place": "Street",
-      "x": -6
+      "place": "FlowerShop",
+      "x": 0
     },
     {
       "id": "dock",
-      "place": "Street",
-      "x": 6
-    },
-    {
-      "id": "photo_studio",
-      "place": "Street",
+      "place": "Harbor",
       "x": -10
     },
     {
+      "id": "photo_studio",
+      "place": "PhotoStudio",
+      "x": 0
+    },
+    {
       "id": "residential_middle",
-      "place": "Street",
-      "x": 1
+      "place": "ResidentialCenter",
+      "x": 0
     },
     {
       "id": "main_street",
@@ -55,27 +55,27 @@
     {
       "id": "public_middle",
       "place": "Street",
-      "x": -3
+      "x": 8.63
     },
     {
       "id": "public_east",
-      "place": "Street",
-      "x": 14
+      "place": "EastCrossing",
+      "x": 0
     },
     {
       "id": "corner_garden",
       "place": "Street",
-      "x": -4
+      "x": -10
     },
     {
       "id": "ancient_tree_square",
-      "place": "Street",
-      "x": 15
+      "place": "Square",
+      "x": 0
     },
     {
       "id": "hilltop_platform",
-      "place": "Lighthouse",
-      "x": 6
+      "place": "Summit",
+      "x": 0
     }
   ],
   "edges": [

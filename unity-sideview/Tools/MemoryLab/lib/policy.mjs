@@ -22,6 +22,7 @@ export class Policy {
       allowUnionTypes: true,
     });
     this.validators = new Map();
+    this.turnValidators = new WeakMap();
   }
   schema(actor, kind = "output") {
     const defs = clone(this.catalog.contract.$defs),
@@ -111,6 +112,7 @@ export class Policy {
       throw new TurnError("不能对同一事件重复计分");
   }
   validate(c, o) {
+    if(o?.action?.option_id)o=this.expandTurn(c,o);
     this.validateInput(c);
     const v = this.validator(c.actor_id, "output");
     if (!v(o)) throw new TurnError("输出格式错误：" + v.errors[0].instancePath);
@@ -119,6 +121,20 @@ export class Policy {
     const action = o.action,
       info = o.info,
       mode = c.interaction.mode;
+    if (mode === "player" && /(?:^(?:认识[啊呀的]?[,，]\s*|你好[啊呀]?[,，]\s*)?Z[，,。！!？?]|你(?:就是|是)\s*Z(?:[，。！？!?]|$)|用\s*Z\s*的样子)/i.test(o.dialogue))
+      throw new TurnError("身份边界：当前收话人是玩家player，不是Z；请自然回应玩家，历史误称不代表身份事实");
+    const travel = info.travel_decision;
+    if(c.environment.companion_request && !travel)
+      throw new TurnError("同行决定：请明确接受、拒绝或稍后同行");
+    if(action.type==="escort_player" && (mode!=="player" || travel?.choice!=="accept" || travel.destination_id!==action.target))
+      throw new TurnError("同行决定：接受同行必须有最终目的地和escort_player动作");
+    if(travel?.choice==="accept" && action.type!=="escort_player")
+      throw new TurnError("同行决定：不能只口头答应或只走一个路口，请选择escort_player");
+    if(action.type==="cancel_action" && (mode!=="player" || travel?.choice!=="cancel" || action.target!==c.character_state.pending_action?.id))
+      throw new TurnError("同行决定：只能取消本人当前的同行行动");
+    if(travel?.choice==="cancel" && action.type!=="cancel_action")throw new TurnError("同行决定：取消必须提交cancel_action");
+    if(travel?.choice==="continue" && (c.character_state.pending_action?.type!=="escort_player" || travel.destination_id!==c.character_state.pending_action.target))throw new TurnError("同行决定：只能继续已有目的地，改目的地需先取消");
+    if(travel && ["decline","postpone","continue"].includes(travel.choice) && action.type!=="wait")throw new TurnError("同行决定：拒绝、暂缓或继续现有同行时选wait");
     const selected = c.available_actions.find(
       (a) =>
         a.id === action.action_id &&
@@ -311,17 +327,20 @@ export class Policy {
         throw new TurnError("宿主未开启远程通信");
     } else if (info.communication)
       throw new TurnError("没有通信动作不能添加通信信息");
+    const changedPeers=new Set();
     for (const p of info.peer_relation_changes || []) {
       const peer = c.character_state.peer_relations[p.target_actor_id];
       if (
         c.environment.intent_only ||
         p.target_actor_id === c.actor_id ||
+        changedPeers.has(p.target_actor_id)||(!p.affinity_delta&&!p.trust_delta)||
         !this.catalog.actors.has(p.target_actor_id) ||
         !peer ||
         peer.affinity == null ||
         peer.trust == null
       )
         throw new TurnError("只能更新本人对既有NPC的关系，走近前不更新关系");
+      changedPeers.add(p.target_actor_id);
       this.validateSources(p.source_event_ids, c, true);
       if (!p.source_event_ids.includes(c.interaction.source_event_id))
         throw new TurnError("NPC关系须引用本轮真实获得的信息");
@@ -350,10 +369,60 @@ export class Policy {
     }
     return o;
   }
+  compiledTurn(c) {
+    if(!this.turnValidators.has(c)){const schema=this.outputContract(c);this.turnValidators.set(c,{schema,validate:this.ajv.compile(schema)});}
+    return this.turnValidators.get(c);
+  }
+  modelContract(c) {
+    const s = clone(this.compiledTurn(c).schema);
+    // Transport/storage retains the v1.2 representation. Models only select an
+    // immutable option and propose deltas; they never duplicate engine state.
+    const i = s.$defs.info;
+    for (const k of ["affinity", "trust", "world_suspicion", "persuasion", "missing_state", "memory_updates", "knowledge_updates"])
+      delete i.properties[k];
+    for (const [k,v] of Object.entries(i.properties)) if (v === false) delete i.properties[k];
+    i.required = i.required.filter(k => Object.hasOwn(i.properties, k));
+    delete i.allOf;
+    s.$defs.output.properties.action = {
+      type: "object", additionalProperties: false, required: ["option_id"],
+      properties: { option_id: { enum: c.available_actions.map(a => a.id) } },
+    };
+    // These refer to canonical action fields; expansion is checked against the
+    // exact same dynamic contract before the proposal can enter storage.
+    delete s.$defs.output.allOf;
+    const communicationIds = c.available_actions.filter(a=>a.type==="communicate").map(a=>a.id);
+    if (communicationIds.length) s.$defs.output.allOf = [{
+      if: {properties:{action:{properties:{option_id:{enum:communicationIds}}}}},
+      then: {properties:{dialogue:{minLength:1},info:{required:["communication"]}}},
+      else: {properties:{info:{properties:{communication:false}}}},
+    }];
+    else delete i.properties.communication;
+    for (const [key,change] of Object.entries(i.properties.changes.properties)) {
+      const rule=c.character_state.metric_policy?.[key];
+      if (rule?.source === "engine" || c.character_state.info[key] === null) {delete i.properties.changes.properties[key];continue;}
+      change.properties.delta.not={const:0};
+      if(rule){change.properties.delta.minimum=rule.min_delta;change.properties.delta.maximum=rule.max_delta;}
+    }
+    return s;
+  }
+  expandInfo(c, compact) {
+    const info = { ...clone(c.character_state.info), ...clone(compact), memory_updates: [], knowledge_updates: [] };
+    for (const k of ["affinity", "trust", "world_suspicion", ...(c.actor_id === "z" ? [] : ["persuasion"])])
+      info[k] = c.character_state.info[k] === null ? null : c.character_state.info[k] + (compact.changes?.[k]?.delta || 0);
+    return info;
+  }
+  expandTurn(c, compact) {
+    const check = this.ajv.compile(this.modelContract(c));
+    if (!check(compact)) throw new TurnError("角色回合契约错误：" + check.errors[0].instancePath);
+    const a = c.available_actions.find(a => a.id === compact.action.option_id);
+    return { dialogue: compact.dialogue, action: { action_id: a.id, type: a.type, target: a.target, parameters: clone(a.parameters), description: a.description || a.type }, info: this.expandInfo(c, compact.info) };
+  }
   outputContract(c) {
     const s = this.schema(c.actor_id),
       i = s.$defs.info,
       p = i.properties;
+    if(c.environment.companion_request)i.required.push("travel_decision");
+    p.peer_relation_changes.items.properties.source_event_ids.contains={const:c.interaction.source_event_id};
     p.agenda_update.properties.goal_id.enum = (c.character_state.allowed_goals || []).map(g=>g.id||g);
     p.agenda_update.properties.next_action_id.enum = [null, ...(c.character_state.allowed_next_action_ids || [])];
     if (c.environment.intent_only) {

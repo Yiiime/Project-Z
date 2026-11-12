@@ -1,3 +1,4 @@
+import {deliveryText} from '../utterance.js';
 /**
  * Server-only Vivi 2.0 adapter, using the official HTTP SSE TTS endpoint.
  * https://docs.volcengine.com/docs/DoubaoVoice/HTTPChunkedSSEUnidirectionalStreaming-V3?lang=zh
@@ -72,10 +73,10 @@ async function ttsReadInput(request, url) {
     }
     text += decoder.decode();
     const input = JSON.parse(text);
-    if (!ttsObject(input) || Object.keys(input).some(key => !['requestId', 'text', 'mood'].includes(key)) || typeof input.requestId !== 'string' || !TTS_UUID.test(input.requestId)) throw new TtsError(400, 'tts_invalid_input', '语音请求编号或字段无效。');
+    if (!ttsObject(input) || Object.keys(input).some(key => !['requestId', 'text', 'mood', 'delivery'].includes(key)) || typeof input.requestId !== 'string' || !TTS_UUID.test(input.requestId)) throw new TtsError(400, 'tts_invalid_input', '语音请求编号或字段无效。');
     const mood = input.mood ?? 'happy';
     if (!TTS_MOODS.has(mood)) throw new TtsError(400, 'tts_invalid_input', '语音语气无效。');
-    return { requestId: input.requestId.toLowerCase(), text: ttsPlain(input.text, TTS_MAX_TEXT, true), mood };
+    return { requestId: input.requestId.toLowerCase(), text: ttsPlain(input.text, TTS_MAX_TEXT, true), mood, delivery:input.delivery===undefined?'':deliveryText(input.delivery) };
   } catch (error) {
     if (error instanceof TtsError) throw error;
     throw new TtsError(400, 'tts_invalid_input', '语音请求内容无效。');
@@ -108,8 +109,8 @@ function ttsPayload(value, userHash, format) {
   };
   return { user: { uid: `z_${userHash}` }, req_params: {
     text: value.text, speaker: TTS_SPEAKER,
-    audio_params: { format: format || 'mp3', sample_rate: 24000, enable_subtitle: true, speech_rate: value.mood === 'happy' ? 3 : value.mood === 'serious' ? -3 : 0 },
-    additions: JSON.stringify({ context_texts: [styles[value.mood]] }),
+    audio_params: { format: format || 'mp3', sample_rate: 24000, enable_subtitle: true, speech_rate: value.delivery ? 0 : value.mood === 'happy' ? 3 : value.mood === 'serious' ? -3 : 0 },
+    additions: JSON.stringify({ context_texts: [value.delivery || styles[value.mood]] }),
   } };
 }
 function ttsUpstreamError(status) {

@@ -29,7 +29,7 @@ namespace Seabreeze
             // Preparation belongs inside the opaque part of a scene transition.
             // Movement still observes WorldDirector.IsTransitioning and stays blocked.
             Clear();stage=destination;
-            try{Spawn();prepared=true;}
+            try{session.Memory.Actions.PrepareScene(stage);Spawn();prepared=true;}
             catch(System.Exception error)
             {
                 Clear();
@@ -47,7 +47,9 @@ namespace Seabreeze
         {
             foreach(var old in stage.GetComponentsInChildren<NpcPresence>(true))old.gameObject.SetActive(false);
             var staged=session.FirstDay?.StagedCast(stage.place);
-            foreach(var definition in staged??SevenCharacterCatalog.Actors.Where(a=>a.schedule!=null&&a.schedule.Length>0?a.schedule.Any(s=>s.place==stage.place):a.Place==stage.place))
+            foreach(var definition in staged??SevenCharacterCatalog.Actors.Where(a=>session.Memory.Actions.UsesSavedPosition(a.id)
+                ?session.State.memory.positions.Find(p=>p.actorId==a.id)?.place==stage.place.ToString()
+                :a.schedule!=null&&a.schedule.Length>0?a.schedule.Any(s=>s.place==stage.place):a.Place==stage.place))
             {
                 var saved=session.State.memory.positions.Find(a=>a.actorId==definition.id&&a.place==stage.place.ToString());
                 float x=staged!=null?session.FirstDay.CastPosition(definition.id,stage.place):saved!=null?saved.x:definition.x;
@@ -58,7 +60,7 @@ namespace Seabreeze
                 npc.motionResource=definition.motion;
                 var runtime=ScriptableObject.CreateInstance<NpcData>();runtime.hideFlags=HideFlags.DontSave;
                 runtime.id=definition.id;runtime.displayName=definition.displayName;runtime.description=definition.occupation;runtime.accent=definition.Accent;
-                runtime.schedule=staged==null&&definition.schedule!=null&&definition.schedule.Length>0?definition.schedule:new[]{new NpcSchedule { place=stage.place,from=TimePeriod.Morning,through=TimePeriod.Night }};
+                runtime.schedule=staged==null&&!session.Memory.Actions.UsesSavedPosition(definition.id)&&definition.schedule!=null&&definition.schedule.Length>0?definition.schedule:new[]{new NpcSchedule { place=stage.place,from=TimePeriod.Morning,through=TimePeriod.Night }};
                 npc.RuntimeData=runtime;data.Add(runtime);actors.Add(npc);world.Interactables.Add(interact);
             }
         }
@@ -75,7 +77,7 @@ namespace Seabreeze
         void Clear()
         {
             prepared=false;
-            foreach(var npc in actors)if(npc!=null){if(world!=null)world.Interactables.Remove(npc.GetComponent<Interactable>());npc.gameObject.SetActive(false);Destroy(npc.gameObject);}
+            foreach(var npc in actors)if(npc!=null){session?.Memory?.Runtimes?.SceneUnloaded(npc);if(world!=null)world.Interactables.Remove(npc.GetComponent<Interactable>());npc.gameObject.SetActive(false);Destroy(npc.gameObject);}
             actors.Clear();foreach(var d in data)if(d!=null)Destroy(d);data.Clear();
         }
         void OnDestroy(){Clear();}
