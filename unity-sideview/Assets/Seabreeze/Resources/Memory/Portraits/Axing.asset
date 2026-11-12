@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Axing
   m_EditorClassIdentifier: Assembly-CSharp::Seabreeze.Live2DModelProfile
   prefab: {fileID: 3954980612758703625, guid: 6981475f826ca4cd3bd5f15c91498f12, type: 3}
+  portraitDisplayMaterial: {fileID: 2100000, guid: ede5a7024fa14b329c1175ee01435313, type: 2}
   characterId: axing
   rendererIndex: 1
   renderLayer: 30

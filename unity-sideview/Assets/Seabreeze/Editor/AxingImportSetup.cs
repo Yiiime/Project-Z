@@ -27,7 +27,10 @@ namespace Seabreeze.Editor
         const string ModelAssetPath = ModelRoot + "/Model.asset";
         const string PrefabPath = ModelRoot + "/Model.prefab";
         const string ControllerPath = ModelRoot + "/Model.controller";
+        const string TexturePath = ModelRoot + "/texture_00.png";
         const string ProfilePath = "Assets/Seabreeze/Resources/Memory/Portraits/Axing.asset";
+        const int AtlasTextureSize = 4096;
+        const string DisplayMaterialPath = ModelRoot + "/AxingPortraitComposite.mat";
 
         // These are the authored motion3 clips, not their static exp3 endpoint
         // poses. The service-facing keys deliberately stay stable even if the
@@ -54,12 +57,14 @@ namespace Seabreeze.Editor
             }
         }
 
+        // Unity uses the v13 rig with two iris UVs redirected to the original portrait
+        // detail in the 4096 atlas. The model and texture must be imported as a pair.
         static readonly Dictionary<string, string> RequiredHashes =
             new Dictionary<string, string>(StringComparer.Ordinal)
             {
                 { "Model.model3.json", "4b52e973f09f3fe00181fe677efc09b850682f7172453e1516b2b99c2beb8c62" },
-                { "Model.moc3", "adfa5c9af1e75a84cb7c328073e295dd330008b19e491dccc4803f67f39784bf" },
-                { "texture_00.png", "7572a8609e161a71bb6f1c051992762d8fd14e9cd2404a7908e23a5f4d3c7004" }
+                { "Model.moc3", "833add2955a1027057954f97463977fc00204382c72c1bd3199ab91869259df9" },
+                { "texture_00.png", "6c504ce33ea789548d555473a6f5c553bd749473c044e6c24d6e10ef623e0057" }
             };
 
         [MenuItem("Seabreeze/Configure Axing v13 dialogue portrait")]
@@ -68,10 +73,12 @@ namespace Seabreeze.Editor
             EnsureEditMode();
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
             ValidateRawSource();
+            ConfigureTextureImport();
 
             AssetDatabase.ImportAsset(ModelJsonPath,
                 ImportAssetOptions.ForceUpdate | ImportAssetOptions.ForceSynchronousImport);
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+            ValidateTextureImport();
 
             var prefab = RequireAsset<GameObject>(PrefabPath, "阿星 Cubism model prefab");
             RequireAsset<CubismMoc>(ModelAssetPath, "阿星 Cubism model asset");
@@ -87,6 +94,7 @@ namespace Seabreeze.Editor
             }
 
             profile.prefab = prefab;
+            profile.portraitDisplayMaterial = RequireAsset<Material>(DisplayMaterialPath, "阿星 portrait display material");
             profile.characterId = "axing";
             profile.rendererIndex = 1;
             profile.renderLayer = 30;
@@ -149,6 +157,7 @@ namespace Seabreeze.Editor
             EnsureEditMode();
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
             ValidateRawSource();
+            ValidateTextureImport();
             var prefab = RequireAsset<GameObject>(PrefabPath, "阿星 Cubism model prefab");
             RequireAsset<CubismMoc>(ModelAssetPath, "阿星 Cubism model asset");
             ValidateParameters(prefab);
@@ -178,6 +187,54 @@ namespace Seabreeze.Editor
                 };
             }
             return bindings;
+        }
+
+        static void ConfigureTextureImport()
+        {
+            var importer = AssetImporter.GetAtPath(TexturePath) as TextureImporter;
+            if (importer == null)
+                throw new InvalidOperationException("阿星 atlas texture importer is unavailable: " + TexturePath);
+
+            importer.textureType = TextureImporterType.Default;
+            importer.spriteImportMode = SpriteImportMode.None;
+            importer.alphaIsTransparency = true;
+            // Preserve the color values the artist used for semi-transparent facial layers.
+            // The display material converts the finished composite for the linear Canvas.
+            importer.sRGBTexture = false;
+            importer.maxTextureSize = AtlasTextureSize;
+            importer.textureCompression = TextureImporterCompression.Uncompressed;
+            SetPortraitPlatformSettings(importer, "DefaultTexturePlatform");
+            SetPortraitPlatformSettings(importer, "Standalone");
+            importer.SaveAndReimport();
+            ValidateTextureImport();
+        }
+
+        static void SetPortraitPlatformSettings(TextureImporter importer, string platform)
+        {
+            var settings = importer.GetPlatformTextureSettings(platform);
+            settings.overridden = true;
+            settings.maxTextureSize = AtlasTextureSize;
+            settings.textureCompression = TextureImporterCompression.Uncompressed;
+            importer.SetPlatformTextureSettings(settings);
+        }
+
+        static void ValidateTextureImport()
+        {
+            var importer = AssetImporter.GetAtPath(TexturePath) as TextureImporter;
+            if (importer == null)
+                throw new InvalidOperationException("阿星 atlas texture importer is unavailable: " + TexturePath);
+
+            var defaultPlatform = importer.GetPlatformTextureSettings("DefaultTexturePlatform");
+            var standalone = importer.GetPlatformTextureSettings("Standalone");
+            if (importer.sRGBTexture || importer.maxTextureSize != AtlasTextureSize ||
+                importer.textureType != TextureImporterType.Default ||
+                importer.spriteImportMode != SpriteImportMode.None ||
+                importer.textureCompression != TextureImporterCompression.Uncompressed ||
+                defaultPlatform.maxTextureSize != AtlasTextureSize ||
+                defaultPlatform.textureCompression != TextureImporterCompression.Uncompressed ||
+                standalone.maxTextureSize != AtlasTextureSize ||
+                standalone.textureCompression != TextureImporterCompression.Uncompressed)
+                throw new InvalidDataException("阿星 atlas texture import settings did not stick: " + TexturePath);
         }
 
         static AnimatorController PrepareMotionController()
@@ -444,6 +501,8 @@ namespace Seabreeze.Editor
             if (profile.animatorController != controller || profile.idleState != "Idle" || profile.talkState != "Idle" ||
                 profile.proceduralIdle)
                 throw new InvalidDataException("阿星 profile must keep authored Idle for action return and speech.");
+            if (profile.portraitDisplayMaterial != RequireAsset<Material>(DisplayMaterialPath, "阿星 portrait display material"))
+                throw new InvalidDataException("阿星 portrait display material must match its atlas color space.");
             string[] keys = { "repair", "puzzled", "angry", "surprise", "sigh", "smile" };
             foreach (var key in keys)
                 if (profile.FindExpression(key) == null)
