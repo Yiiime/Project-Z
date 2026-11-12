@@ -65,6 +65,7 @@ namespace Seabreeze
         }
         void OnDestroy()
         {
+            ReleaseSeventhNight();
             DisposePhone();
             if(nativeLive!=null)nativeLive.Close();
             if(Instance==this){Instance=null;Time.timeScale=1f;}
@@ -89,6 +90,7 @@ namespace Seabreeze
             ambienceText=Label("Ambience",bottomStrip,BL,BL,new Vector2(76,26),new Vector2(1120,30),"",18,new Color(.79f,.78f,.86f),TextAlignmentOptions.MidlineLeft);
             objectiveText=Label("Current thought",hud,TL,TL,Vector2.zero,Vector2.zero,"",18,Muted);
             objectiveText.gameObject.SetActive(false);
+            Button("Seventh night shortcut",hud,BL,BL,new Vector2(44,94),new Vector2(220,46),"第七晚结局 →",OpenSeventhNight,true,19);
             var phone=KitCircle("Phone",hud,new Vector2(1,0),new Vector2(1,0),new Vector2(-34,54),64,"phone",()=>ToggleOverlay("phone"));
             Label("Key",phone.transform,new Vector2(.5f,0),TC,new Vector2(0,-6),new Vector2(92,24),"Tab",14,Muted,TextAlignmentOptions.Top);
             phoneBadge=MakeBadge(phone.transform,new Vector2(-2,2));
@@ -226,6 +228,7 @@ namespace Seabreeze
         void Update()
         {
             if(!initialized||session==null)return;
+            if(overlayMode=="z-ending"){UpdateSeventhNight();return;}
             bool playerChat=session.Memory!=null&&session.Memory.PlayerChatOpen;
             hud.gameObject.SetActive(!hidden&&!playerChat);
             if(playerChat){HideInteraction();return;}
@@ -310,7 +313,8 @@ namespace Seabreeze
                 yield return overlayContent.gameObject.AddComponent<PhoneSceneGlass>().Capture((RectTransform)overlayContent);
                 yield return FadeOverlay(1,Style.FadeInDuration);overlayBusy=false;overlayRoutine=null;yield break;
             }
-            if(mode=="map")BuildMap();
+            if(mode=="z-ending")BuildSeventhNight();
+            else if(mode=="map")BuildMap();
             else
             {
                 Vector2 size=mode=="pause"||mode=="restart"?new Vector2(760,730):mode=="ending"?new Vector2(1160,790):new Vector2(1280,790);
@@ -354,6 +358,7 @@ namespace Seabreeze
         }
         void FinishCloseOverlay()
         {
+            if(overlayMode=="z-ending")ReleaseSeventhNight();
             FinishPhoneClose();
             if(nativeLive!=null){nativeLive.Close();nativeLive=null;}
             canvas.enabled=true;overlayBusy=false;overlayRoutine=null;
@@ -404,11 +409,12 @@ namespace Seabreeze
             Button("Resume",overlayContent,TL,TL,new Vector2(46,-230),new Vector2(668,64),"继续散步",CloseOverlay,true,25);
             Button("Save",overlayContent,TL,TL,new Vector2(46,-308),new Vector2(668,56),"保存此刻",()=>{if(session.Save())ShowToast("已保存。下次会从这里继续。");},false,23);
             Button("Restart",overlayContent,TL,TL,new Vector2(46,-378),new Vector2(668,56),"重新开始这一天",()=>OpenOverlay("restart"),false,23);
-            Button("Model settings",overlayContent,TL,TL,new Vector2(46,-444),new Vector2(310,32),"对话服务设置",()=>Application.OpenURL(MemoryRuntimeConfig.Settings.serviceUrl+"/settings"),false,18);
-            Button("Load save",overlayContent,TL,TL,new Vector2(380,-444),new Vector2(330,32),"读取上次存档",()=>CloseOverlayThen(()=>session.LoadSavedGame()),false,18);
-            Label("Volume",overlayContent,TL,TL,new Vector2(46,-477),new Vector2(260,35),"环境声音",22,Muted);
-            var volumeLabel=Label("Volume value",overlayContent,TL,TL,new Vector2(610,-477),new Vector2(100,35),Mathf.RoundToInt(AudioListener.volume*100)+"%",22,Paper,TextAlignmentOptions.TopRight);
-            var track=Panel("Volume slider",overlayContent,TL,TL,new Vector2(48,-540),new Vector2(660,7),new Color(.24f,.32f,.42f,1),true);
+            Button("Enter seventh night",overlayContent,TL,TL,new Vector2(46,-444),new Vector2(668,56),"进入第七晚结局",OpenSeventhNight,true,23);
+            Button("Model settings",overlayContent,TL,TL,new Vector2(46,-510),new Vector2(310,32),"对话服务设置",()=>Application.OpenURL(MemoryRuntimeConfig.Settings.serviceUrl+"/settings"),false,18);
+            Button("Load save",overlayContent,TL,TL,new Vector2(380,-510),new Vector2(330,32),"读取上次存档",()=>CloseOverlayThen(()=>session.LoadSavedGame()),false,18);
+            Label("Volume",overlayContent,TL,TL,new Vector2(46,-548),new Vector2(260,35),"环境声音",22,Muted);
+            var volumeLabel=Label("Volume value",overlayContent,TL,TL,new Vector2(610,-548),new Vector2(100,35),Mathf.RoundToInt(AudioListener.volume*100)+"%",22,Paper,TextAlignmentOptions.TopRight);
+            var track=Panel("Volume slider",overlayContent,TL,TL,new Vector2(48,-606),new Vector2(660,7),new Color(.24f,.32f,.42f,1),true);
             var slider=track.gameObject.AddComponent<Slider>();slider.minValue=0;slider.maxValue=1;slider.value=AudioListener.volume;
             var handle=Panel("Handle",track.transform,new Vector2(0,.5f),C,Vector2.zero,new Vector2(18,24),Accent,true);
             slider.handleRect=handle.rectTransform;slider.targetGraphic=handle;slider.direction=Slider.Direction.LeftToRight;slider.navigation=new Navigation{mode=Navigation.Mode.None};

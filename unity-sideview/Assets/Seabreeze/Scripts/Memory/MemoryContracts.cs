@@ -23,13 +23,13 @@ namespace Seabreeze
         public bool ok,configured,verified,endConversation;
         public string error,warning,app,mode,model,runId,requestId,actorId,targetId,reason,topic,proposalId,text,expression,checkpoint;
         public int seq,configurationRevision,responseRevision;
-        public ActorTurn result;public JObject state;
+        public ActorTurn result;public JObject state,ending;
         public string[] recalledMemoryIds=Array.Empty<string>();
     }
     [Serializable] public sealed class NpcSavedPosition { public string actorId,place,locationId;public float x;public int day,period; }
     [Serializable] public sealed class MemorySaveState
     {
-        public string worldId="",checkpoint="";public int nextSeq,acknowledgedSeq;
+        public string worldId="",checkpoint="",seventhNightEndingJson="",seventhNightEndingRequestId="";public int nextSeq,acknowledgedSeq;
         public List<MemoryEvent> outbox=new List<MemoryEvent>();public List<NpcSavedPosition> positions=new List<NpcSavedPosition>();
         public void Sanitize(){if(string.IsNullOrEmpty(worldId))worldId=Guid.NewGuid().ToString("N");if(checkpoint==null)checkpoint="";if(outbox==null)outbox=new List<MemoryEvent>();if(positions==null)positions=new List<NpcSavedPosition>();nextSeq=Math.Max(nextSeq,acknowledgedSeq);foreach(var e in outbox)if(e!=null)nextSeq=Math.Max(nextSeq,e.seq);}
     }

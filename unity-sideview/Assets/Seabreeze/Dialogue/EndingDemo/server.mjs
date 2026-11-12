@@ -19,7 +19,8 @@ const atomic = async (file, value) => {
   await writeFile(temp, JSON.stringify(value, null, 2), { mode: 0o600 });
   await rename(temp, file);
 };
-export async function createEndingServer({ dataDir = process.env.Z_ENDING_DATA || DEFAULT_DATA, provider: suppliedProvider } = {}) {
+export async function createEndingServer({ dataDir = process.env.Z_ENDING_DATA || DEFAULT_DATA, provider: suppliedProvider,
+  selectionPath = join(DEFAULT_DATA, 'source-selection.json') } = {}) {
   await mkdir(dataDir, { recursive: true });
   const scenarioFile = join(dataDir, 'scenario.json'), configFile = join(dataDir, 'model.json');
   let scenario = validateScenario(JSON.parse(await readFile(existsSync(scenarioFile) ? scenarioFile : join(ROOT, 'scenario.example.json'), 'utf8')));
@@ -87,6 +88,7 @@ export async function createEndingServer({ dataDir = process.env.Z_ENDING_DATA |
         if (busy) throw new EndingError('Z正在作出选择，请等待完成再保存', 409);
         if (input.revision !== revisionOf(scenario)) throw new EndingError('本局经历已在另一个窗口更新，请重新加载后合并', 409);
         const next = validateScenario(input.scenario); await atomic(scenarioFile, next); scenario = next;
+        if (input.useFile && selectionPath) await atomic(selectionPath, { scenarioPath: scenarioFile, revision: revisionOf(next) });
         json(res, 200, { scenario, revision: revisionOf(scenario) }); return;
       }
       if (req.method === 'PUT' && url.pathname === '/api/model') {

@@ -17,6 +17,7 @@ import { Store, uid } from "./lib/store.mjs";
 import { Catalog, PROJECT } from "./lib/catalog.mjs";
 import { ModelProvider } from "./lib/provider.mjs";
 import { Engine } from "./lib/engine.mjs";
+import { GameEndingCoordinator } from "./lib/ending.mjs";
 import { TurnError, canonical } from "./lib/policy.mjs";
 export function environmentFromFile(path) {
   if (!path) return;
@@ -50,6 +51,7 @@ export function createServer({
   songSubmit,
   decide,
   backgroundEnabled = true,
+  endingScenarioPath,
   configPath = process.env.Z_MEMORY_CONFIG ||
     join(APP_ROOT, ".local/model.json"),
 } = {}) {
@@ -77,11 +79,13 @@ export function createServer({
   const engine = new Engine(store, catalog, provider, { decide }),
     token = randomBytes(24).toString("hex");
   const daySongs=songSubmit ? new DaySongDispatch(songSubmit) : null;
+  const endings = new GameEndingCoordinator(engine, catalog, provider, { scenarioPath: endingScenarioPath });
   let background = false;
   const status = () => ({
     ok: true,
     app: "moonlife-runtime",
     protocol: 2,
+    endingIntegration: true,
     configurationRevision,
     mode: provider.mode || "real",
     version: catalog.registry.pack_version,
@@ -601,6 +605,10 @@ export function createServer({
               conversation: p.conversationId,
             });
             result = { ok: true };
+          } else if (url.pathname === "/api/game/ending") {
+            const ending = await endings.generate(p, checkRun);
+            checkRun(p);
+            result = gameResponse(world, { ending });
           } else if (url.pathname === "/api/game/checkpoint")
             result = gameResponse(world);
           else if (url.pathname === "/api/game/close") {

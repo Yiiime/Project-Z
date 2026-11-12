@@ -184,7 +184,8 @@ namespace Seabreeze
                 Label("Caption",button.transform,new Vector2(.5f,0),TC,new Vector2(0,-4),new Vector2(104,26),labels[i],16,PhoneWhite,TextAlignmentOptions.Top);
                 if(i==0&&UnreadCount>0){var badge=MakeBadge(button.transform,new Vector2(-8,1));badge.text=UnreadCount>9?"9+":UnreadCount.ToString();}
             }
-            var hint=PhoneText(phonePage,24,658,336,22,"Tab 收起手机 · 回到眼前的风景",13,PhoneMuted);hint.alignment=TextAlignmentOptions.Center;
+            PhoneButton(phonePage,"Seventh night ending",24,614,336,42,"第七晚 · 进入结局 →",OpenSeventhNight,16,true);
+            var hint=PhoneText(phonePage,24,676,336,22,"Tab 收起手机 · 回到眼前的风景",13,PhoneMuted);hint.alignment=TextAlignmentOptions.Center;
         }
 
         // Shared sizing/typography, with untrusted authored/AI text always rendered literally.

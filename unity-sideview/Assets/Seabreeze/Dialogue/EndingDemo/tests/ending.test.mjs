@@ -56,7 +56,7 @@ test('choosing to stay does not turn uncertainty or shutdown into safety', () =>
 async function fixture(t, provider) {
   const dataDir = await mkdtemp(join(tmpdir(), 'z-ending-test-'));
   await import('node:fs/promises').then(fs => fs.writeFile(join(dataDir, 'scenario.json'), JSON.stringify(sample)));
-  const app = await createEndingServer({ dataDir, provider });
+  const app = await createEndingServer({ dataDir, provider, selectionPath: join(dataDir, 'source-selection.json') });
   await new Promise(resolve => app.server.listen(0, '127.0.0.1', resolve));
   const base = `http://127.0.0.1:${app.server.address().port}`, status = await fetch(base + '/api/status').then(r => r.json());
   t.after(async () => { app.server.closeAllConnections(); await new Promise(resolve => app.server.close(resolve)); await rm(dataDir, { recursive: true, force: true }); });
@@ -87,12 +87,14 @@ test('both offline previews have all known memories and reloadable standalone ru
   }
 });
 test('JSON file upload previews without overwriting active run until confirmed', async t => {
-  const { call } = await fixture(t), next = copy(); next.title = '上传的故事';
+  const { call, app } = await fixture(t), next = copy(); next.title = '上传的故事';
   const draft = await call('/api/import', 'POST', { name: 'story.json', text: JSON.stringify(next) });
   assert.equal(draft.status, 200); assert.equal(draft.data.scenario.title, '上传的故事');
   assert.equal((await call('/api/scenario')).data.scenario.title, sample.title);
-  const saved = await call('/api/scenario', 'PUT', { scenario: draft.data.scenario, revision: draft.data.revision });
+  const saved = await call('/api/scenario', 'PUT', { scenario: draft.data.scenario, revision: draft.data.revision, useFile: true });
   assert.equal(saved.status, 200); assert.equal(saved.data.scenario.title, '上传的故事');
+  const selected = JSON.parse(await readFile(join(app.dataDir, 'source-selection.json'), 'utf8'));
+  assert.equal(selected.scenarioPath, join(app.dataDir, 'scenario.json'));
 });
 test('unconfigured model never silently substitutes a preview', async t => {
   const provider = { publicConfig: () => ({ configured: false }) };

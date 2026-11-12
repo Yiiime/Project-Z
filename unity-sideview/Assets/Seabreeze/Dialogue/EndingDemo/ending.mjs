@@ -8,13 +8,13 @@ const string = (value, label, max, optional = false) => {
     throw new EndingError(`${label}需${optional ? '为' : '填写'}不超过${max}字的文本`);
   return value.trim();
 };
-export function validateScenario(input) {
+export function validateScenario(input, { maxMemories = 40 } = {}) {
   if (!input || input.version !== 1) throw new EndingError('需要 version: 1 的本局经历文件');
   const world = input.world;
   if (!world || typeof world.departureReady !== 'boolean') throw new EndingError('请填写离岛准备是否完成');
   if (!['pending', 'succeeded', 'blocked'].includes(world.leaveOutcome)) throw new EndingError('离岛结果无效');
   if (!['uncertain', 'safe', 'shutdown'].includes(world.stayOutcome)) throw new EndingError('留岛结果无效');
-  if (!Array.isArray(input.memories) || input.memories.length > 40) throw new EndingError('最多录入40条经历');
+  if (!Array.isArray(input.memories) || input.memories.length > maxMemories) throw new EndingError(`最多录入${maxMemories}条经历`);
   const ids = new Set();
   const memories = input.memories.map((m, i) => {
     if (!m || typeof m.id !== 'string' || !/^[a-zA-Z0-9_-]{1,64}$/.test(m.id) || ids.has(m.id))

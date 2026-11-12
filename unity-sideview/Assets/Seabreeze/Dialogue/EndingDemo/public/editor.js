@@ -39,7 +39,7 @@ $('drop-zone').ondrop = event => { event.preventDefault(); $('drop-zone').classL
 $('use-file').onclick = async () => {
   if (!draft || busy) return; busy = true; $('use-file').disabled = true; $('error').textContent = '';
   try {
-    const saved = await api('/api/scenario', { method: 'PUT', body: JSON.stringify({ revision, scenario: draft }) });
+    const saved = await api('/api/scenario', { method: 'PUT', body: JSON.stringify({ revision, scenario: draft, useFile: true }) });
     revision = saved.revision; current = saved.scenario; draft = null; busy = false; location.href = '/';
   } catch (error) { $('error').textContent = error.message; }
   finally { busy = false; $('use-file').disabled = false; }

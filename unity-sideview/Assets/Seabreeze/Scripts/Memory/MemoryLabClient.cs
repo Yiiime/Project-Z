@@ -142,6 +142,24 @@ namespace Seabreeze
         public void InviteTask(string task,string actor,string text,Action<MemoryReply> completed)
         {session.Memory.Append(new MemoryEvent{kind="task_invite",taskId=task,actorId=actor,text=text,conversationId=session.Memory.Conversations.ActiveId});StartCoroutine(AfterSynchronized(completed));}
         IEnumerator AfterSynchronized(Action<MemoryReply> completed){while(!CanGenerate)yield return null;completed(new MemoryReply{ok=true});}
+        public void GenerateEnding(string mode,Action<MemoryReply> complete,Action<string> failed)
+        { StartCoroutine(EndingAfterSynchronized(mode,complete,failed)); }
+        IEnumerator EndingAfterSynchronized(string mode,Action<MemoryReply> complete,Action<string> failed)
+        {
+            var state=session.State.memory; int version=generation; float deadline=Time.unscaledTime+45;
+            while(version==generation&&!CanGenerate&&Time.unscaledTime<deadline)yield return null;
+            if(version!=generation||session.State.memory!=state)yield break;
+            if(!CanGenerate){failed(Status+"。请先连接游戏的记忆服务。");yield break;}
+            var request=RequestBase();request.details=new Newtonsoft.Json.Linq.JObject{{"mode",mode}};
+            if(string.IsNullOrEmpty(state.seventhNightEndingRequestId))state.seventhNightEndingRequestId=request.requestId;
+            request.requestId=state.seventhNightEndingRequestId;session.Save();
+            yield return Send("/api/game/ending",request,600,r=>{
+                if(session.State.memory!=state)return;
+                Accept(r,state);
+                if(r.ending==null){failed("游戏服务没有返回结局。");return;}
+                state.seventhNightEndingJson=r.ending.ToString(Newtonsoft.Json.Formatting.None);state.seventhNightEndingRequestId="";session.Save();complete(r);
+            },failed);
+        }
         public void ConfirmTaskStep(string task,string step,string performer,Newtonsoft.Json.Linq.JObject evidence)
         {session.Memory.Append(new MemoryEvent{kind="task_receipt",taskId=task,stepId=step,performerId=performer,receiptId=Guid.NewGuid().ToString("N"),succeeded=true,participants=evidence?["participants"]?.ToObject<string[]>()??Array.Empty<string>(),voluntaryConsents=evidence?["voluntary_consents"]?.ToObject<string[]>()??Array.Empty<string>(),messageEventId=(string)evidence?["message_event_id"]});}
         IEnumerator Send(string endpoint,MemoryRequest input,int seconds,Action<MemoryReply> complete,Action<string> failed)
