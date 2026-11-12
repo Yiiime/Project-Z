@@ -27,7 +27,9 @@ namespace Seabreeze.Editor
         const string ModelAssetPath = ModelRoot + "/Model.asset";
         const string PrefabPath = ModelRoot + "/Model.prefab";
         const string ControllerPath = ModelRoot + "/Model.controller";
+        const string TexturePath = ModelRoot + "/texture_00.png";
         const string ProfilePath = "Assets/Seabreeze/Resources/Memory/Portraits/Axing.asset";
+        const int AtlasTextureSize = 4096;
 
         // These are the authored motion3 clips, not their static exp3 endpoint
         // poses. The service-facing keys deliberately stay stable even if the
@@ -68,10 +70,12 @@ namespace Seabreeze.Editor
             EnsureEditMode();
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
             ValidateRawSource();
+            ConfigureTextureImport();
 
             AssetDatabase.ImportAsset(ModelJsonPath,
                 ImportAssetOptions.ForceUpdate | ImportAssetOptions.ForceSynchronousImport);
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+            ValidateTextureImport();
 
             var prefab = RequireAsset<GameObject>(PrefabPath, "阿星 Cubism model prefab");
             RequireAsset<CubismMoc>(ModelAssetPath, "阿星 Cubism model asset");
@@ -149,6 +153,7 @@ namespace Seabreeze.Editor
             EnsureEditMode();
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
             ValidateRawSource();
+            ValidateTextureImport();
             var prefab = RequireAsset<GameObject>(PrefabPath, "阿星 Cubism model prefab");
             RequireAsset<CubismMoc>(ModelAssetPath, "阿星 Cubism model asset");
             ValidateParameters(prefab);
@@ -178,6 +183,51 @@ namespace Seabreeze.Editor
                 };
             }
             return bindings;
+        }
+
+        static void ConfigureTextureImport()
+        {
+            var importer = AssetImporter.GetAtPath(TexturePath) as TextureImporter;
+            if (importer == null)
+                throw new InvalidOperationException("阿星 atlas texture importer is unavailable: " + TexturePath);
+
+            importer.textureType = TextureImporterType.Default;
+            importer.spriteImportMode = SpriteImportMode.None;
+            importer.alphaIsTransparency = true;
+            importer.maxTextureSize = AtlasTextureSize;
+            importer.textureCompression = TextureImporterCompression.Uncompressed;
+            SetPortraitPlatformSettings(importer, "DefaultTexturePlatform");
+            SetPortraitPlatformSettings(importer, "Standalone");
+            importer.SaveAndReimport();
+            ValidateTextureImport();
+        }
+
+        static void SetPortraitPlatformSettings(TextureImporter importer, string platform)
+        {
+            var settings = importer.GetPlatformTextureSettings(platform);
+            settings.overridden = true;
+            settings.maxTextureSize = AtlasTextureSize;
+            settings.textureCompression = TextureImporterCompression.Uncompressed;
+            importer.SetPlatformTextureSettings(settings);
+        }
+
+        static void ValidateTextureImport()
+        {
+            var importer = AssetImporter.GetAtPath(TexturePath) as TextureImporter;
+            if (importer == null)
+                throw new InvalidOperationException("阿星 atlas texture importer is unavailable: " + TexturePath);
+
+            var defaultPlatform = importer.GetPlatformTextureSettings("DefaultTexturePlatform");
+            var standalone = importer.GetPlatformTextureSettings("Standalone");
+            if (importer.maxTextureSize != AtlasTextureSize ||
+                importer.textureType != TextureImporterType.Default ||
+                importer.spriteImportMode != SpriteImportMode.None ||
+                importer.textureCompression != TextureImporterCompression.Uncompressed ||
+                defaultPlatform.maxTextureSize != AtlasTextureSize ||
+                defaultPlatform.textureCompression != TextureImporterCompression.Uncompressed ||
+                standalone.maxTextureSize != AtlasTextureSize ||
+                standalone.textureCompression != TextureImporterCompression.Uncompressed)
+                throw new InvalidDataException("阿星 atlas texture import settings did not stick: " + TexturePath);
         }
 
         static AnimatorController PrepareMotionController()

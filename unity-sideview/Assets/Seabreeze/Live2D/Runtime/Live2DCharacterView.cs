@@ -22,6 +22,8 @@ namespace Seabreeze
         Live2DModelProfile profile;
         Live2DStateDriver driver;
         Animator animator;
+        Canvas rootCanvas;
+        readonly Vector3[] viewportCorners = new Vector3[4];
         string lastEmotion, lastMotion;
         bool lastTalking;
         int lastWidth, lastHeight;
@@ -29,6 +31,7 @@ namespace Seabreeze
         int portraitMotionGeneration;
         string activePortraitMotion;
         ZhouboGloomOverlay zhouboGloom;
+        const int MinPortraitTextureDimension = 2;
 
         public bool IsVisible => stage != null && stage.activeSelf;
         public Live2DModelProfile CurrentProfile => profile;
@@ -41,6 +44,7 @@ namespace Seabreeze
             if (this.viewport == viewport && image != null) return;
             Release();
             this.viewport = viewport;
+            rootCanvas = viewport.GetComponentInParent<Canvas>(true)?.rootCanvas;
             var go = new GameObject("Live2D Render Surface", typeof(RectTransform), typeof(CanvasRenderer), typeof(RawImage));
             go.transform.SetParent(viewport, false);
             var rect = (RectTransform)go.transform;
@@ -75,7 +79,11 @@ namespace Seabreeze
             // Keep model and camera in world units. The canvas scales only the resulting RawImage.
             if (stage.scene != gameObject.scene)
                 SceneManager.MoveGameObjectToScene(stage, gameObject.scene);
-            stage.transform.position = new Vector3(10000, 10000, 0);
+            // Axing's thin eyelids lose vertex precision in the distant portrait
+            // stage. This off-map position keeps the model and camera together.
+            stage.transform.position = string.Equals(next.characterId, "axing", StringComparison.OrdinalIgnoreCase)
+                ? new Vector3(64f, 64f, 0f)
+                : new Vector3(10000f, 10000f, 0f);
             stage.SetActive(false);
             modelObject = Instantiate(next.prefab, stage.transform);
             modelObject.name = next.characterId + " Cubism Model";
@@ -299,15 +307,68 @@ namespace Seabreeze
         void ResizeTarget()
         {
             if (viewport == null || modelCamera == null || profile == null) return;
-            float aspect = Mathf.Clamp(viewport.rect.width / Mathf.Max(1, viewport.rect.height), .25f, 3f);
-            int height = Mathf.Clamp(profile.textureHeight, 256, 2048);
-            int width = Mathf.Clamp(Mathf.RoundToInt(height * aspect), 128, 4096);
+            var pixelSize = GetViewportPixelSize();
+            if (pixelSize.x < MinPortraitTextureDimension || pixelSize.y < MinPortraitTextureDimension)
+            {
+                // The first Show can run before the overlay Canvas has completed
+                // its layout. Keep the old profile value as a one-frame fallback;
+                // LateUpdate replaces it with the real pixel size once available.
+                float fallbackAspect = Mathf.Clamp(viewport.rect.width / Mathf.Max(1f, viewport.rect.height), .25f, 3f);
+                int fallbackHeight = Mathf.Max(MinPortraitTextureDimension, profile.textureHeight);
+                pixelSize = new Vector2(fallbackHeight * fallbackAspect, fallbackHeight);
+            }
+
+            float aspect = Mathf.Clamp(pixelSize.x / Mathf.Max(1f, pixelSize.y), .25f, 3f);
+            int width = Mathf.Max(MinPortraitTextureDimension, Mathf.RoundToInt(pixelSize.x));
+            int height = Mathf.Max(MinPortraitTextureDimension, Mathf.RoundToInt(pixelSize.y));
+            int maxDimension = SystemInfo.maxTextureSize;
+            if (maxDimension > 0 && Mathf.Max(width, height) > maxDimension)
+            {
+                float resize = maxDimension / (float)Mathf.Max(width, height);
+                width = Mathf.Max(MinPortraitTextureDimension, Mathf.RoundToInt(width * resize));
+                height = Mathf.Max(MinPortraitTextureDimension, Mathf.RoundToInt(height * resize));
+            }
+
             if (target != null && target.IsCreated() && width == lastWidth && height == lastHeight) return;
-            if (target != null) { modelCamera.targetTexture = null; target.Release(); Destroy(target); }
-            target = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32)
-            { name = "Live2D Portrait Alpha", antiAliasing = 1, filterMode = FilterMode.Bilinear, wrapMode = TextureWrapMode.Clamp };
-            target.Create(); modelCamera.targetTexture = target; modelCamera.aspect = aspect;
+            modelCamera.targetTexture = null;
+            if (target == null)
+            {
+                target = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32)
+                { name = "Live2D Portrait Alpha", antiAliasing = 1, filterMode = FilterMode.Bilinear, wrapMode = TextureWrapMode.Clamp };
+            }
+            else
+            {
+                // Keep the managed RenderTexture object stable while a window is
+                // being resized; only its native storage is recreated.
+                target.Release();
+                target.width = width;
+                target.height = height;
+            }
+            if (!target.IsCreated()) target.Create();
+            modelCamera.targetTexture = target; modelCamera.aspect = aspect;
             image.texture = target; lastWidth = width; lastHeight = height;
+        }
+
+        Vector2 GetViewportPixelSize()
+        {
+            // Project the displayed rectangle. Its world corners already include
+            // the CanvasScaler transform on a Retina screen-space overlay.
+            viewport.GetWorldCorners(viewportCorners);
+            Camera projectionCamera = rootCanvas != null && rootCanvas.renderMode != RenderMode.ScreenSpaceOverlay
+                ? rootCanvas.worldCamera
+                : null;
+            Vector2 lowerLeft = RectTransformUtility.WorldToScreenPoint(projectionCamera, viewportCorners[0]);
+            Vector2 upperRight = RectTransformUtility.WorldToScreenPoint(projectionCamera, viewportCorners[2]);
+            Vector2 size = new Vector2(Mathf.Abs(upperRight.x - lowerLeft.x), Mathf.Abs(upperRight.y - lowerLeft.y));
+
+            // MemoryDialogueView scales the portrait RectTransform during its
+            // entrance animation. Do not resize the native target for that visual
+            // transition; the RawImage still receives the presentation scale.
+            Vector3 localScale = viewport.localScale;
+            if (Mathf.Abs(localScale.x) > .0001f) size.x /= Mathf.Abs(localScale.x);
+            if (Mathf.Abs(localScale.y) > .0001f) size.y /= Mathf.Abs(localScale.y);
+
+            return size;
         }
         static void SetLayer(Transform node, int layer)
         {
@@ -364,7 +425,7 @@ namespace Seabreeze
             if (modelCamera != null) modelCamera.targetTexture = null;
             if (target != null) { target.Release(); Destroy(target); target = null; }
             if (stage != null) { stage.SetActive(false); Destroy(stage); }
-            stage = null; modelObject = null; modelCamera = null; driver = null; animator = null; zhouboGloom = null; profile = null;
+            stage = null; modelObject = null; modelCamera = null; driver = null; animator = null; rootCanvas = null; zhouboGloom = null; profile = null;
         }
         void Release()
         {
