@@ -6,21 +6,24 @@
     "revision": 49,
     "reviewed_on": "2026-11-07",
     "name_bindings": {
-      "留洋": "林序",
-      "晴野": "小小晴"
+      "留洋": "linxu",
+      "林序": "linxu",
+      "晴野": "xiaoxiaoqing",
+      "小小晴": "xiaoxiaoqing"
     },
     "unbound_names": [
       "青青"
     ],
-    "note": "保留项目已确认的八位角色名称；不因地图标签新增角色。图未确认沙滩入口、建筑门向、营业状态或室内路径。"
+    "note": "保留项目已确认的八位角色名称；不因地图标签新增角色。图未确认沙滩入口、建筑门向、营业状态或室内路径。",
+    "persona_reviewed_on": "2026-11-12"
   },
   "layout": [
     "地图方向上北下南左西右东。生活区三条东西街道由北向南：居民街、公共街、海滨街。森林在东北，沙滩在东南，海湾在西南。",
-    "居民街北侧住宅从西到东：林序的家、李庭的家、小小晴的家、Z的家、周伯伯的家。",
+    "居民街北侧住宅从西到东：留洋的家、李庭的家、晴野的家、Z的家、周伯伯的家。",
     "公共街一带由西到东：码头、游客中心、西侧十字路口、街角花园、花店、中部连接路、咖啡店、照相馆、东侧连接路旁的古树广场。店铺与住宅分开。",
     "海滨街北侧由西到东：海岛杂货铺、海边旧书屋、海滨休息区、海风酒吧。由海滨街一侧到达。",
     "西侧连接路在李庭家南侧连接居民街，往南经过游客中心东侧十字路口，到海滨街西端。",
-    "中部连接路在小小晴家与Z家之间，向南只到花店与咖啡店之间的公共街，不能继续直穿到旧书屋或海滨街。",
+    "中部连接路在晴野家与Z家之间，向南只到花店与咖啡店之间的公共街，不能继续直穿到旧书屋或海滨街。",
     "东侧连接路连接居民街东端、古树广场附近、公共街东端、海滨街东端。公共街与海滨街之间要走西侧或东侧连接路。",
     "从海滨街西端继续向西就是木质栈道，尽头有长椅；栈道不连接码头，不能步行跨过海湾。",
     "森林小路依次连接居民街东端／森林入口、梨园的家、阿星的研究所、山顶平台。梨园家在周伯伯家东北方向，研究所在梨园家北侧，山顶平台在研究所以东。研究所与平台是不同地点；没有沙滩直上平台的已设定道路。",
@@ -30,7 +33,7 @@
     "residential_west": {
       "name": "居民街西段",
       "kind": "road",
-      "description": "北侧是林序的家，向东到李庭家附近的西侧连接路。",
+      "description": "北侧是留洋的家，向东到李庭家附近的西侧连接路。",
       "aliases": []
     },
     "residential_west_junction": {
@@ -42,7 +45,7 @@
     "residential_middle": {
       "name": "居民街中部路口",
       "kind": "junction",
-      "description": "小小晴家与Z家之间；向南经中部连接路只到公共街。",
+      "description": "晴野家与Z家之间；向南经中部连接路只到公共街。",
       "aliases": []
     },
     "residential_east": {
@@ -91,7 +94,7 @@
     "dock": {
       "name": "码头",
       "kind": "facility",
-      "description": "公共街最西端；游客中心在正东。林序常在这里检查船。码头与木质栈道不同。",
+      "description": "公共街最西端；游客中心在正东。留洋常在这里检查船。码头与木质栈道不同。",
       "aliases": []
     },
     "visitor_center": {
@@ -109,8 +112,11 @@
     "flower_shop": {
       "name": "花店",
       "kind": "facility",
-      "description": "公共街北侧；西邻街角花园，东边隔中部连接路是咖啡店。小小晴经营。",
-      "aliases": []
+      "description": "公共街北侧；西邻街角花园，东边隔中部连接路是咖啡店。晴野经营。",
+      "aliases": [
+        "晴野的花店",
+        "小小晴的花店"
+      ]
     },
     "cafe": {
       "name": "咖啡店",
@@ -134,37 +140,40 @@
       ]
     },
     "linxu_home": {
-      "name": "林序的家",
+      "name": "留洋的家",
       "kind": "residence",
       "description": "居民街北侧五处住宅最西边；东邻李庭家。去码头经居民街向东、西侧连接路向南、公共街向西。",
       "aliases": [
-        "林序家",
+        "留洋家",
         "留洋的家",
-        "船长家"
+        "船长家",
+        "林序家",
+        "林序的家"
       ]
     },
     "liting_home": {
       "name": "李庭的家",
       "kind": "residence",
-      "description": "居民街北侧；西邻林序家，东邻小小晴家，南侧附近是西侧连接路。咖啡店在家东南方向。",
+      "description": "居民街北侧；西邻留洋家，东邻晴野家，南侧附近是西侧连接路。咖啡店在家东南方向。",
       "aliases": [
         "李庭家"
       ]
     },
     "xiaoxiaoqing_home": {
-      "name": "小小晴的家",
+      "name": "晴野的家",
       "kind": "residence",
       "description": "居民街北侧；西邻李庭家，东邻Z家，中部连接路在它与Z家之间。",
       "aliases": [
-        "小小晴家",
+        "晴野家",
         "晴野的家",
-        "晴野家"
+        "小小晴家",
+        "小小晴的家"
       ]
     },
     "z_home": {
       "name": "Z的家",
       "kind": "residence",
-      "description": "居民街北侧；西邻小小晴家，东邻周伯伯家，中部连接路在西侧。",
+      "description": "居民街北侧；西邻晴野家，东邻周伯伯家，中部连接路在西侧。",
       "aliases": [
         "Z家",
         "Z 的家",
@@ -415,7 +424,7 @@
       "public_note": "生活在岛上，平时直播、逛街和探索；认识以下七位岛民。"
     },
     "linxu": {
-      "name": "林序",
+      "name": "留洋",
       "occupation": "船长",
       "workplace": "dock",
       "home": "linxu_home",
@@ -432,15 +441,15 @@
     },
     "liyuan": {
       "name": "梨园",
-      "occupation": "地图绘制与路线勘察，经营地图业务",
+      "occupation": "独居岛民，常住森林小屋",
       "workplace": "liyuan_home",
       "home": "liyuan_home",
       "usual_place": "liyuan_home",
-      "public_note": "常在森林小屋画图和接问路委托；地图没有另一间独立的地图铺建筑。"
+      "public_note": "平常话少、独来独往，身边有旧地图；没有另开的地图铺。"
     },
     "axing": {
       "name": "阿星",
-      "occupation": "技术员，负责设备维护",
+      "occupation": "工程师，负责设备维护",
       "workplace": "axing_lab",
       "home": null,
       "usual_place": "axing_lab",
@@ -448,15 +457,15 @@
     },
     "zhengyi": {
       "name": "正义",
-      "occupation": "警察",
+      "occupation": "岛上巡警",
       "workplace": "visitor_center",
       "home": null,
       "usual_place": "visitor_center",
       "public_note": "常在游客中心，也会在岛上巡逻。"
     },
     "xiaoxiaoqing": {
-      "name": "小小晴",
-      "occupation": "花店老板，照顾植物与制作花束",
+      "name": "晴野",
+      "occupation": "花店店长，负责花艺与植被养护",
       "workplace": "flower_shop",
       "home": "xiaoxiaoqing_home",
       "usual_place": "flower_shop",

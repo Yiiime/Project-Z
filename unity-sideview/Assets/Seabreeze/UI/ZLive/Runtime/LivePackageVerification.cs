@@ -1,3 +1,4 @@
+using System.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -188,7 +189,7 @@ namespace ZLive {
                 if (!HasMessage(chat,line)) { Fail("sent chat message: "+line); yield break; }
             }
             if (Array.IndexOf(Environment.GetCommandLineArgs(),"--verify-live-audience") >= 0) {
-                var names = new HashSet<string>{"晚风来信","月亮邮差","海盐汽水","橘子浮标","倒带一格","困困豆","听雨同学","烤面包边"};
+                var names = new HashSet<string>(SevenCharacterCatalog.Actors.Where(a=>a.id!="z").Select(a=>a.displayName));
                 deadline = Time.realtimeSinceStartupAsDouble + 65;
                 while (names.Count > 0 && Time.realtimeSinceStartupAsDouble < deadline) {
                     foreach (var label in chat.Query<Label>(className:"nickname").ToList())
@@ -198,7 +199,7 @@ namespace ZLive {
                 if (names.Count != 0 || chat.Query<Label>(className:"viewer-initial").ToList().Count < 5) {
                     Fail("audience rows or avatars: "+string.Join(",",names)); yield break;
                 }
-                Debug.Log("LIVE_PACKAGE_EIGHT_VIEWERS_PASS");
+                Debug.Log("LIVE_PACKAGE_SEVEN_ISLAND_VIEWERS_PASS");
             }
             // Rebuild the visible list from the real session snapshot, as on room entry.
             var type = typeof(LiveFeatureController);
