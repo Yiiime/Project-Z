@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20658eea1de5e4e48acec160054bac1e, type: 3}
+  m_Name: ZFinal-v03
+  m_EditorClassIdentifier: Assembly-CSharp::Seabreeze.Live2DModelProfile
+  prefab: {fileID: 4263971582556020264, guid: 7bde1b13b1ce597ba3abe2e4d525e362, type: 3}
+  characterId: z
+  rendererIndex: 1
+  renderLayer: 30
+  modelPosition: {x: 0, y: 0, z: 0}
+  modelScale: 1
+  cameraCenter: {x: 0, y: 0}
+  orthographicSize: 2
+  autoFrame: 1
+  visibleHeight: 0.78
+  verticalFocus: 0.62
+  uvRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  textureHeight: 1200
+  defaultEmotion: neutral
+  expressions:
+  - emotion: neutral
+    expression: {fileID: 0}
+  - emotion: happy
+    expression: {fileID: 11400000, guid: 18fca2c3eeff5757be69b06574ed8f0e, type: 2}
+  - emotion: sad
+    expression: {fileID: 11400000, guid: 1af0697c9be55808931542916ab5c067, type: 2}
+  - emotion: serious
+    expression: {fileID: 11400000, guid: e51709b44cae58d98c0fb9d057bd9221, type: 2}
+  - emotion: shy
+    expression: {fileID: 11400000, guid: 9fad275a985c51e68d8998f4a09ca472, type: 2}
+  - emotion: happy_wave
+    expression: {fileID: 11400000, guid: bacd52a3512c541f9c9648f98c185872, type: 2}
+  animatorController: {fileID: 9100000, guid: 3e317e518c675127865ab9b9b4b73aac, type: 2}
+  idleState: Idle
+  talkState: Talk
+  proceduralIdle: 1
+  proceduralTalk: 1
+  expressionFadeSeconds: 0.24
+  mouthParameter: ParamZSpeech
+  breathParameter: ParamBreath
+  leftEyeParameter: ParamEyeLOpen
+  rightEyeParameter: ParamEyeROpen
+  authoringNotes: Z dialogue model imported from the local r5-daily-speech source using the target Cubism SDK. Daytime dialogue and the live room share this model. Dialogue text and live-room audio drive ParamZSpeech through their respective presenters.

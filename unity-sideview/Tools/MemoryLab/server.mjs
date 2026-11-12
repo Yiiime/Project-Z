@@ -336,8 +336,21 @@ export function createServer({
             if (old) {
               if (old.game_payload_hash !== digest)
                 throw new TurnError("重复事件内容不同");
-              return respond(res, gameResponse(world));
+              const replayProposal =
+                event.kind === "utterance" && event.speakerId !== "player"
+                  ? store.record(event.proposalId)
+                  : null;
+              return respond(
+                res,
+                gameResponse(
+                  world,
+                  replayProposal
+                    ? { expression: replayProposal.portrait_expression ?? null }
+                    : {},
+                ),
+              );
             }
+            let committedExpression = null;
             store.transaction(() => {
               const when = logicalHour(event.day, event.period),
                 now = logicalHour(p.day, p.period);
@@ -410,6 +423,7 @@ export function createServer({
                       proposal.output.action.target !== event.recipientId)
                   )
                     throw new TurnError("实际发言与批准的提案不一致");
+                  committedExpression = proposal.portrait_expression ?? null;
                   engine.commit(world, event.proposalId, {
                     visible: audience,
                     location,
@@ -480,7 +494,12 @@ export function createServer({
                 store.put("event", stored);
               }
             });
-            result = gameResponse(world);
+            result = gameResponse(
+              world,
+              event.kind === "utterance" && event.speakerId !== "player"
+                ? { expression: committedExpression }
+                : {},
+            );
           } else if (url.pathname === "/api/game/focus") {
             engine.focus(world, p.actorId || null, "unity_" + p.runId);
             result = gameResponse(world);
@@ -562,13 +581,20 @@ export function createServer({
               recalledMemoryIds: store
                 .record(r.proposalId)
                 .context.character_state.memories.map((m) => m.id),
+              expression:
+                r.expression ??
+                store.record(r.proposalId)?.portrait_expression ??
+                null,
             });
           } else if (url.pathname === "/api/game/commit") {
+            const proposal = store.record(p.proposalId);
             engine.commit(world, p.proposalId, {
               visible: p.observers || [p.actorId],
               location: p.locationId,
             });
-            result = gameResponse(world);
+            result = gameResponse(world, {
+              expression: proposal?.portrait_expression ?? null,
+            });
           } else if (url.pathname === "/api/game/cancel") {
             engine.cancel(world, {
               actor: p.actorId,

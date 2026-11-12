@@ -1,6 +1,6 @@
 const $ = id => document.getElementById(id);
 const periods = ['上午', '午后', '傍晚', '夜晚'];
-let data = null, actorId = 'c01', worldId = '', selectedId = '', requestNumber = 0, controller;
+let data = null, actorId = 'linxu', worldId = '', selectedId = '', requestNumber = 0, controller;
 let listSignature = '', detailSignature = '', actorSignature = '', worldSignature = '';
 function element(tag, text, className) {
   const node = document.createElement(tag);

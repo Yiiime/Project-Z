@@ -4,8 +4,9 @@ import {execFileSync} from 'node:child_process';
 import {mkdtempSync, readFileSync, rmSync, mkdirSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
+import {fileURLToPath} from 'node:url';
 
-const kit = new URL('../member-kit/', import.meta.url).pathname;
+const kit = fileURLToPath(new URL('../member-kit/', import.meta.url));
 
 test('installer scripts are valid bash and pin verified downloads', () => {
   for (const file of ['install.sh', '安装.command', 'build.sh']) execFileSync('bash', ['-n', join(kit, file)]);

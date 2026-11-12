@@ -74,6 +74,15 @@ namespace ZLive
             player = host.GetComponent<LiveAudioPlayer>();
             Check("model_ready", character != null && character.Ready);
             if (character == null || !character.Ready) throw new Exception("Z model failed to initialize");
+            var v3Profile = character.PortraitResourcePath == CharacterPresenter.NativePortraitResource &&
+                character.PortraitProfile != null && character.PortraitProfile.name == "ZFinal-v03";
+            var v3Prefab = PrefabHasParameter("ParamZSpeech");
+            Check("v3_profile_selected", v3Profile, character.PortraitResourcePath + ", name=" + (character.PortraitProfile != null ? character.PortraitProfile.name : "<null>"));
+            Check("v3_prefab_native_parameter", v3Prefab);
+            Check("v3_parameter_count", character.ParameterCount == 40, "count=" + character.ParameterCount);
+            Check("speech_parameter_resolved", character.SpeechParameter == "ParamZSpeech", character.SpeechParameter);
+            if (!v3Profile || !v3Prefab || character.ParameterCount != 40 || character.SpeechParameter != "ParamZSpeech")
+                throw new Exception("night Z did not load the V3 portrait profile/prefab");
             player.Frame = Frame;
             player.Receipt = (command, receipt) => Task.CompletedTask;
             player.Source.volume = 0;
@@ -85,7 +94,7 @@ namespace ZLive
             await Open();
             Time.timeScale = 0; // The phone pauses the world; character and audio must keep updating.
             Check("main_Z_portrait_loaded",character.UsingStoryPortrait);
-            var profile=Resources.Load<Seabreeze.Live2DModelProfile>("Memory/Portraits/Z");
+            var profile=character.PortraitProfile;
             foreach(var mood in new[]{"sad","shy","serious","happy"}){
                 string key=mood=="happy"?"happy_wave":mood;
                 character.Cue(mood,mood=="happy"?"wave":"none","smooth");character.BeginSpeaking(true);
@@ -96,6 +105,7 @@ namespace ZLive
                     if(entry.Id=="ParamBrowForm"||entry.Id=="ParamMouthForm"||entry.Id=="ParamCheek"||entry.Id=="ParamMouthVariant")
                         matches &= Mathf.Abs(character.ParameterValue(entry.Id)-entry.Value)<.12f;
                 Check("main_profile_"+key,matches);
+                CheckLegacyMouthDefault("main_profile_"+key);
                 character.EndCue();
             }
             float clock = character.ZPerformance.Elapsed;
@@ -116,19 +126,22 @@ namespace ZLive
                     Check(mood+"_gesture",character.ParameterValue(id)>.5f, id+"="+character.ParameterValue(id));
                 }
                 if(mood=="cry"||mood=="bawl"||mood=="gloom")Check(mood+"_accents",character.Accents.AnchorsReady && character.Accents.VisibleIntensity>.5f,character.Accents.ActiveAccent+" intensity="+character.Accents.VisibleIntensity+" anchors="+character.Accents.AnchorsReady);
+                CheckLegacyMouthDefault(mood);
                 if(mood=="cry") {
                     var g=character.Accents.GetComponent<UnityEngine.UI.Graphic>();
-                    var mesh=g.canvasRenderer.GetMesh();
-                    checks.Add(new JObject{{"name","accent_render_diagnostics"},{"passed",true},{"vertices",mesh!=null?mesh.vertexCount:0},{"culled",g.canvasRenderer.cull},{"rect",g.rectTransform.rect.ToString()},{"world",g.transform.position.ToString()},{"scale",g.transform.lossyScale.ToString()}});
+                    var renderer=g!=null?g.GetComponent<CanvasRenderer>():null;
+                    Check("cry_canvas_renderer",renderer!=null);
+                    var mesh=renderer!=null?renderer.GetMesh():null;
+                    checks.Add(new JObject{{"name","accent_render_diagnostics"},{"passed",renderer!=null},{"vertices",mesh!=null?mesh.vertexCount:0},{"culled",renderer!=null&&renderer.cull},{"rect",g!=null?g.rectTransform.rect.ToString():"<null>"},{"world",g!=null?g.transform.position.ToString():"<null>"},{"scale",g!=null?g.transform.lossyScale.ToString():"<null>"}});
                 }
                 Capture(mood);
                 if(mood=="happy")ScreenCapture.CaptureScreenshot(Path.Combine(OutputDirectory,"live-room.png"));
                 character.EndCue(); await Wait(.8f);
-                Check(mood+"_reset", character.ZPerformance.CurrentExpression==ZFaceExpression.Neutral && character.ZPerformance.CurrentGesture==ZGesture.None && character.ParameterValue("ParamMouthOpenY")<.01f);
+                Check(mood+"_reset", character.ZPerformance.CurrentExpression==ZFaceExpression.Neutral && character.ZPerformance.CurrentGesture==ZGesture.None && SpeechValue()<.01f);
             }
             character.Cue("happy","wave","smooth");character.BeginSpeaking(true);await Wait(.3f);
             player.Pause(true);await Wait(.1f);clock=character.ZPerformance.Elapsed;
-            await Wait(.3f);Check("pause_freezes_performance",Mathf.Abs(character.ZPerformance.Elapsed-clock)<.001f && character.ParameterValue("ParamMouthOpenY")<.01f);
+            await Wait(.3f);Check("pause_freezes_performance",Mathf.Abs(character.ZPerformance.Elapsed-clock)<.001f && SpeechValue()<.01f);
             player.Pause(false);await Wait(.3f);Check("resume_performance",character.ZPerformance.Elapsed>clock);character.EndCue();
 
             var clip=AudioClip.Create("Z verification tone",24000*2,1,24000,false);
@@ -162,7 +175,7 @@ namespace ZLive
             await SampleAudio("singing",player.Play(song,CancellationToken.None));
             var cts=new CancellationTokenSource();var interrupted=player.Host(command,cts.Token);await Wait(.3f);cts.Cancel();
             try{await interrupted;}catch(OperationCanceledException){}
-            await Wait(.2f);Check("cancel_resets",!player.Source.isPlaying && character.ZPerformance.CurrentGesture==ZGesture.None && character.ParameterValue("ParamMouthOpenY")<.01f);cts.Dispose();
+            await Wait(.2f);Check("cancel_resets",!player.Source.isPlaying && character.ZPerformance.CurrentGesture==ZGesture.None && SpeechValue()<.01f);cts.Dispose();
 
             int before=FindObjectsByType<CharacterPresenter>(FindObjectsSortMode.None).Length;
             host.Close();await Wait(2);Check("close_releases_character",FindObjectsByType<CharacterPresenter>(FindObjectsSortMode.None).Length==before-1);
@@ -172,11 +185,31 @@ namespace ZLive
 
         async Task SampleAudio(string name,Task playback)
         {
-            float maximum=0,minimum=1;
-            while(!playback.IsCompleted){await Frame();float mouth=character.ParameterValue("ParamMouthOpenY");maximum=Mathf.Max(maximum,mouth);minimum=Mathf.Min(minimum,mouth);}
+            float maximum=0,minimum=1,legacyBaseline=character.ParameterDefaultValue("ParamMouthOpenY"),legacyMaximumDelta=0;
+            while(!playback.IsCompleted){await Frame();float mouth=SpeechValue();maximum=Mathf.Max(maximum,mouth);minimum=Mathf.Min(minimum,mouth);if(character.UsesNativeSpeechParameter)legacyMaximumDelta=Mathf.Max(legacyMaximumDelta,Mathf.Abs(character.ParameterValue("ParamMouthOpenY")-legacyBaseline));}
             await playback;await Wait(.2f);
             Check(name+"_lip_sync",maximum>.15f && maximum-minimum>.1f,"min="+minimum+", max="+maximum);
-            Check(name+"_completion_reset",!player.Source.isPlaying && character.ParameterValue("ParamMouthOpenY")<.01f && character.ZPerformance.CurrentGesture==ZGesture.None);
+            Check(name+"_completion_reset",!player.Source.isPlaying && SpeechValue()<.01f && character.ZPerformance.CurrentGesture==ZGesture.None);
+            if(character.UsesNativeSpeechParameter)Check(name+"_legacy_mouth_not_double_written",legacyMaximumDelta<.03f,"delta="+legacyMaximumDelta);
+        }
+
+        float SpeechValue(){return character==null?0:character.ParameterValue(character.SpeechParameter);}
+
+        void CheckLegacyMouthDefault(string name)
+        {
+            if(!character.UsesNativeSpeechParameter)return;
+            var baseline=character.ParameterDefaultValue("ParamMouthOpenY");
+            var value=character.ParameterValue("ParamMouthOpenY");
+            Check(name+"_legacy_mouth_default",Mathf.Abs(value-baseline)<.03f,"value="+value+", default="+baseline);
+        }
+
+        bool PrefabHasParameter(string id)
+        {
+            var prefab=character?.PortraitProfile?.prefab;
+            if(prefab==null)return false;
+            foreach(var parameter in prefab.GetComponentsInChildren<Live2D.Cubism.Core.CubismParameter>(true))
+                if(parameter.Id==id)return true;
+            return false;
         }
 
         void Capture(string name)

@@ -1,0 +1,262 @@
+{
+  "Version": 3,
+  "Parameters": [
+    {
+      "Id": "ParamAngleX",
+      "GroupId": "",
+      "Name": "ParamAngleX"
+    },
+    {
+      "Id": "ParamAngleY",
+      "GroupId": "",
+      "Name": "ParamAngleY"
+    },
+    {
+      "Id": "ParamAngleZ",
+      "GroupId": "",
+      "Name": "ParamAngleZ"
+    },
+    {
+      "Id": "ParamBodyAngleZ",
+      "GroupId": "",
+      "Name": "ParamBodyAngleZ"
+    },
+    {
+      "Id": "ParamBreath",
+      "GroupId": "",
+      "Name": "ParamBreath"
+    },
+    {
+      "Id": "ParamEyeLOpen",
+      "GroupId": "",
+      "Name": "ParamEyeLOpen"
+    },
+    {
+      "Id": "ParamEyeROpen",
+      "GroupId": "",
+      "Name": "ParamEyeROpen"
+    },
+    {
+      "Id": "ParamEyeSmile",
+      "GroupId": "",
+      "Name": "ParamEyeSmile"
+    },
+    {
+      "Id": "ParamEyeBallX",
+      "GroupId": "",
+      "Name": "ParamEyeBallX"
+    },
+    {
+      "Id": "ParamEyeBallY",
+      "GroupId": "",
+      "Name": "ParamEyeBallY"
+    },
+    {
+      "Id": "ParamBrowForm",
+      "GroupId": "",
+      "Name": "ParamBrowForm"
+    },
+    {
+      "Id": "ParamMouthOpenY",
+      "GroupId": "",
+      "Name": "ParamMouthOpenY"
+    },
+    {
+      "Id": "ParamMouthVariant",
+      "GroupId": "",
+      "Name": "ParamMouthVariant"
+    },
+    {
+      "Id": "ParamHairSideL",
+      "GroupId": "",
+      "Name": "ParamHairSideL"
+    },
+    {
+      "Id": "ParamHairSideR",
+      "GroupId": "",
+      "Name": "ParamHairSideR"
+    },
+    {
+      "Id": "ParamHairBang",
+      "GroupId": "",
+      "Name": "ParamHairBang"
+    },
+    {
+      "Id": "ParamHairBack",
+      "GroupId": "",
+      "Name": "ParamHairBack"
+    },
+    {
+      "Id": "ParamHairPitch",
+      "GroupId": "",
+      "Name": "ParamHairPitch"
+    },
+    {
+      "Id": "ParamPosePoint",
+      "GroupId": "",
+      "Name": "ParamPosePoint"
+    },
+    {
+      "Id": "ParamPoseExplain",
+      "GroupId": "",
+      "Name": "ParamPoseExplain"
+    },
+    {
+      "Id": "ParamPoseWave",
+      "GroupId": "",
+      "Name": "ParamPoseWave"
+    },
+    {
+      "Id": "ParamBodyAngleX",
+      "GroupId": "",
+      "Name": "ParamBodyAngleX"
+    },
+    {
+      "Id": "ParamBodyAngleY",
+      "GroupId": "",
+      "Name": "ParamBodyAngleY"
+    },
+    {
+      "Id": "ParamHairSideL2",
+      "GroupId": "",
+      "Name": "ParamHairSideL2"
+    },
+    {
+      "Id": "ParamHairSideR2",
+      "GroupId": "",
+      "Name": "ParamHairSideR2"
+    },
+    {
+      "Id": "ParamHairBack2",
+      "GroupId": "",
+      "Name": "ParamHairBack2"
+    },
+    {
+      "Id": "ParamHairSideL3",
+      "GroupId": "",
+      "Name": "ParamHairSideL3"
+    },
+    {
+      "Id": "ParamHairSideR3",
+      "GroupId": "",
+      "Name": "ParamHairSideR3"
+    },
+    {
+      "Id": "ParamHairBack3",
+      "GroupId": "",
+      "Name": "ParamHairBack3"
+    },
+    {
+      "Id": "ParamMouthForm",
+      "GroupId": "",
+      "Name": "ParamMouthForm"
+    },
+    {
+      "Id": "ParamCheek",
+      "GroupId": "",
+      "Name": "ParamCheek"
+    },
+    {
+      "Id": "ParamDangleEar2",
+      "GroupId": "",
+      "Name": "ParamDangleEar2"
+    },
+    {
+      "Id": "ParamDangleEar1",
+      "GroupId": "",
+      "Name": "ParamDangleEar1"
+    },
+    {
+      "Id": "ParamQingyeEmotion",
+      "Name": "ParamQingyeEmotion",
+      "GroupId": ""
+    },
+    {
+      "Id": "ParamQingyeTears",
+      "Name": "ParamQingyeTears",
+      "GroupId": ""
+    },
+    {
+      "Id": "ParamQingyeCryHold",
+      "Name": "ParamQingyeCryHold",
+      "GroupId": ""
+    },
+    {
+      "Id": "ParamQingyeFxSurprise",
+      "Name": "ParamQingyeFxSurprise",
+      "GroupId": "Qingye r6 外效"
+    },
+    {
+      "Id": "ParamQingyeFxShock",
+      "Name": "ParamQingyeFxShock",
+      "GroupId": "Qingye r6 外效"
+    },
+    {
+      "Id": "ParamQingyeFxQuestion",
+      "Name": "ParamQingyeFxQuestion",
+      "GroupId": "Qingye r6 外效"
+    },
+    {
+      "Id": "ParamQingyeFxIrisStarL",
+      "Name": "ParamQingyeFxIrisStarL",
+      "GroupId": "Qingye r6 外效"
+    },
+    {
+      "Id": "ParamQingyeFxIrisStarR",
+      "Name": "ParamQingyeFxIrisStarR",
+      "GroupId": "Qingye r6 外效"
+    },
+    {
+      "Id": "ParamQingyeFxStarLeftBig",
+      "Name": "ParamQingyeFxStarLeftBig",
+      "GroupId": "Qingye r6 外效"
+    },
+    {
+      "Id": "ParamQingyeFxStarLeftSmall",
+      "Name": "ParamQingyeFxStarLeftSmall",
+      "GroupId": "Qingye r6 外效"
+    },
+    {
+      "Id": "ParamQingyeFxStarRightBig",
+      "Name": "ParamQingyeFxStarRightBig",
+      "GroupId": "Qingye r6 外效"
+    },
+    {
+      "Id": "ParamQingyeFxStarRightSmall",
+      "Name": "ParamQingyeFxStarRightSmall",
+      "GroupId": "Qingye r6 外效"
+    },
+    {
+      "Id": "ParamQingyeFxAnger",
+      "Name": "ParamQingyeFxAnger",
+      "GroupId": "Qingye r6 外效"
+    },
+    {
+      "Id": "ParamQYR6Surprise",
+      "GroupId": "",
+      "Name": "惊讶窄口"
+    },
+    {
+      "Id": "ParamQYR6Shock",
+      "GroupId": "",
+      "Name": "震惊眼口"
+    },
+    {
+      "Id": "ParamQYR6Question",
+      "GroupId": "",
+      "Name": "疑惑单眉与口型"
+    },
+    {
+      "Id": "ParamQYR6Curiosity",
+      "GroupId": "",
+      "Name": "好奇说话"
+    },
+    {
+      "Id": "ParamQYNeutralSpeech",
+      "GroupId": "",
+      "Name": "日常说话口型"
+    }
+  ],
+  "ParameterGroups": [],
+  "Parts": []
+}

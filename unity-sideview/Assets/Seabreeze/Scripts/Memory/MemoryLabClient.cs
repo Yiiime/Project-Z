@@ -21,6 +21,7 @@ namespace Seabreeze
         float nextHealth,nextOpen,retryModelAt;
         public string RunId {get;private set;}="";
         public string LastError {get;private set;}="";
+        public string BackgroundError {get;private set;}="";
         public string Mode {get;private set;}="real";
         public string Model {get;private set;}="";
         public bool Reachable {get;private set;}
@@ -28,7 +29,9 @@ namespace Seabreeze
         public int ConfigurationRevision {get;private set;}
         public event Action ConnectionChanged;
         public bool Synchronized => opened&&!opening&&!syncing&&session?.State?.memory!=null&&session.State.memory.outbox.Count==0;
-        public bool CanGenerate => Synchronized&&!focusing&&Reachable&&Configured&&Time.unscaledTime>=retryModelAt;
+        // Accept input during journal sync. PlayerReply waits until that sync completes.
+        public bool CanQueuePlayerInput => opened&&!opening&&!focusing&&Reachable&&Configured&&Time.unscaledTime>=retryModelAt;
+        public bool CanGenerate => Synchronized&&CanQueuePlayerInput;
         public string Status => !Reachable?"记忆服务未连接":!Configured?"尚未配置模型":!Synchronized?"正在同步记忆":Time.unscaledTime<retryModelAt?"模型暂时不可用，稍后重试":Mode=="simulated"?"模拟模型验收":"模型已连接";
         public void Initialize(GameSession owner)
         {
@@ -40,7 +43,7 @@ namespace Seabreeze
         {
             generation++;focusVersion++;focusing=false;foreach(var c in requests.Values)c.Cancel();requests.Clear();
             StopAllCoroutines();opened=opening=syncing=checking=false;
-            RunId=Guid.NewGuid().ToString("N");nextHealth=nextOpen=retryModelAt=0;LastError="";acknowledgedRevision=0;
+            RunId=Guid.NewGuid().ToString("N");nextHealth=nextOpen=retryModelAt=0;LastError="";BackgroundError="";acknowledgedRevision=0;
         }
         public MemoryRequest RequestBase()
         {
@@ -87,9 +90,35 @@ namespace Seabreeze
         }
         public void Generate(string endpoint,MemoryRequest request,Action<MemoryReply> complete,Action<string> failed)
         {
-            if(!CanGenerate){failed("模型尚未就绪，请稍候。");return;}
+            bool playerRequest=IsPlayerRequest(request);
+            if(playerRequest)LastError="";
+            if(!CanGenerate){if(playerRequest)LastError="模型尚未就绪，请稍候。";failed("模型尚未就绪，请稍候。");return;}
             var state=session.State.memory;
-            StartCoroutine(Send(endpoint,request,35,r=>{Accept(r,state);complete(r);},e=>{LastError=e;retryModelAt=Time.unscaledTime+15;failed(e);}));
+            StartCoroutine(Send(endpoint,request,35,r=>{Accept(r,state);if(playerRequest)LastError="";else BackgroundError="";complete(r);},e=>
+            {
+                if(playerRequest)LastError=e;else BackgroundError=e;
+                // A malformed/invalid turn belongs to that actor and can be
+                // retried. Only a player transport/model outage should disable
+                // the normal input entrance; an autonomous NPC must not lock it.
+                if(playerRequest&&!IsRecoverableTurnError(e))retryModelAt=Time.unscaledTime+15;
+                failed(e);
+            }));
+        }
+
+        static bool IsPlayerRequest(MemoryRequest request)
+        {
+            return request!=null&&string.Equals(request.channel,"private_player_chat",StringComparison.Ordinal);
+        }
+
+        static bool IsRecoverableTurnError(string error)
+        {
+            if(string.IsNullOrEmpty(error))return false;
+            return error.StartsWith("输出格式错误：",StringComparison.Ordinal)||
+                error.StartsWith("输入格式错误：",StringComparison.Ordinal)||
+                error.StartsWith("模型未返回 JSON 对象",StringComparison.Ordinal)||
+                error.StartsWith("模型输出未完成",StringComparison.Ordinal)||
+                error.StartsWith("本轮取消或超过等待预算",StringComparison.Ordinal)||
+                error.StartsWith("台词超出本轮字数预算",StringComparison.Ordinal);
         }
         public void CancelConversation(string conversationId) {StartCoroutine(CancelAfterDelivered(conversationId));}
         IEnumerator CancelAfterDelivered(string conversation)

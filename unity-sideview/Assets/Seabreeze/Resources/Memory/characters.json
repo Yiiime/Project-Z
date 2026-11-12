@@ -10,7 +10,7 @@
       "locationId": "z_home",
       "x": 3.4,
       "color": "#C5AFD9",
-      "portrait": "Memory/Portraits/Z",
+      "portrait": "Memory/Portraits/ZFinal-v03",
       "motion": "Art/CastMotion/z"
     },
     {
@@ -22,6 +22,7 @@
       "locationId": "liyuan_home",
       "x": -4,
       "color": "#97BCCB",
+      "portrait": "Memory/Portraits/Liyuan",
       "motion": "Art/CastMotion/liyuan"
     },
     {
@@ -33,6 +34,7 @@
       "locationId": "cafe",
       "x": -2,
       "color": "#A8CFAD",
+      "portrait": "Memory/Portraits/Liting",
       "motion": "Art/CastMotion/liting"
     },
     {
@@ -44,6 +46,7 @@
       "locationId": "axing_lab",
       "x": 2,
       "color": "#9FD8CA",
+      "portrait": "Memory/Portraits/Axing",
       "motion": "Art/CastMotion/axing"
     },
     {
@@ -55,7 +58,8 @@
       "place": "Street",
       "locationId": "visitor_center",
       "x": 12,
-      "color": "#91BFE2"
+      "color": "#91BFE2",
+      "portrait": "Memory/Portraits/Zhengyi"
     },
     {
       "id": "xiaoxiaoqing",
@@ -66,6 +70,8 @@
       "locationId": "flower_shop",
       "x": -6,
       "color": "#EDA6B4",
+      "portrait": "Memory/Portraits/Qingye",
+      "dialogueCharactersPerSecond": 13,
       "motion": "Art/CastMotion/xiaoxiaoqing"
     },
     {
@@ -77,6 +83,7 @@
       "locationId": "dock",
       "x": 6,
       "color": "#E4B972",
+      "portrait": "Memory/Portraits/Liuyang",
       "motion": "Art/CastMotion/linxu"
     },
     {
@@ -88,6 +95,8 @@
       "locationId": "photo_studio",
       "x": -10,
       "color": "#C5AFD9",
+      "portrait": "Memory/Portraits/ZhouboDaily",
+      "previewPortrait": "Memory/Portraits/ZhouboFinal-v03",
       "motion": "Art/CastMotion/zhou_bobo"
     }
   ]

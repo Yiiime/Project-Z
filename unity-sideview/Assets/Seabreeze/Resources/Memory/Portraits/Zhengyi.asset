@@ -1,0 +1,116 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20658eea1de5e4e48acec160054bac1e, type: 3}
+  m_Name: Zhengyi
+  m_EditorClassIdentifier: Assembly-CSharp::Seabreeze.Live2DModelProfile
+  prefab: {fileID: 1631836906762910422, guid: 59f4ca4147149479f97383f4f1fb76d5, type: 3}
+  characterId: zhengyi
+  rendererIndex: 1
+  renderLayer: 30
+  modelPosition: {x: 0, y: 0, z: 0}
+  modelScale: 1
+  cameraCenter: {x: 0, y: 0}
+  orthographicSize: 2
+  autoFrame: 1
+  visibleHeight: 0.78
+  verticalFocus: 0.62
+  uvRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  textureHeight: 1200
+  defaultEmotion: neutral
+  expressions:
+  - emotion: neutral
+    expression: {fileID: 11400000, guid: 548586556ff4b43c682b98ab0e14510b, type: 2}
+  - emotion: smile
+    expression: {fileID: 11400000, guid: 9d12451485c324ab6ab02432e9ec5ab6, type: 2}
+  - emotion: surprise
+    expression: {fileID: 11400000, guid: 3ce90e346c2df4f7999fdd50e04ad333, type: 2}
+  - emotion: shock
+    expression: {fileID: 11400000, guid: a80e61c3265fd49009cdbf38aad7cd6f, type: 2}
+  - emotion: troubled
+    expression: {fileID: 11400000, guid: 4cd78796f6aac4045b74d68707955bab, type: 2}
+  - emotion: puzzled
+    expression: {fileID: 11400000, guid: 4cd78796f6aac4045b74d68707955bab, type: 2}
+  - emotion: starry_curious
+    expression: {fileID: 11400000, guid: 44755b960ec2c4b729f4d420f9e7cc9f, type: 2}
+  - emotion: curious
+    expression: {fileID: 11400000, guid: 44755b960ec2c4b729f4d420f9e7cc9f, type: 2}
+  - emotion: angry
+    expression: {fileID: 11400000, guid: bfdfff07d124546ffbc0b40467f72488, type: 2}
+  - emotion: blush
+    expression: {fileID: 11400000, guid: 5e8fa89ef12e045d0a1bdc4f57cbaade, type: 2}
+  - emotion: shy
+    expression: {fileID: 11400000, guid: 5e8fa89ef12e045d0a1bdc4f57cbaade, type: 2}
+  - emotion: cry
+    expression: {fileID: 11400000, guid: 781e7fe2fb3c946638c9548e756537e6, type: 2}
+  - emotion: bawl
+    expression: {fileID: 11400000, guid: 781e7fe2fb3c946638c9548e756537e6, type: 2}
+  - emotion: bawl_tears_preview
+    expression: {fileID: 11400000, guid: 97c05e88aed834bcb8c3193ae498e18d, type: 2}
+  - emotion: bawling
+    expression: {fileID: 11400000, guid: 97c05e88aed834bcb8c3193ae498e18d, type: 2}
+  - emotion: wave
+    expression: {fileID: 11400000, guid: 4aa647b64d2064c5297238bd9975d372, type: 2}
+  - emotion: explain
+    expression: {fileID: 11400000, guid: dd39ea79f0051444ebb8d62482e90c9b, type: 2}
+  - emotion: point
+    expression: {fileID: 11400000, guid: 6f8e8f6dd5fb940d484d50340bb10ab4, type: 2}
+  - emotion: happy
+    expression: {fileID: 11400000, guid: 9d12451485c324ab6ab02432e9ec5ab6, type: 2}
+  - emotion: warm
+    expression: {fileID: 11400000, guid: 9d12451485c324ab6ab02432e9ec5ab6, type: 2}
+  - emotion: surprised
+    expression: {fileID: 11400000, guid: 3ce90e346c2df4f7999fdd50e04ad333, type: 2}
+  animatorController: {fileID: 0}
+  idleState: Idle
+  talkState: Talk
+  proceduralIdle: 1
+  proceduralTalk: 1
+  expressionFadeSeconds: 0.24
+  clearExpressionOnInterrupt: 1
+  discreteExpressionParameters: 1
+  expressionIndexParameter: ParamDialogueFace
+  expressionMixParameter: 
+  expressionTransitions: []
+  mouthParameter: ParamMouthOpenY
+  speechAddsToExpressionTarget: 1
+  speechPeak: 0.32
+  speechRest: 0.1
+  speechExpressions:
+  - emotion: smile
+    peak: 0.4
+  - emotion: surprise
+    peak: 0.36
+  - emotion: shock
+    peak: 0.4
+  - emotion: bawl
+    peak: 0.24
+  - emotion: cry
+    peak: 0.24
+  tearExpression: bawl_tears_preview
+  tearStartSeconds: 1.1
+  breathParameter: ParamBreath
+  leftEyeParameter: ParamEyeLOpen
+  rightEyeParameter: ParamEyeROpen
+  authoringNotes: "\u6B63\u4E49 c06 halfbody-six-r3-outer \u539F\u7EBF\u8272\u5305\uFF1B\u516B\u4EF6\u8138\u65C1\u7B26\u53F7\u6302\u5728
+    Warp_Face\uFF0C\u4E24\u9897\u8679\u819C\u661F\u4FDD\u7559\u539F\u751F Eye_Mask_L/Eye_Mask_R\u3002\u5BF9\u767D\u8868\u60C5\u53EA\u5199
+    ParamDialogueFace \u7684\u6574\u6570 0..6\uFF0C\u7981\u6B62\u5728\u679A\u4E3E\u503C\u4E4B\u95F4\u63D2\u503C\uFF1Bsurprise/shock/troubled/starry_curious/angry/blush
+    \u5206\u522B\u6620\u5C04\u516D\u9879\u72B6\u6001 1..6\uFF0Cmouth \u53EA\u9A71\u52A8
+    ParamMouthOpenY\uFF1Bsmile/shock/bawl \u5CF0\u503C\u5206\u522B\u4E3A .40/.40/.24\uFF0Csurprise
+    \u4E3A .36\uFF1Bbawl \u5148\u7528\u65E0\u6CEA\u54ED\u76F8\uFF0C\u7EA6 1.10 \u79D2\u540E\u5207
+    bawl_tears_preview\uFF1B\u5207\u53E5\u5148\u6E05\u7406 ParamDialogueFace\u3001\u89C6\u7EBF\u3001\u7709\u3001\u816E\u7EA2\u3001\u54ED\u76F8\u548C\u53E3\u578B\u3002rendererIndex=1\u3001renderLayer=30\u3001autoFrame=true\u3001visibleHeight=.78\u3001verticalFocus=.62
+    \u4E0E\u674E\u5EAD/\u6674\u91CE\u57FA\u7EBF\u4E00\u81F4\uFF1B\u5BF9\u8BDD\u5C3A\u5BF8\u4ECD\u9700\u5728\u5BBF\u4E3B
+    Unity \u4E2D\u6309\u56FA\u5B9A 360x390 \u673A\u4F4D\u590D\u6838\u3002"

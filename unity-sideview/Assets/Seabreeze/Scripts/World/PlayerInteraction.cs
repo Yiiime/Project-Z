@@ -40,7 +40,19 @@ namespace Seabreeze
             }
 
             if (Current != null && GameInput.InteractPressed)
-                Current.Activate();
+            {
+                // Keep Shift+E on the same world interaction route as E. The
+                // special case is intentionally limited to Zhoubo and the
+                // explicit local preview launcher flag; all other NPCs and
+                // props continue through Interactable.Activate unchanged.
+                bool finalPreview = Current.npc && Current.id == "zhou_bobo" &&
+                    GameInput.ShiftInteractPressed && s.Memory != null &&
+                    s.Memory.LocalPortraitPreviewControls;
+                if (finalPreview)
+                    s.Memory.BeginPlayerChat(Current.id, true);
+                else
+                    Current.Activate();
+            }
         }
     }
 }

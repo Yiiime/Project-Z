@@ -1,0 +1,83 @@
+{
+  "Version": 3,
+  "FileReferences": {
+    "Moc": "Model.moc3",
+    "Textures": [
+      "texture_00.png",
+      "texture_bawl.png"
+    ],
+    "DisplayInfo": "Model.cdi3.json",
+    "Motions": {
+      "Idle": [
+        {
+          "File": "motions/idle.motion3.json",
+          "FadeInTime": 0,
+          "FadeOutTime": 0
+        }
+      ],
+      "Dialogue": [
+        {
+          "File": "motions/dialogue_neutral.motion3.json",
+          "Sound": "sounds/dialogue.wav",
+          "FadeInTime": 0,
+          "FadeOutTime": 0
+        }
+      ],
+      "SmilePreview": [
+        {
+          "File": "motions/smile_preview.motion3.json",
+          "Sound": "sounds/smile_preview.wav",
+          "FadeInTime": 0,
+          "FadeOutTime": 0
+        }
+      ],
+      "BawlPreview": [
+        {
+          "File": "motions/bawl_preview.motion3.json",
+          "Sound": "sounds/bawl_preview.wav",
+          "FadeInTime": 0,
+          "FadeOutTime": 0
+        }
+      ]
+    },
+    "Expressions": [
+      {
+        "Name": "DialogueSmile",
+        "File": "expressions/dialogue_smile.exp3.json"
+      },
+      {
+        "Name": "SmileHold",
+        "File": "expressions/SmileHold.exp3.json"
+      },
+      {
+        "Name": "BawlDry",
+        "File": "expressions/BawlDry.exp3.json"
+      },
+      {
+        "Name": "BawlWet",
+        "File": "expressions/BawlWet.exp3.json"
+      },
+      {
+        "Name": "ExpressionReset",
+        "File": "expressions/ExpressionReset.exp3.json"
+      }
+    ]
+  },
+  "Groups": [
+    {
+      "Target": "Parameter",
+      "Name": "EyeBlink",
+      "Ids": [
+        "ParamEyeLOpen",
+        "ParamEyeROpen"
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Name": "LipSync",
+      "Ids": [
+        "ParamMouthOpenY"
+      ]
+    }
+  ]
+}

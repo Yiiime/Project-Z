@@ -1,0 +1,12 @@
+{
+  "Version": 3,
+  "Meta": {"Duration": 3.0, "Fps": 30, "Loop": false, "AreBeziersRestricted": true, "FadeInTime": 0.3, "FadeOutTime": 0.35, "CurveCount": 6, "TotalSegmentCount": 18, "TotalPointCount": 24, "UserDataCount": 0, "TotalUserDataSize": 0},
+  "Curves": [
+    {"Target":"Parameter","Id":"ParamAngleZ","Segments":[0,0,0,0.5,4,0,2.5,4,0,3.0,0]},
+    {"Target":"Parameter","Id":"ParamMouthVariant","Segments":[0,0,2,0.5,0,2,2.5,0,2,3.0,0]},
+    {"Target":"Parameter","Id":"ParamRelievedSmile","Segments":[0,0,0,0.7,1,0,2.5,1,0,3.0,0]},
+    {"Target":"Parameter","Id":"ParamFxQuestion","Segments":[0,0,0,0.2,0,0,2.5,0,0,3.0,0]},
+    {"Target":"Parameter","Id":"ParamFxExclamation","Segments":[0,0,0,0.2,0,0,2.5,0,0,3.0,0]},
+    {"Target":"Parameter","Id":"ParamFxAnger","Segments":[0,0,0,0.2,0,0,2.5,0,0,3.0,0]}
+  ]
+}

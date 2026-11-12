@@ -1,0 +1,122 @@
+{
+  "Version": 3,
+  "Parameters": [
+    {
+      "Id": "ParamAngleX",
+      "GroupId": "",
+      "Name": "ParamAngleX"
+    },
+    {
+      "Id": "ParamAngleY",
+      "GroupId": "",
+      "Name": "ParamAngleY"
+    },
+    {
+      "Id": "ParamAngleZ",
+      "GroupId": "",
+      "Name": "ParamAngleZ"
+    },
+    {
+      "Id": "ParamBodyAngleZ",
+      "GroupId": "",
+      "Name": "ParamBodyAngleZ"
+    },
+    {
+      "Id": "ParamBreath",
+      "GroupId": "",
+      "Name": "ParamBreath"
+    },
+    {
+      "Id": "ParamEyeLOpen",
+      "GroupId": "",
+      "Name": "ParamEyeLOpen"
+    },
+    {
+      "Id": "ParamEyeROpen",
+      "GroupId": "",
+      "Name": "ParamEyeROpen"
+    },
+    {
+      "Id": "ParamEyeSmile",
+      "GroupId": "",
+      "Name": "ParamEyeSmile"
+    },
+    {
+      "Id": "ParamEyeBallX",
+      "GroupId": "",
+      "Name": "ParamEyeBallX"
+    },
+    {
+      "Id": "ParamEyeBallY",
+      "GroupId": "",
+      "Name": "ParamEyeBallY"
+    },
+    {
+      "Id": "ParamBrowForm",
+      "GroupId": "",
+      "Name": "ParamBrowForm"
+    },
+    {
+      "Id": "ParamMouthOpenY",
+      "GroupId": "",
+      "Name": "ParamMouthOpenY"
+    },
+    {
+      "Id": "ParamMouthVariant",
+      "GroupId": "",
+      "Name": "ParamMouthVariant"
+    },
+    {
+      "Id": "ParamHairPitch",
+      "GroupId": "",
+      "Name": "ParamHairPitch"
+    },
+    {
+      "Id": "ParamBodyAngleX",
+      "GroupId": "",
+      "Name": "ParamBodyAngleX"
+    },
+    {
+      "Id": "ParamBodyAngleY",
+      "GroupId": "",
+      "Name": "ParamBodyAngleY"
+    },
+    {
+      "Id": "ParamMouthForm",
+      "GroupId": "",
+      "Name": "ParamMouthForm"
+    },
+    {
+      "Id": "ParamSmile",
+      "GroupId": "",
+      "Name": "ParamSmile"
+    },
+    {
+      "Id": "ParamBawl",
+      "GroupId": "",
+      "Name": "ParamBawl"
+    },
+    {
+      "Id": "ParamTear",
+      "GroupId": "",
+      "Name": "ParamTear"
+    },
+    {
+      "Id": "ParamPuzzled",
+      "GroupId": "",
+      "Name": "ParamPuzzled"
+    },
+    {
+      "Id": "ParamSigh",
+      "GroupId": "",
+      "Name": "ParamSigh"
+    },
+    {
+      "Id": "ParamSighRelease",
+      "GroupId": "",
+      "Name": "ParamSighRelease"
+    }
+  ],
+  "ParameterGroups": [],
+  "Parts": []
+}

@@ -9,6 +9,11 @@ using Live2D.Cubism.Framework;
 using Live2D.Cubism.Framework.Physics;
 namespace ZLive {
 public sealed class CharacterPresenter:MonoBehaviour {
+    public const string NativePortraitResource = "Memory/Portraits/ZFinal-v03";
+    public const string LegacyPortraitResource = "Memory/Portraits/Z";
+    public const string LegacyLivePrefabResource = "ZLiveModel";
+    const string NativeSpeechParameter = "ParamZSpeech";
+    const string LegacySpeechParameter = "ParamMouthOpenY";
     Seabreeze.Live2DModelProfile portraitProfile;
     public bool UsingStoryPortrait {get;private set;}
     Camera portraitCamera;CubismModel cubismModel;
@@ -20,13 +25,24 @@ public sealed class CharacterPresenter:MonoBehaviour {
     public ZEmotionAccents Accents { get; private set; }
     string pendingGesture = "none", pendingMotion = "idle";
     bool cueActive;
+    string speechParameter = LegacySpeechParameter;
     readonly Dictionary<string,CubismParameter> parameters=new Dictionary<string,CubismParameter>();
+    public Seabreeze.Live2DModelProfile PortraitProfile => portraitProfile;
+    public string PortraitResourcePath {get;private set;}
+    public int ParameterCount => parameters.Count;
+    public string SpeechParameter => speechParameter;
+    public bool UsesNativeSpeechParameter => speechParameter == NativeSpeechParameter;
     void Awake(){config=JObject.Parse(Resources.Load<TextAsset>("character").text);Performance=new LiveCharacterPerformance(config);}
     public void Initialize(){
-        portraitProfile=Resources.Load<Seabreeze.Live2DModelProfile>("Memory/Portraits/Z");
+        portraitProfile=Resources.Load<Seabreeze.Live2DModelProfile>(NativePortraitResource);
+        PortraitResourcePath=NativePortraitResource;
+        if(!HasStoryPrefab(portraitProfile)){
+            portraitProfile=Resources.Load<Seabreeze.Live2DModelProfile>(LegacyPortraitResource);
+            PortraitResourcePath=LegacyPortraitResource;
+        }
         var prefab=portraitProfile!=null?portraitProfile.prefab:null;
-        UsingStoryPortrait=prefab!=null&&prefab.GetComponent<CubismModel>()?.Moc!=null;
-        if(!UsingStoryPortrait)prefab=Resources.Load<GameObject>("ZLiveModel");if(prefab==null){Debug.LogError("[ZLive] Z 模型未准备，请运行 Seabreeze > Prepare Live Z Model。");return;}var model=Instantiate(prefab,transform);model.name="Z · Live2D";cubismModel=model.GetComponent<CubismModel>();
+        UsingStoryPortrait=HasStoryPrefab(portraitProfile);
+        if(!UsingStoryPortrait){prefab=Resources.Load<GameObject>(LegacyLivePrefabResource);PortraitResourcePath=LegacyLivePrefabResource;}if(prefab==null){Debug.LogError("[ZLive] Z 模型未准备，请运行 Seabreeze > Prepare Live Z Model。");return;}var model=Instantiate(prefab,transform);model.name="Z · Live2D";cubismModel=model.GetComponent<CubismModel>();
         foreach(var t in model.GetComponentsInChildren<Transform>(true))t.gameObject.layer=30;
         foreach(var p in model.GetComponentsInChildren<CubismParameter>(true))parameters[p.Id]=p;
         var animator=model.GetComponent<Animator>();if(animator!=null)animator.enabled=false;
@@ -36,9 +52,10 @@ public sealed class CharacterPresenter:MonoBehaviour {
         var before=model.AddComponent<CubismCharacterInputBridge>();before.Presenter=this;
         var bridge=model.AddComponent<CubismCharacterBridge>();bridge.Presenter=this;
         var update=model.GetComponent<CubismUpdateController>();if(update==null)update=model.AddComponent<CubismUpdateController>();update.Refresh();
+        speechParameter=ResolveSpeechParameter();
         Texture=new RenderTexture(1600,1000,24,RenderTextureFormat.ARGB32);Texture.Create();var camera=new GameObject("Character Camera").AddComponent<Camera>();portraitCamera=camera;camera.transform.SetParent(transform,true);camera.GetUniversalAdditionalCameraData().SetRenderer(1);camera.orthographic=true;camera.orthographicSize=3.5f;camera.transform.position=new Vector3(0,1,-10);camera.clearFlags=CameraClearFlags.SolidColor;camera.backgroundColor=Color.clear;camera.cullingMask=1<<30;camera.targetTexture=Texture;
         Accents=ZEmotionAccents.Create(ZPerformance,portraitCamera,transform);
-        Ready=parameters.Count==32 && ZPerformance.IsModelReady;
+        Ready=ZPerformance.IsModelReady && parameters.ContainsKey(speechParameter);
     }
     public void SetViewport(float width,float height,float pixelsPerUnit=1){
         if(!Ready||portraitCamera==null||width<1||height<1)return;
@@ -62,9 +79,13 @@ public sealed class CharacterPresenter:MonoBehaviour {
         if(parameters.TryGetValue(id,out var p))return p.Value;
         return 0;
     }
+    public float ParameterDefaultValue(string id){
+        if(parameters.TryGetValue(id,out var p))return p.DefaultValue;
+        return 0;
+    }
     void OnApplicationFocus(bool focused){if(!focused)ClearPointerGaze();}
     public void Cue(string moodName,string action,string transition,float holdMs=0,bool carryArms=false){
-        textSpeaking=false; cueActive=true;
+        textSpeaking=false; cueActive=true;ResetSpeechParameters();
         Performance.Prepare(moodName,action,transition,holdMs,carryArms);
         if(ZPerformance==null)return;
         ZPerformance.CancelCurrentPerformance();
@@ -79,7 +100,7 @@ public sealed class CharacterPresenter:MonoBehaviour {
     }
     void StartZGesture(){if(ZPerformance==null)return;ZPerformance.SetGesture(Performance.Reduced?"none":pendingGesture);ZPerformance.SetMotionPreset(Performance.Reduced?"idle":pendingMotion);}
     public void BeginSpeaking(bool textOnly=false){textSpeaking=textOnly;Performance.BeginSpeaking();StartZGesture();}
-    public void EndCue(){textSpeaking=false;cueActive=false;Performance.EndSpeech();ZPerformance?.ResetPerformance();Set("ParamMouthOpenY",0);}
+    public void EndCue(){textSpeaking=false;cueActive=false;Performance.EndSpeech();ZPerformance?.ResetPerformance();ResetSpeechParameters();}
     public void SetWaiting(bool waiting){Performance.SetWaiting(waiting);if(!cueActive&&ZPerformance!=null){var motion=waiting?ZMotionPreset.Think:ZMotionPreset.Idle;if(ZPerformance.CurrentMotion!=motion)ZPerformance.SetMotionPreset(motion);}}
     public void NoticeMessage()=>Performance.NoticeMessage();
     // Web SDK focus/breath runs before physics; authored dialogue channels run after it.
@@ -101,13 +122,23 @@ public sealed class CharacterPresenter:MonoBehaviour {
         if(!Ready)return;
         // Voice owns only mouth openness, after the Z expression controller (order 1000).
         // Z retains its own eyebrow, eyelid, cheek and gesture parameter bindings.
-        Set("ParamMouthOpenY",Paused?0:Performance.Mouth);
+        Set(speechParameter,Paused?0:Performance.Mouth);
         if(!Paused){
             if(Performance.Pose.TryGetValue("ParamEyeBallX",out var x))Set("ParamEyeBallX",x);
             if(Performance.Pose.TryGetValue("ParamEyeBallY",out var y))Set("ParamEyeBallY",y);
         }
     }
     readonly float[] samples=new float[256];
+    static bool HasStoryPrefab(Seabreeze.Live2DModelProfile profile){var prefab=profile!=null?profile.prefab:null;return prefab!=null&&prefab.GetComponent<CubismModel>()?.Moc!=null;}
+    string ResolveSpeechParameter(){
+        if(parameters.ContainsKey(NativeSpeechParameter))return NativeSpeechParameter;
+        if(portraitProfile!=null&&!string.IsNullOrEmpty(portraitProfile.mouthParameter)&&parameters.ContainsKey(portraitProfile.mouthParameter))return portraitProfile.mouthParameter;
+        return parameters.ContainsKey(LegacySpeechParameter)?LegacySpeechParameter:string.Empty;
+    }
+    void ResetSpeechParameters(){
+        if(parameters.ContainsKey(NativeSpeechParameter))Set(NativeSpeechParameter,ParameterDefaultValue(NativeSpeechParameter));
+        if(parameters.ContainsKey(LegacySpeechParameter))Set(LegacySpeechParameter,ParameterDefaultValue(LegacySpeechParameter));
+    }
     void Set(string id,float value){
         if(parameters.TryGetValue(id,out var p))p.Value=Mathf.Clamp(value,p.MinimumValue,p.MaximumValue);
     }

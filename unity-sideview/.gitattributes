@@ -10,3 +10,7 @@
 *.ttf binary
 # Preserve the imported supplier license snapshots byte-for-byte for MANIFEST.json.
 Tools/live-call-demo/ui/live2d/licenses/*.source.html.txt -text -whitespace
+Assets/Seabreeze/Live2D/Models/Zhengyi/Model.asset filter=lfs diff=lfs merge=lfs -text
+Assets/Seabreeze/Live2D/Models/Zhengyi/Model.moc3 filter=lfs diff=lfs merge=lfs -text
+Assets/Seabreeze/Live2D/Models/Qingye/Model.asset filter=lfs diff=lfs merge=lfs -text
+Assets/Seabreeze/Live2D/Models/Qingye/Model.moc3 filter=lfs diff=lfs merge=lfs -text
