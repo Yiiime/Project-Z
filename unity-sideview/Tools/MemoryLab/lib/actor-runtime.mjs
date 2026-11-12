@@ -142,6 +142,8 @@ export class ActorRuntime {
           const portrait = supportsPortraitExpression(context.actor_id)
             ? output.expression ?? output.portrait_expression ?? output.portraitExpression
             : null;
+          const delivery = output.delivery;
+          delete output.delivery;
           delete output.expression;
           delete output.portrait_expression;
           delete output.portraitExpression;
@@ -158,6 +160,8 @@ export class ActorRuntime {
               enumerable: false,
               configurable: true,
             });
+          // Reserved upstream metadata: no prompt or mood-derived default.
+          Object.defineProperty(validated, "delivery", { value: delivery, enumerable: false });
           return validated;
         } catch (error) {
           if (

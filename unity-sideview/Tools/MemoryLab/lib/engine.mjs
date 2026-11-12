@@ -1,4 +1,5 @@
 import { memoryProjection, privateOffer, narrativeChange, rememberNarration } from "./live-memory.mjs";
+import { speechDelivery } from "./speech-delivery.mjs";
 import { uid } from "./store.mjs";
 import { clone } from "./catalog.mjs";
 import { Policy, TurnError, canonical } from "./policy.mjs";
@@ -744,6 +745,7 @@ export class Engine {
         w = this.world(world);
       try {
         const generated = await this.decide(clone(context));
+        const speech = speechDelivery(generated?.delivery);
         const requestedExpression =
           generated && typeof generated === "object"
             ? generated.portraitExpression ??
@@ -758,6 +760,7 @@ export class Engine {
             ? { ...generated }
             : generated;
         if (output && typeof output === "object") {
+          delete output.delivery;
           delete output.expression;
           delete output.portraitExpression;
           delete output.portrait_expression;
@@ -791,6 +794,8 @@ export class Engine {
             context,
             output,
             portrait_expression: expression,
+            delivery: speech.delivery,
+            speech_warning: speech.warning,
             job: job.id,
             conversation: job.conversation,
             root: job.root,

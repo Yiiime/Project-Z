@@ -24,20 +24,34 @@ namespace Seabreeze
         {
             public RectTransform Row,Panel;
             public TextMeshProUGUI Text;
+            public bool IsPlayer;
         }
         readonly List<ChatBubble> history=new List<ChatBubble>();
         DialogueSceneBackdrop backdrop;
-        float previousColumnWidth;
+        float previousColumnWidth;int lastLayoutCharacters=-1;
         static readonly Color BubbleInk=new Color(.145f,.149f,.208f,1);
         const float ExpressionHoldSeconds=1.2f;
         const float LiyuanSmilePreparationSeconds=.25f;
         const float LiyuanBawlPreparationSeconds=2f;
         float charactersPerSecond;
+        bool followingSpeech,speechStarted;string portraitSpeechToken;
+        public bool ReadyForSpeech => PlayerInputReady&&!linePreparationActive;
+        public void FollowSpeech()
+        {
+            followingSpeech=true;speechStarted=false;
+            portraitSpeechToken=Guid.NewGuid().ToString("N");
+            character?.SetState(portraitEmotion,false);
+        }
         float ExpressionClock => selectedActor == "xiaoxiaoqing" ? Time.realtimeSinceStartup : Time.unscaledTime;
         Coroutine linePreparation;
         bool linePreparationActive;
         string selectedActor,lastSpeaker,portraitEmotion; bool entering,typing; float revealed,speechUntil,expressionEndsAt;
 
+        void EndFollowingSpeech()
+        {
+            if(portraitSpeechToken!=null)character?.EndSpeechDrive(portraitSpeechToken,0);
+            portraitSpeechToken=null;followingSpeech=false;
+        }
         public bool Closing {get;private set;}
         public bool PlayerInputReady => !entering&&!Closing&&playerPanel!=null&&playerPanel.gameObject.activeSelf;
         internal TMP_InputField DialogueInput => input;
@@ -101,7 +115,7 @@ namespace Seabreeze
             Label("Send caption",sendPanel.transform,new Vector2(.5f,.5f),new Vector2(.5f,.5f),Vector2.zero,new Vector2(90,35),"发送 →",21,BubbleInk,TextAlignmentOptions.Center);
             playerState=Label("连接与等待状态",column,Vector2.zero,Vector2.zero,new Vector2(5,88),new Vector2(730,32),"",18,Paper);playerState.richText=false;playerState.rectTransform.anchorMax=Vector2.right;playerState.rectTransform.sizeDelta=new Vector2(0,32);
             var help=Label("输入提示",column,Vector2.zero,Vector2.zero,new Vector2(5,-36),new Vector2(730,28),"Enter 发送    ·    点击气泡显示全文    ·    Esc 返回",16,new Color(.9f,.92f,1,.7f));help.rectTransform.anchorMax=Vector2.right;help.rectTransform.sizeDelta=new Vector2(0,28);
-            DialogueControl("声音",-76,"sound",()=>{AudioListener.volume=AudioListener.volume>.01f?0:1;});
+            DialogueControl("声音",-76,"sound",()=>{AudioListener.volume=AudioListener.volume>.01f?0:1;if(AudioListener.volume<=.01f)memory.Client.StopSpeech();});
             DialogueControl("结束交谈",-8,"close",()=>memory.Conversations.Cancel("玩家结束交谈"));
             playerGroup.alpha=0;playerPanel.gameObject.SetActive(false);
         }
@@ -123,9 +137,9 @@ namespace Seabreeze
             var row=Rect(isPlayer?"Player message":"NPC message",content,Vector2.up,Vector2.up,Vector2.zero,Vector2.zero);row.anchorMax=Vector2.one;
             var anchor=isPlayer?Vector2.one:Vector2.up;
             var panel=FinalKitAssets.Bubble(isPlayer?"bubble-player":"bubble-npc",row,anchor,anchor,Vector2.zero,new Vector2(334,86));panel.raycastTarget=true;
-            var text=Label("Message",panel.transform,Vector2.up,Vector2.up,new Vector2(34,-22),new Vector2(260,36),message,24,BubbleInk);text.richText=false;text.lineSpacing=5;
+            var text=Label("Message",panel.transform,Vector2.up,Vector2.up,new Vector2(34,-22),new Vector2(260,36),message,24,BubbleInk);text.richText=false;text.lineSpacing=5;text.maxVisibleCharacters=isPlayer?int.MaxValue:0;
             var reveal=panel.gameObject.AddComponent<Button>();reveal.targetGraphic=panel;reveal.transition=Selectable.Transition.None;reveal.navigation=new Navigation{mode=Navigation.Mode.None};reveal.onClick.AddListener(FinishTyping);
-            history.Add(new ChatBubble{Row=row,Panel=panel.rectTransform,Text=text});historyText=text;
+            history.Add(new ChatBubble{Row=row,Panel=panel.rectTransform,Text=text,IsPlayer=isPlayer});historyText=text;
             if(history.Count>12){Destroy(history[0].Row.gameObject);history.RemoveAt(0);}
             RefreshHistoryLayout();
         }
@@ -156,8 +170,9 @@ namespace Seabreeze
         void ApplyPortrait(string actorId)
         {
             var definition=SevenCharacterCatalog.Find(actorId);
-            charactersPerSecond = definition != null && definition.dialogueCharactersPerSecond > 0
-                ? definition.dialogueCharactersPerSecond : Style.TypewriterSpeed;
+            // No audio timing exists when muted/offline; keep a calm readable fallback.
+            charactersPerSecond = Mathf.Min(6,definition != null && definition.dialogueCharactersPerSecond > 0
+                ? definition.dialogueCharactersPerSecond : Style.TypewriterSpeed);
             bool final=actorId=="zhou_bobo"&&memory.ZhouboPortraitFinal;
             string path=final?definition?.previewPortrait:definition?.portrait;
             var profile=!string.IsNullOrEmpty(path)?Resources.Load<Live2DModelProfile>(path):null;
@@ -185,23 +200,35 @@ namespace Seabreeze
             previousColumnWidth=column.rect.width;
             foreach(var bubble in history)
             {
+                bubble.Text.ForceMeshUpdate(true);
+                int count=Mathf.Min(bubble.Text.maxVisibleCharacters,bubble.Text.textInfo.characterCount);
+                bool visible=bubble.IsPlayer||count>0;
+                bubble.Row.gameObject.SetActive(visible);
+                if(!visible){bubble.Row.sizeDelta=new Vector2(-16,0);continue;}
+                string shown=bubble.Text.text;
+                if(count<bubble.Text.textInfo.characterCount){var last=bubble.Text.textInfo.characterInfo[count-1];shown=shown.Substring(0,last.index+last.stringLength);}
                 float maxWidth=Mathf.Min(594,width*.88f);
-                float bubbleWidth=Mathf.Clamp(bubble.Text.GetPreferredValues(bubble.Text.text).x+68,128,maxWidth);
-                float textHeight=Mathf.Max(34,bubble.Text.GetPreferredValues(bubble.Text.text,bubbleWidth-68,0).y);
+                float bubbleWidth=Mathf.Clamp(bubble.Text.GetPreferredValues(shown).x+68,bubble.IsPlayer?128:84,maxWidth);
+                float textHeight=Mathf.Max(32,bubble.Text.GetPreferredValues(shown,bubbleWidth-68,0).y);
                 bubble.Row.anchoredPosition=new Vector2(8,-y);bubble.Row.sizeDelta=new Vector2(-16,textHeight+52);
                 bubble.Panel.sizeDelta=new Vector2(bubbleWidth,textHeight+52);bubble.Text.rectTransform.sizeDelta=new Vector2(bubbleWidth-68,textHeight);
                 bubble.Text.ForceMeshUpdate();y+=textHeight+62;
             }
             content.sizeDelta=new Vector2(0,Mathf.Max(historyScroll.viewport.rect.height,y+8));historyScroll.verticalNormalizedPosition=0;
+            lastLayoutCharacters=historyText!=null?historyText.maxVisibleCharacters:-1;
+        }
+        void RefreshTypingLayout()
+        {
+            if(historyText!=null&&lastLayoutCharacters!=historyText.maxVisibleCharacters)RefreshHistoryLayout();
         }
         void FinishTyping()
         {
             bool hadPendingLine=typing||linePreparationActive;
             CancelPendingLinePreparation();
-            if(hadPendingLine&&!string.IsNullOrEmpty(portraitEmotion))expressionEndsAt=ExpressionClock+ExpressionHoldSeconds;
+            if(hadPendingLine&&!followingSpeech&&!string.IsNullOrEmpty(portraitEmotion))expressionEndsAt=ExpressionClock+ExpressionHoldSeconds;
             typing=false;
-            if(historyText!=null)historyText.maxVisibleCharacters=int.MaxValue;
-            if(character!=null)character.SetState(portraitEmotion,false);
+            if(historyText!=null){historyText.maxVisibleCharacters=int.MaxValue;RefreshTypingLayout();}
+            if(character!=null)character.SetState(portraitEmotion,followingSpeech&&memory.Client.SpeechPlaying);
         }
         void BeginPortraitLine(string speaker,string expression)
         {
@@ -239,7 +266,7 @@ namespace Seabreeze
                 linePreparation=null;linePreparationActive=false;yield break;
             }
             linePreparation=null;linePreparationActive=false;
-            if(character!=null)character.SetState(portraitEmotion,true);
+            if(character!=null)character.SetState(portraitEmotion,!followingSpeech||memory.Client.SpeechPlaying);
             typing=true;
         }
         void CancelPendingLinePreparation()
@@ -275,16 +302,16 @@ namespace Seabreeze
         }
         void ResetPortraitIdle()
         {
-            CancelPendingLinePreparation();expressionEndsAt=0;portraitEmotion=null;character?.ResetToDefault();
+            EndFollowingSpeech();speechStarted=false;CancelPendingLinePreparation();expressionEndsAt=0;portraitEmotion=null;character?.ResetToDefault();
         }
 
         public void ShowLine(string speaker,string text,Vector3 position,bool playerConversation,string expression=null)
         {
             if(playerConversation)
             {
-                FinishTyping();AddBubble(text,speaker=="player");lastSpeaker=speaker;revealed=0;
+                EndFollowingSpeech();speechStarted=false;FinishTyping();AddBubble(text,speaker=="player");lastSpeaker=speaker;revealed=0;
                 BeginPortraitLine(speaker,expression);
-                typing=speaker!="player"&&!linePreparationActive;historyText.maxVisibleCharacters=(typing||linePreparationActive)?0:int.MaxValue;return;
+                typing=speaker!="player"&&!linePreparationActive;historyText.maxVisibleCharacters=(typing||linePreparationActive)?0:int.MaxValue;RefreshTypingLayout();return;
             }
             speechTitle.text=SevenCharacterCatalog.Name(speaker);speechText.text=text;speechTitle.color=SevenCharacterCatalog.Find(speaker)?.Accent??Paper;
             speechUntil=Time.unscaledTime+Mathf.Clamp(1.3f+text.Length*.05f,2.5f,6);speechPanel.gameObject.SetActive(true);
@@ -323,9 +350,37 @@ namespace Seabreeze
             acceptTask.interactable=declineTask.interactable=fullView&&offeredTask!=null&&memory.Client.CanGenerate;inviteTask.interactable=fullView&&activeTasks.Count>0&&memory.Client.CanGenerate;
             taskTitle.text=offeredTask!=null?"NPC已提出："+offeredTask:activeTasks.Count>0?"玩家进行中："+activeTasks[selectedTask]:"";
             send.interactable=PlayerInputReady&&memory.PlayerChatOpen&&memory.Client.CanGenerate&&!memory.Conversations.Sending;
-            playerState.text=memory.Conversations.Sending?"对方正在想怎么说…":memory.Client.CanGenerate?"":"暂时无法连接。Esc 返回后，可在暂停菜单设置对话服务。";
+            playerState.text=memory.Conversations.Sending?"对方正在想怎么说…":"";
             playerState.color=new Color(.94f,.94f,1,.82f);
+            if(followingSpeech&&PlayerInputReady)
+            {
+                bool playing=memory.Client.SpeechPlaying;
+                if(playing)
+                {
+                    speechStarted=true;
+                    if(typing)
+                    {
+                        int visible=0,end=memory.Client.SpeechCaptionEnd;
+                        while(visible<historyText.textInfo.characterCount&&historyText.textInfo.characterInfo[visible].index<end)visible++;
+                        revealed=Mathf.Max(revealed,visible);
+                        historyText.maxVisibleCharacters=Mathf.FloorToInt(revealed);
+                        if(historyText.maxVisibleCharacters>=historyText.textInfo.characterCount)FinishTyping();
+                    }
+                }
+                character.SetState(portraitEmotion,playing);
+                if(playing)
+                {
+                    if(!character.HasSpeechDrive)character.BeginSpeechDrive(portraitSpeechToken,0);
+                    character.SetSpeechAmplitude(portraitSpeechToken,0,memory.Client.SpeechAmplitude);
+                }
+                RefreshTypingLayout();
+                if(memory.Client.SpeechBusy)return;
+                EndFollowingSpeech();
+                if(speechStarted){FinishTyping();expressionEndsAt=ExpressionClock+ExpressionHoldSeconds;}
+                speechStarted=false;
+            }
             if(typing&&PlayerInputReady){revealed+=Time.unscaledDeltaTime*charactersPerSecond;historyText.maxVisibleCharacters=Mathf.FloorToInt(revealed);if(historyText.maxVisibleCharacters>=historyText.textInfo.characterCount)FinishTyping();else character.SetState(portraitEmotion,lastSpeaker==selectedActor);}
+            RefreshTypingLayout();
 
         }
     }
