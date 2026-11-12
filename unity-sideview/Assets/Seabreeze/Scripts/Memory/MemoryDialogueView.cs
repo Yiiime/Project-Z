@@ -350,7 +350,7 @@ namespace Seabreeze
             acceptTask.interactable=declineTask.interactable=fullView&&offeredTask!=null&&memory.Client.CanGenerate;inviteTask.interactable=fullView&&activeTasks.Count>0&&memory.Client.CanGenerate;
             taskTitle.text=offeredTask!=null?"NPC已提出："+offeredTask:activeTasks.Count>0?"玩家进行中："+activeTasks[selectedTask]:"";
             send.interactable=PlayerInputReady&&memory.PlayerChatOpen&&memory.Client.CanGenerate&&!memory.Conversations.Sending;
-            playerState.text=memory.Conversations.Sending?"对方正在想怎么说…":memory.Client.CanGenerate?memory.Client.SpeechStatus:"暂时无法连接。Esc 返回后，可在暂停菜单设置对话服务。";
+            playerState.text=memory.Conversations.Sending?"对方正在想怎么说…":"";
             playerState.color=new Color(.94f,.94f,1,.82f);
             if(followingSpeech&&PlayerInputReady)
             {
