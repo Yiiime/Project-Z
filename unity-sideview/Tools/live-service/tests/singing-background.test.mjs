@@ -155,7 +155,7 @@ test('review gets explicit execution facts and rejects audience tool claims',()=
  payload.context.candidate.intent='tool';payload.context.candidate.plannedTool={name:'play_prepared_song',targetId:'ready-task'};
  const play=normalizeAgentInput(payload);assert.match(buildAgentRequest(play).input.executionContext,/尝试执行所列播放工具/);
  payload.context.candidate.plannedTool.name='prepare_song';assert.match(buildAgentRequest(normalizeAgentInput(payload)).input.executionContext,/没有安排播放/);
- payload.context.candidate.role='audience';payload.context.candidate.speakerId='moon';assert.throws(()=>normalizeAgentInput(payload));
+ payload.context.candidate.role='audience';payload.context.candidate.speakerId='liting';assert.throws(()=>normalizeAgentInput(payload));
 });
 test('daytime tickets are only visible with matching save, day, owner and public receipt',async t=>{
  const {service}=await fixture(t);

@@ -1,3 +1,4 @@
+using System.Linq;
 using System;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -182,12 +183,14 @@ public sealed partial class LiveFeatureController {
         var row=Box(mine?"chat-row mine":"chat-row");
         if(!system){
             var avatar=Box("avatar");
-            string badge=mine?null:name switch {"橘子浮标"=>"buoy","倒带一格"=>"tape","困困豆"=>"bean","听雨同学"=>"rain","烤面包边"=>"toast",_=>null};
+            // Reuse the existing avatar styles; character identity comes from the island roster.
+            string actor=Seabreeze.SevenCharacterCatalog.Actors.FirstOrDefault(a=>a.displayName==name)?.id;
+            string badge=mine?null:actor switch {"linxu"=>"buoy","liyuan"=>"tape","axing"=>"bean","zhengyi"=>"rain","zhou_bobo"=>"toast",_=>null};
             if(badge!=null){
                 avatar.AddToClassList("viewer-"+badge);
                 avatar.Add(Text(name.Substring(0,1),"viewer-initial"));
             }else{
-                string portrait=mine?"self":name=="晚风来信"?"wind":name=="海盐汽水"?"salt":name=="月亮邮差"?"moon":"guest";
+                string portrait=mine?"self":actor=="xiaoxiaoqing"?"wind":actor=="liting"?"salt":"guest";
                 avatar.Add(Art(portrait,"portrait"));
             }
             row.Add(avatar);

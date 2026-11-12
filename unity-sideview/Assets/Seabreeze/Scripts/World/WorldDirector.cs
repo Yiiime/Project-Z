@@ -23,9 +23,9 @@ namespace Seabreeze
         bool initial = true;
         CanvasGroup fade;
         float lastSave;
-        bool requestHasArrival;
         PlaceId requestedPlace;
         string requestedArrival, pendingArrival;
+        float? requestedMapX, pendingMapX;
         Rigidbody2D transitionBody;
         bool restoreSimulation;
         SaveData attachedState;
@@ -117,6 +117,8 @@ namespace Seabreeze
             }
             if (arrival)
                 spawn = arrival.transform.position;
+            else if (pendingMapX.HasValue)
+                spawn = MapSpawn(scene, pendingMapX.Value);
             else if (restoreRequested || (initial && wasStarted && savedPlace == scene.place.ToString()))
                 // Runtime Load/NewGame replaces SaveData. Keep its requested position
                 // separate from the old scene's physical player during the dissolve.
@@ -125,6 +127,7 @@ namespace Seabreeze
             else if (scene.place == PlaceId.Street)
                 spawn.x = previous == PlaceId.Cafe ? scene.fromCafe : previous == PlaceId.Lighthouse ? scene.fromLighthouse : scene.streetSpawn;
             pendingArrival = null;
+            pendingMapX = null;
             restoreRequested = false;
             attachedState = saved;
             initial = false;
@@ -142,15 +145,33 @@ namespace Seabreeze
 
         // World routes still dispatch GameSession.TravelRequested: NPC memory and
         // conversations capture/cancel from that existing event before the scene unloads.
-        public bool TravelTo(PlaceId place, string arrivalId)
+        public bool TravelTo(PlaceId place, string arrivalId) => RequestTravel(place, arrivalId, null);
+
+        public bool TravelToMapPoint(PlaceId place, float x) => RequestTravel(place, null, x);
+
+        static Vector2 MapSpawn(WorldScene scene, float x)
+        {
+            // Keep map arrivals clear of automatic triggers at the street edges.
+            float limit = Mathf.Max(0, scene.width / 2 - 2);
+            return new Vector2(Mathf.Clamp(x, -limit, limit), .08f);
+        }
+
+        bool RequestTravel(PlaceId place, string arrivalId, float? mapX)
         {
             var session = GameSession.Instance;
             if (!session || !session.IsReady || session.InputBlocked || IsTransitioning ||
                 !Application.CanStreamedLevelBeLoaded(place.ToString()))
                 return false;
+            if (mapX.HasValue && Stage != null && Stage.place == place && session.State == attachedState)
+            {
+                Player.GetComponent<PlayerController>().Teleport(MapSpawn(Stage, mapX.Value));
+                Follow.Snap();
+                SavePosition();
+                return true;
+            }
             requestedPlace = place;
             requestedArrival = arrivalId;
-            requestHasArrival = true;
+            requestedMapX = mapX;
             try
             {
                 session.Travel(place);
@@ -158,8 +179,8 @@ namespace Seabreeze
             }
             finally
             {
-                requestHasArrival = false;
                 requestedArrival = null;
+                requestedMapX = null;
             }
         }
 
@@ -167,13 +188,14 @@ namespace Seabreeze
         {
             if (IsTransitioning)
                 return;
-            pendingArrival = requestHasArrival && requestedPlace == place ? requestedArrival : null;
-            requestHasArrival = false;
+            pendingArrival = requestedPlace == place ? requestedArrival : null;
+            pendingMapX = requestedPlace == place ? requestedMapX : null;
             if (!Application.CanStreamedLevelBeLoaded(place.ToString()))
             {
                 Debug.LogWarning($"Map '{place}' is not in Build Settings; returning to Street.");
                 place = PlaceId.Street;
                 pendingArrival = null;
+                pendingMapX = null;
                 if (initial)
                 {
                     GameSession.Instance.State.place = place.ToString();
@@ -239,6 +261,7 @@ namespace Seabreeze
         void FinishTransition()
         {
             pendingArrival = null;
+            pendingMapX = null;
             restoreRequested = false;
             if (fade) { fade.alpha = 0; fade.blocksRaycasts = false; }
             if (transitionBody)

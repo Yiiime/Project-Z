@@ -135,7 +135,7 @@ test("eight current identities, private profile isolation and mapped public occu
   t.after(() => e.store.close());
   assert.deepEqual(
     e.snapshot("w").actors.map((a) => a.name),
-    ["Z", "梨园", "李庭", "阿星", "正义", "小小晴", "留洋", "周伯伯"],
+    ["Z", "梨园", "李庭", "阿星", "正义", "晴野", "留洋", "周伯伯"],
   );
   const j = e.player("w", "z", "咖啡店老板是谁");
   const c = e.context(j);

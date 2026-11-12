@@ -14,7 +14,7 @@ description: 扮演《来自月亮的Z》的Z或七位既有NPC，处理玩家�
 | 李庭 | `liting` | [liting.md](references/characters/liting.md) |
 | 阿星 | `axing` | [axing.md](references/characters/axing.md) |
 | 正义 | `zhengyi` | [zhengyi.md](references/characters/zhengyi.md) |
-| 小小晴 | `xiaoxiaoqing` | [xiaoxiaoqing.md](references/characters/xiaoxiaoqing.md) |
+| 晴野 | `xiaoxiaoqing` | [xiaoxiaoqing.md](references/characters/xiaoxiaoqing.md) |
 | 留洋 | `linxu` | [linxu.md](references/characters/linxu.md) |
 | 周伯伯 | `zhou_bobo` | [zhou_bobo.md](references/characters/zhou_bobo.md) |
 
@@ -31,3 +31,5 @@ description: 扮演《来自月亮的Z》的Z或七位既有NPC，处理玩家�
 接口见[单份契约](references/contract.schema.json)。角色限制（Z无援助字段、周固定反对）由服务lib/policy.mjs应用，不能复制八份常规Schema再独立改。Skill定义判断，不代替数据库、地图、消息送达和实际回执。
 
 调用前后核对：当前是谁？谁真说了什么？哪些内容对这个人可见、可分享？台词是否与下一步一致？是否替别人决定、编成功或把后台真相变成亲历？
+
+后续支线仅供作者与剧情引擎查阅[阶段参考](references/story-stages.md)，不加入角色常驻上下文或初始记忆。姓名显示使用留洋、晴野，旧ID linxu、xiaoxiaoqing保持不变。

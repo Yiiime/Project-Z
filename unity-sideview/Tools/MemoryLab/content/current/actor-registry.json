@@ -15,7 +15,7 @@
       "actor_id": "z",
       "name": "Z",
       "kind": "protagonist",
-      "version": "2.0",
+      "version": "2026-11-12",
       "default_location": "z_home",
       "location_status": "map_named",
       "capability_policy": {
@@ -36,13 +36,21 @@
           "id": "z_rest",
           "label": "休息并消化真实的新经历"
         }
-      ]
+      ],
+      "provenance": {
+        "url": "https://bytedance.larkoffice.com/docx/MD4cdfT7poZiwWx2XmgchzzTnKh",
+        "revision": 1269,
+        "documents": [
+          "完整人设V0.2（revision 5）",
+          "精简角色卡V0.4（revision 60）"
+        ]
+      }
     },
     {
       "actor_id": "liyuan",
       "name": "梨园",
       "kind": "npc",
-      "version": "2.0",
+      "version": "2026-11-12",
       "default_location": "liyuan_home",
       "location_status": "map_named",
       "capability_policy": {
@@ -53,29 +61,37 @@
       "daily_goals": [
         {
           "id": "liyuan_work",
-          "label": "绘图、勘察与核对真实路线"
+          "label": "整理自己的旧物，留意身边发生的事"
         },
         {
           "id": "liyuan_social",
-          "label": "听取别人对地点的解释、协商自己的选择"
+          "label": "按自己的戒心与牵挂决定是否回应、接近熟人"
         },
         {
           "id": "liyuan_rest",
-          "label": "整理地图或休息"
+          "label": "独处、整理思绪或休息"
         }
       ],
       "provenance": {
-        "url": "https://bytedance.larkoffice.com/share/base/view/shrcnWA9TnkCKLBM2JvXypbELpc",
-        "submission_number": 4,
-        "submitter": "杨力源",
-        "record_id": "reczz28W2ZAf0OxG"
+        "url": "https://bytedance.larkoffice.com/docx/MD4cdfT7poZiwWx2XmgchzzTnKh",
+        "revision": 1269,
+        "documents": [
+          "人物表梨园行",
+          "周伯伯与正义、晴野关系段"
+        ],
+        "previous": {
+          "url": "https://bytedance.larkoffice.com/share/base/view/shrcnWA9TnkCKLBM2JvXypbELpc",
+          "submission_number": 4,
+          "submitter": "杨力源",
+          "record_id": "reczz28W2ZAf0OxG"
+        }
       }
     },
     {
       "actor_id": "liting",
       "name": "李庭",
       "kind": "npc",
-      "version": "2.0",
+      "version": "2026-11-12",
       "default_location": "cafe",
       "location_status": "map_named",
       "capability_policy": {
@@ -98,17 +114,25 @@
         }
       ],
       "provenance": {
-        "url": "https://bytedance.larkoffice.com/share/base/view/shrcnWA9TnkCKLBM2JvXypbELpc",
-        "submission_number": 6,
-        "submitter": "李霆懿",
-        "record_id": "reczz28W2eWxW2UA"
+        "url": "https://bytedance.larkoffice.com/docx/MD4cdfT7poZiwWx2XmgchzzTnKh",
+        "revision": 1269,
+        "documents": [
+          "人物表李庭行",
+          "周伯伯、晴野、正义关系段"
+        ],
+        "previous": {
+          "url": "https://bytedance.larkoffice.com/share/base/view/shrcnWA9TnkCKLBM2JvXypbELpc",
+          "submission_number": 6,
+          "submitter": "李霆懿",
+          "record_id": "reczz28W2eWxW2UA"
+        }
       }
     },
     {
       "actor_id": "axing",
       "name": "阿星",
       "kind": "npc",
-      "version": "2.0",
+      "version": "2026-11-12",
       "default_location": "axing_lab",
       "location_status": "map_named",
       "capability_policy": {
@@ -131,17 +155,25 @@
         }
       ],
       "provenance": {
-        "url": "https://bytedance.larkoffice.com/share/base/view/shrcnWA9TnkCKLBM2JvXypbELpc",
-        "submission_number": 7,
-        "submitter": "余星亮",
-        "record_id": "reczz28W2eZIAUPy"
+        "url": "https://bytedance.larkoffice.com/docx/MD4cdfT7poZiwWx2XmgchzzTnKh",
+        "revision": 1269,
+        "documents": [
+          "人物表阿星行",
+          "晴野、正义关系段"
+        ],
+        "previous": {
+          "url": "https://bytedance.larkoffice.com/share/base/view/shrcnWA9TnkCKLBM2JvXypbELpc",
+          "submission_number": 7,
+          "submitter": "余星亮",
+          "record_id": "reczz28W2eZIAUPy"
+        }
       }
     },
     {
       "actor_id": "zhengyi",
       "name": "正义",
       "kind": "npc",
-      "version": "2.0",
+      "version": "2026-11-12",
       "default_location": "visitor_center",
       "location_status": "map_named",
       "capability_policy": {
@@ -164,17 +196,24 @@
         }
       ],
       "provenance": {
-        "url": "https://bytedance.larkoffice.com/share/base/view/shrcnWA9TnkCKLBM2JvXypbELpc",
-        "submission_number": 1,
-        "submitter": "郑绎",
-        "record_id": "reczz28W1RjvhJMG"
+        "url": "https://bytedance.larkoffice.com/docx/MD4cdfT7poZiwWx2XmgchzzTnKh",
+        "revision": 1269,
+        "documents": [
+          "zhengyi 1110ver.md"
+        ],
+        "previous": {
+          "url": "https://bytedance.larkoffice.com/share/base/view/shrcnWA9TnkCKLBM2JvXypbELpc",
+          "submission_number": 1,
+          "submitter": "郑绎",
+          "record_id": "reczz28W1RjvhJMG"
+        }
       }
     },
     {
       "actor_id": "xiaoxiaoqing",
-      "name": "小小晴",
+      "name": "晴野",
       "kind": "npc",
-      "version": "2.0",
+      "version": "2026-11-12",
       "default_location": "flower_shop",
       "location_status": "map_named",
       "capability_policy": {
@@ -197,18 +236,26 @@
         }
       ],
       "provenance": {
-        "url": "https://bytedance.larkoffice.com/share/base/view/shrcnWA9TnkCKLBM2JvXypbELpc",
-        "submission_number": 9,
-        "submitter": "代子晴",
-        "record_id": "reczz28W2kjyyrCS",
-        "source_character_name": "晴野（同条正文称小小晴，运行沿用小小晴）"
+        "url": "https://bytedance.larkoffice.com/docx/MD4cdfT7poZiwWx2XmgchzzTnKh",
+        "revision": 1269,
+        "documents": [
+          "晴野_人设与剧情.md（2026-11-11）",
+          "完整故事参考（revision 189，仅非冲突背景）"
+        ],
+        "previous": {
+          "url": "https://bytedance.larkoffice.com/share/base/view/shrcnWA9TnkCKLBM2JvXypbELpc",
+          "submission_number": 9,
+          "submitter": "代子晴",
+          "record_id": "reczz28W2kjyyrCS",
+          "source_character_name": "晴野（同条正文称小小晴，运行沿用小小晴）"
+        }
       }
     },
     {
       "actor_id": "linxu",
       "name": "留洋",
       "kind": "npc",
-      "version": "2.0",
+      "version": "2026-11-12",
       "default_location": "dock",
       "location_status": "map_named",
       "capability_policy": {
@@ -231,17 +278,25 @@
         }
       ],
       "provenance": {
-        "url": "https://bytedance.larkoffice.com/share/base/view/shrcnWA9TnkCKLBM2JvXypbELpc",
-        "submission_number": 11,
-        "submitter": "刘洋",
-        "record_id": "reczz28WLo4igh3K"
+        "url": "https://bytedance.larkoffice.com/docx/MD4cdfT7poZiwWx2XmgchzzTnKh",
+        "revision": 1269,
+        "documents": [
+          "人物表留洋行",
+          "晴野、正义、周伯伯关系段"
+        ],
+        "previous": {
+          "url": "https://bytedance.larkoffice.com/share/base/view/shrcnWA9TnkCKLBM2JvXypbELpc",
+          "submission_number": 11,
+          "submitter": "刘洋",
+          "record_id": "reczz28WLo4igh3K"
+        }
       }
     },
     {
       "actor_id": "zhou_bobo",
       "name": "周伯伯",
       "kind": "npc",
-      "version": "2.0",
+      "version": "2026-11-12",
       "default_location": "photo_studio",
       "location_status": "map_named",
       "capability_policy": {
@@ -264,32 +319,48 @@
         }
       ],
       "provenance": {
-        "url": "https://bytedance.larkoffice.com/share/base/view/shrcnWA9TnkCKLBM2JvXypbELpc",
-        "submission_number": 12,
-        "submitter": "周泓杰",
-        "record_id": "reczz28WhzvholPg"
+        "url": "https://bytedance.larkoffice.com/docx/MD4cdfT7poZiwWx2XmgchzzTnKh",
+        "revision": 1269,
+        "documents": [
+          "zhou_bobo.md",
+          "周伯伯_晴野线剧情.md（2026-11-11）"
+        ],
+        "previous": {
+          "url": "https://bytedance.larkoffice.com/share/base/view/shrcnWA9TnkCKLBM2JvXypbELpc",
+          "submission_number": 12,
+          "submitter": "周泓杰",
+          "record_id": "reczz28WhzvholPg"
+        }
       }
     }
   ],
   "legacy_aliases": {
-    "laozhou": "linxu"
+    "laozhou": "linxu",
+    "qingye": "xiaoxiaoqing",
+    "liuyang": "linxu"
   },
   "runtime_status": "unified Node runtime; Unity presentation and executor receipts; natural memory outside dialogue critical path",
   "source_review": {
-    "url": "https://bytedance.larkoffice.com/share/base/view/shrcnWA9TnkCKLBM2JvXypbELpc",
-    "table_id": "tblgMOpDri5m2t2M",
-    "revision": 146,
-    "reviewed_on": "2026-11-07",
-    "selection": "按编号降序读取全表，同一提交人采用最大编号",
-    "selected_submission_numbers": [
-      1,
-      4,
-      6,
-      7,
-      9,
-      11,
-      12
-    ]
+    "url": "https://bytedance.larkoffice.com/docx/MD4cdfT7poZiwWx2XmgchzzTnKh",
+    "revision": 1269,
+    "reviewed_on": "2026-11-12",
+    "selection": "文档列为主，人物/职业/与Z关系补充；晴野线采用2026-11-11 MVP附件；空文档不虚构新生平",
+    "previous_review": {
+      "url": "https://bytedance.larkoffice.com/share/base/view/shrcnWA9TnkCKLBM2JvXypbELpc",
+      "table_id": "tblgMOpDri5m2t2M",
+      "revision": 146,
+      "reviewed_on": "2026-11-07",
+      "selection": "按编号降序读取全表，同一提交人采用最大编号",
+      "selected_submission_numbers": [
+        1,
+        4,
+        6,
+        7,
+        9,
+        11,
+        12
+      ]
+    }
   },
   "initial_metric_policy": {
     "affinity": {
@@ -320,5 +391,257 @@
     "max_pairs_per_scan": 2,
     "max_initial_decisions_per_actor_per_tick": 1
   },
-  "public_map": "moonlife-actors/references/island-map.json"
+  "public_map": "moonlife-actors/references/island-map.json",
+  "initial_relationships": {
+    "z": {
+      "liyuan": {
+        "affinity": 58,
+        "trust": 45,
+        "source": "moonlife-actors/references/characters/z.md#初始关系"
+      },
+      "liting": {
+        "affinity": 60,
+        "trust": 35,
+        "source": "moonlife-actors/references/characters/z.md#初始关系"
+      },
+      "axing": {
+        "affinity": 65,
+        "trust": 60,
+        "source": "moonlife-actors/references/characters/z.md#初始关系"
+      },
+      "zhengyi": {
+        "affinity": 65,
+        "trust": 60,
+        "source": "moonlife-actors/references/characters/z.md#初始关系"
+      },
+      "xiaoxiaoqing": {
+        "affinity": 72,
+        "trust": 70,
+        "source": "moonlife-actors/references/characters/z.md#初始关系"
+      },
+      "linxu": {
+        "affinity": 65,
+        "trust": 60,
+        "source": "moonlife-actors/references/characters/z.md#初始关系"
+      },
+      "zhou_bobo": {
+        "affinity": 65,
+        "trust": 70,
+        "source": "moonlife-actors/references/characters/z.md#初始关系"
+      }
+    },
+    "liyuan": {
+      "z": {
+        "affinity": 80,
+        "trust": 60,
+        "source": "moonlife-actors/references/characters/liyuan.md#初始关系"
+      },
+      "zhou_bobo": {
+        "affinity": 15,
+        "trust": 10,
+        "source": "moonlife-actors/references/characters/liyuan.md#初始关系"
+      }
+    },
+    "liting": {
+      "z": {
+        "affinity": 80,
+        "trust": 65,
+        "source": "moonlife-actors/references/characters/liting.md#初始关系"
+      },
+      "zhou_bobo": {
+        "affinity": 55,
+        "trust": 55,
+        "source": "moonlife-actors/references/characters/liting.md#初始关系"
+      },
+      "xiaoxiaoqing": {
+        "affinity": 65,
+        "trust": 65,
+        "source": "moonlife-actors/references/characters/liting.md#初始关系"
+      },
+      "zhengyi": {
+        "affinity": 52,
+        "trust": 50,
+        "source": "moonlife-actors/references/characters/liting.md#初始关系"
+      }
+    },
+    "axing": {
+      "z": {
+        "affinity": 65,
+        "trust": 60,
+        "source": "moonlife-actors/references/characters/axing.md#初始关系"
+      },
+      "zhou_bobo": {
+        "affinity": 55,
+        "trust": 55,
+        "source": "moonlife-actors/references/characters/axing.md#初始关系"
+      },
+      "xiaoxiaoqing": {
+        "affinity": 58,
+        "trust": 55,
+        "source": "moonlife-actors/references/characters/axing.md#初始关系"
+      },
+      "zhengyi": {
+        "affinity": 52,
+        "trust": 50,
+        "source": "moonlife-actors/references/characters/axing.md#初始关系"
+      }
+    },
+    "zhengyi": {
+      "z": {
+        "affinity": 75,
+        "trust": 70,
+        "source": "moonlife-actors/references/characters/zhengyi.md#初始关系"
+      },
+      "liyuan": {
+        "affinity": 65,
+        "trust": 65,
+        "source": "moonlife-actors/references/characters/zhengyi.md#初始关系"
+      },
+      "linxu": {
+        "affinity": 65,
+        "trust": 65,
+        "source": "moonlife-actors/references/characters/zhengyi.md#初始关系"
+      },
+      "xiaoxiaoqing": {
+        "affinity": 65,
+        "trust": 60,
+        "source": "moonlife-actors/references/characters/zhengyi.md#初始关系"
+      },
+      "zhou_bobo": {
+        "affinity": 35,
+        "trust": 25,
+        "source": "moonlife-actors/references/characters/zhengyi.md#初始关系"
+      },
+      "liting": {
+        "affinity": 52,
+        "trust": 50,
+        "source": "moonlife-actors/references/characters/zhengyi.md#初始关系"
+      },
+      "axing": {
+        "affinity": 55,
+        "trust": 52,
+        "source": "moonlife-actors/references/characters/zhengyi.md#初始关系"
+      }
+    },
+    "xiaoxiaoqing": {
+      "z": {
+        "affinity": 75,
+        "trust": 70,
+        "source": "moonlife-actors/references/characters/xiaoxiaoqing.md#初始关系"
+      },
+      "linxu": {
+        "affinity": 82,
+        "trust": 80,
+        "source": "moonlife-actors/references/characters/xiaoxiaoqing.md#初始关系"
+      },
+      "zhengyi": {
+        "affinity": 70,
+        "trust": 75,
+        "source": "moonlife-actors/references/characters/xiaoxiaoqing.md#初始关系"
+      },
+      "liting": {
+        "affinity": 68,
+        "trust": 65,
+        "source": "moonlife-actors/references/characters/xiaoxiaoqing.md#初始关系"
+      },
+      "zhou_bobo": {
+        "affinity": 60,
+        "trust": 45,
+        "source": "moonlife-actors/references/characters/xiaoxiaoqing.md#初始关系"
+      },
+      "liyuan": {
+        "affinity": 35,
+        "trust": 30,
+        "source": "moonlife-actors/references/characters/xiaoxiaoqing.md#初始关系"
+      },
+      "axing": {
+        "affinity": 60,
+        "trust": 55,
+        "source": "moonlife-actors/references/characters/xiaoxiaoqing.md#初始关系"
+      }
+    },
+    "linxu": {
+      "z": {
+        "affinity": 78,
+        "trust": 65,
+        "source": "moonlife-actors/references/characters/linxu.md#初始关系"
+      },
+      "zhou_bobo": {
+        "affinity": 55,
+        "trust": 55,
+        "source": "moonlife-actors/references/characters/linxu.md#初始关系"
+      },
+      "xiaoxiaoqing": {
+        "affinity": 78,
+        "trust": 75,
+        "source": "moonlife-actors/references/characters/linxu.md#初始关系"
+      },
+      "zhengyi": {
+        "affinity": 62,
+        "trust": 60,
+        "source": "moonlife-actors/references/characters/linxu.md#初始关系"
+      }
+    },
+    "zhou_bobo": {
+      "z": {
+        "affinity": 65,
+        "trust": 40,
+        "source": "moonlife-actors/references/characters/zhou_bobo.md#初始关系"
+      },
+      "liyuan": {
+        "affinity": 30,
+        "trust": 20,
+        "source": "moonlife-actors/references/characters/zhou_bobo.md#初始关系"
+      },
+      "liting": {
+        "affinity": 55,
+        "trust": 55,
+        "source": "moonlife-actors/references/characters/zhou_bobo.md#初始关系"
+      },
+      "axing": {
+        "affinity": 60,
+        "trust": 55,
+        "source": "moonlife-actors/references/characters/zhou_bobo.md#初始关系"
+      },
+      "zhengyi": {
+        "affinity": 50,
+        "trust": 40,
+        "source": "moonlife-actors/references/characters/zhou_bobo.md#初始关系"
+      },
+      "xiaoxiaoqing": {
+        "affinity": 65,
+        "trust": 65,
+        "source": "moonlife-actors/references/characters/zhou_bobo.md#初始关系"
+      },
+      "linxu": {
+        "affinity": 55,
+        "trust": 55,
+        "source": "moonlife-actors/references/characters/zhou_bobo.md#初始关系"
+      }
+    }
+  },
+  "persona_revision": "2026-11-12",
+  "relationship_initialization": {
+    "source": "按已确认故事设计的可调初值，不是原表数值",
+    "range": [
+      0,
+      100
+    ],
+    "directional": true,
+    "existing_save": "已有边保留，缺少边补初值；不覆盖本局经历"
+  },
+  "live_policy": {
+    "mandatory_actor_ids": [
+      "z",
+      "liyuan",
+      "liting",
+      "axing",
+      "zhengyi",
+      "xiaoxiaoqing",
+      "linxu",
+      "zhou_bobo"
+    ],
+    "individual_reply_required": false,
+    "note": "Z主持，其余七人在直播名册；每轮可保持安静。直播适配器使用既有候选/发布协议，不新增岛上远程动作。"
+  }
 }

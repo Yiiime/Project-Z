@@ -5,7 +5,7 @@
       "owner": "liyuan",
       "title": "地图上的空白 · 一起探索",
       "description": "请玩家带Z和梨园去一个地图没标、Z觉得值得留下的地方。Z说明为什么，梨园负责补图。",
-      "enabled_on_start": true,
+      "enabled_on_start": false,
       "steps": [
         {
           "id": "visit",
@@ -244,8 +244,8 @@
       "id": "flowers",
       "owner": "xiaoxiaoqing",
       "title": "今日份花花",
-      "description": "小小晴请玩家向实际收件人送花，转达今天的祝福。",
-      "enabled_on_start": true,
+      "description": "晴野请玩家向实际收件人送花，转达今天的祝福。",
+      "enabled_on_start": false,
       "steps": [
         {
           "id": "deliver",
@@ -257,7 +257,7 @@
         },
         {
           "id": "blessing",
-          "label": "实际转达小小晴的祝福",
+          "label": "实际转达晴野的祝福",
           "performed_by": [
             "player"
           ],
