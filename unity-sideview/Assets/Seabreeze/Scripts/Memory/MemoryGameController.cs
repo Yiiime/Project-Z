@@ -18,7 +18,7 @@ namespace Seabreeze
         public MemoryReply LastReply {get;private set;}
         public bool LocalPortraitPreviewControls=>localPortraitPreview;
         public bool ZhouboPortraitFinal {get;private set;}
-        public bool PlayerChatOpen=>(Conversations!=null&&Conversations.PlayerActor!=null)||(View!=null&&View.Closing);
+        public bool PlayerChatOpen=>(Conversations!=null&&Conversations.PlayerActor!=null)||(View!=null&&(View.Closing||View.ScriptedOpen));
         public void Initialize(GameSession s,WorldDirector w){session=s;world=w;finalZhouboPreview=Array.IndexOf(Environment.GetCommandLineArgs(),"-zhoubo-final-preview")>=0;localPortraitPreview=Array.IndexOf(Environment.GetCommandLineArgs(),"-localPortraitPreview")>=0;ZhouboPortraitFinal=finalZhouboPreview;if(s.State.memory==null)s.State.memory=new MemorySaveState();s.State.memory.Sanitize();Spawner=gameObject.AddComponent<SevenNpcSpawner>();Spawner.Initialize(s,w);View=gameObject.AddComponent<MemoryDialogueView>();View.Initialize(this,s,w);Client=gameObject.AddComponent<MemoryLabClient>();Client.Initialize(s);Conversations=gameObject.AddComponent<NpcConversationCoordinator>();Conversations.Initialize(this,s,w);var executor=gameObject.AddComponent<MemoryActionExecutor>();executor.Initialize(this,s,w);lastDay=s.State.day;lastPeriod=s.State.period;s.Clock.Changed+=ClockChanged;s.TravelRequested+=TravelRequested;Client.ConnectionChanged+=ConnectionChanged;}
         public void SetZhouboPortraitFinal(bool enabled){if(!localPortraitPreview)return;ZhouboPortraitFinal=enabled;}
         public void ResetZhouboPortraitSelection(){ZhouboPortraitFinal=false;}
