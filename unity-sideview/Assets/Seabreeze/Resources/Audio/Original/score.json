@@ -1,0 +1,10 @@
+{
+  "crossfadeSeconds": 2.4,
+  "tracks": [
+    {"mood":"title","title":"为你留一扇窗","resource":"Audio/Original/a_window_for_you","gain":0.42},
+    {"mood":"day","title":"海风来信","resource":"Audio/Original/morning_letters","gain":0.42},
+    {"mood":"evening","title":"灯火与潮汐","resource":"Audio/Original/lantern_tide","gain":0.42},
+    {"mood":"home","title":"为你留一扇窗","resource":"Audio/Original/a_window_for_you","gain":0.40},
+    {"mood":"credits","title":"烟花之后","resource":"Audio/Original/after_the_fireworks","gain":0.48}
+  ]
+}

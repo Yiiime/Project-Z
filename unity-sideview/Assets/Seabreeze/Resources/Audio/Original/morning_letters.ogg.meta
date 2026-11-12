@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: aaba926395f048daa9fd90b7d3b63b58
+AudioImporter:
+  externalObjects: {}
+  serializedVersion: 8
+  defaultSettings:
+    serializedVersion: 2
+    loadType: 2
+    sampleRateSetting: 0
+    sampleRateOverride: 44100
+    compressionFormat: 1
+    quality: 0.85
+    conversionMode: 0
+    preloadAudioData: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  normalize: 0
+  loadInBackground: 1
+  ambisonic: 0
+  3D: 0
+  userData: Original Project Z instrumental; exact musical loop; see ArtSource/Audio/OriginalScore
+  assetBundleName:
+  assetBundleVariant:

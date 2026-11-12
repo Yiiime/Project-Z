@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17fc95eb7cf17489ba4fb7ee74660e84, type: 3}
+  m_Name: StartPage
+  m_EditorClassIdentifier: Assembly-CSharp::Seabreeze.StartPageConfig
+  background: {fileID: 2800000, guid: 7e1fc2fa85e1454fab38d62a45704abb, type: 3}
+  focusX: 0.5
+  overscan: 1.015
+  sea:
+    serializedVersion: 2
+    x: 0.65
+    y: 0.015
+    width: 0.35
+    height: 0.17
+  sky:
+    serializedVersion: 2
+    x: 0.41
+    y: 0.79
+    width: 0.51
+    height: 0.11
+  shade: {r: 0.045, g: 0.1, b: 0.17, a: 0.16}

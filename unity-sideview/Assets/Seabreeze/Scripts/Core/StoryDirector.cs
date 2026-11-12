@@ -16,6 +16,7 @@ namespace Seabreeze
             get
             {
                 if (!session) return "沿着海边走走";
+                if (session.FirstDay != null && session.State.firstDay != null) return session.FirstDay.Objective;
                 if (MemoryRuntimeConfig.Enabled) return "走近岛民按 E 交谈；长椅和咖啡可以推进时段。";
                 if (!string.IsNullOrEmpty(session.State.ending)) return "这一日，已经有了自己的名字。还可以继续散步。";
                 if (!Has("postcard_found")) return "海边长椅旁，有一张被风吹来的旧明信片。";
@@ -34,6 +35,7 @@ namespace Seabreeze
         public bool IsAvailable(string id)
         {
             if (!session || !session.IsReady) return false;
+            if (session.FirstDay != null && !session.FirstDay.IsAvailable(id)) return false;
             if (MemoryRuntimeConfig.Enabled && SevenCharacterCatalog.Find(id) != null) return session.Memory != null && session.Memory.CanInteract(id);
             if (id.StartsWith("npc_", StringComparison.Ordinal))
             {
@@ -44,6 +46,8 @@ namespace Seabreeze
         }
         public string PromptFor(string id)
         {
+            var storyPrompt = session?.FirstDay?.Prompt(id);
+            if (storyPrompt != null) return storyPrompt;
             if (MemoryRuntimeConfig.Enabled)
             {
                 var actor = SevenCharacterCatalog.Find(id);
@@ -70,6 +74,7 @@ namespace Seabreeze
         public void Interact(string id)
         {
             if (!session || session.InputBlocked || !IsAvailable(id)) return;
+            if (session.FirstDay != null && session.FirstDay.Interact(id)) return;
             if (MemoryRuntimeConfig.Enabled)
             {
                 if (SevenCharacterCatalog.Find(id) != null) { session.Memory?.BeginPlayerChat(id); return; }
@@ -169,8 +174,6 @@ namespace Seabreeze
             if (!session) return;
             if (MemoryRuntimeConfig.Enabled)
             {
-                phone.Add("小岛通讯\n走近岛民按 E 交谈，也可以旁听附近正在发生的交流。");
-                phone.Add("月亮岛\n人物按各自经历形成判断。剧情消息由引擎明确投递。");
                 return;
             }
             phone.Add("汐风镇天气\n" + session.Clock.WeatherLabel + "。傍晚海堤风大，记得带件外套。");
