@@ -424,6 +424,8 @@
     }
   ],
   "notes": {
-    "zhengyi": "原表任务栏只有“不希望Z被代替”的态度，未给具体玩家委托，因此不新增任务。"
+    "zhengyi": "2026-11-10档案采用随机帮助事件与实际目睹，不新增正义发布的玩家任务；无好感占位阈值。阶段参考见story-stages.md。",
+    "retired_on_20261112": "map_blank/map_trial/map_packing/flowers保留定义及旧局进度，新局不启用。新版晴野MVP仅有阶段文档，尚未接执行器。",
+    "axing": "generator/tools/letter为旧稿保留委托，11月12日文档列为空，尚未得到新主档确认；不据此新增路线或运行能力。"
   }
 }

@@ -39,5 +39,9 @@ const providers={env:{},config:identity=>configProvider.config(identity),generat
  return {action:'wait',speech:'',mood:'warm',handledIds:[],wakeAfterMs:120000,continuation:'await_event',agendaUpdates:[]};
 }};
 const {server,sessions}=await createLiveServer({root:path.join(directory,'sessions'),artifacts:new ArtifactStore(path.join(directory,'artifacts')),songRoot:fileURLToPath(new URL('../server/assets/songs',import.meta.url)),providers,token:'isolated-ui-verification'});
-server.listen(4188,'127.0.0.1',()=>console.log('UI verification fixture on 127.0.0.1:4188; no external providers.'));
+server.listen(Number(process.env.Z_VERIFY_PORT||4188),'127.0.0.1',()=>{
+ const port=server.address().port;
+ if(process.env.Z_VERIFY_OUTPUT){const output=path.resolve(process.env.Z_VERIFY_OUTPUT);if(!output.startsWith('/private/tmp/'))throw Error('Use an isolated verification directory');fs.mkdirSync(output,{recursive:true});fs.writeFileSync(path.join(output,'live-url.txt'),'http://127.0.0.1:'+port);fs.writeFileSync(path.join(output,'live-pid.txt'),String(process.pid));}
+ console.log('UI verification fixture on 127.0.0.1:'+port+'; pid='+process.pid+'; no external providers.');
+});
 for(const signal of ['SIGINT','SIGTERM'])process.on(signal,()=>{server.closeAllConnections();server.close(()=>{fs.rmSync(directory,{recursive:true,force:true});process.exit(0);});});

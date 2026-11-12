@@ -1,0 +1,24 @@
+{
+  "dropped": true,
+  "calls": 3,
+  "requests": [
+    {
+      "requestId": "ff549631fc65424dab0a8f237c9e17f9",
+      "actor": "z",
+      "proposalId": "proposal_8faba46c49a74954",
+      "status": 200
+    },
+    {
+      "requestId": "ff549631fc65424dab0a8f237c9e17f9",
+      "actor": "z",
+      "proposalId": "proposal_8faba46c49a74954",
+      "status": 200
+    },
+    {
+      "requestId": "d13412774d914b97a080be01a3d5b7d5",
+      "actor": "z",
+      "proposalId": "proposal_07376986c6304811",
+      "status": 200
+    }
+  ]
+}

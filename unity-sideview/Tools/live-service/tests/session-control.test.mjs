@@ -98,7 +98,7 @@ test('real host parser and bundle expose skill and roundtrip lifecycle proposal'
 
 test('session requests traverse real authenticated provider protocol with separate lane',async t=>{
  const s=await fixture(t);let seen;
- const p=new Providers({DEEPSEEK_API_KEY:'test-only'},{fetch:async(_url,options)=>{seen=JSON.parse(options.body);return Response.json({choices:[{finish_reason:'stop',message:{content:JSON.stringify({intent:'farewell',scope:'',speech:'谢谢大家，晚安。'})}}]});}});
+ const p=new Providers({DEEPSEEK_API_KEY:'test-only'},{fetch:async(_url,options)=>{seen=JSON.parse(options.body);return Response.json({choices:[{finish_reason:'stop',message:{content:JSON.stringify({intent:'farewell',scope:'',speech:'谢谢大家，晚安。',actorId:'z',delivery:'平静温柔地道别。',expression:'neutral'})}}]});}});
  const result=await p.generate(s.id,{requestId:crypto.randomUUID(),eventId:'farewell',kind:'session',context:s.sessionControl.context('farewell')});
  assert.equal(result.intent,'farewell');assert(seen.messages[0].content.includes('直播进程管理'));assert(/json/i.test(seen.messages.map(m=>m.content).join(' ')),'JSON-mode provider requires an explicit JSON instruction');
 });

@@ -1,5 +1,5 @@
 import { DatabaseSync } from "node:sqlite";
-import { randomUUID } from "node:crypto";
+import { randomUUID, createHash } from "node:crypto";
 import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 
@@ -16,10 +16,13 @@ export class Store {
       CREATE TABLE IF NOT EXISTS settings (id TEXT PRIMARY KEY, payload TEXT NOT NULL);
       CREATE TABLE IF NOT EXISTS team_sessions (token_hash TEXT PRIMARY KEY, payload TEXT NOT NULL);
       CREATE TABLE IF NOT EXISTS game_archives (id TEXT PRIMARY KEY, payload TEXT NOT NULL);
+      CREATE TABLE IF NOT EXISTS snapshot_blobs (id TEXT PRIMARY KEY, payload TEXT NOT NULL);
       CREATE TABLE IF NOT EXISTS records (
         id TEXT PRIMARY KEY, experiment_id TEXT NOT NULL REFERENCES experiments(id),
         kind TEXT NOT NULL, seq INTEGER NOT NULL, payload TEXT NOT NULL);
-      CREATE INDEX IF NOT EXISTS records_scope ON records(experiment_id, kind, seq);`);
+      CREATE INDEX IF NOT EXISTS records_scope ON records(experiment_id, kind, seq);
+      CREATE INDEX IF NOT EXISTS records_actor ON records(experiment_id, kind,
+        json_extract(payload, '$.actor'), json_extract(payload, '$.epoch'), seq);`);
   }
   transaction(fn) {
     if (this.transactionDepth) return fn();
@@ -85,6 +88,13 @@ export class Store {
     const r = this.db.prepare("SELECT payload FROM records WHERE id=?").get(id);
     return r && JSON.parse(r.payload);
   }
+  actorRecords(expId, kind, actor, epoch, { after = 0, limit = 200, descending = false } = {}) {
+    return this.db.prepare(`SELECT payload FROM records WHERE experiment_id=? AND kind=?
+      AND json_extract(payload, '$.actor')=? AND json_extract(payload, '$.epoch')=?
+      AND COALESCE(json_extract(payload, '$.runtime_seq'), 0)>?
+      ORDER BY seq ${descending ? 'DESC' : 'ASC'} LIMIT ?`)
+      .all(expId, kind, actor, epoch, after, limit).map(r => JSON.parse(r.payload));
+  }
   put(kind, record) {
     const existing = this.db
       .prepare("SELECT seq FROM records WHERE id=?")
@@ -132,6 +142,22 @@ export class Store {
     this.db
       .prepare("INSERT OR IGNORE INTO game_archives VALUES (?, ?)")
       .run(id, JSON.stringify(snapshot));
+  }
+  freezeCheckpoint(checkpoint) {
+    return this.transaction(() => {
+      const put = value => {
+        const payload=JSON.stringify(value), id=createHash("sha256").update(payload).digest("hex");
+        this.db.prepare("INSERT OR IGNORE INTO snapshot_blobs VALUES (?,?)").run(id,payload);return id;
+      };
+      const manifest={...checkpoint,records:Object.fromEntries(Object.entries(checkpoint.records).map(([kind,rows])=>[kind,rows.map(put)]))};
+      const ref=put(manifest);return ref;
+    });
+  }
+  thawCheckpoint(ref) {
+    if(typeof ref!=="string"||!/^[a-f0-9]{64}$/.test(ref))throw Error("存档引用无效");
+    const get=id=>{const row=this.db.prepare("SELECT payload FROM snapshot_blobs WHERE id=?").get(id);if(!row)throw Error("缺少角色存档数据库，请同时恢复后端备份或导入完整快照");return JSON.parse(row.payload);};
+    const manifest=get(ref);
+    return {...manifest,records:Object.fromEntries(Object.entries(manifest.records).map(([kind,ids])=>[kind,ids.map(get)]))};
   }
   teamSession(tokenHash) {
     const r = this.db

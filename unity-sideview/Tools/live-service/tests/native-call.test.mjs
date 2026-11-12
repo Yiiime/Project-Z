@@ -79,13 +79,13 @@ test('PCM stream exposes early audio but requires exact subtitle and successful 
 
 test('native host sends a reviewed-sentence candidate before final JSON and restores short message IDs',async()=>{
  const original=crypto.randomUUID(),seen=[];let finish;
- const result={action:'speak',sessionDecision:null,mood:'warm',gesture:'none',transition:'smooth',handledIds:['inbox_1'],audienceMessageIds:[],speech:'我听见你的问题了。你想从哪里开始？',wakeAfterMs:2000,continuation:'leave_space',memory:'',agendaUpdates:[],tool:null};
+ const result={action:'speak',sessionDecision:null,actorId:'z',delivery:'自然平静地说。',expression:'neutral',mood:'warm',gesture:'none',transition:'smooth',handledIds:['inbox_1'],audienceMessageIds:[],speech:'我听见你的问题了。你想从哪里开始？',wakeAfterMs:2000,continuation:'leave_space',memory:'',agendaUpdates:[],tool:null};
  const providers=new Providers({DEEPSEEK_API_KEY:'test'},{fetch:async(_url,options)=>{
   assert.equal(JSON.parse(options.body).stream,true);const text=JSON.stringify(result),cut=text.indexOf('你想')+1;
   return new Response(new ReadableStream({start(c){const send=content=>c.enqueue(new TextEncoder().encode('data: '+JSON.stringify({choices:[{delta:{content}}]})+'\n\n'));send(text.slice(0,cut));finish=()=>{send(text.slice(cut));c.enqueue(new TextEncoder().encode('data: '+JSON.stringify({choices:[{delta:{},finish_reason:'stop'}]})+'\n\ndata: [DONE]\n\n'));c.close();};}}));
  }});
  const payload={requestId:crypto.randomUUID(),kind:'host',eventId:'turn',context:{call:{active:true,id:crypto.randomUUID(),input:'idle',turns:1,audienceOpen:false,story:null,audienceCandidates:[],audienceReason:'none'},host:{inbox:[{id:original,name:'你',mine:true,text:'怎么开始'}]},mediaRuntime:{audioEnabled:true,ttsAvailable:true}}};
  const promise=providers.generate('stream-owner',payload,{onSentence:s=>seen.push(s)});for(let i=0;i<100&&!seen.length;i++)await new Promise(r=>setTimeout(r,5));
- const countBeforeFinal=seen.length;finish();assert.equal(countBeforeFinal,1);assert.equal(seen[0].text,'我听见你的问题了。');assert.deepEqual(seen[0].handledIds,[original]);const reply=await promise;
+ const countBeforeFinal=seen.length;finish();assert.equal(countBeforeFinal,1);assert.equal(seen[0].text,'我听见你的问题了。');assert.equal(seen[0].actorId,'z');assert.equal(seen[0].delivery,result.delivery);assert.equal(seen[0].expression,result.expression);assert.deepEqual(seen[0].handledIds,[original]);const reply=await promise;
  assert.equal(seen.length,2);assert.equal(seen.map(s=>s.text).join(''),reply.speech);assert.deepEqual(reply.handledIds,[original]);
 });

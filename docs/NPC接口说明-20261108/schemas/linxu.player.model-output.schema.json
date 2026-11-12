@@ -1,0 +1,314 @@
+{
+  "$ref": "#/$defs/output",
+  "$defs": {
+    "output": {
+      "type": "object",
+      "required": [
+        "dialogue",
+        "action",
+        "info"
+      ],
+      "properties": {
+        "dialogue": {
+          "type": "string"
+        },
+        "action": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "option_id"
+          ],
+          "properties": {
+            "option_id": {
+              "enum": [
+                "wait_here",
+                "offer_dock_sort",
+                "move_visitor_center"
+              ]
+            }
+          }
+        },
+        "info": {
+          "$ref": "#/$defs/info"
+        }
+      },
+      "additionalProperties": false
+    },
+    "info": {
+      "type": "object",
+      "required": [
+        "emotion",
+        "changes",
+        "support_willingness"
+      ],
+      "properties": {
+        "emotion": {
+          "type": "string",
+          "enum": [
+            "relaxed",
+            "curious",
+            "interested",
+            "tired",
+            "tense",
+            "anxious",
+            "angry",
+            "scared",
+            "shocked",
+            "sad",
+            "moved",
+            "reluctant",
+            "relieved",
+            "serious",
+            "concerned",
+            "annoyed"
+          ]
+        },
+        "changes": {
+          "type": "object",
+          "properties": {
+            "affinity": {
+              "type": "object",
+              "required": [
+                "delta",
+                "reason",
+                "source_event_ids"
+              ],
+              "properties": {
+                "delta": {
+                  "type": "integer",
+                  "minimum": -50,
+                  "maximum": 50,
+                  "not": {
+                    "const": 0
+                  }
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "source_event_ids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "additionalProperties": false
+            },
+            "trust": {
+              "type": "object",
+              "required": [
+                "delta",
+                "reason",
+                "source_event_ids"
+              ],
+              "properties": {
+                "delta": {
+                  "type": "integer",
+                  "minimum": -50,
+                  "maximum": 50,
+                  "not": {
+                    "const": 0
+                  }
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "source_event_ids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "additionalProperties": false
+            },
+            "world_suspicion": {
+              "type": "object",
+              "required": [
+                "delta",
+                "reason",
+                "source_event_ids"
+              ],
+              "properties": {
+                "delta": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "not": {
+                    "const": 0
+                  }
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "source_event_ids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "additionalProperties": false
+            },
+            "persuasion": {
+              "type": "object",
+              "required": [
+                "delta",
+                "reason",
+                "source_event_ids"
+              ],
+              "properties": {
+                "delta": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "not": {
+                    "const": 0
+                  }
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "source_event_ids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "decision": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "peer_relation_changes": {
+          "type": "array",
+          "maxItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "target_actor_id",
+              "affinity_delta",
+              "trust_delta",
+              "reason",
+              "source_event_ids"
+            ],
+            "properties": {
+              "target_actor_id": {
+                "enum": [
+                  "z",
+                  "liyuan",
+                  "liting",
+                  "axing",
+                  "zhengyi",
+                  "xiaoxiaoqing",
+                  "zhou_bobo"
+                ]
+              },
+              "affinity_delta": {
+                "type": "integer",
+                "minimum": -100,
+                "maximum": 100
+              },
+              "trust_delta": {
+                "type": "integer",
+                "minimum": -100,
+                "maximum": 100
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source_event_ids": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "agenda_update": {
+          "type": "object",
+          "required": [
+            "goal_id",
+            "next_action_id",
+            "reason",
+            "source_event_ids"
+          ],
+          "properties": {
+            "goal_id": {
+              "type": "string",
+              "minLength": 1,
+              "enum": [
+                "linxu_work",
+                "linxu_social",
+                "linxu_rest"
+              ]
+            },
+            "next_action_id": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                null,
+                "wait_here",
+                "offer_dock_sort",
+                "move_visitor_center"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            },
+            "source_event_ids": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "support_willingness": {
+          "enum": [
+            "unassessed",
+            "considering",
+            "willing",
+            "unwilling"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

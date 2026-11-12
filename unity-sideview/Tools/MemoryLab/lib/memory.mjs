@@ -175,6 +175,9 @@ export class MemoryBank {
         id: m.id,
         speakerId: m.speakerId,
         text: m.content,
+        conversation_id: m.conversationId,
+        actual_audience: m.participants,
+        disclose_to: m.disclose_to || [actor],
         source_event_ids: [m.eventId || m.id],
         kind: m.origin === "dialogue" ? "claim" : "observation",
       }));

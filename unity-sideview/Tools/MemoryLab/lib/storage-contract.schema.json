@@ -1,0 +1,4784 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "Runtime storage contract. Per-character BackendInfo and output conditions are supplied from Policy by checkpoint.mjs. Exported into the team schema.",
+  "$defs": {
+    "ActionRecord": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "执行实例 ID；回执必须回传这个值。"
+        },
+        "experimentId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "epoch": {
+          "type": "integer"
+        },
+        "hour": {
+          "type": "number"
+        },
+        "actor": {
+          "$ref": "#/$defs/ActorId"
+        },
+        "type": {
+          "enum": [
+            "wait",
+            "move",
+            "cancel_move",
+            "communicate",
+            "schedule_meeting",
+            "offer_task",
+            "give_task_reward"
+          ]
+        },
+        "target": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "parameters": {
+          "type": "object"
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "succeeded",
+            "failed",
+            "cancelled"
+          ]
+        },
+        "receiptPayload": {
+          "type": "string",
+          "description": "回执内容的 JSON 字符串，记录实际结果用于幂等核对。"
+        },
+        "receiptId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "receiptHour": {
+          "type": "number",
+          "description": "实际动作回执在游戏中的时间。旧记录可能缺省；不能仅凭动作开始时间回忆未来结果。"
+        }
+      },
+      "required": [
+        "id",
+        "experimentId",
+        "epoch",
+        "hour",
+        "actor",
+        "type",
+        "target",
+        "parameters",
+        "status"
+      ],
+      "additionalProperties": true
+    },
+    "ActorId": {
+      "enum": [
+        "z",
+        "liyuan",
+        "liting",
+        "axing",
+        "zhengyi",
+        "xiaoxiaoqing",
+        "linxu",
+        "zhou_bobo"
+      ]
+    },
+    "ActorState": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/ActorId"
+        },
+        "name": {
+          "type": "string"
+        },
+        "scene": {
+          "$ref": "#/$defs/LocationId"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "info": {
+          "type": "object"
+        },
+        "peer_relations": {
+          "$ref": "#/$defs/PeerRelations"
+        },
+        "applied_event_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "agenda": {
+          "anyOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "pending_action": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "数据库中的持久行动 ID；在 ModelContext 中会展开成 ActionRecord。"
+        },
+        "previous_result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PreviousActionResult"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "last_external_event": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "next_agenda_tick": {
+          "type": "number"
+        },
+        "identity": {
+          "$ref": "#/$defs/PublicIdentity"
+        },
+        "talking_to_player": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "scene",
+        "version",
+        "info",
+        "peer_relations",
+        "applied_event_ids",
+        "pending_action"
+      ],
+      "additionalProperties": true,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "id": {
+                "const": "z"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "info": {
+                "$ref": "#/$defs/BackendInfoZ"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "id": {
+                "const": "liyuan"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "info": {
+                "$ref": "#/$defs/BackendInfoliyuan"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "id": {
+                "const": "liting"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "info": {
+                "$ref": "#/$defs/BackendInfoliting"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "id": {
+                "const": "axing"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "info": {
+                "$ref": "#/$defs/BackendInfoaxing"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "id": {
+                "const": "zhengyi"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "info": {
+                "$ref": "#/$defs/BackendInfozhengyi"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "id": {
+                "const": "xiaoxiaoqing"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "info": {
+                "$ref": "#/$defs/BackendInfoxiaoxiaoqing"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "id": {
+                "const": "linxu"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "info": {
+                "$ref": "#/$defs/BackendInfolinxu"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "id": {
+                "const": "zhou_bobo"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "info": {
+                "$ref": "#/$defs/BackendInfoZhouBobo"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "AvailableAction": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "enum": [
+            "wait",
+            "move",
+            "cancel_move",
+            "communicate",
+            "schedule_meeting",
+            "offer_task",
+            "give_task_reward"
+          ]
+        },
+        "target": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "parameters": {
+          "type": "object"
+        },
+        "effect_class": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "target",
+        "parameters"
+      ],
+      "additionalProperties": true,
+      "description": "后台按能力、场景、对话占用、任务和行程生成的本轮选项。id -> 模型 option_id -> 展开后 action_id；只有已提交实例进入 Unity 执行队列。"
+    },
+    "BackendTurnZ": {
+      "type": "object",
+      "properties": {
+        "dialogue": {
+          "type": "string",
+          "description": "纯台词，无动作、环境、心理旁白；字符预算由 context.reply_budget 给出。"
+        },
+        "action": {
+          "$ref": "#/$defs/ExpandedAction"
+        },
+        "info": {
+          "$ref": "#/$defs/BackendInfoZ"
+        }
+      },
+      "required": [
+        "dialogue",
+        "action",
+        "info"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "type": {
+                    "const": "communicate"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "dialogue": {
+                "minLength": 1
+              },
+              "action": {
+                "properties": {
+                  "target": {
+                    "enum": [
+                      "liyuan",
+                      "liting",
+                      "axing",
+                      "zhengyi",
+                      "xiaoxiaoqing",
+                      "linxu",
+                      "zhou_bobo"
+                    ]
+                  },
+                  "action_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "required": [
+                      "channel",
+                      "conversation_id"
+                    ],
+                    "properties": {
+                      "channel": {
+                        "enum": [
+                          "face_to_face",
+                          "whisper",
+                          "note",
+                          "phone",
+                          "radio",
+                          "work_system",
+                          "public_announcement",
+                          "livestream"
+                        ]
+                      },
+                      "conversation_id": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "info": {
+                "required": [
+                  "communication"
+                ]
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "info": {
+                "properties": {
+                  "communication": false
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "offer_task",
+                      "give_task_reward"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "target": {
+                    "const": "player"
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "required": [
+                      "task_id"
+                    ],
+                    "properties": {
+                      "task_id": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "BackendTurnZhouBobo": {
+      "type": "object",
+      "properties": {
+        "dialogue": {
+          "type": "string",
+          "description": "纯台词，无动作、环境、心理旁白；字符预算由 context.reply_budget 给出。"
+        },
+        "action": {
+          "$ref": "#/$defs/ExpandedAction"
+        },
+        "info": {
+          "$ref": "#/$defs/BackendInfoZhouBobo"
+        }
+      },
+      "required": [
+        "dialogue",
+        "action",
+        "info"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "type": {
+                    "const": "communicate"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "dialogue": {
+                "minLength": 1
+              },
+              "action": {
+                "properties": {
+                  "target": {
+                    "enum": [
+                      "z",
+                      "liyuan",
+                      "liting",
+                      "axing",
+                      "zhengyi",
+                      "xiaoxiaoqing",
+                      "linxu"
+                    ]
+                  },
+                  "action_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "required": [
+                      "channel",
+                      "conversation_id"
+                    ],
+                    "properties": {
+                      "channel": {
+                        "enum": [
+                          "face_to_face",
+                          "whisper",
+                          "note",
+                          "phone",
+                          "radio",
+                          "work_system",
+                          "public_announcement",
+                          "livestream"
+                        ]
+                      },
+                      "conversation_id": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "info": {
+                "required": [
+                  "communication"
+                ]
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "info": {
+                "properties": {
+                  "communication": false
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "offer_task",
+                      "give_task_reward"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "target": {
+                    "const": "player"
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "required": [
+                      "task_id"
+                    ],
+                    "properties": {
+                      "task_id": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "BackendTurnaxing": {
+      "type": "object",
+      "properties": {
+        "dialogue": {
+          "type": "string",
+          "description": "纯台词，无动作、环境、心理旁白；字符预算由 context.reply_budget 给出。"
+        },
+        "action": {
+          "$ref": "#/$defs/ExpandedAction"
+        },
+        "info": {
+          "$ref": "#/$defs/BackendInfoaxing"
+        }
+      },
+      "required": [
+        "dialogue",
+        "action",
+        "info"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "type": {
+                    "const": "communicate"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "dialogue": {
+                "minLength": 1
+              },
+              "action": {
+                "properties": {
+                  "target": {
+                    "enum": [
+                      "z",
+                      "liyuan",
+                      "liting",
+                      "zhengyi",
+                      "xiaoxiaoqing",
+                      "linxu",
+                      "zhou_bobo"
+                    ]
+                  },
+                  "action_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "required": [
+                      "channel",
+                      "conversation_id"
+                    ],
+                    "properties": {
+                      "channel": {
+                        "enum": [
+                          "face_to_face",
+                          "whisper",
+                          "note",
+                          "phone",
+                          "radio",
+                          "work_system",
+                          "public_announcement",
+                          "livestream"
+                        ]
+                      },
+                      "conversation_id": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "info": {
+                "required": [
+                  "communication"
+                ]
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "info": {
+                "properties": {
+                  "communication": false
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "offer_task",
+                      "give_task_reward"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "target": {
+                    "const": "player"
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "required": [
+                      "task_id"
+                    ],
+                    "properties": {
+                      "task_id": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "BackendTurnlinxu": {
+      "type": "object",
+      "properties": {
+        "dialogue": {
+          "type": "string",
+          "description": "纯台词，无动作、环境、心理旁白；字符预算由 context.reply_budget 给出。"
+        },
+        "action": {
+          "$ref": "#/$defs/ExpandedAction"
+        },
+        "info": {
+          "$ref": "#/$defs/BackendInfolinxu"
+        }
+      },
+      "required": [
+        "dialogue",
+        "action",
+        "info"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "type": {
+                    "const": "communicate"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "dialogue": {
+                "minLength": 1
+              },
+              "action": {
+                "properties": {
+                  "target": {
+                    "enum": [
+                      "z",
+                      "liyuan",
+                      "liting",
+                      "axing",
+                      "zhengyi",
+                      "xiaoxiaoqing",
+                      "zhou_bobo"
+                    ]
+                  },
+                  "action_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "required": [
+                      "channel",
+                      "conversation_id"
+                    ],
+                    "properties": {
+                      "channel": {
+                        "enum": [
+                          "face_to_face",
+                          "whisper",
+                          "note",
+                          "phone",
+                          "radio",
+                          "work_system",
+                          "public_announcement",
+                          "livestream"
+                        ]
+                      },
+                      "conversation_id": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "info": {
+                "required": [
+                  "communication"
+                ]
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "info": {
+                "properties": {
+                  "communication": false
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "offer_task",
+                      "give_task_reward"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "target": {
+                    "const": "player"
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "required": [
+                      "task_id"
+                    ],
+                    "properties": {
+                      "task_id": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "BackendTurnliting": {
+      "type": "object",
+      "properties": {
+        "dialogue": {
+          "type": "string",
+          "description": "纯台词，无动作、环境、心理旁白；字符预算由 context.reply_budget 给出。"
+        },
+        "action": {
+          "$ref": "#/$defs/ExpandedAction"
+        },
+        "info": {
+          "$ref": "#/$defs/BackendInfoliting"
+        }
+      },
+      "required": [
+        "dialogue",
+        "action",
+        "info"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "type": {
+                    "const": "communicate"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "dialogue": {
+                "minLength": 1
+              },
+              "action": {
+                "properties": {
+                  "target": {
+                    "enum": [
+                      "z",
+                      "liyuan",
+                      "axing",
+                      "zhengyi",
+                      "xiaoxiaoqing",
+                      "linxu",
+                      "zhou_bobo"
+                    ]
+                  },
+                  "action_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "required": [
+                      "channel",
+                      "conversation_id"
+                    ],
+                    "properties": {
+                      "channel": {
+                        "enum": [
+                          "face_to_face",
+                          "whisper",
+                          "note",
+                          "phone",
+                          "radio",
+                          "work_system",
+                          "public_announcement",
+                          "livestream"
+                        ]
+                      },
+                      "conversation_id": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "info": {
+                "required": [
+                  "communication"
+                ]
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "info": {
+                "properties": {
+                  "communication": false
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "offer_task",
+                      "give_task_reward"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "target": {
+                    "const": "player"
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "required": [
+                      "task_id"
+                    ],
+                    "properties": {
+                      "task_id": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "BackendTurnliyuan": {
+      "type": "object",
+      "properties": {
+        "dialogue": {
+          "type": "string",
+          "description": "纯台词，无动作、环境、心理旁白；字符预算由 context.reply_budget 给出。"
+        },
+        "action": {
+          "$ref": "#/$defs/ExpandedAction"
+        },
+        "info": {
+          "$ref": "#/$defs/BackendInfoliyuan"
+        }
+      },
+      "required": [
+        "dialogue",
+        "action",
+        "info"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "type": {
+                    "const": "communicate"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "dialogue": {
+                "minLength": 1
+              },
+              "action": {
+                "properties": {
+                  "target": {
+                    "enum": [
+                      "z",
+                      "liting",
+                      "axing",
+                      "zhengyi",
+                      "xiaoxiaoqing",
+                      "linxu",
+                      "zhou_bobo"
+                    ]
+                  },
+                  "action_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "required": [
+                      "channel",
+                      "conversation_id"
+                    ],
+                    "properties": {
+                      "channel": {
+                        "enum": [
+                          "face_to_face",
+                          "whisper",
+                          "note",
+                          "phone",
+                          "radio",
+                          "work_system",
+                          "public_announcement",
+                          "livestream"
+                        ]
+                      },
+                      "conversation_id": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "info": {
+                "required": [
+                  "communication"
+                ]
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "info": {
+                "properties": {
+                  "communication": false
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "offer_task",
+                      "give_task_reward"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "target": {
+                    "const": "player"
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "required": [
+                      "task_id"
+                    ],
+                    "properties": {
+                      "task_id": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "BackendTurnxiaoxiaoqing": {
+      "type": "object",
+      "properties": {
+        "dialogue": {
+          "type": "string",
+          "description": "纯台词，无动作、环境、心理旁白；字符预算由 context.reply_budget 给出。"
+        },
+        "action": {
+          "$ref": "#/$defs/ExpandedAction"
+        },
+        "info": {
+          "$ref": "#/$defs/BackendInfoxiaoxiaoqing"
+        }
+      },
+      "required": [
+        "dialogue",
+        "action",
+        "info"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "type": {
+                    "const": "communicate"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "dialogue": {
+                "minLength": 1
+              },
+              "action": {
+                "properties": {
+                  "target": {
+                    "enum": [
+                      "z",
+                      "liyuan",
+                      "liting",
+                      "axing",
+                      "zhengyi",
+                      "linxu",
+                      "zhou_bobo"
+                    ]
+                  },
+                  "action_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "required": [
+                      "channel",
+                      "conversation_id"
+                    ],
+                    "properties": {
+                      "channel": {
+                        "enum": [
+                          "face_to_face",
+                          "whisper",
+                          "note",
+                          "phone",
+                          "radio",
+                          "work_system",
+                          "public_announcement",
+                          "livestream"
+                        ]
+                      },
+                      "conversation_id": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "info": {
+                "required": [
+                  "communication"
+                ]
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "info": {
+                "properties": {
+                  "communication": false
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "offer_task",
+                      "give_task_reward"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "target": {
+                    "const": "player"
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "required": [
+                      "task_id"
+                    ],
+                    "properties": {
+                      "task_id": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "BackendTurnzhengyi": {
+      "type": "object",
+      "properties": {
+        "dialogue": {
+          "type": "string",
+          "description": "纯台词，无动作、环境、心理旁白；字符预算由 context.reply_budget 给出。"
+        },
+        "action": {
+          "$ref": "#/$defs/ExpandedAction"
+        },
+        "info": {
+          "$ref": "#/$defs/BackendInfozhengyi"
+        }
+      },
+      "required": [
+        "dialogue",
+        "action",
+        "info"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "type": {
+                    "const": "communicate"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "dialogue": {
+                "minLength": 1
+              },
+              "action": {
+                "properties": {
+                  "target": {
+                    "enum": [
+                      "z",
+                      "liyuan",
+                      "liting",
+                      "axing",
+                      "xiaoxiaoqing",
+                      "linxu",
+                      "zhou_bobo"
+                    ]
+                  },
+                  "action_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "required": [
+                      "channel",
+                      "conversation_id"
+                    ],
+                    "properties": {
+                      "channel": {
+                        "enum": [
+                          "face_to_face",
+                          "whisper",
+                          "note",
+                          "phone",
+                          "radio",
+                          "work_system",
+                          "public_announcement",
+                          "livestream"
+                        ]
+                      },
+                      "conversation_id": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "info": {
+                "required": [
+                  "communication"
+                ]
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "info": {
+                "properties": {
+                  "communication": false
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "offer_task",
+                      "give_task_reward"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "target": {
+                    "const": "player"
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "required": [
+                      "task_id"
+                    ],
+                    "properties": {
+                      "task_id": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "ConversationRecord": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "experimentId": {
+          "type": "string"
+        },
+        "epoch": {
+          "type": "integer"
+        },
+        "hour": {
+          "type": "number"
+        },
+        "status": {
+          "type": "string"
+        },
+        "actors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ActorId"
+          }
+        },
+        "lines": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "experimentId",
+        "epoch",
+        "status",
+        "actors"
+      ],
+      "additionalProperties": true
+    },
+    "CooperationRequest": {
+      "type": "object",
+      "properties": {
+        "task_id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "request": {
+          "type": "string"
+        },
+        "source_event_id": {
+          "type": "string"
+        },
+        "effect_class": {
+          "type": "string"
+        },
+        "allowed_step_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "step_labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "task_id",
+        "title",
+        "request",
+        "source_event_id",
+        "allowed_step_ids",
+        "step_labels"
+      ],
+      "additionalProperties": true
+    },
+    "CooperationState": {
+      "type": "object",
+      "properties": {
+        "task_id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "source_event_id": {
+          "type": "string"
+        },
+        "effect_class": {
+          "type": "string"
+        },
+        "allowed_step_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "decision": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TaskParticipation"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "task_id",
+        "title",
+        "status",
+        "source_event_id",
+        "allowed_step_ids",
+        "decision"
+      ],
+      "additionalProperties": true
+    },
+    "DiagnosticEventRecord": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "experimentId": {
+          "type": "string"
+        },
+        "epoch": {
+          "type": "integer"
+        },
+        "hour": {
+          "type": "number"
+        },
+        "type": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "details": {
+          "type": "object"
+        },
+        "at": {
+          "type": "string"
+        },
+        "seq": {
+          "type": "integer"
+        },
+        "game_payload_hash": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "experimentId",
+        "epoch",
+        "hour",
+        "type",
+        "text",
+        "details",
+        "at"
+      ],
+      "additionalProperties": false
+    },
+    "ExecutionEvidence": {
+      "type": "object",
+      "description": "后台真实执行回执的只读视图。台词、wait和未执行动作不进入此列表；失败回执仍保留failed，不等于完成。这里只包含当前角色、当前时间线最近6项。",
+      "properties": {
+        "action_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "enum": [
+            "succeeded",
+            "failed"
+          ]
+        },
+        "receipt_id": {
+          "type": "string"
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "scene": {
+              "type": "string"
+            },
+            "summary": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "required": [
+        "action_id",
+        "type",
+        "target",
+        "status",
+        "result"
+      ],
+      "additionalProperties": false
+    },
+    "ExpandedAction": {
+      "type": "object",
+      "properties": {
+        "action_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "选项 ID，例如 move_flower_shop。实际执行实例另生成 action_proposal_...。"
+        },
+        "type": {
+          "enum": [
+            "wait",
+            "move",
+            "cancel_move",
+            "communicate",
+            "schedule_meeting",
+            "offer_task",
+            "give_task_reward"
+          ]
+        },
+        "target": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "parameters": {
+          "type": "object"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "action_id",
+        "type",
+        "target",
+        "parameters",
+        "description"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "wait"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "parameters": {
+                "type": "object",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              },
+              "target": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "move"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "parameters": {
+                "$ref": "#/$defs/MoveParameters"
+              },
+              "target": {
+                "$ref": "#/$defs/LocationId"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "cancel_move"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "action_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "要取消的持久化 action.id，不是 move_flower_shop 选项 ID。"
+                  }
+                },
+                "required": [
+                  "action_id"
+                ],
+                "additionalProperties": false
+              },
+              "target": {
+                "$ref": "#/$defs/LocationId"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "communicate"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "parameters": {
+                "type": "object",
+                "required": [
+                  "channel",
+                  "conversation_id"
+                ],
+                "properties": {
+                  "channel": {
+                    "enum": [
+                      "face_to_face",
+                      "whisper",
+                      "note",
+                      "phone",
+                      "radio",
+                      "work_system",
+                      "public_announcement",
+                      "livestream"
+                    ]
+                  },
+                  "conversation_id": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              },
+              "target": {
+                "$ref": "#/$defs/ActorId"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "schedule_meeting"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "parameters": {
+                "type": "object",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              },
+              "target": {
+                "$ref": "#/$defs/ActorId"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "offer_task"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "task_id": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "task_id"
+                ],
+                "additionalProperties": false
+              },
+              "target": {
+                "const": "player"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "give_task_reward"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "task_id": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "task_id"
+                ],
+                "additionalProperties": false
+              },
+              "target": {
+                "const": "player"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "JobRecord": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "experimentId": {
+          "type": "string"
+        },
+        "epoch": {
+          "type": "integer"
+        },
+        "hour": {
+          "type": "number"
+        },
+        "world": {
+          "type": "string"
+        },
+        "actor": {
+          "$ref": "#/$defs/ActorId"
+        },
+        "event": {
+          "type": "string"
+        },
+        "mode": {
+          "type": "string"
+        },
+        "conversation": {
+          "type": "string"
+        },
+        "channel": {
+          "type": "string"
+        },
+        "root": {
+          "type": "string"
+        },
+        "hop": {
+          "type": "integer"
+        },
+        "due": {
+          "type": "number"
+        },
+        "status": {
+          "type": "string"
+        },
+        "environment": {
+          "type": "object"
+        },
+        "context": {
+          "type": "object"
+        },
+        "infoSchema": {
+          "type": "object"
+        },
+        "error": {
+          "type": "string"
+        },
+        "rejected_output": {
+          "description": "Failed raw model result; deliberately unrestricted JSON for diagnostics."
+        },
+        "request_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "input_hash": {
+          "type": "string"
+        },
+        "proposal_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "experimentId",
+        "epoch",
+        "hour",
+        "actor",
+        "event",
+        "mode",
+        "status"
+      ],
+      "additionalProperties": true,
+      "description": "Persisted job; error/rejected_output belong here. Run responses use JobResult.validation_error."
+    },
+    "KnownFact": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summary": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "source_event_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "disclose_to": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "summary"
+      ],
+      "additionalProperties": true
+    },
+    "LiveRoomContext": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mandatory_participants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ActorId"
+          },
+          "minItems": 8,
+          "maxItems": 8,
+          "uniqueItems": true
+        },
+        "role": {
+          "enum": [
+            "host",
+            "audience"
+          ]
+        },
+        "heard_in_progress": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "mandatory_participants",
+        "role"
+      ],
+      "additionalProperties": true
+    },
+    "LocationId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "逻辑地点 ID，例如 flower_shop；不等同于 Unity 场景名或屏幕坐标。允许宿主定义的新地点，能否行走另由执行器确认。"
+    },
+    "MapPlace": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/LocationId"
+        },
+        "name": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "additionalProperties": true
+    },
+    "MemoryAvailability": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "enum": [
+            "archived",
+            "future",
+            "superseded",
+            "review",
+            "dormant",
+            "cue",
+            "fading",
+            "clear"
+          ]
+        },
+        "label": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "label",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "MemoryEvidence": {
+      "type": "object",
+      "properties": {
+        "messageId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "quote": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "messageId",
+        "quote"
+      ],
+      "additionalProperties": false
+    },
+    "MemoryRecord": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "experimentId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "epoch": {
+          "type": "integer"
+        },
+        "actorId": {
+          "$ref": "#/$defs/ActorId"
+        },
+        "kind": {
+          "enum": [
+            "experience",
+            "hearsay",
+            "commitment",
+            "reflection"
+          ]
+        },
+        "content": {
+          "type": "string"
+        },
+        "gist": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "speakerId": {
+          "type": "string"
+        },
+        "sourceLabel": {
+          "type": "string"
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/MemoryEvidence"
+          }
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "createdHour": {
+          "type": "number"
+        },
+        "originalHour": {
+          "type": "number"
+        },
+        "importance": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "emotion": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2
+        },
+        "keywords": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "recallCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "detailRecallCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "origin": {
+          "type": "string"
+        },
+        "disclose_to": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "commitmentStatus": {
+          "enum": [
+            "pending",
+            "fulfilled",
+            "cancelled"
+          ]
+        },
+        "lastRecalledAt": {
+          "type": "number"
+        },
+        "lastDetailRecalledAt": {
+          "type": "number"
+        },
+        "supersededBy": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "experimentId",
+        "epoch",
+        "actorId",
+        "kind",
+        "content",
+        "gist",
+        "evidence",
+        "createdHour"
+      ],
+      "additionalProperties": true,
+      "description": "后台持久记忆。玩家/NPC原话是 hearsay，执行回执形成 experience；reflection 是可修正推断。commitment 不等于事情已完成。额外字段允许记忆提炼器扩展。"
+    },
+    "MessageRecord": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "eventId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "experimentId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "epoch": {
+          "type": "integer"
+        },
+        "hour": {
+          "type": "number"
+        },
+        "participants": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "speakerId": {
+          "$ref": "#/$defs/SpeakerId"
+        },
+        "recipientId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "conversationId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "content": {
+          "type": "string"
+        },
+        "status": {
+          "const": "complete"
+        },
+        "origin": {
+          "enum": [
+            "dialogue",
+            "world"
+          ]
+        },
+        "disclose_to": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "eventId",
+        "experimentId",
+        "epoch",
+        "hour",
+        "content"
+      ],
+      "additionalProperties": true
+    },
+    "Metric": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "ModelContext": {
+      "type": "object",
+      "required": [
+        "protocol_version",
+        "session_id",
+        "turn_id",
+        "actor_id",
+        "interaction",
+        "environment",
+        "character_state",
+        "available_actions"
+      ],
+      "properties": {
+        "protocol_version": {
+          "const": "1.2.0"
+        },
+        "session_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "turn_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actor_id": {
+          "enum": [
+            "z",
+            "liyuan",
+            "liting",
+            "axing",
+            "zhengyi",
+            "xiaoxiaoqing",
+            "linxu",
+            "zhou_bobo"
+          ]
+        },
+        "interaction": {
+          "type": "object",
+          "required": [
+            "mode",
+            "source_actor_id",
+            "source_event_id",
+            "input"
+          ],
+          "properties": {
+            "mode": {
+              "enum": [
+                "player",
+                "npc_message",
+                "world_event",
+                "agenda",
+                "livestream"
+              ]
+            },
+            "source_actor_id": {
+              "enum": [
+                "z",
+                "liyuan",
+                "liting",
+                "axing",
+                "zhengyi",
+                "xiaoxiaoqing",
+                "linxu",
+                "zhou_bobo",
+                "player",
+                "engine"
+              ]
+            },
+            "source_event_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "input": {
+              "type": "string"
+            },
+            "conversation_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "channel": {
+              "enum": [
+                "face_to_face",
+                "whisper",
+                "note",
+                "phone",
+                "radio",
+                "work_system",
+                "public_announcement",
+                "livestream",
+                "private_player_chat",
+                null
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "mode": {
+                    "const": "npc_message"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "conversation_id",
+                  "channel"
+                ],
+                "properties": {
+                  "source_actor_id": {
+                    "enum": [
+                      "z",
+                      "liyuan",
+                      "liting",
+                      "axing",
+                      "zhengyi",
+                      "xiaoxiaoqing",
+                      "linxu",
+                      "zhou_bobo"
+                    ]
+                  },
+                  "conversation_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "channel": {
+                    "enum": [
+                      "face_to_face",
+                      "whisper",
+                      "note",
+                      "phone",
+                      "radio",
+                      "work_system",
+                      "public_announcement",
+                      "livestream"
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "mode": {
+                    "const": "player"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "source_actor_id": {
+                    "const": "player"
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "mode": {
+                    "enum": [
+                      "world_event",
+                      "agenda"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "source_actor_id": {
+                    "const": "engine"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "environment": {
+          "type": "object",
+          "required": [
+            "scene"
+          ],
+          "properties": {
+            "scene": {
+              "type": "string",
+              "minLength": 1
+            },
+            "present_characters": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "map_context": {
+              "type": "object",
+              "required": [
+                "current_place",
+                "exits",
+                "asked_routes"
+              ],
+              "properties": {
+                "current_place": {
+                  "$ref": "#/$defs/MapPlace"
+                },
+                "exits": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/MapPlace"
+                  }
+                },
+                "asked_routes": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "destination",
+                      "status",
+                      "path"
+                    ],
+                    "properties": {
+                      "status": {
+                        "enum": [
+                          "known_route",
+                          "host_navigation_required"
+                        ]
+                      },
+                      "path": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "destination": {
+                        "$ref": "#/$defs/LocationId"
+                      },
+                      "destination_name": {
+                        "type": "string"
+                      },
+                      "via": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "boundary": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            },
+            "day": {
+              "type": "integer"
+            },
+            "period": {
+              "type": "integer"
+            },
+            "weather": {
+              "type": "string"
+            },
+            "simulation_tick": {
+              "type": "integer"
+            },
+            "location_id": {
+              "$ref": "#/$defs/LocationId"
+            },
+            "scene_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "sceneId": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Legacy host alias; scene_id is the normalized context field. Neither is location_id."
+            },
+            "actual_audience": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "reachable_locations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "walkable_locations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "player_conversation_active": {
+              "type": "boolean"
+            },
+            "intent_only": {
+              "type": "boolean"
+            },
+            "meeting_candidates": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/ActorId"
+              }
+            },
+            "social_opportunity": {
+              "type": "object",
+              "properties": {
+                "nearby_actors": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/ActorId"
+                  }
+                },
+                "kind": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "nearby_actors",
+                "kind"
+              ],
+              "additionalProperties": true
+            },
+            "live_room": {
+              "$ref": "#/$defs/LiveRoomContext"
+            },
+            "available_actions": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/AvailableAction"
+              }
+            },
+            "allowed_communication_channels": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": true
+        },
+        "character_state": {
+          "type": "object",
+          "required": [
+            "version",
+            "info",
+            "known_facts",
+            "memories",
+            "applied_event_ids"
+          ],
+          "properties": {
+            "version": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "info": {
+              "type": "object"
+            },
+            "known_facts": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/KnownFact"
+              }
+            },
+            "memories": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/RecalledMemory"
+              }
+            },
+            "applied_event_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "peer_relations": {
+              "$ref": "#/$defs/PeerRelations"
+            },
+            "metric_policy": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "properties": {
+                  "source": {
+                    "enum": [
+                      "engine",
+                      "model"
+                    ]
+                  },
+                  "min_delta": {
+                    "type": "integer"
+                  },
+                  "max_delta": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "source",
+                  "min_delta",
+                  "max_delta"
+                ],
+                "additionalProperties": true
+              }
+            },
+            "eligible_share_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "peer_relation_policy": {
+              "type": "object",
+              "properties": {
+                "max_abs_delta": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "max_abs_delta"
+              ],
+              "additionalProperties": false
+            },
+            "allowed_goals": {
+              "type": "array"
+            },
+            "allowed_next_action_ids": {
+              "type": "array"
+            },
+            "disclosure_by_recipient": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "share_scope_target_id": {
+              "type": "string"
+            },
+            "public_identity": {
+              "$ref": "#/$defs/PublicIdentity"
+            },
+            "received_claims": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/RecalledMemory"
+              }
+            },
+            "recent_conversation": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/RecentExperience"
+              }
+            },
+            "recent_experiences": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/RecentExperience"
+              }
+            },
+            "agenda": {
+              "anyOf": [
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "pending_action": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/ActionRecord"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "cooperation_requests": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/CooperationRequest"
+              }
+            },
+            "cooperation_state": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/CooperationState"
+              }
+            },
+            "execution_evidence": {
+              "type": "array",
+              "maxItems": 6,
+              "items": {
+                "$ref": "#/$defs/ExecutionEvidence"
+              }
+            }
+          },
+          "additionalProperties": true
+        },
+        "available_actions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AvailableAction"
+          },
+          "minItems": 1
+        },
+        "plot_node": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "summary": {
+              "type": "string"
+            }
+          },
+          "required": [],
+          "additionalProperties": true
+        },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TaskState"
+          }
+        },
+        "previous_action_result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PreviousActionResult"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reply_budget": {
+          "type": "object",
+          "properties": {
+            "max_dialogue_chars": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "deadline_ms": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "max_dialogue_chars",
+            "deadline_ms"
+          ],
+          "additionalProperties": true
+        },
+        "player": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Engine.context 为单个角色组装的本轮模型输入；不是 Unity 请求体。人设正文在 system prompt，不重复塞进此对象。环境允许宿主扩展字段。",
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "actor_id": {
+                "const": "z"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "character_state": {
+                "properties": {
+                  "info": {
+                    "$ref": "#/$defs/BackendInfoZ"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "actor_id": {
+                "const": "liyuan"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "character_state": {
+                "properties": {
+                  "info": {
+                    "$ref": "#/$defs/BackendInfoliyuan"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "actor_id": {
+                "const": "liting"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "character_state": {
+                "properties": {
+                  "info": {
+                    "$ref": "#/$defs/BackendInfoliting"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "actor_id": {
+                "const": "axing"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "character_state": {
+                "properties": {
+                  "info": {
+                    "$ref": "#/$defs/BackendInfoaxing"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "actor_id": {
+                "const": "zhengyi"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "character_state": {
+                "properties": {
+                  "info": {
+                    "$ref": "#/$defs/BackendInfozhengyi"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "actor_id": {
+                "const": "xiaoxiaoqing"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "character_state": {
+                "properties": {
+                  "info": {
+                    "$ref": "#/$defs/BackendInfoxiaoxiaoqing"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "actor_id": {
+                "const": "linxu"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "character_state": {
+                "properties": {
+                  "info": {
+                    "$ref": "#/$defs/BackendInfolinxu"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "actor_id": {
+                "const": "zhou_bobo"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "character_state": {
+                "properties": {
+                  "info": {
+                    "$ref": "#/$defs/BackendInfoZhouBobo"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "MoveParameters": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/RouteParameters"
+        },
+        {
+          "type": "object",
+          "properties": {},
+          "required": [],
+          "additionalProperties": false
+        }
+      ],
+      "description": "推荐使用 origin + 完整 route；兼容旧 reachable_locations 模式的空对象。路径必须从真实当前位置开始、经过可执行的地图边并终止于 target。"
+    },
+    "PeerRelation": {
+      "type": "object",
+      "properties": {
+        "affinity": {
+          "$ref": "#/$defs/Metric"
+        },
+        "trust": {
+          "$ref": "#/$defs/Metric"
+        },
+        "source": {
+          "type": "string"
+        },
+        "impression_formed": {
+          "type": "boolean"
+        },
+        "history": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RelationHistory"
+          },
+          "maxItems": 12
+        }
+      },
+      "required": [
+        "affinity",
+        "trust"
+      ],
+      "additionalProperties": true
+    },
+    "PeerRelations": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/ActorId"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/PeerRelation"
+      }
+    },
+    "PortableCheckpoint": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": 2
+        },
+        "worldId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "contentRevision": {
+          "type": "string"
+        },
+        "world": {
+          "$ref": "#/$defs/WorldState"
+        },
+        "tasks": {
+          "$ref": "#/$defs/TaskCheckpoint"
+        },
+        "records": {
+          "type": "object",
+          "properties": {
+            "event": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/$defs/WorldEventRecord"
+                  },
+                  {
+                    "$ref": "#/$defs/DiagnosticEventRecord"
+                  }
+                ]
+              }
+            },
+            "message": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/MessageRecord"
+              }
+            },
+            "memory": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/MemoryRecord"
+              }
+            },
+            "job": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/JobRecord"
+              }
+            },
+            "action": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/ActionRecord"
+              }
+            },
+            "proposal": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/ProposalRecord"
+              }
+            },
+            "conversation": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/ConversationRecord"
+              }
+            },
+            "social_decision": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/SocialDecisionRecord"
+              }
+            },
+            "memory_job": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/MemoryJobRecord"
+              }
+            },
+            "reflection_job": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/ReflectionJobRecord"
+              }
+            }
+          },
+          "required": [
+            "event",
+            "message",
+            "memory",
+            "job",
+            "action",
+            "proposal",
+            "conversation",
+            "social_decision",
+            "memory_job",
+            "reflection_job"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "version",
+        "worldId",
+        "contentRevision",
+        "world",
+        "tasks",
+        "records"
+      ],
+      "additionalProperties": false
+    },
+    "PreviousActionResult": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "action_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "event_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summary": {
+          "type": "string"
+        },
+        "action_type": {
+          "type": "string",
+          "description": "本次回执针对的具体动作类型，旧存档可能缺省。"
+        },
+        "effect_scope": {
+          "enum": [
+            "message_delivery",
+            "action_cancelled",
+            "awaiting_execution",
+            "no_world_change",
+            "task_state",
+            "world_action"
+          ],
+          "description": "区分台词送达、等待、任务状态、物理执行。status=succeeded只确认这个作用范围，不能泛化为其他工作已完成。"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "additionalProperties": true
+    },
+    "ProposalRecord": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "experimentId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "epoch": {
+          "type": "integer"
+        },
+        "hour": {
+          "type": "number"
+        },
+        "world": {
+          "type": "string",
+          "minLength": 1
+        },
+        "runId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actor": {
+          "$ref": "#/$defs/ActorId"
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "restored_pending",
+            "committed",
+            "cancelled"
+          ]
+        },
+        "context": {
+          "$ref": "#/$defs/ModelContext"
+        },
+        "output": {
+          "type": "object"
+        },
+        "liveTurn": {
+          "type": "object"
+        },
+        "job": {
+          "type": "string",
+          "minLength": 1
+        },
+        "conversation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "root": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hop": {
+          "type": "integer"
+        },
+        "eventId": {
+          "type": "string"
+        },
+        "cancelReason": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "experimentId",
+        "epoch",
+        "hour",
+        "actor",
+        "status",
+        "context",
+        "output"
+      ],
+      "additionalProperties": true,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "actor": {
+                "const": "z"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "output": {
+                "$ref": "#/$defs/BackendTurnZ"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "actor": {
+                "const": "liyuan"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "output": {
+                "$ref": "#/$defs/BackendTurnliyuan"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "actor": {
+                "const": "liting"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "output": {
+                "$ref": "#/$defs/BackendTurnliting"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "actor": {
+                "const": "axing"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "output": {
+                "$ref": "#/$defs/BackendTurnaxing"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "actor": {
+                "const": "zhengyi"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "output": {
+                "$ref": "#/$defs/BackendTurnzhengyi"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "actor": {
+                "const": "xiaoxiaoqing"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "output": {
+                "$ref": "#/$defs/BackendTurnxiaoxiaoqing"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "actor": {
+                "const": "linxu"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "output": {
+                "$ref": "#/$defs/BackendTurnlinxu"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "actor": {
+                "const": "zhou_bobo"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "output": {
+                "$ref": "#/$defs/BackendTurnZhouBobo"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "PublicIdentity": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/ActorId"
+        },
+        "name": {
+          "type": "string"
+        },
+        "occupation": {
+          "type": "string"
+        },
+        "workplace": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "home": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "usual_place": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "workplace_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "home_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "usual_place_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "public_note": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "occupation"
+      ],
+      "additionalProperties": true
+    },
+    "RecalledMemory": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summary": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "source_event_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "disclose_to": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "actorId": {
+          "$ref": "#/$defs/ActorId"
+        },
+        "content": {
+          "type": "string"
+        },
+        "detailLevel": {
+          "enum": [
+            "detail",
+            "gist"
+          ]
+        },
+        "sourceLabel": {
+          "type": "string"
+        },
+        "speakerId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "commitmentStatus": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "certainty": {
+          "type": "string"
+        },
+        "availability": {
+          "type": "number"
+        },
+        "clarity": {
+          "type": "number"
+        },
+        "cueScore": {
+          "type": "number"
+        },
+        "cued": {
+          "type": "boolean"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/$defs/MemoryAvailability"
+        },
+        "rank": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "additionalProperties": true,
+      "description": "进入上下文的裁剪/检索视图，不等于数据库 MemoryRecord 全量；可能只有大意。"
+    },
+    "RecentExperience": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "speakerId": {
+          "$ref": "#/$defs/SpeakerId"
+        },
+        "text": {
+          "type": "string"
+        },
+        "conversation_id": {
+          "type": "string"
+        },
+        "actual_audience": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "disclose_to": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "source_event_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "kind": {
+          "enum": [
+            "claim",
+            "observation"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "speakerId",
+        "text",
+        "actual_audience",
+        "disclose_to",
+        "source_event_ids",
+        "kind"
+      ],
+      "additionalProperties": true
+    },
+    "RelationHistory": {
+      "type": "object",
+      "properties": {
+        "turn_id": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "source_event_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "source_kind": {
+          "type": "string"
+        },
+        "source_actor_id": {
+          "$ref": "#/$defs/SpeakerId"
+        },
+        "before": {
+          "type": "object",
+          "properties": {
+            "affinity": {
+              "$ref": "#/$defs/Metric"
+            },
+            "trust": {
+              "$ref": "#/$defs/Metric"
+            }
+          },
+          "required": [
+            "affinity",
+            "trust"
+          ],
+          "additionalProperties": false
+        },
+        "after": {
+          "type": "object",
+          "properties": {
+            "affinity": {
+              "$ref": "#/$defs/Metric"
+            },
+            "trust": {
+              "$ref": "#/$defs/Metric"
+            }
+          },
+          "required": [
+            "affinity",
+            "trust"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "turn_id",
+        "reason",
+        "source_event_ids",
+        "source_kind",
+        "source_actor_id",
+        "before",
+        "after"
+      ],
+      "additionalProperties": false
+    },
+    "RouteParameters": {
+      "type": "object",
+      "properties": {
+        "origin": {
+          "$ref": "#/$defs/LocationId"
+        },
+        "route": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/LocationId"
+          },
+          "minItems": 2
+        }
+      },
+      "required": [
+        "origin",
+        "route"
+      ],
+      "additionalProperties": false
+    },
+    "SpeakerId": {
+      "enum": [
+        "z",
+        "liyuan",
+        "liting",
+        "axing",
+        "zhengyi",
+        "xiaoxiaoqing",
+        "linxu",
+        "zhou_bobo",
+        "player",
+        "engine"
+      ]
+    },
+    "TaskCheckpoint": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TaskDbState"
+          }
+        },
+        "collaboration": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TaskDbCollaboration"
+          }
+        },
+        "receipts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TaskReceiptRecord"
+          }
+        },
+        "followups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TaskFollowupRecord"
+          }
+        }
+      },
+      "required": [
+        "state"
+      ],
+      "additionalProperties": false
+    },
+    "TaskDbCollaboration": {
+      "type": "object",
+      "properties": {
+        "session": {
+          "type": "string",
+          "minLength": 1
+        },
+        "task": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actor": {
+          "$ref": "#/$defs/ActorId"
+        },
+        "status": {
+          "type": "string"
+        },
+        "invite_event": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "request": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "decision": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "session",
+        "task",
+        "actor",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "TaskDbState": {
+      "type": "object",
+      "properties": {
+        "session": {
+          "type": "string",
+          "minLength": 1
+        },
+        "task": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "available",
+            "offered",
+            "active",
+            "declined",
+            "completed"
+          ]
+        },
+        "enabled": {
+          "enum": [
+            0,
+            1
+          ]
+        },
+        "progress": {
+          "type": "string",
+          "description": "JSON 编码的步骤进度，不是对象。"
+        },
+        "reward_claimed": {
+          "enum": [
+            0,
+            1
+          ]
+        }
+      },
+      "required": [
+        "session",
+        "task",
+        "status",
+        "enabled",
+        "progress",
+        "reward_claimed"
+      ],
+      "additionalProperties": false
+    },
+    "TaskDefinition": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner": {
+          "$ref": "#/$defs/ActorId"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "enabled_on_start": {
+          "type": "boolean"
+        },
+        "assignee": {
+          "const": "player"
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TaskStep"
+          }
+        },
+        "reward": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string"
+            },
+            "summary": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "summary"
+          ],
+          "additionalProperties": false
+        },
+        "source_submission": {
+          "type": "integer"
+        },
+        "effect_class": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "owner",
+        "title",
+        "description",
+        "enabled_on_start",
+        "assignee",
+        "steps",
+        "reward"
+      ],
+      "additionalProperties": true,
+      "description": "正式任务只能发给玩家。performed_by 描述步骤参与者，不能替代玩家接受或 NPC 的自愿协作判断。配置存在不意味着物理步骤执行器已完成。"
+    },
+    "TaskFollowup": {
+      "type": "object",
+      "required": [
+        "task_id",
+        "choice",
+        "reason",
+        "source_event_ids"
+      ],
+      "properties": {
+        "task_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "choice": {
+          "enum": [
+            "reoffer",
+            "postpone",
+            "stop"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "source_event_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "TaskFollowupRecord": {
+      "type": "object",
+      "properties": {
+        "session": {
+          "type": "string"
+        },
+        "task": {
+          "type": "string"
+        },
+        "decline_event": {
+          "type": "string"
+        },
+        "decision": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "session",
+        "task",
+        "decline_event",
+        "decision"
+      ],
+      "additionalProperties": false
+    },
+    "TaskParticipation": {
+      "type": "object",
+      "required": [
+        "task_id",
+        "choice",
+        "reason",
+        "source_event_ids",
+        "contribution",
+        "step_ids"
+      ],
+      "properties": {
+        "task_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "choice": {
+          "enum": [
+            "willing",
+            "declined",
+            "postponed"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "source_event_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "contribution": {
+          "type": "string",
+          "maxLength": 240
+        },
+        "step_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "TaskProgress": {
+      "type": "object",
+      "properties": {
+        "succeeded": {
+          "type": "boolean"
+        },
+        "performed_by": {
+          "$ref": "#/$defs/SpeakerId"
+        },
+        "details": {
+          "$ref": "#/$defs/TaskReceiptDetails"
+        },
+        "receipt_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "succeeded",
+        "performed_by",
+        "details",
+        "receipt_id"
+      ],
+      "additionalProperties": false
+    },
+    "TaskReceiptDetails": {
+      "type": "object",
+      "properties": {
+        "participants": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "voluntary_consents": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "message_event_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [],
+      "additionalProperties": true
+    },
+    "TaskReceiptRecord": {
+      "type": "object",
+      "properties": {
+        "session": {
+          "type": "string"
+        },
+        "receipt": {
+          "type": "string"
+        },
+        "payload": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "session",
+        "receipt",
+        "payload"
+      ],
+      "additionalProperties": false
+    },
+    "TaskState": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/TaskDefinition"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "available",
+                "offered",
+                "active",
+                "declined",
+                "completed"
+              ]
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "progress": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/TaskProgress"
+              }
+            },
+            "reward_claimed": {
+              "type": "boolean"
+            },
+            "decline_event_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "followup": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/TaskFollowup"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "collaborators": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "actor_id": {
+                    "$ref": "#/$defs/ActorId"
+                  },
+                  "status": {
+                    "type": "string"
+                  },
+                  "decision": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/TaskParticipation"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "actor_id",
+                  "status",
+                  "decision"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "status",
+            "enabled",
+            "progress",
+            "reward_claimed"
+          ],
+          "additionalProperties": true
+        }
+      ]
+    },
+    "TaskStep": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "label": {
+          "type": "string"
+        },
+        "performed_by": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SpeakerId"
+          },
+          "minItems": 1
+        },
+        "depends_on": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "performed_by",
+        "depends_on"
+      ],
+      "additionalProperties": true
+    },
+    "WorldEventRecord": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "experimentId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "epoch": {
+          "type": "integer"
+        },
+        "hour": {
+          "type": "number"
+        },
+        "seq": {
+          "type": "integer"
+        },
+        "text": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "speaker": {
+          "$ref": "#/$defs/SpeakerId"
+        },
+        "visible": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "disclose_to": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "importance": {
+          "type": "number"
+        },
+        "conversationId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "recipient": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "channel": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "location": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "game_payload_hash": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "experimentId",
+        "epoch",
+        "hour",
+        "text",
+        "kind",
+        "speaker",
+        "visible"
+      ],
+      "additionalProperties": true
+    },
+    "WorldState": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "worldId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "epoch": {
+          "type": "integer"
+        },
+        "hour": {
+          "type": "number"
+        },
+        "day": {
+          "type": "integer"
+        },
+        "period": {
+          "type": "integer"
+        },
+        "tick": {
+          "type": "integer"
+        },
+        "runId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "seq": {
+          "type": "integer"
+        },
+        "responseRevision": {
+          "type": "integer"
+        },
+        "weather": {
+          "type": "string"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "actors": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/ActorId"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/ActorState"
+          },
+          "required": [
+            "z",
+            "liyuan",
+            "liting",
+            "axing",
+            "zhengyi",
+            "xiaoxiaoqing",
+            "linxu",
+            "zhou_bobo"
+          ],
+          "minProperties": 8,
+          "maxProperties": 8
+        },
+        "focus": {
+          "anyOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "syncMode": {
+          "type": "string"
+        },
+        "liveRoom": {
+          "anyOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "lab": {
+          "type": "boolean"
+        },
+        "host": {
+          "type": "string"
+        },
+        "initialSeed": {
+          "type": "string"
+        },
+        "initialMetrics": {
+          "type": "object"
+        },
+        "version": {
+          "type": "integer"
+        },
+        "memoryRevision": {
+          "type": "integer"
+        },
+        "encounters": {
+          "type": "object"
+        },
+        "wakes": {
+          "type": "object"
+        },
+        "reflected": {
+          "type": "object"
+        },
+        "contentRevision": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "lastAccess": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "worldId",
+        "runId",
+        "epoch",
+        "hour",
+        "day",
+        "period",
+        "tick",
+        "seq",
+        "responseRevision",
+        "version",
+        "actors",
+        "active"
+      ],
+      "additionalProperties": true
+    },
+    "JobResult": {
+      "type": "object",
+      "properties": {
+        "job": {
+          "type": "string"
+        },
+        "actor": {
+          "$ref": "#/$defs/ActorId"
+        },
+        "status": {
+          "enum": [
+            "proposed",
+            "cancelled",
+            "failed"
+          ]
+        },
+        "proposalId": {
+          "type": "string"
+        },
+        "output": {
+          "type": "object"
+        },
+        "error_type": {
+          "type": "string"
+        },
+        "validation_error": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "job",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "MemoryJobRecord": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "experimentId": {
+          "type": "string"
+        },
+        "epoch": {
+          "type": "integer"
+        },
+        "hour": {
+          "type": "number"
+        },
+        "actorId": {
+          "$ref": "#/$defs/ActorId"
+        },
+        "eventId": {
+          "type": "string"
+        },
+        "selected": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "running",
+            "failed",
+            "complete"
+          ]
+        },
+        "attempts": {
+          "type": "integer"
+        },
+        "error": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "experimentId",
+        "epoch",
+        "hour",
+        "actorId",
+        "eventId",
+        "status",
+        "attempts"
+      ],
+      "additionalProperties": false
+    },
+    "ReflectionJobRecord": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "experimentId": {
+          "type": "string"
+        },
+        "epoch": {
+          "type": "integer"
+        },
+        "hour": {
+          "type": "number"
+        },
+        "actorId": {
+          "$ref": "#/$defs/ActorId"
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "running",
+            "failed",
+            "complete"
+          ]
+        },
+        "error": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "experimentId",
+        "epoch",
+        "hour",
+        "actorId",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "SocialDecisionRecord": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "experimentId": {
+          "type": "string"
+        },
+        "epoch": {
+          "type": "integer"
+        },
+        "hour": {
+          "type": "number"
+        },
+        "actor": {
+          "$ref": "#/$defs/ActorId"
+        },
+        "payload": {
+          "type": "object",
+          "required": [
+            "choice",
+            "reason",
+            "source_event_ids"
+          ],
+          "properties": {
+            "choice": {
+              "enum": [
+                "engage",
+                "keep_to_self",
+                "postpone"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "source_event_ids": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "id",
+        "experimentId",
+        "epoch",
+        "hour",
+        "actor",
+        "payload"
+      ],
+      "additionalProperties": false
+    },
+    "TraceRecord": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "experimentId": {
+          "type": "string"
+        },
+        "epoch": {
+          "type": "integer"
+        },
+        "hour": {
+          "type": "number"
+        },
+        "version": {
+          "type": "integer"
+        },
+        "actorId": {
+          "$ref": "#/$defs/ActorId"
+        },
+        "observers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ActorId"
+          }
+        },
+        "evidenceMessages": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "selected": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "requests": {
+          "type": "object",
+          "description": "Provider request body diagnostics; object keys depend on extraction/reflection stage."
+        },
+        "responses": {
+          "type": "object",
+          "description": "Raw provider responses grouped by pipeline stage."
+        },
+        "addedIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "experimentId",
+        "epoch",
+        "hour"
+      ],
+      "additionalProperties": true
+    }
+  }
+}

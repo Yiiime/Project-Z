@@ -57,7 +57,7 @@ namespace ZLive {
             };
         }
 
-        public void Receive(string sessionId, JArray rows) {
+        public void Receive(string sessionId, JArray rows,bool characterJournal=false) {
             if (!Current || rows == null || rows.Count == 0) return;
             var state = owner.memory;
             string prefix = "live_mem_" + sessionId + "_";
@@ -74,7 +74,7 @@ namespace ZLive {
                     string flag = TopicPrefix + (string)row["item"];
                     if (!owner.flags.Contains(flag)) owner.flags.Add(flag);
                 }
-                state.outbox.Add(new MemoryEvent {
+                if(!characterJournal)state.outbox.Add(new MemoryEvent {
                     id = prefix + seq, seq = ++state.nextSeq, day = owner.day, period = owner.period,
                     accepted = (bool?)row["shared"] == true, kind = "live_memory", channel = "livestream", speakerId = (string)row["speaker"],
                     conversationId = sessionId, text = (string)row["text"], stepId = (string)row["change"]?["id"],

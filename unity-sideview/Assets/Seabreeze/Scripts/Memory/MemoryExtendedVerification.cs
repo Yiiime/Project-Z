@@ -15,6 +15,8 @@ namespace Seabreeze
     {
         readonly List<object> checks = new List<object>();
         string output;
+        JObject backendCheckpoint=new JObject();
+        IEnumerator RefreshBackend(){var task=MemoryVerificationSnapshot.Read(Memory.Client);while(!task.IsCompleted)yield return null;if(task.IsFaulted||task.IsCanceled){Record("backend-snapshot",false);yield break;}backendCheckpoint=task.Result;}
         float started;
         int failures;
         GameSession Game => GameSession.Instance;
@@ -114,7 +116,9 @@ namespace Seabreeze
             {
                 yield return Button("接受任务");Record("cooperation-task-active",TaskState("map_blank")=="active");
                 yield return Button("邀请当前NPC协作");
-                Record("npc-cooperation-choice",Memory.LastReply?.result?.info?["task_participation"]!=null,Memory.LastReply?.result?.info?["task_participation"]);
+                yield return RefreshBackend();
+                var proposal=backendCheckpoint["records"]?["proposal"]?.FirstOrDefault(p=>(string)p["id"]==Memory.LastReply?.proposalId);
+                Record("npc-cooperation-choice",proposal?["output"]?["info"]?["task_participation"]!=null,proposal?["output"]?["info"]?["task_participation"]);
             }
             else Record("cooperation-offer-path",false,TaskState("map_blank"));
             Memory.Conversations.CancelAll();yield return Chat("axing","你平时做什么？想去码头应该怎么走？");
@@ -128,7 +132,8 @@ namespace Seabreeze
                     Game.Story.Toast+=capture;Game.Story.Interact("noticeboard");Game.Story.Toast-=capture;
                     Record("no-fixed-day4-announcement",!Game.Story.Objective.Contains("毁灭")&&notice!=null&&!notice.Contains("毁灭"));
                     Memory.PublishStoryEvent("verify_private_day4","仅林序接收的船务测试通知，核对代号：琥珀海燕492。",new[]{"linxu"},true,new[]{"linxu"});yield return Ready();
-                    var secret=Checkpoint()["records"]?["event"]?.FirstOrDefault(e=>(string)e["id"]==Memory.StoryEventId("verify_private_day4"));
+                    yield return RefreshBackend();
+                    var secret=backendCheckpoint["records"]?["event"]?.FirstOrDefault(e=>(string)e["id"]==Memory.StoryEventId("verify_private_day4"));
                     Record("day4-directed-event",secret!=null&&!secret["visible"].Values<string>().Contains("z"),secret?["visible"]);
                     int seq=Game.State.memory.nextSeq;
                     Memory.PublishStoryEvent("verify_private_day4","仅林序接收的船务测试通知，核对代号：琥珀海燕492。",new[]{"linxu"},true,new[]{"linxu"});

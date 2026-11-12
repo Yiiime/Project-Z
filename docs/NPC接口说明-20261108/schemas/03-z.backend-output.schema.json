@@ -1,0 +1,671 @@
+{
+  "$ref": "#/$defs/output",
+  "$defs": {
+    "output": {
+      "type": "object",
+      "required": [
+        "dialogue",
+        "action",
+        "info"
+      ],
+      "properties": {
+        "dialogue": {
+          "type": "string"
+        },
+        "action": {
+          "type": "object",
+          "required": [
+            "type",
+            "target",
+            "description",
+            "action_id",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "minLength": 1
+            },
+            "target": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "description": {
+              "type": "string"
+            },
+            "action_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "parameters": {
+              "type": "object"
+            }
+          },
+          "additionalProperties": false
+        },
+        "info": {
+          "$ref": "#/$defs/info"
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "type": {
+                    "const": "communicate"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "dialogue": {
+                "minLength": 1
+              },
+              "action": {
+                "properties": {
+                  "target": {
+                    "enum": [
+                      "liyuan",
+                      "liting",
+                      "axing",
+                      "zhengyi",
+                      "xiaoxiaoqing",
+                      "linxu",
+                      "zhou_bobo"
+                    ]
+                  },
+                  "action_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "required": [
+                      "channel",
+                      "conversation_id"
+                    ],
+                    "properties": {
+                      "channel": {
+                        "enum": [
+                          "face_to_face",
+                          "whisper",
+                          "note",
+                          "phone",
+                          "radio",
+                          "work_system",
+                          "public_announcement",
+                          "livestream"
+                        ]
+                      },
+                      "conversation_id": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "info": {
+                "required": [
+                  "communication"
+                ]
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "info": {
+                "properties": {
+                  "communication": false
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "offer_task",
+                      "give_task_reward"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "target": {
+                    "const": "player"
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "required": [
+                      "task_id"
+                    ],
+                    "properties": {
+                      "task_id": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "info": {
+      "type": "object",
+      "required": [
+        "affinity",
+        "trust",
+        "world_suspicion",
+        "emotion",
+        "changes",
+        "memory_updates",
+        "knowledge_updates"
+      ],
+      "properties": {
+        "affinity": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "trust": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "world_suspicion": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "emotion": {
+          "type": "string",
+          "enum": [
+            "relaxed",
+            "curious",
+            "interested",
+            "tired",
+            "tense",
+            "anxious",
+            "angry",
+            "scared",
+            "shocked",
+            "sad",
+            "moved",
+            "reluctant",
+            "relieved",
+            "serious",
+            "concerned",
+            "annoyed"
+          ]
+        },
+        "changes": {
+          "type": "object",
+          "properties": {
+            "affinity": {
+              "type": "object",
+              "required": [
+                "delta",
+                "reason",
+                "source_event_ids"
+              ],
+              "properties": {
+                "delta": {
+                  "type": "integer",
+                  "minimum": -100,
+                  "maximum": 100,
+                  "not": {
+                    "const": 0
+                  }
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "source_event_ids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "additionalProperties": false
+            },
+            "trust": {
+              "type": "object",
+              "required": [
+                "delta",
+                "reason",
+                "source_event_ids"
+              ],
+              "properties": {
+                "delta": {
+                  "type": "integer",
+                  "minimum": -100,
+                  "maximum": 100,
+                  "not": {
+                    "const": 0
+                  }
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "source_event_ids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "additionalProperties": false
+            },
+            "world_suspicion": {
+              "type": "object",
+              "required": [
+                "delta",
+                "reason",
+                "source_event_ids"
+              ],
+              "properties": {
+                "delta": {
+                  "type": "integer",
+                  "minimum": -100,
+                  "maximum": 100,
+                  "not": {
+                    "const": 0
+                  }
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "source_event_ids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "memory_updates": {
+          "type": "array",
+          "maxItems": 0
+        },
+        "knowledge_updates": {
+          "type": "array",
+          "maxItems": 0
+        },
+        "missing_state": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "affinity",
+              "trust",
+              "world_suspicion"
+            ]
+          }
+        },
+        "decision": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "communication": {
+          "type": "object",
+          "required": [
+            "intent",
+            "shared_claim_ids",
+            "source_event_ids"
+          ],
+          "properties": {
+            "intent": {
+              "enum": [
+                "inquire",
+                "inform",
+                "invite",
+                "accept",
+                "decline",
+                "end"
+              ]
+            },
+            "shared_claim_ids": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "source_event_ids": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "peer_relation_changes": {
+          "type": "array",
+          "maxItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "target_actor_id",
+              "affinity_delta",
+              "trust_delta",
+              "reason",
+              "source_event_ids"
+            ],
+            "properties": {
+              "target_actor_id": {
+                "enum": [
+                  "liyuan",
+                  "liting",
+                  "axing",
+                  "zhengyi",
+                  "xiaoxiaoqing",
+                  "linxu",
+                  "zhou_bobo"
+                ]
+              },
+              "affinity_delta": {
+                "type": "integer",
+                "minimum": -100,
+                "maximum": 100
+              },
+              "trust_delta": {
+                "type": "integer",
+                "minimum": -100,
+                "maximum": 100
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source_event_ids": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "agenda_update": {
+          "type": "object",
+          "required": [
+            "goal_id",
+            "next_action_id",
+            "reason",
+            "source_event_ids"
+          ],
+          "properties": {
+            "goal_id": {
+              "type": "string",
+              "minLength": 1,
+              "enum": [
+                "z_work",
+                "z_social",
+                "z_rest"
+              ]
+            },
+            "next_action_id": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                null,
+                "wait_here",
+                "move_visitor_center",
+                "move_flower_shop",
+                "move_dock",
+                "move_residential_middle",
+                "move_main_street",
+                "move_public_middle",
+                "move_corner_garden"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            },
+            "source_event_ids": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "social_decision": false,
+        "task_participation": false,
+        "task_followup": false
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "affinity": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "affinity"
+            ]
+          },
+          "then": {
+            "required": [
+              "missing_state"
+            ],
+            "properties": {
+              "missing_state": {
+                "contains": {
+                  "const": "affinity"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "trust": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "trust"
+            ]
+          },
+          "then": {
+            "required": [
+              "missing_state"
+            ],
+            "properties": {
+              "missing_state": {
+                "contains": {
+                  "const": "trust"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "world_suspicion": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "world_suspicion"
+            ]
+          },
+          "then": {
+            "required": [
+              "missing_state"
+            ],
+            "properties": {
+              "missing_state": {
+                "contains": {
+                  "const": "world_suspicion"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "affinity": {
+                "const": 50
+              }
+            },
+            "required": [
+              "affinity"
+            ]
+          },
+          "then": {
+            "properties": {
+              "changes": {
+                "properties": {
+                  "affinity": false
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "changes": {
+                "required": [
+                  "affinity"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "trust": {
+                "const": 50
+              }
+            },
+            "required": [
+              "trust"
+            ]
+          },
+          "then": {
+            "properties": {
+              "changes": {
+                "properties": {
+                  "trust": false
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "changes": {
+                "required": [
+                  "trust"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "world_suspicion": {
+                "const": 0
+              }
+            },
+            "required": [
+              "world_suspicion"
+            ]
+          },
+          "then": {
+            "properties": {
+              "changes": {
+                "properties": {
+                  "world_suspicion": false
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "changes": {
+                "required": [
+                  "world_suspicion"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    }
+  }
+}

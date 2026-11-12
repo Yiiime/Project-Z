@@ -1,0 +1,93 @@
+{
+  "notice": "文档构造的呈现回执，用于说明字段；不是新一轮Unity试玩证据。",
+  "actor": {
+    "id": "z",
+    "name": "Z",
+    "scene": "z_home",
+    "version": 3,
+    "info": {
+      "affinity": 52,
+      "trust": 50,
+      "world_suspicion": 0,
+      "emotion": "interested",
+      "changes": {},
+      "memory_updates": [],
+      "knowledge_updates": []
+    },
+    "peer_relations": {
+      "liyuan": {
+        "affinity": 65,
+        "trust": 60,
+        "source": "moonlife-actors/references/characters/z.md#初始关系",
+        "impression_formed": true
+      },
+      "liting": {
+        "affinity": 60,
+        "trust": 35,
+        "source": "moonlife-actors/references/characters/z.md#初始关系",
+        "impression_formed": true
+      },
+      "axing": {
+        "affinity": 65,
+        "trust": 60,
+        "source": "moonlife-actors/references/characters/z.md#初始关系",
+        "impression_formed": true
+      },
+      "zhengyi": {
+        "affinity": 65,
+        "trust": 60,
+        "source": "moonlife-actors/references/characters/z.md#初始关系",
+        "impression_formed": true
+      },
+      "xiaoxiaoqing": {
+        "affinity": 65,
+        "trust": 60,
+        "source": "moonlife-actors/references/characters/z.md#初始关系",
+        "impression_formed": true
+      },
+      "linxu": {
+        "affinity": 65,
+        "trust": 60,
+        "source": "moonlife-actors/references/characters/z.md#初始关系",
+        "impression_formed": true
+      },
+      "zhou_bobo": {
+        "affinity": 65,
+        "trust": 70,
+        "source": "moonlife-actors/references/characters/z.md#初始关系",
+        "impression_formed": true
+      }
+    },
+    "applied_event_ids": [
+      "evt_2943276a8ae54a63"
+    ],
+    "agenda": null,
+    "pending_action": "action_proposal_06d6af682fc64d95",
+    "previous_result": {
+      "status": "pending",
+      "action_id": "action_proposal_06d6af682fc64d95",
+      "summary": "等待实际动作回执。"
+    },
+    "last_external_event": "evt_2943276a8ae54a63",
+    "next_agenda_tick": 30
+  },
+  "action": {
+    "id": "action_proposal_06d6af682fc64d95",
+    "experimentId": "world_schema_example",
+    "epoch": 1,
+    "hour": 0,
+    "actor": "z",
+    "type": "move",
+    "target": "flower_shop",
+    "parameters": {
+      "origin": "z_home",
+      "route": [
+        "z_home",
+        "residential_middle",
+        "public_middle",
+        "flower_shop"
+      ]
+    },
+    "status": "pending"
+  }
+}

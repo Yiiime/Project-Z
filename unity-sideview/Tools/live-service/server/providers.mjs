@@ -20,13 +20,13 @@ export class Providers {
  forOwner(owner){return new Providers(this.env,{...this.options,owner,singingContext:()=>this.singing?.context(owner,{publicRoom:true})});}
  async singingFetch(route,options={}){if(!this.singing)return Response.json({error:"singing_unavailable"},{status:503});return singingRequest(this.singing,this.options.owner||"local-owner",route,options.body?JSON.parse(options.body):null);}
  async config(identity){return (await handleAgent(request('/api/agent/config',identity),this.env,this.options)).json();}
- async generate(identity,payload,{signal,onSentence,compactReview,reviewExpanded,broadcastContext,daytimeTasks,songSession}={}){const r=await handleAgent(request('/api/agent',identity,payload,signal),this.env,{...this.options,onSentence,compactReview,reviewExpanded,broadcastContext,daytimeTasks,songSession}),body=await r.json();if(!r.ok)throw Object.assign(Error(body.error),{code:body.error,validationReason:body.validationReason});return body;}
- async synthesizeStream(identity,text,mood,signal){return handleTts(request('/api/tts',identity,{requestId:uid(),text,mood:({neutral:'warm',shy:'warm',sad:'warm',surprised:'happy'})[mood]||mood},signal),this.env,{...this.options,audioFormat:'pcm'});}
- async synthesize(identity,text,mood,signal){
+ async generate(identity,payload,{signal,onSentence,compactReview,reviewExpanded,broadcastContext,daytimeTasks,songSession,character}={}){const r=await handleAgent(request('/api/agent',identity,payload,signal),this.env,{...this.options,onSentence,compactReview,reviewExpanded,broadcastContext,daytimeTasks,songSession,character}),body=await r.json();if(!r.ok)throw Object.assign(Error(body.error),{code:body.error,validationReason:body.validationReason});return body;}
+ async synthesizeStream(identity,text,mood,signal,delivery){return handleTts(request('/api/tts',identity,{requestId:uid(),text,...(delivery?{delivery}:{}),mood:({neutral:'warm',shy:'warm',sad:'warm',surprised:'happy'})[mood]||mood},signal),this.env,{...this.options,audioFormat:'pcm'});}
+ async synthesize(identity,text,mood,signal,delivery){
   let failure=null;const options={...this.options,diagnostics:detail=>{this.options.diagnostics?.(detail);if(detail.classification==='provider_error_code'&&detail.status===45000010)failure='tts_provider_configuration_error';if(detail.classification==='provider_error_code'&&detail.status===45000030)failure='tts_provider_resource_not_granted';}};
   const requestId=uid(),controller=new AbortController();const abort=()=>controller.abort();signal?.addEventListener('abort',abort,{once:true});const timer=setTimeout(abort,30000);
   try{if(signal?.aborted)throw Error('cancelled');
-   const r=await handleTts(request('/api/tts',identity,{requestId,text,mood:({neutral:'warm',shy:'warm',sad:'warm',surprised:'happy'})[mood]||mood},controller.signal),this.env,options);
+   const r=await handleTts(request('/api/tts',identity,{requestId,text,...(delivery?{delivery}:{}),mood:({neutral:'warm',shy:'warm',sad:'warm',surprised:'happy'})[mood]||mood},controller.signal),this.env,options);
    if(!r.ok){const error=await r.json();throw Error(error.error||'tts_unavailable');}
    const audio=await SpeechDirector.prototype.readAudio.call({},r.body,null,requestId,controller.signal);
    const clean=v=>v.normalize('NFKC').replace(/[^\p{L}\p{N}]/gu,'');
@@ -44,9 +44,17 @@ export class RemoteSpeech extends EventTarget {
  constructor(session,providers){super();this.session=session;this.providers=providers;this.enabled=session.capabilities.audioEnabled;this.volume=this.enabled?1:0;this.available=!!providers.env.VOLC_TTS_API_KEY;this.warm=new Map();this.streams=new Map();}
  cancel(){for(const stream of this.streams.values())stream.close();this.streams.clear();this.dropWarmSpeech();this.session.cancelHost("guest_interrupt");}
  fadeOut(ms){return this.session.fadeHost(ms);}
- warmSpeech(key,text,mood,{streaming=false}={}){if(streaming&&this.enabled&&this.available){if(this.warm.has(key))return this.warm.get(key).promise;this.dropWarmSpeech();const stream=new PcmSpeech(text,signal=>this.providers.synthesizeStream(this.session.id,text,mood,signal));this.warm.set(key,{stream,controller:stream.controller,promise:stream.ready});return stream.ready;} if(!this.enabled||!this.available)return null;if(this.warm.has(key))return this.warm.get(key).promise;this.dropWarmSpeech();const controller=new AbortController();const promise=this.prepareAudio(text,mood,{signal:controller.signal});promise.catch(()=>{});this.warm.set(key,{controller,promise});this.dispatchEvent(new CustomEvent('preparation',{detail:{requestId:key,status:'started'}}));return promise;}
+ warmSpeech(key,text,mood,{streaming=false,delivery}={}){
+  if(!this.enabled||!this.available)return null;
+  const signature=JSON.stringify([text,mood,delivery||'']);const old=this.warm.get(key);
+  if(old?.signature===signature&&!!old.stream===streaming)return old.promise;
+  this.dropWarmSpeech();
+  if(streaming){const stream=new PcmSpeech(text,signal=>this.providers.synthesizeStream(this.session.id,text,mood,signal,delivery));this.warm.set(key,{signature,stream,controller:stream.controller,promise:stream.ready});return stream.ready;}
+  const controller=new AbortController();const promise=this.prepareAudio(text,mood,{signal:controller.signal,delivery});promise.catch(()=>{});this.warm.set(key,{signature,controller,promise});this.dispatchEvent(new CustomEvent('preparation',{detail:{requestId:key,status:'started'}}));return promise;
+ }
  dropWarmSpeech(key){for(const [k,v] of this.warm)if(!key||key===k){v.controller.abort();v.stream?.close();this.warm.delete(k);}}
- claimStream(key,text,mood,signal){const warm=this.warm.get(key);let stream;if(warm?.stream){this.warm.delete(key);stream=warm.stream;}else{if(warm)this.dropWarmSpeech(key);stream=new PcmSpeech(text,s=>this.providers.synthesizeStream(this.session.id,text,mood,s));}this.streams.set(stream.id,stream);signal?.addEventListener('abort',()=>{stream.close();this.streams.delete(stream.id);},{once:true});return stream;}
- claim(key,text,mood,signal){const warm=this.warm.get(key);if(warm){this.warm.delete(key);signal?.addEventListener('abort',()=>warm.controller.abort(),{once:true});return warm.promise;}return this.prepareAudio(text,mood,{signal});}
- async prepareAudio(text,mood,{signal}={}){const a=await this.providers.synthesize(this.session.id,text,mood,signal);if(signal?.aborted)throw Error('cancelled');const meta=this.session.artifacts.put(a.bytes,a.contentType);this.session.artifactIds.add(meta.artifactId);return {...meta,words:a.words};}
+ matchingWarm(key,text,mood,delivery){const warm=this.warm.get(key);if(warm&&warm.signature!==JSON.stringify([text,mood,delivery||''])){this.dropWarmSpeech(key);return null;}return warm;}
+ claimStream(key,text,mood,signal,delivery){const warm=this.matchingWarm(key,text,mood,delivery);let stream;if(warm?.stream){this.warm.delete(key);stream=warm.stream;}else{if(warm)this.dropWarmSpeech(key);stream=new PcmSpeech(text,s=>this.providers.synthesizeStream(this.session.id,text,mood,s,delivery));}this.streams.set(stream.id,stream);signal?.addEventListener('abort',()=>{stream.close();this.streams.delete(stream.id);},{once:true});return stream;}
+ claim(key,text,mood,signal,delivery){const warm=this.matchingWarm(key,text,mood,delivery);if(warm&&!warm.stream){this.warm.delete(key);signal?.addEventListener('abort',()=>warm.controller.abort(),{once:true});return warm.promise;}if(warm)this.dropWarmSpeech(key);return this.prepareAudio(text,mood,{signal,delivery});}
+ async prepareAudio(text,mood,{signal,delivery}={}){const a=await this.providers.synthesize(this.session.id,text,mood,signal,delivery);if(signal?.aborted)throw Error('cancelled');const meta=this.session.artifacts.put(a.bytes,a.contentType);this.session.artifactIds.add(meta.artifactId);return {...meta,words:a.words};}
 }

@@ -123,7 +123,7 @@ export class SpeechDirector extends EventTarget {
     if(!this.enabled||!this.available){this.startText(current,0);return;}
     if(text.length>this.config.maxTextLength){this.useText(current,'long');return;}
     const warm=this.warm;
-    if(warm&&warm.key===detail.preparedAudioKey&&warm.text===text&&warm.mood===detail.mood){
+    if(warm&&warm.key===detail.preparedAudioKey&&warm.text===text&&warm.mood===detail.mood&&(warm.delivery||'')===(detail.delivery||'')){
       clearTimeout(warm.timer);this.warm=null;
       void this.useWarmAudio(current,warm);return;
     }
@@ -131,14 +131,14 @@ export class SpeechDirector extends EventTarget {
   }
   // One unpublished recording, exact candidate identity. Warming never speaks,
   // updates captions, or authorizes publication. The engine owns that decision.
-  warmSpeech(key,text,mood){
+  warmSpeech(key,text,mood,{delivery}={}){
     if(this.destroyed||this.paused||!this.enabled||!this.available||!this.volume||!key||!text||text.length>this.config.maxTextLength)return null;
-    if(this.warm?.key===key&&this.warm.text===text&&this.warm.mood===mood)return key;
+    if(this.warm?.key===key&&this.warm.text===text&&this.warm.mood===mood&&(this.warm.delivery||'')===(delivery||''))return key;
     this.dropWarmSpeech();
-    const slot={key,text,mood,controller:new AbortController(),startedAt:performance.now()};this.warm=slot;
+    const slot={key,text,mood,delivery,controller:new AbortController(),startedAt:performance.now()};this.warm=slot;
     slot.timer=setTimeout(()=>this.dropWarmSpeech(key),30000);
     this.emit('preparation',{key,phase:'started'});
-    slot.promise=this.prepareAudio(text,mood,{signal:slot.controller.signal}).then(audio=>{
+    slot.promise=this.prepareAudio(text,mood,{signal:slot.controller.signal,delivery}).then(audio=>{
       const bytes=(audio.buffer.length||Math.ceil(audio.buffer.duration*(audio.buffer.sampleRate||24000)))*(audio.buffer.numberOfChannels||1)*4;
       if(slot.controller.signal.aborted||bytes>8*1024*1024)return null;
       this.emit('preparation',{key,phase:'ready',durationMs:Math.round(performance.now()-slot.startedAt)});return audio;
@@ -197,7 +197,7 @@ export class SpeechDirector extends EventTarget {
     });
     try{
       const response=await this.fetch('/api/tts',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/x-ndjson'},
-        signal:controller.signal,body:JSON.stringify({requestId,text:current.text,mood:({neutral:'warm',shy:'warm',sad:'warm',surprised:'happy'})[current.detail.mood]||(['happy','warm','serious','thinking'].includes(current.detail.mood)?current.detail.mood:'warm')})});
+        signal:controller.signal,body:JSON.stringify({requestId,text:current.text,...(current.detail.delivery?{delivery:current.detail.delivery}:{}),mood:({neutral:'warm',shy:'warm',sad:'warm',surprised:'happy'})[current.detail.mood]||(['happy','warm','serious','thinking'].includes(current.detail.mood)?current.detail.mood:'warm')})});
       if(!this.valid(current)||current.mode!=='loading'||controller.signal.aborted)return;
       if(!response.ok){
         const error=await response.json().catch(()=>({}));
@@ -257,7 +257,7 @@ export class SpeechDirector extends EventTarget {
   }
   // Prepare an isolated performance segment without replacing chat, speaking,
   // or using text fallback. Caller owns cancellation and the resulting audio.
-  async prepareAudio(text,mood,{signal}={}){
+  async prepareAudio(text,mood,{signal,delivery}={}){
     if(!this.enabled||!this.available||!text||text.length>this.config.maxTextLength)throw Error('voice_unavailable');
     const controller=new AbortController(),abort=()=>controller.abort();
     signal?.addEventListener('abort',abort,{once:true});
@@ -265,7 +265,7 @@ export class SpeechDirector extends EventTarget {
     try{
       if(signal?.aborted)throw Error('cancelled');
       const response=await this.fetch('/api/tts',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/x-ndjson'},signal:controller.signal,
-        body:JSON.stringify({requestId,text,mood:({neutral:'warm',shy:'warm',sad:'warm',surprised:'happy'})[mood]||mood})});
+        body:JSON.stringify({requestId,text,...(delivery?{delivery}:{}),mood:({neutral:'warm',shy:'warm',sad:'warm',surprised:'happy'})[mood]||mood})});
       if(!response.ok||!response.headers.get('Content-Type')?.includes('application/x-ndjson'))throw Error('tts_failed');
       const audio=await this.readAudio(response.body,null,requestId,controller.signal);
       const buffer=await this.audioContext().decodeAudioData(audio.bytes.buffer);

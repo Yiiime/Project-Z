@@ -163,10 +163,10 @@ test('invalid host decisions stop thinking, retain the question and retry only a
  const f=await fixture(t),e=f.s.engine;e.enabled=true;e.nextWake=e._clock;
  f.s.input(f.envelope({type:'viewer.message',payload:{text:'青藏高原能听了吗'}}));
  let calls=0;e.client.generate=async()=>{calls++;throw Object.assign(Error('invalid'),{code:'agent_invalid_reply',validationReason:'unknown_handled_id'});};
- for(let i=0;i<3;i++){e.nextWake=e._clock;await e._think();assert.equal(f.s.snapshot().performance.waiting,false);assert.equal(f.s.snapshot().room.messages.find(m=>m.mine).replyStatus,'failed');}
- e.nextWake=e._clock;await e._think();assert.equal(calls,3);assert.equal(e.inbox.filter(m=>m.mine).length,1);
- f.s.control(f.envelope({action:'retry_reply'}));await e._think();assert.equal(calls,4);
- f.s.input(f.envelope({type:'viewer.message',payload:{text:'那先聊聊'}}));await e._think();assert.equal(calls,5);
+ for(let i=0;i<6;i++){e.nextWake=e._clock;await e._think();assert.equal(f.s.snapshot().performance.waiting,false);assert.equal(f.s.snapshot().room.messages.find(m=>m.mine).replyStatus,'failed');}
+ e.nextWake=e._clock;await e._think();assert.equal(calls,6);assert.equal(e.inbox.filter(m=>m.mine).length,1);
+ f.s.control(f.envelope({action:'retry_reply'}));await e._think();assert.equal(calls,7);
+ f.s.input(f.envelope({type:'viewer.message',payload:{text:'那先聊聊'}}));await e._think();assert.equal(calls,8);
  assert(!lastCommand(f.s,'host.present'));assert.equal(e._state.agent.validationReason,'unknown_handled_id');
 });
 

@@ -1,0 +1,686 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "LiveHostAction": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "enum": [
+            "speak",
+            "wait",
+            "tool"
+          ]
+        },
+        "mood": {
+          "enum": [
+            "happy",
+            "warm",
+            "serious",
+            "thinking",
+            "neutral",
+            "shy",
+            "sad",
+            "surprised"
+          ]
+        },
+        "gesture": {
+          "enum": [
+            "none",
+            "openArms",
+            "coverMouth",
+            "present",
+            "handWave",
+            "chin",
+            "nod",
+            "shake",
+            "tilt",
+            "lean",
+            "emphasis",
+            "draw",
+            "wavePose",
+            "foldArms",
+            "relaxArms",
+            "startle",
+            "discover"
+          ]
+        },
+        "transition": {
+          "enum": [
+            "smooth",
+            "sudden"
+          ]
+        },
+        "handledIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "maxItems": 16,
+          "uniqueItems": true
+        },
+        "audienceMessageIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "maxItems": 1
+        },
+        "wakeAfterMs": {
+          "type": "integer",
+          "minimum": 2000,
+          "maximum": 120000
+        },
+        "continuation": {
+          "enum": [
+            "continue",
+            "leave_space",
+            "await_event"
+          ]
+        },
+        "agendaUpdates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/LiveAgendaUpdate"
+          },
+          "maxItems": 4
+        },
+        "tool": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/LiveTool"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sessionDecision": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/LiveSessionDecision"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "action",
+        "mood",
+        "handledIds",
+        "wakeAfterMs"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "tool"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "tool"
+            ],
+            "properties": {
+              "tool": {
+                "$ref": "#/$defs/LiveTool"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "tool": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "wait"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "gesture": {
+                "const": "none"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "sessionDecision"
+            ],
+            "properties": {
+              "sessionDecision": {
+                "type": "object"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "action": {
+                "const": "speak"
+              }
+            }
+          }
+        }
+      ],
+      "description": "当前 Z 媒体适配协议，action 内仍有 action 字段。speech 映射到外层 dialogue，memory 已去除。gesture/continuation/agendaUpdates 可由现有解析器补默认值；工具许可与事件引用还需媒体运行时校验。"
+    },
+    "LiveAgendaUpdate": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "goal": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "nextStep": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "status": {
+          "enum": [
+            "open",
+            "deferred",
+            "completed",
+            "cancelled"
+          ]
+        },
+        "evidenceIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "maxItems": 3
+        }
+      },
+      "required": [
+        "id",
+        "goal",
+        "nextStep",
+        "status",
+        "evidenceIds"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "id": {
+                "type": "null"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "open",
+                  "deferred"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "LiveTool": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "const": "finish_activity"
+            },
+            "args": {
+              "type": "object",
+              "properties": {
+                "taskId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "cancel": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "taskId",
+                "cancel"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "name",
+            "args"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "const": "prepare_song"
+            },
+            "args": {
+              "type": "object",
+              "properties": {
+                "messageId": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "messageId"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "name",
+            "args"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "const": "clarify_song"
+            },
+            "args": {
+              "type": "object",
+              "properties": {
+                "taskId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "messageId": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "taskId",
+                "messageId"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "name",
+            "args"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "const": "cancel_song"
+            },
+            "args": {
+              "type": "object",
+              "properties": {
+                "taskId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "messageId": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "taskId",
+                "messageId"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "name",
+            "args"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "const": "play_prepared_song"
+            },
+            "args": {
+              "type": "object",
+              "properties": {
+                "taskId": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "taskId"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "name",
+            "args"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "const": "start_singing"
+            },
+            "args": {
+              "type": "object",
+              "properties": {
+                "songId": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "songId"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "name",
+            "args"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "const": "replay_talent"
+            },
+            "args": {
+              "type": "object",
+              "properties": {
+                "taskId": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "taskId"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "name",
+            "args"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "const": "offer_call_story"
+            },
+            "args": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "name",
+            "args"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "LiveSessionDecision": {
+      "type": "object",
+      "properties": {
+        "intent": {
+          "enum": [
+            "close",
+            "stop",
+            "finish_extension"
+          ]
+        },
+        "sourceMessageId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "scope": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 180
+        }
+      },
+      "required": [
+        "intent",
+        "sourceMessageId",
+        "scope",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "LiveAudienceAction": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "send_danmaku"
+            },
+            "intent": {
+              "enum": [
+                "reaction",
+                "atmosphere",
+                "advance"
+              ]
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "type",
+            "intent",
+            "evidence_ids"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "wait"
+            },
+            "intent": {
+              "enum": [
+                "reaction",
+                "atmosphere",
+                "advance"
+              ]
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        }
+      ],
+      "description": "岛民直播行动：发弹幕或暂时不说话。wait 仍在线感知。evidence_ids 引用本次直播公开事件，不是私有记忆 ID。"
+    },
+    "LivePublishedEvent": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "actorId": {
+          "$ref": "#/$defs/SpeakerId"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "publicationId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "stage": {
+          "enum": [
+            "message",
+            "progress",
+            "completed",
+            "interrupted"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "actorId",
+        "text"
+      ],
+      "additionalProperties": true,
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "stage"
+            ],
+            "properties": {
+              "stage": {
+                "const": "progress"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "actorId": {
+                "const": "z"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "SpeakerId": {
+      "enum": [
+        "z",
+        "liyuan",
+        "liting",
+        "axing",
+        "zhengyi",
+        "xiaoxiaoqing",
+        "linxu",
+        "zhou_bobo",
+        "player",
+        "engine"
+      ]
+    },
+    "LiveBinding": {
+      "type": "object",
+      "properties": {
+        "worldId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "runId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "roomId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "roomToken": {
+          "type": "string",
+          "minLength": 1,
+          "description": "后台发出的临时房间凭据，不是模型 API Key，不放到模型上下文或玩家界面。"
+        },
+        "actors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ActorId"
+          },
+          "uniqueItems": true,
+          "minItems": 8,
+          "maxItems": 8
+        }
+      },
+      "required": [
+        "worldId",
+        "runId",
+        "roomId",
+        "roomToken",
+        "actors"
+      ],
+      "additionalProperties": false
+    },
+    "ActorId": {
+      "enum": [
+        "z",
+        "liyuan",
+        "liting",
+        "axing",
+        "zhengyi",
+        "xiaoxiaoqing",
+        "linxu",
+        "zhou_bobo"
+      ]
+    }
+  }
+}

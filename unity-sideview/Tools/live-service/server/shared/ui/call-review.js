@@ -1,3 +1,4 @@
+import {utteranceMetadata} from '../utterance.js';
 import {completeHostSentences} from './sentence-boundaries.js';
 
 const reviewError = code => Object.assign(new Error(code), {code});
@@ -19,7 +20,7 @@ export async function approveCallCandidate(engine, {candidate, result, signal, v
   let current = candidate;
   for (let attempt = 0; attempt < 2; attempt++) {
     if (!valid()) throw reviewError('agent_reply_stale');
-    engine._warmCandidate(current.id, {...result, speech:current.text});
+    engine._warmCandidate(current.id, {...result, ...utteranceMetadata('z',current,{allowLegacy:true}), speech:current.text});
     let outcome, issue;
     const ticket = await dialogue.inspect(current, {
       signal, compact:true, sessionEvents:engine.session.evidence(),
@@ -53,7 +54,7 @@ export async function approveCallCandidate(engine, {candidate, result, signal, v
     if (!replacement || replacement.length > 120 || completeHostSentences(replacement, true).length !== 1) throw reviewError('agent_reply_repair_failed');
     const text = current.text.slice(0, part.start) + replacement + current.text.slice(part.end);
     if (text.length > 360) throw reviewError('agent_reply_repair_failed');
-    current = {...current, id:crypto.randomUUID(), text};
+    current = {...current, ...utteranceMetadata('z',response,{allowLegacy:true}), id:crypto.randomUUID(), text};
   }
   throw reviewError('agent_reply_repair_failed');
 }
