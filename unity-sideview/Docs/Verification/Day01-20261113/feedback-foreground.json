@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "sourceRevision": "91cc9b8",
+  "nativeIME": {
+    "source": "macOS Pinyin",
+    "composition": "xiao",
+    "visibleMarkup": false,
+    "committedName": "小还"
+  },
+  "directApp": {
+    "launcherUsed": false,
+    "autoConnection": true,
+    "realOpeningLive": true,
+    "invitationClicked": true,
+    "savedPhase": "Harbor",
+    "proactiveZDialogue": true
+  },
+  "saveScope": "Isolated temporary LAN player; original player untouched",
+  "scope": "Foreground native macOS name input, direct app entry, actual opening live and invitation-to-Harbor. Square task regression covered separately by Unity Play Mode fixtures."
+}
