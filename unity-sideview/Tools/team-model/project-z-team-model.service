@@ -1,0 +1,18 @@
+[Unit]
+Description=Project Z team model gateway
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/services/project-z-team-model
+ExecStart=/usr/bin/node server.mjs
+Environment=Z_TEAM_SERVER_CONFIG=%h/.config/project-z-team-model/server.json
+Environment=Z_TEAM_DATA=%h/.local/share/project-z-team-model
+UMask=0077
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=10
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=default.target

@@ -30,10 +30,23 @@ namespace Seabreeze.Editor
             foreach(string file in Directory.GetFiles(service,"*",SearchOption.AllDirectories))
             {
                 string relative=file.Substring(service.Length+1);
-                if(relative.Split(Path.DirectorySeparatorChar).Any(p=>p==".local"||p==".data"||p=="node_modules"||p=="tests"||p=="test-results")||relative.EndsWith(".log",StringComparison.Ordinal))continue;
+                if(relative.Split(Path.DirectorySeparatorChar).Any(p=>p==".local"||p==".data"||p==".private"||p.StartsWith(".env",StringComparison.Ordinal)||p=="node_modules"||p=="tests"||p=="test-results")||relative.EndsWith(".log",StringComparison.Ordinal))continue;
                 string target=Path.Combine(folder,"MemoryLab",relative);Directory.CreateDirectory(Path.GetDirectoryName(target));File.Copy(file,target,true);
             }
             string node=Arg("-memoryNode",Environment.GetEnvironmentVariable("Z_MEMORY_NODE")??"");
+            string teamSource=Path.GetFullPath("Tools/team-model");
+            foreach(string name in new[]{"client.mjs","common.mjs","client.json","gateway-cert.crt","login.mjs","start-local-live.mjs"})
+            {
+                string source=Path.Combine(teamSource,name);if(!File.Exists(source))continue;
+                string target=Path.Combine(folder,"team-model",name);Directory.CreateDirectory(Path.GetDirectoryName(target));File.Copy(source,target,true);
+            }
+            string liveSource=Path.GetFullPath("Tools/live-service");
+            foreach(string file in Directory.GetFiles(liveSource,"*",SearchOption.AllDirectories))
+            {
+                string relative=file.Substring(liveSource.Length+1);
+                if(relative.StartsWith("config"+Path.DirectorySeparatorChar,StringComparison.Ordinal)||relative.Split(Path.DirectorySeparatorChar).Any(p=>p.StartsWith(".",StringComparison.Ordinal)||p=="node_modules"||p=="tests"||p=="test-results"||p=="verification")||relative.EndsWith(".env",StringComparison.Ordinal)||relative.EndsWith(".log",StringComparison.Ordinal))continue;
+                string target=Path.Combine(folder,"live-service",relative);Directory.CreateDirectory(Path.GetDirectoryName(target));File.Copy(file,target,true);
+            }
             if(!string.IsNullOrEmpty(node)&&File.Exists(node))
             {
                 Directory.CreateDirectory(Path.Combine(folder,"Runtime"));File.Copy(node,Path.Combine(folder,"Runtime/node"),true);
@@ -41,9 +54,13 @@ namespace Seabreeze.Editor
                 if(!File.Exists(license))license=Path.Combine(service,"licenses/NODE-LICENSE.txt");
                 if(File.Exists(license))File.Copy(license,Path.Combine(folder,"Runtime/NODE-LICENSE.txt"),true);
             }
-            File.WriteAllText(Path.Combine(folder,"启动七人记忆试玩.command"),"#!/bin/sh\nset -eu\ncd \"$(dirname \"$0\")\"\nif [ -x Runtime/node ]; then export Z_MEMORY_NODE=\"$PWD/Runtime/node\"; fi\nsh MemoryLab/start.sh --background\nopen ProjectZSevenMemory.app --args -memoryService \"http://127.0.0.1:${Z_MEMORY_PORT:-4330}\"\n");
+            File.WriteAllText(Path.Combine(folder,"启动七人记忆试玩.command"),"#!/bin/sh\nset -eu\ncd \"$(dirname \"$0\")\"\nif [ -x Runtime/node ]; then export Z_MEMORY_NODE=\"$PWD/Runtime/node\"; export Z_LIVE_NODE=\"$PWD/Runtime/node\"; fi\nexport Z_LIVE_CONNECTION_FILE=\"$PWD/live-service/.runtime/team-connection.json\"\nsh MemoryLab/start.sh --background\nopen ProjectZSevenMemory.app --env \"Z_LIVE_CONNECTION_FILE=$Z_LIVE_CONNECTION_FILE\" --args -memoryService \"http://127.0.0.1:${Z_MEMORY_PORT:-4330}\"\n");
             MakeExecutable(Path.Combine(folder,"启动七人记忆试玩.command"));
             if(File.Exists(Path.Combine(folder,"Runtime/node")))MakeExecutable(Path.Combine(folder,"Runtime/node"));
+            using(var signing=System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo {FileName="/usr/bin/codesign",Arguments="--force --deep --sign - \""+destination.Replace("\"","\\\"")+"\"",UseShellExecute=false,CreateNoWindow=true}))
+            {
+                signing.WaitForExit();if(signing.ExitCode!=0)throw new IOException("Could not sign the complete macOS player.");
+            }
             Debug.Log("Unified eight-role playable built: "+destination);
         }
         static void MakeExecutable(string path)
