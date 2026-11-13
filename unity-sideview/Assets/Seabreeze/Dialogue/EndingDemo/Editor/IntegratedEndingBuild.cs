@@ -16,7 +16,7 @@ namespace Seabreeze.EndingDemo
             string originalId=PlayerSettings.GetApplicationIdentifier(NamedBuildTarget.Standalone);
             try {
                 PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Standalone,"com.projectz.islandending");
-                string path=Path.GetFullPath("Builds/IslandEnding/ProjectZ-IslandEnding.app");Directory.CreateDirectory(Path.GetDirectoryName(path));
+                string path=Path.GetFullPath(Environment.GetEnvironmentVariable("Z_ENDING_BUILD_OUTPUT")??"Builds/IslandEnding/ProjectZ-IslandEnding.app");Directory.CreateDirectory(Path.GetDirectoryName(path));
                 var options=BuildOptions.Development;
                 if(Environment.GetEnvironmentVariable("Z_ENDING_SCRIPTS_ONLY")=="1")options|=BuildOptions.BuildScriptsOnly;
                 var report=BuildPipeline.BuildPlayer(new BuildPlayerOptions{scenes=EditorBuildSettings.scenes.Where(s=>s.enabled).Select(s=>s.path).ToArray(),locationPathName=path,target=BuildTarget.StandaloneOSX,options=options});

@@ -55,13 +55,25 @@ namespace Seabreeze.EndingDemo
             session.Memory.PublishStoryEvent("ending_qa_shared","玩家当面对Z说：我记得你说过想看岛外，我会尊重你的选择。",new[]{"player","z"});
             deadline=Time.realtimeSinceStartup+30;while(!session.Memory.Client.CanGenerate&&Time.realtimeSinceStartup<deadline)yield return null;
             ScreenCapture.CaptureScreenshot(Path.Combine(output,"01-main-game.png"));yield return new WaitForEndOfFrame();yield return new WaitForSecondsRealtime(.5f);
+            bool legacy=Array.IndexOf(Environment.GetCommandLineArgs(),"-endingLegacyQA")>=0;
+            if(legacy)
+            {
+                // Reproduce an old save whose cached ending predates versioned
+                // upload support. This must not adopt the new source silently.
+                var old=new EndingDemoView.EndingRun{id="legacy_without_revision",worldId=session.State.memory.worldId,
+                    sourceName="OLD_LEGACY_FILE",memoryCount=0,liveMemoryCount=0,recollections=Array.Empty<EndingDemoView.Recollection>(),
+                    decision=new EndingDemoView.Decision{title="旧缓存",opening="旧文件里的回望",reason="旧理由",choice="stay",decision="旧选择",lastLine="旧末句"},
+                    outcome=new EndingDemoView.Outcome{label="旧结果",text="旧结果"}};
+                session.State.memory.seventhNightEndingJson=Newtonsoft.Json.JsonConvert.SerializeObject(old);
+            }
             var shortcut=Find(ui,"Seventh night shortcut");Require(shortcut!=null&&shortcut.gameObject.activeInHierarchy,"Main game shortcut is missing");shortcut.onClick.Invoke();
             deadline=Time.realtimeSinceStartup+150;
-            while((string.IsNullOrEmpty(session.State.memory.seventhNightEndingJson)||Field<bool>(ui,"endingGenerating"))&&Time.realtimeSinceStartup<deadline)yield return null;
+            while((string.IsNullOrEmpty(session.State.memory.seventhNightEndingJson)||Field<bool>(ui,"endingGenerating")||(legacy&&session.State.memory.seventhNightEndingJson.Contains("legacy_without_revision")))&&Time.realtimeSinceStartup<deadline)yield return null;
             Require(!string.IsNullOrEmpty(session.State.memory.seventhNightEndingJson),"Ending was not persisted to the game save");
             var result=JsonUtility.FromJson<EndingDemoView.EndingRun>(session.State.memory.seventhNightEndingJson);
             Require(result.liveMemoryCount>0,"Ending omitted the current game memory");
             Require(result.worldId==session.State.memory.worldId,"Ending used another save's world");
+            if(legacy)Require(result.id!="legacy_without_revision"&&result.sourceName!="OLD_LEGACY_FILE","Legacy cache did not refresh against the current source");
             var portrait=Field<Live2DCharacterView>(ui,"endingCharacter");Require(portrait?.CurrentModel!=null&&portrait.CurrentProfile.characterId=="z","Game Z Live2D is missing");
             deadline=Time.realtimeSinceStartup+10;while(ui.IsOverlayTransitioning&&Time.realtimeSinceStartup<deadline)yield return null;
             Require(ui.HasOverlay&&Mathf.Approximately(Time.timeScale,0),"Main gameplay did not pause under its ending overlay");

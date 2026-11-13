@@ -29,7 +29,9 @@ async function refresh(){
       if(status.source.phase==='deciding')$('notice').textContent='Z 正在结合这些日子，形成自己的选择…';
       else if(status.source.phase==='recalling')$('notice').textContent=`正在回望经历：${status.source.completed} / ${status.source.memoryCount} 段`;
       else if(status.source.phase==='failed')$('error').textContent=status.source.error||'这次生成没有完成，可回游戏重试。';
-      else if(status.source.ending){$('notice').textContent='新的结局已保存，游戏中的第七晚会自动更新。';showRun(status.source.ending);}
+      else if(status.source.phase==='outdated'){$('notice').textContent='记忆文件已保存。生成期间本局经历发生变化，请回游戏点“以本局经历重新演出”。';$('error').textContent=status.source.error||'';}
+      else if(status.source.uploaded&&!status.source.ending){$('notice').textContent='记忆文件已保存，当前经历尚未生成结局。请回游戏点“以本局经历重新演出”。';}
+      else if(status.source.ending){$('notice').textContent=status.source.newExperiencesAvailable?'结局已按本次生成开始时的记忆保存。本局之后有新变化，可回游戏重新演出。':'新的结局已保存，游戏中的第七晚会自动更新。';showRun(status.source.ending);}
     }
   }catch(error){$('error').textContent=error.message;}finally{polling=false;}
 }

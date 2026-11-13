@@ -25,8 +25,40 @@ namespace Seabreeze
         static readonly string[] EndingThreadNames={"照片与见面","花店的日常","旧物与设备","直播里的话","那些约定"};
         static readonly string[] EndingThreadIcons={"album","people","tasks","live","messages"};
 
+        bool EndingCinematicEnabled => Array.IndexOf(Environment.GetCommandLineArgs(),"-endingCinematicPreview")>=0;
+        void BuildEndingClassic()
+        {
+            var background=Stretch("Moon island ending coast",overlayRoot,Vector2.zero,Vector2.zero).gameObject.AddComponent<RawImage>();
+            background.texture=Resources.Load<Texture2D>("Art/lighthouse");background.color=new Color(.26f,.29f,.38f);background.raycastTarget=false;
+            var veil=Stretch("Seventh night veil",overlayRoot,Vector2.zero,Vector2.zero).gameObject.AddComponent<Image>();veil.color=new Color(.025f,.04f,.08f,.60f);veil.raycastTarget=true;
+            var portrait=EndingRegion("Z ending portrait",overlayRoot,new Vector2(.035f,.06f),new Vector2(.455f,.90f));
+            endingCharacter=portrait.gameObject.AddComponent<Live2DCharacterView>();endingCharacter.Initialize(portrait);
+            var definition=SevenCharacterCatalog.Find("z");
+            var profile=Resources.Load<Live2DModelProfile>(definition?.portrait??"Memory/Portraits/ZFinal-v03");
+            if(profile!=null)endingCharacter.Show(profile);
+            endingColumn=EndingRegion("Seventh night story",overlayRoot,new Vector2(.48f,.09f),new Vector2(.955f,.90f));
+            endingEyebrow=Label("Seventh night chapter",endingColumn,TL,TL,Vector2.zero,new Vector2(840,35),"第七天 · 夜晚 · 月亮岛码头",18,Accent);
+            endingTitle=Label("Z ending title",endingColumn,TL,TL,new Vector2(0,-68),new Vector2(845,110),"这些日子，仍然在这里",43,Paper);endingTitle.richText=false;
+            endingSource=Label("Game memory source",endingColumn,TL,TL,new Vector2(0,-174),new Vector2(850,45),"正在同步本局中 Z 已知的经历",17,Muted);endingSource.richText=false;
+            var viewport=Stretch("Ending scroll",endingColumn,new Vector2(0,180),new Vector2(0,-238));viewport.gameObject.AddComponent<RectMask2D>();
+            var hit=viewport.gameObject.AddComponent<Image>();hit.color=Color.clear;hit.raycastTarget=true;
+            var scroll=viewport.gameObject.AddComponent<ScrollRect>();endingScroll=scroll;scroll.horizontal=false;scroll.scrollSensitivity=38;scroll.movementType=ScrollRect.MovementType.Clamped;scroll.viewport=viewport;
+            var textRect=Rect("Ending words",viewport,TL,TL,Vector2.zero,new Vector2(820,300));textRect.anchorMax=Vector2.one;textRect.sizeDelta=new Vector2(-16,300);
+            endingBody=textRect.gameObject.AddComponent<TextMeshProUGUI>();endingBody.font=UIPrimitives.Font;endingBody.fontSize=27;endingBody.color=Paper;endingBody.richText=false;endingBody.lineSpacing=10;
+            endingBody.textWrappingMode=TextWrappingModes.Normal;
+            scroll.content=textRect;
+            endingProgress=Label("Ending page progress",endingColumn,BL,BL,new Vector2(0,105),new Vector2(830,35),"",18,Muted);
+            endingPrevious=Button("Previous ending memory",endingColumn,BL,BL,new Vector2(0,35),new Vector2(185,55),"← 上一段",()=>ShowEndingPage(endingPage-1),false,20);
+            endingOriginal=Button("Ending memory source",endingColumn,BL,BL,new Vector2(210,35),new Vector2(275,55),"看这一段原文",ToggleEndingOriginal,false,20);
+            endingNext=Button("Continue ending",endingColumn,BL,BL,new Vector2(520,35),new Vector2(290,55),"继续 →",NextEndingPage,true,21);
+            Button("Return to island",overlayRoot,new Vector2(1,1),new Vector2(1,1),new Vector2(-45,-30),new Vector2(250,48),"返回小岛 · Esc",CloseOverlay,false,18);
+            Button("Reconsider current island memories",overlayRoot,TL,TL,new Vector2(45,-30),new Vector2(345,48),"以本局经历重新演出",()=>{if(!endingGenerating){seventhNight=null;session.State.memory.seventhNightEndingRequestId="";GenerateSeventhNight();}},false,18);
+            endingUpload=Button("Upload ending memories",overlayRoot,TL,TL,new Vector2(410,-30),new Vector2(285,48),"上传 / 更换记忆文件 ↗",OpenEndingMemoryUpload,false,18);
+            endingHistory=Button("Previous ending version",overlayRoot,TL,TL,new Vector2(715,-30),new Vector2(235,48),"看上次结局",ToggleEndingHistory,false,18);endingHistory.interactable=false;
+        }
         void BuildEndingStage()
         {
+            if(!EndingCinematicEnabled){BuildEndingClassic();return;}
             endingArt=Resources.Load<EndingStageArt>("UI/EndingStageArt");
             endingStageRun="";endingVisited.Clear();endingMemoryThreads.Clear();endingAutoPlay=false;
             endingBackdrop=Stretch("Moon island ending coast",overlayRoot,Vector2.zero,Vector2.zero).gameObject.AddComponent<RawImage>();
@@ -63,7 +95,7 @@ namespace Seabreeze
             endingNext=Button("Continue ending",endingColumn,new Vector2(1,0),new Vector2(1,0),new Vector2(-28,18),new Vector2(310,48),"继续 →",NextEndingPage,true,20);
             endingWorldLink=Label("This game's ending snapshot",overlayRoot,new Vector2(1,1),new Vector2(1,1),new Vector2(-60,-145),new Vector2(780,35),"",17,Muted,TextAlignmentOptions.TopRight);
             endingTools=Rect("Ending tools",overlayRoot,TL,TL,new Vector2(60,-18),new Vector2(1200,62)).gameObject;
-            Button("Reconsider current island memories",endingTools.transform,TL,TL,Vector2.zero,new Vector2(285,46),"以本局经历重新演出",()=>{if(!endingGenerating){seventhNight=null;GenerateSeventhNight();}},false,17);
+            Button("Reconsider current island memories",endingTools.transform,TL,TL,Vector2.zero,new Vector2(285,46),"以本局经历重新演出",()=>{if(!endingGenerating){seventhNight=null;session.State.memory.seventhNightEndingRequestId="";GenerateSeventhNight();}},false,17);
             endingUpload=Button("Upload ending memories",endingTools.transform,TL,TL,new Vector2(303,0),new Vector2(280,46),"上传 / 更换记忆文件 ↗",OpenEndingMemoryUpload,false,17);
             endingHistory=Button("Previous ending version",endingTools.transform,TL,TL,new Vector2(600,0),new Vector2(200,46),"看上次结局",ToggleEndingHistory,false,17);endingHistory.interactable=false;
             endingAuto=Button("Ending autoplay",endingTools.transform,TL,TL,new Vector2(820,0),new Vector2(190,46),"自动演出：关",()=>{endingAutoPlay=!endingAutoPlay;endingAuto.GetComponentInChildren<TextMeshProUGUI>().text=endingAutoPlay?"自动演出：开":"自动演出：关";ResetEndingAutoTime();},false,17);
@@ -106,6 +138,13 @@ namespace Seabreeze
         void ShowEndingStage(int page)
         {
             int count=seventhNight.recollections.Length;
+            if(!EndingCinematicEnabled)
+            {
+                endingEyebrow.text=page>0&&page<=count?"第 "+seventhNight.recollections[page-1].day+" 天 · 仍然记得":page==count+1?"这些经历之后 · 她想说的话":page==count+2?"第七晚 · Z 的选择":"第七晚 · 她自己的答案";
+                endingProgress.text=$"{page+1} / {count+4} · {count} 段经历";
+                endingSource.text=$"{seventhNight.sourceName} · 本局实际经历 {seventhNight.liveMemoryCount} 段 · 已保存";
+                endingCharacter?.SetState("serious",true);return;
+            }
             bool memory=page>0&&page<=count;
             bool phone=page==count+1||(memory&&EndingThread(seventhNight.recollections[page-1])==3);
             bool outcome=page==count+3;

@@ -13,7 +13,7 @@ const requested=process.env.Z_ENDING_REQUESTED_PORT;
 const start=Number(requested||4338);
 if(!Number.isInteger(start)||start<1024||start>65535)throw Error('记忆服务端口无效');
 for(let port=start;port<=Math.min(start+(requested?0:20),65535);port++){
-  try{const r=await fetch('http://127.0.0.1:'+port+'/api/health',{signal:AbortSignal.timeout(500)});const s=await r.json();if(s.endingIntegration&&s.endingMemoryUpload){console.log(port);process.exit(0);}}catch{}
+  try{const r=await fetch('http://127.0.0.1:'+port+'/api/health',{signal:AbortSignal.timeout(500)});const s=await r.json();if(s.endingIntegration&&s.endingMemoryUpload&&s.endingSourceRefresh>=4){console.log(port);process.exit(0);}}catch{}
   const free=await new Promise(resolve=>{const s=net.createServer();s.once('error',()=>resolve(false));s.listen(port,'127.0.0.1',()=>s.close(()=>resolve(true)));});
   if(free){console.log(port);process.exit(0);}
 }
@@ -25,14 +25,14 @@ if [[ -z "${Z_MEMORY_CONFIG:-}" && -f "$HOME/Project-Z/unity-sideview/Tools/Memo
   export Z_MEMORY_CONFIG="$HOME/Project-Z/unity-sideview/Tools/MemoryLab/.local/model.json"
 fi
 if [[ ! -d Tools/MemoryLab/node_modules/ajv ]]; then (cd Tools/MemoryLab && npm ci --ignore-scripts --no-audit --no-fund); fi
-if ! curl --silent --fail "http://127.0.0.1:${z_ending_port}/api/health" | "$z_ending_node" -e 'let b="";process.stdin.on("data",d=>b+=d);process.stdin.on("end",()=>{try{const s=JSON.parse(b);process.exit(s.endingIntegration&&s.endingMemoryUpload?0:1)}catch{process.exit(1)}})'; then
+if ! curl --silent --fail "http://127.0.0.1:${z_ending_port}/api/health" | "$z_ending_node" -e 'let b="";process.stdin.on("data",d=>b+=d);process.stdin.on("end",()=>{try{const s=JSON.parse(b);process.exit(s.endingIntegration&&s.endingMemoryUpload&&s.endingSourceRefresh>=4?0:1)}catch{process.exit(1)}})'; then
   mkdir -p Tools/MemoryLab/.data
   "$z_ending_node" --input-type=module - <<'JS'
 import {spawn} from 'node:child_process';
 import {openSync,closeSync} from 'node:fs';
 import {resolve} from 'node:path';
 const log=openSync('Tools/MemoryLab/.data/ending-game-service.log','a',0o600);
-const child=spawn(process.execPath,[resolve('Tools/MemoryLab/server.mjs'),'--port',process.env.Z_MEMORY_PORT],{cwd:process.cwd(),env:process.env,detached:true,stdio:['ignore',log,log]});
+const child=spawn(process.execPath,[resolve('Tools/MemoryLab/server.mjs'),'--port',process.env.Z_MEMORY_PORT,'--db',resolve('Tools/MemoryLab/.data/ending-runtime-v4.sqlite')],{cwd:process.cwd(),env:process.env,detached:true,stdio:['ignore',log,log]});
 child.unref();closeSync(log);
 JS
   for z_ending_attempt in {1..40}; do
@@ -40,11 +40,19 @@ JS
     sleep .2
   done
 fi
-if ! curl --silent --fail "http://127.0.0.1:${z_ending_port}/api/health" | "$z_ending_node" -e 'let b="";process.stdin.on("data",d=>b+=d);process.stdin.on("end",()=>{try{const s=JSON.parse(b);process.exit(s.endingIntegration&&s.endingMemoryUpload?0:1)}catch{process.exit(1)}})'; then
+if ! curl --silent --fail "http://127.0.0.1:${z_ending_port}/api/health" | "$z_ending_node" -e 'let b="";process.stdin.on("data",d=>b+=d);process.stdin.on("end",()=>{try{const s=JSON.parse(b);process.exit(s.endingIntegration&&s.endingMemoryUpload&&s.endingSourceRefresh>=4?0:1)}catch{process.exit(1)}})'; then
   printf '游戏记忆服务尚未启动，请查看 Tools/MemoryLab/.data/ending-game-service.log 后重试。\n'
   exit 1
 fi
 if [[ -d Builds/IslandEnding/ProjectZ-IslandEnding.app ]]; then
+  "$z_ending_node" --input-type=module - <<'JS'
+import {mkdirSync,writeFileSync,renameSync} from 'node:fs';
+import {homedir} from 'node:os';
+import {join} from 'node:path';
+const directory=join(homedir(),'.project-z','ending-demo');mkdirSync(directory,{recursive:true});
+const path=join(directory,'game-service.json');
+writeFileSync(path+'.tmp',JSON.stringify({serviceUrl:'http://127.0.0.1:'+process.env.Z_MEMORY_PORT}),{mode:0o600});renameSync(path+'.tmp',path);
+JS
   open Builds/IslandEnding/ProjectZ-IslandEnding.app --args -memoryService "http://127.0.0.1:${z_ending_port}"
   printf '完整游戏已打开。进入“第七晚结局”，点“上传 / 更换记忆文件”。确认文件后，结局会自动更新。\n'
 else
