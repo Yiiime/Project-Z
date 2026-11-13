@@ -5,6 +5,7 @@ using Live2D.Cubism.Framework.Utils;
 using UnityEngine;
 using UnityEngine.UIElements;
 using ZLive;
+using Newtonsoft.Json.Linq;
 
 namespace Seabreeze
 {
@@ -14,7 +15,7 @@ namespace Seabreeze
         LiveFeatureController feature;
         bool previousAudioPause, previousBackground, previousUnscaled, closing, restored;
 
-        public static NativeLiveHost Open(Transform parent, Action returnToGame, Action<string> sessionEnded = null, MemoryGameController memory = null)
+        public static NativeLiveHost Open(Transform parent, Action returnToGame, Action<string> sessionEnded = null, MemoryGameController memory = null, string storyMode = "daily", Action<JObject> sceneCommand = null)
         {
             var root = new GameObject("Z Native Live");
             root.transform.SetParent(parent, false);
@@ -34,17 +35,21 @@ namespace Seabreeze
             if(memory!=null){host.feature.BindCharacters=memory.Client.BeginLive;host.feature.ReleaseCharacters=memory.Client.EndLive;}
             host.feature.ExitRequested = returnToGame;
             host.feature.SessionEnded = sessionEnded;
+            host.feature.SceneMode = storyMode;
+            host.feature.SceneCommand = sceneCommand;
             return host;
         }
 
         public Task SynchronizeExit() => feature != null ? feature.Leave() : Task.CompletedTask;
 
         public bool HandleBack() => feature != null && feature.HandleBack();
+        public void AcceptArrival() => feature?.AcceptArrival();
 
         public async void Close()
         {
             if (closing) return;
             closing = true;
+            feature.SceneCommand = null;
             feature.ExitRequested = null;
             feature.SessionEnded = null;
             feature.StopPlayback();

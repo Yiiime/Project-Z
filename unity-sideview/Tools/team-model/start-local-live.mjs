@@ -21,7 +21,7 @@ export async function startLocalLive(){
   const runtime=process.env.Z_LIVE_RUNTIME_DIR||join(root,'.runtime');
   mkdirSync(runtime,{recursive:true,mode:0o700});
   const log=openSync(join(runtime,'team-start.log'),'a',0o600);
-  const child=spawn(node,[join(root,'server/index.mjs')],{cwd:root,env:{...process.env,Z_LIVE_CONNECTION_FILE:connectionFile},detached:true,stdio:['ignore',log,log]});
+  const child=spawn(node,[join(root,'server/index.mjs')],{cwd:root,env:{...process.env,Z_LIVE_CONNECTION_FILE:connectionFile,Z_LIVE_CHARACTER_SERVICE_URL:process.env.Z_LIVE_CHARACTER_SERVICE_URL||`http://127.0.0.1:${process.env.Z_MEMORY_PORT||4330}`},detached:true,stdio:['ignore',log,log]});
   let failed=false;child.on('error',()=>{failed=true;});child.unref();closeSync(log);
   for(let n=0;n<50&&!failed;n++){if(await healthy())return;await new Promise(resolve=>setTimeout(resolve,200));}
   throw Error('团队直播服务未启动，请检查是否有旧服务占用端口 '+port+'。');

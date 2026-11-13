@@ -104,7 +104,7 @@ export function createGateway({ config, dbPath = ":memory:", fetchImpl = fetch, 
       if (req.url === "/auth/poll") { const input = await readJson(req, 1024); return json(res, 200, await auth.poll(input.id)); }
       const user = await auth.authenticate(req.headers.authorization);
       const input = await readJson(req);
-      if (req.url === "/auth/status") return json(res, 200, { user: { id: user.id, login: user.login }, repository: config.repository, profiles: Object.fromEntries(Object.entries(profiles).map(([name, profile]) => [name, publicProfile(profile)])) });
+      if (req.url === "/auth/status") return json(res, 200, { user: { id: user.id, login: user.login }, expires:user.expires, repository: config.repository, profiles: Object.fromEntries(Object.entries(profiles).map(([name, profile]) => [name, publicProfile(profile)])) });
       if (req.url === "/auth/logout") { auth.logout(user); return json(res, 200, { ok: true }); }
       const name = /^\/v1\/(npc|live)$/.exec(req.url)?.[1];
       if (!name || !profiles[name]) throw new GatewayError("此模型入口未开放", 404);

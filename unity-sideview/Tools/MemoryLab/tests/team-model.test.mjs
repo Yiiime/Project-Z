@@ -49,7 +49,7 @@ test('team player schema errors receive one bounded repair within the network bu
   for(const invalidCalls of [1,2]){
     let calls=0;const requests=[];
     const provider={team:{},config:{topK:6},publicConfig:()=>({configured:true}),request:messages=>({messages}),call:async request=>{
-      calls++;requests.push(request);const context=JSON.parse(request.messages.at(-1).content);
+      calls++;requests.push(request);const context=JSON.parse(request.messages.find(m=>m.role==='user'&&m.content.startsWith('{')).content);
       assert.equal(context.reply_budget.deadline_ms,30000);
       return {finishReason:'stop',text:JSON.stringify({dialogue:'你好。',action:{option_id:context.available_actions.find(a=>a.type==='wait').id},info:{emotion:'relaxed',changes:{},...(calls<=invalidCalls?{unexpected_field:true}:{})}})};
     }};

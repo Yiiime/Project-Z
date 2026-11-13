@@ -8,6 +8,14 @@ namespace Seabreeze.Editor
 {
     public static class MemoryPlaytestBuild
     {
+        public static void BuildDay01()
+        {
+            string destination=Path.GetFullPath(Arg("-memoryBuild","Builds/Day01-Playtest/ProjectZ-Day01.app"));
+            Directory.CreateDirectory(Path.GetDirectoryName(destination));
+            var report=BuildPipeline.BuildPlayer(new BuildPlayerOptions{scenes=EditorBuildSettings.scenes.Where(s=>s.enabled).Select(s=>s.path).ToArray(),locationPathName=destination,target=BuildTarget.StandaloneOSX,options=BuildOptions.None});
+            File.WriteAllText(Path.Combine(Path.GetDirectoryName(destination),"build-report.txt"),$"Result: {report.summary.result}\nUnity: {Application.unityVersion}\nErrors: {report.summary.totalErrors}\nWarnings: {report.summary.totalWarnings}\nSize: {report.summary.totalSize}\n");
+            if(report.summary.result!=BuildResult.Succeeded)throw new InvalidOperationException("Day0–1 build failed.");
+        }
         [MenuItem("Seabreeze/Build eight-role Skill and memory playtest")]
         public static void Build()
         {

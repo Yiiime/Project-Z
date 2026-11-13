@@ -14,3 +14,14 @@ Assets/Seabreeze/Live2D/Models/Zhengyi/Model.asset filter=lfs diff=lfs merge=lfs
 Assets/Seabreeze/Live2D/Models/Zhengyi/Model.moc3 filter=lfs diff=lfs merge=lfs -text
 Assets/Seabreeze/Live2D/Models/Qingye/Model.asset filter=lfs diff=lfs merge=lfs -text
 Assets/Seabreeze/Live2D/Models/Qingye/Model.moc3 filter=lfs diff=lfs merge=lfs -text
+
+Assets/Seabreeze/Live2D/Models/Axing/Model.asset filter=lfs diff=lfs merge=lfs -text
+Assets/Seabreeze/Live2D/Models/Axing/Model.moc3 filter=lfs diff=lfs merge=lfs -text
+Assets/Seabreeze/Live2D/Models/Liting/Model.asset filter=lfs diff=lfs merge=lfs -text
+Assets/Seabreeze/Live2D/Models/Liting/Model.moc3 filter=lfs diff=lfs merge=lfs -text
+Assets/Seabreeze/Live2D/Models/Liyuan/Model.asset filter=lfs diff=lfs merge=lfs -text
+Assets/Seabreeze/Live2D/Models/Liyuan/Model.moc3 filter=lfs diff=lfs merge=lfs -text
+Assets/Seabreeze/Live2D/Models/ZFinal-v03/Model.asset filter=lfs diff=lfs merge=lfs -text
+Assets/Seabreeze/Live2D/Models/ZFinal-v03/Model.moc3 filter=lfs diff=lfs merge=lfs -text
+Assets/Seabreeze/Live2D/Models/ZhouboDaily/Model.asset filter=lfs diff=lfs merge=lfs -text
+Assets/Seabreeze/Live2D/Models/ZhouboDaily/Model.moc3 filter=lfs diff=lfs merge=lfs -text

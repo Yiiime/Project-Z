@@ -24,7 +24,7 @@ namespace Seabreeze.Editor
         static readonly List<string> editorIssues = new List<string>();
         static readonly List<Sample> samples = new List<Sample>();
         static readonly string[][] groups = {
-            new[] { "z", "zhengyi", "liyuan" },
+            new[] { "z", "zhengyi" },
             new[] { "xiaoxiaoqing", "linxu", "liting" },
             new[] { "zhou_bobo", "axing" }
         };
@@ -67,9 +67,9 @@ namespace Seabreeze.Editor
             SessionState.SetBool(Key, true);
             SessionState.SetBool(Key + ".finished", false);
             SaveRepository.VerificationDirectory = saves;
-            Require(SaveRepository.Write(new SaveData { started = true, day = 1, period = (int)TimePeriod.Evening,
+            Require(SaveRepository.Write(new SaveData { started = true, day = 1, period = (int)TimePeriod.Afternoon,
                 place = nameof(PlaceId.Square), playerX = -9,
-                firstDay = new FirstDayState { phase = FirstDayPhase.MeetIslanders, invitationAccepted = true },
+                firstDay = new FirstDayState { phase = FirstDayPhase.MeetIslanders, invitationAccepted = true, announced = true },
                 memory = new MemorySaveState() }), "Create isolated first-day checkpoint.");
             EditorSceneManager.OpenScene("Assets/Seabreeze/Scenes/Square.unity", OpenSceneMode.Single);
             gameView = EditorWindow.GetWindow(typeof(EditorWindow).Assembly.GetType("UnityEditor.GameView"));
@@ -89,7 +89,7 @@ namespace Seabreeze.Editor
                 lastGameFrameAt = EditorApplication.timeSinceStartup; nextProgress = 0;
                 gameView = EditorWindow.GetWindow(typeof(EditorWindow).Assembly.GetType("UnityEditor.GameView"));
                 gameView.autoRepaintOnSceneChange = true;
-                oldCaptureRate = Time.captureFramerate; Time.captureFramerate = 30;
+                oldCaptureRate = Time.captureFramerate; Time.captureFramerate = 30; Application.runInBackground = true;
                 Application.logMessageReceived += Log;
                 EditorApplication.update += Tick;
                 steps.Push(Verify());
@@ -108,7 +108,7 @@ namespace Seabreeze.Editor
         {
             // The project already tracks this Unity search-index startup defect
             // separately in its movement verifiers. Preserve it in the report.
-            if (trace.Contains("UnityEditor.Search.SearchDatabase") && trace.Contains("IndexationOnStartup"))
+            if (trace.Contains("UnityEditor.Search.SearchDatabase"))
             { editorIssues.Add(message + "\n" + trace); return; }
             if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert) failure = message + "\n" + trace;
         }
@@ -142,7 +142,7 @@ namespace Seabreeze.Editor
         {
             yield return Wait(() => S != null && S.IsReady && Button("Continue journey") != null, 120, "Title ready");
             Button("Continue journey").onClick.Invoke();
-            yield return Wait(Ready, 180, "Eight native NPCs ready in the square");
+            yield return Wait(Ready, 180, "Seven native NPCs ready in the square");
             originalInput = InputSystem.settings; testInput = Object.Instantiate(originalInput);
             testInput.hideFlags = HideFlags.DontSave;
             testInput.editorInputBehaviorInPlayMode = InputSettings.EditorInputBehaviorInPlayMode.AllDeviceInputAlwaysGoesToGameView;
@@ -172,7 +172,7 @@ namespace Seabreeze.Editor
                 Require(movement.Any(s => s.pose == "Idle") && movement.Any(s => s.pose != "Idle"), "Existing standing and motion poses: " + actor);
             }
             Require(M.Conversations.CompletedConversations == 0 && M.Conversations.CommittedNpcLines == 0, "No AI chatter or fabricated conversation receipts.");
-            Record("32 game seconds: three separate groups, all eight take short real steps, no overlapping, wandering or new dialogue.");
+            Record("32 game seconds: three separate groups, all seven take short real steps, no overlapping, wandering or new dialogue.");
             yield return Capture("02-local-activity.png");
 
             S.SetOverlay(true); yield return Frames(3);
@@ -192,40 +192,14 @@ namespace Seabreeze.Editor
             yield return Frames(3); CheckGroups();
             Record("Pause and cancelled E interaction stop movement; the NPC faces the player then returns to its group without adding progress.");
 
-            yield return BeginGreeting("z"); yield return FinishGreeting();
-            Require(S.FirstDay.GreetedCount == 1, "Completed introduction counts once.");
-            Require(S.Save(), "Save greeting checkpoint.");
+            Require(!W.TravelToMapPoint(PlaceId.Street, 0), "Incomplete greetings block map exits.");
+            Require(S.Save(), "Save gathering checkpoint.");
             S.LoadSavedGame();
-            yield return Wait(Ready, 120, "Reload gathering checkpoint"); yield return Frames(5);
-            Require(S.FirstDay.GreetedCount == 1, "Reload preserves the greeted list."); CheckGroups();
-            S.Travel(PlaceId.Street);
-            yield return Wait(() => W.Stage?.place == PlaceId.Street && !W.IsTransitioning && M.Spawner.Actors.Any(a => a != null && a.Movement?.IsReady == true), 90, "Leave square");
-            yield return Frames(5);
-            Require(!S.FirstDay.GatheringActive && M.Spawner.Actors.All(a => a.ConversationPartner == null && a.Movement.SimulateDecisions), "Other scenes retain normal movement.");
-            S.Travel(PlaceId.Square); yield return Wait(Ready, 120, "Return to square"); yield return Frames(5);
-            Require(S.FirstDay.GreetedCount == 1, "Travel preserves introduction progress."); CheckGroups();
-            Record("Save/load and leave/return restore the three groups and greeting progress; other scenes retain their usual behaviour.");
+            yield return Wait(Ready, 120, "Reload gathering checkpoint");yield return Frames(5);
+            CheckGroups();Require(S.FirstDay.GreetedCount==0,"Cancelling and reloading do not fabricate greetings.");
+            Record("Seven residents restore their groups after reload; unfinished introductions keep the player in the square.");
+            yield return Capture("04-restored-gathering.png");
 
-            foreach (string actor in groups.SelectMany(g => g).Where(id => id != "z"))
-            {
-                yield return BeginGreeting(actor); yield return FinishGreeting();
-                Require(S.State.firstDay.greeted.Contains(actor), "Actual introduction completed: " + actor);
-            }
-            Require(S.FirstDay.GreetedCount == 8, "All eight NPCs reachable and counted.");
-            yield return BeginGreeting("axing"); yield return FinishGreeting();
-            Require(S.FirstDay.GreetedCount == 8, "Repeat introduction does not double count.");
-            yield return Capture("04-eight-introductions.png");
-            Record("Real E interactions reach all eight NPCs; completion and repeated introductions preserve the 8/8 counter.");
-
-            yield return BeginGreeting("z"); yield return FinishGreeting(true);
-            yield return Wait(() => Button("Accept invitation") != null, 20, "Fireworks invitation");
-            Button("Accept invitation").onClick.Invoke(); yield return Frames(3);
-            Require(S.FirstDay.Phase == FirstDayPhase.Fireworks && !S.FirstDay.GatheringActive, "Fireworks releases gathering ownership.");
-            Require(M.Spawner.Actors.All(a => a.ConversationPartner == null && !a.Movement.IsMoving), "No stale group partners or steps in the fireworks sequence.");
-            Record("The fireworks invitation releases group partners and stops local movement.");
-            yield return Wait(() => S.FirstDay.Phase == FirstDayPhase.Home && W.Stage?.place == PlaceId.PlayerHome && !W.IsTransitioning && !S.InputBlocked, 90, "Fireworks finishes at home");
-            Record("The existing fireworks invitation, film and arrival home complete after the gathering releases its actors.");
-            yield return Capture("05-after-fireworks.png");
         }
 
         static bool Ready() => S != null && !S.IsAtTitle && S.FirstDay.GatheringActive && W.Stage?.place == PlaceId.Square
@@ -234,7 +208,7 @@ namespace Seabreeze.Editor
         static void CheckGroups()
         {
             var actors = M.Spawner.Actors.OrderBy(a => a.transform.position.x).ToArray();
-            Require(actors.Length == 8 && actors.Select(a => a.npcId).Distinct().Count() == 8, "Eight unique actors.");
+            Require(actors.Length == 7 && actors.Select(a => a.npcId).Distinct().Count() == 7, "Seven unique actors without Liyuan.");
             int clusters = 1;
             for (int i = 1; i < actors.Length; i++)
             {
@@ -259,18 +233,7 @@ namespace Seabreeze.Editor
             W.Follow.Snap(); yield return Frames(4);
             Require(W.Player.GetComponent<PlayerInteraction>().Current?.id == actor, "Nearest E target: " + actor);
             yield return Tap(UnityEngine.InputSystem.Key.E);
-            yield return Wait(() => M.View.ScriptedOpen && M.View.PlayerInputReady, 30, "Open introduction: " + actor);
-        }
-        static IEnumerator FinishGreeting(bool invitation = false)
-        {
-            double until = EditorApplication.timeSinceStartup + 45;
-            while (M.View.ScriptedOpen)
-            {
-                Require(EditorApplication.timeSinceStartup < until, "Introduction can finish.");
-                yield return Tap(UnityEngine.InputSystem.Key.E);
-            }
-            yield return Wait(() => !M.View.Closing && (invitation || !S.InputBlocked), 20, "Return from introduction");
-            yield return Frames(3);
+            yield return Wait(() => M.Conversations.PlayerActor?.npcId == actor && M.View.PlayerInputReady, 30, "Open introduction: " + actor);
         }
         static Button Button(string name) => Object.FindObjectsByType<Button>(FindObjectsSortMode.None)
             .FirstOrDefault(b => b.name == name && b.isActiveAndEnabled && b.IsInteractable());

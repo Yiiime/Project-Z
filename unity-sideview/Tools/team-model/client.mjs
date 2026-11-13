@@ -50,7 +50,7 @@ export class TeamClient {
   session() {
     try {
       const saved = JSON.parse(readFileSync(this.sessionFile, "utf8"));
-      if (saved.origin !== this.origin || saved.repository !== this.config.repository || saved.expires <= this.now() || !/^[A-Za-z0-9_-]{43}$/.test(saved.token)) return null;
+      if (saved.origin !== this.origin || saved.repository !== this.config.repository || !Number.isSafeInteger(saved.expires) || saved.expires <= this.now() || !/^[A-Za-z0-9_-]{43}$/.test(saved.token)) return null;
       return saved;
     } catch { return null; }
   }
@@ -59,6 +59,7 @@ export class TeamClient {
     return { enabled: true, connected: Boolean(session), repository: this.config.repository, user: session?.user || null, loginPending: Boolean(this.login) };
   }
   save(value) {
+    if(!/^[A-Za-z0-9_-]{43}$/.test(value.token||'')||!Number.isSafeInteger(value.expires)||value.expires<=this.now()||!Number.isSafeInteger(value.user?.id))throw new GatewayError('团队登录响应无效',502);
     mkdirSync(this.directory, { recursive: true, mode: 0o700 });
     const temporary = this.sessionFile + "." + randomBytes(8).toString("hex");
     writeFileSync(temporary, JSON.stringify({ ...value, origin: this.origin, repository: this.config.repository }), { mode: 0o600, flag: "wx" });

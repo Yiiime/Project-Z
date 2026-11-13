@@ -126,7 +126,7 @@ export class TeamAuth {
     if (!row) throw new GatewayError("请先登录 GitHub 连接团队模型", 401, "login_required");
     const user = { id: row.user_id, login: row.login };
     await this.member(user);
-    return { ...user, digest: row.digest };
+    return { ...user, digest: row.digest, expires: row.expires };
   }
 
   charge(user, limit = 5000) {

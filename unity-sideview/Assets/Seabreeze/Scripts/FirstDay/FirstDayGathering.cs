@@ -96,7 +96,7 @@ namespace Seabreeze
                 var npc = member.Npc;
                 var movement = npc.Movement;
                 var partner = Partner(member);
-                npc.ConversationPartner = npc.npcId == greeting ? world.Player : partner;
+                npc.ConversationPartner = (npc.npcId == greeting || session.Memory?.Conversations.PlayerActor == npc) ? world.Player : partner;
                 movement.SimulateDecisions = false;
 
                 if (paused)

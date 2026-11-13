@@ -97,7 +97,7 @@ namespace Seabreeze
             return opened;
         }
         public string StoryEventId(string stableId)=>"story_"+session.State.memory.worldId+"_"+stableId;
-        public void PublishStoryEvent(string stableId,string text,string[] observers,bool verified=false,string[] discloseTo=null)
+        public void PublishStoryEvent(string stableId,string text,string[] observers,bool verified=false,string[] discloseTo=null,string conversationId=null)
         {
             string id=StoryEventId(stableId);
             if(session.State.memory.outbox.Any(e=>e.id==id))return;
@@ -106,10 +106,11 @@ namespace Seabreeze
                 var cp=JObject.Parse(session.State.memory.checkpoint);
                 if((cp["records"]?["event"]??new JArray()).Any(e=>(string)e["id"]==id))return;
             }
-            Append(new MemoryEvent{id=id,kind="story_event",text=text,observers=observers,verified=verified,discloseTo=discloseTo??observers,location=session.CurrentPlace.ToString(),locationId=Location(null)});
+            Append(new MemoryEvent{id=id,kind="story_event",conversationId=conversationId,text=text,observers=observers,verified=verified,discloseTo=discloseTo??observers,location=session.CurrentPlace.ToString(),locationId=Location(null)});
         }
         public void RespondTask(string taskId,bool accepted)
         {
+            session.FirstDay?.BeginTask(accepted);
             Client.RespondTask(taskId,accepted,ReplyToCurrentConversation());
         }
         public void InviteTask(string taskId,string actorId,string text)

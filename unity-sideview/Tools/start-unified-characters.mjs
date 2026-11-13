@@ -21,7 +21,7 @@ const memoryReady=async()=>{try{const r=await fetch(`http://127.0.0.1:${memoryPo
 if(await alive(`http://127.0.0.1:${memoryPort}/api/health`)&&!await memoryReady())throw Error('当前端口是旧版角色服务。请先关闭旧服务，或设置 Z_MEMORY_PORT 使用空闲端口后重新启动。');
 if(!await alive(`http://127.0.0.1:${memoryPort}/api/health`))start('memory',memory,['server.mjs','--port',String(memoryPort),'--db',path.join(memory,'.data/unified-local.sqlite')],{Z_MEMORY_CONFIG:config});
 const tokenFile=path.join(liveRuntime,'local-token');let token='';try{token=fs.readFileSync(tokenFile,'utf8').trim();}catch{}
-if(!await alive(`http://127.0.0.1:${livePort}/health`,{Authorization:'Bearer '+token}))start('live',live,['server/index.mjs'],{Z_UNITY_PORT:String(livePort),Z_LIVE_RUNTIME_DIR:liveRuntime,Z_MEMORY_CONFIG:config});
+if(!await alive(`http://127.0.0.1:${livePort}/health`,{Authorization:'Bearer '+token}))start('live',live,['server/index.mjs'],{Z_UNITY_PORT:String(livePort),Z_LIVE_RUNTIME_DIR:liveRuntime,Z_MEMORY_CONFIG:config,Z_LIVE_CHARACTER_SERVICE_URL:`http://127.0.0.1:${memoryPort}`});
 let ready=false;
 for(let n=0;n<40;n++){
  try{token=fs.readFileSync(tokenFile,'utf8').trim();}catch{}

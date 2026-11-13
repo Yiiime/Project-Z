@@ -21,12 +21,12 @@ const env=loadEnvironment(configRoot);
 const team=office?null:loadTeamClient();
 if(team)env.DEEPSEEK_API_KEY='team-managed';
 // One local character API configuration can serve both surfaces; never expose it to Unity.
-if(!env.DEEPSEEK_API_KEY){const shared=process.env.Z_MEMORY_CONFIG||path.resolve(root,'../MemoryLab/.local/model.json');try{const c=JSON.parse(fs.readFileSync(shared,'utf8'));if(c.apiKey)env.DEEPSEEK_API_KEY=c.apiKey;}catch{}}
+if(!env.DEEPSEEK_API_KEY){const shared=process.env.Z_MEMORY_CONFIG||path.resolve(root,'../MemoryLab/.local/model.json');try{const c=JSON.parse(fs.readFileSync(shared,'utf8'));if(c.apiKey&&c.provider==='deepseek'&&/^https:\/\/api\.deepseek\.com(?:\/v1)?\/?$/.test(c.baseUrl||''))env.DEEPSEEK_API_KEY=c.apiKey;}catch{}}
 const voice=new NativeVoiceService({configRoot:process.env.Z_LIVE_VOICE_CONFIG_DIR||configRoot,profileRoot:path.join(runtime,'voiceprint')});
 const singing=await SingingService.open({root,directory:path.join(runtime,'singing'),libraryDirectory:path.join(runtime,'library'),environment:()=>env,sources:[new NeteaseSource(),...(env.Z_SONG_CATALOG?[new CatalogSource({id:'configured',file:env.Z_SONG_CATALOG})]:[])],autoRenew:env.Z_NETEASE_AUTO_RENEW!=='0',onSessionStatus:status=>console.log('NetEase session:',status.status,status.renewal||'')});
 const library=new LiveSongLibrary({root,directory:path.join(runtime,'library'),singing});
 const providers=new Providers(env,{singing,singingContext:()=>singing.context('local-owner',{publicRoom:true}),...(team?{fetch:team.modelFetch('live',fetch,'https://api.deepseek.com/chat/completions'),modelSource:'team-ark',modelName:team.config.profiles.live.model}: {})});
-const {server}=await createLiveServer({root:path.join(runtime,'sessions'),providers,artifacts:new ArtifactStore(path.join(runtime,'artifacts')),songRoot:path.join(root,'server/assets/songs'),token,library,voice,...(office?{tokens:office.tokens,tls:{key:fs.readFileSync(path.join(runtime,'key.pem')),cert:fs.readFileSync(path.join(runtime,'cert.pem'))}}:{})});
+const {server}=await createLiveServer({root:path.join(runtime,'sessions'),providers,artifacts:new ArtifactStore(path.join(runtime,'artifacts')),songRoot:path.join(root,'server/assets/songs'),token,library,voice,characterServiceUrl:process.env.Z_LIVE_CHARACTER_SERVICE_URL||null,...(office?{tokens:office.tokens,tls:{key:fs.readFileSync(path.join(runtime,'key.pem')),cert:fs.readFileSync(path.join(runtime,'cert.pem'))}}:{})});
 // Editor-only loopback credential: outside Assets, never included in a Player build.
 server.listen(port,office?.host||'127.0.0.1',()=>{
  if(!office){const file=process.env.Z_LIVE_CONNECTION_FILE||path.resolve(root,'../../UserSettings/ZLive/local-connection.json');fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(file,JSON.stringify({baseUrl:`http://127.0.0.1:${port}`,token}),{mode:0o600});}
