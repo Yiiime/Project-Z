@@ -38,6 +38,7 @@ namespace Seabreeze
         bool initialized, available, wasBlocked = true;
         bool interactionHold;
         bool passOtherActors;
+        PlayerController guidePaceSource;
         string unsupportedReason;
         public string LastStartFailure { get; private set; }
         float previousVisualX;
@@ -54,6 +55,23 @@ namespace Seabreeze
         public event Action MovementStarted;
         public string ActiveRequestId => activeRequest;
         public string TargetId => target?.id;
+
+        // Guiding is temporary. Keep authored wandering values intact, and read
+        // the current player values so a route never relies on a copied speed.
+        float EffectiveMaxSpeed => guidePaceSource != null ? Mathf.Max(.1f, guidePaceSource.speed) : maxSpeed;
+        float EffectiveAcceleration => guidePaceSource != null ? Mathf.Max(.1f, guidePaceSource.acceleration) : acceleration;
+        float EffectiveDeceleration => guidePaceSource != null ? Mathf.Max(.1f, guidePaceSource.deceleration) : deceleration;
+        float TravelSpeed
+        {
+            get
+            {
+                var player = passOtherActors && world != null && world.Player != null
+                    ? world.Player.GetComponent<PlayerController>() : null;
+                return player != null ? Mathf.Max(EffectiveMaxSpeed, player.speed * 1.1f) : EffectiveMaxSpeed;
+            }
+        }
+        public void SetGuidePace(PlayerController player) => guidePaceSource = player;
+        public void ClearGuidePace() => guidePaceSource = null;
 
         bool InCurrentWorld => initialized && isActiveAndEnabled && available && presence != null
             && presence.isActiveAndEnabled && session != null && session == GameSession.Instance && session.IsReady
@@ -288,7 +306,7 @@ namespace Seabreeze
             target = next;
             blockedTime = movementTime = 0;
             blockingObject = null;
-            movementTimeout = next == null ? 0 : 8 + Vector2.Distance(body.position, next.position) / maxSpeed * 3;
+            movementTimeout = next == null ? 0 : 8 + Vector2.Distance(body.position, next.position) / EffectiveMaxSpeed * 3;
             if (next != null && visual.UsesNpcStateMotion)
                 visual.BeginNpcMotionRoute(Mathf.Abs(next.position.x - body.position.x));
             NpcMoveResult waiting = next == null ? Finish(NpcMoveOutcome.Waiting, "wait", true, false) : null;
@@ -389,14 +407,15 @@ namespace Seabreeze
                 remaining=Mathf.Min(remaining,Mathf.Max(0,Mathf.Sign(distance)*(world.Player.position.x-body.position.x)-1f));
             // An accepted companion can keep pace with the player without
             // changing ordinary wandering speed or ignoring physical walls.
-            float travelSpeed=passOtherActors&&world.Player!=null?Mathf.Max(maxSpeed,world.Player.GetComponent<PlayerController>().speed*1.1f):maxSpeed;
-            float desired = Mathf.Sign(distance) * Mathf.Min(travelSpeed, Mathf.Sqrt(2 * deceleration * remaining));
+            float stoppingRate = EffectiveDeceleration;
+            float desired = Mathf.Sign(distance) * Mathf.Min(TravelSpeed, Mathf.Sqrt(2 * stoppingRate * remaining));
             if (visual.UsesNpcStateMotion)
             {
                 if (!visual.HasNpcMotionRoute) visual.BeginNpcMotionRoute(Mathf.Abs(distance));
                 desired *= visual.NpcRouteSpeedFactor;
             }
-            float rate = Mathf.Sign(speed) != Mathf.Sign(desired) || Mathf.Abs(desired) < Mathf.Abs(speed) ? deceleration : passOtherActors?Mathf.Max(acceleration,14f):acceleration;
+            float accelerationRate = passOtherActors ? Mathf.Max(EffectiveAcceleration, 14f) : EffectiveAcceleration;
+            float rate = Mathf.Sign(speed) != Mathf.Sign(desired) || Mathf.Abs(desired) < Mathf.Abs(speed) ? stoppingRate : accelerationRate;
             speed = Mathf.MoveTowards(speed, desired, rate * dt);
             float step = speed * dt;
             if (Mathf.Sign(step) == Mathf.Sign(distance)) step = Mathf.Sign(step) * Mathf.Min(Mathf.Abs(step), Mathf.Min(Mathf.Abs(distance),remaining+.01f));
@@ -494,7 +513,7 @@ namespace Seabreeze
             previousVisualX = x; hasVisualPosition = true;
             // Spawn/teleport/reload is not a walking stride. Interpolated render
             // displacement, rather than the requested physics velocity, drives art.
-            if (!CanAct || Mathf.Abs(dx) > Mathf.Max(.25f, maxSpeed * Time.deltaTime * 2))
+            if (!CanAct || Mathf.Abs(dx) > Mathf.Max(.25f, Mathf.Max(TravelSpeed, ActualSpeed) * Time.deltaTime * 2))
             {
                 dx = 0;
                 visual.StopNpcMotionImmediately();

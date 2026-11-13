@@ -97,17 +97,47 @@ namespace Seabreeze
             ambienceText.textWrappingMode=TextWrappingModes.NoWrap;
             ambienceText.overflowMode=TextOverflowModes.Ellipsis;
             ambienceText.richText=false;
-            firstDayTaskSurface=Panel("First day task glass",hud,TL,TL,new Vector2(32,-211),new Vector2(624,100),new Color(.055f,.10f,.18f,.73f));
-            ((RoundedPanel)firstDayTaskSurface).CornerRadius=16;
-            objectiveText=Label("Current thought",firstDayTaskSurface.transform,TL,TL,new Vector2(16,-12),new Vector2(590,80),"",19,Paper);
-            objectiveText.outlineColor=new Color(.06f,.1f,.15f,.9f);objectiveText.outlineWidth=.12f;
-            objectiveText.gameObject.SetActive(false);firstDayTaskSurface.gameObject.SetActive(false);
+            BuildObjectiveCard();
             var phone=KitCircle("Phone",hud,new Vector2(1,0),new Vector2(1,0),new Vector2(-34,54),64,"phone",()=>ToggleOverlay("phone"));
             Label("Key",phone.transform,new Vector2(.5f,0),TC,new Vector2(0,-6),new Vector2(92,24),"Tab",14,Muted,TextAlignmentOptions.Top);
             phoneBadge=MakeBadge(phone.transform,new Vector2(-2,2));
             foreach(var label in new[]{dateText,timeText,weatherText,placeText,ambienceText})
             {label.outlineColor=new Color(.10f,.14f,.22f,.6f);label.outlineWidth=.08f;}
 
+        }
+
+        // A quiet continuation of the phone's blue glass, sized to the actual objective.
+        // Presentation only: the director remains the owner of progress and completion.
+        void BuildObjectiveCard()
+        {
+            firstDayTaskSurface=Panel("First day task glass",hud,TL,TL,new Vector2(44,-220),new Vector2(444,126),new Color(.16f,.22f,.32f,.64f));
+            var glass=(RoundedPanel)firstDayTaskSurface;
+            glass.CornerRadius=24;
+            glass.SetBorder(PhoneBorder,1);
+            var inner=Stretch("Objective inner reflection",glass.transform,new Vector2(5,5),new Vector2(-5,-5)).gameObject.AddComponent<RoundedPanel>();
+            inner.color=Color.clear;inner.CornerRadius=20;inner.SetBorder(new Color(.80f,.86f,.96f,.09f),.7f);inner.raycastTarget=false;
+            var badge=Panel("Objective icon glass",glass.transform,TL,TL,new Vector2(18,-16),new Vector2(30,30),new Color(.75f,.74f,.87f,.14f));
+            ((RoundedPanel)badge).CornerRadius=15;((RoundedPanel)badge).SetBorder(new Color(.90f,.91f,1,.18f),.6f);
+            FinalKitAssets.Icon("tasks",badge.transform,C,C,Vector2.zero,new Vector2(18,18));
+            Label("Objective heading",glass.transform,TL,TL,new Vector2(59,-20),new Vector2(240,26),"当前行程",15,PhoneWhite);
+            Label("Objective status",glass.transform,new Vector2(1,1),new Vector2(1,1),new Vector2(-20,-22),new Vector2(70,22),"进行中",12,PhoneMuted,TextAlignmentOptions.TopRight);
+            Line(glass.transform,TL,TL,new Vector2(20,-56),new Vector2(404,1),new Color(.82f,.87f,.96f,.12f));
+            objectiveText=Label("Current thought",glass.transform,TL,TL,new Vector2(20,-70),new Vector2(404,40),"",19,PhoneWhite);
+            objectiveText.richText=false;objectiveText.lineSpacing=5;
+            firstDayTaskSurface.gameObject.SetActive(false);
+        }
+        void RefreshObjectiveCard()
+        {
+            if(firstDayTaskSurface==null)return;
+            bool visible=session.FirstDay?.Active==true;
+            if(firstDayTaskSurface.gameObject.activeSelf!=visible)firstDayTaskSurface.gameObject.SetActive(visible);
+            if(!visible)return;
+            string value=session.FirstDay.Objective??"";
+            if(objectiveText.text==value)return;
+            objectiveText.text=value;
+            float height=Mathf.Max(30,objectiveText.GetPreferredValues(value,404,0).y+6);
+            objectiveText.rectTransform.sizeDelta=new Vector2(404,height);
+            firstDayTaskSurface.rectTransform.sizeDelta=new Vector2(444,70+height+20);
         }
 
         void RightShortcut(string label,string key,LineIcon.Symbol symbol,float y,Action action)
@@ -168,9 +198,7 @@ namespace Seabreeze
             weatherText.text=weather;
             RefreshPhoneBadge();
             placeText.text=PlaceName(session.CurrentPlace);
-            objectiveText.text=session.Story.Objective;
-            objectiveText.gameObject.SetActive(session.FirstDay!=null&&session.FirstDay.Active);
-            firstDayTaskSurface.gameObject.SetActive(objectiveText.gameObject.activeSelf);
+            RefreshObjectiveCard();
             ambienceText.text=MusicDirector.Instance==null?"海风，和远处的浪":MusicDirector.Instance.MusicEnabled?MusicDirector.Instance.CurrentTitle:"音乐已关闭";
         }
         static IslandMapCatalog placeCatalog;
@@ -249,7 +277,7 @@ namespace Seabreeze
         {
             if(!initialized||session==null||session.IsAtTitle)return;
             if(session.FirstDay!=null&&session.FirstDay.BlocksInput&&!(session.Memory?.PlayerChatOpen??false)){HideInteraction();return;}
-            if(session.FirstDay?.Active==true)objectiveText.text=session.FirstDay.Objective;
+            RefreshObjectiveCard();
             bool playerChat=session.Memory!=null&&session.Memory.PlayerChatOpen;
             hud.gameObject.SetActive(!hidden&&!playerChat);
             if(playerChat){HideInteraction();return;}
