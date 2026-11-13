@@ -9,8 +9,25 @@ import {createLiveServer} from '../server/http.mjs';
 import {ArtifactStore,Providers} from '../server/providers.mjs';
 import {SingingService} from '../server/singing/service.mjs';
 import {LiveSongLibrary} from '../server/song-library/index.mjs';
+import http from 'node:http';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const plan={intent:'request',title:'晚安',artist:'颜人中',version:'',question:'',segment:{kind:'chorus',ordinal:1,description:'第一段完整副歌',lyricStart:''}};
+test('restored character rooms follow the owning LAN backend after its port changes',async t=>{
+ const f=await fixture(t),directory=fs.mkdtempSync(path.join(os.tmpdir(),'z-restored-lan-'));
+ const memory=http.createServer((_req,res)=>{res.setHeader('Content-Type','application/json');res.end(JSON.stringify({ok:true,restored:true}));});
+ await new Promise(resolve=>memory.listen(0,'127.0.0.1',resolve));
+ const current=`http://127.0.0.1:${memory.address().port}`,saved=f.s.persistData();
+ saved.characterBinding={memoryUrl:'http://127.0.0.1:1',worldId:'world',runId:'run',roomId:'room',roomToken:'token'};
+ fs.mkdirSync(path.join(directory,'sessions'));fs.writeFileSync(path.join(directory,'sessions',saved.id+'.json'),JSON.stringify(saved));
+ const options={root:path.join(directory,'sessions'),providers:new Providers({}),artifacts:new ArtifactStore(path.join(directory,'artifacts')),songRoot:path.join(root,'server/assets/songs'),token:'fixture-token'};
+ let restored;
+ try{
+  await assert.rejects(createLiveServer({...options,characterServiceUrl:'http://example.com'}),/invalid_character_service/);
+  restored=await createLiveServer({...options,characterServiceUrl:current});await new Promise(resolve=>restored.server.listen(0,'127.0.0.1',resolve));
+  const room=restored.sessions.get(saved.id);assert.equal(room.characters.binding.worldId,'world');assert.equal(room.characters.binding.memoryUrl,current);
+  assert.equal((await room.characters.post('projection')).restored,true);
+ }finally{if(restored){restored.server.closeAllConnections();await new Promise(resolve=>restored.server.close(resolve));}memory.closeAllConnections();await new Promise(resolve=>memory.close(resolve));fs.rmSync(directory,{recursive:true,force:true});}
+});
 async function fixture(t,{transcribe,tokens,voice}={}) {
  const directory=fs.mkdtempSync(path.join(os.tmpdir(),'z-native-http-'));
  const singing=await SingingService.open({root,directory:path.join(directory,'singing'),autoStart:false,sources:[],environment:()=>({}),parse:async()=>plan});
@@ -53,7 +70,10 @@ test('chat-driven song uses existing media lifecycle and returns to chat without
  const f=await fixture(t),s=f.s;
  const task=f.singing.submit({text:'晚安的副歌',sourceId:'source',sessionId:s.id,owner:'local-owner'});await f.singing.tick();
  assert(await s.engine._executeSinging({name:'play_prepared_song',args:{taskId:task.id}}));
- await new Promise(r=>setTimeout(r,20));const latest=type=>[...s.commands.values()].filter(c=>c.type===type).at(-1);
+ const latest=type=>[...s.commands.values()].filter(c=>c.type===type).at(-1);
+ const deadline=Date.now()+3000;
+ while(!latest('media.prepare')&&Date.now()<deadline)await new Promise(r=>setTimeout(r,10));
+ assert(latest('media.prepare'),'prepared song must dispatch a media command');
  const receipt=(c,status,extra={})=>s.receipt(f.envelope({executorLeaseId:s.lease,commandId:c.commandId,taskId:c.taskId,resourceRevision:c.resourceRevision,payload:{artifactId:c.payload.artifactId,playbackId:c.payload.playbackId,status,...extra}}));
  receipt(latest('media.prepare'),'ready',{durationMs:32284});assert(s.talent.play());
  receipt(latest('media.play'),'started',{positionMs:0,durationMs:32284});
@@ -140,6 +160,9 @@ test('ready song follows the reviewed intro despite chat arriving during speech 
  e.client.fetch=async(route,options)=>{if(route.endsWith('/play')){entered();await gate;}return fetch(route,options);};
  const finishing=finishIntro(f);await started;
  s.input(f.envelope({type:'viewer.message',payload:{text:'我等着听'}}));release();await finishing;
+ // Playback dispatch uses real local HTTP; wait for its observable commit,
+ // rather than assuming the 30 ms speech fixture delay covers the request.
+ for(let i=0;i<200&&!lastCommand(s,'media.prepare');i++)await new Promise(r=>setTimeout(r,10));
  assert.equal(e._state.agent.errorCode,null);
  assert.equal(f.singing.context('local-owner').tasks.find(x=>x.id===task.id).status,'scheduled');
  const prepare=lastCommand(s,'media.prepare');assert(prepare);

@@ -3,22 +3,27 @@ import { canonical, TurnError } from './policy.mjs';
 
 // Durable request identity lives on the job, so response recovery also works
 // after a service restart. The in-process queue only coalesces concurrent calls.
-export function createUtteranceHandler(engine) {
+export function createUtteranceHandler(engine, firstDay = null) {
   const running = new Map();
   return async function utterance(p) {
     const key = `${p.worldId}:${p.runId}:${p.actorId}`;
     const previous = running.get(key);
     const task = (async () => {
       if (previous) await previous.catch(() => {});
-      const world = p.worldId, w = engine.world(world), actor = p.actorId, recipient = p.recipientId;
+      const world = p.worldId, actor = p.actorId, recipient = p.recipientId;
+      let w = engine.world(world);
       if (!w.active || w.runId !== p.runId) throw new TurnError('请求属于已取消的时间线');
       engine.catalog.actor(actor);
       if (recipient !== 'player') engine.catalog.actor(recipient);
       const isPlayer = recipient === 'player';
       if (isPlayer && w.focus?.actor !== actor) throw new TurnError('该NPC未取得玩家对话占用');
+      if (isPlayer) await firstDay?.prepareTask(world, actor, p.conversationId);
+      w = engine.world(world);
+      if (!w.active || w.runId !== p.runId || isPlayer && w.focus?.actor !== actor) throw new TurnError('请求属于已取消的时间线');
       const source = engine.utteranceSource(world, actor, recipient, p.conversationId, p.sourceEventId);
       const channel = p.channel || (isPlayer ? 'private_player_chat' : 'face_to_face');
       const environment = {
+        ...(isPlayer && w.firstDay && !['Complete','DailyReady'].includes(w.firstDay.phase) ? {first_day:w.firstDay} : {}),
         sceneId: p.scene, day: p.day, period: p.period, weather: p.weather || w.weather || '未提供',
         actual_audience: isPlayer ? [actor, 'player'] : [...new Set([actor, recipient, ...(p.observers || [])])],
         ...(!isPlayer ? { social_opportunity: { nearby_actors: [recipient], kind: 'co_location' } } : {}),

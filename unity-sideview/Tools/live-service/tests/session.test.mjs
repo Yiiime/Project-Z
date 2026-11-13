@@ -225,3 +225,46 @@ test('a verified outing leaves a quiet beat before the host brings up her song w
  assert.match(song.payload.text,/还答应学一首歌.*夏夜最后的烟火/);
  assert(!e.facts.some(f=>['npc.message','player.message'].includes(f.type)));
 });
+
+test('arrival tools pass the real parser and executor only after presentation and player confirmation',async t=>{
+ const s=await fixture(t);const {LiveScene}=await import('../server/live-scene.mjs');
+ s.scene=new LiveScene(s,{mode:'arrival',playerName:'小海',worldId:'a'.repeat(32),day:1});s.engine.liveScene=s.scene;
+ const value=()=>({kind:'host',context:{...normalizeAgentInput({requestId:crypto.randomUUID(),eventId:'arrival',kind:'host',context:s.engine._hostContext([])}).context,scene:s.scene.binding()}});
+ const parsed=(name,args={})=>parseAgentReply({action:'tool',speech:'模型生成的本轮主持内容',mood:'warm',handledIds:[],wakeAfterMs:2000,memory:'',tool:{name,args}},value());
+ assert.throws(()=>parsed('depart_island'));
+ const draw=parsed('draw_guest');assert(s.engine._executeTool(draw.tool));
+ let c=latest(s,'story.present');assert.equal(s.scene.phase,'opening');receipt(s,c,'displayed');assert.equal(s.scene.phase,'drawn');
+ assert(s.engine._executeTool(parsed('offer_arrival',{title:'现场邀请',description:'七天的小岛生活'}).tool));
+ c=latest(s,'story.present');receipt(s,c,'displayed');assert.equal(s.scene.phase,'offered');
+ assert.throws(()=>parsed('depart_island'));
+ s.input(envelope(s,{type:'story.accept_arrival',payload:{}}));assert.equal(s.scene.phase,'accepted');
+ assert(s.engine._executeTool(parsed('depart_island').tool));receipt(s,latest(s,'story.present'),'displayed');assert.equal(s.scene.phase,'departed');
+ assert(!s.snapshot().publicEvents.some(e=>e.type==='npc.message'));
+ const restored=new LiveSession({id:s.id,root:s.root,providers:s.providers,artifacts:s.artifacts,songRoot:s.songRoot,saved:s.persistData()});t.after(()=>restored.close());assert.equal(restored.snapshot().story.phase,'departed');
+});
+
+test('onboarding has no timed program and a generated farewell is retained as subtitle fallback',async t=>{
+ const s=await fixture(t);const {LiveScene}=await import('../server/live-scene.mjs');
+ for(const mode of ['arrival','first_evening']){
+  s.scene=new LiveScene(s,{mode,playerName:'小海',worldId:'a'.repeat(32),day:1});s.engine.liveScene=s.scene;
+  s.sessionControl.data.startedAt=Date.now()-3600000;s.sessionControl.data.targetAt=Date.now()-600000;s.sessionControl.data.hardAt=Date.now()-300000;
+  s.sessionControl.tick();assert(s.sessionControl.normal);assert(!s.sessionControl.snapshot().timing);
+ }
+ s.sessionControl.data.phase='farewell';s.sessionControl.data.farewellText='这句来自本场模型';s.sessionControl.audioDisabled();await frame();assert.equal(latest(s,'host.present').payload.text,'这句来自本场模型');
+});
+
+
+test('virtual viewers wait for reviewed host playback and drop interrupted reactions',async t=>{
+ const s=await fixture(t);const {LiveScene}=await import('../server/live-scene.mjs');
+ s.scene=new LiveScene(s,{mode:'arrival',playerName:'小海',worldId:'a'.repeat(32),day:1});s.engine.liveScene=s.scene;
+ const reaction={virtualAudience:[{name:'海风',text:'七天听起来真不错'}]};
+ s.engine._onHostSpeechCommitted(1,reaction);
+ assert.equal(latest(s,'virtual_audience.present'),undefined);
+ s.engine._public('speech.interrupted','未播完',{speechId:'1'});
+ assert.equal(latest(s,'virtual_audience.present'),undefined);
+ s.engine._onHostSpeechCommitted(2,reaction);
+ s.engine._public('speech.completed','来岛上住七天',{speechId:'2',speakerId:'Z'});
+ assert.equal(latest(s,'virtual_audience.present').payload.text,'七天听起来真不错');
+ const count=s.commands.size;s.engine._public('speech.completed','重复回执',{speechId:'2',speakerId:'Z'});
+ assert.equal(s.commands.size,count);
+});

@@ -48,6 +48,9 @@ namespace Seabreeze
                 {
                     var snapshot = JObject.Parse(checkpoint);
                     var tasks = snapshot["tasks"] as JObject;
+                    foreach (var key in taskDefinitions.Where(kv => (bool?)kv.Value["dynamic"] == true).Select(kv => kv.Key).ToArray()) taskDefinitions.Remove(key);
+                    foreach (JObject definition in tasks?["definitions"] as JArray ?? new JArray())
+                        if (!string.IsNullOrEmpty((string)definition["id"])) taskDefinitions[(string)definition["id"]] = definition;
                     var rows = tasks?["state"] as JArray;
                     var seen = new HashSet<string>(StringComparer.Ordinal);
                     if (rows != null) foreach (var row in rows.OfType<JObject>())

@@ -2,275 +2,309 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace Seabreeze
 {
-    // Durable Day 1 checkpoints; world, chat, cinema and phone retain their own lifecycles.
+    // The host owns durable facts. The main Agent chooses when to use available scene tools.
     public sealed class FirstDayDirector : MonoBehaviour
     {
-        GameSession session; WorldDirector world;
-        FirstDayCinema cinema; FirstDayOverlay invitations;
-        NativeLiveHost openingLive;
-        FirstDayContent content;
+        public static readonly string[] FirstDayCast = { "z", "xiaoxiaoqing", "linxu", "zhengyi", "liting", "axing", "zhou_bobo" };
+        GameSession session; WorldDirector world; FirstDayOverlay invitations; NpcSpeechBubble bubble;
+        NativeLiveHost live; FirstDayEscort escort;
         readonly FirstDayGathering gathering = new FirstDayGathering();
-        WorldScene decorated;
-        bool busy, resuming, waitingInvitation, travelSucceeded;
-        float liveOpened;
-        int generation;
+        public bool GatheringActive => session != null && !session.IsAtTitle && Phase == FirstDayPhase.MeetIslanders && session.CurrentPlace == PlaceId.Square;
+        bool busy, planning, harborOpening, receiptPending;
+        float nextPlan; int generation;
+        readonly Dictionary<string, string> completedTalks = new Dictionary<string, string>();
+        readonly HashSet<string> pendingSteps = new HashSet<string>();
         public bool BlocksInput => busy;
         public bool Active => session?.State?.firstDay != null && Phase != FirstDayPhase.None && Phase != FirstDayPhase.Complete;
         public FirstDayPhase Phase => session?.State?.firstDay?.phase ?? FirstDayPhase.None;
-        public bool GatheringActive => session != null && !session.IsAtTitle
-            && Phase == FirstDayPhase.MeetIslanders && session.CurrentPlace == PlaceId.Square;
-        public string[] Cast => SevenCharacterCatalog.Actors.Select(a=>a.id).ToArray();
-        public int GreetedCount => session.State.firstDay?.greeted.Count(id=>Cast.Contains(id)) ?? 0;
+        public string[] Cast => FirstDayCast;
+        public int GreetedCount => session?.State?.firstDay?.greeted.Count(Cast.Contains) ?? 0;
         public string Objective
         {
             get
             {
-                switch(Phase)
+                if (!Active) return "今日休息 " + session.Clock.RestActions + "/4";
+                if (Phase == FirstDayPhase.MeetIslanders)
                 {
-                    case FirstDayPhase.Live: return "出发前夜 · 在 Z 的直播间，等一封小岛来信。";
-                    case FirstDayPhase.Arrival: return "船正靠近小岛。";
-                    case FirstDayPhase.Harbor: return "Z 正在码头等你。靠近她，按 E 打声招呼。";
-                    case FirstDayPhase.WalkToSquare: return "沿街向右：码头 → 公共街 → 古树广场。走到街道边缘即可通行。";
-                    case FirstDayPhase.MeetIslanders:
-                        var remaining = SevenCharacterCatalog.Actors.Where(a=>!session.State.firstDay.greeted.Contains(a.id)).Select(a=>a.displayName);
-                        return GreetedCount < Cast.Length ? $"认识岛民 {GreetedCount}/{Cast.Length} · 靠近按 E\n还没聊过："+string.Join("、",remaining) : "大家都认识啦。再和 Z 交谈，邀请她一起看烟花。";
-                    case FirstDayPhase.Fireworks: return "把今晚的光，留在心里。";
-                    case FirstDayPhase.Home: return "这是留给你的海边小屋。靠近左侧的床按 E，和小岛道一声晚安。";
-                    case FirstDayPhase.Bedtime: return "故事落幕 · 谢谢你来到小岛。";
-                    case FirstDayPhase.Complete: return "这段故事已落幕。可以继续散步、交谈，或按 P 留下一张照片。";
-                    default: return "";
+                    if (!session.State.firstDay.announced) return "稍等 Z 向大家介绍你";
+                    string names = string.Join("、", Cast.Where(id => !session.State.firstDay.greeted.Contains(id)).Select(SevenCharacterCatalog.Name));
+                    return names.Length == 0 ? "已经认识大家，等 Z 安排接下来的活动" : "认识朋友 " + GreetedCount + "/7 · 走近按 E，读完问候\n还没认识：" + names;
                 }
+                if (Phase == FirstDayPhase.Live) return session.Memory?.Client.CanGenerate == true ? "Z 正在准备直播，请稍候" : "连接暂未就绪，正在重试 · 请确认小岛主机在线";
+                if (Phase == FirstDayPhase.Harbor) return session.State.firstDay.harborReady ? "等 Z 邀请你去市民广场" : "和 Z 打个招呼 · 输入回应，听完后关闭对话";
+                if (Phase == FirstDayPhase.WalkToSquare) return "跟随 Z 向右前往市民广场 · A / D 或方向键移动";
+                if (Phase == FirstDayPhase.WelcomeTask) return string.IsNullOrEmpty(session.State.firstDay.objective) ? "走近一位朋友按 E，聊聊能一起做的小事" : session.State.firstDay.objective;
+                if (Phase == FirstDayPhase.EveningReady) return "迎新小事完成了 · 等待 Z 的晚间直播";
+                return "继续今天的小岛生活";
             }
         }
-        public void Initialize(GameSession owner,WorldDirector director)
+        public void Initialize(GameSession owner, WorldDirector director)
         {
-            session=owner;world=director;
-            cinema=gameObject.AddComponent<FirstDayCinema>();cinema.Initialize(owner);
-            invitations=gameObject.AddComponent<FirstDayOverlay>();invitations.Initialize();
-            var file=Resources.Load<TextAsset>("FirstDay/conversations");
-            content=file!=null?JsonUtility.FromJson<FirstDayContent>(file.text):null;
+            session = owner; world = director;
+            invitations = gameObject.AddComponent<FirstDayOverlay>(); invitations.Initialize();
+            escort = gameObject.AddComponent<FirstDayEscort>(); escort.Initialize(owner, director);
+        }
+        public JObject Context()
+        {
+            var state = session.State.firstDay;
+            return new JObject {
+                ["phase"] = !Active ? session.Clock.LiveReady ? "DailyReady" : "Complete" : Phase.ToString(),
+                ["version"] = (state?.stageVersion ?? 0) + session.State.day * 1000,
+                ["playerName"] = PlayerIdentity.DisplayName, ["greeted"] = new JArray(state?.greeted ?? new List<string>()),
+                ["announced"] = state?.announced ?? false, ["openingStarted"] = state?.openingStarted ?? false,
+                ["harborReady"] = state?.harborReady ?? false, ["restActions"] = session.Clock.RestActions,
+                ["currentActor"] = session.Memory?.Conversations.PlayerActor?.npcId,
+                ["conversation"] = session.Memory?.Conversations.ActiveId ?? "",
+                ["place"] = session.CurrentPlace.ToString(),
+                ["photoIds"] = new JArray(session.State.phone?.photos.Select(p => p.id) ?? Enumerable.Empty<string>())
+            };
         }
         public void ResetForStateChange()
         {
-            gathering.Reset();
-            generation++;StopAllCoroutines();cinema.Cancel();invitations.Hide();
-            if(openingLive!=null){openingLive.Close();openingLive=null;}
-            session.Memory?.View.ResetView();MusicDirector.Instance?.SetMoodOverride(null);
-            busy=resuming=waitingInvitation=false;decorated=null;GameUI.Instance.SetTitleVisible(false);
+            gathering.Reset(); generation++; StopAllCoroutines(); invitations.Hide(); bubble?.Clear();
+            if (live != null) { live.Close(); live = null; }
+            busy = planning = harborOpening = receiptPending = false;
+            completedTalks.Clear(); pendingSteps.Clear(); escort.ResetRoute();
+            session.Memory?.View.ResetView(); nextPlan = 0;
         }
-        public void ResumeAfterTravel(){StartCoroutine(ResumeWhenReady());}
-        IEnumerator ResumeWhenReady(){yield return null;while(world.IsTransitioning)yield return null;Resume();}
+        public void ResumeAfterTravel() { StartCoroutine(ResumeWhenReady()); }
+        IEnumerator ResumeWhenReady() { yield return null; while (world.IsTransitioning) yield return null; Resume(); }
         public void Resume()
         {
-            if(resuming||session.IsAtTitle||!Active)return;
-            resuming=true;
-            switch(Phase)
-            {
-                case FirstDayPhase.Live: BeginLive();break;
-                case FirstDayPhase.Arrival: PlayArrival();break;
-                case FirstDayPhase.Fireworks: PlayFireworks();break;
-                case FirstDayPhase.Home: if(session.CurrentPlace!=PlaceId.PlayerHome)StartCoroutine(GoHome());break;
-                case FirstDayPhase.Bedtime: ShowCredits();break;
-            }
-            session.Memory?.Spawner.Reload();
-            resuming=false;
+            if (session.IsAtTitle) return;
+            if (Phase == FirstDayPhase.Arrival) StartCoroutine(Arrive());
+            else if (Phase == FirstDayPhase.Fireworks) StartCoroutine(FireworksPlaceholder());
+            else if (Phase == FirstDayPhase.EveningLive) OpenLive(false);
+            else if (Phase == FirstDayPhase.Live && session.State.firstDay.openingStarted) OpenLive(true);
+            nextPlan = 0;
         }
-        void SetPhase(FirstDayPhase phase,string journal=null)
+        void SetPhase(FirstDayPhase phase)
         {
-            session.State.firstDay.phase=phase;
-            if(journal!=null)session.Story.AddJournal(journal);
-            session.NotifyChanged();session.Save();
-        }
-        void BeginLive()
-        {
-            busy=true;GameUI.Instance.CloseOverlayImmediately();GameUI.Instance.SetTitleVisible(true);Time.timeScale=0;
-            openingLive=NativeLiveHost.Open(transform,OfferInvitation,_=>OfferInvitation());
-            liveOpened=Time.unscaledTime;waitingInvitation=true;
-            invitations.Show("出发前夜 · Z 的直播间","今晚，她想寄出一封特别的小岛邀请。", "先听 Z 聊一会儿…",OfferInvitation,null,true);
-            invitations.SetActionEnabled(false,"先听 Z 聊一会儿…");
-        }
-        void OfferInvitation()
-        {
-            if(Phase!=FirstDayPhase.Live)return;
-            waitingInvitation=false;
-            invitations.Show("这封邀请，写给你。","Z：抽到你啦！如果最近的日子有些匆忙，就来岛上住一晚吧。\n\n明天我会在码头等你。不用准备什么，带上你自己就好。","收下邀请，向小岛出发",()=>
-            {
-                session.State.firstDay.invitationAccepted=true;
-                if(openingLive!=null){openingLive.Close();openingLive=null;}
-                SetPhase(FirstDayPhase.Arrival,"在 Z 的直播间收到了一封小岛邀请。她说，明天会在码头等我。");
-                PlayArrival();
-            },()=>
-            {
-                invitations.Show("小岛来信 · 邀请已收到","可以继续看直播，准备好了再出发。","带着邀请出发",OfferInvitation,null,true);
-            });
-        }
-        void PlayArrival()
-        {
-            busy=true;GameUI.Instance.SetTitleVisible(true);
-            MusicDirector.Instance?.SetMoodOverride("day");
-            cinema.PlayArrival(()=>{MusicDirector.Instance?.SetMoodOverride(null);StartCoroutine(ArriveAtHarbor());});
-        }
-        IEnumerator ArriveAtHarbor()
-        {
-            session.State.period=(int)TimePeriod.Afternoon;session.Clock.Refresh();
-            SetPhase(FirstDayPhase.Harbor,"船靠岸了。码头的风里，已经有人在喊我的名字。");
-            yield return Travel(PlaceId.Harbor,-10);
-            if(!travelSucceeded)yield break;
-            session.Memory?.Spawner.Reload();
-            GameUI.Instance.SetTitleVisible(false);busy=false;Time.timeScale=1;
-            session.Story.Notify("A / D 行走 · E 交谈 · P 拍照 · Tab 手机");
-        }
-        IEnumerator Travel(PlaceId place,float x)
-        {
-            busy=true;Time.timeScale=1;travelSucceeded=false;
-            session.Memory?.Conversations.CancelAll("第一天场景切换");
-            world.Travel(place);
-            while(world.IsTransitioning)yield return null;
-            if(world.Stage==null||world.Stage.place!=place)
-            {
-                busy=false;GameUI.Instance.SetTitleVisible(false);
-                session.Story.Notify("地点尚未准备好，请从暂停菜单读档重试。");yield break;
-            }
-            world.Player.GetComponent<PlayerController>().Teleport(new Vector2(x,.08f));world.Follow.Snap();
-            session.State.playerX=x;session.Save();travelSucceeded=true;
-            yield return null;
+            var state = session.State.firstDay; state.phase = phase; state.stageVersion++;
+            state.objective = ""; state.agentRequest = ""; planning = false; nextPlan = 0;
+            session.NotifyChanged(); session.Save();
         }
         void Update()
         {
-            if(session==null||session.IsAtTitle||!session.IsReady){gathering.Reset();return;}
-            if(waitingInvitation&&openingLive!=null&&invitations.Visible&&Phase==FirstDayPhase.Live)
+            if (session == null || !session.IsReady || session.IsAtTitle || world == null || world.Stage == null || world.IsTransitioning) return;
+            gathering.Tick(session, world);
+            bubble?.Tick(session.Memory?.PlayerChatOpen ?? false);
+            if (Phase == FirstDayPhase.Harbor && !harborOpening && !session.State.firstDay.harborOpened && session.Memory?.Spawner.Find("z") != null)
+                StartCoroutine(OpenHarborConversation());
+            if (Phase == FirstDayPhase.WalkToSquare && session.CurrentPlace == PlaceId.Square)
             {
-                float wait=12-(Time.unscaledTime-liveOpened);
-                if(wait>0)invitations.SetActionEnabled(false,"小岛来信 · "+Mathf.CeilToInt(wait)+" 秒后打开");
-                else invitations.SetActionEnabled(true,"打开小岛来信 →");
+                SetPhase(FirstDayPhase.MeetIslanders);
+                session.State.period = (int)TimePeriod.Afternoon; session.Clock.Refresh(); session.Memory?.Spawner.Reload();
             }
-            if(openingLive!=null && Phase==FirstDayPhase.Live && !invitations.IsModal && GameInput.Pressed(UnityEngine.InputSystem.Key.Escape))
-                if(!openingLive.HandleBack())OfferInvitation();
-            if(world.Stage==null||world.IsTransitioning){gathering.Reset();return;}
-            if(decorated!=world.Stage){decorated=world.Stage;Decorate();}
-            if(Active&&Phase==FirstDayPhase.WalkToSquare&&session.CurrentPlace==PlaceId.Square)
+            if (Phase == FirstDayPhase.WelcomeTask) ObserveTask();
+            if (busy || planning || live != null || invitations.Visible || (session.Memory?.PlayerChatOpen ?? false) || GameUI.Instance.HasOverlay || Time.unscaledTime < nextPlan) return;
+            bool wantsPlan = Phase == FirstDayPhase.Live || Phase == FirstDayPhase.Harbor && session.State.firstDay.harborReady ||
+                Phase == FirstDayPhase.MeetIslanders && (!session.State.firstDay.announced || GreetedCount == Cast.Length) ||
+                Phase == FirstDayPhase.EveningReady || !Active && session.Clock.LiveReady;
+            if (wantsPlan && session.Memory.Spawner.IsStageReady(world.Stage) && (session.Memory?.Client.CanGenerate ?? false)) RequestPlan();
+        }
+        void RequestPlan()
+        {
+            planning = true; nextPlan = Time.unscaledTime + 8;
+            int stamp = generation; var owner = session.State; var phase = Phase; int version = owner.firstDay?.stageVersion ?? 0;
+            var request = session.Memory.Client.RequestBase();
+            if (Active)
             {
-                session.State.period=(int)TimePeriod.Evening;session.Clock.Refresh();
-                SetPhase(FirstDayPhase.MeetIslanders,"来到古树广场。烟花开始前，先认识今晚一起看烟花的人。");
-                session.Memory?.Spawner.Reload();session.Story.Notify("广场上的每个人，都有一句想对你说的话。");
+                if (string.IsNullOrEmpty(owner.firstDay.agentRequest)) owner.firstDay.agentRequest = Guid.NewGuid().ToString("N");
+                request.requestId = owner.firstDay.agentRequest; session.Save();
             }
-            gathering.Tick(session,world);
-            if(!GatheringActive&&Active&&session.Memory?.Spawner!=null&&StagedCast(session.CurrentPlace)!=null)
-                foreach(var npc in session.Memory.Spawner.Actors)if(npc!=null&&npc.Movement!=null){npc.Movement.SimulateDecisions=false;npc.Movement.SetInteractionHold(true);}
-        }
-        void Decorate()
-        {
-            if(session.State.firstDay==null)return;
-            if(session.CurrentPlace==PlaceId.Harbor)
+            session.Memory.Client.Generate("/api/game/story/plan", request, reply =>
             {
-                var door=new GameObject("Guest room doorway");door.transform.SetParent(world.Stage.transform,false);door.transform.position=new Vector3(-4,0,0);
-                var i=door.AddComponent<Interactable>();i.id="firstday_home_door";i.label="回海边小屋";i.promptOffset=new Vector3(0,2.1f,0);world.Interactables.Add(i);
+                if (stamp != generation || owner != session.State) return;
+                planning = false;
+                if (Active) owner.firstDay.agentRequest = "";
+                if (Phase != phase || (owner.firstDay?.stageVersion ?? 0) != version || session.Memory.PlayerChatOpen || world.IsTransitioning || busy || GameUI.Instance.HasOverlay) return;
+                var plan = reply.storyPlan; string tool = (string)plan?["tool"];
+                if (tool == "open_live") { if (Phase == FirstDayPhase.Live) OpenLive(true); else if (Phase == FirstDayPhase.EveningReady || session.Clock.LiveReady) StartCoroutine(NotifyLive()); }
+                else if (tool == "offer_walk" && Phase == FirstDayPhase.Harbor) OfferWalk((string)plan["title"], (string)plan["description"]);
+                else if (tool == "announce_player" && Phase == FirstDayPhase.MeetIslanders && !owner.firstDay.announced) StartCoroutine(Announce((string)plan["speech"]));
+                else if (tool == "show_fireworks" && Phase == FirstDayPhase.MeetIslanders && GreetedCount == Cast.Length) { SetPhase(FirstDayPhase.Fireworks); StartCoroutine(FireworksPlaceholder()); }
+            }, error => { if (stamp != generation || owner != session.State) return; planning = false; session.Story.Notify(error); });
+        }
+        void OfferWalk(string title, string description)
+        {
+            busy = true; session.State.firstDay.objective = title; session.Save();
+            invitations.Show(title, description, "确认", () => {
+                busy = false; SetPhase(FirstDayPhase.WalkToSquare);
+                session.Memory.PublishStoryEvent("walk_accepted", PlayerIdentity.DisplayName + "接受了 Z 一起去市民广场的邀请。", new[] { "player", "z" }, true);
+            }, () => { busy = false; nextPlan = Time.unscaledTime + 8; });
+        }
+        IEnumerator Announce(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text)) yield break;
+            busy = true;
+            if (bubble == null) { bubble = gameObject.AddComponent<NpcSpeechBubble>(); bubble.Initialize(invitations.Surface, session.Memory, world); }
+            bubble.Show("z", text);
+            if (!bubble.Visible) { busy = false; yield break; }
+            float end = Time.unscaledTime + NpcSpeechBubble.ReadDuration(text);
+            while (Time.unscaledTime < end) { bubble.Tick(false); yield return null; }
+            var audience = Cast.Concat(new[] { "player" }).ToArray();
+            session.Memory.PublishStoryEvent("player_introduced", "Z 向在场的人介绍新朋友：" + text, audience, true);
+            session.State.firstDay.announced = true; session.State.firstDay.stageVersion++; session.Save(); busy = false;
+        }
+        IEnumerator OpenHarborConversation()
+        {
+            harborOpening = true; yield return null;
+            if (Phase != FirstDayPhase.Harbor) { harborOpening = false; yield break; }
+            session.Memory.BeginPlayerChat("z");
+            if (session.Memory.Conversations.PlayerActor != null) session.State.firstDay.harborOpened = true;
+            session.Save(); harborOpening = false;
+        }
+        public void ConversationCompleted(string actor, string conversation, string evidence)
+        {
+            completedTalks[actor] = evidence;
+            if (Phase == FirstDayPhase.Harbor && actor == "z") { session.State.firstDay.harborReady = true; session.Save(); nextPlan = 0; }
+            if (Phase == FirstDayPhase.MeetIslanders && session.State.firstDay.announced && Cast.Contains(actor) && !session.State.firstDay.greeted.Contains(actor))
+            {
+                session.State.firstDay.greeted.Add(actor); session.State.firstDay.stageVersion++;
+                session.Memory.PublishStoryEvent("greeted_" + actor, PlayerIdentity.DisplayName + "在市民广场与" + SevenCharacterCatalog.Name(actor) + "完成了一轮初次交流。", new[] { "player", actor }, true);
+                session.NotifyChanged(); session.Save(); nextPlan = 0;
             }
         }
-        public IEnumerable<SevenCharacter> StagedCast(PlaceId place)
+        public void BeginTask(bool accepted)
         {
-            if(!Active)return null;
-            if(place==PlaceId.Harbor&&(Phase==FirstDayPhase.Harbor||Phase==FirstDayPhase.WalkToSquare))return SevenCharacterCatalog.Actors.Where(a=>a.id=="z");
-            if(place==PlaceId.Square&&(Phase==FirstDayPhase.WalkToSquare||Phase==FirstDayPhase.MeetIslanders||Phase==FirstDayPhase.Fireworks))return SevenCharacterCatalog.Actors;
-            return null;
+            if (!accepted || Phase != FirstDayPhase.WelcomeTask) return;
+            completedTalks.Clear(); pendingSteps.Clear();
+            session.State.firstDay.taskPhotoIds = session.State.phone.photos.Select(p => p.id).ToList(); session.Save();
         }
-        public float CastPosition(string actor,PlaceId place)
+        void ObserveTask()
         {
-            if(place==PlaceId.Harbor)return -7.8f;
-            if(place==PlaceId.Square&&(Phase==FirstDayPhase.WalkToSquare||Phase==FirstDayPhase.MeetIslanders)
-                &&FirstDayGathering.TryPosition(actor,out float x))return x;
-            int index=Array.IndexOf(Cast,actor);
-            return -7.4f+index*2.05f;
-        }
-        public bool IsAvailable(string id)
-        {
-            if(id=="firstday_home_door")return Phase==FirstDayPhase.Home||Phase==FirstDayPhase.Complete;
-            return true;
-        }
-        public string Prompt(string id)
-        {
-            if(id=="firstday_bed")return Phase==FirstDayPhase.Complete?"休息，迎接新的一天":"睡个好觉 · 播放片尾";
-            if(id=="firstday_home_door")return "回海边小屋";
-            if(id=="z"&&Phase==FirstDayPhase.MeetIslanders&&GreetedCount==Cast.Length)return "邀请 Z 一起看烟花";
-            return null;
-        }
-        public bool Interact(string id)
-        {
-            if(id=="firstday_bed")
+            if (receiptPending || !session.Memory.Client.Synchronized || string.IsNullOrEmpty(session.State.memory.checkpoint)) return;
+            JObject cp; try { cp = JObject.Parse(session.State.memory.checkpoint); } catch { return; }
+            var definitions = (cp["tasks"]?["definitions"] as JArray ?? new JArray()).OfType<JObject>().ToArray();
+            var rows = (cp["tasks"]?["state"] as JArray ?? new JArray()).OfType<JObject>().ToArray();
+            foreach (var definition in definitions)
             {
-                if(Phase==FirstDayPhase.Complete){session.State.period=3;session.Clock.Advance();return true;}
-                if(Phase!=FirstDayPhase.Home)return true;
-                busy=true;invitations.Show("把今天，轻轻放下。","海风还在窗外。今晚认识的那些名字，好像已经没有那么陌生了。\n\n躺下后将播放游戏片尾，回望岛上的风景与相遇。","晚安，小岛",()=>{SetPhase(FirstDayPhase.Bedtime,"在烟花结束后的夜里，第一次在小岛睡着。");ShowCredits();},()=>busy=false);return true;
-            }
-            if(id=="firstday_home_door"){StartCoroutine(ReturnHome());return true;}
-            if(!Active)return false;
-            if(id=="bench"||id=="lighthouse_bench"||id=="coffee") {session.Story.Notify("今晚和大家约好了看烟花。先慢慢逛，时间会等你。");return true;}
-            if(id=="z"&&Phase==FirstDayPhase.Harbor&&session.CurrentPlace==PlaceId.Harbor)
-            {
-                Talk("harbor",()=>SetPhase(FirstDayPhase.WalkToSquare,"Z 在码头接到了我。往右穿过公共街，就是今晚看烟花的古树广场。"));return true;
-            }
-            if(Phase==FirstDayPhase.MeetIslanders&&session.CurrentPlace==PlaceId.Square&&Cast.Contains(id))
-            {
-                if(id=="z"&&GreetedCount==Cast.Length){Talk("fireworks_invite",AskFireworks);return true;}
-                Talk("meet_"+id,()=>
+                string id = (string)definition["id"]; var row = rows.FirstOrDefault(r => (string)r["task"] == id);
+                if ((string)row?["status"] == "completed") {
+                    session.State.firstDay.taskId = id;
+                    session.Memory.PublishStoryEvent("welcome_complete_" + id, PlayerIdentity.DisplayName + "实际完成了" + SevenCharacterCatalog.Name((string)definition["owner"]) + "提出的小事：" + (string)definition["title"], Cast.Concat(new[] { "player" }).ToArray(), true);
+                    SetPhase(FirstDayPhase.EveningReady); return;
+                }
+                if ((string)row?["status"] != "active") continue;
+                session.State.firstDay.taskId = id;
+                var progress = JObject.Parse((string)row["progress"] ?? "{}");
+                foreach (JObject step in definition["steps"])
                 {
-                    if(!session.State.firstDay.greeted.Contains(id))
-                    {
-                        session.State.firstDay.greeted.Add(id);
-                        session.Story.AddJournal("在古树广场认识了"+SevenCharacterCatalog.Name(id)+"。");
-                        session.Memory?.PublishStoryEvent("firstday_meet_"+id,"第一天，玩家在古树广场听完了"+SevenCharacterCatalog.Name(id)+"的自我介绍。",new[]{"player",id},true);
-                    }
-                    session.NotifyChanged();session.Save();
-                    if(GreetedCount==Cast.Length)session.Story.Notify("大家都认识啦。再和 Z 说一声，就可以开始烟花了。");
-                });return true;
+                    string stepId = (string)step["id"], target = (string)step["target"], action = (string)step["action"], evidence = null;
+                    if ((bool?)progress[stepId]?["succeeded"] == true) continue;
+                    if (((JArray)step["depends_on"]).Any(d => (bool?)progress[(string)d]?["succeeded"] != true)) break;
+                    session.State.firstDay.objective = (string)definition["title"] + "\n下一步：" + (string)step["label"] + (action == "take_photo" ? " · 按 P 拍照" : " · 走近按 E");
+                    if (action == "talk_to") completedTalks.TryGetValue(target, out evidence);
+                    if (action == "take_photo") evidence = session.State.phone.photos.FirstOrDefault(p => p.place == target && !session.State.firstDay.taskPhotoIds.Contains(p.id))?.id;
+                    if (evidence != null && !pendingSteps.Contains(id + stepId)) ReportStep(id, stepId, action, target, evidence);
+                    break;
+                }
             }
-            return false;
         }
-        void Talk(string id,Action completed)
+        void ReportStep(string task, string step, string action, string target, string evidence)
         {
-            var conversation=content?.conversations?.FirstOrDefault(c=>c.id==id);
-            if(conversation==null||session.Memory?.View==null){session.Story.Notify("这段故事暂时没有准备好，请稍后再试。");return;}
-            busy=true;var owner=session.State;int stamp=generation;
-            if(GatheringActive)gathering.BeginGreeting(conversation.actor);
-            session.Memory.View.OpenStory(conversation.actor,conversation.lines,finished=>{if(owner!=session.State||stamp!=generation)return;gathering.EndGreeting();busy=false;if(finished)completed?.Invoke();});
-        }
-        void AskFireworks()
-        {
-            busy=true;invitations.Show("要开始今晚的烟花吗？","已经和广场上的每个人打过招呼。\n\nZ：那就把今天最后的一点光，留给我们吧。\n看完烟花，我带你回海边的小屋。","和大家一起抬头",()=>{SetPhase(FirstDayPhase.Fireworks,"大家在古树下站到了一起。Z 说，今晚的烟花也有一份是为我点亮的。");PlayFireworks();},()=>busy=false);
-        }
-        void PlayFireworks()
-        {
-            busy=true;session.State.period=(int)TimePeriod.Night;session.Clock.Refresh();GameUI.Instance.SetTitleVisible(true);
-            MusicDirector.Instance?.SetMoodOverride("evening");
-            cinema.PlayFireworks(()=>{MusicDirector.Instance?.SetMoodOverride(null);StartCoroutine(GoHome());});
-        }
-        IEnumerator GoHome()
-        {
-            SetPhase(FirstDayPhase.Home,"烟花散去，Z 把钥匙交给我。小屋的灯亮着，像是早就知道我会来。");
-            yield return Travel(PlaceId.PlayerHome,4.2f);
-            if(!travelSucceeded)yield break;
-            GameUI.Instance.SetTitleVisible(false);busy=false;Time.timeScale=1;session.Memory?.Spawner.Reload();
-            session.Story.Notify("欢迎回家。走近左侧的床，按 E 和小岛道一声晚安。");
-        }
-        IEnumerator ReturnHome(){yield return Travel(PlaceId.PlayerHome,4.2f);
-            if(!travelSucceeded)yield break;busy=false;}
-        void ShowCredits()
-        {
-            busy=true;GameUI.Instance.SetTitleVisible(true);
-            MusicDirector.Instance?.SetMoodOverride("credits");
-            cinema.PlayCredits(()=>
-            {
-                MusicDirector.Instance?.SetMoodOverride(null);
-                session.State.day=2;session.State.period=0;session.State.firstDay.phase=FirstDayPhase.Complete;session.Clock.Refresh();
-                SetPhase(FirstDayPhase.Complete,"故事落幕。希望在这个越来越快速的时代，找回一些原初的情感联系和交流。");
-                busy=false;Time.timeScale=1;GameUI.Instance.SetTitleVisible(false);session.Memory?.Spawner.Reload();session.NotifyChanged();session.Save();
-                session.Story.Notify("片尾已结束。现在可以继续小岛生活，照片和回忆都留在手机里。");
+            pendingSteps.Add(task + step); receiptPending = true; var owner = session.State; int stamp = generation;
+            var request = session.Memory.Client.RequestBase(); request.taskId = task; request.stepId = step; request.succeeded = true; request.performerId = "player";
+            request.receiptId = "welcome_" + task + "_" + step;
+            request.details["action"] = action; request.details["target"] = target; request.details["evidence_id"] = evidence;
+            session.Memory.Client.Generate("/api/game/task/receipt", request, _ => { if (owner == session.State && stamp == generation) receiptPending = false; }, error => {
+                if (owner != session.State || stamp != generation) return; receiptPending = false; pendingSteps.Remove(task + step); session.Story.Notify(error);
             });
         }
-        void OnDestroy(){gathering.Reset();if(openingLive!=null)openingLive.Close();}
+        IEnumerator FireworksPlaceholder()
+        {
+            busy = true; session.State.period = (int)TimePeriod.Night; session.Clock.Refresh();
+            // No media asset is configured. This is a story transition, not a video receipt.
+            yield return new WaitForSecondsRealtime(.8f);
+            session.Memory.PublishStoryEvent("fireworks_story", "玩家与 Z 在榕树广场一起度过烟花时刻，随后回到大家身边。", Cast.Concat(new[] { "player" }).ToArray(), true);
+            SetPhase(FirstDayPhase.WelcomeTask); busy = false;
+        }
+        IEnumerator Arrive()
+        {
+            busy = true; session.Memory?.Conversations.CancelAll("抵岛"); Time.timeScale = 1;
+            SetPhase(FirstDayPhase.Harbor); session.State.period = (int)TimePeriod.Afternoon;
+            session.Memory.PublishStoryEvent("arrival_accepted", PlayerIdentity.DisplayName + "接受了七天登岛邀请，Z在码头与这位新朋友见面。", new[] { "player", "z" }, true);
+            session.State.firstDay.harborOpened = false; world.Travel(PlaceId.Harbor);
+            while (world.IsTransitioning) yield return null;
+            var z = session.Memory?.Spawner.Find("z");
+            world.Player.GetComponent<PlayerController>().Teleport(new Vector2(z != null ? z.transform.position.x - 1.2f : -9, .08f)); world.Follow.Snap();
+            GameUI.Instance.SetTitleVisible(false); session.Clock.Refresh(); busy = false; session.Save();
+        }
+        void OpenLive(bool opening)
+        {
+            if (live != null) return;
+            if (opening) { session.State.firstDay.openingStarted = true; session.Save(); }
+            else if (Active) SetPhase(FirstDayPhase.EveningLive);
+            GameUI.Instance.CloseOverlayImmediately(); busy = true; Time.timeScale = 0;
+            GameUI.Instance.SetTitleVisible(true);
+            var owner = session.State; int stamp = generation;
+            live = NativeLiveHost.Open(transform, () => {
+                if (opening) ShowOpeningRetry();
+                else { var host = live; live = null; host?.Close(); busy = false; Time.timeScale = 1; GameUI.Instance.SetTitleVisible(false); if (Active) SetPhase(FirstDayPhase.EveningReady); else nextPlan = Time.unscaledTime + 8; }
+            }, id => {
+                if (owner != session.State || stamp != generation) return;
+                if (opening) { var previous = live; live = null; previous?.Close(); ShowOpeningRetry(); return; }
+                StartCoroutine(CompleteEvening(id, owner, stamp));
+            }, opening ? null : session.Memory, opening ? "arrival" : Active ? "first_evening" : "daily", command => {
+                if (owner != session.State || stamp != generation || !opening || Phase != FirstDayPhase.Live) return;
+                if ((string)command["tool"] == "offer_arrival") invitations.Show((string)command["title"], (string)command["description"], "确认登岛", () => {
+                    live?.AcceptArrival();
+                });
+                if ((string)command["tool"] == "depart_island" && owner.firstDay.invitationAccepted) {
+                    var host = live; live = null; host?.Close(); SetPhase(FirstDayPhase.Arrival); StartCoroutine(Arrive());
+                }
+            });
+        }
+        IEnumerator CompleteEvening(string id, SaveData owner, int stamp)
+        {
+            var host = live;
+            if (host == null) yield break;
+            var sync = host.SynchronizeExit();
+            while (!sync.IsCompleted) yield return null;
+            if (owner != session.State || stamp != generation) yield break;
+            if (sync.IsFaulted || sync.IsCanceled)
+            {
+                invitations.Show("正在保存今晚的相遇", "连接暂时中断，进度会保留。恢复后再试一次。", "重试", () => StartCoroutine(CompleteEvening(id, owner, stamp)));
+                yield break;
+            }
+            live = null; host.Close(); busy = false; Time.timeScale = 1; GameUI.Instance.SetTitleVisible(false);
+            session.Clock.CompleteLiveSession(id); session.Memory?.Spawner.Reload();
+        }
+        void ShowOpeningRetry() { invitations.Show("小岛邀请", "可以继续直播，或稍后再试。", "继续观看", () => { if (live == null) OpenLive(true); }); }
+        IEnumerator NotifyLive() { busy = true; yield return GameUI.Instance.ShowLiveNotification(); busy = false; OpenLive(false); }
+        public IEnumerable<SevenCharacter> StagedCast(PlaceId place)
+        {
+            if (!Active) return null;
+            if ((Phase == FirstDayPhase.Harbor || Phase == FirstDayPhase.WalkToSquare) && place == PlaceId.Harbor) return SevenCharacterCatalog.Actors.Where(a => a.id == "z");
+            if (Phase == FirstDayPhase.WalkToSquare && place == PlaceId.Street) return SevenCharacterCatalog.Actors.Where(a => a.id == "z");
+            if (place == PlaceId.Square && Phase != FirstDayPhase.Live && Phase != FirstDayPhase.Arrival) return SevenCharacterCatalog.Actors.Where(a => Cast.Contains(a.id));
+            return null;
+        }
+        public float CastPosition(string actor, PlaceId place)
+        {
+            if (actor == "z" && Phase == FirstDayPhase.WalkToSquare) return escort.ArrivalX(place);
+            if (place == PlaceId.Harbor) return -7.8f;
+            if (place == PlaceId.Square && Phase == FirstDayPhase.MeetIslanders && FirstDayGathering.TryPosition(actor, out float x)) return x;
+            return -7.4f + Array.IndexOf(Cast, actor) * 2.05f;
+        }
+        public bool CanTravel(PlaceId target) => !(Phase == FirstDayPhase.MeetIslanders && session.CurrentPlace == PlaceId.Square && GreetedCount < Cast.Length && target != PlaceId.Square);
+        public bool IsAvailable(string id) => !Active || !(id == "bench" || id == "lighthouse_bench" || id == "coffee" || id.StartsWith("firstday_"));
+        public string Prompt(string id) => null;
+        public bool Interact(string id)
+        {
+            if (!Active) return false;
+            if (Phase == FirstDayPhase.MeetIslanders && !session.State.firstDay.announced)
+            { session.Story.Notify("Z 正准备向大家介绍你。 "); return true; }
+            if (!IsAvailable(id)) { session.Story.Notify("先和大家完成今天的相遇。 "); return true; }
+            if (Cast.Contains(id)) { session.Memory.BeginPlayerChat(id); return true; }
+            return false;
+        }
+        void OnDestroy() { gathering.Reset(); if (live != null) live.Close(); }
     }
 }

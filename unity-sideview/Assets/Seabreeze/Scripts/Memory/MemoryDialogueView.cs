@@ -145,7 +145,8 @@ namespace Seabreeze
         void Send()
         {
             if(IsComposing()){StartCoroutine(ResumeInput());return;}
-            if(!PlayerInputReady||memory.Conversations==null||!memory.Client.CanGenerate||memory.Conversations.Sending||string.IsNullOrWhiteSpace(input.text))return;
+            if(!PlayerInputReady||memory.Conversations==null||!memory.Client.CanGenerate||memory.Conversations.Sending)return;
+            if(string.IsNullOrWhiteSpace(input.text)){if(!string.IsNullOrEmpty(memory.Client.LastError))memory.Conversations.RequestPlayerReply();return;}
             FinishTyping();ResetPortraitIdle();string value=input.text;input.text="";memory.Conversations.SendPlayer(value);input.ActivateInputField();
         }
         IEnumerator ResumeInput(){yield return null;if(PlayerInputReady&&memory.PlayerChatOpen)input.ActivateInputField();}
@@ -311,6 +312,7 @@ namespace Seabreeze
             speechTitle.text=SevenCharacterCatalog.Name(speaker);speechText.text=text;speechTitle.color=SevenCharacterCatalog.Find(speaker)?.Accent??Paper;
             speechUntil=Time.unscaledTime+Mathf.Clamp(1.3f+text.Length*.05f,2.5f,6);speechPanel.gameObject.SetActive(true);
         }
+        public bool LineFullyVisible => !typing && !linePreparationActive;
         public void ResetView()
         {
             StopAllCoroutines();
@@ -332,7 +334,8 @@ namespace Seabreeze
             if(!Closing)RefreshTasks();
             UpdateTaskActions(fullView&&!overlay);
             send.interactable=PlayerInputReady&&memory.PlayerChatOpen&&memory.Client.CanGenerate&&!memory.Conversations.Sending;
-            playerState.text=memory.Conversations.Sending?"对方正在想怎么说…":memory.Client.CanGenerate?"":"暂时无法连接。Esc 返回后，可在暂停菜单设置对话服务。";
+            sendCaption.text=!memory.Conversations.Sending&&!string.IsNullOrEmpty(memory.Client.LastError)&&string.IsNullOrWhiteSpace(input.text)?"重试回复":"发送 →";
+            playerState.text=memory.Conversations.Sending?"对方正在想怎么说…":!string.IsNullOrEmpty(memory.Client.LastError)?"这次回复没有接通 · 可点重试回复，或重新发送":!memory.Client.Reachable||!memory.Client.Configured?"暂时无法连接。Esc 返回后，可在暂停菜单设置对话服务。":memory.Conversations.IntroductionReady?"已完成一轮交流 · 可以继续聊，或 Esc 返回":!memory.Client.CanGenerate?"正在记下这次交流，请稍候…":session.FirstDay?.Phase==FirstDayPhase.MeetIslanders?"读完问候即可认识这位朋友 · 也可以自由聊天":session.FirstDay?.Active==true?"输入一句回应，听完对方回复后再返回":"";
             playerState.color=new Color(.94f,.94f,1,.82f);
             if(followingSpeech&&PlayerInputReady)
             {

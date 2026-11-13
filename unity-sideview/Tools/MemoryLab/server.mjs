@@ -1,4 +1,5 @@
 import { SpeechService, SpeechError } from "./lib/speech.mjs";
+import {FirstDayAgent} from './lib/first-day.mjs';
 import {dayConversation} from "./lib/daytime.mjs";
 import {localSongSubmit,DaySongDispatch} from "./lib/day-song-dispatch.mjs";
 import http from "node:http";
@@ -80,9 +81,10 @@ export function createServer({
   }
   let configurationRevision = 1;
   const engine = new Engine(store, catalog, provider, { decide }),
+    firstDay = new FirstDayAgent(engine, provider, catalog),
     token = randomBytes(24).toString("hex");
   const daySongs=songSubmit ? new DaySongDispatch(songSubmit) : null;
-  const liveRoom=new LiveRoom(engine), lab=createLab(engine), utterance=createUtteranceHandler(engine);
+  const liveRoom=new LiveRoom(engine), lab=createLab(engine), utterance=createUtteranceHandler(engine,firstDay);
   let background = false;
   const status = () => ({
     ok: true,
@@ -146,7 +148,7 @@ export function createServer({
     const cp=engine.checkpoint(world),ref=store.freezeCheckpoint(cp);
     return {version:3,ref,worldId:world,contentRevision:cp.contentRevision,
       broadcast:{...cp.broadcast,entries:[]},world:{day:cp.world.day,period:cp.world.period,hour:cp.world.hour,actors:Object.fromEntries(Object.entries(cp.world.actors).map(([id,a])=>[id,{runtime_input_seq:a.runtime_input_seq||0}]))},
-      tasks:{state:cp.tasks.state,collaboration:cp.tasks.collaboration},
+      tasks:{state:cp.tasks.state,collaboration:cp.tasks.collaboration,definitions:cp.tasks.definitions},
       records:{action:cp.records.action.filter(a=>a.status==="pending"),event:cp.records.event.filter(e=>e.id.startsWith("story_"+world+"_")).map(e=>({id:e.id}))}};
   };
   const gameResponse = (world, extra = {}, portable = false) => {
@@ -350,6 +352,7 @@ export function createServer({
           w.period = p.period;
           w.hour = target;
           engine.save(w);
+          if(p.details?.firstDay)firstDay.update(world,p.details.firstDay);
           if(daySongs){
             // A checkpoint can be rolled back, or reopened after an offline evening.
             daySongs.resetWorld(w.worldId);
@@ -360,7 +363,10 @@ export function createServer({
           result = gameResponse(world);
         } else {
           const w = checkRun(p);
-          if (["/api/game/speech","/api/game/speech/stream"].includes(url.pathname)) {
+          if(p.details?.firstDay)w.firstDay=firstDay.update(world,p.details.firstDay);
+          if(url.pathname === '/api/game/story/plan') {
+            result=gameResponse(world,{storyPlan:await firstDay.plan(world,p.runId,p.requestId)});
+          } else if (["/api/game/speech","/api/game/speech/stream"].includes(url.pathname)) {
             // Synthesize the committed server-side proposal, never caller-supplied text.
             const proposal = store.record(p.proposalId);
             const currentSpeech = () => {
@@ -610,7 +616,16 @@ export function createServer({
               let stored = engine.event(world, event.id);
               if(!stored&&["utterance","action_result"].includes(event.kind))stored=engine.acknowledgeReceipt(world,event,when);
               if(!stored)throw new TurnError("事件没有产生可确认记录");
+              if(stored && event.kind==='story_event' && event.verified && event.observers?.includes('z') &&
+                 (['player_introduced','fireworks_story','arrival_accepted'].some(key=>event.id===`story_${world}_${key}`) ||
+                  event.id.startsWith(`story_${world}_welcome_complete_`))) {
+                stored.publicActivity='firstday'; store.put('event',stored);
+              }
               if (stored) {
+                if(event.kind==='story_event' && event.id===`story_${world}_encounter_${event.conversationId}` &&
+                   event.conversationId && w.firstDay && event.observers?.length===2 && event.observers.includes('player') && event.observers.some(id=>catalog.actors.has(id))) {
+                  stored.subject='player_encounter';stored.recipient=event.observers.find(id=>id!=='player');
+                }
                 if(event.kind==="utterance" && stored.speaker==="z" && stored.channel==="private_player_chat")stored.daySongBridge=true;
                 stored.game_payload_hash = digest;
                 store.put("event", stored);

@@ -17,6 +17,7 @@ export function matchesStep(text, line) {
 }
 export function isPublic(event, world) {
   if (!event.visible?.includes('z') || event.channel==='private_player_chat') return false;
+  if (event.kind==='fact' && event.speaker==='engine' && event.publicActivity==='firstday') return true;
   if (event.channel==='livestream') return true;
   return event.kind==='fact' && event.speaker==='engine' &&
     ['player',...Object.keys(world.actors)].every(id=>event.disclose_to?.includes(id));
@@ -33,6 +34,7 @@ function dayActivities(world,events){
   const lines=new Set();
   for(const e of events){
     if(1+Math.floor(e.hour/24)!==world.day)continue;
+    if(e.kind==='fact' && e.speaker==='engine' && e.publicActivity==='firstday' && e.visible?.includes('z')) { lines.add(e.text.slice(0,90)); continue; }
     if(e.kind==='fact' && e.speaker==='engine' && Object.hasOwn(activities,e.publicActivity)){
       lines.add(activities[e.publicActivity]);continue;
     }

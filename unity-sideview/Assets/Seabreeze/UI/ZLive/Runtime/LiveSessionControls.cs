@@ -32,10 +32,10 @@ public sealed partial class LiveFeatureController {
             locallyPaused=false;
             audioPlayer.Pause(false);
         }
-        bool blocked=SessionInputBlocked;
+        bool blocked=!connected||SessionInputBlocked;
         input.SetEnabled(!blocked);
         sendButton.SetEnabled(!blocked&&!sendingInput&&!string.IsNullOrWhiteSpace(input.value));
-        liveSessionLabel.text=SessionPhase=="ended"?"已结束":SessionClosing||stopRequested?"收尾中":"• LIVE";
+        liveSessionLabel.text=SessionPhase=="ended"?"已结束":!connected?"连接中":SessionClosing||stopRequested?"收尾中":"• LIVE";
         status.style.display=string.IsNullOrEmpty(status.text)?DisplayStyle.None:DisplayStyle.Flex;
     }
 }

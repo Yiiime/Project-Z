@@ -8,13 +8,14 @@ import {hash} from './providers.mjs';
 import {transcribePcm} from './voice/index.mjs';
 import {singingRequest} from './singing/index.mjs';
 const json=(res,status,body)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});res.end(JSON.stringify(body));};
-export async function createLiveServer({root,providers,artifacts,songRoot,token,tokens,tls,library,transcribe=transcribePcm,voice=null}){
+export async function createLiveServer({root,providers,artifacts,songRoot,token,tokens,tls,library,transcribe=transcribePcm,voice=null,characterServiceUrl=null}){
+ if(characterServiceUrl){const target=new URL(characterServiceUrl);if(target.protocol!=='http:'||target.hostname!=='127.0.0.1'||target.username||target.password||target.pathname!=='/'||target.search||target.hash)throw Error('invalid_character_service');characterServiceUrl=target.origin;}
  const identities=tokens||{'local-owner':token};
  if(Object.values(identities).some(value=>typeof value!=='string'||!value.length))throw Error('invalid_access_tokens');
  const pendingCreations=new Map();
  const scoped=new Map();const providerFor=owner=>{if(!scoped.has(owner))scoped.set(owner,providers.forOwner?providers.forOwner(owner):providers);return scoped.get(owner);};
  const sessions=new Map(),creations=new Map(),songOperations=new Map(),voiceRequests=new Map();fs.mkdirSync(root,{recursive:true,mode:0o700});
- for(const file of fs.readdirSync(root).filter(n=>/^[a-f0-9-]+\.json$/.test(n))){const saved=JSON.parse(fs.readFileSync(path.join(root,file),'utf8'));if(saved.phase==='ended'||!identities[saved.owner])continue;const s=new LiveSession({root,providers:providerFor(saved.owner),artifacts,songRoot,saved,id:saved.id,owner:saved.owner,capabilities:saved.capabilities});await s.initialize();sessions.set(s.id,s);}
+ for(const file of fs.readdirSync(root).filter(n=>/^[a-f0-9-]+\.json$/.test(n))){const saved=JSON.parse(fs.readFileSync(path.join(root,file),'utf8'));if(saved.phase==='ended'||!identities[saved.owner])continue;if(characterServiceUrl&&saved.characterBinding)saved.characterBinding={...saved.characterBinding,memoryUrl:characterServiceUrl};const s=new LiveSession({root,providers:providerFor(saved.owner),artifacts,songRoot,saved,id:saved.id,owner:saved.owner,capabilities:saved.capabilities});await s.initialize();sessions.set(s.id,s);}
  const handler=async(req,res)=>{try{
   const auth=Buffer.from(req.headers.authorization||'');const owner=Object.keys(identities).find(id=>{const expected=Buffer.from('Bearer '+identities[id]);return auth.length===expected.length&&timingSafeEqual(auth,expected);});if(!owner)return json(res,401,{error:'unauthorized'});
   const currentProviders=providerFor(owner);
@@ -71,7 +72,7 @@ export async function createLiveServer({root,providers,artifacts,songRoot,token,
    const creationKey=owner+':'+key;if(creations.has(creationKey)){const c=creations.get(creationKey);if(c.fingerprint!==fingerprint)return json(res,409,{error:'idempotency_conflict'});return json(res,201,(await c.promise).snapshot());}
    if([...sessions.values()].filter(s=>s.owner===owner&&s.phase!=='ended').length+(pendingCreations.get(owner)||0)>=(tokens?2:20))return json(res,429,{error:'session_limit'});
    pendingCreations.set(owner,(pendingCreations.get(owner)||0)+1);
-   const promise=(async()=>{try{const s=new LiveSession({root,providers:currentProviders,owner,artifacts,songRoot,memory:body.memory,characterBinding:body.characterBinding,capabilities:body.capabilities});await s.initialize();sessions.set(s.id,s);return s;}finally{pendingCreations.set(owner,pendingCreations.get(owner)-1);}})();creations.set(creationKey,{fingerprint,promise});return json(res,201,(await promise).snapshot());
+   const promise=(async()=>{try{const s=new LiveSession({root,providers:currentProviders,owner,artifacts,songRoot,memory:body.memory,characterBinding:body.characterBinding,story:body.story,capabilities:body.capabilities});await s.initialize();sessions.set(s.id,s);return s;}finally{pendingCreations.set(owner,pendingCreations.get(owner)-1);}})();creations.set(creationKey,{fingerprint,promise});return json(res,201,(await promise).snapshot());
   }
   const match=url.pathname.match(/^\/v1\/live\/sessions\/([a-f0-9-]+)(?:\/(events|inputs|receipts|control|heartbeat|artifacts)(?:\/([a-f0-9]{64}))?)?$/);if(!match)return json(res,404,{error:'not_found'});
   const s=sessions.get(match[1]);if(!s||s.owner!==owner)return json(res,404,{error:'not_found'});const route=match[2];

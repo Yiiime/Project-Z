@@ -28,6 +28,7 @@ namespace Seabreeze
             Application.targetFrameRate = 60;
             Application.runInBackground = true;
             smokeRun = System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-memorySmokeOutput") >= 0;
+            PackagedPlayConnection.Configure();
             session = gameObject.AddComponent<GameSession>();
             session.Initialize(!smokeRun);
             resumePlace = session.State.place;
@@ -87,6 +88,11 @@ namespace Seabreeze
         {
             // Give the loading label a frame before scene import/instantiation work.
             yield return null;
+            yield return PackagedPlayConnection.Prepare();
+            if (PackagedPlayConnection.Error != null)
+            {
+                entering = false; startPage.ShowError(PackagedPlayConnection.Error); yield break;
+            }
             if (!session.PrepareTitleEntry(newGame))
             {
                 entering = false;

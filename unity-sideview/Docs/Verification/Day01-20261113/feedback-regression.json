@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "stage": 13,
+  "checks": [
+    "Landing opens a real name input",
+    "IME composition renders without literal underline tags",
+    "Uncommitted IME composition does not become the saved name",
+    "Name reaches the actual new save and Harbor scene",
+    "Dock automatically opens the Z conversation",
+    "Cancelling an unfinished chat does not complete the meeting",
+    "Z walks using actual NPC movement while the player stays independent",
+    "Harbor boundary loads Street and restores escort",
+    "Square stages seven residents without Liyuan",
+    "Actual map travel cannot bypass incomplete introductions",
+    "Z introduction bubble is actually visible",
+    "Opening a chat without an NPC line does not count",
+    "Hidden or partly revealed greeting does not count yet",
+    "First close during typing reveals the greeting and keeps the chat open",
+    "Reading an introduction counts immediately without mandatory player typing",
+    "Closing during a later reply preserves the completed introduction",
+    "Repeated introductions cannot duplicate task progress",
+    "Seven completed conversation receipts release the boundary",
+    "Generated task definition renders in the existing conversation task card",
+    "Phone notification appears before livestream",
+    "Live icon stays highlighted during notification",
+    "Phone notification closes after its one-second animation",
+    "Evening completion returns to normal Day 2",
+    "Four real clock advances wait for daily livestream without changing day",
+    "No runtime exceptions during Play Mode verification: []"
+  ],
+  "error": null,
+  "editorWarnings": [
+    "ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.\nParameter name: index"
+  ],
+  "scope": "Actual Unity Play Mode UI, movement and scene transitions; model replies and livestream completion are injected test receipts, not an AI end-to-end run."
+}

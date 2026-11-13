@@ -112,6 +112,12 @@ namespace Seabreeze
         void CloseConversationView()
         {
             if (ScriptedOpen) CloseStory(false);
+            else if (!LineFullyVisible)
+            {
+                // First close reveals the full line; a second close exits. Never
+                // silently discard an introduction because its voice is slower.
+                memory.Client.StopSpeech(); FinishTyping();
+            }
             else memory.Conversations.Cancel("玩家结束交谈");
         }
     }

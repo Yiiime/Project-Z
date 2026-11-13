@@ -42,7 +42,7 @@ namespace Seabreeze
         public string error,warning,app,mode,model,runId,requestId,actorId,targetId,reason,topic,proposalId,text,expression,checkpoint,delivery,speechError,speechWarning;
         public int seq,configurationRevision,responseRevision;
         public MemorySpeechAudio audio;
-        public ActorTurn result;public JObject state,binding;
+        public ActorTurn result;public JObject state,binding,storyPlan;
         public string[] recalledMemoryIds=Array.Empty<string>();
         public string runtimeActorId;public int runtimeSeq;
     }

@@ -36,9 +36,9 @@ export class LiveRoom {
     if (w.liveRoom) return this.binding(w);
     this.engine.cancel(p.worldId);
     w = this.engine.world(p.worldId);
-    w.liveRoom = { id: "room_" + randomBytes(12).toString("hex"), token: randomBytes(24).toString("hex"), actors: [...this.engine.catalog.actors.keys()] };
+    w.liveRoom = { id: "room_" + randomBytes(12).toString("hex"), token: randomBytes(24).toString("hex"), actors: [...this.engine.catalog.actors.keys()].filter(id=>w.firstDay?.phase!=="EveningLive"||id!=="liyuan") };
     this.engine.save(w);
-    this.engine.addEvent(p.worldId, { id: w.liveRoom.id + "_opened", text: "Z的直播开始，七位岛民和玩家都已进入直播间。岛民保持在线，通过弹幕交流；没有任何岛外秘密因此自动公开。", kind: "fact", speaker: "engine", visible: [...w.liveRoom.actors, "player"], channel: "livestream", conversationId: w.liveRoom.id });
+    this.engine.addEvent(p.worldId, { id: w.liveRoom.id + "_opened", text: "Z的直播开始，玩家和本场在场岛民进入直播间。岛民通过弹幕交流；没有任何岛外秘密因此自动公开。", kind: "fact", speaker: "engine", visible: [...w.liveRoom.actors, "player"], channel: "livestream", conversationId: w.liveRoom.id });
     return this.binding(this.engine.world(p.worldId));
   }
   binding(w) { return { worldId: w.worldId, runId: w.runId, roomId: w.liveRoom.id, roomToken: w.liveRoom.token, actors: w.liveRoom.actors }; }
