@@ -8,7 +8,7 @@ import { randomBytes, randomUUID } from 'node:crypto';
 import { ModelProvider } from '../../../../Tools/MemoryLab/lib/provider.mjs';
 import { EndingError, validateScenario, revisionOf, decisionMessages, validateDecision, parseModel,
   recollectionMessages, validateRecollections, previewDecision, previewRecollections, resolveOutcome,
-  sourceBlocks, importMessages, annotatedScenario } from './ending.mjs';
+  validateDailyPages, previewDailyPages, approvedDailyPagesFor, requestDailyPage, sourceBlocks, importMessages, annotatedScenario } from './ending.mjs';
 
 export const ROOT = dirname(fileURLToPath(import.meta.url));
 const PROJECT = resolve(ROOT, '../../../..');
@@ -105,17 +105,34 @@ export async function createEndingServer({ dataDir = process.env.Z_ENDING_DATA |
         busy = true;
         const snapshot = structuredClone(scenario), revision = revisionOf(snapshot);
         try {
-          let decision, recollections;
+          let decision, recollections, dailyPages;
           if (input.mode === 'model') {
             const first = await provider.call(provider.request(decisionMessages(snapshot, persona), { json: true, maxTokens: 2500 }));
             decision = validateDecision(parseModel(first.text), snapshot);
             if (snapshot.memories.some(m => m.zKnows)) {
               const second = await provider.call(provider.request(recollectionMessages(snapshot, decision, persona), { json: true, maxTokens: 14000 }));
               recollections = validateRecollections(parseModel(second.text), snapshot);
-            } else recollections = [];
-          } else { decision = previewDecision(snapshot, input.mode === 'preview-leave' ? 'leave' : 'stay'); recollections = previewRecollections(snapshot); }
+              dailyPages = [];
+              const knownDays = [...new Set(snapshot.memories.filter(m => m.zKnows).map(m => m.day))].sort((a, b) => a - b);
+              const approved = approvedDailyPagesFor(snapshot);
+              if (approved) {
+                dailyPages = validateDailyPages({ dailyPages: approved }, snapshot);
+              } else {
+                const recollectionById = new Map(recollections.map(item => [item.memoryId, item.text]));
+                for (const day of knownDays) {
+                  const dayScenario = { ...snapshot, memories: snapshot.memories.filter(m => m.zKnows && m.day === day).map(memory => ({
+                    ...memory, text: recollectionById.get(memory.id) || memory.text,
+                  })) };
+                  dailyPages.push(await requestDailyPage(provider, dayScenario, decision, day, persona));
+                }
+              }
+            } else { recollections = []; dailyPages = []; }
+          } else {
+            decision = previewDecision(snapshot, input.mode === 'preview-leave' ? 'leave' : 'stay');
+            recollections = previewRecollections(snapshot); dailyPages = previewDailyPages(snapshot);
+          }
           const run = { id: randomUUID(), revision, mode: input.mode, createdAt: new Date().toISOString(),
-            playerName: snapshot.playerName, scenarioTitle: snapshot.title, decision, recollections,
+            playerName: snapshot.playerName, scenarioTitle: snapshot.title, decision, recollections, dailyPages,
             outcome: resolveOutcome(snapshot, decision.choice), memoryCount: recollections.length };
           await atomic(join(dataDir, 'runs', `${run.id}.json`), run); runs.set(run.id, run);
           if (runs.size > 50) runs.delete(runs.keys().next().value);

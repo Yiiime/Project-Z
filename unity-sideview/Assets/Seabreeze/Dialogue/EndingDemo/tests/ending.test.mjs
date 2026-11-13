@@ -5,7 +5,8 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { createEndingServer, ROOT } from '../server.mjs';
 import { validateScenario, revisionOf, knownMemories, decisionMessages, validateDecision, validateRecollections,
-  previewDecision, resolveOutcome, sourceBlocks, annotatedScenario } from '../ending.mjs';
+  previewDecision, resolveOutcome, sourceBlocks, annotatedScenario, dailyPageMessages, validateDailyPages,
+  previewDailyPages, approvedDailyPagesFor, scenarioMemoryFingerprint } from '../ending.mjs';
 const sample = JSON.parse(await readFile(join(ROOT, 'tests/scenario.fixture.json'), 'utf8'));
 const copy = () => structuredClone(sample);
 test('manual scenario round-trip retains memory, plot and knowledge flags', () => {
@@ -37,6 +38,32 @@ test('recollection publication requires exact full coverage and chronological or
   assert.throws(() => validateRecollections({ recollections: r.slice(1) }, s), /覆盖/);
   const duplicates = structuredClone(r); duplicates[1].memoryId = 'm01'; assert.throws(() => validateRecollections({ recollections: duplicates }, s), /重复/);
   const fabricated = structuredClone(r); fabricated[0].memoryId = 'unknown'; assert.throws(() => validateRecollections({ recollections: fabricated }, s));
+});
+test('daily pages keep dates, facts and feelings separate without fixed labels', () => {
+  const s = validateScenario(sample), pages = previewDailyPages(s);
+  assert.equal(pages.length, new Set(knownMemories(s).map(m => m.day)).size);
+  assert.deepEqual(validateDailyPages({ dailyPages: pages }, s), pages);
+  assert.ok(pages.every(page => page.text.includes('\n\n')));
+  const prompt = JSON.stringify(dailyPageMessages({ ...s, memories: s.memories.filter(m => m.day === 1) }, previewDecision(s, 'leave'), 1, 'persona'));
+  assert.match(prompt, /按材料判断/); assert.match(prompt, /不重复/); assert.match(prompt, /材料少时只写1行/); assert.match(prompt, /不超过450字/);
+  assert.equal(typeof scenarioMemoryFingerprint(s), 'string');
+  assert.equal(approvedDailyPagesFor(s), null, 'approved pages must not apply to another story');
+  const labeled = structuredClone(pages); labeled[0].text = '今天的事：\n发生了一件事。\n\n我有点难过。';
+  assert.throws(() => validateDailyPages({ dailyPages: labeled }, s), /栏目标签/);
+  const spacedLabel = structuredClone(pages); spacedLabel[0].text = '重要事实 发生了一件事。\n我把细节留在这里。\n\n我有点难过。';
+  assert.throws(() => validateDailyPages({ dailyPages: spacedLabel }, s), /栏目标签/);
+  const splitLabel = structuredClone(pages); splitLabel[0].text = 'Z 的感悟\n发生了一件事。\n\n我有点难过。';
+  assert.throws(() => validateDailyPages({ dailyPages: splitLabel }, s), /栏目标签/);
+  const spacedLabelParts = structuredClone(pages); spacedLabelParts[0].text = 'Z 的 感悟\n发生了一件事。\n\n我有点难过。';
+  assert.throws(() => validateDailyPages({ dailyPages: spacedLabelParts }, s), /栏目标签/);
+  const crlf = structuredClone(pages); crlf[0].text = '发生了一件事。\r\n我把细节留在这里。\r\n\r\n我有点难过。';
+  assert.equal(validateDailyPages({ dailyPages: crlf }, s)[0].text, '发生了一件事。\n我把细节留在这里。\n\n我有点难过。');
+  const threeParagraphs = structuredClone(pages); threeParagraphs[0].text = '事实。\n\n感受。\n\n多余。';
+  assert.throws(() => validateDailyPages({ dailyPages: threeParagraphs }, s), /严格分出/);
+  const twoSentences = structuredClone(pages); twoSentences[0].text = '事实一。事实二。\n\n感受。';
+  assert.throws(() => validateDailyPages({ dailyPages: twoSentences }, s), /每句/);
+  const tooLong = structuredClone(pages); tooLong[0].text = `${'事实'.repeat(226)}\n\n感受。`;
+  assert.throws(() => validateDailyPages({ dailyPages: tooLong }, s), /不超过450/);
 });
 test('Z choice cannot cite hidden or fabricated reasons', () => {
   const s = copy(), decision = previewDecision(s, 'leave'); decision.reasonMemoryIds = ['unknown'];
@@ -106,6 +133,7 @@ test('model decision uses manual content, filters private facts, and locks choic
     publicConfig: () => ({ configured: true }), request: messages => messages,
     call: async messages => { requests.push(messages); const input = JSON.parse(messages[1].content);
       if (requests.length === 1) return { text: JSON.stringify(previewDecision(sample, 'stay')) };
+      if (input.dailyPage) return { text: JSON.stringify({ dailyPages: [{ day: input.day, title: `第${input.day}天`, text: '一件具体的事发生了。\n我把细节留在这里。\n\n我还在慢慢想。' }] }) };
       assert.equal(input.choice, 'stay');
       return { text: JSON.stringify({ recollections: input.memories.map(m => ({ memoryId: m.id, text: `我记得：${m.text}` })) }) };
     },
@@ -117,6 +145,8 @@ test('model decision uses manual content, filters private facts, and locks choic
   assert.equal(r.status, 200); assert.equal(r.data.mode, 'model'); assert.equal(r.data.decision.choice, 'stay');
   assert.ok(JSON.stringify(requests).includes('MANUAL_FACT')); assert.ok(!JSON.stringify(requests).includes('PRIVATE_SECRET'));
   assert.equal(r.data.recollections[0].original, 'MANUAL_FACT'); assert.equal(r.data.memoryCount, 8);
+  assert.deepEqual(r.data.dailyPages.map(page => page.day), [1, 2, 3, 4, 5, 6, 7]);
+  assert.ok(r.data.dailyPages.every(page => page.text.includes('一件具体的事')), '普通模型分支应使用模型返回的每日稿');
 });
 test('partial model recollections fail without publishing fabricated success', async t => {
   let calls = 0; const provider = { publicConfig: () => ({ configured: true }), request: m => m,
@@ -125,6 +155,21 @@ test('partial model recollections fail without publishing fabricated success', a
   const r = await call('/api/generate', 'POST', { mode: 'model', revision: revisionOf(validateScenario(sample)) });
   assert.equal(r.status, 502); assert.match(r.data.error, /覆盖/);
   assert.equal((await call('/api/status')).data.busy, false);
+});
+test('malformed daily page retries once then fails instead of using a fabricated preview', async t => {
+  let dailyCalls = 0;
+  const provider = { publicConfig: () => ({ configured: true }), request: messages => messages,
+    call: async messages => {
+      const input = JSON.parse(messages[1].content);
+      if (input.dailyPage) { dailyCalls += 1; return { text: JSON.stringify({ noDailyPages: true }) }; }
+      if (input.choice) return { text: JSON.stringify({ recollections: input.memories.map(m => ({ memoryId: m.id, text: `我看到${m.title}。` })) }) };
+      return { text: JSON.stringify({ ...previewDecision(sample, 'leave'), reasonMemoryIds: input.memories.slice(-1).map(m => m.id) }) };
+    } };
+  const { call } = await fixture(t, provider), s = copy();
+  s.memories = s.memories.filter(m => m.zKnows && m.day === 1).slice(0, 1);
+  const saved = await call('/api/scenario', 'PUT', { revision: revisionOf(validateScenario(sample)), scenario: s });
+  const r = await call('/api/generate', 'POST', { mode: 'model', revision: saved.data.revision });
+  assert.equal(r.status, 502); assert.match(r.data.error, /每日回忆格式不完整/); assert.equal(dailyCalls, 2);
 });
 test('local API refuses foreign origins and unauthenticated writes', async t => {
   const { base } = await fixture(t);

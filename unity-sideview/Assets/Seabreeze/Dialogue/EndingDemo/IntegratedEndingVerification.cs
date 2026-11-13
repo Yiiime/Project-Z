@@ -62,22 +62,22 @@ namespace Seabreeze.EndingDemo
             var result=JsonUtility.FromJson<EndingDemoView.EndingRun>(session.State.memory.seventhNightEndingJson);
             Require(result.liveMemoryCount>0,"Ending omitted the current game memory");
             Require(result.worldId==session.State.memory.worldId,"Ending used another save's world");
-            var portrait=Field<Live2DCharacterView>(ui,"endingCharacter");Require(portrait?.CurrentModel!=null&&portrait.CurrentProfile.characterId=="z","Game Z Live2D is missing");
             deadline=Time.realtimeSinceStartup+10;while(ui.IsOverlayTransitioning&&Time.realtimeSinceStartup<deadline)yield return null;
             Require(ui.HasOverlay&&Mathf.Approximately(Time.timeScale,0),"Main gameplay did not pause under its ending overlay");
-            Call(ui,"NextEndingPage");yield return null;
-            ScreenCapture.CaptureScreenshot(Path.Combine(output,"02-z-native-ending.png"));yield return new WaitForEndOfFrame();yield return new WaitForSecondsRealtime(.5f);
-            for(int page=0;page<result.memoryCount+2;page++){
-                if(Field<TextMeshProUGUI>(ui,"endingBody").maxVisibleCharacters!=int.MaxValue)Call(ui,"NextEndingPage");
-                Call(ui,"NextEndingPage");yield return null;
-                Require(!string.IsNullOrWhiteSpace(Field<TextMeshProUGUI>(ui,"endingBody").text),"An ending page is empty");
-                Require(Field<TextMeshProUGUI>(ui,"endingBody").rectTransform.rect.height>1,"An ending page has collapsed text layout");
-                if(page==0){Call(ui,"NextEndingPage");ScreenCapture.CaptureScreenshot(Path.Combine(output,"03-memory-in-game.png"));yield return new WaitForEndOfFrame();yield return new WaitForSecondsRealtime(.5f);TextDiagnostic(ui,"memory");}
+            var pages=Field<EndingDemoView.DailyPage[]>(ui,"endingDailyPages");
+            Require(pages.Length==7,"Expected one page for each day in the seven-day fixture");
+            var title=Field<TextMeshProUGUI>(ui,"endingTitle");
+            var body=Field<TextMeshProUGUI>(ui,"endingBody");
+            int firstPage=Field<int>(ui,"endingPage");
+            Require(title.text==pages[0].title,"Daily reading should open with the first day");
+            for(int i=0;i<pages.Length;i++)
+            {
+                Call(ui,"ShowEndingPage",firstPage+i);
+                Require(title.text==pages[i].title && body.text.Contains("\n\n"),"Missing title or paragraph break");
             }
-            Require(Field<int>(ui,"endingPage")==result.memoryCount+2,"Full memory traversal did not reach the last page");
-            Call(ui,"NextEndingPage");
-            ScreenCapture.CaptureScreenshot(Path.Combine(output,"04-z-choice.png"));yield return new WaitForEndOfFrame();yield return new WaitForSecondsRealtime(.5f);
-            TextDiagnostic(ui,"choice");
+            Call(ui,"ShowEndingPage",firstPage);
+            Call(ui,"ToggleEndingOriginal");Require(Field<bool>(ui,"endingOriginalShown"),"Cannot read source");
+            Call(ui,"ToggleEndingOriginal");Require(body.text.Contains("\n\n"),"Cannot return to daily recollection");
             if(Array.IndexOf(Environment.GetCommandLineArgs(),"-endingUploadQA")>=0){
                 string oldId=result.id;
                 var upload=Find(ui,"Upload ending memories");Require(upload!=null&&upload.interactable,"Native memory upload button is missing");
@@ -110,6 +110,56 @@ namespace Seabreeze.EndingDemo
             ui.CloseOverlay();deadline=Time.realtimeSinceStartup+10;while(ui.HasOverlay&&Time.realtimeSinceStartup<deadline)yield return null;
             Require(session.Save(),"Game save write failed");session.LoadSavedGame();
             Require(JsonUtility.FromJson<EndingDemoView.EndingRun>(session.State.memory.seventhNightEndingJson)?.id==result.id,"Ending disappeared after loading the game's save");
+            var legacyPath=Path.Combine(output,"legacy.json");
+            if(File.Exists(legacyPath))
+            {
+                // Reopen an old-format ending inside this isolated test world. Keep
+                // background polling from replacing the snapshot during capture.
+                var legacy=Newtonsoft.Json.Linq.JObject.Parse(File.ReadAllText(legacyPath));
+                legacy["worldId"]=session.State.memory.worldId;
+                deadline=Time.realtimeSinceStartup+20;
+                while((ui.IsOverlayTransitioning||WorldDirector.Instance?.IsTransitioning!=false||!session.Memory.Client.CanGenerate)&&Time.realtimeSinceStartup<deadline)yield return null;
+                session.State.memory.seventhNightEndingJson=legacy.ToString();
+                ui.OpenSeventhNight();
+                deadline=Time.realtimeSinceStartup+15;
+                while((Field<EndingDemoView.EndingRun>(ui,"seventhNight")?.id!=(string)legacy["id"])&&Time.realtimeSinceStartup<deadline)yield return null;
+                typeof(GameUI).GetField("endingHistoryShown",Fields).SetValue(ui,true);
+                typeof(GameUI).GetField("nextEndingSourceCheck",Fields).SetValue(ui,Time.unscaledTime+120);
+                while(ui.IsOverlayTransitioning&&Time.realtimeSinceStartup<deadline)yield return null;
+                pages=Field<EndingDemoView.DailyPage[]>(ui,"endingDailyPages");
+                Require(pages.Length==7 && pages[6].title=="李庭叫我自己听","Older save did not load the reviewed seven days");
+                Call(ui,"ShowEndingPage",firstPage+6);
+                body=Field<TextMeshProUGUI>(ui,"endingBody");
+                Require(body.text==pages[6].text && body.text.Split('\n').Length==5,"Day seven should have four sentences separated by a paragraph break");
+                yield return new WaitForSecondsRealtime(.22f);
+                var info=body.textInfo;
+                int firstAlpha=-1,firstLineCount=0,hiddenLines=0;
+                for(int i=0;i<info.characterCount;i++){
+                    var ch=info.characterInfo[i];if(!ch.isVisible)continue;
+                    int alpha=info.meshInfo[ch.materialReferenceIndex].colors32[ch.vertexIndex].a;
+                    if(ch.lineNumber==0){
+                        if(firstAlpha<0)firstAlpha=alpha;
+                        Require(alpha==firstAlpha,"Characters on the same line faded independently");
+                        firstLineCount++;
+                    }else if(alpha==0)hiddenLines++;
+                }
+                Require(firstLineCount>1 && firstAlpha>0 && firstAlpha<255 && hiddenLines>0,"Did not observe a partial whole-sentence fade");
+                ScreenCapture.CaptureScreenshot(Path.Combine(output,"legacy-day7-reveal.png"));yield return new WaitForEndOfFrame();
+                yield return new WaitForSecondsRealtime(7);
+                ScreenCapture.CaptureScreenshot(Path.Combine(output,"legacy-day7.png"));yield return new WaitForEndOfFrame();
+                yield return new WaitForSecondsRealtime(.2f);
+                Call(ui,"NextEndingPage");
+                yield return new WaitForEndOfFrame();
+                var blackWords=Field<TextMeshProUGUI>(ui,"endingBlackBody");
+                Require(Field<Image>(ui,"endingBlackScreen").gameObject.activeInHierarchy && blackWords.text.Length==0,"Ending did not start on an empty black screen");
+                yield return new WaitForSecondsRealtime(.40f);
+                Require(blackWords.text.Length==0,"Ending text appeared during the black beat");
+                ScreenCapture.CaptureScreenshot(Path.Combine(output,"legacy-black.png"));yield return new WaitForEndOfFrame();
+                yield return new WaitForSecondsRealtime(1.8f);
+                Require(blackWords.text=="留洋，我想走。","Expected the reviewed decision after the black beat");
+                ScreenCapture.CaptureScreenshot(Path.Combine(output,"legacy-choice.png"));yield return new WaitForEndOfFrame();
+                yield return new WaitForSecondsRealtime(.4f);
+            }
             passed=true;
         }
     }

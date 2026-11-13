@@ -13,7 +13,7 @@ const requested=process.env.Z_ENDING_REQUESTED_PORT;
 const start=Number(requested||4338);
 if(!Number.isInteger(start)||start<1024||start>65535)throw Error('记忆服务端口无效');
 for(let port=start;port<=Math.min(start+(requested?0:20),65535);port++){
-  try{const r=await fetch('http://127.0.0.1:'+port+'/api/health',{signal:AbortSignal.timeout(500)});const s=await r.json();if(s.endingIntegration&&s.endingMemoryUpload){console.log(port);process.exit(0);}}catch{}
+  try{const r=await fetch('http://127.0.0.1:'+port+'/api/health',{signal:AbortSignal.timeout(500)});const s=await r.json();if(s.endingIntegration&&s.endingMemoryUpload&&s.endingDailyPages){console.log(port);process.exit(0);}}catch{}
   const free=await new Promise(resolve=>{const s=net.createServer();s.once('error',()=>resolve(false));s.listen(port,'127.0.0.1',()=>s.close(()=>resolve(true)));});
   if(free){console.log(port);process.exit(0);}
 }
@@ -25,7 +25,7 @@ if [[ -z "${Z_MEMORY_CONFIG:-}" && -f "$HOME/Project-Z/unity-sideview/Tools/Memo
   export Z_MEMORY_CONFIG="$HOME/Project-Z/unity-sideview/Tools/MemoryLab/.local/model.json"
 fi
 if [[ ! -d Tools/MemoryLab/node_modules/ajv ]]; then (cd Tools/MemoryLab && npm ci --ignore-scripts --no-audit --no-fund); fi
-if ! curl --silent --fail "http://127.0.0.1:${z_ending_port}/api/health" | "$z_ending_node" -e 'let b="";process.stdin.on("data",d=>b+=d);process.stdin.on("end",()=>{try{const s=JSON.parse(b);process.exit(s.endingIntegration&&s.endingMemoryUpload?0:1)}catch{process.exit(1)}})'; then
+if ! curl --silent --fail "http://127.0.0.1:${z_ending_port}/api/health" | "$z_ending_node" -e 'let b="";process.stdin.on("data",d=>b+=d);process.stdin.on("end",()=>{try{const s=JSON.parse(b);process.exit(s.endingIntegration&&s.endingMemoryUpload&&s.endingDailyPages?0:1)}catch{process.exit(1)}})'; then
   mkdir -p Tools/MemoryLab/.data
   "$z_ending_node" --input-type=module - <<'JS'
 import {spawn} from 'node:child_process';
@@ -40,13 +40,41 @@ JS
     sleep .2
   done
 fi
-if ! curl --silent --fail "http://127.0.0.1:${z_ending_port}/api/health" | "$z_ending_node" -e 'let b="";process.stdin.on("data",d=>b+=d);process.stdin.on("end",()=>{try{const s=JSON.parse(b);process.exit(s.endingIntegration&&s.endingMemoryUpload?0:1)}catch{process.exit(1)}})'; then
+if ! curl --silent --fail "http://127.0.0.1:${z_ending_port}/api/health" | "$z_ending_node" -e 'let b="";process.stdin.on("data",d=>b+=d);process.stdin.on("end",()=>{try{const s=JSON.parse(b);process.exit(s.endingIntegration&&s.endingMemoryUpload&&s.endingDailyPages?0:1)}catch{process.exit(1)}})'; then
   printf '游戏记忆服务尚未启动，请查看 Tools/MemoryLab/.data/ending-game-service.log 后重试。\n'
   exit 1
 fi
 if [[ -d Builds/IslandEnding/ProjectZ-IslandEnding.app ]]; then
-  open Builds/IslandEnding/ProjectZ-IslandEnding.app --args -memoryService "http://127.0.0.1:${z_ending_port}"
-  printf '完整游戏已打开。进入“第七晚结局”，点“上传 / 更换记忆文件”。确认文件后，结局会自动更新。\n'
+  # macOS asks a game inside Documents for access when Mono loads its native libraries.
+  # Run the signed build from a private per-user temporary directory instead.
+  z_ending_app="$("$z_ending_node" --input-type=module - <<'JS'
+import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
+const name = 'ProjectZ-IslandEnding.app';
+const source = resolve('Builds/IslandEnding', name);
+const digest = createHash('sha256').update(readFileSync(join(source, 'Contents/_CodeSignature/CodeResources'))).digest('hex');
+const cache = join(tmpdir(), 'ProjectZ-PR58', digest);
+const app = join(cache, name);
+mkdirSync(cache, { recursive: true, mode: 0o700 });
+if (!existsSync(app)) {
+  const stage = mkdtempSync(join(cache, '.install-'));
+  const copy = join(stage, name);
+  try {
+    try { execFileSync('/bin/cp', ['-cR', source, copy]); }
+    catch { execFileSync('/usr/bin/ditto', [source, copy]); }
+    execFileSync('/usr/bin/codesign', ['--verify', '--deep', '--strict', copy]);
+    try { renameSync(copy, app); }
+    catch (error) { if (!['EEXIST', 'ENOTEMPTY'].includes(error.code) || !existsSync(app)) throw error; }
+  } finally { rmSync(stage, { recursive: true, force: true }); }
+}
+console.log(app);
+JS
+)"
+  open -n "$z_ending_app" --args -memoryService "http://127.0.0.1:${z_ending_port}"
+  printf '完整游戏已打开。点左下角「第七晚结局」即可看七天回忆，按空格继续。\n'
 else
   printf '记忆服务已启动。请在 Unity 打开 Street 场景并 Play；点击“第七晚结局”。\n'
   printf '独立构建菜单：Seabreeze → Ending Demo → Build full game with ending entry。\n'

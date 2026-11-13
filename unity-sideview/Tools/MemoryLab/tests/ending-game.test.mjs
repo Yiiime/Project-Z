@@ -14,6 +14,7 @@ async function fixture(t, hook) {
     call: async messages => {
       requests.push(messages); if (hook) await hook(messages);
       const input = JSON.parse(messages[1].content);
+      if (input.dailyPage) return { text: JSON.stringify({ dailyPages: [{ day: input.day, title: `第${input.day}天`, text: '一天里发生了一件具体的事。\n我把当时看到的细节记在这里。\n\n我还在慢慢想。' }] }) };
       if (input.choice) return { text: JSON.stringify({ recollections: input.memories.map(m => ({ memoryId: m.id, text: `我记得${m.title}。${m.text}` })) }) };
       return { text: JSON.stringify({ choice: 'leave', title: '带着这段日子', opening: '我记得我们说过的话。', reason: '我想自己去看看。', reasonMemoryIds: [], decision: '我选择离开，执行结果还要确认。', lastLine: '这一步，让我自己来。' }) };
     } };

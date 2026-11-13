@@ -12,6 +12,7 @@ async function fixture(t, hook) {
       if(input.blocks)return {text:JSON.stringify({title:'这份经历',playerName:'旅人',context:'第七晚，在码头回望。',lastMessage:'',
         world:{departureReady:false,departureDetail:'',stayDetail:'未来没有保证',leaveOutcome:'pending',leaveAftermath:'',stayOutcome:'uncertain',stayAftermath:''},
         blocks:input.blocks.map((b,i)=>({id:b.id,title:'经历'+(i+1),day:i+1,kind:'memory',zKnows:!b.text.includes('SECRET')}))})};
+      if(input.dailyPage)return {text:JSON.stringify({dailyPages:[{day:input.day,title:'第'+input.day+'天',text:'这一天发生了一件具体的事。\n我把当时看到的细节记在这里。\n\n我还在慢慢想。'}]})};
       if(input.choice)return {text:JSON.stringify({recollections:input.memories.map(m=>({memoryId:m.id,text:'我记得：'+m.text}))})};
       const changed=input.memories.some(m=>m.text.includes('NEW_FILE'));
       return {text:JSON.stringify({choice:changed?'stay':'leave',title:'带着这些日子',opening:'让我回想一下。',reason:'这是我自己的选择。',reasonMemoryIds:[],decision:changed?'我想留下。':'我想离开。',lastLine:'这一步，我自己来。'})};

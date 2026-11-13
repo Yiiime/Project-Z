@@ -4,7 +4,8 @@ import { fileURLToPath } from 'node:url';
 import { createHash, randomUUID } from 'node:crypto';
 import { homedir } from 'node:os';
 import { validateScenario, knownMemories, decisionMessages, validateDecision, recollectionMessages,
-  validateRecollections, parseModel, previewDecision, previewRecollections, resolveOutcome, revisionOf } from '../../../Assets/Seabreeze/Dialogue/EndingDemo/ending.mjs';
+  validateRecollections, validateDailyPages, parseModel, previewDecision, previewRecollections,
+  previewDailyPages, approvedDailyPagesFor, requestDailyPage, resolveOutcome, revisionOf } from '../../../Assets/Seabreeze/Dialogue/EndingDemo/ending.mjs';
 import { TurnError } from './policy.mjs';
 
 export const authoredFile = resolve(dirname(fileURLToPath(import.meta.url)), '../../../Assets/Seabreeze/Dialogue/EndingDemo/scenario.example.json');
@@ -107,7 +108,7 @@ export class GameEndingCoordinator {
       return current;
     };
     const persona = this.catalog.profile('z');
-    let decision, recollections = [];
+    let decision, recollections = [], dailyPages = [];
     try {
     if (mode === 'model') {
       const response = await this.provider.call(this.provider.request(decisionMessages(scenario, persona), { json: true, maxTokens: 2800 }));
@@ -122,11 +123,28 @@ export class GameEndingCoordinator {
         recollections.push(...validateRecollections(parseModel(response.text), batch));
         checkCurrent(); progress.completed = recollections.length;
       }
-    } else { decision = previewDecision(scenario, mode === 'preview-leave' ? 'leave' : 'stay'); recollections = previewRecollections(scenario); }
+      const days = [...new Set(memories.map(m => m.day))].sort((a, b) => a - b);
+      const approved = approvedDailyPagesFor(scenario);
+      if (approved) {
+        dailyPages = validateDailyPages({ dailyPages: approved }, scenario);
+      } else {
+        const recollectionById = new Map(recollections.map(item => [item.memoryId, item.text]));
+        for (const day of days) {
+          const dayScenario = { ...scenario, memories: memories.filter(m => m.day === day).map(memory => ({
+            ...memory, text: recollectionById.get(memory.id) || memory.text,
+          })) };
+          dailyPages.push(await requestDailyPage(this.provider, dayScenario, decision, day, persona));
+          checkCurrent();
+        }
+      }
+    } else {
+      decision = previewDecision(scenario, mode === 'preview-leave' ? 'leave' : 'stay');
+      recollections = previewRecollections(scenario); dailyPages = previewDailyPages(scenario);
+    }
     const current = checkCurrent();
     if (current.epoch !== epoch) throw new TurnError('结局属于已取消的时间线');
     const result = { id: randomUUID(), mode, revision: revisionOf(scenario), createdAt: new Date().toISOString(),
-      scenarioTitle: scenario.title, playerName: scenario.playerName, decision, recollections, memoryCount: recollections.length,
+      scenarioTitle: scenario.title, playerName: scenario.playerName, decision, recollections, dailyPages, memoryCount: recollections.length,
       outcome: resolveOutcome(scenario, decision.choice), worldId: current.worldId, runId: current.runId,
       sourceDay: original.day, sourceSeq: original.seq, liveMemoryCount, sourceEventIds: eventIds,
       zState: structuredClone(original.actors.z.info), sourceName, contextRevision, sourceRevision };
