@@ -282,17 +282,8 @@ namespace Seabreeze
                 Description = complete ? "从直播间的一次邀请，到和大家一起看烟花。第一天，已经有了想记住的人。"
                     : session.FirstDay != null ? session.FirstDay.Objective : "沿着海风，认识岛上的人。"
             };
-            string[] labels = { "在 Z 的直播间接受小岛邀请", "在码头和 Z 打招呼", "沿街走到古树广场", "和广场的每位岛民聊一聊", "和 Z 一起开启烟花", "回家，在床边结束这一天" };
-            FirstDayPhase[] finishedAt = { FirstDayPhase.Arrival, FirstDayPhase.WalkToSquare, FirstDayPhase.MeetIslanders,
-                FirstDayPhase.Fireworks, FirstDayPhase.Home, FirstDayPhase.Complete };
-            bool nextFound = false;
-            for (int i = 0; i < labels.Length; i++)
-            {
-                bool done = firstDay.phase >= finishedAt[i];
-                bool ready = !complete && !done && !nextFound;
-                if (ready) nextFound = true;
-                task.Steps.Add(new PhoneTaskStep { Id = "first_day_" + i, Label = labels[i], Complete = done, Ready = ready });
-            }
+            task.Title = string.IsNullOrEmpty(firstDay.objective) ? "小岛旅程" : firstDay.objective;
+            task.Description = complete ? "已经认识岛上的朋友，接下来每天休息四次后进入直播。" : session.FirstDay?.Objective ?? "沿着海风，认识岛上的人。";
             tasks.Insert(0, task);
             if (!TaskDataAvailable) TaskDataHint = "第一天的约定保存在这台设备上。";
             TaskDataAvailable = true;
@@ -318,6 +309,9 @@ namespace Seabreeze
                 }
                 catch (JsonException) { }
             }
+            foreach (var key in taskDefinitions.Where(kv => (bool?)kv.Value["dynamic"] == true).Select(kv => kv.Key).ToArray()) taskDefinitions.Remove(key);
+            foreach (JObject definition in checkpoint["tasks"]?["definitions"] as JArray ?? new JArray())
+                if (!string.IsNullOrEmpty((string)definition["id"])) taskDefinitions[(string)definition["id"]] = definition;
             if (taskDefinitions.Count == 0) { TaskDataAvailable = false; TaskDataHint = "暂时无法读取委托说明。"; return; }
             try
             {

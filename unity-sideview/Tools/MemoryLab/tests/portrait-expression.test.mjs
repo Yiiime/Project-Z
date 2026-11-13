@@ -26,7 +26,7 @@ class FixtureProvider {
   }
   async call(request) {
     this.calls.push(request);
-    const context = JSON.parse(request.messages.at(-1).content);
+    const context = JSON.parse(request.messages.find(m=>m.role==="user"&&m.content.startsWith("{")).content);
     const action = context.available_actions.find((a) => a.type === "wait");
     const info = clone(context.character_state.info);
     info.changes = {};
@@ -220,4 +220,24 @@ test("Axing retries an invalid portrait reply once", async (t) => {
   assert.equal(result.status, "failed");
   assert.equal(provider.calls.length, 2);
   assert.match(result.validation_error, /输出格式错误：\/info\/emotion/);
+});
+
+
+test("compact action output repairs invalid state emotion without relaxing the contract", async t => {
+  class CompactProvider extends InvalidEmotionProvider {
+    async call(request,options) {
+      const response=await super.call(request,options),output=JSON.parse(response.text);
+      const context=JSON.parse(request.messages[1].content);
+      const wait=context.available_actions.find(a=>a.type==='wait');
+      output.action={option_id:wait.id};
+      output.info={emotion:output.info.emotion,changes:{}};
+      return {...response,text:JSON.stringify(output)};
+    }
+  }
+  const provider=new CompactProvider(1);const {engine}=setup(t,"default","z",provider);
+  const job=engine.player("w","z","你好，很高兴来岛上。");
+  const result=(await engine.run("w",1,job.id))[0];
+  assert.equal(result.status,"proposed",result.validation_error);
+  assert.equal(provider.calls.length,2);
+  assert.match(provider.calls[1].messages[0].content,/角色回合契约错误：\/info\/emotion/);
 });

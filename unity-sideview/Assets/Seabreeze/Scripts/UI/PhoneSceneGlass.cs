@@ -31,6 +31,9 @@ namespace Seabreeze
                 var tint=UIPrimitives.Stretch("Blue glass tint",clip,Vector2.zero,Vector2.zero).gameObject.AddComponent<Image>();
                 tint.color=new Color(.055f,.09f,.16f,.86f);tint.raycastTarget=false;
             }
+            // Batch-mode verification has no rendered end-of-frame callback.
+            // Keep the tint surface and allow the phone transition to finish.
+            if(Application.isBatchMode)yield break;
             yield return new WaitForEndOfFrame();
             var capture=ScreenCapture.CaptureScreenshotAsTexture();
             if(capture==null)yield break;

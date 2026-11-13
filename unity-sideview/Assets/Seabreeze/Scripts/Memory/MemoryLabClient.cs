@@ -113,7 +113,7 @@ namespace Seabreeze
         }
         IEnumerator BeginLiveRoutine(TaskCompletionSource<Newtonsoft.Json.Linq.JObject> done)
         {
-            float deadline=Time.unscaledTime+10;
+            float deadline=Time.unscaledTime+30;
             while((!CanGenerate||session.State.memory.runtimeOutbox.Count>0||runtimeSyncing.Count>0)&&Time.unscaledTime<deadline)yield return null;
             if(!CanGenerate||session.State.memory.runtimeOutbox.Count>0||runtimeSyncing.Count>0){done.TrySetException(new Exception("角色服务尚未同步，暂时不能进入直播。"));yield break;}
             var state=session.State.memory;
@@ -133,7 +133,9 @@ namespace Seabreeze
         }
         public MemoryRequest RequestBase()
         {
-            return new MemoryRequest { worldId=session.State.memory.worldId,runId=RunId,requestId=Guid.NewGuid().ToString("N"),day=session.State.day,period=session.State.period,weather=session.State.weather };
+            var request = new MemoryRequest { worldId=session.State.memory.worldId,runId=RunId,requestId=Guid.NewGuid().ToString("N"),day=session.State.day,period=session.State.period,weather=session.State.weather, details = new JObject() };
+            if (session.FirstDay != null && (session.State.firstDay != null || session.Clock.LiveReady)) request.details["firstDay"] = session.FirstDay.Context();
+            return request;
         }
         float nextLiveSnapshot;bool liveSnapshotPending;
         IEnumerator LiveSnapshot(){yield return Send("/api/game/checkpoint",RequestBase(),8,r=>Accept(r,session.State.memory),e=>LastError=e);liveSnapshotPending=false;}
@@ -178,8 +180,8 @@ namespace Seabreeze
             request.runtimeEvent=state.runtimeOutbox.Where(e=>e.actorId==actor).OrderBy(e=>e.seq).First();
             yield return Send("/api/game/runtime/sync",request,8,r=>{
                 if(session.State.memory!=state||r.runId!=RunId||r.runtimeActorId!=actor)return;
-                var cursor=state.RuntimeCursor(actor);cursor.acknowledgedSeq=Math.Max(cursor.acknowledgedSeq,r.runtimeSeq);
-                state.runtimeOutbox.RemoveAll(e=>e.actorId==actor&&e.seq<=cursor.acknowledgedSeq);
+                // The cursor and the checkpoint must be persisted together.
+                // A delayed response cannot acknowledge records absent from the accepted snapshot.
                 Accept(r,state);session.Save();runtimeRetryAt.Remove(actor);
             },e=>{BackgroundError=e;runtimeRetryAt[actor]=Time.unscaledTime+2;});
             runtimeSyncing.Remove(actor);
@@ -205,10 +207,12 @@ namespace Seabreeze
             if(playerRequest)LastError="";
             if(!CanGenerateFor(request.actorId)){if(playerRequest)LastError="模型尚未就绪，请稍候。";failed("模型尚未就绪，请稍候。");return;}
             var state=session.State.memory;
-            var actor=session.Memory.Spawner.Find(request.actorId);
-            request.runtimeSnapshot=session.Memory.Runtimes?.Capture(actor,"decision_request");
             request.walkableLocations=SevenCharacterCatalog.Walkable(session.CurrentPlace);
-            request.runtimeSeq=state.RuntimeCursor(request.actorId).nextSeq;
+            if(!string.IsNullOrEmpty(request.actorId)){
+                var actor=session.Memory.Spawner.Find(request.actorId);
+                request.runtimeSnapshot=session.Memory.Runtimes?.Capture(actor,"decision_request");
+                request.runtimeSeq=state.RuntimeCursor(request.actorId).nextSeq;
+            }
             StartCoroutine(Send(endpoint,request,35,r=>{Accept(r,state);if(playerRequest)LastError="";else BackgroundError="";complete(r);},e=>
             {
                 if(playerRequest)LastError=e;else BackgroundError=e;

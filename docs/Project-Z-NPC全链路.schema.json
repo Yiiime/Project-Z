@@ -404,15 +404,15 @@
   "x-source-files": [
     {
       "path": "unity-sideview/Assets/Seabreeze/Scripts/Memory/MemoryContracts.cs",
-      "sha256": "831499a8ec674f8f30f6b94656dcb7629652d217a946baf0d357a6a55b079a21"
+      "sha256": "5f4591ea6eef74f6b678d06d50b91de3d1f90bdb9bcc33887f2c7819302e7168"
     },
     {
       "path": "unity-sideview/Tools/MemoryLab/server.mjs",
-      "sha256": "6120887dd0339db8f5d39061194b49bdc1cb67669a448d672f33df99e6eeb37e"
+      "sha256": "7fab1bee1e0c49cce6c89f1a48afad4247db54ddaba80a35ac61d937c98646ea"
     },
     {
       "path": "unity-sideview/Tools/MemoryLab/lib/engine.mjs",
-      "sha256": "b0b0d71277d6f8de4d42320fb765db0a012b2b5d7a1db814cbd9276b29b6ef50"
+      "sha256": "f9ff4b14266f48b0f91547659586c4101f4397dafaa8b680017a728fb249a82b"
     },
     {
       "path": "unity-sideview/Tools/MemoryLab/lib/policy.mjs",
@@ -420,7 +420,7 @@
     },
     {
       "path": "unity-sideview/Tools/MemoryLab/lib/live-room.mjs",
-      "sha256": "afe8781dbcdb130e06ad444f56756267a50a1f2e911826405e69f053ffebd9d6"
+      "sha256": "bdcd077535d294c8e2677370e7284628d1d073abb971559738a9525a16acff95"
     },
     {
       "path": "unity-sideview/Tools/MemoryLab/lib/memory.mjs",
@@ -432,7 +432,7 @@
     },
     {
       "path": "unity-sideview/Tools/MemoryLab/lib/tasks.mjs",
-      "sha256": "eef898afc4a5e7ce35b10e372ceb51e47d155d46e42a58c8c146dd56cab29256"
+      "sha256": "ebe320f929fd55306679ecde71be210bdc62fdc4cd537c99b789058e7da4132a"
     },
     {
       "path": "unity-sideview/Tools/live-service/server/character-bridge.mjs",
@@ -440,7 +440,7 @@
     },
     {
       "path": "unity-sideview/Tools/live-service/server/shared/worker/agent-director.js",
-      "sha256": "8173e7796604da4813959eb19f7237c5cf43063d71ea367b9c949e720f1f40d2"
+      "sha256": "929612cf10a1e50535efdc6101dc8fd683bc78d78a4536099b8c694b2e9b2246"
     },
     {
       "path": "unity-sideview/Tools/MemoryLab/content/current/actor-registry.json",
@@ -20297,6 +20297,12 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/TaskFollowupRecord"
+          }
+        },
+        "definitions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TaskDefinition"
           }
         }
       },

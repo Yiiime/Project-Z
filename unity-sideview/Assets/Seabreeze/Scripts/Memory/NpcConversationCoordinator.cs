@@ -11,8 +11,10 @@ namespace Seabreeze
         {
             public string id,stage;
             public NpcPresence first,second;
-            public bool player,cancelled,sending;
+            public bool player,cancelled,sending,introductionReported;
             public float started;
+            public int playerTurns, npcReplies;
+            public string lastEvidence;
             public readonly Dictionary<NpcPresence,bool> previous = new Dictionary<NpcPresence,bool>();
         }
         MemoryGameController memory; GameSession session; WorldDirector world;
@@ -39,10 +41,11 @@ namespace Seabreeze
         public void Initialize(MemoryGameController m,GameSession s,WorldDirector w){memory=m;session=s;world=w;nextDecision=Time.unscaledTime+4;}
         void Update()
         {
+            ReportIntroduction();
             // This scene has authored, silent social groups until the player
             // finishes the introductions. Autonomous AI must not move them away.
-            if(session?.FirstDay?.GatheringActive==true){if(sessions.Count>0)CancelAll("第一日广场分组");return;}
-            foreach(var c in sessions.Values.ToArray())if(!WorldReady||!Present(c.first)||(!c.player&&c.stage!="选择是否交谈"&&!Present(c.second))||Time.unscaledTime-c.started>MemoryRuntimeConfig.Settings.conversationTimeout)Finish(c,false);
+            if(session?.FirstDay?.GatheringActive==true){foreach(var c in sessions.Values.Where(c=>!c.player).ToArray())Finish(c,false);return;}
+            foreach(var c in sessions.Values.ToArray())if(!WorldReady||!Present(c.first)||(!c.player&&c.stage!="选择是否交谈"&&!Present(c.second))||(!c.player&&Time.unscaledTime-c.started>MemoryRuntimeConfig.Settings.conversationTimeout))Finish(c,false);
             if(!WorldReady||!memory.Client.CanGenerate||Time.unscaledTime<nextDecision||sessions.Values.Any(c=>!c.player))return;
             nextDecision=Time.unscaledTime+MemoryRuntimeConfig.Settings.decisionInterval;
             var actors=memory.Spawner.Actors.Where(Eligible).ToArray();if(actors.Length<2)return;
@@ -106,12 +109,18 @@ namespace Seabreeze
             if(held.TryGetValue(npc,out var previous))Finish(previous,false);
             var c=new Conversation{id="player_"+Guid.NewGuid().ToString("N"),first=npc,player=true,stage="玩家交谈",started=Time.unscaledTime};player=c;sessions[c.id]=c;Hold(c,npc);npc.ConversationPartner=world.Player;
             memory.Client.Focus(npc.npcId);memory.View.OpenPlayer(npc.npcId);
+            if (session.FirstDay?.Active ?? false)
+            {
+                memory.PublishStoryEvent("encounter_" + c.id, PlayerIdentity.DisplayName + "实际走近了" + SevenCharacterCatalog.Name(npc.npcId) + "，准备交谈。", new[] { "player", npc.npcId }, true, conversationId: c.id);
+                c.sending = true; StartCoroutine(PlayerReply(c));
+            }
         }
         public void SendPlayer(string message)
         {
             var c=player;if(c==null||c.sending||!memory.Client.CanQueuePlayerInput||string.IsNullOrWhiteSpace(message))return;
+            ReportIntroduction();
             memory.Client.StopSpeech();
-            c.sending=true;c.started=Time.unscaledTime;memory.CommitLine(c.id,"player",c.first.npcId,message.Trim(),"","private_player_chat");StartCoroutine(PlayerReply(c));
+            c.playerTurns++; c.sending=true;c.started=Time.unscaledTime;memory.CommitLine(c.id,"player",c.first.npcId,message.Trim(),"","private_player_chat");StartCoroutine(PlayerReply(c));
         }
         IEnumerator PlayerReply(Conversation c)
         {
@@ -123,19 +132,32 @@ namespace Seabreeze
             {
                 memory.ShowResult(line);
                 string dialogue=line.result?.dialogue??line.text;string expression=line.result?.expression??line.expression;
-                if(!string.IsNullOrEmpty(dialogue)){memory.CommitLine(c.id,c.first.npcId,"player",dialogue,line.proposalId,"private_player_chat",expression);CommittedNpcLines++;memory.View.FollowSpeech();memory.Client.Speak(line,c.id,c.first.npcId,()=>memory.View.ReadyForSpeech);}
+                if(!string.IsNullOrEmpty(dialogue)){memory.CommitLine(c.id,c.first.npcId,"player",dialogue,line.proposalId,"private_player_chat",expression);c.npcReplies++; c.lastEvidence=session.State.memory.outbox.LastOrDefault()?.id; CommittedNpcLines++;memory.View.FollowSpeech();memory.Client.Speak(line,c.id,c.first.npcId,()=>memory.View.ReadyForSpeech);}
                 else memory.Client.CommitDecision(line,c.first.npcId,new[]{c.first.npcId,"player"},request.locationId);
                 LastRecalledMemoryIds=line.recalledMemoryIds??Array.Empty<string>();
             }
             c.sending=false;
         }
+        // Reading a resident's introduction is enough to meet them. Other
+        // conversation tasks still require a player turn and an NPC response.
+        public bool IntroductionReady => player != null && (player.introductionReported ||
+            !player.sending && memory.View.LineFullyVisible && player.npcReplies > 0 &&
+            (session.FirstDay?.Phase == FirstDayPhase.MeetIslanders || player.playerTurns > 0 && player.npcReplies > 1));
+        void ReportIntroduction()
+        {
+            if (!IntroductionReady || player.introductionReported) return;
+            player.introductionReported = true;
+            session.FirstDay?.ConversationCompleted(player.first.npcId, player.id, player.lastEvidence);
+        }
         public void RequestPlayerReply(){if(player!=null&&!player.sending){memory.Client.StopSpeech();player.sending=true;StartCoroutine(PlayerReply(player));}}
-        public void Cancel(string reason="玩家结束交谈"){if(player!=null)Finish(player,false);else foreach(var c in sessions.Values.ToArray())Finish(c,false);}
+        public void Cancel(string reason="玩家结束交谈"){if(player!=null)Finish(player,false,reason=="玩家结束交谈");else foreach(var c in sessions.Values.ToArray())Finish(c,false);}
         public void CancelAll(string reason="世界状态变化"){foreach(var c in sessions.Values.ToArray())Finish(c,false);}
         public void ResetTimeline(){CancelAll();cooldown.Clear();planner=0;LastIntentReason="";LastRecalledMemoryIds=Array.Empty<string>();CompletedConversations=CommittedNpcLines=0;}
-        void Finish(Conversation c,bool completed)
+        void Finish(Conversation c,bool completed,bool userClosed=false)
         {
-            if(c==null||c.cancelled)return;c.cancelled=true;memory.Client?.CancelConversation(c.id);
+            if(c==null||c.cancelled)return;
+            if (userClosed && c == player) ReportIntroduction();
+            c.cancelled=true;memory.Client?.CancelConversation(c.id);
             if(c.second!=null)cooldown[Pair(c.first.npcId,c.second.npcId)]=Time.unscaledTime+MemoryRuntimeConfig.Settings.pairCooldown;
             foreach(var old in c.previous)if(old.Key!=null&&old.Key.Movement!=null){held.Remove(old.Key);old.Key.ConversationPartner=null;old.Key.Movement.Interrupt("conversation_finished");old.Key.Movement.SetInteractionHold(false);old.Key.Movement.SimulateDecisions=old.Value;memory.Runtimes?.Conversation(old.Key,c.id,false);}
             sessions.Remove(c.id);if(completed)CompletedConversations++;

@@ -248,7 +248,7 @@ namespace Seabreeze
             var vr = veil.rectTransform; vr.anchorMax = Vector2.one; vr.offsetMin = vr.offsetMax = Vector2.zero; modal = veil.gameObject;
             modalBack = CloseModal;
             var card = Panel("Title modal", veil.transform, new Vector2(.5f, .5f), new Vector2(.5f, .5f), Vector2.zero, new Vector2(700, height), new Color(.075f, .14f, .21f, .96f), true);
-            card.rectTransform.localScale = Vector3.one * Mathf.Min(1, Mathf.Min((root.rect.width - 48) / 700, (root.rect.height - 48) / height));
+            card.gameObject.AddComponent<ModalViewportFit>().Fit();
             Label("Heading", card.transform, Vector2.up, Vector2.up, new Vector2(42, -38), new Vector2(616, 48), title, 32, White);
             return card.rectTransform;
         }
@@ -274,7 +274,48 @@ namespace Seabreeze
             if (menuGroup != null) { menuGroup.interactable = !busy; menuGroup.blocksRaycasts = !busy; }
             if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(null);
         }
-        void Choose(bool fresh) { if (busy) return; ShowLoading(); enter?.Invoke(fresh); }
+        void Choose(bool fresh)
+        {
+            if (busy) return;
+            if (fresh) { ShowNameEntry(); return; }
+            ShowLoading(); enter?.Invoke(false);
+        }
+        void ShowNameEntry()
+        {
+            var card = ModalCard("海风该怎样称呼你？", 352);
+            card.GetComponent<Image>().color = new Color(.97f,.95f,.92f,1);
+            var heading = card.Find("Heading").GetComponent<TextMeshProUGUI>();
+            heading.color = new Color(.17f,.23f,.31f); heading.fontSize = 30;
+            heading.rectTransform.anchoredPosition = new Vector2(36,-30);
+            heading.rectTransform.sizeDelta = new Vector2(628,48);
+            var fieldRect = Rect("Player name", card, Vector2.up, Vector2.up, new Vector2(36,-104), new Vector2(628,66));
+            var fill = fieldRect.gameObject.AddComponent<Image>(); fill.color = new Color(.86f,.83f,.92f,.65f);
+            var field = fieldRect.gameObject.AddComponent<TMP_InputField>();
+            var text = Label("Name text", fieldRect, Vector2.zero, Vector2.zero, new Vector2(18,9), new Vector2(592,48), "", 26, new Color(.17f,.23f,.31f));
+            field.textViewport = fieldRect; field.textComponent = text; field.richText = false;
+            field.lineType = TMP_InputField.LineType.SingleLine; field.characterLimit = 48;
+            var hint = Label("Name hint", card, Vector2.up, Vector2.up, new Vector2(36,-188), new Vector2(628,44), "1–12 个字，岛上的朋友会这样称呼你。", 18, new Color(.43f,.45f,.53f));
+            void AcceptName()
+            {
+                if (busy || !string.IsNullOrEmpty(EventSystem.current?.currentInputModule?.input?.compositionString)) return;
+                var name = PlayerIdentity.Normalize(field.text);
+                if (string.IsNullOrWhiteSpace(name)) { hint.text = "请先写下你的名字。"; field.ActivateInputField(); return; }
+                PlayerIdentity.PendingName = name;
+                ShowLoading(); enter?.Invoke(true);
+            }
+            var confirm = UIPrimitives.Button("Confirm player name", card, Vector2.zero, Vector2.zero, new Vector2(248,30), new Vector2(416,58), "带着这个名字出发", AcceptName, true);
+            UIPrimitives.Button("Cancel player name", card, Vector2.zero, Vector2.zero, new Vector2(36,30), new Vector2(192,58), "再想想", CloseModal);
+            foreach (var button in card.GetComponentsInChildren<Button>())
+            {
+                bool main = button == confirm;
+                button.GetComponent<Image>().color = main ? new Color(.38f,.30f,.52f,1) : new Color(.88f,.85f,.91f,1);
+                var label = button.GetComponentInChildren<TextMeshProUGUI>();
+                UIHoverFeedback.Attach(button,main);
+                label.color = main ? Color.white : new Color(.29f,.26f,.37f); label.alignment = TextAlignmentOptions.Center;
+            }
+            field.onSubmit.AddListener(_ => AcceptName());
+            field.text = ""; field.Select(); field.ActivateInputField();
+        }
         public void ShowLoading() { busy = true; CloseModal(); menuGroup.alpha = 1; group.interactable = false; status.text = "海风正在捎来你的故事…"; }
         public void ShowSaveNotice(string message) { if (notice != null) notice.text = message; if (!hasSave) confirmFresh = true; }
         public void ShowError(string message)

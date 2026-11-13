@@ -10,16 +10,30 @@ export class TaskEngine {
     if (catalog.tasks.some((t) => t.assignee !== "player"))
       throw new TurnError("任务只能给玩家");
     this.db.exec(
-      `CREATE TABLE IF NOT EXISTS task_state(session TEXT,task TEXT,status TEXT,enabled INTEGER,progress TEXT,reward_claimed INTEGER DEFAULT 0,PRIMARY KEY(session,task));CREATE TABLE IF NOT EXISTS task_receipts(session TEXT,receipt TEXT,payload TEXT,PRIMARY KEY(session,receipt));CREATE TABLE IF NOT EXISTS task_followups(session TEXT,task TEXT,decline_event TEXT,decision TEXT,PRIMARY KEY(session,task));CREATE TABLE IF NOT EXISTS task_collaboration(session TEXT,task TEXT,actor TEXT,status TEXT,invite_event TEXT,request TEXT,decision TEXT,PRIMARY KEY(session,task,actor));`,
+      `CREATE TABLE IF NOT EXISTS task_definitions(session TEXT,task TEXT,payload TEXT,PRIMARY KEY(session,task));CREATE TABLE IF NOT EXISTS task_state(session TEXT,task TEXT,status TEXT,enabled INTEGER,progress TEXT,reward_claimed INTEGER DEFAULT 0,PRIMARY KEY(session,task));CREATE TABLE IF NOT EXISTS task_receipts(session TEXT,receipt TEXT,payload TEXT,PRIMARY KEY(session,receipt));CREATE TABLE IF NOT EXISTS task_followups(session TEXT,task TEXT,decline_event TEXT,decision TEXT,PRIMARY KEY(session,task));CREATE TABLE IF NOT EXISTS task_collaboration(session TEXT,task TEXT,actor TEXT,status TEXT,invite_event TEXT,request TEXT,decision TEXT,PRIMARY KEY(session,task,actor));`,
     );
   }
-  definition(task) {
-    const d = this.definitions.get(task);
+  definition(task, world) {
+    const row = world ? this.db.prepare("SELECT payload FROM task_definitions WHERE session=? AND task=?").get(world, task) : null;
+    const d = row ? JSON.parse(row.payload) : this.definitions.get(task);
     if (!d) throw new TurnError("未知委托");
     return d;
   }
+  dynamicDefinitions(world) {
+    return this.db.prepare("SELECT payload FROM task_definitions WHERE session=?").all(world).map(row => JSON.parse(row.payload));
+  }
+  register(world, definition) {
+    if (!world || !definition?.dynamic || !/^welcome_[a-zA-Z0-9_]+$/.test(definition.id) ||
+        definition.assignee !== "player" || !definition.steps?.length || definition.steps.length > 3 ||
+        !this.catalog.actors.has(definition.owner)) throw new TurnError("实时任务定义无效");
+    const old = this.db.prepare("SELECT payload FROM task_definitions WHERE session=? AND task=?").get(world, definition.id);
+    const payload = encode(definition);
+    if (old && old.payload !== payload) throw new TurnError("实时任务定义不能被覆盖");
+    this.db.prepare("INSERT OR IGNORE INTO task_definitions VALUES(?,?,?)").run(world, definition.id, payload);
+    return definition;
+  }
   state(world, task) {
-    const d = this.definition(task);
+    const d = this.definition(task, world);
     this.db
       .prepare("INSERT OR IGNORE INTO task_state VALUES(?,?,?,?,?,0)")
       .run(world, task, "available", Number(d.enabled_on_start), "{}");
@@ -38,7 +52,7 @@ export class TaskEngine {
       }));
   }
   list(world, owner) {
-    return [...this.definitions.values()]
+    return [...this.definitions.values(), ...this.dynamicDefinitions(world)]
       .filter((d) => !owner || d.owner === owner)
       .map((d) => {
         const row = this.state(world, d.id),
@@ -67,12 +81,13 @@ export class TaskEngine {
         id &&
         f.decline_event !== id &&
         event?.speaker === "player" &&
-        event.visible.includes(this.definition(task).owner),
+        event.visible.includes(this.definition(task, world).owner),
     );
   }
   options(world, actor, id) {
+    const welcomeOccupied = this.list(world).some(t => t.dynamic && ["offered", "active", "completed"].includes(t.status));
     return this.list(world, actor).flatMap((t) => [
-      ...(t.enabled &&
+      ...(t.enabled && (!t.dynamic || !welcomeOccupied) &&
       (t.status === "available" ||
         (t.status === "declined" && this.canReoffer(world, t.id, id)))
         ? [
@@ -97,8 +112,10 @@ export class TaskEngine {
     ]);
   }
   offer(world, task, actor, recipient = "player", trigger, followup) {
-    const d = this.definition(task),
+    const d = this.definition(task, world),
       s = this.state(world, task);
+    if (d.dynamic && this.list(world).some(t => t.id !== task && t.dynamic && ["offered", "active", "completed"].includes(t.status)))
+      throw new TurnError("只需完成一项迎新委托");
     if (
       recipient !== "player" ||
       d.owner !== actor ||
@@ -143,7 +160,7 @@ export class TaskEngine {
   }
   followup(world, actor, decision) {
     if (
-      this.definition(decision.task_id).owner !== actor ||
+      this.definition(decision.task_id, world).owner !== actor ||
       this.state(world, decision.task_id).status !== "declined"
     )
       throw new TurnError("只能判断自己的被拒任务");
@@ -153,8 +170,8 @@ export class TaskEngine {
       )
       .run(JSON.stringify(decision), world, decision.task_id);
   }
-  allowed(task, actor) {
-    return this.definition(task)
+  allowed(task, actor, world) {
+    return this.definition(task, world)
       .steps.filter(
         (s) =>
           (s.performed_by.length === 1 && s.performed_by[0] === "player") ||
@@ -180,17 +197,17 @@ export class TaskEngine {
       .all(world, actor, event)
       .filter((r) => this.state(world, r.task).status === "active")
       .map((r) => {
-        const d = this.definition(r.task);
+        const d = this.definition(r.task, world);
         return {
           task_id: d.id,
           title: d.title,
           request: r.request,
           source_event_id: r.invite_event,
           effect_class: d.effect_class,
-          allowed_step_ids: this.allowed(d.id, actor),
+          allowed_step_ids: this.allowed(d.id, actor, world),
           step_labels: Object.fromEntries(
             d.steps
-              .filter((s) => this.allowed(d.id, actor).includes(s.id))
+              .filter((s) => this.allowed(d.id, actor, world).includes(s.id))
               .map((s) => [s.id, s.label]),
           ),
         };
@@ -202,14 +219,14 @@ export class TaskEngine {
       .all(world, actor)
       .filter((r) => this.state(world, r.task).status === "active")
       .map((r) => {
-        const d = this.definition(r.task);
+        const d = this.definition(r.task, world);
         return {
           task_id: d.id,
           title: d.title,
           status: r.status,
           source_event_id: r.invite_event,
           effect_class: d.effect_class,
-          allowed_step_ids: this.allowed(d.id, actor),
+          allowed_step_ids: this.allowed(d.id, actor, world),
           decision: r.decision ? JSON.parse(r.decision) : null,
         };
       });
@@ -223,10 +240,10 @@ export class TaskEngine {
     if (
       !row ||
       this.state(world, p.task_id).status !== "active" ||
-      p.step_ids.some((s) => !this.allowed(p.task_id, actor).includes(s)) ||
+      p.step_ids.some((s) => !this.allowed(p.task_id, actor, world).includes(s)) ||
       (p.choice !== "willing" && p.step_ids.length) ||
       (actor === "zhou_bobo" &&
-        this.definition(p.task_id).effect_class === "escape_assistance" &&
+        this.definition(p.task_id, world).effect_class === "escape_assistance" &&
         p.choice === "willing")
     )
       throw new TurnError("协作决定超出真实邀请或角色范围");
@@ -237,7 +254,7 @@ export class TaskEngine {
       .run(p.choice, JSON.stringify(p), world, p.task_id, actor);
   }
   record(world, task, stepId, receipt, success, who, details, positions) {
-    const d = this.definition(task),
+    const d = this.definition(task, world),
       state = this.state(world, task),
       step = d.steps.find((s) => s.id === stepId);
     if (
@@ -297,6 +314,8 @@ export class TaskEngine {
     }
     if (success && step.depends_on.some((id) => !progress[id]?.succeeded))
       throw new TurnError("前置步骤尚未完成");
+    if(d.dynamic && success && (details.action!==step.action || details.target!==step.target ||
+      typeof details.evidence_id!=='string' || !details.evidence_id)) throw new TurnError("实时任务缺少匹配动作的实际证据");
     if (task === "two_friends_photo" && success) {
       const peers = details.participants || [];
       if (
@@ -353,7 +372,7 @@ export class TaskEngine {
     return true;
   }
   reward(world, task, actor, recipient = "player") {
-    const d = this.definition(task),
+    const d = this.definition(task, world),
       s = this.state(world, task);
     if (
       recipient !== "player" ||
@@ -371,6 +390,7 @@ export class TaskEngine {
   }
   snapshot(world) {
     return {
+      definitions: this.dynamicDefinitions(world),
       state: this.db
         .prepare("SELECT * FROM task_state WHERE session=?")
         .all(world),
@@ -386,6 +406,8 @@ export class TaskEngine {
     };
   }
   restore(world, data) {
+    this.db.prepare("DELETE FROM task_definitions WHERE session=?").run(world);
+    for (const definition of data.definitions || []) this.register(world, definition);
     for (const [key, table] of Object.entries({
       state: "task_state",
       receipts: "task_receipts",

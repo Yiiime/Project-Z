@@ -67,7 +67,7 @@ namespace Seabreeze
         // Read again on Continue so those presentation-only changes never become progress.
         internal bool PrepareTitleEntry(bool newGame)
         {
-            var next = newGame ? new SaveData { firstDay = new FirstDayState(), place = nameof(PlaceId.Harbor), playerX = -10, period = (int)TimePeriod.Afternoon } : SaveRepository.Load();
+            var next = newGame ? new SaveData { firstDay = FirstDayState.NewJourney(), playerName = PlayerIdentity.Normalize(PlayerIdentity.PendingName), place = nameof(PlaceId.Harbor), playerX = -10, period = (int)TimePeriod.Afternoon } : SaveRepository.Load();
             if (!newGame && !next.started) return false;
             Dialogue.Cancel();
             State = next;
@@ -99,7 +99,7 @@ namespace Seabreeze
             FirstDay?.ResetForStateChange();
             Memory?.BeforeStateChange();
             Dialogue.Cancel();
-            State = new SaveData { started = true, firstDay = new FirstDayState(), place = nameof(PlaceId.Harbor), playerX = -10, period = 1 };
+            State = new SaveData { started = true, firstDay = FirstDayState.NewJourney(), playerName = State.playerName, place = nameof(PlaceId.Harbor), playerX = -10, period = 1 };
             if (MemoryRuntimeConfig.Enabled) State.memory = new MemorySaveState();
             overlay = false;
             Story.ResetTransientState();

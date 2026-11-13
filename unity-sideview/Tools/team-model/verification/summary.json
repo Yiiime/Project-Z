@@ -1,0 +1,64 @@
+{
+  "date": "2026-11-13",
+  "gateway": "https://10.37.20.9:4338",
+  "model": "ep-20260624162511-sjh5k",
+  "real_github_login": "Yiiime",
+  "oauth_scope": "public data only",
+  "non_member_lookup": {
+    "user": "octocat",
+    "http": 403
+  },
+  "anonymous_model_http": 401,
+  "real_npc": [
+    {
+      "status": "proposed",
+      "dialogue": "你好呀，欢迎来月亮岛！我是Z。刚到的话可以先在居民街和公共街逛逛，想找咖啡店、花店或者游客中心，我都能给你指路。"
+    }
+  ],
+  "real_live": {
+    "source": "team-ark",
+    "stream_completed": true,
+    "stream_text": "模型通道已连接",
+    "host_speech": "你好呀，欢迎来到月亮岛。今天想随便聊聊，还是听我分享点岛上的小事？",
+    "expression": "happy_wave"
+  },
+  "real_lan": {
+    "real": true,
+    "unauthenticatedInvitationHttp": 403,
+    "memberMemoryHttp": 200,
+    "configured": true,
+    "member": "Yiiime",
+    "mode": "real"
+  },
+  "bootstrap": {
+    "memory_configured": true,
+    "memory_team": true,
+    "live_configured": true,
+    "live_source": "team-ark",
+    "connection_mode": "0o600"
+  },
+  "unit_tests": {
+    "gateway": 19,
+    "memory": 159,
+    "live": 165,
+    "lan": 10
+  },
+  "unity": {
+    "version": "6000.3.27f1",
+    "compiled": true,
+    "build_result": "Succeeded",
+    "build_errors": 0,
+    "build_warnings": 27,
+    "signed_application_verified": true,
+    "started": true,
+    "reached_name_dialog": true,
+    "full_story_manually_retested": false,
+    "verification_bundle_id": "com.seabreezestudio.teammodel.verify",
+    "screenshot": "player-startup.jpg"
+  },
+  "distribution": {
+    "provider_keys_in_repository": false,
+    "private_configuration_files_in_package": [],
+    "github_membership_credential_expiry": "2027-02-11"
+  }
+}

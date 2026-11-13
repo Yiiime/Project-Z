@@ -25,7 +25,9 @@ public sealed partial class LiveFeatureController {
     void BuildCompanionUI() {
         echoReference=GetComponent<NativeRtcAudioReference>().Output;
         AuthorizeMicrophone=EnsureMicrophonePermission;
-        invitationPlayer=gameObject.AddComponent<AudioSource>();
+        var invitationObject=new GameObject("Call invitation audio");
+        invitationObject.transform.SetParent(transform,false);
+        invitationPlayer=invitationObject.AddComponent<AudioSource>();
         invitationPlayer.playOnAwake=false;
         invitationPlayer.ignoreListenerPause=true;
         invitationPlayer.clip=Resources.Load<AudioClip>("LiveGlass/call-invitation");

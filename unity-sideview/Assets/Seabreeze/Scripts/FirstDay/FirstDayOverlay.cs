@@ -14,6 +14,7 @@ namespace Seabreeze
         TextMeshProUGUI body, actionLabel;
         Button accept;
         public bool Visible => card != null;
+        public RectTransform Surface => root;
         public bool IsModal { get; private set; }
         public void Initialize()
         {
@@ -26,6 +27,7 @@ namespace Seabreeze
         }
         public void Show(string title, string text, string action, Action callback, Action dismiss = null, bool compact = false)
         {
+            if (!compact) { ShowLetter(title,text,action,callback,dismiss); return; }
             Hide(); IsModal = !compact;
             var parent = root;
             if (!compact)
@@ -43,6 +45,42 @@ namespace Seabreeze
             accept=Button("Accept invitation",panel.transform,compact?Vector2.right:Vector2.zero,compact?Vector2.right:Vector2.zero,new Vector2(compact?-24:30,compact?18:28),new Vector2(compact?280:440,compact?44:62),action,()=>{Hide();callback?.Invoke();},true,compact?19:23);
             actionLabel=accept.GetComponentInChildren<TextMeshProUGUI>();
             if(dismiss!=null)Button("Later",panel.transform,Vector2.right,Vector2.right,new Vector2(-30,28),new Vector2(230,62),"再待一会儿",()=>{Hide();dismiss();},false,21);
+        }
+        void ShowLetter(string title, string text, string action, Action callback, Action dismiss)
+        {
+            Hide(); IsModal = true;
+            var veil = Panel("Invitation veil",root,Vector2.zero,Vector2.zero,Vector2.zero,Vector2.one,new Color(.025f,.035f,.09f,.65f),true);
+            veil.rectTransform.anchorMax = Vector2.one; veil.rectTransform.offsetMin = veil.rectTransform.offsetMax = Vector2.zero;
+            card = veil.gameObject;
+            var panel = Panel("A letter from the island",veil.transform,Vector2.one*.5f,Vector2.one*.5f,Vector2.zero,new Vector2(760,510),new Color(.98f,.96f,.92f,1),true);
+            ((RoundedPanel)panel).CornerRadius=26;
+            ((RoundedPanel)panel).SetBorder(new Color(.70f,.58f,.79f),2);
+            var art = Resources.Load<Texture2D>("FirstDay/InvitationPaper");
+            if (art != null) {
+                panel.color=Color.clear;
+                var image=Stretch("Illustrated invitation",panel.transform,Vector2.zero,Vector2.zero).gameObject.AddComponent<RawImage>();
+                image.texture=art; image.raycastTarget=false;
+            }
+            var ink=new Color(.14f,.23f,.31f);
+            Label("Letter eyebrow",panel.transform,Vector2.up,Vector2.up,new Vector2(150,-48),new Vector2(550,34),"来自月亮岛的一封信",17,new Color(.48f,.38f,.56f));
+            var heading=Label("Title",panel.transform,Vector2.up,Vector2.up,new Vector2(150,-83),new Vector2(550,80),title,32,ink);
+            heading.richText=false; heading.enableAutoSizing=true; heading.fontSizeMin=22;heading.fontSizeMax=32;heading.overflowMode=TextOverflowModes.Ellipsis;
+            Label("Recipient",panel.transform,Vector2.up,Vector2.up,new Vector2(60,-170),new Vector2(590,40),"致  "+PlayerIdentity.DisplayName,25,ink).richText=false;
+            body=Label("Letter",panel.transform,Vector2.up,Vector2.up,new Vector2(60,-222),new Vector2(550,150),text,22,ink);
+            body.richText=false; body.enableAutoSizing=true;body.fontSizeMin=17;body.fontSizeMax=22;body.overflowMode=TextOverflowModes.Ellipsis;
+            Label("Signature",panel.transform,Vector2.up,Vector2.up,new Vector2(60,-382),new Vector2(590,36),"七天小岛生活  ·  邀请人 Z",17,new Color(.39f,.40f,.49f));
+            float width=dismiss==null?640:390;
+            accept=Button("Accept invitation",panel.transform,Vector2.zero,Vector2.zero,new Vector2(dismiss==null?60:310,38),new Vector2(width,58),action,()=>{Hide();callback?.Invoke();},true,23);
+            Decorate(accept,true); actionLabel=accept.GetComponentInChildren<TextMeshProUGUI>();
+            if(dismiss!=null) Decorate(Button("Later",panel.transform,Vector2.zero,Vector2.zero,new Vector2(60,38),new Vector2(230,58),"再待一会儿",()=>{Hide();dismiss();},false,21),false);
+            panel.gameObject.AddComponent<ModalViewportFit>().Fit();
+        }
+        static void Decorate(Button button,bool primary)
+        {
+            button.GetComponent<Image>().color=primary?new Color(.37f,.29f,.49f,1):new Color(.88f,.84f,.91f,1);
+            var label=button.GetComponentInChildren<TextMeshProUGUI>(); label.alignment=TextAlignmentOptions.Center;
+            UIHoverFeedback.Attach(button,primary);
+            label.color=primary?Color.white:new Color(.25f,.23f,.35f);
         }
         public void SetActionEnabled(bool enabled, string text) { if(accept!=null)accept.interactable=enabled;if(actionLabel!=null)actionLabel.text=text; }
         public void SetBody(string text) { if(body!=null)body.text=text; }

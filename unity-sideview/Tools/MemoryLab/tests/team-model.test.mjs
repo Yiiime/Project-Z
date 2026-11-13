@@ -1,0 +1,62 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+import { tmpdir } from "node:os";
+import { createServer } from "../server.mjs";
+import {Store} from "../lib/store.mjs";
+import {Catalog} from "../lib/catalog.mjs";
+import {Engine} from "../lib/engine.mjs";
+
+test("team login enables real provider protocol without loading or rewriting the local API Key", async t => {
+  const root=mkdtempSync(join(tmpdir(),"z-team-memory-"));
+  const configPath=join(root,"model.json");
+  const prior=JSON.stringify({provider:"deepseek",baseUrl:"https://api.deepseek.com",model:"old-model",apiType:"chat",apiKey:"fixture-local-key"});
+  writeFileSync(configPath,prior);
+  let logged=false,calls=0;
+  const team={
+    config:{profiles:{npc:{provider:"ark",baseUrl:"https://ark-cn-beijing.bytedance.net/api/v3",model:"ep-test",apiType:"responses"}}},
+    session:()=>logged?{user:{id:17,login:"member"}}:null,
+    publicStatus:()=>({enabled:true,connected:logged,user:logged?{id:17,login:"member"}:null}),
+    startLogin:async()=>({userCode:"ABCD-EFGH",verificationUri:"https://github.com/login/device",interval:5}),
+    pollLogin:async()=>{logged=true;return {connected:true,pending:false};},
+    logout:async()=>{logged=false;},
+    modelFetch:()=>async(url,options)=>{
+      calls++;assert.equal(url,"https://ark-cn-beijing.bytedance.net/api/v3/responses");
+      assert.equal(JSON.parse(options.body).model,"ep-test");
+      assert.equal(options.headers.Authorization,"Bearer team-managed");
+      return Response.json({status:"completed",output:[{type:"message",content:[{type:"output_text",text:"OK"}]}]});
+    }
+  };
+  const app=createServer({dbPath:join(root,"memory.sqlite"),configPath,teamClient:team,backgroundEnabled:false});
+  t.after(async()=>{app.server.closeAllConnections();await new Promise(resolve=>app.server.close(resolve));app.store.close();rmSync(root,{recursive:true,force:true});});
+  await new Promise(resolve=>app.server.listen(0,"127.0.0.1",resolve));
+  const base=`http://127.0.0.1:${app.server.address().port}`;
+  const post=(route,body={})=>fetch(base+route,{method:"POST",headers:{"Content-Type":"application/json","X-Z-Memory":"1"},body:JSON.stringify(body)});
+  const before=await (await fetch(base+"/api/config")).json();assert.equal(before.team.enabled,true);assert.equal(before.configured,false);
+  assert.equal((await post("/api/config",{apiKey:"override"})).status,400);
+  assert.equal((await (await post("/api/team/login")).json()).userCode,"ABCD-EFGH");
+  await (await post("/api/team/poll")).json();
+  const connected=await (await fetch(base+"/api/config")).json();assert.equal(connected.configured,true);assert.equal(connected.team.connected,true);
+  assert.doesNotMatch(JSON.stringify(connected),/fixture-local-key|team-managed/);
+  assert.equal((await post("/api/config/test")).status,200);assert.equal(calls,1);
+  assert.equal(readFileSync(configPath,"utf8"),prior);
+  await post("/api/team/logout");
+  assert.equal((await (await fetch(base+"/api/health")).json()).configured,false);
+});
+
+test('team player schema errors receive one bounded repair within the network budget',async t=>{
+  for(const invalidCalls of [1,2]){
+    let calls=0;const requests=[];
+    const provider={team:{},config:{topK:6},publicConfig:()=>({configured:true}),request:messages=>({messages}),call:async request=>{
+      calls++;requests.push(request);const context=JSON.parse(request.messages.find(m=>m.role==='user'&&m.content.startsWith('{')).content);
+      assert.equal(context.reply_budget.deadline_ms,30000);
+      return {finishReason:'stop',text:JSON.stringify({dialogue:'你好。',action:{option_id:context.available_actions.find(a=>a.type==='wait').id},info:{emotion:'relaxed',changes:{},...(calls<=invalidCalls?{unexpected_field:true}:{})}})};
+    }};
+    const store=new Store();t.after(()=>store.close());const engine=new Engine(store,new Catalog(),provider);
+    engine.create('w');engine.focus('w','z','player');const job=engine.player('w','z','你好');const result=(await engine.run('w',1,job.id))[0];
+    assert.equal(calls,2);assert.equal(result.status,invalidCalls===1?'proposed':'failed');
+    assert.match(requests[1].messages[0].content,/上一版模型输出未通过/);
+    assert.equal(engine.world('w').actors.z.info.affinity,50);
+  }
+});

@@ -10,6 +10,7 @@ export function storageContract(catalog, policy) {
     schema.$defs['BackendTurn' + suffix].allOf = role.$defs.output.allOf;
   }
   const defs=schema.$defs;
+  defs.TaskCheckpoint.properties.definitions={type:"array",items:{$ref:"#/$defs/TaskDefinition"}};
   defs.ModelContext.properties.z_story={type:"object",required:["id","count","line"],properties:{id:{type:"string"},count:{type:"integer",minimum:0},line:{type:"string"}},additionalProperties:false};
   defs.ModelContext.properties.interaction.properties.counterpart={anyOf:[{type:"null"},{type:"object",required:["actor_id","name","role"],properties:{actor_id:{type:"string"},name:{type:"string"},role:{enum:["player","npc"]}},additionalProperties:false}]};
   for(const k of ["affinity","trust"])defs.PeerRelation.properties[k]={anyOf:[{$ref:"#/$defs/Metric"},{type:"null"}]};
@@ -58,7 +59,21 @@ export function checkpointValidator(catalog, policy) {
         fail('提案人物或世界引用无效');
     }
     const definitions = new Map(catalog.tasks.map(t => [t.id, t]));
+    for (const task of cp.tasks.definitions || []) {
+      if (!task.dynamic || !/^welcome_[a-zA-Z0-9_]+$/.test(task.id) || definitions.has(task.id) || task.assignee !== 'player' || task.steps.length < 1 || task.steps.length > 3)
+        fail('实时任务定义无效或重复');
+      const seen = new Set();
+      for (const [index, step] of task.steps.entries()) {
+        if (step.id !== 'step_'+(index+1) || JSON.stringify(step.depends_on) !== JSON.stringify(index?['step_'+index]:[]) ||
+            JSON.stringify(step.performed_by) !== '["player"]' || seen.has(step.action+':'+step.target) ||
+            !(step.action === 'talk_to' && catalog.actors.has(step.target) && !['liyuan',task.owner].includes(step.target) || step.action === 'take_photo' && step.target === 'Square'))
+          fail('实时任务步骤超出执行能力');
+        seen.add(step.action+':'+step.target);
+      }
+      definitions.set(task.id, task);
+    }
     for (const [kind, table] of Object.entries(cp.tasks)) {
+      if (kind === 'definitions') continue;
       const keys = new Set();
       for (const row of table) {
         if (row.session !== cp.worldId) fail('任务所属世界不一致');
