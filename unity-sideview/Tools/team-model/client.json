@@ -1,0 +1,20 @@
+{
+  "enabled": false,
+  "origin": "https://10.37.20.9:4338",
+  "repository": "Yiiime/Project-Z",
+  "certificateFile": "gateway-cert.pem",
+  "profiles": {
+    "npc": {
+      "provider": "ark",
+      "baseUrl": "https://ark-cn-beijing.bytedance.net/api/v3",
+      "model": "ep-20260624162511-sjh5k",
+      "apiType": "responses"
+    },
+    "live": {
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "model": "deepseek-flash",
+      "apiType": "chat"
+    }
+  }
+}

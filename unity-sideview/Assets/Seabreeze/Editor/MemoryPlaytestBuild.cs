@@ -22,10 +22,16 @@ namespace Seabreeze.Editor
             foreach(string file in Directory.GetFiles(service,"*",SearchOption.AllDirectories))
             {
                 string relative=file.Substring(service.Length+1);
-                if(relative.Split(Path.DirectorySeparatorChar).Any(p=>p==".local"||p==".data"||p=="node_modules"||p=="tests"||p=="test-results")||relative.EndsWith(".log",StringComparison.Ordinal))continue;
+                if(relative.Split(Path.DirectorySeparatorChar).Any(p=>p==".local"||p==".data"||p==".private"||p.StartsWith(".env",StringComparison.Ordinal)||p=="node_modules"||p=="tests"||p=="test-results")||relative.EndsWith(".log",StringComparison.Ordinal))continue;
                 string target=Path.Combine(folder,"MemoryLab",relative);Directory.CreateDirectory(Path.GetDirectoryName(target));File.Copy(file,target,true);
             }
             string node=Arg("-memoryNode",Environment.GetEnvironmentVariable("Z_MEMORY_NODE")??"");
+            string teamSource=Path.GetFullPath("Tools/team-model");
+            foreach(string name in new[]{"client.mjs","common.mjs","client.json","gateway-cert.pem","login.mjs"})
+            {
+                string source=Path.Combine(teamSource,name);if(!File.Exists(source))continue;
+                string target=Path.Combine(folder,"team-model",name);Directory.CreateDirectory(Path.GetDirectoryName(target));File.Copy(source,target,true);
+            }
             if(!string.IsNullOrEmpty(node)&&File.Exists(node))
             {
                 Directory.CreateDirectory(Path.Combine(folder,"Runtime"));File.Copy(node,Path.Combine(folder,"Runtime/node"),true);

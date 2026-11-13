@@ -1,0 +1,30 @@
+{
+  "repository": "Yiiime/Project-Z",
+  "host": "10.37.20.9",
+  "port": 4338,
+  "tlsKeyFile": "gateway-key.pem",
+  "tlsCertFile": "gateway-cert.pem",
+  "maxConcurrent": 8,
+  "perMemberConcurrent": 3,
+  "dailyLimit": 5000,
+  "github": {
+    "clientId": "REPLACE_WITH_DEDICATED_OAUTH_APP_CLIENT_ID",
+    "membershipToken": "REPLACE_WITH_PROJECT_METADATA_READ_TOKEN"
+  },
+  "profiles": {
+    "npc": {
+      "provider": "ark",
+      "baseUrl": "https://ark-cn-beijing.bytedance.net/api/v3",
+      "model": "ep-20260624162511-sjh5k",
+      "apiType": "responses",
+      "apiKey": "REPLACE_ON_SERVER_ONLY"
+    },
+    "live": {
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "model": "deepseek-flash",
+      "apiType": "chat",
+      "apiKey": "REPLACE_ON_SERVER_ONLY"
+    }
+  }
+}

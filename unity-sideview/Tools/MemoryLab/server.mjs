@@ -17,6 +17,8 @@ const APP_ROOT = dirname(fileURLToPath(import.meta.url));
 import { Store, uid } from "./lib/store.mjs";
 import { Catalog, PROJECT } from "./lib/catalog.mjs";
 import { ModelProvider } from "./lib/provider.mjs";
+import { TeamModelProvider } from "./lib/team-provider.mjs";
+import { loadTeamClient } from "../team-model/client.mjs";
 import { Engine } from "./lib/engine.mjs";
 import { LiveRoom } from "./lib/live-room.mjs";
 import { createLab } from "./lib/lab.mjs";
@@ -51,6 +53,7 @@ export function createServer({
   dbPath = join(APP_ROOT, ".data/unified.sqlite"),
   root = PROJECT,
   providerFactory,
+  teamClient,
   speech = new SpeechService(),
   songSubmit,
   decide,
@@ -58,12 +61,13 @@ export function createServer({
   configPath = process.env.Z_MEMORY_CONFIG ||
     join(APP_ROOT, ".local/model.json"),
 } = {}) {
+  const team = providerFactory ? null : (teamClient === undefined ? loadTeamClient() : teamClient);
   const catalog = new Catalog(root),
     store = new Store(dbPath),
     provider = providerFactory
       ? providerFactory(store)
-      : new ModelProvider(store);
-  if (!providerFactory && process.env.GAME_MODEL_API_KEY)
+      : team ? new TeamModelProvider(store, team) : new ModelProvider(store);
+  if (!providerFactory && !team && process.env.GAME_MODEL_API_KEY)
     provider.set({
       provider: "deepseek",
       baseUrl: "https://api.deepseek.com",
@@ -71,7 +75,7 @@ export function createServer({
       apiKey: process.env.GAME_MODEL_API_KEY,
     });
   if (
-    !providerFactory &&
+    !providerFactory && !team &&
     !process.env.GAME_MODEL_API_KEY &&
     existsSync(configPath)
   ) {
@@ -297,7 +301,17 @@ export function createServer({
       }
       const p = JSON.parse(raw || "{}"),
         started = performance.now();
+      if (url.pathname.startsWith("/api/team/")) {
+        if (!team) throw new TurnError("团队模型尚未启用");
+        try {
+          if (url.pathname === "/api/team/login") return respond(res, await team.startLogin());
+          if (url.pathname === "/api/team/poll") return respond(res, await team.pollLogin());
+          if (url.pathname === "/api/team/logout") { await team.logout(); return respond(res, { ok: true }); }
+        } catch (error) { throw new TurnError(error.message); }
+        throw new TurnError("接口不存在");
+      }
       if (url.pathname === "/api/config") {
+        if (team) throw new TurnError("当前由团队统一提供模型，请使用 GitHub 登录");
         for (const w of store.experiments().filter((w) => w.worldId))
           engine.cancel(w.worldId);
         provider.set(p);
