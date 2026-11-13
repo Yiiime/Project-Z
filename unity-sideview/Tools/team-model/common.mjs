@@ -12,14 +12,15 @@ export function profileEndpoint(profile) {
   const valid = profile.provider === "deepseek"
     ? url.hostname === "api.deepseek.com" && ["", "/v1"].includes(path) && profile.apiType === "chat"
     : profile.provider === "ark" && (url.hostname === "ark-cn-beijing.bytedance.net" || /^ark\.[a-z0-9-]+\.volces\.com$/.test(url.hostname)) && path === "/api/v3" && ["chat", "responses"].includes(profile.apiType);
-  if (!valid || url.protocol !== "https:" || url.port || url.username || url.password || url.search || url.hash || !/^[\w.-]{1,160}$/.test(profile.model))
+  const requestType=profile.requestApiType||profile.apiType;
+  if (!valid || !['chat','responses'].includes(requestType) || (requestType==='responses'&&profile.apiType!=='responses') || url.protocol !== "https:" || url.port || url.username || url.password || url.search || url.hash || !/^[\w.-]{1,160}$/.test(profile.model))
     throw new GatewayError("模型服务配置无效", 503, "configuration_error");
   return url.href.replace(/\/$/, "") + (profile.apiType === "responses" ? "/responses" : "/chat/completions");
 }
 
 export function publicProfile(profile) {
   profileEndpoint(profile);
-  return Object.fromEntries(["provider", "baseUrl", "model", "apiType"].map(key => [key, profile[key]]));
+  return {...Object.fromEntries(["provider", "baseUrl", "model", "apiType"].map(key => [key, profile[key]])),...(profile.requestApiType?{requestApiType:profile.requestApiType}:{})};
 }
 
 export async function readJson(req, limit = 400_000) {

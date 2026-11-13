@@ -21,6 +21,8 @@ namespace Seabreeze.Editor
             try
             {
                 if(!File.Exists(config) || !JsonUtility.FromJson<TeamConfig>(File.ReadAllText(config)).enabled) return;
+                if(string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("Z_LIVE_CONNECTION_FILE")))
+                    Environment.SetEnvironmentVariable("Z_LIVE_CONNECTION_FILE",Path.Combine(root,"UserSettings/ZLive/team-connection.json"));
                 string node = FindNode();
                 bool windows = Application.platform == RuntimePlatform.WindowsEditor;
                 string script = Path.Combine(root, windows ? "Tools/MemoryLab/launcher.mjs" : "Tools/MemoryLab/start.sh");

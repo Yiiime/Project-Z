@@ -30,7 +30,7 @@ export function secureRequest(url, { body, token, certificate, signal, allowHttp
 }
 
 export class TeamClient {
-  constructor(config, { certificate, sessionDirectory = join(homedir(), ".project-z/team-model"), requestImpl = secureRequest, allowHttpForTests = false } = {}) {
+  constructor(config, { certificate, sessionDirectory = join(homedir(), ".project-z/team-model"), requestImpl = secureRequest, oauthFetch = fetch, now = Date.now, allowHttpForTests = false } = {}) {
     const origin = new URL(config.origin);
     const test = allowHttpForTests && origin.protocol === "http:" && origin.hostname === "127.0.0.1";
     if ((!test && origin.protocol !== "https:") || origin.username || origin.password || origin.pathname !== "/" || origin.search || origin.hash)
@@ -39,6 +39,8 @@ export class TeamClient {
     this.origin = origin.origin;
     this.certificate = certificate;
     this.requestImpl = requestImpl;
+    this.oauthFetch = oauthFetch;
+    this.now = now;
     this.allowHttpForTests = allowHttpForTests;
     this.directory = sessionDirectory;
     this.sessionFile = join(sessionDirectory, createHash("sha256").update(this.origin + ":" + config.repository).digest("hex") + ".json");
@@ -48,7 +50,7 @@ export class TeamClient {
   session() {
     try {
       const saved = JSON.parse(readFileSync(this.sessionFile, "utf8"));
-      if (saved.origin !== this.origin || saved.repository !== this.config.repository || saved.expires <= Date.now() || !/^[A-Za-z0-9_-]{43}$/.test(saved.token)) return null;
+      if (saved.origin !== this.origin || saved.repository !== this.config.repository || saved.expires <= this.now() || !/^[A-Za-z0-9_-]{43}$/.test(saved.token)) return null;
       return saved;
     } catch { return null; }
   }
@@ -83,20 +85,47 @@ export class TeamClient {
     if (!response.ok) throw new GatewayError(typeof data.error === "string" ? data.error : "团队服务请求失败", response.status, data.code);
     return data;
   }
+  async oauth(path, input) {
+    try {
+      const response=await this.oauthFetch("https://github.com/login/"+path,{method:"POST",redirect:"error",signal:AbortSignal.timeout(10000),headers:{Accept:"application/json","Content-Type":"application/x-www-form-urlencoded","User-Agent":"Project-Z-Team-Model"},body:new URLSearchParams(input).toString()});
+      return {status:response.status,body:await response.json()};
+    } catch { throw new GatewayError("无法连接 GitHub 登录服务，请检查本机网络",502,"github_unavailable"); }
+  }
+  publicLogin() { const {userCode,verificationUri,interval,expires}=this.login;return {userCode,verificationUri,interval,expires}; }
   async startLogin() {
-    if (this.login?.expires > Date.now()) return { ...this.login, id: undefined };
-    this.login = await this.json("/auth/start", {}, { anonymous: true });
-    return { ...this.login, id: undefined };
+    if (this.login?.expires > this.now()) return this.publicLogin();
+    const config=await this.json("/auth/config",{}, {anonymous:true});
+    if(config.repository!==this.config.repository || !config.clientId)throw new GatewayError("团队登录应用配置不匹配",503);
+    const {status,body}=await this.oauth("device/code",{client_id:config.clientId});
+    if(status!==200 || !body.device_code || !body.user_code || body.verification_uri!=="https://github.com/login/device")
+      throw new GatewayError("GitHub 登录尚未就绪，请稍后重试",503,"github_unavailable");
+    const interval=Math.max(5,Number(body.interval)||5);
+    this.login={clientId:config.clientId,deviceCode:body.device_code,userCode:body.user_code,verificationUri:body.verification_uri,interval,expires:this.now()+Math.min(900,Number(body.expires_in)||900)*1000,next:this.now()+interval*1000,busy:false};
+    return this.publicLogin();
   }
   async pollLogin() {
     if (!this.login) return { pending: false, ...this.publicStatus() };
+    const state=this.login;
+    if(state.expires<=this.now()){this.login=null;throw new GatewayError("登录已过期，请重新登录",401,"login_expired");}
+    if(state.busy||state.next>this.now())return {pending:true,interval:state.interval};
+    state.busy=true;state.next=this.now()+state.interval*1000;
     try {
-      const result = await this.json("/auth/poll", { id: this.login.id }, { anonymous: true });
-      if (result.pending) return { pending: true, interval: result.interval };
-      this.save(result);
-      this.login = null;
+      if(!state.accessToken){
+        const {status,body}=await this.oauth("oauth/access_token",{client_id:state.clientId,device_code:state.deviceCode,grant_type:"urn:ietf:params:oauth:grant-type:device_code"});
+        if(body.error==="authorization_pending")return {pending:true,interval:state.interval};
+        if(body.error==="slow_down"){state.interval+=5;state.next=this.now()+state.interval*1000;return {pending:true,interval:state.interval};}
+        if(status!==200||!body.access_token)throw new GatewayError("GitHub 授权未完成，请重新登录",401,"login_expired");
+        state.accessToken=body.access_token;
+      }
+      if(this.login!==state)throw new GatewayError("本次登录已取消",409,"cancelled");
+      // Only the short-lived token issued to this dedicated app crosses the pinned
+      // connection. The gateway verifies its application before granting a session.
+      const result=await this.json("/auth/exchange",{accessToken:state.accessToken},{anonymous:true});
+      if(this.login!==state)throw new GatewayError("本次登录已取消",409,"cancelled");
+      this.save(result);this.login=null;
       return { pending: false, ...this.publicStatus() };
     } catch (error) { if ([401, 403].includes(error.status)) this.login = null; throw error; }
+    finally {state.busy=false;}
   }
   async logout() {
     try { if (this.session()) await this.json("/auth/logout", {}); }
@@ -107,10 +136,10 @@ export class TeamClient {
     if (status.repository !== this.config.repository) throw new GatewayError("团队服务与项目不匹配", 503);
     return status;
   }
-  modelFetch(profileName, fallback = fetch) {
+  modelFetch(profileName, fallback = fetch, requestEndpoint) {
     const profile = this.config.profiles[profileName];
     if (!profile) throw new GatewayError("缺少团队模型配置", 503);
-    const endpoint = profileEndpoint(profile);
+    const endpoint = requestEndpoint || profileEndpoint(profile);
     return async (url, options = {}) => {
       if (String(url) !== endpoint) return fallback(url, options);
       if (options.method !== "POST") throw new GatewayError("模型请求方法无效");

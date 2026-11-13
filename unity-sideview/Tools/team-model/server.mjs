@@ -5,6 +5,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { once } from "node:events";
 import { TeamAuth } from "./auth.mjs";
+import { chatRequestToResponses, responseForProfile } from "./adapter.mjs";
 import { GatewayError, json, profileEndpoint, publicProfile, readJson } from "./common.mjs";
 
 export function createGateway({ config, dbPath = ":memory:", fetchImpl = fetch, now = Date.now, tls, allowHttpForTests = false }) {
@@ -33,7 +34,7 @@ export function createGateway({ config, dbPath = ":memory:", fetchImpl = fetch, 
   async function model(req, res, user, profile, input) {
     if (total >= maxConcurrent || (active.get(user.id) || 0) >= perMember)
       throw new GatewayError("团队模型繁忙，请稍后重试", 429, "rate_limited");
-    const responses = profile.apiType === "responses";
+    const responses = (profile.requestApiType||profile.apiType) === "responses";
     const messages = responses ? input.input : input.messages;
     if (!Array.isArray(messages) || messages.length < 1 || messages.length > 200 || messages.some(item => !item || !["system", "user", "assistant", "developer"].includes(item.role) || typeof item.content !== "string"))
       throw new GatewayError("对话内容格式无效");
@@ -43,10 +44,11 @@ export function createGateway({ config, dbPath = ":memory:", fetchImpl = fetch, 
     const permitted = responses
       ? ["input", "temperature", "max_output_tokens", "stream", "thinking", "text"]
       : ["messages", "temperature", "max_tokens", "stream", "thinking", "response_format", "stream_options"];
-    const body = Object.fromEntries(permitted.filter(key => input[key] !== undefined).map(key => [key, input[key]]));
+    let body = Object.fromEntries(permitted.filter(key => input[key] !== undefined).map(key => [key, input[key]]));
     body.model = profile.model;
     if (responses) { body.store = false; body.max_output_tokens ??= 2048; }
     else body.max_tokens ??= 2048;
+    if(profile.apiType==='responses'&&!responses)body=chatRequestToResponses(body);
     auth.charge(user, dailyLimit);
     total++;
     active.set(user.id, (active.get(user.id) || 0) + 1);
@@ -55,7 +57,7 @@ export function createGateway({ config, dbPath = ":memory:", fetchImpl = fetch, 
     res.on("close", cancel);
     const timer = setTimeout(cancel, 120_000);
     try {
-      const upstream = await fetchImpl(profileEndpoint(profile), {
+      let upstream = await fetchImpl(profileEndpoint(profile), {
         method: "POST", redirect: "error", signal: controller.signal,
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${profile.apiKey}` },
         body: JSON.stringify(body),
@@ -64,6 +66,7 @@ export function createGateway({ config, dbPath = ":memory:", fetchImpl = fetch, 
         await upstream.body?.cancel();
         throw new GatewayError(upstream.status === 429 ? "模型服务限流，请稍后重试" : "团队模型暂时不可用，请联系维护者", upstream.status === 429 ? 429 : 502, "model_unavailable");
       }
+      upstream=await responseForProfile(upstream,profile);
       const contentType = upstream.headers.get("content-type") || "";
       if (!/^(application\/json|text\/event-stream)(?:;|$)/i.test(contentType) || !upstream.body)
         throw new GatewayError("模型服务返回格式异常", 502, "model_unavailable");
@@ -95,6 +98,8 @@ export function createGateway({ config, dbPath = ":memory:", fetchImpl = fetch, 
       if (req.headers.origin) throw new GatewayError("不允许此请求来源", 403);
       if (req.method === "GET" && req.url === "/health") return json(res, 200, { ok: true, app: "project-z-team-model", protocol: 1 });
       if (req.method !== "POST") throw new GatewayError("接口不存在", 404);
+      if (req.url === "/auth/config") { await readJson(req, 1024); return json(res, 200, { clientId: config.github.clientId, repository: config.repository }); }
+      if (req.url === "/auth/exchange") { limitLogin(req); const input=await readJson(req,8192); return json(res,200,await auth.exchange(input.accessToken)); }
       if (req.url === "/auth/start") { limitLogin(req); await readJson(req, 1024); return json(res, 200, await auth.start()); }
       if (req.url === "/auth/poll") { const input = await readJson(req, 1024); return json(res, 200, await auth.poll(input.id)); }
       const user = await auth.authenticate(req.headers.authorization);

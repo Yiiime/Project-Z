@@ -16,18 +16,23 @@ function fixture(t, overrides = {}) {
     if (url === "https://github.com/login/device/code") return Response.json({ device_code: "upstream-device-private", user_code: "ABCD-EFGH", verification_uri: "https://github.com/login/device", expires_in: 900, interval: 5 });
     if (url === "https://github.com/login/oauth/access_token") return Response.json({ access_token: "upstream-github-private" });
     if (url === "https://api.github.com/user") { assert.equal(options.headers.Authorization, "Bearer upstream-github-private"); return Response.json(user); }
+    if (url === "https://api.github.com/applications/fixture-client/token") {
+      assert.equal(options.headers.Authorization,"Basic "+Buffer.from("fixture-client:fixture-client-secret").toString("base64"));
+      const supplied=JSON.parse(options.body).access_token;
+      return Response.json({app:{client_id:supplied==='foreign-app-token'?'different-app':'fixture-client'},scopes:supplied==='overprivileged-token'?['repo']:[],user});
+    }
     if (url.endsWith("/collaborators/member")) return new Response(null, { status: permitted ? 204 : 404 });
     if (url.endsWith("/collaborators/member/permission")) return Response.json({ permission: "read", user: { id: 17, login: "member" } });
     if (["https://api.deepseek.com/chat/completions", "https://ark-cn-beijing.bytedance.net/api/v3/responses"].includes(url)) return overrides.model ? overrides.model(url, options) : Response.json({ choices: [{ message: { content: "接口协议测试" }, finish_reason: "stop" }] });
     throw Error("Unexpected fixture URL: " + url);
   };
-  const config = { repository: "Yiiime/Project-Z", github: { clientId: "fixture-client", membershipToken: "fixture-membership-credential" }, profiles: { npc: profile }, ...overrides.config };
+  const config = { repository: "Yiiime/Project-Z", github: { clientId: "fixture-client", clientSecret:"fixture-client-secret", membershipToken: "fixture-membership-credential" }, profiles: { npc: profile }, ...overrides.config };
   const app = createGateway({ config, fetchImpl: fake, now: () => clock, allowHttpForTests: true, ...(overrides.dbPath ? { dbPath: overrides.dbPath } : {}) });
   t.after(() => { if(!app.server.listening)return;app.server.closeAllConnections(); return new Promise(resolve => app.server.close(resolve)); });
   const listen = () => new Promise(resolve => app.server.listen(0, "127.0.0.1", resolve));
   const post = async (route, body = {}, token, extra = {}) => fetch(`http://127.0.0.1:${app.server.address().port}${route}`, { method: "POST", headers: { "Content-Type": "application/json", ...(token ? { Authorization: "Bearer " + token } : {}), ...extra }, body: JSON.stringify(body) });
   const login = async () => { const start = await (await post("/auth/start")).json(); clock += 5100; const response = await post("/auth/poll", { id: start.id }); return { start, response, result: await response.json() }; };
-  return { app, config, requests, listen, post, login, advance: ms => clock += ms, remove: () => permitted = false, outage: () => unavailable = true, rename: () => user = { id: 18, login: "member" } };
+  return { app, config, requests, listen, post, login, oauthFetch:fake, now:()=>clock, advance: ms => clock += ms, remove: () => permitted = false, outage: () => unavailable = true, rename: () => user = { id: 18, login: "member" } };
 }
 
 test("production startup requires TLS and private GitHub configuration", () => {
@@ -38,6 +43,7 @@ test("only a verified project member receives a token; model credentials stay at
   const f = fixture(t); await f.listen();
   const { start, result, response } = await f.login();
   assert.equal(response.status, 200);
+  assert.equal(new URLSearchParams(f.requests.find(x=>x.url.endsWith('/login/device/code')).options.body).has('scope'),false);
   assert.equal(start.device_code, undefined);
   assert.equal(result.access_token, undefined);
   assert.match(result.token, /^[\w-]{43}$/);
@@ -121,8 +127,8 @@ test("local client stores only a scoped service credential and clears it on revo
   t.after(() => rmSync(directory, { recursive: true, force: true }));
   const f = fixture(t); await f.listen();
   const config = { origin: `http://127.0.0.1:${f.app.server.address().port}`, repository: "Yiiime/Project-Z", profiles: { npc: { ...profile, apiKey: undefined } } };
-  const client = new TeamClient(config, { sessionDirectory: directory, allowHttpForTests: true });
-  const start = await client.startLogin(); assert.equal(start.id, undefined);
+  const client = new TeamClient(config, { sessionDirectory: directory, oauthFetch:f.oauthFetch, now:f.now, allowHttpForTests: true });
+  const start = await client.startLogin(); assert.equal(start.id, undefined);assert.equal(start.deviceCode,undefined);
   f.advance(5100); assert.equal((await client.pollLogin()).connected, true);
   assert.doesNotMatch(readFileSync(client.sessionFile, "utf8"), /fixture-model-credential|upstream-github-private/);
   const remote = new TeamClient({ ...config, origin: "http://127.0.0.1:1" }, { sessionDirectory: directory, allowHttpForTests: true });
@@ -130,6 +136,12 @@ test("local client stores only a scoped service credential and clears it on revo
   f.remove(); f.advance(60_001);
   await assert.rejects(client.verify(), /没有项目使用权限/);
   assert.equal(client.session(), null);
+});
+
+test("tokens issued to another application or with broader scopes cannot become team sessions", async t=>{
+  const f=fixture(t);await f.listen();
+  for(const accessToken of ['foreign-app-token','overprivileged-token'])assert.equal((await f.post('/auth/exchange',{accessToken})).status,401);
+  assert.equal(f.app.auth.db.prepare('SELECT count(*) AS n FROM sessions').get().n,0);
 });
 
 test("GitHub failure after the cache expires does not grant continued model access", async t => {

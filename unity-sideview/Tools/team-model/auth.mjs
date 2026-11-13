@@ -7,11 +7,12 @@ const secret = () => randomBytes(32).toString("base64url");
 const loginPattern = /^[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,38})$/;
 
 export class TeamAuth {
-  constructor({ repository, clientId, membershipToken, dbPath = ":memory:", fetchImpl = fetch, now = Date.now }) {
-    if (!/^[\w.-]+\/[\w.-]+$/.test(repository || "") || !clientId || !membershipToken || clientId.startsWith("REPLACE_") || membershipToken.startsWith("REPLACE_"))
+  constructor({ repository, clientId, clientSecret, membershipToken, dbPath = ":memory:", fetchImpl = fetch, now = Date.now }) {
+    if (!/^[\w.-]+\/[\w.-]+$/.test(repository || "") || !clientId || !clientSecret || !membershipToken || [clientId,clientSecret,membershipToken].some(value=>typeof value!=="string"||value.startsWith("REPLACE_")))
       throw new GatewayError("缺少 GitHub 团队授权配置", 503, "configuration_error");
     this.repository = repository;
     this.clientId = clientId;
+    this.clientSecret = clientSecret;
     this.membershipToken = membershipToken;
     this.fetch = fetchImpl;
     this.now = now;
@@ -23,13 +24,13 @@ export class TeamAuth {
       CREATE TABLE IF NOT EXISTS usage (user_id INTEGER NOT NULL, day INTEGER NOT NULL, count INTEGER NOT NULL, PRIMARY KEY(user_id,day));`);
   }
 
-  async github(url, { token, form } = {}) {
+  async github(url, { token, form, basic, payload } = {}) {
     let response;
     try {
       response = await this.fetch(url, {
-        method: form ? "POST" : "GET", redirect: "error", signal: AbortSignal.timeout(10000),
-        headers: { Accept: "application/json", "User-Agent": "Project-Z-Team-Model", ...(token ? { Authorization: `Bearer ${token}`, "X-GitHub-Api-Version": "2022-11-28" } : {}), ...(form ? { "Content-Type": "application/x-www-form-urlencoded" } : {}) },
-        ...(form ? { body: new URLSearchParams(form).toString() } : {}),
+        method: form || payload ? "POST" : "GET", redirect: "error", signal: AbortSignal.timeout(10000),
+        headers: { Accept: "application/json", "User-Agent": "Project-Z-Team-Model", "X-GitHub-Api-Version": "2022-11-28", ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(basic ? { Authorization: `Basic ${basic}` } : {}), ...(form ? { "Content-Type": "application/x-www-form-urlencoded" } : {}), ...(payload ? { "Content-Type": "application/json" } : {}) },
+        ...(form ? { body: new URLSearchParams(form).toString() } : payload ? { body: JSON.stringify(payload) } : {}),
       });
     } catch { throw new GatewayError("暂时无法核验 GitHub 身份，请稍后重试", 503, "github_unavailable"); }
     if (response.status === 204) return { status: 204, body: {} };
@@ -44,10 +45,9 @@ export class TeamAuth {
       throw new GatewayError("GitHub 身份无效", 403, "not_member");
     // Explicit membership remains required even if the repository becomes public.
     const route = `https://api.github.com/repos/${this.repository}/collaborators/${user.login}`;
-    const check = await this.github(route, { token: this.membershipToken });
+    const [check,permission] = await Promise.all([this.github(route,{token:this.membershipToken}),this.github(route+"/permission",{token:this.membershipToken})]);
     if (check.status === 404) return this.deny(user.id);
     if (check.status !== 204) throw new GatewayError("暂时无法核验项目权限，请稍后重试", 503, "github_unavailable");
-    const permission = await this.github(route + "/permission", { token: this.membershipToken });
     if (permission.status === 404) return this.deny(user.id);
     if (permission.status !== 200) throw new GatewayError("暂时无法核验项目权限，请稍后重试", 503, "github_unavailable");
     if (permission.body.user?.id !== user.id || !["read", "write", "admin", "maintain", "triage"].includes(permission.body.permission))
@@ -61,10 +61,30 @@ export class TeamAuth {
     throw new GatewayError("此 GitHub 账号没有项目使用权限", 403, "not_member");
   }
 
+  async exchange(accessToken) {
+    if(typeof accessToken!=="string" || !accessToken || accessToken.length>4096 || /\s/.test(accessToken))
+      throw new GatewayError("GitHub 登录凭据无效",401,"login_required");
+    // Check the token's issuer with the application's own secret. A token issued
+    // to another OAuth app must never become a Project Z service session.
+    const identity=await this.github(`https://api.github.com/applications/${this.clientId}/token`,{
+      basic:Buffer.from(`${this.clientId}:${this.clientSecret}`).toString("base64"),payload:{access_token:accessToken}
+    });
+    if([404,422].includes(identity.status))throw new GatewayError("GitHub 登录凭据无效或不属于此应用",401,"login_required");
+    if(identity.status!==200)throw new GatewayError("暂时无法核验 GitHub 登录应用",503,"github_unavailable");
+    if(identity.body.app?.client_id!==this.clientId || !Array.isArray(identity.body.scopes) || identity.body.scopes.filter(Boolean).length)
+      throw new GatewayError("登录凭据不属于此应用或权限范围不匹配",401,"login_required");
+    const user={id:identity.body.user?.id,login:identity.body.user?.login};
+    await this.member(user,true);
+    const token=secret(),expires=this.now()+30*86400_000;
+    this.db.prepare("DELETE FROM sessions WHERE expires<=?").run(this.now());
+    this.db.prepare("INSERT INTO sessions VALUES(?,?,?,?)").run(hash(token),user.id,user.login,expires);
+    return {token,expires,user};
+  }
+
   async start() {
     for (const [key, value] of this.pending) if (value.expires <= this.now()) this.pending.delete(key);
     if (this.pending.size >= 100) throw new GatewayError("登录请求较多，请稍后重试", 429, "rate_limited");
-    const { status, body } = await this.github("https://github.com/login/device/code", { form: { client_id: this.clientId, scope: "read:user" } });
+    const { status, body } = await this.github("https://github.com/login/device/code", { form: { client_id: this.clientId } });
     if (status !== 200 || !body.device_code || !body.user_code || body.verification_uri !== "https://github.com/login/device")
       throw new GatewayError("GitHub 登录尚未就绪，请联系项目维护者", 503, "github_unavailable");
     const id = secret(), interval = Math.max(5, Number(body.interval) || 5);
@@ -95,16 +115,8 @@ export class TeamAuth {
         this.pending.delete(digest);
         throw new GatewayError("GitHub 授权未完成，请重新登录", 401, "login_expired");
       }
-      // GitHub access tokens are used once for identity and never persisted or returned.
-      const identity = await this.github("https://api.github.com/user", { token: result.body.access_token });
       this.pending.delete(digest);
-      if (identity.status !== 200) throw new GatewayError("无法确认 GitHub 身份", 401, "login_expired");
-      const user = { id: identity.body.id, login: identity.body.login };
-      await this.member(user, true);
-      const token = secret(), expires = this.now() + 30 * 86400_000;
-      this.db.prepare("DELETE FROM sessions WHERE expires<=?").run(this.now());
-      this.db.prepare("INSERT INTO sessions VALUES(?,?,?,?)").run(hash(token), user.id, user.login, expires);
-      return { token, expires, user };
+      return await this.exchange(result.body.access_token);
     } finally { state.busy = false; }
   }
 

@@ -7,10 +7,10 @@ import {
 } from "./portrait-expression.mjs";
 
 const MAX_PLAYER_OUTPUT_REPAIRS = 1;
-const isRepairableOutputError = (error) =>
+const isRepairableOutputError = (error, team = false) =>
   error instanceof SyntaxError ||
   (error instanceof Error && error.message === "模型未返回 JSON 对象") ||
-  (error instanceof TurnError && /^(输出格式错误：|身份边界：|同行决定：)/.test(error.message));
+  (error instanceof TurnError && (/^(输出格式错误：|身份边界：|同行决定：)/.test(error.message) || (team && /^角色回合契约错误：/.test(error.message))));
 
 export class ActorRuntime {
   constructor(catalog, policy, provider) {
@@ -169,7 +169,7 @@ export class ActorRuntime {
           if (
             canRepair &&
             attempt < MAX_PLAYER_OUTPUT_REPAIRS &&
-            isRepairableOutputError(error) &&
+            isRepairableOutputError(error, Boolean(this.provider.team)) &&
             !controller.signal.aborted
           ) {
             repair = repairInstruction(error);

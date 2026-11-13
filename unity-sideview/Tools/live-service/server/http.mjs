@@ -18,7 +18,7 @@ export async function createLiveServer({root,providers,artifacts,songRoot,token,
  const handler=async(req,res)=>{try{
   const auth=Buffer.from(req.headers.authorization||'');const owner=Object.keys(identities).find(id=>{const expected=Buffer.from('Bearer '+identities[id]);return auth.length===expected.length&&timingSafeEqual(auth,expected);});if(!owner)return json(res,401,{error:'unauthorized'});
   const currentProviders=providerFor(owner);
-  const url=new URL(req.url,'http://localhost');if(req.method==='GET'&&url.pathname==='/health')return json(res,200,{ok:true,protocolVersion:1,agentConfigured:!!providers.env.DEEPSEEK_API_KEY,ttsConfigured:!!providers.env.VOLC_TTS_API_KEY});
+  const url=new URL(req.url,'http://localhost');if(req.method==='GET'&&url.pathname==='/health')return json(res,200,{ok:true,protocolVersion:1,agentConfigured:!!providers.env.DEEPSEEK_API_KEY,ttsConfigured:!!providers.env.VOLC_TTS_API_KEY,...(providers.options?.modelSource?{modelSource:providers.options.modelSource}:{})});
   const pcmRoute=url.pathname.match(/^\/v1\/live\/sessions\/([a-f0-9-]+)\/audio-stream\/([a-f0-9-]+)$/);
   if(pcmRoute&&req.method==='GET'){const s=sessions.get(pcmRoute[1]);if(!s||s.owner!==owner)return json(res,404,{error:'not_found'});const stream=s.speech.streams.get(pcmRoute[2]);if(!stream||s.phase!=='live')return json(res,404,{error:'stale_audio_stream'});stream.response(res);return;}
   const rtcRoute=url.pathname.match(/^\/v1\/live\/sessions\/([a-f0-9-]+)\/voice\/(config|start|joined|stop|enroll)$/);

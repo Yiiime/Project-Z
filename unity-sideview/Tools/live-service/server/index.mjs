@@ -25,10 +25,12 @@ if(!env.DEEPSEEK_API_KEY){const shared=process.env.Z_MEMORY_CONFIG||path.resolve
 const voice=new NativeVoiceService({configRoot:process.env.Z_LIVE_VOICE_CONFIG_DIR||configRoot,profileRoot:path.join(runtime,'voiceprint')});
 const singing=await SingingService.open({root,directory:path.join(runtime,'singing'),libraryDirectory:path.join(runtime,'library'),environment:()=>env,sources:[new NeteaseSource(),...(env.Z_SONG_CATALOG?[new CatalogSource({id:'configured',file:env.Z_SONG_CATALOG})]:[])],autoRenew:env.Z_NETEASE_AUTO_RENEW!=='0',onSessionStatus:status=>console.log('NetEase session:',status.status,status.renewal||'')});
 const library=new LiveSongLibrary({root,directory:path.join(runtime,'library'),singing});
-const providers=new Providers(env,{singing,singingContext:()=>singing.context('local-owner',{publicRoom:true}),...(team?{fetch:team.modelFetch('live')}: {})});
+const providers=new Providers(env,{singing,singingContext:()=>singing.context('local-owner',{publicRoom:true}),...(team?{fetch:team.modelFetch('live',fetch,'https://api.deepseek.com/chat/completions'),modelSource:'team-ark',modelName:team.config.profiles.live.model}: {})});
 const {server}=await createLiveServer({root:path.join(runtime,'sessions'),providers,artifacts:new ArtifactStore(path.join(runtime,'artifacts')),songRoot:path.join(root,'server/assets/songs'),token,library,voice,...(office?{tokens:office.tokens,tls:{key:fs.readFileSync(path.join(runtime,'key.pem')),cert:fs.readFileSync(path.join(runtime,'cert.pem'))}}:{})});
 // Editor-only loopback credential: outside Assets, never included in a Player build.
-if(!office){const configDir=path.resolve(root,'../../UserSettings/ZLive');fs.mkdirSync(configDir,{recursive:true});fs.writeFileSync(path.join(configDir,'local-connection.json'),JSON.stringify({baseUrl:`http://127.0.0.1:${port}`,token}),{mode:0o600});}
-server.listen(port,office?.host||'127.0.0.1',()=>console.log(`Unity live service ${office?'https':'http'}://${office?.host||'127.0.0.1'}:${port}; agent=${!!env.DEEPSEEK_API_KEY}, Vivi=${!!env.VOLC_TTS_API_KEY}. Local connection file ready.`));
+server.listen(port,office?.host||'127.0.0.1',()=>{
+ if(!office){const file=process.env.Z_LIVE_CONNECTION_FILE||path.resolve(root,'../../UserSettings/ZLive/local-connection.json');fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(file,JSON.stringify({baseUrl:`http://127.0.0.1:${port}`,token}),{mode:0o600});}
+ console.log(`Unity live service ${office?'https':'http'}://${office?.host||'127.0.0.1'}:${port}; agent=${!!env.DEEPSEEK_API_KEY}, Vivi=${!!env.VOLC_TTS_API_KEY}. Local connection file ready.`);
+});
 server.on('error',e=>{console.error(`Server failed: ${e.code||'unknown'}`);void singing.close().finally(()=>{library.close();process.exit(1);});});
 for(const sig of ['SIGINT','SIGTERM'])process.on(sig,()=>{server.closeAllConnections();void singing.close().finally(()=>{library.close();server.close(()=>process.exit(0));});setTimeout(()=>process.exit(0),3000).unref();});

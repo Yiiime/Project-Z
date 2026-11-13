@@ -4,6 +4,9 @@ import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { createServer } from "../server.mjs";
+import {Store} from "../lib/store.mjs";
+import {Catalog} from "../lib/catalog.mjs";
+import {Engine} from "../lib/engine.mjs";
 
 test("team login enables real provider protocol without loading or rewriting the local API Key", async t => {
   const root=mkdtempSync(join(tmpdir(),"z-team-memory-"));
@@ -40,4 +43,20 @@ test("team login enables real provider protocol without loading or rewriting the
   assert.equal(readFileSync(configPath,"utf8"),prior);
   await post("/api/team/logout");
   assert.equal((await (await fetch(base+"/api/health")).json()).configured,false);
+});
+
+test('team player schema errors receive one bounded repair within the network budget',async t=>{
+  for(const invalidCalls of [1,2]){
+    let calls=0;const requests=[];
+    const provider={team:{},config:{topK:6},publicConfig:()=>({configured:true}),request:messages=>({messages}),call:async request=>{
+      calls++;requests.push(request);const context=JSON.parse(request.messages.at(-1).content);
+      assert.equal(context.reply_budget.deadline_ms,30000);
+      return {finishReason:'stop',text:JSON.stringify({dialogue:'你好。',action:{option_id:context.available_actions.find(a=>a.type==='wait').id},info:{emotion:'relaxed',changes:{},...(calls<=invalidCalls?{unexpected_field:true}:{})}})};
+    }};
+    const store=new Store();t.after(()=>store.close());const engine=new Engine(store,new Catalog(),provider);
+    engine.create('w');engine.focus('w','z','player');const job=engine.player('w','z','你好');const result=(await engine.run('w',1,job.id))[0];
+    assert.equal(calls,2);assert.equal(result.status,invalidCalls===1?'proposed':'failed');
+    assert.match(requests[1].messages[0].content,/上一版模型输出未通过/);
+    assert.equal(engine.world('w').actors.z.info.affinity,50);
+  }
 });

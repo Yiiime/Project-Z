@@ -26,7 +26,11 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
         // well as players; never fall back to a user's service during a test.
         var connectionFile=Environment.GetEnvironmentVariable("Z_LIVE_CONNECTION_FILE");
         if(string.IsNullOrEmpty(pendingBase)&&!string.IsNullOrWhiteSpace(connectionFile))
+        {
+            for(int attempt=0;attempt<80&&!File.Exists(connectionFile);attempt++)await Task.Delay(250,life.Token);
+            if(!File.Exists(connectionFile))throw new Exception("直播连接配置尚未就绪，请检查本机服务启动情况。");
             ReadConnection(connectionFile);
+        }
 #if !UNITY_EDITOR
         if(string.IsNullOrEmpty(pendingBase))ReadConnection(Path.Combine(Application.dataPath,"Resources","zlive-connection.json"));
 #endif
@@ -38,7 +42,7 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
         if(string.IsNullOrEmpty(pendingBase)){string file=Path.GetFullPath(Path.Combine(Application.dataPath,"../UserSettings/ZLive/local-connection.json"));if(File.Exists(file)){ReadConnection(file);}}
 #endif
         if(string.IsNullOrEmpty(pendingBase)){status.text="尚未连接 · 请先启动直播服务，再重新进入";return;}await Enter();
-    }catch(Exception e){Error(e);}}
+    }catch(OperationCanceledException)when(life.IsCancellationRequested){}catch(Exception e){Error(e);}}
     void ReadConnection(string file){if(!File.Exists(file))return;var c=JObject.Parse(File.ReadAllText(file));pendingBase=(string)c["baseUrl"];pendingToken=(string)c["token"];pendingPin=(string)c["certificateSha256"];}
     public async Task Enter(){transport=new LiveTransport(pendingBase,pendingToken,pendingPin);transport.Event+=e=>events.Enqueue(e);transport.Connection+=s=>connections.Enqueue(s);audioPlayer.Transport=transport;
         liveMemory=LiveMemoryBridge.Open();
