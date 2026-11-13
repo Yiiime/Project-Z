@@ -46,7 +46,7 @@ namespace ZLive
             var payload = (JObject)command["payload"];
             if ((string)payload["tool"] == "draw_guest")
             {
-                using (var view = new ArrivalGiftView(document.rootVisualElement,(string)payload["playerName"]))
+                using (var view = ArrivalGiftView.TakePrepared(document.rootVisualElement,(string)payload["playerName"]))
                 {
                     float idle=0,animation=0;
                     while(!view.Collected)

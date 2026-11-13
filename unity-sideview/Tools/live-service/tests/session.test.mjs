@@ -329,3 +329,60 @@ test('first evening virtual audience publishes alongside resident lane, and clos
  assert(s.sessionControl.data.eveningSongComplete);assert.equal(s.engine._state.media.phase,'completed');s.engine._active=null;
  s.sessionControl.tick();assert.equal(s.sessionControl.data.phase,'closing');
 });
+
+
+test('showcase limits audience selection and cues the song after a minute unless the player is waiting',async t=>{
+ const s=await fixture(t);const {LiveScene}=await import('../server/live-scene.mjs');
+ s.scene=new LiveScene(s,{mode:'first_evening',playerName:'小海',worldId:'a'.repeat(32),day:1});s.engine.liveScene=s.scene;
+ s.sessionControl.data.eveningStartClock=0;
+ const inbox=Array.from({length:12},(_,i)=>({id:'n'+i,text:'公开弹幕'+i,mine:false,recipientIds:['z']}));
+ inbox.unshift({id:'player1',text:'我还有个问题',mine:true,recipientIds:['z']});
+ assert.deepEqual(s.engine._hostContext(inbox).host.inbox.map(m=>m.id),['player1','n9','n10','n11']);
+ assert(s.engine._wakeDelay({wakeAfterMs:9000,continuation:'leave_space'})<=2000);
+ s.engine._clock=59999;assert.equal(s.scene.binding().songDue,false);
+ s.engine._clock=60000;s.engine.inbox=[inbox[0]];assert.equal(s.scene.binding().songDue,false);
+ s.engine.inbox=[];assert.equal(s.scene.binding().songDue,true);
+ s.sessionControl.data.lastPlayerClock=58000;assert.equal(s.scene.binding().songDue,false);
+ s.engine._clock=63000;assert.equal(s.scene.binding().songDue,true);
+ s.sessionControl.tick();assert.equal(s.sessionControl.data.eveningSongRequested,true);
+});
+test('lottery animation starts on the announcement playback receipt without marking the draw complete',async t=>{
+ const s=await fixture(t);const {LiveScene}=await import('../server/live-scene.mjs');
+ s.scene=new LiveScene(s,{mode:'arrival',playerName:'小海',worldId:'b'.repeat(32),day:1});s.engine.liveScene=s.scene;
+ s.scene.warmup.speeches=2;s.scene.warmup.messages=2;
+ s.engine._say('我想给大家一个惊喜。','warm','none',{source:'deepseek'});await frame();
+ s.engine.speechPlan={result:{action:'tool',tool:{name:'draw_guest',args:{}}}};
+ const host=latest(s,'host.present');assert.equal(latest(s,'story.present'),undefined);
+ receipt(s,host,'started',{durationMs:2000,positionMs:0});assert.equal(latest(s,'story.present').payload.tool,'draw_guest');
+ assert.equal(s.scene.phase,'opening');assert.equal(s.scene.completedSpeeches.size,0);
+});
+
+test('first evening host and reviewer share already-public daytime memories before retelling',async t=>{
+ const s=await fixture(t,{worldId:'c'.repeat(32),runId:'d'.repeat(32),day:1,entries:[]});const {LiveScene}=await import('../server/live-scene.mjs');
+ s.scene=new LiveScene(s,{mode:'first_evening',playerName:'小海',worldId:'c'.repeat(32),day:1});s.engine.liveScene=s.scene;
+ const fact={id:'arrival',text:'小海抵达码头，与 Z 见面。',speaker:'engine',layer:'daily',day:1};
+ s.broadcast.binding.today=[fact.text];s.broadcast.binding.entries=[fact];s.broadcast.lastTopic={text:'今天风凉',id:'wind'};
+ let binding;s.providers.generate=async(_id,_p,o)=>{binding=o.broadcastContext;return {};};
+ for(const kind of ['host','review']){
+  await s.engine.client.generate({kind,context:kind==='host'?{host:{inbox:[]}}:{candidate:{role:'host'}}},{});
+  assert.deepEqual(binding.today,[fact.text]);assert(binding.entries.some(e=>e.id===fact.id));
+ }
+ assert.equal(s.broadcast.told.size,0,'reading a memory does not mark it as retold');
+});
+
+test('host reviewer accepts a server-bound public memory reference and rejects invented evidence',()=>{
+ const value={kind:'review',context:{candidate:{id:'candidate',role:'host'},revision:1,publicEvents:[],broadcast:{entries:[{id:'public-day-event'}]}}};
+ const answer={decision:'allow',reason:'引用了当天公开事件',evidence_ids:['public-day-event']};
+ assert.deepEqual(parseAgentReply(JSON.stringify(answer),value).evidenceIds,['public-day-event']);
+ assert.throws(()=>parseAgentReply(JSON.stringify({...answer,evidence_ids:['invented-event']}),value));
+ assert.throws(()=>parseAgentReply(JSON.stringify({...answer,echo_of:null}),{...value,context:{...value.context,candidate:{id:'candidate',role:'audience'}}}));
+});
+
+test('quiet first-evening minute uses the requested song introduction without another generation wait',async t=>{
+ const s=await fixture(t);const {LiveScene}=await import('../server/live-scene.mjs');
+ s.scene=new LiveScene(s,{mode:'first_evening',playerName:'小海',worldId:'e'.repeat(32),day:1});s.engine.liveScene=s.scene;s.sessionControl.data.eveningStartClock=0;s.engine._clock=60000;
+ s.providers.generate=()=>{throw Error('Unexpected model generation before requested transition');};
+ const cue=await s.engine.client.generate({kind:'host',context:{host:{inbox:[]}}},{});
+ assert.equal(cue.speech,'给大家唱一首《晚安》，祝大家晚安。');assert.equal(cue.tool.name,'start_singing');assert.deepEqual(cue.handledIds,[]);
+ assert.equal(latest(s,'media.play'),undefined,'the normal review and real introduction playback still precede singing');
+});

@@ -26,6 +26,7 @@ export class SessionControl {
   }
   get onboarding(){return ['arrival','first_evening'].includes(this.s.scene?.context?.mode);}
   eveningElapsed(){return Math.max(0,(this.s.engine._clock||0)-(this.data.eveningStartClock??this.s.engine._clock??0));}
+  eveningSongDue(){const e=this.s.engine;return this.s.scene?.context?.mode==='first_evening'&&this.eveningElapsed()>=60000&&!this.data.eveningSongComplete&&!e._mediaPlaying()&&!e.inbox.some(m=>m.mine)&&!e._state.call?.active&&e._clock-(this.data.lastPlayerClock??-Infinity)>=5000;}
   get normal(){return ['opening','live'].includes(this.data.phase);}
   timing(){
     const d=this.data,at=d.endedAt??this.now(),elapsed=Math.max(0,at-d.startedAt);
@@ -53,6 +54,7 @@ export class SessionControl {
     finally{clearTimeout(timer);this.requests.delete(controller);}
   }
   enqueue(message){
+    if(this.s.scene?.context?.mode==='first_evening')this.data.lastPlayerClock=this.s.engine._clock;
     if(this.disposed||['farewell','ended'].includes(this.data.phase)||this.data.closeReason==='player')return;
     // One bounded semantic lane; no keyword matching, and no need to wait for singing.
     if(this.inputQueue.length>=16)this.inputQueue.shift();
@@ -76,7 +78,7 @@ export class SessionControl {
     const player=context.host.inbox.find(m=>m.mine&&m.id===d.sourceMessageId);
     if(d.intent==='stop'){if(player)this.stop();return true;}
     if(d.intent==='close'){
-      if(this.s.scene?.context?.mode==='first_evening' && (this.eveningElapsed()<135000 || !this.data.eveningSongComplete))return true;
+      if(this.s.scene?.context?.mode==='first_evening' && !this.data.eveningSongComplete)return true;
       const e=this.s.engine;
       if(this.data.phase!=='live'||(this.s.scene?.context?.mode==='first_evening'?e._mediaPlaying():e._state.media)||e.inbox.some(m=>m.mine&&!result.handledIds.includes(m.id)))return true;
       // New inputs invalidate the engine epoch before this commit hook.
@@ -178,7 +180,10 @@ export class SessionControl {
   tick(){
     const d=this.data;if(this.disposed||d.phase==='ended')return;
     if(!this.onboarding&&this.now()>=d.hardAt){this.end('session_hard_limit');return;}
-    if(this.s.scene?.context?.mode==='first_evening' && this.normal && this.eveningElapsed()>=140000 && d.eveningSongComplete && !this.s.engine._active && !this.s.engine._mediaPlaying()){this.begin('host');return;}
+    if(this.normal&&this.eveningSongDue()&&!d.eveningSongRequested){
+      d.eveningSongRequested=true;const e=this.s.engine;e.epoch++;e.pending?.abort();e.pending=null;e._cancelPreparation('first_evening_song_due');e._cancelTopic('first_evening_song_due');e.speechPlan=null;e.nextWake=e._clock;this.changed();
+    }
+    if(this.s.scene?.context?.mode==='first_evening' && this.normal && d.eveningSongComplete && !this.s.engine._active && !this.s.engine._mediaPlaying()){this.begin('host');return;}
     if(this.s.scene?.context?.mode==='first_evening' && this.normal && this.eveningElapsed()>=180000 && !['starting','playing'].includes(this.s.talent.current?.phase)){this.begin('host');return;}
     if(d.deadlineAt&&this.now()>=d.deadlineAt){this.end('closing_timeout');return;}
     if(d.extensionActive&&this.now()>=d.extensionDeadline){this.begin('host');return;}

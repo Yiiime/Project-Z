@@ -294,6 +294,7 @@ namespace Seabreeze
             var text = Label("Name text", fieldRect, Vector2.zero, Vector2.zero, new Vector2(18,9), new Vector2(592,48), "", 26, new Color(.17f,.23f,.31f));
             field.textViewport = fieldRect; field.textComponent = text; field.richText = false;
             field.lineType = TMP_InputField.LineType.SingleLine; field.characterLimit = 48;
+            field.onValueChanged.AddListener(value => ZLive.ArrivalGiftView.Prewarm(value));
             var hint = Label("Name hint", card, Vector2.up, Vector2.up, new Vector2(36,-188), new Vector2(628,44), "1–12 个字，岛上的朋友会这样称呼你。", 18, new Color(.43f,.45f,.53f));
             void AcceptName()
             {
@@ -301,6 +302,7 @@ namespace Seabreeze
                 var name = PlayerIdentity.Normalize(field.text);
                 if (string.IsNullOrWhiteSpace(name)) { hint.text = "请先写下你的名字。"; field.ActivateInputField(); return; }
                 PlayerIdentity.PendingName = name;
+                ZLive.ArrivalGiftView.Prewarm(name);
                 GameSession.Instance?.FirstDay?.BeginTitleFilm();
                 ShowLoading(); enter?.Invoke(true);
             }

@@ -12,6 +12,18 @@ using Button=UnityEngine.UIElements.Button;
 
 namespace ZLive
 {
+    public sealed class ArrivalNameRenderer : MonoBehaviour
+    {
+        public Camera Camera; public RenderTexture Target;
+        System.Collections.IEnumerator Start()
+        {
+            yield return null; // CanvasRenderer needs its first layout before an offscreen capture.
+            Canvas.ForceUpdateCanvases();
+            foreach(var text in GetComponentsInChildren<TextMeshProUGUI>())text.ForceMeshUpdate();
+            UnityEngine.Rendering.RenderPipeline.SubmitRenderRequest(Camera,new UnityEngine.Rendering.Universal.UniversalRenderPipeline.SingleCameraRequest{destination=Target});
+            gameObject.SetActive(false);
+        }
+    }
     // The supplied clickable HTML is a video state machine. Keep its clip and cue times intact.
     public sealed class ArrivalGiftView : IDisposable
     {
@@ -19,7 +31,8 @@ namespace ZLive
         readonly VisualElement stage, giftHit;
         readonly Button action;
         readonly VideoPlayer player;
-        readonly GameObject host, overlayHost;
+        readonly GameObject host; GameObject overlayHost;
+        static ArrivalGiftView warming;
         readonly RenderTexture video, composite, names;
         readonly Material material;
         readonly JArray tracking;
@@ -30,10 +43,23 @@ namespace ZLive
         public bool Revealed => phase=="reward"||phase=="collect"||phase=="done";
         public bool Collected {get;private set;}
         public double PlaybackTime => player!=null?player.time:0;
-        public string PlayerName {get;}
-        public ArrivalGiftView(VisualElement parent,string playerName)
+        public string PlayerName {get;private set;}
+        public bool VideoPrepared => prepared;
+        public static void Prewarm(string value)
         {
-            PlayerName=playerName;
+            value=PlayerIdentity.Normalize(value);if(string.IsNullOrWhiteSpace(value))return;
+            if(warming==null||warming.host==null)warming=new ArrivalGiftView(new VisualElement(),value,true);
+            else if(warming.PlayerName!=value){warming.PlayerName=value;Object.Destroy(warming.overlayHost);warming.overlayHost=warming.CreateNameLayer(value);}
+        }
+        public static ArrivalGiftView TakePrepared(VisualElement parent,string value)
+        {
+            Prewarm(value);var view=warming;warming=null;
+            if(view==null)return new ArrivalGiftView(parent,value);
+            parent.Add(view.Root);view.SetPaused(false);return view;
+        }
+        public ArrivalGiftView(VisualElement parent,string playerName,bool prepareOnly=false)
+        {
+            PlayerName=playerName;suspended=prepareOnly;
             Root=new VisualElement{name="arrival-gift-overlay"};
             Root.style.position=Position.Absolute;Root.style.left=Root.style.right=Root.style.top=Root.style.bottom=0;
             Root.style.backgroundColor=new Color(.067f,.075f,.118f);Root.style.alignItems=Align.Center;Root.style.justifyContent=Justify.Center;
@@ -55,17 +81,17 @@ namespace ZLive
             parent.Add(Root);ShowAction(false);
             material=new Material(Resources.Load<Shader>("FirstDay/ArrivalNameComposite"));material.SetTexture("_Overlay",names);
             tracking=(JArray)JObject.Parse(Resources.Load<TextAsset>("FirstDay/ArrivalTracking").text)["frames"];
-            overlayHost=CreateNameLayer(playerName);host=new GameObject("Original arrival animation");
+            overlayHost=CreateNameLayer(playerName);host=new GameObject("Original arrival animation");Object.DontDestroyOnLoad(host);
             player=host.AddComponent<VideoPlayer>();player.playOnAwake=false;player.isLooping=false;player.waitForFirstFrame=true;player.skipOnDrop=false;
             player.audioOutputMode=VideoAudioOutputMode.None;player.renderMode=VideoRenderMode.RenderTexture;player.targetTexture=video;
             player.clip=Resources.Load<VideoClip>("FirstDay/ArrivalReference");
             player.prepareCompleted+=_=>{prepared=true;if(!suspended)player.Play();};player.errorReceived+=(_,error)=>failure=error;
             player.loopPointReached+=_=>{if(phase=="collect"){phase="done";Collected=true;}};player.Prepare();
         }
-        static RenderTexture Target(string name){var texture=new RenderTexture(1280,778,24,RenderTextureFormat.ARGB32){name=name};texture.Create();return texture;}
+        static RenderTexture Target(string name){var texture=new RenderTexture(2560,1556,24,RenderTextureFormat.ARGB32){name=name,filterMode=FilterMode.Bilinear,useMipMap=false};texture.Create();return texture;}
         GameObject CreateNameLayer(string value)
         {
-            var root=new GameObject("Arrival name surface");root.layer=31;
+            var root=new GameObject("Arrival name surface");root.layer=31;root.transform.position=new Vector3(10000,0,0);Object.DontDestroyOnLoad(root);
             var camera=new GameObject("Name surface camera").AddComponent<Camera>();camera.transform.SetParent(root.transform);camera.transform.localPosition=new Vector3(0,0,-10);camera.orthographic=true;camera.orthographicSize=389;camera.aspect=1280f/778;camera.nearClipPlane=.1f;camera.farClipPlane=30;camera.cullingMask=1<<31;camera.clearFlags=CameraClearFlags.SolidColor;camera.backgroundColor=Color.clear;camera.targetTexture=names;camera.enabled=false;
             var canvasObject=new GameObject("Name surface canvas",typeof(RectTransform),typeof(Canvas));canvasObject.layer=31;canvasObject.transform.SetParent(root.transform,false);
             var canvas=canvasObject.GetComponent<Canvas>();canvas.renderMode=RenderMode.WorldSpace;canvas.worldCamera=camera;((RectTransform)canvas.transform).sizeDelta=new Vector2(1280,778);
@@ -79,7 +105,7 @@ namespace ZLive
             Text(canvas.transform,"arrival-greeter","Z",new Rect(327,445,76,37),26,26);
             Text(canvas.transform,"arrival-winner-name",value,new Rect(351,363,nameWidth,37),26,21);
             Text(canvas.transform,"arrival-personal-message","码头的灯会为你亮着。"+value+"，我们岛上见。",new Rect(181,518,495,34),21,14);
-            Canvas.ForceUpdateCanvases();foreach(var text in canvas.GetComponentsInChildren<TextMeshProUGUI>())text.ForceMeshUpdate();camera.Render();root.SetActive(false);return root;
+            var renderer=root.AddComponent<ArrivalNameRenderer>();renderer.Camera=camera;renderer.Target=names;return root;
         }
         static RectTransform Rect(Transform parent,string name,Rect area){var go=new GameObject(name,typeof(RectTransform));go.layer=31;var r=go.GetComponent<RectTransform>();r.SetParent(parent,false);r.anchorMin=r.anchorMax=r.pivot=new Vector2(0,1);r.anchoredPosition=new Vector2(area.x,-area.y);r.sizeDelta=area.size;return r;}
         static void Patch(Transform parent,Texture2D paper,Rect area){var raw=Rect(parent,"Repaired original paper",area).gameObject.AddComponent<RawImage>();raw.texture=paper;raw.uvRect=new Rect(area.x/1280,1-(area.y+area.height)/778,area.width/1280,area.height/778);raw.raycastTarget=false;}
@@ -101,6 +127,6 @@ namespace ZLive
             if(visible){var h=(JArray)best["h"];var matrix=Matrix4x4.identity;matrix.m00=(float)h[0];matrix.m01=(float)h[1];matrix.m03=(float)h[2];matrix.m10=(float)h[3];matrix.m11=(float)h[4];matrix.m13=(float)h[5];matrix.m30=(float)h[6];matrix.m31=(float)h[7];matrix.m33=(float)h[8];var inverse=matrix.inverse;material.SetVector("_H0",new Vector4(inverse.m00,inverse.m01,inverse.m03,0));material.SetVector("_H1",new Vector4(inverse.m10,inverse.m11,inverse.m13,0));material.SetVector("_H2",new Vector4(inverse.m30,inverse.m31,inverse.m33,0));}
             Graphics.Blit(video,composite,material);
         }
-        public void Dispose(){Root.RemoveFromHierarchy();if(player!=null)player.Stop();Object.Destroy(host);Object.Destroy(overlayHost);Object.Destroy(material);foreach(var t in new[]{video,composite,names}){t.Release();Object.Destroy(t);}}
+        public void Dispose(){Root.RemoveFromHierarchy();if(player!=null)player.Stop();Object.Destroy(host);Object.Destroy(overlayHost);Object.Destroy(material);RenderTexture.active=null;foreach(var t in new[]{video,composite,names}){t.Release();Object.Destroy(t);}}
     }
 }

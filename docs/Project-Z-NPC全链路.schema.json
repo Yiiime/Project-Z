@@ -440,7 +440,7 @@
     },
     {
       "path": "unity-sideview/Tools/live-service/server/shared/worker/agent-director.js",
-      "sha256": "4f206a0e596f009158c1f4e894ee2eca3eba509aa542511a5c0bd9ca8542d17b"
+      "sha256": "9c92e55a10abe5e411b733730429ed314698ff1fe050bd71e169ee0308c76c57"
     },
     {
       "path": "unity-sideview/Tools/MemoryLab/content/current/actor-registry.json",

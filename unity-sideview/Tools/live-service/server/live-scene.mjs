@@ -15,7 +15,7 @@ export function scenePrompt(scene) {
     '当scene.warmup.ready=true且scene.phase=opening时，才像突然想起来一样自然提起：原来今天已经是第1000场直播，想送一位朋友来月亮岛一起生活旅游7天。说完惊喜缘由后自主调用draw_guest打开礼盒，由玩家亲手点击拆开；不要反复预告，也不要追加举手、扣字等门槛。'+
     'scene.tools仅含当前可用工具。draw_guest args={}只展示待点击礼盒，不代表已经开奖；收到实际结果后才调用offer_arrival args={title,description}，标题简短，描述包含玩家名字且不超过100字。玩家确认后才用depart_island args={}告别。没有工具可用时继续自然闲聊，不虚构开奖或接受事实。'+
     '开场只使用scene.tools中的剧情工具，不唱歌、不点歌、不开始其他活动；唱歌留到登岛后的首夜直播。调用工具时必须action=tool并携带tool={name,args}，其余必填字段照常提供；action=speak或wait时不得携带tool。speech是执行前本轮自然台词。arrival不使用收播决定，省略sessionDecision。'+(scene.tools?.includes('draw_guest')?'\n当前暖场已完成，本轮必须action=tool，tool={name:"draw_guest",args:{}}。speech由你自然表达刚想起第1000场、邀请一位朋友来岛上住七天的惊喜缘由；不再另开闲聊话题。':'');
-  if(scene.mode==='first_evening')return common+'\n首夜总时长目标150秒，包含歌曲与告别。先主动聊当日经历，同时与岛民和虚拟观众互动；每轮必须提供2–4条virtualAudience=[{name,text}]，非岛民网名、每条不超过36字。scene.elapsedMs从观众真正看到的首段发言起计。约80秒主动说想唱《晚安》祝大家晚安，然后调用start_singing，songId=wanan-yanrenzhong-vivi2-chorus。歌曲实际完成后再简短告别，约150秒结束；不要提前收播，不反复唱歌。只有真实播放完成才能说唱完。首夜六位岛民可以回应，梨园不参加。';
+  if(scene.mode==='first_evening')return common+'\n首夜纯聊天约60秒，之后唱《晚安》并简短告别。本场以主动回忆今天为主，覆盖通用直播“不用盘点一天、只在话题相关时接一句”的默认节奏。前60秒每轮先从broadcast.today和character_context选一段实际公开经历作为主体，再简短接1条弹幕；不要被观众的风凉、催衣服等闲话连续带走。开场从broadcast.today选一条原始事实，用第一人称自然转述；后续换另一条记录。回忆的动作、地点与参与者严格以原记录为限，不补写玩家表现、牵手、沿途介绍等细节。只有记录明确说一起走到广场时才讲一起走；只有抵达码头和介绍记录时就只说在码头见到你、向大家介绍你。可以讲自己当下觉得开心，不替玩家编造当时的感受，也不说逛遍全岛。不要反复问观众想聊什么、想听什么。每轮speech约35–65字，优先回应玩家；从host.inbox中选1–2条最相关弹幕自然接话，不逐条点名清空队列，wakeAfterMs=2000。每轮提供2–3条virtualAudience=[{name,text}]，非岛民网名、每条不超过36字，围绕已发生的当天经历回应；聊天未到60秒时不主动催歌。scene.elapsedMs从首句实际播放起计。60秒后若玩家无新消息，主动说给大家唱一首《晚安》祝大家晚安，再调用start_singing，songId=wanan-yanrenzhong-vivi2-chorus。若玩家正在说话，先回应玩家，再自然接歌。歌曲实际完成后立即简短告别，不再开启闲聊，不反复唱歌。首夜六位岛民可以回应，梨园不参加。'+(scene.songDue?'\n聊天已满一分钟且没有待回应的玩家消息，本轮必须action=tool，tool={name:"start_singing",args:{songId:"wanan-yanrenzhong-vivi2-chorus"}}。用一句温柔的自然台词提出给大家唱《晚安》祝大家晚安；不再等NPC弹幕队列清空。':'');
   return common+'\n首夜或日常直播由你自然展开。先接住新朋友和当日可公开经历，不照着清单汇报；想唱歌时自行选合适歌曲并调用已有唱歌工具，歌曲没有固定安排。首夜六位岛民可以回应，梨园不参加。';
 }
 export class LiveScene {
@@ -38,7 +38,7 @@ export class LiveScene {
   allowed() { if(this.context?.mode!=='arrival'||this.pending)return [];
     return this.phase==='opening'?(this.warmupStatus().ready?['draw_guest']:[]):this.phase==='drawn'?['offer_arrival']:this.phase==='accepted'?['depart_island']:[];
   }
-  binding() {return this.context?{...this.context,elapsedMs:this.session.sessionControl?.eveningElapsed?.()||0,phase:this.phase,tools:this.allowed(),invitation:this.invitation,warmup:this.warmupStatus()}:null;}
+  binding() {return this.context?{...this.context,elapsedMs:this.session.sessionControl?.eveningElapsed?.()||0,songDue:this.session.sessionControl?.eveningSongDue?.()||false,phase:this.phase,tools:this.allowed(),invitation:this.invitation,warmup:this.warmupStatus()}:null;}
   snapshot(){return {context:this.context,phase:this.phase,invitation:this.invitation,warmup:this.warmup,completedSpeeches:[...this.completedSpeeches]};}
   execute(tool) {
     if(!this.allowed().includes(tool.name))return false;

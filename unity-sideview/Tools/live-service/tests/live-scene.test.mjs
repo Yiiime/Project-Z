@@ -65,7 +65,7 @@ test('lottery result needs player activation and matching name',()=>{
 test('first evening requires mixed virtual audience and a timed goodnight song',async()=>{
  const {scenePrompt}=await import('../server/live-scene.mjs');
  const prompt=scenePrompt({...input,mode:'first_evening'});
- assert(prompt.includes('150秒'));assert(prompt.includes('virtualAudience'));assert(prompt.includes('wanan-yanrenzhong-vivi2-chorus'));
+ assert(prompt.includes('纯聊天约60秒'));assert(prompt.includes('broadcast.today'));assert(prompt.includes('virtualAudience'));assert(prompt.includes('wanan-yanrenzhong-vivi2-chorus'));
 });
 
 test('collecting the displayed gift can accept immediately without another host turn',()=>{
@@ -99,4 +99,11 @@ test('first evening host must carry virtual chat in addition to the NPC lane',as
  const speech={action:'speak',speech:'今晚一起聊聊。',mood:'warm',handledIds:[],wakeAfterMs:2000,memory:'',agendaUpdates:[]};
  assert.throws(()=>parseAgentReply(speech,{kind:'host',context}),/invalid_evening_virtual_audience/);
  assert.equal(parseAgentReply({...speech,virtualAudience:[{name:'海风',text:'晚上好呀'},{name:'月光',text:'来听你聊天'}]},{kind:'host',context}).virtualAudience.length,2);
+});
+
+test('first evening song cue does not wait for another virtual audience round',async()=>{
+ const {parseAgentReply}=await import('../server/shared/worker/agent-director.js');
+ const context={host:{inbox:[]},mediaRuntime:{audioEnabled:true},scene:{...input,mode:'first_evening',songDue:true,phase:'opening',tools:[]}};
+ const speech={actorId:'z',delivery:'温柔地说。',expression:'neutral',action:'tool',tool:{name:'start_singing',args:{songId:'wanan-yanrenzhong-vivi2-chorus'}},speech:'给大家唱一首晚安，祝大家晚安。',mood:'warm',handledIds:[],wakeAfterMs:2000,memory:'',agendaUpdates:[],virtualAudience:[]};
+ assert.equal(parseAgentReply(speech,{kind:'host',context}).tool.name,'start_singing');
 });

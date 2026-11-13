@@ -29,7 +29,11 @@ class NativeConversationEngine extends CallConversationEngine {
    }
    return result;
  }
- _hostContext(...args){const context=super._hostContext(...args);if(this.sessionControl)context.host.sessionControl=this.sessionControl.snapshot();return context;}
+ _hostContext(inbox,...args){
+   if(this.liveScene?.context?.mode==='first_evening')inbox=[...inbox.filter(m=>m.mine),...inbox.filter(m=>!m.mine).slice(-3)];
+   const context=super._hostContext(inbox,...args);if(this.sessionControl)context.host.sessionControl=this.sessionControl.snapshot();return context;
+ }
+ _wakeDelay(result){const delay=super._wakeDelay(result);return this.liveScene?.context?.mode==='first_evening'?Math.min(delay,2000):delay;}
  _recapTurn(){
    if(this.liveScene?.context)return false;
    return this.sessionControl?.normal && this.broadcast?.nextItem() && !this._state.call.active &&
@@ -84,12 +88,18 @@ export class LiveSession extends EventEmitter {
  }
  async refreshCharacterMemory(){if(!this.characters||!this.broadcast)return;await this.characters.flush();const projection=await this.characters.post('projection');const {ok,...view}=projection;this.broadcast.refresh({...this.broadcast.binding,...view});}
  async initialize(){await this.refreshCharacterMemory();const config=await this.providers.config(this.id);this.engine.configureAgent({sentenceStreaming:true,generate:async(p,o)=>{
+    if(p.kind==='host'&&this.sessionControl.eveningSongDue())return {action:'tool',actorId:'z',delivery:'轻声温柔地说，带着笑意。',expression:'neutral',speech:'给大家唱一首《晚安》，祝大家晚安。',mood:'warm',gesture:'none',transition:'smooth',handledIds:[],wakeAfterMs:2000,continuation:'await_event',memory:'',agendaUpdates:[],tool:{name:'start_singing',args:{songId:'wanan-yanrenzhong-vivi2-chorus'}}};
     if(p.kind==='audience'&&this.scene.context?.mode==='arrival')return {requestId:p.requestId,status:'skip',items:[],source:'runtime'};
     if(p.kind==='audience'&&this.scene.context?.mode==='first_evening'&&p.context.audience?.eligibleNpcIds)p.context.audience.eligibleNpcIds=p.context.audience.eligibleNpcIds.filter(id=>id!=='liyuan');
     const hostSide=p.kind==='host'||p.kind==='repair'||(p.kind==='review'&&p.context.candidate?.role==='host');
     if(hostSide)await this.refreshCharacterMemory();
     const cue=p.context?.host?.inbox?.findLast(m=>m.mine)?.text;
     const memory=hostSide?this.broadcast?.recall(cue):null;
+    // First-night memories are already public world facts, including before their first retelling on stream.
+    if(memory&&this.scene.context?.mode==='first_evening'){
+      memory.today=[...this.broadcast.binding.today];
+      memory.entries=[...new Map([...memory.entries,...this.broadcast.binding.entries.filter(e=>e.layer==='daily'&&e.speaker==='engine')].map(e=>[e.id,e])).values()];
+    }
     const daytimeTasks=memory?.daySongs.length?this.broadcast.songTasks().filter(t=>
       this.broadcast.visibleSongs(cue).some(s=>s.sourceId===t.sourceId)):[];
     const reply=await this.providers.generate(this.id,p,{...o,character:this.characters,daytimeTasks,sceneContext:this.scene.binding(),broadcastContext:memory,songSession:memory?this.engine.session.id:null});
@@ -98,7 +108,9 @@ export class LiveSession extends EventEmitter {
          this.broadcast.offer.step===proposal.step && this.broadcast.offer.source===this.broadcast.lastTopic?.id)
         this.broadcast.offer.quote=proposal.quote;
       return reply;
-  },fetch:(route,options)=>this.providers.singingFetch(route,options),cancel(){}},config);this.engine.setPaused(true);this.engine.start();this.phase='paused';if(this.sessionControl.data.phase==='ended'){this.phase='ended';this.sessionControl.dispose();}else if(!this.sessionControl.normal)this.sessionControl.end('server_restarted_during_close');this.sessionControl.tick();this.flush();return this;}
+  },fetch:(route,options)=>this.providers.singingFetch(route,options),cancel(){}},config);
+  if(this.scene.context?.mode==='first_evening'){this.engine.handoffEnabled=false;this.engine.audience.setConfig({handoff:false});}
+  this.engine.setPaused(true);this.engine.start();this.phase='paused';if(this.sessionControl.data.phase==='ended'){this.phase='ended';this.sessionControl.dispose();}else if(!this.sessionControl.normal)this.sessionControl.end('server_restarted_during_close');this.sessionControl.tick();this.flush();return this;}
  restore(saved){const e=this.engine,x=saved.engine;Object.assign(e,{_state:x.state,_clock:x.clock,_speechId:x.speechId,_messageId:x.messageId,inbox:x.inbox,facts:x.facts,memory:x.memory});Object.assign(e.session,x.session);e._state.call=e._emptyCall();e._state.paused=true;e._state.currentSpeech=null;e._state.speaking=false;e._state.media=null;
   e.audience.events=copy(x.facts);for(const fact of x.facts)e.audience.dialogue.record(fact);
   // Retire unfinished activities from older sessions without replaying them.
@@ -131,7 +143,7 @@ export class LiveSession extends EventEmitter {
  async presentHost(detail){const controller=new AbortController();this.hostController?.abort();this.hostController=controller;const epoch=this.epoch;try{
   const replyTo=this.engine.speechLinks.get(detail.id)||[],recipientIds=[...new Set(replyTo.map(id=>this.engine.session.events.find(e=>e.id===id)?.speakerId).filter(Boolean))];
   let audio=null,reason=null;const closing=!this.sessionControl.normal;
-  if(this.engine._state.call.active&&this.speech.enabled&&this.speech.available&&!closing){
+  if((this.engine._state.call.active||this.scene.context?.mode==='first_evening')&&this.speech.enabled&&this.speech.available&&!closing){
    const stream=this.speech.claimStream(detail.preparedAudioKey,detail.text,detail.mood,controller.signal,detail.delivery);
    this.command('host.present',{...utteranceMetadata('z',detail,{allowLegacy:true}),replyTo,recipientIds,speechId:String(detail.id),text:detail.text,mood:detail.mood,gesture:detail.gesture,transition:detail.transition,modality:'pcm-stream',audioStreamId:stream.id,words:[]});return;
   }
@@ -192,8 +204,10 @@ export class LiveSession extends EventEmitter {
   if(c.payload.modality==='pcm-stream'&&['progress','completed'].includes(p.status)){const stream=this.speech.streams.get(c.payload.audioStreamId);if(!stream||p.positionMs>stream.bytes/48+5)throw Error('invalid_position');if(p.status==='completed'&&(!stream.done||stream.error||p.positionMs<stream.durationMs-5))throw Error('not_finished');}
   const failed=['failed','skipped','interrupted'].includes(p.status);
   if(c.type==='story.present'){this.scene.receipt(c,p);}
-  else if(c.type==='virtual_audience.present'){if(!failed){this.scene.audienceDisplayed();const message=this.engine._message(c.payload.text,{id:c.payload.messageId,name:c.payload.name,type:'chat'});this.engine._cancelTopic('virtual_audience_displayed');this.engine._cancelPreparation('virtual_audience_displayed');this.engine._receive(message,false,'virtual_'+c.payload.messageId,{recipientIds:['z']});}}
+  else if(c.type==='virtual_audience.present'){if(!failed){this.scene.audienceDisplayed();const message=this.engine._message(c.payload.text,{id:c.payload.messageId,name:c.payload.name,type:'chat'});if(this.scene.context?.mode!=='first_evening'){this.engine._cancelTopic('virtual_audience_displayed');this.engine._cancelPreparation('virtual_audience_displayed');}this.engine._receive(message,false,'virtual_'+c.payload.messageId,{recipientIds:['z']});}}
   else if(c.type==='host.present'){
+   // Start the prepared animation as the reviewed lottery announcement starts speaking.
+   if(p.status==='started' && this.engine.speechPlan?.result?.tool?.name==='draw_guest' && this.scene.allowed().includes('draw_guest'))this.scene.execute(this.engine.speechPlan.result.tool);
    if(failed)this.interruptSpeech(p.reason||p.status);
    else if(p.status==='progress'&&typeof p.text==='string'){if(!c.payload.text.startsWith(p.text)||p.text.length<(c.textLength||0))throw Error('invalid_progress');this.engine.recordSpeechProgress(Number(p.speechId),p.text);c.textLength=p.text.length;}
    else if(p.status==='completed'){if(!this.engine.completeSpeech(Number(p.speechId)))throw Error('state_conflict');}

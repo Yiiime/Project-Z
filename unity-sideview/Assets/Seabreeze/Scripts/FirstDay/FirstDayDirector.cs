@@ -189,7 +189,7 @@ namespace Seabreeze
             float end = Time.unscaledTime + NpcSpeechBubble.ReadDuration(text);
             while (Time.unscaledTime < end) { bubble.Tick(false); yield return null; }
             var audience = Cast.Concat(new[] { "player" }).ToArray();
-            session.Memory.PublishStoryEvent("player_introduced", "Z 向在场的人介绍新朋友：" + text, audience, true);
+            session.Memory.PublishStoryEvent("player_introduced", "Z 陪" + PlayerIdentity.DisplayName + "从码头来到市民广场，并向在场的朋友介绍这位新朋友：" + text, audience, true);
             session.State.firstDay.announced = true; session.State.firstDay.stageVersion++; session.Save(); busy = false;
         }
         IEnumerator OpenHarborConversation()

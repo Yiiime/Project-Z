@@ -8,10 +8,14 @@ Shader "Hidden/ProjectZ/ArrivalNameComposite"
  #include "UnityCG.cginc"
  sampler2D _MainTex, _Overlay;
  float4 _H0,_H1,_H2,_NameRect;
+ float4 _MainTex_TexelSize;
  float edge(float2 p,float4 r){float2 d=min(p-r.xy,r.xy+r.zw-p);return saturate(min(d.x,d.y)/6); }
  float _Visible;
  fixed4 frag(v2f_img i):SV_Target {
   fixed4 video=tex2D(_MainTex,i.uv);
+  float2 d=_MainTex_TexelSize.xy*2;
+  fixed3 neighbors=(tex2D(_MainTex,i.uv+float2(d.x,0)).rgb+tex2D(_MainTex,i.uv-float2(d.x,0)).rgb+tex2D(_MainTex,i.uv+float2(0,d.y)).rgb+tex2D(_MainTex,i.uv-float2(0,d.y)).rgb)*.25;
+  video.rgb=saturate(video.rgb+(video.rgb-neighbors)*.4);
   float3 p=float3(i.uv.x*1280,(1-i.uv.y)*778,1);
   float z=dot(_H2.xyz,p);
   float2 original=float2(dot(_H0.xyz,p),dot(_H1.xyz,p))/z;
