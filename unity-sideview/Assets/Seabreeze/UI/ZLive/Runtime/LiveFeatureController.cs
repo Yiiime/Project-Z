@@ -14,18 +14,20 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     Label status,caption;ScrollView chat;TextField input;JObject state;
     readonly ConcurrentQueue<JObject> events=new ConcurrentQueue<JObject>();readonly ConcurrentQueue<string> connections=new ConcurrentQueue<string>();
     readonly Dictionary<string,CancellationTokenSource> running=new Dictionary<string,CancellationTokenSource>();readonly Dictionary<string,JObject> outcomes=new Dictionary<string,JObject>();readonly HashSet<string> messageIds=new HashSet<string>();
-    readonly CancellationTokenSource life=new CancellationTokenSource();readonly HashSet<TaskCompletionSource<bool>> frameWaiters=new HashSet<TaskCompletionSource<bool>>();float heartbeatAt;bool connected,locallyPaused=true,disposed,leaving;string pendingBase,pendingToken,pendingPin;string SessionKey {get {using(var sha=System.Security.Cryptography.SHA256.Create())return "ZLive.Session."+BitConverter.ToString(sha.ComputeHash(System.Text.Encoding.UTF8.GetBytes(pendingBase+"|"+pendingToken+(liveMemory==null?"":"|"+liveMemory.Key)))).Replace("-","");}}
+    readonly CancellationTokenSource life=new CancellationTokenSource();readonly HashSet<TaskCompletionSource<bool>> frameWaiters=new HashSet<TaskCompletionSource<bool>>();float heartbeatAt;bool connected,locallyPaused=true,disposed,leaving;string pendingBase,pendingToken,pendingPin;string SessionKey {get {using(var sha=System.Security.Cryptography.SHA256.Create())return "ZLive.Session."+BitConverter.ToString(sha.ComputeHash(System.Text.Encoding.UTF8.GetBytes(pendingBase+"|"+pendingToken+(liveMemory==null?"":"|"+liveMemory.Key)+"|"+(string)characterBinding?["worldId"]+"|"+(string)characterBinding?["runId"]))).Replace("-","");}}
     LiveMemoryBridge liveMemory;
+    public Func<Task<JObject>> BindCharacters;public Func<Task> ReleaseCharacters;JObject characterBinding;
     public Action ExitRequested;
     public Action<string> SessionEnded;
     bool sessionEndNotified;
     public void Configure(string serviceUrl,string gameSessionToken){pendingBase=serviceUrl;pendingToken=gameSessionToken;}
     async void Start(){try{character=gameObject.AddComponent<CharacterPresenter>();character.Initialize();audioPlayer=gameObject.AddComponent<LiveAudioPlayer>();audioPlayer.Character=character;character.Audio=audioPlayer.Source;audioPlayer.Frame=NextFrame;audioPlayer.Receipt=Report;audioPlayer.Caption=SetHostCaption;gameObject.AddComponent<NativeRtcAudioReference>();BuildUI();BuildCompanionUI();
-#if !UNITY_EDITOR
-        // A local playtest launcher can select its own connection without modifying the signed app.
+        // Explicit local connections take precedence in editor verification as
+        // well as players; never fall back to a user's service during a test.
         var connectionFile=Environment.GetEnvironmentVariable("Z_LIVE_CONNECTION_FILE");
         if(string.IsNullOrEmpty(pendingBase)&&!string.IsNullOrWhiteSpace(connectionFile))
             ReadConnection(connectionFile);
+#if !UNITY_EDITOR
         if(string.IsNullOrEmpty(pendingBase))ReadConnection(Path.Combine(Application.dataPath,"Resources","zlive-connection.json"));
 #endif
         if(string.IsNullOrEmpty(pendingBase)) {
@@ -42,7 +44,8 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
         liveMemory=LiveMemoryBridge.Open();
         if(liveMemory!=null)await liveMemory.WaitForDaytimeSync();
         if(leaving||disposed)return;
-        state=await transport.Enter(PlayerPrefs.GetString(SessionKey,""),!muted&&audioPlayer.Source.volume>0,character.Ready,liveMemory?.Binding());if(leaving||disposed){await transport.Control("end");return;}PlayerPrefs.SetString(SessionKey,transport.SessionId);PlayerPrefs.Save();ApplyState(state);await transport.Control("resume");
+        if(BindCharacters!=null&&characterBinding==null)characterBinding=await BindCharacters();
+        state=await transport.Enter(PlayerPrefs.GetString(SessionKey,""),!muted&&audioPlayer.Source.volume>0,character.Ready,liveMemory?.Binding(),characterBinding);if(leaving||disposed){await transport.Control("end");return;}PlayerPrefs.SetString(SessionKey,transport.SessionId);PlayerPrefs.Save();ApplyState(state);await transport.Control("resume");
         // A new Unity process cannot prove an old audio instance completed. Never replay it silently.
         foreach(JObject c in (JArray)state["pendingCommands"]){if((string)c["type"]=="host.present"||(string)c["type"]=="media.play"||(string)c["type"]=="audience.present")await Report(c,new JObject{{"status","interrupted"},{"reason","client_restarted"}});else Queue(c);}
         connected=true;_=Observe(transport.Subscribe());locallyPaused=false;audioPlayer.Pause(false);await SyncAudioCapabilities();UpdateCallView();
@@ -85,7 +88,7 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     async Task VisibleFrame(VisualElement element,CancellationToken cancel){await NextFrame();await NextFrame();cancel.ThrowIfCancellationRequested();if(!(Application.isFocused||(Application.isBatchMode&&document.panelSettings.targetTexture!=null))||!element.visible||element.resolvedStyle.display==DisplayStyle.None||element.worldBound.width<=0||element.worldBound.height<=0)throw new Exception("not_visible");}
     Task NextFrame(){var tcs=new TaskCompletionSource<bool>();if(disposed){tcs.SetCanceled();return tcs.Task;}frameWaiters.Add(tcs);StartCoroutine(EndFrame(tcs));return tcs.Task;}
     IEnumerator EndFrame(TaskCompletionSource<bool> tcs){yield return null;frameWaiters.Remove(tcs);if(disposed||leaving)tcs.TrySetCanceled();else tcs.TrySetResult(true);}
-    void ApplyState(JObject snapshot){liveMemory?.Receive((string)snapshot["sessionId"],snapshot["memoryEvents"] as JArray);state=snapshot;UpdateCallView();character.SetWaiting((bool?)snapshot["performance"]?["waiting"]??false);
+    void ApplyState(JObject snapshot){liveMemory?.Receive((string)snapshot["sessionId"],snapshot["memoryEvents"] as JArray,characterBinding!=null);state=snapshot;UpdateCallView();character.SetWaiting((bool?)snapshot["performance"]?["waiting"]??false);
         foreach(JObject e in (JArray)(snapshot["publicEvents"]??new JArray())){string id=(string)e["id"],type=(string)e["type"];if(messageIds.Contains(id)||!(type=="player.message"||type=="npc.message"||type=="speech.completed"))continue;messageIds.Add(id);if(snapshot["room"]?["messages"]==null)AddChat(type=="speech.completed"?"Z":type=="player.message"?"你":NpcName((string)e["speakerId"]),(string)e["text"],type=="player.message");}
         foreach(JObject message in (JArray)(snapshot["room"]?["messages"]??new JArray())){string id="message:"+(string)message["id"];if(messageIds.Add(id)&&(string)message["type"]!="z")AddChat((string)message["name"]??"小屋通知",(string)message["text"],(bool?)message["mine"]==true,(string)message["type"]=="system");}
         if((string)snapshot["phase"]=="paused"){locallyPaused=true;audioPlayer.Pause(true);}
@@ -114,7 +117,7 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
             Error(e);Toast(FriendlyError(e));
         }finally{sendingInput=false;if(!disposed)RefreshSessionControls();}
     }
-    public async Task Leave(){leaving=true;CancelCompanion();CancelAll();PlayerPrefs.DeleteKey(SessionKey);if(transport!=null)await transport.Control("end");}
+    public async Task Leave(){leaving=true;CancelCompanion();CancelAll();PlayerPrefs.DeleteKey(SessionKey);if(transport!=null&&!string.IsNullOrEmpty(transport.SessionId))await transport.Control("end");if(ReleaseCharacters!=null)await ReleaseCharacters();}
     public void StopPlayback(){leaving=true;CancelCompanion();locallyPaused=true;CancelAll();audioPlayer?.Pause(true);}
     bool resuming;
     async Task ResumeRoom(){

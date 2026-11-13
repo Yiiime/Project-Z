@@ -1,0 +1,101 @@
+{
+  "checked": 122,
+  "failures": [],
+  "results": [
+    {
+      "probe": "retry_same_utterance_request",
+      "first": 200,
+      "retry": 400,
+      "error": "该角色正在处理另一回合"
+    },
+    {
+      "probe": "Unity_task_accept_reply",
+      "http": 200,
+      "task": "dock_sort"
+    },
+    {
+      "probe": "new_event_id_same_proposal",
+      "http": 200,
+      "expectedAck": 5,
+      "returnedAck": 4
+    },
+    {
+      "probe": "silent_endpoint_commits_nonempty_dialogue",
+      "http": 200,
+      "storedText": "我先自己想一想。"
+    },
+    {
+      "probe": "receipt_relabels_conversation",
+      "http": 200,
+      "storedConversation": "different-conv"
+    },
+    {
+      "probe": "completed_text_diverges_from_played_prefix",
+      "http": 200,
+      "record": "另一个结尾"
+    },
+    {
+      "probe": "progress_after_complete_reopens_publication",
+      "http": 200,
+      "newEventId": "live_c36613be1120e81e02d14f52d2afbac5a23309a7"
+    },
+    {
+      "probe": "lab_full_data_task_tables",
+      "exportedKeys": [
+        "ok",
+        "worldId",
+        "runId",
+        "contentVersion",
+        "state",
+        "records",
+        "actor",
+        "initialRelationships",
+        "observerView",
+        "results"
+      ],
+      "hasRawTaskCheckpoint": false,
+      "actualFollowups": 1
+    },
+    {
+      "probe": "invalid_actor_info_checkpoint",
+      "runtime": "accepted",
+      "schemaAccepts": false
+    },
+    {
+      "probe": "new_input_with_unacknowledged_prior_reply",
+      "http": 400,
+      "error": "该角色正在处理另一回合"
+    },
+    {
+      "probe": "failed_restore_changes_old_proposal",
+      "error": "table task_state has no column named unexpected_column",
+      "before": "pending",
+      "after": "cancelled",
+      "runId": "orphan_run"
+    },
+    {
+      "probe": "move_action_receipt_roundtrip",
+      "http": 200,
+      "atProposal": "z_home",
+      "afterReceipt": "flower_shop",
+      "actionStatus": "succeeded",
+      "nextTurnPreviousResult": {
+        "status": "succeeded",
+        "action_type": "move",
+        "effect_scope": "world_action",
+        "action_id": "action_proposal_c7449de8908b4871",
+        "event_id": "move-done",
+        "summary": "已实际到达花店。"
+      },
+      "nextTurnEvidence": [
+        "action_proposal_c7449de8908b4871"
+      ]
+    },
+    {
+      "probe": "new_event_id_same_action_receipt",
+      "http": 200,
+      "expectedAck": 4,
+      "returnedAck": 3
+    }
+  ]
+}

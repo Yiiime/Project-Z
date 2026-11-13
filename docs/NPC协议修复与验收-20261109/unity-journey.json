@@ -1,0 +1,71 @@
+{
+  "startX": 3.4,
+  "dialogue": "好，我们去花店。",
+  "selectedAction": {
+    "action_id": "move_flower_shop",
+    "type": "move",
+    "target": "flower_shop",
+    "parameters": {
+      "origin": "z_home",
+      "route": [
+        "z_home",
+        "residential_middle",
+        "public_middle",
+        "flower_shop"
+      ]
+    },
+    "description": "move"
+  },
+  "pausedWhileTalking": true,
+  "walkingX": 2.59604526,
+  "midJourneyPause": true,
+  "continueDialogue": "那我们继续走，到了再聊。",
+  "actionReceipt": {
+    "id": "action_proposal_8faba46c49a74954",
+    "experimentId": "world_fee4e4173774468e8aaff778c8e0dbfc",
+    "epoch": 2,
+    "hour": 9.3333333333333339,
+    "actor": "z",
+    "type": "move",
+    "target": "flower_shop",
+    "parameters": {
+      "origin": "z_home",
+      "route": [
+        "z_home",
+        "residential_middle",
+        "public_middle",
+        "flower_shop"
+      ]
+    },
+    "status": "succeeded",
+    "receiptPayload": "{\"result\":{\"scene\":\"flower_shop\",\"summary\":\"已实际走到目的地：flower_shop。\"},\"success\":true}",
+    "receiptId": "evt_99c32a0853a548b39e0f0fe7f45c0a40",
+    "receiptHour": 9.3333333333333339
+  },
+  "finalX": -5.956254,
+  "arrivalEvent": {
+    "id": "evt_99c32a0853a548b39e0f0fe7f45c0a40",
+    "experimentId": "world_fee4e4173774468e8aaff778c8e0dbfc",
+    "epoch": 2,
+    "hour": 9.3333333333333339,
+    "seq": 5,
+    "text": "已实际走到目的地：flower_shop。",
+    "kind": "fact",
+    "speaker": "engine",
+    "visible": [
+      "z"
+    ],
+    "disclose_to": [
+      "z"
+    ],
+    "importance": 2,
+    "conversationId": "",
+    "recipient": "",
+    "channel": "",
+    "location": "flower_shop",
+    "sources": [],
+    "game_payload_hash": "d2587d1f24c537c4e6e8a305c46c9ee64ad6ba72880aa38f3e7666306f007d03"
+  },
+  "passed": true,
+  "phase": 11
+}

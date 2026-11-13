@@ -1,0 +1,191 @@
+{
+  "passed": true,
+  "source": "Unity Play Mode; real V3 model and LiveAudioPlayer; text-only playback, no TTS credentials",
+  "checks": [
+    {
+      "name": "native_v3_ready",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Z_keys_equal_user_json",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "selected_neutral",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "reset_neutral",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "selected_happy",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "parameters_happy",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "reset_happy",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "selected_sad",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "parameters_sad",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "reset_sad",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "selected_shy",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "parameters_shy",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "reset_shy",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "selected_serious",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "parameters_serious",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "reset_serious",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "selected_happy_wave",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "parameters_happy_wave",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "reset_happy_wave",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "selected_cry",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "authored_clip_cry",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "reset_cry",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "selected_bawl",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "authored_clip_bawl",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "reset_bawl",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "selected_surprise",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "authored_clip_surprise",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "reset_surprise",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "selected_starry_curious",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "authored_clip_starry_curious",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "reset_starry_curious",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "invalid_alias_resets_neutral",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "wire_expression_overrides_mood",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "subtitle_only_spoken_text",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "actual_playback_receipts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "post_playback_reset",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "host_cannot_impersonate_NPC",
+      "passed": true,
+      "detail": ""
+    }
+  ]
+}

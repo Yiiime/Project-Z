@@ -37,6 +37,9 @@ namespace Seabreeze
         int simulatedIndex;
         bool initialized, available, wasBlocked = true;
         bool interactionHold;
+        bool passOtherActors;
+        string unsupportedReason;
+        public string LastStartFailure { get; private set; }
         float previousVisualX;
         bool hasVisualPosition;
 
@@ -48,6 +51,9 @@ namespace Seabreeze
         public bool SimulateDecisions { get => simulateDecisions; set => simulateDecisions = value; }
         public NpcMoveResult LastResult { get; private set; }
         public event Action<NpcMoveResult> MovementFinished;
+        public event Action MovementStarted;
+        public string ActiveRequestId => activeRequest;
+        public string TargetId => target?.id;
 
         bool InCurrentWorld => initialized && isActiveAndEnabled && available && presence != null
             && presence.isActiveAndEnabled && session != null && session == GameSession.Instance && session.IsReady
@@ -55,6 +61,15 @@ namespace Seabreeze
             && presence.location == session.CurrentPlace && gameObject.scene == stage.gameObject.scene;
         bool CanAct => InCurrentWorld && !session.NonPlayerInputBlocked && !interactionHold && !world.IsTransitioning && Time.timeScale > 0;
         public bool InteractionHeld => interactionHold;
+        public void RebaseIdleArea()
+        {
+            // Reaching a committed destination changes the local idle area;
+            // old spawn-relative wandering must not immediately undo the trip.
+            if (authoredPoints != null)
+                foreach (var point in authoredPoints)
+                    resolved[point.id] = new NpcDestination(point.id, body.position + point.position, point.facing);
+            nextDecisionTime = Time.time + 8;
+        }
         public void SetInteractionHold(bool value)
         {
             if (value && !interactionHold) Interrupt("conversation_hold");
@@ -63,13 +78,20 @@ namespace Seabreeze
         }
         public bool CanReachConversationPoint(Vector2 point) => InCurrentWorld && Finite(point) && IsSupportedTarget(new NpcDestination("conversation", point));
         public bool MoveForConversation(Vector2 point, int facing)
+            => MoveToPoint(point,facing,false);
+        public bool MoveToPoint(Vector2 point,int facing,bool passActors)
         {
-            if (!CanAct || !CanReachConversationPoint(point)) return false;
+            LastStartFailure=null;
+            if(!CanAct){LastStartFailure="actor_busy";return false;}
+            passOtherActors=passActors;
+            if (!CanReachConversationPoint(point)){LastStartFailure=unsupportedReason??"unreachable_ground_or_obstacle";passOtherActors=false;return false;}
             resolved["conversation"] = new NpcDestination("conversation", point, facing);
             var request = BeginDecision();
-            if (request == null) return false;
+            if (request == null){LastStartFailure="actor_busy";passOtherActors=false;return false;}
             var output = new NpcMoveOutput { dialogue = "", action = new NpcMoveCommand { type = "move", target = "conversation", action_id = "move_conversation" }, info = new NpcMoveOutput.ActorInfo { actor_id = ActorId } };
-            return AcceptDecision(request.request_id, JsonUtility.ToJson(output), out _);
+            bool accepted=AcceptDecision(request.request_id, JsonUtility.ToJson(output), out var reason);
+            if(!accepted){LastStartFailure=reason;passOtherActors=false;}
+            return accepted;
         }
 
         public void Configure(NpcPresence owner, CharacterVisual artwork, NpcDestination[] points)
@@ -273,6 +295,7 @@ namespace Seabreeze
             // State is committed before a receipt listener can submit a newer destination.
             Publish(interrupted);
             Publish(waiting);
+            if (next != null) MovementStarted?.Invoke();
             return true;
         }
 
@@ -280,20 +303,21 @@ namespace Seabreeze
 
         bool IsSupportedTarget(NpcDestination point)
         {
+            unsupportedReason=null;
             if (point.position.x < -stage.width / 2 + .5f || point.position.x > stage.width / 2 - .5f
-                || Mathf.Abs(point.position.y - body.position.y) > .15f) return false;
+                || Mathf.Abs(point.position.y - body.position.y) > .15f){unsupportedReason="outside_scene_or_height";return false;}
             float dx = point.position.x - body.position.x;
             int steps = Mathf.Max(1, Mathf.CeilToInt(Mathf.Abs(dx) / .25f));
             for (int i = 0; i <= steps; i++)
             {
                 Vector2 feet = Vector2.Lerp(body.position, point.position, (float)i / steps);
-                if (!TryGround(feet, out float floor) || Mathf.Abs(floor - feet.y) > .15f) return false;
+                if (!TryGround(feet, out float floor) || Mathf.Abs(floor - feet.y) > .15f){unsupportedReason="unsupported_ground";return false;}
             }
             if (Mathf.Abs(dx) <= ArrivalDistance) return true;
             Vector2 direction = dx < 0 ? Vector2.left : Vector2.right;
             int count = capsule.Cast(direction, ObstacleFilter(), hits, Mathf.Abs(dx) + Skin);
             for (int i = 0; i < count; i++)
-                if (BlocksHorizontal(hits[i], direction) && hits[i].distance < Mathf.Abs(dx) + Skin) return false;
+                if (BlocksHorizontal(hits[i], direction) && hits[i].distance < Mathf.Abs(dx) + Skin){unsupportedReason="obstructed:"+hits[i].collider.name;return false;}
             return true;
         }
 
@@ -306,8 +330,10 @@ namespace Seabreeze
 
         bool BlocksHorizontal(RaycastHit2D hit, Vector2 direction)
         {
+            if(passOtherActors&&hit.collider.GetComponentInParent<NpcPresence>()!=null)return false;
             if (hit.collider.attachedRigidbody == body || Vector2.Dot(hit.normal, direction) > -.1f
-                || hit.collider.GetComponentInParent<PlayerController>() != null) return false;
+                || hit.collider.GetComponentInParent<PlayerController>() != null
+                || hit.collider.GetComponentInParent<NpcPresence>() != null) return false;
             var platform = hit.collider.GetComponent<PlatformEffector2D>();
             return !hit.collider.usedByEffector || platform == null || !platform.useOneWay;
         }
@@ -359,16 +385,21 @@ namespace Seabreeze
                 return;
             }
             float remaining = Mathf.Max(0, Mathf.Abs(distance) - ArrivalDistance * .5f);
-            float desired = Mathf.Sign(distance) * Mathf.Min(maxSpeed, Mathf.Sqrt(2 * deceleration * remaining));
+            if(passOtherActors&&world.Player!=null&&Mathf.Abs(world.Player.position.x-target.position.x)>1.5f)
+                remaining=Mathf.Min(remaining,Mathf.Max(0,Mathf.Sign(distance)*(world.Player.position.x-body.position.x)-1f));
+            // An accepted companion can keep pace with the player without
+            // changing ordinary wandering speed or ignoring physical walls.
+            float travelSpeed=passOtherActors&&world.Player!=null?Mathf.Max(maxSpeed,world.Player.GetComponent<PlayerController>().speed*1.1f):maxSpeed;
+            float desired = Mathf.Sign(distance) * Mathf.Min(travelSpeed, Mathf.Sqrt(2 * deceleration * remaining));
             if (visual.UsesNpcStateMotion)
             {
                 if (!visual.HasNpcMotionRoute) visual.BeginNpcMotionRoute(Mathf.Abs(distance));
                 desired *= visual.NpcRouteSpeedFactor;
             }
-            float rate = Mathf.Sign(speed) != Mathf.Sign(desired) || Mathf.Abs(desired) < Mathf.Abs(speed) ? deceleration : acceleration;
+            float rate = Mathf.Sign(speed) != Mathf.Sign(desired) || Mathf.Abs(desired) < Mathf.Abs(speed) ? deceleration : passOtherActors?Mathf.Max(acceleration,14f):acceleration;
             speed = Mathf.MoveTowards(speed, desired, rate * dt);
             float step = speed * dt;
-            if (Mathf.Sign(step) == Mathf.Sign(distance)) step = Mathf.Sign(step) * Mathf.Min(Mathf.Abs(step), Mathf.Abs(distance));
+            if (Mathf.Sign(step) == Mathf.Sign(distance)) step = Mathf.Sign(step) * Mathf.Min(Mathf.Abs(step), Mathf.Min(Mathf.Abs(distance),remaining+.01f));
             Vector2 direction = step < 0 ? Vector2.left : Vector2.right;
             float travel = Mathf.Abs(step);
             int count = capsule.Cast(direction, ObstacleFilter(), hits, travel + Skin);
@@ -413,6 +444,7 @@ namespace Seabreeze
 
         public void Interrupt(string reason = "cancelled")
         {
+            passOtherActors=false;
             InvalidateRequest();
             Finish(NpcMoveOutcome.Interrupted, reason, true);
             speed = ActualSpeed = 0;

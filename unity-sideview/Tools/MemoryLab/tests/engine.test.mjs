@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { Store } from "../lib/store.mjs";
 import { Catalog, clone } from "../lib/catalog.mjs";
 import { Engine } from "../lib/engine.mjs";
@@ -11,6 +12,110 @@ const make = () => {
   engine.create("w");
   return engine;
 };
+// A synthetic implemented route exercises multi-hop graph validation separately
+// from the authored scene bindings (these anchors now span several scenes).
+const streetAnchors = ["z_home","residential_middle","public_middle","flower_shop"];
+test("a spoken menu handover never becomes execution evidence, even after a successful wait",async t=>{
+  const e=make();t.after(()=>e.store.close());
+  const j=e.player("w","liting","那给我看看");
+  e.decide=c=>({...reply(c),dialogue:"喏，菜单。"});
+  const proposed=(await e.run("w",1,j.id))[0];
+  assert.equal(proposed.status,"proposed");
+  e.commit("w",proposed.proposalId);
+  const c=e.context(e.player("w","liting","我都没看到"));
+  assert.deepEqual(c.character_state.execution_evidence,[]);
+  assert.equal(c.previous_action_result.status,"succeeded");
+  assert.equal(c.previous_action_result.action_type,"wait");
+  assert.equal(c.previous_action_result.effect_scope,"no_world_change");
+  assert(c.character_state.recent_experiences.some(m=>m.speakerId==="liting"&&m.text==="喏，菜单。"&&m.kind==="claim"));
+  assert(!c.character_state.known_facts.some(f=>f.summary.includes("菜单")));
+  assert.equal(e.records(e.world("w"),"action").length,0);
+});
+test("physical evidence requires a receipt and stays specific to its actor and result after reload",async t=>{
+  const e=make();t.after(()=>e.store.close());
+  const action=await flowerTrip(e);
+  assert.deepEqual(e.executionEvidence(e.world("w"),"z"),[]);
+  e.actionReceipt("w",action,true,{scene:"flower_shop",summary:"实际到达花店。"});
+  const expected=e.executionEvidence(e.world("w"),"z");
+  assert.equal(expected.length,1);assert.equal(expected[0].type,"move");
+  assert.equal(expected[0].status,"succeeded");assert.equal(expected[0].result.scene,"flower_shop");
+  assert.deepEqual(e.executionEvidence(e.world("w"),"liting"),[]);
+  assert.equal(e.actor("w","z").previous_result.effect_scope,"world_action");
+  e.open("w","reloaded",e.checkpoint("w"));
+  assert.deepEqual(e.executionEvidence(e.world("w"),"z"),expected);
+  const record=e.store.record(action);record.epoch++;e.store.put("action",record);
+  assert.deepEqual(e.executionEvidence(e.world("w"),"z"),[]);
+});
+test("failed actions remain failed evidence and future or malformed receipts cannot prove completion",async t=>{
+  const e=make();t.after(()=>e.store.close());const action=await flowerTrip(e);
+  e.actionReceipt("w",action,false,{scene:"z_home",summary:"通路受阻，仍在原处。"});
+  assert.equal(e.executionEvidence(e.world("w"),"z")[0].status,"failed");
+  const record=e.store.record(action);record.receiptHour=e.world("w").hour+1;e.store.put("action",record);
+  assert.deepEqual(e.executionEvidence(e.world("w"),"z"),[]);
+  record.receiptHour=e.world("w").hour;
+  for(const payload of ["invalid json","null","[]",JSON.stringify({success:false,result:null})]) {
+    record.receiptPayload=payload;e.store.put("action",record);
+    assert.deepEqual(e.executionEvidence(e.world("w"),"z"),[]);
+  }
+});
+async function flowerTrip(e) {
+  e.place("w","z","z_home");
+  const j=e.player("w","z","去花店吧");
+  j.environment={walkable_locations:streetAnchors};e.store.put("job",j);
+  e.decide=c=>({...reply(c,"move","flower_shop"),dialogue:"好，我们去花店。"});
+  const r=(await e.run("w",1,j.id))[0];assert.equal(r.status,"proposed",r.validation_error);
+  e.commit("w",r.proposalId);return e.actor("w","z").pending_action;
+}
+test("a non-adjacent flower shop invitation creates one complete executable journey",async t=>{
+  const e=make();t.after(()=>e.store.close());const id=await flowerTrip(e);
+  const a=e.store.record(id);assert.deepEqual(a.parameters.route,["z_home","residential_middle","public_middle","flower_shop"]);
+  assert.equal(a.target,"flower_shop");assert.equal(a.status,"pending");
+  assert.equal(e.actor("w","z").scene,"z_home");
+  assert.throws(()=>e.actionReceipt("w",id,true,{scene:"public_middle"}));
+  // A real position update during a chat on the way is not the route's origin.
+  const world=e.world("w");world.actors.z.scene="public_middle";e.save(world);
+  e.actionReceipt("w",id,true,{scene:"flower_shop"});
+  e.actionReceipt("w",id,true,{scene:"flower_shop"});
+  assert.equal(e.actor("w","z").scene,"flower_shop");
+  assert.equal(e.actor("w","z").pending_action,null);
+});
+test("conversation waits preserve the destination and explicit cancellation stops it",async t=>{
+  const e=make();t.after(()=>e.store.close());const id=await flowerTrip(e);
+  await turn(e,"z","路上聊两句");
+  const c=e.context(e.player("w","z","我们还是先不去了"));
+  assert.equal(c.character_state.pending_action.id,id);
+  assert.equal(c.previous_action_result.status,"pending");
+  assert(!c.available_actions.some(a=>a.type==="move"));
+  await turn(e,"z","我们还是先不去了",c=>reply(c,"cancel_move"));
+  assert.equal(e.store.record(id).status,"cancelled");assert.equal(e.actor("w","z").pending_action,null);
+  assert.throws(()=>e.actionReceipt("w",id,true,{scene:"flower_shop"}));
+});
+test("pending journeys survive checkpoint reload and do not get stolen by casual A2A",async t=>{
+  const e=make();t.after(()=>e.store.close());const id=await flowerTrip(e);
+  e.focus("w",null);const cp=e.checkpoint("w");e.open("w","reload_journey",cp);
+  assert.equal(e.actor("w","z").pending_action,id);
+  e.decide=()=>{throw new Error("no model call needed while travelling");};
+  assert.equal((await e.plan("w","z",["xiaoxiaoqing"])).targetId,"");
+  e.actionReceipt("w",id,false,{summary:"道路被阻挡"});
+  assert.notEqual(e.actor("w","z").scene,"flower_shop");
+  assert.equal(e.store.record(id).status,"failed");
+});
+test("unimplemented or disconnected locations never become travel options",t=>{
+  const e=make();t.after(()=>e.store.close());e.place("w","z","z_home");
+  const j=e.player("w","z","去咖啡馆或花店");j.environment={walkable_locations:streetAnchors};
+  const c=e.context(j);assert(c.available_actions.some(a=>a.id==="move_flower_shop"));
+  assert(!c.available_actions.some(a=>["cafe","photo_studio","beach"].includes(a.target)));
+});
+test("load preserves journey/memory but releases conversation holders from the old process",async t=>{
+  const e=make();t.after(()=>e.store.close());const id=await flowerTrip(e);e.focus("w",null);
+  const w=e.world("w");
+  e.store.put("conversation",{id:"old_talk",experimentId:w.id,epoch:w.epoch,hour:w.hour,status:"active",actors:["z","xiaoxiaoqing"]});
+  const cp=e.checkpoint("w");e.open("w","new_process",cp);
+  assert.equal(e.store.record("old_talk").status,"cancelled");
+  assert.equal(e.held(e.world("w"),"z"),false);
+  assert.equal(e.actor("w","z").pending_action,id);
+  assert(e.memory.history(e.world("w"),"z","",8).some(m=>m.text?.includes("花店")||m.summary?.includes("花店")));
+});
 test("a failed meeting decision leaves no running job and the next plan can succeed", async(t)=>{
   const e=make();t.after(()=>e.store.close());
   e.decide=()=>{throw new Error("test model failure");};
@@ -65,7 +170,7 @@ export function reply(c, type = "wait", target) {
       source_event_ids: [c.interaction.source_event_id],
     };
   }
-  if (c.environment.social_opportunity) {
+  if (c.environment.social_opportunity || c.interaction.mode === "npc_message") {
     info.social_decision = {
       choice: type === "communicate" ? "engage" : "keep_to_self",
       reason: "按自己的安排选择",
@@ -501,7 +606,7 @@ test('opening without a checkpoint cannot adopt newer server progress', async t 
   const w=e.world('w');w.actors.z.info.affinity=85;e.save(w);
   e.open('w','empty-checkpoint',null);
   assert.equal(e.world('w').seq,0);
-  assert.equal(e.actor('w','z').info.affinity,50);
+  assert.equal(e.actor('w','z').info.affinity,e.initialActors({}).z.info.affinity);
   assert.equal(e.memory.history(e.world('w'),'z').length,0);
 });
 

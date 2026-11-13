@@ -25,6 +25,19 @@ public sealed class CharacterPresenter:MonoBehaviour {
     public ZEmotionAccents Accents { get; private set; }
     string pendingGesture = "none", pendingMotion = "idle";
     bool cueActive;
+    // Mirrors the user-owned portrait-expressions.json. Verified against all keys in editor tests.
+    public static readonly string[] DialogueExpressions = { "neutral", "happy", "sad", "shy", "serious", "happy_wave", "cry", "bawl", "surprise", "starry_curious" };
+    public string AppliedExpression {get;private set;} = "neutral";
+    AnimationClip expressionClip;
+    float expressionClipTime;
+    public string ActiveExpressionMotion => expressionClip != null ? expressionClip.name : null;
+    public static string NormalizeDialogueExpression(string key) => Array.IndexOf(DialogueExpressions,key)>=0 ? key : "neutral";
+    void ClearExpressionClip(){expressionClip=null;expressionClipTime=0;foreach(var parameter in parameters.Values)parameter.Value=parameter.DefaultValue;}
+    AnimationClip FindExpressionClip(string key){
+        var clips=portraitProfile?.animatorController?.animationClips;
+        if(clips!=null)foreach(var clip in clips)if(clip!=null&&clip.name==key)return clip;
+        return null;
+    }
     string speechParameter = LegacySpeechParameter;
     readonly Dictionary<string,CubismParameter> parameters=new Dictionary<string,CubismParameter>();
     public Seabreeze.Live2DModelProfile PortraitProfile => portraitProfile;
@@ -84,23 +97,26 @@ public sealed class CharacterPresenter:MonoBehaviour {
         return 0;
     }
     void OnApplicationFocus(bool focused){if(!focused)ClearPointerGaze();}
-    public void Cue(string moodName,string action,string transition,float holdMs=0,bool carryArms=false){
+    public void Cue(string moodName,string action,string transition,float holdMs=0,bool carryArms=false,string expression=null){
+        ClearExpressionClip();
         textSpeaking=false; cueActive=true;ResetSpeechParameters();
         Performance.Prepare(moodName,action,transition,holdMs,carryArms);
         if(ZPerformance==null)return;
         ZPerformance.CancelCurrentPerformance();
-        ZPerformance.SetExpression(ZLivePerformanceMap.Expression(moodName));
+        AppliedExpression=expression==null ? (moodName=="happy"&&ZLivePerformanceMap.Gesture(action)=="wave"?"happy_wave":NormalizeDialogueExpression(moodName)) : NormalizeDialogueExpression(expression);
+        ZPerformance.SetExpression(expression==null?ZLivePerformanceMap.Expression(moodName):"neutral");
         pendingGesture=ZLivePerformanceMap.Gesture(action);
         if(UsingStoryPortrait){
-            var key=moodName=="happy"&&pendingGesture=="wave"?"happy_wave":moodName;
+            var key=expression==null ? (moodName=="happy"&&pendingGesture=="wave"?"happy_wave":moodName) : AppliedExpression;
             ZPerformance.SetPortraitExpression(portraitProfile.FindExpression(key));
+            if(expression!=null)expressionClip=FindExpressionClip(key);
         }
-        pendingMotion=ZLivePerformanceMap.Motion(moodName,action);
+        pendingMotion=ZLivePerformanceMap.Motion(expression==null?moodName:AppliedExpression,action);
         if(transition=="sudden")StartZGesture();
     }
     void StartZGesture(){if(ZPerformance==null)return;ZPerformance.SetGesture(Performance.Reduced?"none":pendingGesture);ZPerformance.SetMotionPreset(Performance.Reduced?"idle":pendingMotion);}
     public void BeginSpeaking(bool textOnly=false){textSpeaking=textOnly;Performance.BeginSpeaking();StartZGesture();}
-    public void EndCue(){textSpeaking=false;cueActive=false;Performance.EndSpeech();ZPerformance?.ResetPerformance();ResetSpeechParameters();}
+    public void EndCue(){ClearExpressionClip();AppliedExpression="neutral";textSpeaking=false;cueActive=false;Performance.EndSpeech();ZPerformance?.ResetPerformance();ResetSpeechParameters();}
     public void SetWaiting(bool waiting){Performance.SetWaiting(waiting);if(!cueActive&&ZPerformance!=null){var motion=waiting?ZMotionPreset.Think:ZMotionPreset.Idle;if(ZPerformance.CurrentMotion!=motion)ZPerformance.SetMotionPreset(motion);}}
     public void NoticeMessage()=>Performance.NoticeMessage();
     // Web SDK focus/breath runs before physics; authored dialogue channels run after it.
@@ -120,6 +136,13 @@ public sealed class CharacterPresenter:MonoBehaviour {
     }
     public void ApplyFrame(){
         if(!Ready)return;
+        // Play the same authored expression clips as daytime portraits. The
+        // expression owns face parameters; live speech still owns mouth openness.
+        if(expressionClip!=null){
+            if(!Paused)expressionClipTime+=Time.unscaledDeltaTime;
+            expressionClip.SampleAnimation(cubismModel.gameObject,Mathf.Min(expressionClipTime,expressionClip.length));
+            if(expressionClipTime>=expressionClip.length)ClearExpressionClip();
+        }
         // Voice owns only mouth openness, after the Z expression controller (order 1000).
         // Z retains its own eyebrow, eyelid, cheek and gesture parameter bindings.
         Set(speechParameter,Paused?0:Performance.Mouth);

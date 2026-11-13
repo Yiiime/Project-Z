@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -9,6 +11,7 @@ namespace Seabreeze.Editor
 {
     public static class UnifiedRuntimeVerification
     {
+        static Task<JObject> backend;
         static string output;static double deadline,changedAt;static int phase;static Result result;
         [Serializable] sealed class Result {public bool passed,sceneReady,connected,playerFocusIsolated,focusReleased,internalStateHidden,backendResultRetained,screenshotCaptured;public int rosterCount,visibleActors;public string identities,dialogue,error,mode,screenshot;}
         public static void Begin()
@@ -42,10 +45,14 @@ namespace Seabreeze.Editor
                 }
                 if(phase==3&&EditorApplication.timeSinceStartup-changedAt>3)
                 {
+                    if(backend==null){backend=MemoryVerificationSnapshot.Read(memory.Client);return;}
+                    if(!backend.IsCompleted)return;
+                    if(backend.IsFaulted)throw backend.Exception;
                     Canvas.ForceUpdateCanvases();
                     var rects=memory.View.GetComponentsInChildren<RectTransform>();
                     result.internalStateHidden=!rects.Any(r=>r.name=="Action与Info"||r.name=="行动与数值");
-                    result.backendResultRetained=memory.LastReply.result.action!=null&&memory.LastReply.result.info!=null;
+                    var proposal=backend.Result["records"]?["proposal"]?.FirstOrDefault(p=>(string)p["id"]==memory.LastReply.proposalId);
+                    result.backendResultRetained=proposal?["output"]?["action"]!=null&&proposal?["output"]?["info"]!=null&&memory.LastReply.result.action==null&&memory.LastReply.result.info==null;
                     result.passed=result.passed&&result.internalStateHidden&&result.backendResultRetained;
                     result.screenshot=Path.ChangeExtension(output,"png");ScreenCapture.CaptureScreenshot(result.screenshot);
                     changedAt=EditorApplication.timeSinceStartup;phase=4;return;

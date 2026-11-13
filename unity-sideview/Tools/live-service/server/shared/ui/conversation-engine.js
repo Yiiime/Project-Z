@@ -1,3 +1,5 @@
+import {addressMessage,pendingFor,hostMessage} from '../addressing.js';
+import {utteranceMetadata} from '../utterance.js';
 import {SessionContinuity,validateAgendaUpdates,validateTopicProgress} from './session-continuity.js';
 import {LiveEngine} from './live-engine.js';
 import {AUDIENCE_NAMES} from '../audience-roster.js';
@@ -31,10 +33,12 @@ export class ConversationEngine extends LiveEngine {
       onSelected:preview=>this._selectAudiencePreview(preview),
       onSelectionEnd:entry=>this._endAudiencePreview(entry),
       canAdvance:()=>!this.inbox.some(m=>m.mine),publish:item=>{
+        const route={recipientIds:item.recipientIds||addressMessage(item.text,{speakerId:item.npc_id}),replyTo:item.reply_to?[item.reply_to]:[]};
+        if(item.reply_to&&route.recipientIds.includes('player'))this._acknowledge([item.reply_to],item.npc_id);
         const m=this._message(item.text,{id:item.messageId,name:AUDIENCE_NAMES[item.npc_id],type:'chat',source:'agent-audience'});
-        if(this.audience.config.phases&&!this._state.call?.active&&(item.intent!=='advance'||this._clock<(this.nextAudienceTurn||0)||this._hasPendingPlayerChat()||this._mediaPlaying())){
-          this._public('npc.message',m.text,{id:m.id,speakerRole:'audience',speakerId:item.npc_id});this._emitState();
-        }else{if(this.audience.config.phases)this.nextAudienceTurn=this._clock+20000;this._receive(m,false,item.npc_id);}}});
+        if(!route.recipientIds.includes('z')&&this.audience.config.phases&&!this._state.call?.active&&(item.intent!=='advance'||this._clock<(this.nextAudienceTurn||0)||this._hasPendingPlayerChat()||this._mediaPlaying())){
+          this._public('npc.message',m.text,{id:m.id,speakerRole:'audience',speakerId:item.npc_id,...route});this._emitState();
+        }else{if(this.audience.config.phases)this.nextAudienceTurn=this._clock+20000;this._receive(m,false,item.npc_id,route);}}});
   }
   start(){if(this._started||this._destroyed)return;this._started=true;this._lastTick=performance.now();this._timer=setInterval(()=>this._tick(),160);
     this._public('session.opened','Z 的直播已开始，现在是自由对话，没有预设节目。');this._emitState();}
@@ -42,8 +46,8 @@ export class ConversationEngine extends LiveEngine {
     Object.assign(this._state.agent,{enabled:this.enabled,errorCode:null,source:this.enabled?'ready':'local',capabilities:config.capabilities||[]});
     this._state.textMode=this.enabled?'provider':'local';this._state.textStatus=this.enabled?'ready':'local';this.nextWake=this._clock;this._emitState();}
   configureSpeech(director){this.speechAudio=director;director.addEventListener('preparation',({detail})=>this.audience.dialogue.log({stage:'host.audio.prepare',...detail}));}
-  _warmCandidate(requestId,result){if(['speak','tool'].includes(result?.action)&&typeof result.speech==='string'&&result.speech.length<=360&&TALENT_MOODS.includes(result.mood))return this.speechAudio?.warmSpeech(requestId,result.speech,result.mood);return null;}
-  _unhandledInbox(){const handled=new Set(this._active&&this.speechPlan?.speechId===this._active.id?this.speechPlan.result.handledIds:[]);return this.inbox.filter(m=>!handled.has(m.id)).map(m=>({...m}));}
+  _warmCandidate(requestId,result){if(['speak','tool'].includes(result?.action)&&typeof result.speech==='string'&&result.speech.length<=360&&TALENT_MOODS.includes(result.mood))return this.speechAudio?.warmSpeech(requestId,result.speech,result.mood,{delivery:result.delivery});return null;}
+  _unhandledInbox(){const handled=new Set(this._active&&this.speechPlan?.speechId===this._active.id?this.speechPlan.result.handledIds:[]);return this.inbox.filter(m=>pendingFor(m,'z')&&!handled.has(m.id)).map(hostMessage);}
   _selectAudiencePreview(preview){
     this._cancelPreparation('audience_selected');
     this.audiencePreview={...preview};this.nextWake=this._clock;this._maybePrepare();
@@ -128,6 +132,7 @@ export class ConversationEngine extends LiveEngine {
     if(this.handoffEnabled&&!['speech.progress','speech.completed','npc.message','player.message'].includes(type)){
       this.audience.clearPreparation('public_context_changed');this.audiencePreview=null;
     }
+    if(type.startsWith('speech.')&&metadata.replyTo?.length&&!metadata.recipientIds)metadata={...metadata,recipientIds:[...new Set(metadata.replyTo.map(id=>this.session.events.find(e=>e.id===id)?.speakerId).filter(Boolean))]};
     const e={id:id(),type,text:String(text).slice(0,360),...metadata};
     this.audience.record(e,{replace:Boolean(metadata.speechId)});
     const published=this.audience.getPublicEvents().find(x=>x.id===e.id);if(!published)return;
@@ -148,19 +153,24 @@ export class ConversationEngine extends LiveEngine {
     this._public('speech.progress',text,{id:eventId,speakerRole:'host',speakerId:'Z',speechId:String(speechId),status:'speaking',replyTo:this.speechLinks.get(speechId)||[]});
   }
   exportDialogueTrace(){return {...this.audience.dialogue.exportTrace(),session:this.session.snapshot(),scheduler:{preparing:!!this.preparing,prepared:!!this.prepared,nextWake:this.nextWake,clock:this._clock,topicAssessing:!!this.topicWork,topicProgress:this.topicProgress,audiencePool:this.audience.pool.length,audienceGenerating:this.audience.requests.size}};}
-  _receive(m,mine,speakerId){
+  _receive(m,mine,speakerId,routing={}){
+    const recipients=routing.recipientIds||['z'];
     this.inboxVersion++;
     if(!mine&&this.audiencePreview?.status==='pending'&&this.audiencePreview.messageId!==m.id){this.audience.clearPreparation('other_message_published');this.audiencePreview=null;}
     if(mine&&(this.handoffEnabled||this.audience.config.phases)){this.audience.clearPreparation('player_arrived');this.audiencePreview=null;}
     if(this.audiencePreview?.messageId===m.id&&this.audiencePreview.text===m.text&&this.audiencePreview.npcId===speakerId)this.audiencePreview.status='published';
-    this.inbox.push({id:m.id,name:m.name,text:m.text,mine});if(this.inbox.length>16){const old=this.inbox.shift();this._setReceipt(old.id,'seen');}
-    this._public(mine?'player.message':'npc.message',m.text,{id:m.id,speakerRole:mine?'player':'audience',speakerId:speakerId||(mine?'player':m.name)});
+    if(recipients.length)this.inbox.push({id:m.id,name:m.name,text:m.text,mine,speakerId:speakerId||(mine?'player':m.name),recipientIds:recipients,pendingRecipientIds:[...recipients]});if(this.inbox.length>16){const old=this.inbox.shift();this._setReceipt(old.id,'failed');}
+    this._public(mine?'player.message':'npc.message',m.text,{id:m.id,speakerRole:mine?'player':'audience',speakerId:speakerId||(mine?'player':m.name),recipientIds:recipients,replyTo:routing.replyTo||[]});
     this.audience.dialogue.setWaiting(this.inbox);
     if(mine){this.failureStreak=0;this.speechAudio?.dropWarmSpeech();this.epoch++;this.pending?.abort();this.pending=null;this.nextWake=this._clock;this._setReceipt(m.id,'pending');}
     this.nextWake=this._clock;if(this.handoffEnabled)this._maybePrepare();this._emitState();}
-  sendMessage(value){const text=String(value||'').trim();if(!text||text.length>120||this._destroyed||this._state.paused)return false;
-    const m=this._message(text,{name:'小岛来客',mine:true,type:'chat'});this._receive(m,true);
+  sendMessage(value,routing={}){const text=String(value||'').trim();if(!text||text.length>120||this._destroyed||this._state.paused)return false;
+    const m=this._message(text,{name:'小岛来客',mine:true,type:'chat'});const previous=this.session.events.findLast(e=>e.type==='player.message')?.recipientIds||['z'];this._receive(m,true,'player',{recipientIds:addressMessage(text,{explicit:routing.recipientIds,previous,replyTo:routing.replyToMessageId,events:this.session.events}),replyTo:routing.replyToMessageId?[routing.replyToMessageId]:[]});
     if(!this.enabled){this._setReceipt(m.id,'seen');this._message('主 Agent 尚未连接，请在连接状态中重新检查。');}return true;}
+  _acknowledge(ids,actor){
+    for(const m of this.inbox)if(ids.includes(m.id)&&pendingFor(m,actor)){m.pendingRecipientIds=(m.pendingRecipientIds||m.recipientIds||['z']).filter(id=>id!==actor);if(!m.pendingRecipientIds.length)this._setReceipt(m.id,'replied');}
+    this.inbox=this.inbox.filter(m=>!m.pendingRecipientIds||m.pendingRecipientIds.length);this.audience.dialogue.setWaiting(this.inbox);
+  }
   _hasPendingPlayerChat(){return this.inbox?.some(m=>m.mine)||false;}
   toggleFollow(){if(this._destroyed)return this._state.followed;this._state.followed=!this._state.followed;this._persist();this._public('viewer.follow',this._state.followed?'有观众关注了 Z。':'观众取消了关注。');this._emitState();return this._state.followed;}
   _selectPlayerReply(){return false;}
@@ -180,7 +190,7 @@ export class ConversationEngine extends LiveEngine {
     this.audience?.dialogue.log({stage:'host.prepare.invalidated',reason});
   }
   _hostContext(inbox,turn={mode:'live'}){
-    return {...this._toolContext(),experience:'autonomous',publicEvents:this.facts.slice(-12),host:{inbox,memory:this.memory,recentExpressions:this.recentExpressions.map(e=>({...e})),session:this.session.snapshot(),turn,...(turn.mode==='prepare'&&this.audiencePreview?.status==='pending'?{pendingAudience:(({id,messageId,npcId,text,status})=>({id,messageId,npcId,text,status}))(this.audiencePreview)}:{}),...(this.topicProgress?{topicProgress:this.topicProgress}:{})}};
+    return {...this._toolContext(),experience:'autonomous',publicEvents:this.facts.slice(-12),host:{inbox:inbox.filter(m=>pendingFor(m,'z')).map(hostMessage),...(this.validationFeedback?{validationFeedback:this.validationFeedback}:{}),memory:this.memory,recentExpressions:this.recentExpressions.map(e=>({...e})),session:this.session.snapshot(),turn,...(turn.mode==='prepare'&&this.audiencePreview?.status==='pending'?{pendingAudience:(({id,messageId,npcId,text,status})=>({id,messageId,npcId,text,status}))(this.audiencePreview)}:{}),...(this.topicProgress?{topicProgress:this.topicProgress}:{})}};
   }
   _maybePrepare(){
     const speech=this._active,plan=this.speechPlan,preview=this.audiencePreview?.status==='pending'?this.audiencePreview:null;
@@ -202,7 +212,7 @@ export class ConversationEngine extends LiveEngine {
     }).catch(()=>{if(!controller.signal.aborted)this.audience.dialogue.log({stage:'host.prepare.unavailable',requestId});})
       .finally(()=>{if(this.preparing===work)this.preparing=null;});
   }
-  async _think(){if(this.failureStreak>=3||this.singingExecuting||!this.enabled||!this._started||this.pending||this._active||this._queue.length||this._state.paused||this._destroyed||this._clock<this.nextWake)return;
+  async _think(){if(this.failureStreak>=6||this.singingExecuting||!this.enabled||!this._started||this.pending||this._active||this._queue.length||this._state.paused||this._destroyed||this._clock<this.nextWake)return;
     if(this._mediaPlaying()&&!this.inbox.some(m=>m.mine))return;
     if(this.audiencePreview?.status==='pending'||this.preparing)return;
     let prepared=this.prepared;this.prepared=null;
@@ -211,7 +221,7 @@ export class ConversationEngine extends LiveEngine {
       if(!this.session.events.some(e=>e.id===d.messageId&&e.type==='npc.message'&&e.speakerId===d.npcId&&e.text===d.text)){this.speechAudio?.dropWarmSpeech(prepared.requestId);prepared=null;}
     }
     const controller=new AbortController(),epoch=this.epoch;this.pending=controller;
-    const inbox=this.inbox.map(m=>({...m})),requestId=prepared?.requestId||id(),context=prepared?.context||this._hostContext(inbox),generationContext={publicEvents:context.publicEvents,inbox:context.host.inbox,turn:context.host.turn};
+    const inbox=this.inbox.filter(m=>pendingFor(m,'z')).map(hostMessage),requestId=prepared?.requestId||id(),context=prepared?.context||this._hostContext(inbox),generationContext={publicEvents:context.publicEvents,inbox:context.host.inbox,turn:context.host.turn};
     const sentenceReply=this._beginSentenceReply?.({controller,epoch,inbox,requestId,context,generationContext});
     try{
       this._waitingReceipts('pending',inbox);this._state.agent.source='pending';this._state.agent.errorCode=null;this._emitState();
@@ -219,6 +229,7 @@ export class ConversationEngine extends LiveEngine {
       if(epoch!==this.epoch||this._destroyed||this._state.paused)return;
       this._validateCallReply?.(result,context);
       const allowed=new Set(inbox.map(m=>m.id));
+      if(result.action==='wait'&&result.handledIds?.some(id=>inbox.some(m=>m.id===id&&m.mine)))throw Object.assign(Error('direct_reply_required'),{code:'direct_reply_required'});
       if(!['speak','wait','tool'].includes(result.action)||!Array.isArray(result.handledIds)||result.handledIds.some(x=>!allowed.has(x))||!Number.isInteger(result.wakeAfterMs)||result.wakeAfterMs<2000||result.wakeAfterMs>120000)throw Error('invalid_host_decision');
       if(result.continuation!==undefined&&!['continue','leave_space','await_event'].includes(result.continuation))throw Error('invalid_continuation');
       const agendaUpdates=validateAgendaUpdates(result.agendaUpdates,{items:context.host.session.unfinishedItems,evidence:context.host.session.evidence,allowCurrentSpeech:result.action!=='wait'});
@@ -233,15 +244,15 @@ export class ConversationEngine extends LiveEngine {
       if(sentenceReply?.received()){await sentenceReply.finish(result,agendaUpdates);}
       else if(result.action==='speak'||result.action==='tool'){
         if(!result.speech)throw Error('missing_speech');
-        let preparedAudioKey=requestId,repaired=false,ticket,reviewFailure=null;
-        const candidate={id:requestId,role:'host',speakerId:'Z',text:result.speech,intent:result.action,replyTo:result.handledIds,evidenceIds:[],...(this._state.call?.active?{segment:{index:0,scope:'reply'}}:{}),...(result.action==='tool'?{plannedTool:{name:result.tool.name,targetId:result.tool.args?.taskId||result.tool.args?.songId||result.tool.args?.messageId||''}}:{})};
+        let preparedAudioKey=requestId,repaired=false,ticket,reviewFailure=null,reviewDetail=null;
+        const candidate={id:requestId,role:'host',speakerId:'Z',...utteranceMetadata('z',result,{allowLegacy:true}),text:result.speech,intent:result.action,replyTo:result.handledIds,evidenceIds:[],...(this._state.call?.active?{segment:{index:0,scope:'reply'}}:{}),...(result.action==='tool'?{plannedTool:{name:result.tool.name,targetId:result.tool.args?.taskId||result.tool.args?.songId||result.tool.args?.messageId||''}}:{})};
         if(this._state.call?.active&&this._approveCallCandidate){
           const approved=await this._approveCallCandidate({candidate,result,context,signal:controller.signal,valid:()=>epoch===this.epoch&&!controller.signal.aborted&&!this._destroyed&&!this._state.paused&&this._state.call?.active&&this._state.call.input==='idle'});
-          ticket=approved.ticket;preparedAudioKey=approved.candidate.id;repaired=approved.repaired;result={...result,speech:approved.candidate.text};
-        }else{this._warmCandidate(requestId,result);ticket=await this.audience.dialogue.inspect(candidate,{signal:controller.signal,generationContext,sessionEvents:this.session.evidence(),onFailure:reason=>{reviewFailure=reason;}});}
+          ticket=approved.ticket;preparedAudioKey=approved.candidate.id;repaired=approved.repaired;result={...result,...utteranceMetadata('z',approved.candidate,{allowLegacy:true}),speech:approved.candidate.text};
+        }else{this._warmCandidate(requestId,result);ticket=await this.audience.dialogue.inspect(candidate,{signal:controller.signal,generationContext,sessionEvents:this.session.evidence(),onFailure:reason=>{reviewFailure=reason;},onOutcome:(outcome,detail)=>{if(outcome==='rejected')reviewDetail='review: '+String(detail?.reason||'缺少实际依据，重新回应当前消息').slice(0,150);}});}
         if(epoch!==this.epoch||controller.signal.aborted||this._destroyed||this._state.paused)return;
         if(!ticket&&reviewFailure==='stale'){this.nextWake=this._clock+350;return;}
-        if(!ticket)throw Object.assign(Error('reply_not_approved'),{code:'agent_reply_not_approved'});
+        if(!ticket)throw Object.assign(Error('reply_not_approved'),{code:'agent_reply_not_approved',validationReason:reviewDetail});
         if(this._active||this._queue.length){this.nextWake=this._clock+2000;return;}
         const committed=this.audience.dialogue.commit(ticket,()=>{
           if(result.sessionDecision&&this.commitSessionDecision?.(result,context))return;
@@ -250,8 +261,8 @@ export class ConversationEngine extends LiveEngine {
           // _say starts immediately here; no asynchronous gap after the revision check.
           const speechId=this._speechId+1,playbackLifecycle=this.playbackLifecycle;this.speechLinks.set(speechId,[...handled]);this._onHostSpeechCommitted?.(speechId,result);
           if(this.audiencePreview?.status==='published')this.audiencePreview=null;
-          this._say(result.speech,result.mood,gesture,{source:'deepseek',transition,preparedAudioKey,onComplete:()=>{
-            for(const mid of handled)this._setReceipt(mid,'replied');this.inbox=this.inbox.filter(m=>!handled.has(m.id));
+          this._say(result.speech,result.mood,gesture,{...utteranceMetadata('z',result,{allowLegacy:true}),source:'deepseek',transition,preparedAudioKey,onComplete:()=>{
+            this._acknowledge([...handled],'z');
             this.audience.dialogue.setWaiting(this.inbox);
             const completed=this.session.events.find(e=>e.id===`speech-${speechId}`&&e.type==='speech.completed');
             if(completed&&!repaired){this.session.apply(agendaUpdates,context.host.session,completed,!handled.size);this.memory=String(result.memory||'').slice(0,800);}if(completed)this._onHostReplyCompleted?.(result,context);
@@ -268,10 +279,10 @@ export class ConversationEngine extends LiveEngine {
           this.speechPlan={speechId,epoch,result,attempted:false,inboxVersion:this.inboxVersion};
         });
         if(!committed){this.nextWake=this._clock+2000;return;}
-      }else{if(this.audiencePreview?.status==='published')this.audiencePreview=null;for(const mid of result.handledIds)this._setReceipt(mid,'seen');this.inbox=this.inbox.filter(m=>!result.handledIds.includes(m.id));this.audience.dialogue.setWaiting(this.inbox);this.session.apply(agendaUpdates,context.host.session);this.memory=String(result.memory||'').slice(0,800);}
+      }else{if(this.audiencePreview?.status==='published')this.audiencePreview=null;this._acknowledge(result.handledIds,'z');this.session.apply(agendaUpdates,context.host.session);this.memory=String(result.memory||'').slice(0,800);}
       this.nextWake=this._clock+this._wakeDelay(result);
-      this.failureStreak=0;this._state.agent.errorCode=null;this._state.agent.validationReason=null;this._state.agent.source='deepseek';this._state.textStatus='ready';
-    }catch(error){sentenceReply?.abort();if(error.code==='agent_reply_stale'){if(epoch===this.epoch&&!controller.signal.aborted){this.nextWake=this._clock+350;if(this._state.call?.active)this.callNeedsTurn=true;}return;}if(epoch===this.epoch&&!this._destroyed&&!controller.signal.aborted){if(error.code==='agent_reply_repair_failed')this.callReviewBlocked=true;this.failureStreak++;const retryMs=this.callReviewBlocked?0:error.code==='agent_insufficient_balance'?60000:this.failureStreak<=3?1000*2**(this.failureStreak-1):15000;this.audience.dialogue.log({stage:'host.request.failed',code:error.code||'host_decision_unavailable',retryMs});this._state.agent.errorCode=error.code||'host_decision_unavailable';this._state.agent.validationReason=error.validationReason||null;this._state.agent.source='unavailable';this._state.textStatus='fallback';this._waitingReceipts('failed',inbox);this.nextWake=this._clock+retryMs;}}
+      this.failureStreak=0;this.validationFeedback=null;this._state.agent.errorCode=null;this._state.agent.validationReason=null;this._state.agent.source='deepseek';this._state.textStatus='ready';
+    }catch(error){sentenceReply?.abort();if(error.code==='agent_reply_stale'){if(epoch===this.epoch&&!controller.signal.aborted){this.nextWake=this._clock+350;if(this._state.call?.active)this.callNeedsTurn=true;}return;}if(epoch===this.epoch&&!this._destroyed&&!controller.signal.aborted){if(error.code==='agent_reply_repair_failed')this.callReviewBlocked=true;this.failureStreak++;this.validationFeedback=String(error.validationReason||error.code||'host_decision_unavailable').slice(0,160);const retryMs=this.callReviewBlocked?0:error.code==='agent_insufficient_balance'?60000:this.failureStreak<=3?1000*2**(this.failureStreak-1):15000;this.audience.dialogue.log({stage:'host.request.failed',code:error.code||'host_decision_unavailable',retryMs});this._state.agent.errorCode=error.code||'host_decision_unavailable';this._state.agent.validationReason=error.validationReason||null;this._state.agent.source='unavailable';this._state.textStatus='fallback';this._waitingReceipts('failed',inbox);this.nextWake=this._clock+retryMs;}}
     finally{sentenceReply?.dispose();this.speechAudio?.dropWarmSpeech(requestId);if(this.pending===controller)this.pending=null;this._emitState();}
   }
   _waitingReceipts(status,messages=this.inbox){

@@ -11,11 +11,11 @@
     },
     {
       "path": "main-agent/config/skills-source-lock.json",
-      "sha256": "c0a080888c34d35a8910bd38fd0bc2d76a41a1d438b8b30bba3ec75484a30b49"
+      "sha256": "ed65a572bfc3c2b13ef5858f2404d8080b5e9e6da2e568e8ff449097fc8be0f7"
     },
     {
       "path": "main-agent/prompts/conversation-host.txt",
-      "sha256": "f4b040503daaff33be64e15dc1fe710ea3e9567d9f950855c163ae57e0b6f007"
+      "sha256": "c0fbc3bb67f618e1f512fedac7b5f35528abf4750ba7ac201bbd0d3cffe00ef3"
     },
     {
       "path": "main-agent/prompts/main-agent-skills.txt",
@@ -27,7 +27,7 @@
     },
     {
       "path": "skills/audience-reaction/SKILL.md",
-      "sha256": "b2c963b69a40d70887385c33b5c88e01e4c1fb531c2cf96c318609910e811be4"
+      "sha256": "9c029a7268b8a975cade621198ef8b3dd235730dec0fc18a808e9da637cb26d3"
     },
     {
       "path": "skills/audience-reaction/agents/openai.yaml",
@@ -35,7 +35,7 @@
     },
     {
       "path": "skills/audience-reaction/references/contracts.md",
-      "sha256": "c6488bdd209c9585ec4f997935879d2d3da582a9e5123f8a58e6f714a1df5f62"
+      "sha256": "1a0e4ad5591266d50b5291474e847b1385fb823f24367405a6c1e925220eea96"
     },
     {
       "path": "skills/audience-reaction/references/dialogue-review.md",
@@ -51,7 +51,7 @@
     },
     {
       "path": "skills/audience-reaction/references/host-sentence-repair.md",
-      "sha256": "37eeae2be63b2b41b673184680635872f39e102620aef9fb83cf02b42ab400d2"
+      "sha256": "decd77daae1b806c78c7e056caf6ac6aea77a5b55bfe24a9548b8e29680fa797"
     },
     {
       "path": "skills/audience-reaction/references/host-turn-quality.md",
@@ -99,7 +99,7 @@
     },
     {
       "path": "skills/live-session-control/references/runtime.md",
-      "sha256": "0903d42a95cd641a85c0cbfdc2b3e8cab2eeb7474e3799c1c7a4f28326b6ecd5"
+      "sha256": "eef2c9f4ba2907dbc46ada4212cdc82fa84c78b1861f8dabfcd4e90c6df2911d"
     },
     {
       "path": "skills/singing/SKILL.md",

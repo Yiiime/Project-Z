@@ -267,7 +267,7 @@
         },
         "peer_relation_changes": {
           "type": "array",
-          "maxItems": 1,
+          "maxItems": 7,
           "items": {
             "type": "object",
             "required": [
@@ -470,6 +470,31 @@
               "items": {
                 "type": "string"
               }
+            }
+          },
+          "additionalProperties": false
+        },
+        "travel_decision": {
+          "type": "object",
+          "required": [
+            "choice",
+            "destination_id"
+          ],
+          "properties": {
+            "choice": {
+              "enum": [
+                "accept",
+                "decline",
+                "postpone",
+                "continue",
+                "cancel"
+              ]
+            },
+            "destination_id": {
+              "type": [
+                "string",
+                "null"
+              ]
             }
           },
           "additionalProperties": false
@@ -740,11 +765,24 @@
       "properties": {
         "z_story": {
           "type": "object",
-          "required": ["id", "count", "line"],
+          "required": [
+            "id",
+            "count",
+            "line"
+          ],
           "properties": {
-            "id": {"type": "string"},
-            "count": {"type": "integer", "minimum": 0, "maximum": 2},
-            "line": {"type": "string", "maxLength": 100}
+            "id": {
+              "type": "string"
+            },
+            "count": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 2
+            },
+            "line": {
+              "type": "string",
+              "maxLength": 100
+            }
           },
           "additionalProperties": false
         },
@@ -785,7 +823,8 @@
                 "player",
                 "npc_message",
                 "world_event",
-                "agenda"
+                "agenda",
+                "livestream"
               ]
             },
             "source_actor_id": {
@@ -828,6 +867,32 @@
                 "private_player_chat",
                 null
               ]
+            },
+            "counterpart": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "actor_id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "role": {
+                  "enum": [
+                    "player",
+                    "npc"
+                  ]
+                }
+              },
+              "required": [
+                "actor_id",
+                "name",
+                "role"
+              ],
+              "additionalProperties": false
             }
           },
           "additionalProperties": false,
@@ -1081,6 +1146,59 @@
                 }
               },
               "additionalProperties": true
+            },
+            "execution_evidence": {
+              "type": "array",
+              "maxItems": 6,
+              "items": {
+                "type": "object",
+                "description": "后台真实执行回执的只读视图。台词、wait和未执行动作不进入此列表；失败回执仍保留failed，不等于完成。这里只包含当前角色、当前时间线最近6项。",
+                "properties": {
+                  "action_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "type": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "target": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "status": {
+                    "enum": [
+                      "succeeded",
+                      "failed"
+                    ]
+                  },
+                  "receipt_id": {
+                    "type": "string"
+                  },
+                  "result": {
+                    "type": "object",
+                    "properties": {
+                      "scene": {
+                        "type": "string"
+                      },
+                      "summary": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                },
+                "required": [
+                  "action_id",
+                  "type",
+                  "target",
+                  "status",
+                  "result"
+                ],
+                "additionalProperties": false
+              }
             }
           },
           "additionalProperties": true

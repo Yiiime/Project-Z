@@ -1,0 +1,35 @@
+{
+  "dialogue": "好啊，我们去小小晴的花店看看。",
+  "action": {
+    "action_id": "move_flower_shop",
+    "type": "move",
+    "target": "flower_shop",
+    "parameters": {
+      "origin": "z_home",
+      "route": [
+        "z_home",
+        "residential_middle",
+        "public_middle",
+        "flower_shop"
+      ]
+    },
+    "description": "move"
+  },
+  "info": {
+    "affinity": 52,
+    "trust": 50,
+    "world_suspicion": 0,
+    "emotion": "interested",
+    "changes": {
+      "affinity": {
+        "delta": 2,
+        "reason": "玩家邀请我去看看感兴趣的花店。",
+        "source_event_ids": [
+          "evt_2943276a8ae54a63"
+        ]
+      }
+    },
+    "memory_updates": [],
+    "knowledge_updates": []
+  }
+}

@@ -1,0 +1,466 @@
+{
+  "protocol_version": "1.2.0",
+  "session_id": "schema_example",
+  "turn_id": "job_0a6b79774e2642ca",
+  "actor_id": "z",
+  "interaction": {
+    "mode": "player",
+    "source_actor_id": "player",
+    "source_event_id": "evt_2943276a8ae54a63",
+    "input": "Z，我们一起去小小晴的花店看看花吧。",
+    "conversation_id": "player_player_z"
+  },
+  "plot_node": {
+    "id": "event_driven",
+    "summary": "按已知与本局经历回应，日期不预定知情、援助或结局"
+  },
+  "environment": {
+    "scene": "z_home",
+    "day": 1,
+    "period": 0,
+    "weather": "晴",
+    "simulation_tick": 0,
+    "location_id": "z_home",
+    "scene_id": "Street",
+    "present_characters": [
+      "z",
+      "player"
+    ],
+    "reachable_locations": [
+      "residential_middle"
+    ],
+    "player_conversation_active": true,
+    "map_context": {
+      "current_place": {
+        "id": "z_home",
+        "name": "Z的家",
+        "kind": "residence",
+        "description": "居民街北侧；西邻小小晴家，东邻周伯伯家，中部连接路在西侧。",
+        "aliases": [
+          "Z家",
+          "Z 的家",
+          "Z的房子"
+        ]
+      },
+      "exits": [
+        {
+          "id": "residential_middle",
+          "name": "居民街中部路口",
+          "kind": "junction",
+          "description": "小小晴家与Z家之间；向南经中部连接路只到公共街。",
+          "aliases": []
+        }
+      ],
+      "asked_routes": [
+        {
+          "destination": "flower_shop",
+          "destination_name": "花店",
+          "status": "known_route",
+          "path": [
+            "z_home",
+            "residential_middle",
+            "public_middle",
+            "flower_shop"
+          ],
+          "via": [
+            "Z的家",
+            "居民街中部路口",
+            "公共街中部路口",
+            "花店"
+          ]
+        }
+      ],
+      "boundary": "路线候选不是已走到，入口、门禁和临时封路由引擎确认。"
+    },
+    "sceneId": "Street",
+    "walkable_locations": [
+      "z_home",
+      "visitor_center",
+      "flower_shop",
+      "dock",
+      "photo_studio",
+      "residential_middle",
+      "main_street",
+      "public_middle",
+      "public_east",
+      "corner_garden",
+      "ancient_tree_square"
+    ],
+    "actual_audience": [
+      "z",
+      "player"
+    ]
+  },
+  "character_state": {
+    "version": 1,
+    "info": {
+      "affinity": 50,
+      "trust": 50,
+      "world_suspicion": 0,
+      "emotion": "relaxed",
+      "changes": {},
+      "memory_updates": [],
+      "knowledge_updates": []
+    },
+    "known_facts": [],
+    "memories": [
+      {
+        "id": "mem_evt_2943276a8ae54a63_z",
+        "actorId": "z",
+        "kind": "claim",
+        "content": "玩家说：Z，我们一起去小小晴的花店看看花吧。",
+        "detailLevel": "detail",
+        "sourceLabel": "实际交谈原话，内容未核实",
+        "speakerId": "player",
+        "certainty": "对方的陈述，未必属实",
+        "availability": 100,
+        "clarity": 100,
+        "cueScore": 1,
+        "cued": true,
+        "reason": "细节仍清楚",
+        "state": {
+          "code": "clear",
+          "label": "记得清楚",
+          "reason": "经历较新或被实际使用过，容易想起，细节也还清楚。"
+        },
+        "rank": 94,
+        "summary": "玩家说：Z，我们一起去小小晴的花店看看花吧。",
+        "source_event_ids": [
+          "evt_2943276a8ae54a63"
+        ],
+        "disclose_to": [
+          "z",
+          "player"
+        ]
+      },
+      {
+        "id": "evt_2943276a8ae54a63",
+        "summary": "Z，我们一起去小小晴的花店看看花吧。",
+        "kind": "claim",
+        "source_event_ids": [
+          "evt_2943276a8ae54a63"
+        ],
+        "disclose_to": [
+          "z",
+          "player"
+        ]
+      }
+    ],
+    "received_claims": [
+      {
+        "id": "mem_evt_2943276a8ae54a63_z",
+        "actorId": "z",
+        "kind": "claim",
+        "content": "玩家说：Z，我们一起去小小晴的花店看看花吧。",
+        "detailLevel": "detail",
+        "sourceLabel": "实际交谈原话，内容未核实",
+        "speakerId": "player",
+        "certainty": "对方的陈述，未必属实",
+        "availability": 100,
+        "clarity": 100,
+        "cueScore": 1,
+        "cued": true,
+        "reason": "细节仍清楚",
+        "state": {
+          "code": "clear",
+          "label": "记得清楚",
+          "reason": "经历较新或被实际使用过，容易想起，细节也还清楚。"
+        },
+        "rank": 94,
+        "summary": "玩家说：Z，我们一起去小小晴的花店看看花吧。",
+        "source_event_ids": [
+          "evt_2943276a8ae54a63"
+        ],
+        "disclose_to": [
+          "z",
+          "player"
+        ]
+      },
+      {
+        "id": "evt_2943276a8ae54a63",
+        "summary": "Z，我们一起去小小晴的花店看看花吧。",
+        "kind": "claim",
+        "source_event_ids": [
+          "evt_2943276a8ae54a63"
+        ],
+        "disclose_to": [
+          "z",
+          "player"
+        ]
+      }
+    ],
+    "recent_conversation": [
+      {
+        "id": "msg_evt_2943276a8ae54a63",
+        "speakerId": "player",
+        "text": "Z，我们一起去小小晴的花店看看花吧。",
+        "conversation_id": "player_player_z",
+        "actual_audience": [
+          "z",
+          "player"
+        ],
+        "disclose_to": [
+          "z",
+          "player"
+        ],
+        "source_event_ids": [
+          "evt_2943276a8ae54a63"
+        ],
+        "kind": "claim"
+      }
+    ],
+    "recent_experiences": [
+      {
+        "id": "msg_evt_2943276a8ae54a63",
+        "speakerId": "player",
+        "text": "Z，我们一起去小小晴的花店看看花吧。",
+        "conversation_id": "player_player_z",
+        "actual_audience": [
+          "z",
+          "player"
+        ],
+        "disclose_to": [
+          "z",
+          "player"
+        ],
+        "source_event_ids": [
+          "evt_2943276a8ae54a63"
+        ],
+        "kind": "claim"
+      }
+    ],
+    "applied_event_ids": [],
+    "public_identity": {
+      "id": "z",
+      "name": "Z",
+      "occupation": "主播",
+      "workplace": null,
+      "home": "z_home",
+      "usual_place": "z_home",
+      "public_note": "生活在岛上，平时直播、逛街和探索；认识以下七位岛民。",
+      "workplace_name": null,
+      "home_name": "Z的家",
+      "usual_place_name": "Z的家"
+    },
+    "peer_relations": {
+      "liyuan": {
+        "affinity": 65,
+        "trust": 60,
+        "source": "moonlife-actors/references/characters/z.md#初始关系",
+        "impression_formed": true
+      },
+      "liting": {
+        "affinity": 60,
+        "trust": 35,
+        "source": "moonlife-actors/references/characters/z.md#初始关系",
+        "impression_formed": true
+      },
+      "axing": {
+        "affinity": 65,
+        "trust": 60,
+        "source": "moonlife-actors/references/characters/z.md#初始关系",
+        "impression_formed": true
+      },
+      "zhengyi": {
+        "affinity": 65,
+        "trust": 60,
+        "source": "moonlife-actors/references/characters/z.md#初始关系",
+        "impression_formed": true
+      },
+      "xiaoxiaoqing": {
+        "affinity": 65,
+        "trust": 60,
+        "source": "moonlife-actors/references/characters/z.md#初始关系",
+        "impression_formed": true
+      },
+      "linxu": {
+        "affinity": 65,
+        "trust": 60,
+        "source": "moonlife-actors/references/characters/z.md#初始关系",
+        "impression_formed": true
+      },
+      "zhou_bobo": {
+        "affinity": 65,
+        "trust": 70,
+        "source": "moonlife-actors/references/characters/z.md#初始关系",
+        "impression_formed": true
+      }
+    },
+    "metric_policy": {
+      "affinity": {
+        "source": "model",
+        "min_delta": -50,
+        "max_delta": 50
+      },
+      "trust": {
+        "source": "model",
+        "min_delta": -50,
+        "max_delta": 50
+      },
+      "world_suspicion": {
+        "source": "model",
+        "min_delta": 0,
+        "max_delta": 100
+      }
+    },
+    "peer_relation_policy": {
+      "max_abs_delta": 100
+    },
+    "disclosure_by_recipient": {
+      "liyuan": [],
+      "liting": [],
+      "axing": [],
+      "zhengyi": [],
+      "xiaoxiaoqing": [],
+      "linxu": [],
+      "zhou_bobo": []
+    },
+    "allowed_goals": [
+      {
+        "id": "z_work",
+        "label": "安排直播、探索和自己的未完事项"
+      },
+      {
+        "id": "z_social",
+        "label": "按兴趣与关系找人交谈、独立决定去留"
+      },
+      {
+        "id": "z_rest",
+        "label": "休息并消化真实的新经历"
+      }
+    ],
+    "allowed_next_action_ids": [
+      "wait_here",
+      "move_visitor_center",
+      "move_flower_shop",
+      "move_dock",
+      "move_residential_middle",
+      "move_main_street",
+      "move_public_middle",
+      "move_corner_garden"
+    ],
+    "agenda": null,
+    "pending_action": null,
+    "cooperation_requests": [],
+    "cooperation_state": []
+  },
+  "tasks": [],
+  "available_actions": [
+    {
+      "id": "wait_here",
+      "type": "wait",
+      "target": null,
+      "parameters": {}
+    },
+    {
+      "id": "move_visitor_center",
+      "type": "move",
+      "target": "visitor_center",
+      "parameters": {
+        "origin": "z_home",
+        "route": [
+          "z_home",
+          "residential_middle",
+          "public_middle",
+          "flower_shop",
+          "corner_garden",
+          "main_street",
+          "visitor_center"
+        ]
+      }
+    },
+    {
+      "id": "move_flower_shop",
+      "type": "move",
+      "target": "flower_shop",
+      "parameters": {
+        "origin": "z_home",
+        "route": [
+          "z_home",
+          "residential_middle",
+          "public_middle",
+          "flower_shop"
+        ]
+      }
+    },
+    {
+      "id": "move_dock",
+      "type": "move",
+      "target": "dock",
+      "parameters": {
+        "origin": "z_home",
+        "route": [
+          "z_home",
+          "residential_middle",
+          "public_middle",
+          "flower_shop",
+          "corner_garden",
+          "main_street",
+          "visitor_center",
+          "dock"
+        ]
+      }
+    },
+    {
+      "id": "move_residential_middle",
+      "type": "move",
+      "target": "residential_middle",
+      "parameters": {
+        "origin": "z_home",
+        "route": [
+          "z_home",
+          "residential_middle"
+        ]
+      }
+    },
+    {
+      "id": "move_main_street",
+      "type": "move",
+      "target": "main_street",
+      "parameters": {
+        "origin": "z_home",
+        "route": [
+          "z_home",
+          "residential_middle",
+          "public_middle",
+          "flower_shop",
+          "corner_garden",
+          "main_street"
+        ]
+      }
+    },
+    {
+      "id": "move_public_middle",
+      "type": "move",
+      "target": "public_middle",
+      "parameters": {
+        "origin": "z_home",
+        "route": [
+          "z_home",
+          "residential_middle",
+          "public_middle"
+        ]
+      }
+    },
+    {
+      "id": "move_corner_garden",
+      "type": "move",
+      "target": "corner_garden",
+      "parameters": {
+        "origin": "z_home",
+        "route": [
+          "z_home",
+          "residential_middle",
+          "public_middle",
+          "flower_shop",
+          "corner_garden"
+        ]
+      }
+    }
+  ],
+  "previous_action_result": null,
+  "reply_budget": {
+    "max_dialogue_chars": 160,
+    "deadline_ms": 8000
+  }
+}

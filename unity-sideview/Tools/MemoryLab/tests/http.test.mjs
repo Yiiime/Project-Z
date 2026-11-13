@@ -46,12 +46,12 @@ function reply(c) {
 }
 function zReply(c) {
   const output = reply(c);
-  if (c.actor_id === "z") output.expression = "smile";
+  if (c.actor_id === "z") output.expression = "happy";
   return output;
 }
 function litingReply(c) {
   const output = reply(c);
-  if (c.actor_id === "liting") output.expression = "curious";
+  if (c.actor_id === "liting") output.expression = "troubled";
   return output;
 }
 async function setup(t, decide = reply) {
@@ -109,6 +109,16 @@ const event = (id, seq, kind = "utterance") => ({
   channel: "private_player_chat",
   observers: ["z", "player"],
 });
+test('HTTP utterance binds the actual input and rejects another conversation or an engine speaker',async t=>{
+ const {post,app}=await setup(t);await post('game/open',base,true);await post('game/focus',{...base,actorId:'z'},true);
+ assert.equal((await post('game/sync',{...base,eventData:event('source',1)},true)).code,200);
+ const request={...base,actorId:'z',recipientId:'player',conversationId:'c1',sourceEventId:'source'};
+ for(const patch of [{conversationId:'unrelated'},{actorId:'linxu'},{sourceEventId:'missing'}])
+  assert.equal((await post('game/utterance',{...request,...patch},true)).code,400);
+ assert.equal((await post('game/sync',{...base,eventData:{...event('invalid',2),speakerId:'engine'}},true)).code,400);
+ assert.equal(app.engine.world('native').seq,1);
+ assert.equal((await post('game/utterance',request,true)).code,200);
+});
 test("native open, focus, spoken input, proposed output and actual speech are separate", async (t) => {
   const { app, post } = await setup(t);
   assert.equal((await post("game/open", base, true)).code, 200);
@@ -152,7 +162,7 @@ test("native open, focus, spoken input, proposed output and actual speech are se
     1,
   );
 });
-test("player reply exposes normalized Z expression and keeps it across event replay", async (t) => {
+test("player reply exposes explicit Z expression and keeps it across event replay", async (t) => {
   const { app, post } = await setup(t, zReply);
   await post("game/open", base, true);
   await post("game/focus", { ...base, actorId: "z" }, true);
@@ -345,10 +355,8 @@ test("restored outbox may replay previously approved actual speech, while old ru
   assert.equal(generated.expression, "happy");
   const cp = generated.checkpoint;
   const b2 = { ...base, runId: "r2" };
-  assert.equal(
-    (await post("game/open", { ...b2, checkpoint: cp }, true)).code,
-    200,
-  );
+  const restored = await post("game/open", { ...b2, checkpoint: cp }, true);
+  assert.equal(restored.code, 200, restored.data.error);
   assert.equal((await post("game/checkpoint", base, true)).code, 400);
   const ack = await post(
     "game/sync",
@@ -524,4 +532,14 @@ test("switching between Z and Liting keeps private chat history and portrait rep
     for (const turn of turns)
       assert.equal(history.some((m) => m.text === turn.marker), turn.actor === actor);
   }
+});
+
+
+test("native HTTP never forwards a Z expression alias outside the user enum",async t=>{
+  const {app,post}=await setup(t,c=>({...reply(c),expression:"smile"}));
+  await post("game/open",base,true);await post("game/focus",{...base,actorId:"z"},true);
+  await post("game/sync",{...base,eventData:event("strict-player",1)},true);
+  const generated=await post("game/utterance",{...base,actorId:"z",recipientId:"player",conversationId:"c1",requestId:"strict-expression",scene:"Street",locationId:"z_home"},true);
+  assert.equal(generated.code,200,generated.data.error);assert.equal(generated.data.expression,"neutral");
+  assert.equal(app.store.record(generated.data.proposalId).portrait_expression,"neutral");
 });

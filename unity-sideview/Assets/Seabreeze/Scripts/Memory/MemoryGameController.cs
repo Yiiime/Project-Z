@@ -14,12 +14,15 @@ namespace Seabreeze
         public MemoryLabClient Client {get;private set;}
         public SevenNpcSpawner Spawner {get;private set;}
         public NpcConversationCoordinator Conversations {get;private set;}
+        public MemoryActionExecutor Actions {get;private set;}
+        public NpcRuntimeReporter Runtimes {get;private set;}
         public MemoryDialogueView View {get;private set;}
         public MemoryReply LastReply {get;private set;}
         public bool LocalPortraitPreviewControls=>localPortraitPreview;
+        public bool RuntimeReportingEnabled=>!changing;
         public bool ZhouboPortraitFinal {get;private set;}
         public bool PlayerChatOpen=>(Conversations!=null&&Conversations.PlayerActor!=null)||(View!=null&&(View.Closing||View.ScriptedOpen));
-        public void Initialize(GameSession s,WorldDirector w){session=s;world=w;finalZhouboPreview=Array.IndexOf(Environment.GetCommandLineArgs(),"-zhoubo-final-preview")>=0;localPortraitPreview=Array.IndexOf(Environment.GetCommandLineArgs(),"-localPortraitPreview")>=0;ZhouboPortraitFinal=finalZhouboPreview;if(s.State.memory==null)s.State.memory=new MemorySaveState();s.State.memory.Sanitize();Spawner=gameObject.AddComponent<SevenNpcSpawner>();Spawner.Initialize(s,w);View=gameObject.AddComponent<MemoryDialogueView>();View.Initialize(this,s,w);Client=gameObject.AddComponent<MemoryLabClient>();Client.Initialize(s);Conversations=gameObject.AddComponent<NpcConversationCoordinator>();Conversations.Initialize(this,s,w);var executor=gameObject.AddComponent<MemoryActionExecutor>();executor.Initialize(this,s,w);lastDay=s.State.day;lastPeriod=s.State.period;s.Clock.Changed+=ClockChanged;s.TravelRequested+=TravelRequested;Client.ConnectionChanged+=ConnectionChanged;}
+        public void Initialize(GameSession s,WorldDirector w){session=s;world=w;finalZhouboPreview=Array.IndexOf(Environment.GetCommandLineArgs(),"-zhoubo-final-preview")>=0;localPortraitPreview=Array.IndexOf(Environment.GetCommandLineArgs(),"-localPortraitPreview")>=0;ZhouboPortraitFinal=finalZhouboPreview;if(s.State.memory==null)s.State.memory=new MemorySaveState();s.State.memory.Sanitize();Actions=gameObject.AddComponent<MemoryActionExecutor>();Actions.Initialize(this,s,w);Spawner=gameObject.AddComponent<SevenNpcSpawner>();Spawner.Initialize(s,w);View=gameObject.AddComponent<MemoryDialogueView>();View.Initialize(this,s,w);Client=gameObject.AddComponent<MemoryLabClient>();Client.Initialize(s);Conversations=gameObject.AddComponent<NpcConversationCoordinator>();Conversations.Initialize(this,s,w);Runtimes=gameObject.AddComponent<NpcRuntimeReporter>();Runtimes.Initialize(this,s);lastDay=s.State.day;lastPeriod=s.State.period;s.Clock.Changed+=ClockChanged;s.TravelRequested+=TravelRequested;Client.ConnectionChanged+=ConnectionChanged;}
         public void SetZhouboPortraitFinal(bool enabled){if(!localPortraitPreview)return;ZhouboPortraitFinal=enabled;}
         public void ResetZhouboPortraitSelection(){ZhouboPortraitFinal=false;}
         IEnumerator Start(){if(finalZhouboPreview)yield return StartFinalZhouboPreview();}
@@ -132,9 +135,9 @@ namespace Seabreeze
             };
         }
         public void BeforeSave(){if(!changing)Spawner?.CapturePositions();}
-        public void BeforeStateChange(){changing=true;Conversations?.ResetTimeline();GetComponent<MemoryActionExecutor>()?.ResetTimeline();}
+        public void BeforeStateChange(){changing=true;Runtimes?.ResetTimeline();Conversations?.ResetTimeline();GetComponent<MemoryActionExecutor>()?.ResetTimeline();}
         public void AfterStateChange(){if(session.State.memory==null)session.State.memory=new MemorySaveState();session.State.memory.Sanitize();changing=false;lastDay=session.State.day;lastPeriod=session.State.period;Spawner.Reload();Client.BeginWorld();View.ResetView();}
-        void TravelRequested(PlaceId place){if(!changing)Spawner?.CapturePositions();Conversations?.CancelAll("切换场景");View?.ResetView();}
+        void TravelRequested(PlaceId place){if(changing)return;Spawner?.CapturePositions();Actions?.BeforeTravel(place);Conversations?.CancelAll("切换场景");View?.ResetView();}
         void OnDestroy(){if(session!=null){session.Clock.Changed-=ClockChanged;session.TravelRequested-=TravelRequested;}if(Client!=null)Client.ConnectionChanged-=ConnectionChanged;}
     }
 }

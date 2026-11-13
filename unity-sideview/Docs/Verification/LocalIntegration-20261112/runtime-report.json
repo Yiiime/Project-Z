@@ -1,0 +1,54 @@
+{
+  "passed": true,
+  "source": "Unity Play Mode, actual locomotion, dialogue window, per-NPC HTTP queues and save reload; simulated model",
+  "checks": [
+    {
+      "name": "initial_environment_has_actual_coordinates",
+      "passed": true
+    },
+    {
+      "name": "actual_move_started",
+      "passed": true
+    },
+    {
+      "name": "npc_really_walked",
+      "passed": true
+    },
+    {
+      "name": "movement_start_and_arrival_recorded",
+      "passed": true
+    },
+    {
+      "name": "open_real_dialogue_window",
+      "passed": true
+    },
+    {
+      "name": "other_npc_queue_does_not_block_dialogue",
+      "passed": true
+    },
+    {
+      "name": "only_own_entries",
+      "passed": true
+    },
+    {
+      "name": "dialogue_environment_and_decision_saved",
+      "passed": true
+    },
+    {
+      "name": "dialogue_has_actual_location",
+      "passed": true
+    },
+    {
+      "name": "conversation_closed_recorded",
+      "passed": true
+    },
+    {
+      "name": "future_record_exists",
+      "passed": true
+    },
+    {
+      "name": "reload_drops_future_runtime_record",
+      "passed": true
+    }
+  ]
+}

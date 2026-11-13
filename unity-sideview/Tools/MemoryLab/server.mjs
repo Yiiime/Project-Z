@@ -18,6 +18,9 @@ import { Store, uid } from "./lib/store.mjs";
 import { Catalog, PROJECT } from "./lib/catalog.mjs";
 import { ModelProvider } from "./lib/provider.mjs";
 import { Engine } from "./lib/engine.mjs";
+import { LiveRoom } from "./lib/live-room.mjs";
+import { createLab } from "./lib/lab.mjs";
+import { createUtteranceHandler } from "./lib/utterance.mjs";
 import { TurnError, canonical } from "./lib/policy.mjs";
 export function environmentFromFile(path) {
   if (!path) return;
@@ -79,11 +82,13 @@ export function createServer({
   const engine = new Engine(store, catalog, provider, { decide }),
     token = randomBytes(24).toString("hex");
   const daySongs=songSubmit ? new DaySongDispatch(songSubmit) : null;
+  const liveRoom=new LiveRoom(engine), lab=createLab(engine), utterance=createUtteranceHandler(engine);
   let background = false;
   const status = () => ({
     ok: true,
     app: "moonlife-runtime",
     protocol: 2,
+    runtimeRevision: "integrated-npc-runtime-v1",
     configurationRevision,
     mode: provider.mode || "real",
     version: catalog.registry.pack_version,
@@ -137,7 +142,14 @@ export function createServer({
       elapsed_ms: Math.round(performance.now() - started),
     };
   };
-  const gameResponse = (world, extra = {}) => {
+  const referenceCheckpoint=world=>{
+    const cp=engine.checkpoint(world),ref=store.freezeCheckpoint(cp);
+    return {version:3,ref,worldId:world,contentRevision:cp.contentRevision,
+      broadcast:{...cp.broadcast,entries:[]},world:{day:cp.world.day,period:cp.world.period,hour:cp.world.hour,actors:Object.fromEntries(Object.entries(cp.world.actors).map(([id,a])=>[id,{runtime_input_seq:a.runtime_input_seq||0}]))},
+      tasks:{state:cp.tasks.state,collaboration:cp.tasks.collaboration},
+      records:{action:cp.records.action.filter(a=>a.status==="pending"),event:cp.records.event.filter(e=>e.id.startsWith("story_"+world+"_")).map(e=>({id:e.id}))}};
+  };
+  const gameResponse = (world, extra = {}, portable = false) => {
     const w = engine.world(world);
     w.responseRevision++;
     w.lastAccess = Date.now();
@@ -149,8 +161,8 @@ export function createServer({
       runId: w.runId,
       seq: w.seq,
       responseRevision: w.responseRevision,
-      checkpoint: JSON.stringify(checkpoint),
-      ...extra,
+      checkpoint: JSON.stringify(w.syncMode==="reference-v1"&&!portable?referenceCheckpoint(world):checkpoint),
+      ...(w.syncMode==="reference-v1"&&extra.result?{...extra,result:{dialogue:extra.result.dialogue,expression:extra.result.expression||extra.expression}}:extra),
     };
   };
   const checkRun = (input) => {
@@ -192,6 +204,22 @@ export function createServer({
             initial_policy: catalog.registry.initial_metric_policy,
           });
         if (url.pathname === "/api/health") return respond(res, status());
+        if(["/lab","/lab.js","/lab.css"].includes(url.pathname))return respond(res,readFileSync(join(APP_ROOT,"public",url.pathname==="/lab"?"lab.html":url.pathname.slice(1)),"utf8").replace("__TOKEN__",token),200,url.pathname==="/lab"?"text/html":url.pathname.endsWith(".js")?"text/javascript":"text/css");
+        if (url.pathname === "/runtimes")
+          return respond(res, readFileSync(join(APP_ROOT, "public/runtimes.html"), "utf8").replace("__TOKEN__", token), 200, "text/html");
+        if (url.pathname === "/api/debug/runtimes") {
+          if (req.headers["x-test-token"] !== token && req.headers["x-z-memory"] !== "1")
+            throw new TurnError("需要本机观察室标识");
+          const world = url.searchParams.get("worldId"), actor = url.searchParams.get("actorId");
+          return respond(res, {
+            ok: true,
+            worlds: store.experiments().filter(w => w.worldId).map(w => ({ worldId: w.worldId, day: w.day })),
+            actors: catalog.registry.actors.map(a => ({ id: a.actor_id, name: a.name })),
+            ...(world && actor ? engine.inspectRuntime(world, actor, {
+              after: Number(url.searchParams.get("after") || 0), limit: Number(url.searchParams.get("limit") || 80),
+            }) : {}),
+          });
+        }
         if (
           ["/settings", "/settings.js", "/settings.css"].includes(url.pathname)
         )
@@ -292,17 +320,19 @@ export function createServer({
         );
         return respond(res, { ...status(), message: "模型连接成功" });
       }
+      if(url.pathname.startsWith("/api/lab/"))return respond(res,await lab(url.pathname.slice("/api/lab/".length),p));
       if (url.pathname.startsWith("/api/game/")) {
         const world = p.worldId;
         if (!world || !/^[a-zA-Z0-9_-]{1,100}$/.test(world))
           throw new TurnError("世界标识无效");
         let result;
         if (url.pathname === "/api/game/open") {
-          const inputCheckpoint = p.checkpoint
+          let inputCheckpoint = p.checkpoint
             ? typeof p.checkpoint === "string"
               ? JSON.parse(p.checkpoint)
               : p.checkpoint
             : null;
+          if(inputCheckpoint?.version===3){if(inputCheckpoint.worldId!==world)throw new TurnError("存档所属世界不一致");inputCheckpoint=store.thawCheckpoint(inputCheckpoint.ref);}
           if (
             inputCheckpoint?.world?.hour >
             logicalHour(p.day, p.period) + 0.001
@@ -315,6 +345,7 @@ export function createServer({
           if (w.hour > target + 0.001)
             throw new TurnError("当前游戏不能加载未来记忆");
           w.host = "unity";
+          w.syncMode=p.syncMode||"legacy-full";w.weather=p.weather||w.weather||"未提供";
           w.day = p.day;
           w.period = p.period;
           w.hour = target;
@@ -387,6 +418,25 @@ export function createServer({
           } else if (url.pathname === "/api/game/speech/cancel") {
             speech.cancel(world,p.conversationId,p.proposalId);
             return respond(res,{ok:true});
+          } else if(url.pathname==="/api/game/live/open")result=gameResponse(world,{binding:liveRoom.open(p)});
+          else if(url.pathname==="/api/game/live/close"){liveRoom.close(p);result=gameResponse(world);}
+          else if(url.pathname.startsWith("/api/game/live/")){const op=url.pathname.split("/").at(-1);if(!["prepare","propose","observe","projection"].includes(op))throw new TurnError("直播接口不存在");result={ok:true,...liveRoom[op](p)};}
+          else if(w.liveRoom && !["/api/game/checkpoint","/api/game/state","/api/game/runtime","/api/game/runtime/sync"].includes(url.pathname))throw new TurnError("直播期间暂停岛上行为，请先同步退出直播");
+          else if (url.pathname === "/api/game/runtime/sync") {
+            const event = p.runtimeEvent;
+            if (!event || event.actorId !== p.actorId) throw new TurnError("NPC运行记录身份不匹配");
+            let runtimeSeq;
+            store.transaction(() => {
+              const when = logicalHour(event.day, event.period), now = logicalHour(p.day, p.period);
+              if (when > now + 0.001 || now < w.hour - 0.001) throw new TurnError("NPC运行记录时间不属于当前进度");
+              w.hour = now; w.day = p.day; w.period = p.period; engine.save(w);
+              runtimeSeq = engine.updateEnvironment(world, event.actorId, event.snapshot, {
+                id: event.id, hostSeq: event.seq, day: event.day, period: event.period,
+              });
+            });
+            result = gameResponse(world, { runtimeActorId: event.actorId, runtimeSeq });
+          } else if (url.pathname === "/api/game/runtime") {
+            result = { ok: true, ...engine.inspectRuntime(world, p.actorId, { after: p.after ?? 0, limit: p.limit ?? 80 }) };
           } else if (url.pathname === "/api/game/sync") {
             const event = p.eventData;
             if (!event?.id || !Number.isInteger(event.seq))
@@ -480,6 +530,8 @@ export function createServer({
                     !proposal ||
                     proposal.actor !== event.speakerId ||
                     proposal.output.dialogue !== event.text ||
+                    proposal.conversation!==event.conversationId ||
+                    (proposal.context.interaction.channel||"private_player_chat")!==(event.channel||"private_player_chat") ||
                     (proposal.context.interaction.mode === "player" &&
                       event.recipientId !== "player") ||
                     (proposal.output.action.type === "communicate" &&
@@ -533,10 +585,14 @@ export function createServer({
                   world,
                   event.actionId,
                   event.succeeded,
-                  { scene: event.locationId, summary: event.text },
+                  { scene: event.locationId, summary: event.text, ...(event.reasonCode?{reason_code:event.reasonCode}:{}) },
                   event.id,
                   { id: event.id, seq: event.seq, hour: when },
                 );
+              } else if(event.kind==="action_transition") {
+                engine.actionTransition(world,event.actionId,{scene:event.locationId,place:event.location,x:event.positionX,arrival_id:event.arrivalId},{id:event.id,seq:event.seq,hour:when});
+              } else if(event.kind==="action_progress") {
+                engine.actionProgress(world,event.actionId,event.routeIndex,event.locationId,{id:event.id,seq:event.seq,hour:when});
               } else if (["observation", "story_event"].includes(event.kind)) {
                 engine.observe(world, event.text, event.observers || [], {
                   kind: event.verified ? "fact" : "observation",
@@ -547,10 +603,13 @@ export function createServer({
                   hour: when,
                   location,
                   gist: event.gist,
+                  conversationId:event.conversationId,
                 });
               } else
                 throw new TurnError("不支持该事件类型；剧情必须由引擎显式投递");
-              const stored = engine.event(world, event.id);
+              let stored = engine.event(world, event.id);
+              if(!stored&&["utterance","action_result"].includes(event.kind))stored=engine.acknowledgeReceipt(world,event,when);
+              if(!stored)throw new TurnError("事件没有产生可确认记录");
               if (stored) {
                 if(event.kind==="utterance" && stored.speaker==="z" && stored.channel==="private_player_chat")stored.daySongBridge=true;
                 stored.game_payload_hash = digest;
@@ -568,6 +627,15 @@ export function createServer({
             engine.focus(world, p.actorId || null, "unity_" + p.runId);
             result = gameResponse(world);
           } else if (url.pathname === "/api/game/intent") {
+            if (p.runtimeSnapshot) {
+              if (p.runtimeSeq !== (engine.actor(world, p.actorId).runtime_input_seq || 0)) throw new TurnError("NPC环境尚未同步或已过期");
+              engine.updateEnvironment(world, p.actorId, p.runtimeSnapshot);
+            } else if (p.locationId) {
+              const current = engine.world(world);
+              if (!current.actors[p.actorId]?.pending_action) {
+                catalog.place(p.locationId); current.actors[p.actorId].scene = p.locationId; engine.save(current);
+              }
+            }
             result = gameResponse(
               world,
               await engine.plan(world, p.actorId, p.candidates || [], {
@@ -578,81 +646,10 @@ export function createServer({
               }),
             );
           } else if (url.pathname === "/api/game/utterance") {
-            const actor = p.actorId,
-              recipient = p.recipientId;
-            catalog.actor(actor);
-            if (recipient !== "player") catalog.actor(recipient);
-            const isPlayer = recipient === "player";
-            if (isPlayer && w.focus?.actor !== actor)
-              throw new TurnError("该NPC未取得玩家对话占用");
-            const history = engine.memory.history(
-                w,
-                actor,
-                p.conversationId,
-                8,
-              ),
-              last = history.at(-1);
-            const fallback =
-              last || engine.memory.history(w, actor, "", 8).at(-1);
-            if (!fallback) throw new TurnError("先提交实际交谈或会面事件");
-            const current = engine.world(world);
-            if (p.locationId) {
-              current.actors[actor].scene = p.locationId;
-              engine.save(current);
-            }
-            const j = engine.job(world, actor, fallback.source_event_ids[0], {
-              mode: isPlayer
-                ? "player"
-                : engine.event(world, fallback.source_event_ids[0])?.speaker ===
-                    recipient
-                  ? "npc_message"
-                  : "world_event",
-              conversation: p.conversationId,
-              channel: p.channel || "face_to_face",
-              environment: {
-                sceneId: p.scene,
-                actual_audience: isPlayer ? [actor,"player"] : [...new Set([actor,recipient,...(p.observers||[])])],
-                ...(!isPlayer
-                  ? {
-                      social_opportunity: {
-                        nearby_actors: [recipient],
-                        kind: "co_location",
-                      },
-                    }
-                  : {}),
-                present_characters: [actor, recipient],
-                reachable_locations: p.reachableLocations || [],
-                available_actions: p.availableActions?.length
-                  ? p.availableActions
-                  : undefined,
-              },
-            });
-            const results = await engine.run(world, 1, j.id),
-              r = results[0];
-            if (!r || r.status !== "proposed")
-              throw new TurnError(
-                r?.validation_error || "该角色正在处理另一回合",
-              );
-            result = gameResponse(world, {
-              requestId: p.requestId,
-              actorId: actor,
-              proposalId: r.proposalId,
-              text: r.output.dialogue,
-              delivery: store.record(r.proposalId)?.delivery || "",
-              result: r.output,
-              endConversation:
-                r.output.info.communication?.intent === "end" ||
-                r.output.info.social_decision?.choice === "keep_to_self",
-              recalledMemoryIds: store
-                .record(r.proposalId)
-                .context.character_state.memories.map((m) => m.id),
-              expression:
-                r.expression ??
-                store.record(r.proposalId)?.portrait_expression ??
-                null,
-            });
+            result=gameResponse(world,await utterance(p));
           } else if (url.pathname === "/api/game/commit") {
             const proposal = store.record(p.proposalId);
+            if(proposal?.output.dialogue)throw new TurnError("有台词的提案须使用实际发言回执");
             engine.commit(world, p.proposalId, {
               visible: p.observers || [p.actorId],
               location: p.locationId,
@@ -668,7 +665,7 @@ export function createServer({
             });
             result = { ok: true };
           } else if (url.pathname === "/api/game/checkpoint")
-            result = gameResponse(world);
+            result = gameResponse(world,{},p.portable===true);
           else if (url.pathname === "/api/game/close") {
             speech.cancel(world);
             engine.cancel(world);
@@ -830,7 +827,7 @@ export function createServer({
     daySongs?.close();
     clearInterval(timer);
     for (const w of store.experiments().filter((w) => w.worldId))
-      engine.cancel(w.worldId);
+      engine.runtime.cancel(w.worldId);
   });
   return { server, engine, store, catalog, provider, token, status };
 }

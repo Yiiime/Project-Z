@@ -1,0 +1,313 @@
+{
+  "protocol_version": "1.2.0",
+  "session_id": "schema_example",
+  "turn_id": "job_0765d1410e614951",
+  "actor_id": "xiaoxiaoqing",
+  "interaction": {
+    "mode": "npc_message",
+    "source_actor_id": "z",
+    "source_event_id": "evt_1a3c286d7e694e55",
+    "input": "我想去花店看看今天有什么花。",
+    "conversation_id": "schema_a2a",
+    "channel": "face_to_face"
+  },
+  "plot_node": {
+    "id": "event_driven",
+    "summary": "按已知与本局经历回应，日期不预定知情、援助或结局"
+  },
+  "environment": {
+    "scene": "flower_shop",
+    "day": 1,
+    "period": 0,
+    "weather": "晴",
+    "simulation_tick": 0,
+    "location_id": "flower_shop",
+    "scene_id": null,
+    "present_characters": [
+      "xiaoxiaoqing",
+      "z"
+    ],
+    "reachable_locations": [],
+    "player_conversation_active": false,
+    "map_context": {
+      "current_place": {
+        "id": "flower_shop",
+        "name": "花店",
+        "kind": "facility",
+        "description": "公共街北侧；西邻街角花园，东边隔中部连接路是咖啡店。小小晴经营。",
+        "aliases": []
+      },
+      "exits": [
+        {
+          "id": "corner_garden",
+          "name": "街角花园",
+          "kind": "outdoors",
+          "description": "公共街北侧，西侧连接路以东，花店以西；与花店是两处地点。",
+          "aliases": []
+        },
+        {
+          "id": "public_middle",
+          "name": "公共街中部路口",
+          "kind": "junction",
+          "description": "花店与咖啡店之间；向北经中部连接路到居民街，没有向南直通海滨街的道路。",
+          "aliases": []
+        }
+      ],
+      "asked_routes": [
+        {
+          "destination": "flower_shop",
+          "destination_name": "花店",
+          "status": "known_route",
+          "path": [
+            "flower_shop"
+          ],
+          "via": [
+            "花店"
+          ]
+        }
+      ],
+      "boundary": "路线候选不是已走到，入口、门禁和临时封路由引擎确认。"
+    },
+    "actual_audience": [
+      "xiaoxiaoqing",
+      "z"
+    ],
+    "social_opportunity": {
+      "nearby_actors": [
+        "z"
+      ],
+      "kind": "co_location"
+    }
+  },
+  "character_state": {
+    "version": 1,
+    "info": {
+      "affinity": 50,
+      "trust": 50,
+      "world_suspicion": 0,
+      "persuasion": 0,
+      "emotion": "relaxed",
+      "changes": {},
+      "memory_updates": [],
+      "knowledge_updates": [],
+      "support_willingness": "unassessed"
+    },
+    "known_facts": [],
+    "memories": [
+      {
+        "id": "mem_evt_1a3c286d7e694e55_xiaoxiaoqing",
+        "actorId": "xiaoxiaoqing",
+        "kind": "claim",
+        "content": "Z说：我想去花店看看今天有什么花。",
+        "detailLevel": "detail",
+        "sourceLabel": "实际交谈原话，内容未核实",
+        "speakerId": "z",
+        "certainty": "对方的陈述，未必属实",
+        "availability": 100,
+        "clarity": 100,
+        "cueScore": 1,
+        "cued": true,
+        "reason": "细节仍清楚",
+        "state": {
+          "code": "clear",
+          "label": "记得清楚",
+          "reason": "经历较新或被实际使用过，容易想起，细节也还清楚。"
+        },
+        "rank": 94,
+        "summary": "Z说：我想去花店看看今天有什么花。",
+        "source_event_ids": [
+          "evt_1a3c286d7e694e55"
+        ],
+        "disclose_to": [
+          "z",
+          "xiaoxiaoqing"
+        ]
+      },
+      {
+        "id": "evt_1a3c286d7e694e55",
+        "summary": "我想去花店看看今天有什么花。",
+        "kind": "claim",
+        "source_event_ids": [
+          "evt_1a3c286d7e694e55"
+        ],
+        "disclose_to": [
+          "z",
+          "xiaoxiaoqing"
+        ]
+      }
+    ],
+    "received_claims": [
+      {
+        "id": "mem_evt_1a3c286d7e694e55_xiaoxiaoqing",
+        "actorId": "xiaoxiaoqing",
+        "kind": "claim",
+        "content": "Z说：我想去花店看看今天有什么花。",
+        "detailLevel": "detail",
+        "sourceLabel": "实际交谈原话，内容未核实",
+        "speakerId": "z",
+        "certainty": "对方的陈述，未必属实",
+        "availability": 100,
+        "clarity": 100,
+        "cueScore": 1,
+        "cued": true,
+        "reason": "细节仍清楚",
+        "state": {
+          "code": "clear",
+          "label": "记得清楚",
+          "reason": "经历较新或被实际使用过，容易想起，细节也还清楚。"
+        },
+        "rank": 94,
+        "summary": "Z说：我想去花店看看今天有什么花。",
+        "source_event_ids": [
+          "evt_1a3c286d7e694e55"
+        ],
+        "disclose_to": [
+          "z",
+          "xiaoxiaoqing"
+        ]
+      },
+      {
+        "id": "evt_1a3c286d7e694e55",
+        "summary": "我想去花店看看今天有什么花。",
+        "kind": "claim",
+        "source_event_ids": [
+          "evt_1a3c286d7e694e55"
+        ],
+        "disclose_to": [
+          "z",
+          "xiaoxiaoqing"
+        ]
+      }
+    ],
+    "recent_conversation": [],
+    "recent_experiences": [
+      {
+        "id": "msg_evt_1a3c286d7e694e55",
+        "speakerId": "z",
+        "text": "我想去花店看看今天有什么花。",
+        "conversation_id": "",
+        "actual_audience": [
+          "z",
+          "xiaoxiaoqing"
+        ],
+        "disclose_to": [
+          "z",
+          "xiaoxiaoqing"
+        ],
+        "source_event_ids": [
+          "evt_1a3c286d7e694e55"
+        ],
+        "kind": "claim"
+      }
+    ],
+    "applied_event_ids": [],
+    "public_identity": {
+      "id": "xiaoxiaoqing",
+      "name": "小小晴",
+      "occupation": "花店老板，照顾植物与制作花束",
+      "workplace": "flower_shop",
+      "home": "xiaoxiaoqing_home",
+      "usual_place": "flower_shop",
+      "public_note": "经营花店，也照料街角花园的花。",
+      "workplace_name": "花店",
+      "home_name": "小小晴的家",
+      "usual_place_name": "花店"
+    },
+    "peer_relations": {
+      "z": {
+        "affinity": 65,
+        "trust": 60,
+        "source": "moonlife-actors/references/characters/xiaoxiaoqing.md#初始关系",
+        "impression_formed": true
+      },
+      "zhou_bobo": {
+        "affinity": 55,
+        "trust": 55,
+        "source": "moonlife-actors/references/characters/xiaoxiaoqing.md#初始关系",
+        "impression_formed": true
+      }
+    },
+    "metric_policy": {
+      "affinity": {
+        "source": "model",
+        "min_delta": -50,
+        "max_delta": 50
+      },
+      "trust": {
+        "source": "model",
+        "min_delta": -50,
+        "max_delta": 50
+      },
+      "world_suspicion": {
+        "source": "model",
+        "min_delta": 0,
+        "max_delta": 100
+      },
+      "persuasion": {
+        "source": "model",
+        "min_delta": 0,
+        "max_delta": 100
+      }
+    },
+    "peer_relation_policy": {
+      "max_abs_delta": 100
+    },
+    "disclosure_by_recipient": {
+      "z": [
+        "mem_evt_1a3c286d7e694e55_xiaoxiaoqing",
+        "evt_1a3c286d7e694e55"
+      ],
+      "liyuan": [],
+      "liting": [],
+      "axing": [],
+      "zhengyi": [],
+      "linxu": [],
+      "zhou_bobo": []
+    },
+    "allowed_goals": [
+      {
+        "id": "xiaoxiaoqing_work",
+        "label": "养护花店植被、准备已有花材"
+      },
+      {
+        "id": "xiaoxiaoqing_social",
+        "label": "分享花束故事、维护朋友关系和自己的边界"
+      },
+      {
+        "id": "xiaoxiaoqing_rest",
+        "label": "照顾自己并休息"
+      }
+    ],
+    "allowed_next_action_ids": [
+      "wait_here",
+      "talk_z"
+    ],
+    "agenda": null,
+    "pending_action": null,
+    "cooperation_requests": [],
+    "cooperation_state": []
+  },
+  "tasks": [],
+  "available_actions": [
+    {
+      "id": "wait_here",
+      "type": "wait",
+      "target": null,
+      "parameters": {}
+    },
+    {
+      "id": "talk_z",
+      "type": "communicate",
+      "target": "z",
+      "parameters": {
+        "channel": "face_to_face",
+        "conversation_id": "schema_a2a"
+      }
+    }
+  ],
+  "previous_action_result": null,
+  "reply_budget": {
+    "max_dialogue_chars": 160,
+    "deadline_ms": 8000
+  }
+}
