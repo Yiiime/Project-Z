@@ -1,0 +1,3527 @@
+{
+  "status": "completed",
+  "frame": 17599,
+  "rows": [
+    {
+      "place": "Street",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/Street.png",
+      "frame": 14030,
+      "center": [
+        0.0,
+        3.87916636
+      ],
+      "size": [
+        51.4,
+        12.4083338
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Street",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/Street.png",
+      "frame": 14041,
+      "center": [
+        0.0,
+        3.83546758
+      ],
+      "size": [
+        51.4,
+        17.1412258
+      ],
+      "scale": [
+        2.841087,
+        2.841087
+      ],
+      "floorDelta": -2.23390643E-07,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Street",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/Street.png",
+      "frame": 14053,
+      "center": [
+        0.0,
+        3.87916636
+      ],
+      "size": [
+        51.4,
+        12.4083338
+      ],
+      "scale": [
+        1.65450644,
+        1.65444446
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Street",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/Street.png",
+      "frame": 14065,
+      "center": [
+        0.0,
+        3.87916636
+      ],
+      "size": [
+        51.4,
+        12.4083338
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Street",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/Street.png",
+      "frame": 14076,
+      "center": [
+        0.0,
+        3.83546758
+      ],
+      "size": [
+        51.4,
+        17.1412258
+      ],
+      "scale": [
+        2.841087,
+        2.841087
+      ],
+      "floorDelta": -2.23390643E-07,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "Cafe",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/Cafe.png",
+      "frame": 14130,
+      "center": [
+        0.0,
+        1.84242427
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Cafe",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/Cafe.png",
+      "frame": 14141,
+      "center": [
+        0.0,
+        1.84242427
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Cafe",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/Cafe.png",
+      "frame": 14154,
+      "center": [
+        0.0,
+        1.84242427
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Cafe",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/Cafe.png",
+      "frame": 14166,
+      "center": [
+        0.0,
+        1.84242427
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Cafe",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/Cafe.png",
+      "frame": 14177,
+      "center": [
+        0.0,
+        1.84242427
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "Lighthouse",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Resources/Art/lighthouse_day.png",
+      "frame": 14244,
+      "center": [
+        0.0,
+        5.279055
+      ],
+      "size": [
+        28.0,
+        15.7583742
+      ],
+      "scale": [
+        1.67464125,
+        1.67464125
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Lighthouse",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/Lighthouse.png",
+      "frame": 14255,
+      "center": [
+        0.0,
+        5.279055
+      ],
+      "size": [
+        28.0,
+        15.7583733
+      ],
+      "scale": [
+        2.00956941,
+        2.00956941
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Lighthouse",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/Lighthouse.png",
+      "frame": 14268,
+      "center": [
+        0.0,
+        5.279055
+      ],
+      "size": [
+        28.0,
+        15.7583733
+      ],
+      "scale": [
+        2.00956941,
+        2.00956941
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Lighthouse",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Resources/Art/lighthouse.png",
+      "frame": 14280,
+      "center": [
+        0.0,
+        5.279055
+      ],
+      "size": [
+        28.0,
+        15.7583742
+      ],
+      "scale": [
+        1.67464125,
+        1.67464125
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Lighthouse",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/Lighthouse.png",
+      "frame": 14291,
+      "center": [
+        0.0,
+        5.279055
+      ],
+      "size": [
+        28.0,
+        15.7583733
+      ],
+      "scale": [
+        2.00956941,
+        2.00956941
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "ResidentialCenter",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/ResidentialCenter.png",
+      "frame": 14356,
+      "center": [
+        0.0,
+        3.67500019
+      ],
+      "size": [
+        69.1666641,
+        12.65
+      ],
+      "scale": [
+        0.9998346,
+        0.99999994
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ResidentialCenter",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/ResidentialCenter.png",
+      "frame": 14367,
+      "center": [
+        0.0,
+        3.439226
+      ],
+      "size": [
+        69.1666641,
+        23.0555534
+      ],
+      "scale": [
+        3.8213625,
+        3.8213625
+      ],
+      "floorDelta": 1.30393147E-07,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ResidentialCenter",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/ResidentialCenter.png",
+      "frame": 14380,
+      "center": [
+        0.0,
+        3.67500019
+      ],
+      "size": [
+        69.1666641,
+        12.65
+      ],
+      "scale": [
+        1.686649,
+        1.68666661
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ResidentialCenter",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/ResidentialCenter.png",
+      "frame": 14392,
+      "center": [
+        0.0,
+        3.67500019
+      ],
+      "size": [
+        69.1666641,
+        12.65
+      ],
+      "scale": [
+        0.9998346,
+        0.99999994
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ResidentialCenter",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/ResidentialCenter.png",
+      "frame": 14403,
+      "center": [
+        0.0,
+        3.439226
+      ],
+      "size": [
+        69.1666641,
+        23.0555534
+      ],
+      "scale": [
+        3.8213625,
+        3.8213625
+      ],
+      "floorDelta": 1.30393147E-07,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "Forest",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/Forest.png",
+      "frame": 14470,
+      "center": [
+        0.0,
+        3.575
+      ],
+      "size": [
+        22.291666,
+        12.4333334
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Forest",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/Forest.png",
+      "frame": 14481,
+      "center": [
+        0.0,
+        3.575
+      ],
+      "size": [
+        22.291666,
+        12.4333334
+      ],
+      "scale": [
+        1.5941596,
+        1.59231591
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Forest",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/Forest.png",
+      "frame": 14493,
+      "center": [
+        0.0,
+        3.575
+      ],
+      "size": [
+        22.291666,
+        12.4333334
+      ],
+      "scale": [
+        1.59321022,
+        1.59231591
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Forest",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/Forest.png",
+      "frame": 14504,
+      "center": [
+        0.0,
+        3.575
+      ],
+      "size": [
+        22.291666,
+        12.4333334
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Forest",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/Forest.png",
+      "frame": 14515,
+      "center": [
+        0.0,
+        3.575
+      ],
+      "size": [
+        22.291666,
+        12.4333334
+      ],
+      "scale": [
+        1.5941596,
+        1.59231591
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "ForestCabin",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/ForestCabin.png",
+      "frame": 14581,
+      "center": [
+        0.0,
+        3.57083344
+      ],
+      "size": [
+        25.65,
+        12.4416666
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ForestCabin",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/ForestCabin.png",
+      "frame": 14592,
+      "center": [
+        0.0,
+        3.57083344
+      ],
+      "size": [
+        25.65,
+        12.4416666
+      ],
+      "scale": [
+        1.70999992,
+        1.708238
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ForestCabin",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/ForestCabin.png",
+      "frame": 14604,
+      "center": [
+        0.0,
+        3.57083344
+      ],
+      "size": [
+        25.65,
+        12.4416666
+      ],
+      "scale": [
+        1.70999992,
+        1.708238
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ForestCabin",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/ForestCabin.png",
+      "frame": 14615,
+      "center": [
+        0.0,
+        3.57083344
+      ],
+      "size": [
+        25.65,
+        12.4416666
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ForestCabin",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/ForestCabin.png",
+      "frame": 14626,
+      "center": [
+        0.0,
+        3.57083344
+      ],
+      "size": [
+        25.65,
+        12.4416666
+      ],
+      "scale": [
+        1.70999992,
+        1.708238
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "Research",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/Research.png",
+      "frame": 14693,
+      "center": [
+        0.0,
+        3.7166667
+      ],
+      "size": [
+        21.9,
+        12.3166666
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Research",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/Research.png",
+      "frame": 14704,
+      "center": [
+        0.0,
+        3.7166667
+      ],
+      "size": [
+        21.9,
+        12.3166666
+      ],
+      "scale": [
+        1.57177031,
+        1.57066953
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Research",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/Research.png",
+      "frame": 14716,
+      "center": [
+        0.0,
+        3.7166667
+      ],
+      "size": [
+        21.9,
+        12.3166666
+      ],
+      "scale": [
+        1.57177031,
+        1.57234037
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Research",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/Research.png",
+      "frame": 14727,
+      "center": [
+        0.0,
+        3.7166667
+      ],
+      "size": [
+        21.9,
+        12.3166666
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Research",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/Research.png",
+      "frame": 14738,
+      "center": [
+        0.0,
+        3.7166667
+      ],
+      "size": [
+        21.9,
+        12.3166666
+      ],
+      "scale": [
+        1.57177031,
+        1.57066953
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "Summit",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/Summit.png",
+      "frame": 14804,
+      "center": [
+        0.0,
+        3.9375
+      ],
+      "size": [
+        23.333334,
+        13.125
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Summit",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/Summit.png",
+      "frame": 14815,
+      "center": [
+        0.0,
+        3.9375
+      ],
+      "size": [
+        23.333334,
+        13.125
+      ],
+      "scale": [
+        1.67464113,
+        1.67375135
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Summit",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/Summit.png",
+      "frame": 14827,
+      "center": [
+        0.0,
+        3.9375
+      ],
+      "size": [
+        23.333334,
+        13.125
+      ],
+      "scale": [
+        1.67464113,
+        1.67375135
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Summit",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/Summit.png",
+      "frame": 14838,
+      "center": [
+        0.0,
+        3.9375
+      ],
+      "size": [
+        23.333334,
+        13.125
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Summit",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/Summit.png",
+      "frame": 14849,
+      "center": [
+        0.0,
+        3.9375
+      ],
+      "size": [
+        23.333334,
+        13.125
+      ],
+      "scale": [
+        1.67464113,
+        1.67375135
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "Harbor",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/Harbor.png",
+      "frame": 14916,
+      "center": [
+        0.0,
+        3.9083333
+      ],
+      "size": [
+        38.7583351,
+        12.4333334
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Harbor",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/Harbor.png",
+      "frame": 14927,
+      "center": [
+        0.0,
+        3.874048
+      ],
+      "size": [
+        38.75833,
+        12.925395
+      ],
+      "scale": [
+        2.14233065,
+        2.14233065
+      ],
+      "floorDelta": -5.01820381E-08,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Harbor",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/Harbor.png",
+      "frame": 14940,
+      "center": [
+        0.0,
+        3.9083333
+      ],
+      "size": [
+        38.75833,
+        12.4333334
+      ],
+      "scale": [
+        2.14233065,
+        2.13142848
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Harbor",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/Harbor.png",
+      "frame": 14952,
+      "center": [
+        0.0,
+        3.9083333
+      ],
+      "size": [
+        38.7583351,
+        12.4333334
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Harbor",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/Harbor.png",
+      "frame": 14964,
+      "center": [
+        0.0,
+        3.874048
+      ],
+      "size": [
+        38.75833,
+        12.925395
+      ],
+      "scale": [
+        2.14233065,
+        2.14233065
+      ],
+      "floorDelta": -5.01820381E-08,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "Square",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/Square.png",
+      "frame": 15030,
+      "center": [
+        0.0,
+        3.94583344
+      ],
+      "size": [
+        19.8166676,
+        12.4416666
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Square",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/Square.png",
+      "frame": 15041,
+      "center": [
+        0.0,
+        3.94583344
+      ],
+      "size": [
+        19.8166676,
+        12.4416666
+      ],
+      "scale": [
+        1.50221109,
+        1.502012
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Square",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/Square.png",
+      "frame": 15053,
+      "center": [
+        0.0,
+        3.94583344
+      ],
+      "size": [
+        19.8166676,
+        12.4416666
+      ],
+      "scale": [
+        1.50221109,
+        1.502012
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Square",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/Square.png",
+      "frame": 15065,
+      "center": [
+        0.0,
+        3.94583344
+      ],
+      "size": [
+        19.8166676,
+        12.4416666
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Square",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/Square.png",
+      "frame": 15076,
+      "center": [
+        0.0,
+        3.94583344
+      ],
+      "size": [
+        19.8166676,
+        12.4416666
+      ],
+      "scale": [
+        1.50221109,
+        1.502012
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "EastCrossing",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/EastCrossing.png",
+      "frame": 15143,
+      "center": [
+        0.0,
+        3.86666656
+      ],
+      "size": [
+        24.791666,
+        12.4333334
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "EastCrossing",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/EastCrossing.png",
+      "frame": 15154,
+      "center": [
+        0.0,
+        3.86666656
+      ],
+      "size": [
+        24.791666,
+        12.4333334
+      ],
+      "scale": [
+        1.67889392,
+        1.68207431
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "EastCrossing",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/EastCrossing.png",
+      "frame": 15166,
+      "center": [
+        0.0,
+        3.86666656
+      ],
+      "size": [
+        24.791666,
+        12.4333334
+      ],
+      "scale": [
+        1.67984188,
+        1.68018019
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "EastCrossing",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/EastCrossing.png",
+      "frame": 15177,
+      "center": [
+        0.0,
+        3.86666656
+      ],
+      "size": [
+        24.791666,
+        12.4333334
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "EastCrossing",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/EastCrossing.png",
+      "frame": 15189,
+      "center": [
+        0.0,
+        3.86666656
+      ],
+      "size": [
+        24.791666,
+        12.4333334
+      ],
+      "scale": [
+        1.67889392,
+        1.68207431
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "Boardwalk",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/Boardwalk.png",
+      "frame": 15257,
+      "center": [
+        0.0,
+        3.72500014
+      ],
+      "size": [
+        39.9,
+        12.2166662
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Boardwalk",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/Boardwalk.png",
+      "frame": 15269,
+      "center": [
+        0.0,
+        3.71077323
+      ],
+      "size": [
+        39.9,
+        13.2999992
+      ],
+      "scale": [
+        2.20441985,
+        2.20441985
+      ],
+      "floorDelta": -8.426511E-08,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Boardwalk",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/Boardwalk.png",
+      "frame": 15282,
+      "center": [
+        0.0,
+        3.72500014
+      ],
+      "size": [
+        39.9,
+        12.2166662
+      ],
+      "scale": [
+        1.6291256,
+        1.62888885
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Boardwalk",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/Boardwalk.png",
+      "frame": 15294,
+      "center": [
+        0.0,
+        3.72500014
+      ],
+      "size": [
+        39.9,
+        12.2166662
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Boardwalk",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/Boardwalk.png",
+      "frame": 15306,
+      "center": [
+        0.0,
+        3.71077323
+      ],
+      "size": [
+        39.9,
+        13.2999992
+      ],
+      "scale": [
+        2.20441985,
+        2.20441985
+      ],
+      "floorDelta": -8.426511E-08,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "Seafront",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/Seafront.png",
+      "frame": 15373,
+      "center": [
+        0.0,
+        3.95
+      ],
+      "size": [
+        35.1,
+        12.4333334
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Seafront",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/Seafront.png",
+      "frame": 15385,
+      "center": [
+        0.0,
+        3.95
+      ],
+      "size": [
+        35.1,
+        12.4333334
+      ],
+      "scale": [
+        2.0,
+        1.99732268
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Seafront",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/Seafront.png",
+      "frame": 15397,
+      "center": [
+        0.0,
+        3.95
+      ],
+      "size": [
+        35.1,
+        12.4333334
+      ],
+      "scale": [
+        2.0,
+        1.99732268
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Seafront",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/Seafront.png",
+      "frame": 15408,
+      "center": [
+        0.0,
+        3.95
+      ],
+      "size": [
+        35.1,
+        12.4333334
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Seafront",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/Seafront.png",
+      "frame": 15420,
+      "center": [
+        0.0,
+        3.95
+      ],
+      "size": [
+        35.1,
+        12.4333334
+      ],
+      "scale": [
+        2.0,
+        1.99732268
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "Beach",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/Beach.png",
+      "frame": 15486,
+      "center": [
+        0.0,
+        4.0333333
+      ],
+      "size": [
+        22.0916672,
+        12.4333334
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Beach",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/Beach.png",
+      "frame": 15498,
+      "center": [
+        0.0,
+        4.0333333
+      ],
+      "size": [
+        22.0916672,
+        12.4333334
+      ],
+      "scale": [
+        1.58552635,
+        1.58554733
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Beach",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/Beach.png",
+      "frame": 15510,
+      "center": [
+        0.0,
+        4.0333333
+      ],
+      "size": [
+        22.0916672,
+        12.4333334
+      ],
+      "scale": [
+        1.58552635,
+        1.58554733
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Beach",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/Beach.png",
+      "frame": 15522,
+      "center": [
+        0.0,
+        4.0333333
+      ],
+      "size": [
+        22.0916672,
+        12.4333334
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "Beach",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/Beach.png",
+      "frame": 15534,
+      "center": [
+        0.0,
+        4.0333333
+      ],
+      "size": [
+        22.0916672,
+        12.4333334
+      ],
+      "scale": [
+        1.58552635,
+        1.58554733
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "ForestPath1",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/ForestPath1.png",
+      "frame": 15602,
+      "center": [
+        0.0,
+        3.8625
+      ],
+      "size": [
+        25.325,
+        12.4416666
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ForestPath1",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/ForestPath1.png",
+      "frame": 15614,
+      "center": [
+        0.0,
+        3.8625
+      ],
+      "size": [
+        25.325,
+        12.4416666
+      ],
+      "scale": [
+        1.69871438,
+        1.69852114
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ForestPath1",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/ForestPath1.png",
+      "frame": 15626,
+      "center": [
+        0.0,
+        3.8625
+      ],
+      "size": [
+        25.325,
+        12.4416666
+      ],
+      "scale": [
+        1.69871438,
+        1.69852114
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ForestPath1",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/ForestPath1.png",
+      "frame": 15638,
+      "center": [
+        0.0,
+        3.8625
+      ],
+      "size": [
+        25.325,
+        12.4416666
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ForestPath1",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/ForestPath1.png",
+      "frame": 15650,
+      "center": [
+        0.0,
+        3.8625
+      ],
+      "size": [
+        25.325,
+        12.4416666
+      ],
+      "scale": [
+        1.69871438,
+        1.69852114
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "ForestPath2",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/ForestPath2.png",
+      "frame": 15718,
+      "center": [
+        0.0,
+        3.37916684
+      ],
+      "size": [
+        24.6416664,
+        12.325
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ForestPath2",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/ForestPath2.png",
+      "frame": 15730,
+      "center": [
+        0.0,
+        3.37916684
+      ],
+      "size": [
+        24.6416664,
+        12.325
+      ],
+      "scale": [
+        1.6668545,
+        1.66741824
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ForestPath2",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/ForestPath2.png",
+      "frame": 15743,
+      "center": [
+        0.0,
+        3.37916684
+      ],
+      "size": [
+        24.6416664,
+        12.325
+      ],
+      "scale": [
+        1.6668545,
+        1.66741824
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ForestPath2",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/ForestPath2.png",
+      "frame": 15756,
+      "center": [
+        0.0,
+        3.37916684
+      ],
+      "size": [
+        24.6416664,
+        12.325
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ForestPath2",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/ForestPath2.png",
+      "frame": 15768,
+      "center": [
+        0.0,
+        3.37916684
+      ],
+      "size": [
+        24.6416664,
+        12.325
+      ],
+      "scale": [
+        1.6668545,
+        1.66741824
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "BeachEntrance",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/BeachEntrance.png",
+      "frame": 15836,
+      "center": [
+        0.0,
+        3.7833333
+      ],
+      "size": [
+        23.275,
+        12.4333334
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "BeachEntrance",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/BeachEntrance.png",
+      "frame": 15848,
+      "center": [
+        0.0,
+        3.7833333
+      ],
+      "size": [
+        23.275,
+        12.4333334
+      ],
+      "scale": [
+        1.62762237,
+        1.62704468
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "BeachEntrance",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/BeachEntrance.png",
+      "frame": 15860,
+      "center": [
+        0.0,
+        3.7833333
+      ],
+      "size": [
+        23.275,
+        12.4333334
+      ],
+      "scale": [
+        1.62762237,
+        1.62704468
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "BeachEntrance",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/BeachEntrance.png",
+      "frame": 15872,
+      "center": [
+        0.0,
+        3.7833333
+      ],
+      "size": [
+        23.275,
+        12.4333334
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "BeachEntrance",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/BeachEntrance.png",
+      "frame": 15884,
+      "center": [
+        0.0,
+        3.7833333
+      ],
+      "size": [
+        23.275,
+        12.4333334
+      ],
+      "scale": [
+        1.62762237,
+        1.62704468
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "CaptainHome",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/CaptainHome.png",
+      "frame": 15951,
+      "center": [
+        0.0,
+        2.060606
+      ],
+      "size": [
+        12.40606,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "CaptainHome",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/CaptainHome.png",
+      "frame": 15963,
+      "center": [
+        0.0,
+        2.060606
+      ],
+      "size": [
+        12.40606,
+        6.981818
+      ],
+      "scale": [
+        0.8903871,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "CaptainHome",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/CaptainHome.png",
+      "frame": 15975,
+      "center": [
+        0.0,
+        2.060606
+      ],
+      "size": [
+        12.40606,
+        6.981818
+      ],
+      "scale": [
+        0.8903871,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "CaptainHome",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/CaptainHome.png",
+      "frame": 15987,
+      "center": [
+        0.0,
+        2.060606
+      ],
+      "size": [
+        12.40606,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "CaptainHome",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/CaptainHome.png",
+      "frame": 15999,
+      "center": [
+        0.0,
+        2.060606
+      ],
+      "size": [
+        12.40606,
+        6.981818
+      ],
+      "scale": [
+        0.8903871,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "LiTingHome",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/LiTingHome.png",
+      "frame": 16067,
+      "center": [
+        0.0,
+        1.93333328
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "LiTingHome",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/LiTingHome.png",
+      "frame": 16079,
+      "center": [
+        0.0,
+        1.93333328
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "LiTingHome",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/LiTingHome.png",
+      "frame": 16091,
+      "center": [
+        0.0,
+        1.93333328
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "LiTingHome",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/LiTingHome.png",
+      "frame": 16103,
+      "center": [
+        0.0,
+        1.93333328
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "LiTingHome",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/LiTingHome.png",
+      "frame": 16115,
+      "center": [
+        0.0,
+        1.93333328
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "ZiqingHome",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/ZiqingHome.png",
+      "frame": 16182,
+      "center": [
+        0.0,
+        1.9575758
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ZiqingHome",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/ZiqingHome.png",
+      "frame": 16194,
+      "center": [
+        0.0,
+        1.9575758
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ZiqingHome",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/ZiqingHome.png",
+      "frame": 16206,
+      "center": [
+        0.0,
+        1.9575758
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ZiqingHome",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/ZiqingHome.png",
+      "frame": 16218,
+      "center": [
+        0.0,
+        1.9575758
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ZiqingHome",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/ZiqingHome.png",
+      "frame": 16230,
+      "center": [
+        0.0,
+        1.9575758
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "ZHome",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/ZHome.png",
+      "frame": 16297,
+      "center": [
+        0.0,
+        1.89090908
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ZHome",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/ZHome.png",
+      "frame": 16309,
+      "center": [
+        0.0,
+        1.89090908
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ZHome",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/ZHome.png",
+      "frame": 16321,
+      "center": [
+        0.0,
+        1.89090908
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ZHome",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/ZHome.png",
+      "frame": 16333,
+      "center": [
+        0.0,
+        1.89090908
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ZHome",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/ZHome.png",
+      "frame": 16345,
+      "center": [
+        0.0,
+        1.89090908
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "ZhouHome",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/ZhouHome.png",
+      "frame": 16412,
+      "center": [
+        0.0,
+        1.9818182
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ZhouHome",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/ZhouHome.png",
+      "frame": 16424,
+      "center": [
+        0.0,
+        1.9818182
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ZhouHome",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/ZhouHome.png",
+      "frame": 16436,
+      "center": [
+        0.0,
+        1.9818182
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ZhouHome",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/ZhouHome.png",
+      "frame": 16448,
+      "center": [
+        0.0,
+        1.9818182
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ZhouHome",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/ZhouHome.png",
+      "frame": 16460,
+      "center": [
+        0.0,
+        1.9818182
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "VisitorCenter",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/VisitorCenter.png",
+      "frame": 16526,
+      "center": [
+        0.0,
+        2.0242424
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "VisitorCenter",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/VisitorCenter.png",
+      "frame": 16538,
+      "center": [
+        0.0,
+        2.0242424
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "VisitorCenter",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/VisitorCenter.png",
+      "frame": 16550,
+      "center": [
+        0.0,
+        2.0242424
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "VisitorCenter",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/VisitorCenter.png",
+      "frame": 16562,
+      "center": [
+        0.0,
+        2.0242424
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "VisitorCenter",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/VisitorCenter.png",
+      "frame": 16574,
+      "center": [
+        0.0,
+        2.0242424
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "FlowerShop",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/FlowerShop.png",
+      "frame": 16641,
+      "center": [
+        0.0,
+        2.21818185
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "FlowerShop",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/FlowerShop.png",
+      "frame": 16653,
+      "center": [
+        0.0,
+        2.21818185
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "FlowerShop",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/FlowerShop.png",
+      "frame": 16665,
+      "center": [
+        0.0,
+        2.21818185
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "FlowerShop",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/FlowerShop.png",
+      "frame": 16677,
+      "center": [
+        0.0,
+        2.21818185
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "FlowerShop",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/FlowerShop.png",
+      "frame": 16689,
+      "center": [
+        0.0,
+        2.21818185
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "PhotoStudio",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/PhotoStudio.png",
+      "frame": 16755,
+      "center": [
+        0.0,
+        1.9575758
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "PhotoStudio",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/PhotoStudio.png",
+      "frame": 16767,
+      "center": [
+        0.0,
+        1.9575758
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "PhotoStudio",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/PhotoStudio.png",
+      "frame": 16779,
+      "center": [
+        0.0,
+        1.9575758
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "PhotoStudio",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/PhotoStudio.png",
+      "frame": 16791,
+      "center": [
+        0.0,
+        1.9575758
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "PhotoStudio",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/PhotoStudio.png",
+      "frame": 16803,
+      "center": [
+        0.0,
+        1.9575758
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "CabinInterior",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/CabinInterior.png",
+      "frame": 16870,
+      "center": [
+        0.0,
+        1.913849
+      ],
+      "size": [
+        12.41481,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "CabinInterior",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/CabinInterior.png",
+      "frame": 16882,
+      "center": [
+        0.0,
+        1.913849
+      ],
+      "size": [
+        12.41481,
+        6.981818
+      ],
+      "scale": [
+        0.891015053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "CabinInterior",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/CabinInterior.png",
+      "frame": 16894,
+      "center": [
+        0.0,
+        1.913849
+      ],
+      "size": [
+        12.41481,
+        6.981818
+      ],
+      "scale": [
+        0.891015053,
+        0.8912959
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "CabinInterior",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/CabinInterior.png",
+      "frame": 16906,
+      "center": [
+        0.0,
+        1.913849
+      ],
+      "size": [
+        12.41481,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "CabinInterior",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/CabinInterior.png",
+      "frame": 16918,
+      "center": [
+        0.0,
+        1.913849
+      ],
+      "size": [
+        12.41481,
+        6.981818
+      ],
+      "scale": [
+        0.891015053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "ResearchInterior",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/ResearchInterior.png",
+      "frame": 16986,
+      "center": [
+        0.0,
+        2.0265224
+      ],
+      "size": [
+        12.4142208,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ResearchInterior",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/ResearchInterior.png",
+      "frame": 16998,
+      "center": [
+        0.0,
+        2.0265224
+      ],
+      "size": [
+        12.4142208,
+        6.981818
+      ],
+      "scale": [
+        0.8909728,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ResearchInterior",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/ResearchInterior.png",
+      "frame": 17010,
+      "center": [
+        0.0,
+        2.0265224
+      ],
+      "size": [
+        12.4142208,
+        6.981818
+      ],
+      "scale": [
+        0.8909728,
+        0.8912959
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ResearchInterior",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/ResearchInterior.png",
+      "frame": 17022,
+      "center": [
+        0.0,
+        2.0265224
+      ],
+      "size": [
+        12.4142208,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ResearchInterior",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/ResearchInterior.png",
+      "frame": 17034,
+      "center": [
+        0.0,
+        2.0265224
+      ],
+      "size": [
+        12.4142208,
+        6.981818
+      ],
+      "scale": [
+        0.8909728,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "BarInterior",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/BarInterior.png",
+      "frame": 17101,
+      "center": [
+        0.0,
+        2.31208158
+      ],
+      "size": [
+        12.4080706,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "BarInterior",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/BarInterior.png",
+      "frame": 17113,
+      "center": [
+        0.0,
+        2.31208158
+      ],
+      "size": [
+        12.4080706,
+        6.981818
+      ],
+      "scale": [
+        0.890531361,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "BarInterior",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/BarInterior.png",
+      "frame": 17125,
+      "center": [
+        0.0,
+        2.31208158
+      ],
+      "size": [
+        12.4080706,
+        6.981818
+      ],
+      "scale": [
+        0.890531361,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "BarInterior",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/BarInterior.png",
+      "frame": 17137,
+      "center": [
+        0.0,
+        2.31208158
+      ],
+      "size": [
+        12.4080706,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "BarInterior",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/BarInterior.png",
+      "frame": 17149,
+      "center": [
+        0.0,
+        2.31208158
+      ],
+      "size": [
+        12.4080706,
+        6.981818
+      ],
+      "scale": [
+        0.890531361,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "RestaurantInterior",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/RestaurantInterior.png",
+      "frame": 17215,
+      "center": [
+        0.0,
+        2.16017079
+      ],
+      "size": [
+        12.4141464,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "RestaurantInterior",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/RestaurantInterior.png",
+      "frame": 17221,
+      "center": [
+        0.0,
+        2.16017079
+      ],
+      "size": [
+        12.4141464,
+        6.981818
+      ],
+      "scale": [
+        0.8909674,
+        0.8912959
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "RestaurantInterior",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/RestaurantInterior.png",
+      "frame": 17233,
+      "center": [
+        0.0,
+        2.16017079
+      ],
+      "size": [
+        12.4141464,
+        6.981818
+      ],
+      "scale": [
+        0.8909674,
+        0.8912959
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "RestaurantInterior",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/RestaurantInterior.png",
+      "frame": 17244,
+      "center": [
+        0.0,
+        2.16017079
+      ],
+      "size": [
+        12.4141464,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "RestaurantInterior",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/RestaurantInterior.png",
+      "frame": 17256,
+      "center": [
+        0.0,
+        2.16017079
+      ],
+      "size": [
+        12.4141464,
+        6.981818
+      ],
+      "scale": [
+        0.8909674,
+        0.8912959
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "ZBedroom",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/ZBedroom.png",
+      "frame": 17322,
+      "center": [
+        0.0,
+        1.93333328
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ZBedroom",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/ZBedroom.png",
+      "frame": 17334,
+      "center": [
+        0.0,
+        1.93333328
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ZBedroom",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/ZBedroom.png",
+      "frame": 17346,
+      "center": [
+        0.0,
+        1.93333328
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ZBedroom",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/ZBedroom.png",
+      "frame": 17358,
+      "center": [
+        0.0,
+        1.93333328
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "ZBedroom",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/ZBedroom.png",
+      "frame": 17370,
+      "center": [
+        0.0,
+        1.93333328
+      ],
+      "size": [
+        12.4121208,
+        6.981818
+      ],
+      "scale": [
+        0.890822053,
+        0.890348732
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "GeneralStore",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Art/Island/GeneralStore.png",
+      "frame": 17437,
+      "center": [
+        0.0,
+        1.806666
+      ],
+      "size": [
+        12.4055262,
+        6.98181868
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "GeneralStore",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/GeneralStore.png",
+      "frame": 17449,
+      "center": [
+        0.0,
+        1.806666
+      ],
+      "size": [
+        12.4055262,
+        6.98181868
+      ],
+      "scale": [
+        0.8903488,
+        0.8903488
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "GeneralStore",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/GeneralStore.png",
+      "frame": 17461,
+      "center": [
+        0.0,
+        1.806666
+      ],
+      "size": [
+        12.4055262,
+        6.98181868
+      ],
+      "scale": [
+        0.8903488,
+        0.8903488
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "GeneralStore",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Art/Island/GeneralStore.png",
+      "frame": 17473,
+      "center": [
+        0.0,
+        1.806666
+      ],
+      "size": [
+        12.4055262,
+        6.98181868
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "GeneralStore",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/GeneralStore.png",
+      "frame": 17485,
+      "center": [
+        0.0,
+        1.806666
+      ],
+      "size": [
+        12.4055262,
+        6.98181868
+      ],
+      "scale": [
+        0.8903488,
+        0.8903488
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    },
+    {
+      "place": "PlayerHome",
+      "period": "Afternoon",
+      "artwork": "Assets/Seabreeze/Resources/FirstDay/player_room.png",
+      "frame": 17551,
+      "center": [
+        0.0,
+        2.26624155
+      ],
+      "size": [
+        13.9333334,
+        7.8416667
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "PlayerHome",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/PlayerHome.png",
+      "frame": 17563,
+      "center": [
+        0.0,
+        2.26624155
+      ],
+      "size": [
+        13.9333334,
+        7.8416667
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "PlayerHome",
+      "period": "Evening",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandEvening/PlayerHome.png",
+      "frame": 17575,
+      "center": [
+        0.0,
+        2.26624155
+      ],
+      "size": [
+        13.9333334,
+        7.8416667
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "PlayerHome",
+      "period": "Night",
+      "artwork": "Assets/Seabreeze/Resources/FirstDay/player_room.png",
+      "frame": 17587,
+      "center": [
+        0.0,
+        2.26624155
+      ],
+      "size": [
+        13.9333334,
+        7.8416667
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": false,
+      "valid": true
+    },
+    {
+      "place": "PlayerHome",
+      "period": "Morning",
+      "artwork": "Assets/Seabreeze/Resources/Art/IslandMorning/PlayerHome.png",
+      "frame": 17599,
+      "center": [
+        0.0,
+        2.26624155
+      ],
+      "size": [
+        13.9333334,
+        7.8416667
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "floorDelta": 0.0,
+      "repeatDelta": 0.0,
+      "repeat": true,
+      "valid": true
+    }
+  ],
+  "errors": []
+}
