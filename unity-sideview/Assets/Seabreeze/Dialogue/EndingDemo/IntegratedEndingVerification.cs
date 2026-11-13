@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Seabreeze.EndingDemo
@@ -33,6 +34,55 @@ namespace Seabreeze.EndingDemo
         static void Call(GameUI ui,string name,params object[] args)=>typeof(GameUI).GetMethod(name,Fields).Invoke(ui,args);
         static void Require(bool value,string message){if(!value)throw new InvalidOperationException(message);}
         static Button Find(GameUI ui,string name)=>Array.Find(ui.GetComponentsInChildren<Button>(true),b=>b.name==name);
+        static TextMeshProUGUI VisibleText(Transform root,string fragment)
+        {
+            var label=Array.Find(root.GetComponentsInChildren<TextMeshProUGUI>(),t=>t.text.Contains(fragment));
+            Require(label!=null,"Missing ending text: "+fragment);return label;
+        }
+        static Rect ScreenRect(RectTransform transform)
+        {
+            var corners=new Vector3[4];transform.GetWorldCorners(corners);
+            return Rect.MinMaxRect(corners[0].x,corners[0].y,corners[2].x,corners[2].y);
+        }
+        static Rect VisibleGlyphBounds(TextMeshProUGUI text,int start)
+        {
+            text.ForceMeshUpdate();
+            var min=new Vector2(float.PositiveInfinity,float.PositiveInfinity);
+            var max=new Vector2(float.NegativeInfinity,float.NegativeInfinity);
+            for(int i=0;i<text.textInfo.characterCount;i++){
+                var ch=text.textInfo.characterInfo[i];if(!ch.isVisible||ch.index<start)continue;
+                min=Vector2.Min(min,text.transform.TransformPoint(ch.bottomLeft));
+                max=Vector2.Max(max,text.transform.TransformPoint(ch.topRight));
+            }
+            Require(min.y<max.y,"No visible glyphs in ending text");
+            return Rect.MinMaxRect(min.x,min.y,max.x,max.y);
+        }
+        void CheckDetailPage(GameUI ui,EndingDemoView.EndingRun run,bool longText)
+        {
+            Canvas.ForceUpdateCanvases();
+            var root=Field<Image>(ui,"endingBlackScreen").transform;
+            var words=VisibleText(root,run.decision.lastLine);
+            var status=VisibleText(root,run.outcome.label);
+            var button=Find(ui,"Ending black continue");Require(button.gameObject.activeInHierarchy&&button.interactable,"Missing return button");
+            var scroll=words.GetComponentInParent<ScrollRect>();
+            if(longText){
+                Require(scroll!=null&&scroll.content.rect.height>scroll.viewport.rect.height+1,"Long ending cannot scroll");
+                var pointer=new PointerEventData(EventSystem.current){position=ScreenRect(scroll.viewport).center,scrollDelta=new Vector2(0,-3)};
+                var hits=new System.Collections.Generic.List<RaycastResult>();EventSystem.current.RaycastAll(pointer,hits);
+                Require(hits.Count>0 && ExecuteEvents.GetEventHandler<IScrollHandler>(hits[0].gameObject)==scroll.gameObject,"Scroll wheel misses the ending text");
+                float initial=scroll.verticalNormalizedPosition;
+                ExecuteEvents.ExecuteHierarchy(hits[0].gameObject,pointer,ExecuteEvents.scrollHandler);
+                Require(scroll.verticalNormalizedPosition<initial,"Scroll wheel did not move the ending text");
+                scroll.StopMovement();scroll.verticalNormalizedPosition=0;Canvas.ForceUpdateCanvases();
+            }
+            var lastLine=VisibleGlyphBounds(words,words.text.LastIndexOf(run.decision.lastLine,StringComparison.Ordinal));
+            var story=longText?lastLine:VisibleGlyphBounds(words,0);
+            var state=VisibleGlyphBounds(status,0);var back=ScreenRect((RectTransform)button.transform);
+            var readingArea=scroll==null?new Rect(0,0,Screen.width,Screen.height):ScreenRect(scroll.viewport);
+            Require(story.yMin>=readingArea.yMin-1 && story.yMax<=readingArea.yMax+1,"Ending text is clipped");
+            Require(!story.Overlaps(state) && !state.Overlaps(back) && !story.Overlaps(back),"Ending story, status and return button overlap");
+            Require(state.yMin>=0&&state.yMax<=Screen.height&&back.yMin>=0&&back.yMax<=Screen.height,"Ending controls are outside the window");
+        }
         void TextDiagnostic(GameUI ui,string stage)
         {
             var text=Field<TextMeshProUGUI>(ui,"endingBody");var view=(RectTransform)text.transform.parent;
@@ -128,6 +178,16 @@ namespace Seabreeze.EndingDemo
                 while(ui.IsOverlayTransitioning&&Time.realtimeSinceStartup<deadline)yield return null;
                 pages=Field<EndingDemoView.DailyPage[]>(ui,"endingDailyPages");
                 Require(pages.Length==7 && pages[6].title=="李庭叫我自己听","Older save did not load the reviewed seven days");
+                var args=Environment.GetCommandLineArgs();
+                int wi=Array.IndexOf(args,"-screen-width"),hi=Array.IndexOf(args,"-screen-height");
+                int width=0,height=0;
+                if(wi>=0&&hi>=0&&wi+1<args.Length&&hi+1<args.Length&&int.TryParse(args[wi+1],out width)&&int.TryParse(args[hi+1],out height)){
+                    Screen.SetResolution(width,height,FullScreenMode.Windowed);
+                    deadline=Time.realtimeSinceStartup+8;
+                    while((Screen.width!=width||Screen.height!=height)&&Time.realtimeSinceStartup<deadline)yield return null;
+                    Require(Screen.width==width&&Screen.height==height,"Game did not reach the requested test resolution");
+                    yield return new WaitForEndOfFrame();
+                }
                 Call(ui,"ShowEndingPage",firstPage+6);
                 body=Field<TextMeshProUGUI>(ui,"endingBody");
                 Require(body.text==pages[6].text && body.text.Split('\n').Length==5,"Day seven should have four sentences separated by a paragraph break");
@@ -159,6 +219,30 @@ namespace Seabreeze.EndingDemo
                 Require(blackWords.text=="留洋，我想走。","Expected the reviewed decision after the black beat");
                 ScreenCapture.CaptureScreenshot(Path.Combine(output,"legacy-choice.png"));yield return new WaitForEndOfFrame();
                 yield return new WaitForSecondsRealtime(.4f);
+                var advance=Find(ui,"Ending black input");Require(advance!=null,"Missing black screen advance");
+                var centreClick=new PointerEventData(EventSystem.current){position=new Vector2(Screen.width/2f,Screen.height/2f),button=PointerEventData.InputButton.Left};
+                var centreHits=new System.Collections.Generic.List<RaycastResult>();EventSystem.current.RaycastAll(centreClick,centreHits);
+                Require(centreHits.Count>0&&ExecuteEvents.GetEventHandler<IPointerClickHandler>(centreHits[0].gameObject)==advance.gameObject,"First sentence intercepted the click to continue");
+                ExecuteEvents.ExecuteHierarchy(centreHits[0].gameObject,centreClick,ExecuteEvents.pointerClickHandler);
+                yield return new WaitForEndOfFrame();yield return null;
+                var displayed=Field<EndingDemoView.EndingRun>(ui,"seventhNight");
+                CheckDetailPage(ui,displayed,false);
+                ScreenCapture.CaptureScreenshot(Path.Combine(output,"legacy-complete.png"));yield return new WaitForEndOfFrame();
+                yield return new WaitForSecondsRealtime(.25f);
+                // Exercise an unusually long, unreviewed ending in this isolated world.
+                var longRun=JsonUtility.FromJson<EndingDemoView.EndingRun>(JsonUtility.ToJson(displayed));
+                longRun.decision.choice="stay";longRun.decision.decision="我想留下。";longRun.decision.lastLine="明天我还想再见他们。";
+                longRun.outcome.label="决定留下";longRun.outcome.text=string.Concat(System.Linq.Enumerable.Repeat("我想起今天一起说过的话。\n",40));
+                typeof(GameUI).GetField("seventhNight",Fields).SetValue(ui,longRun);
+                Call(ui,"PrepareDailyPages");Call(ui,"ShowEndingPage",firstPage+7);
+                yield return new WaitForSecondsRealtime(1.8f);advance.onClick.Invoke();
+                yield return new WaitForEndOfFrame();yield return null;CheckDetailPage(ui,longRun,true);
+                yield return new WaitForEndOfFrame();
+                ScreenCapture.CaptureScreenshot(Path.Combine(output,"long-ending-bottom.png"));yield return new WaitForEndOfFrame();
+                yield return new WaitForSecondsRealtime(.25f);
+                Find(ui,"Ending black continue").onClick.Invoke();deadline=Time.realtimeSinceStartup+10;
+                while(ui.HasOverlay&&Time.realtimeSinceStartup<deadline)yield return null;
+                Require(!ui.HasOverlay&&!session.InputBlocked,"Return button did not restore island controls");
             }
             passed=true;
         }

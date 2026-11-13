@@ -25,6 +25,8 @@ namespace Seabreeze
         CanvasGroup endingBlackGroup;
         CanvasGroup endingBlackWordsGroup;
         TextMeshProUGUI endingBlackTitle,endingBlackBody;
+        RectTransform endingBlackViewport;
+        ScrollRect endingBlackScroll;
         Button endingBlackNext;
         EndingRun seventhNight;
         EndingDemo.EndingDemoView.DailyPage[] endingDailyPages = Array.Empty<EndingDemo.EndingDemoView.DailyPage>();
@@ -120,11 +122,16 @@ namespace Seabreeze
             backdrop.texture=Texture2D.blackTexture;backdrop.color=Color.white;backdrop.raycastTarget=false;
             var inputImage=Stretch("Ending black input",endingBlackScreen.transform,Vector2.zero,Vector2.zero).gameObject.AddComponent<Image>();inputImage.color=Color.clear;inputImage.raycastTarget=true;
             var advance=inputImage.gameObject.AddComponent<Button>();advance.transition=Selectable.Transition.None;advance.targetGraphic=inputImage;advance.navigation=new Navigation{mode=Navigation.Mode.None};advance.onClick.AddListener(NextEndingPage);
-            endingBlackTitle=Label("Ending black title",endingBlackScreen.transform,C,C,new Vector2(0, -100),new Vector2(1040,120),"",42,Paper,TextAlignmentOptions.Center);
-            endingBlackBody=Label("Ending black words",endingBlackScreen.transform,C,C,Vector2.zero,new Vector2(1120,240),"",34,Paper,TextAlignmentOptions.Center);
-            endingBlackBody.lineSpacing=14;endingBlackBody.alignment=TextAlignmentOptions.Center;
+            endingBlackTitle=Label("Ending black title",endingBlackScreen.transform,TC,TC,new Vector2(0,-110),new Vector2(1120,52),"",22,Muted,TextAlignmentOptions.Center);
+            endingBlackViewport=Stretch("Ending black words viewport",endingBlackScreen.transform,Vector2.zero,Vector2.zero);var viewportGraphic=endingBlackViewport.gameObject.AddComponent<Image>();viewportGraphic.color=Color.clear;viewportGraphic.raycastTarget=true;endingBlackViewport.gameObject.AddComponent<RectMask2D>();
+            endingBlackScroll=endingBlackViewport.gameObject.AddComponent<ScrollRect>();endingBlackScroll.horizontal=false;endingBlackScroll.vertical=true;endingBlackScroll.scrollSensitivity=38;endingBlackScroll.movementType=ScrollRect.MovementType.Clamped;endingBlackScroll.viewport=endingBlackViewport;
+            var blackBodyRect=Rect("Ending black words",endingBlackViewport,TL,TL,Vector2.zero,new Vector2(0,120));blackBodyRect.anchorMax=new Vector2(1,1);blackBodyRect.pivot=TL;
+            endingBlackBody=blackBodyRect.gameObject.AddComponent<TextMeshProUGUI>();endingBlackBody.font=UIPrimitives.Font;endingBlackBody.text="";endingBlackBody.fontSize=34;endingBlackBody.color=Paper;endingBlackBody.richText=false;endingBlackBody.textWrappingMode=TextWrappingModes.Normal;endingBlackBody.overflowMode=TextOverflowModes.Overflow;endingBlackBody.alignment=TextAlignmentOptions.Center;
+            endingBlackBody.lineSpacing=14;endingBlackScroll.content=blackBodyRect;
+            endingBlackBody.raycastTarget=false;
             endingBlackWordsGroup=endingBlackBody.gameObject.AddComponent<CanvasGroup>();endingBlackWordsGroup.alpha=0;
             endingBlackNext=Button("Ending black continue",endingBlackScreen.transform,new Vector2(.5f,0),new Vector2(.5f,0),new Vector2(0,62),new Vector2(300,54),"回到小岛 →",CloseOverlay,true,20);
+            SetBlackFirstLineLayout();
             endingBlackScreen.gameObject.SetActive(false);
         }
         void GenerateSeventhNight()
@@ -324,10 +331,11 @@ namespace Seabreeze
         {
             endingBlackRevealed=false;endingBlackDetailsShown=false;endingBlackScreen.gameObject.SetActive(true);endingBlackGroup.alpha=1;
             endingColumn.gameObject.SetActive(false);if(endingSceneImage!=null)endingSceneImage.gameObject.SetActive(false);
+            SetBlackFirstLineLayout();
             endingBlackTitle.text="";endingBlackBody.text="";endingBlackWordsGroup.alpha=0;endingBlackNext.gameObject.SetActive(false);
             yield return new WaitForSecondsRealtime(.9f);
             if(endingBlackScreen==null||!endingBlackScreen.gameObject.activeInHierarchy)yield break;
-            endingBlackBody.text=FirstEndingSentence();
+            endingBlackBody.text=FirstEndingSentence();SetBlackFirstLineLayout();
             for(float t=0;t<1;t+=Time.unscaledDeltaTime/.42f){endingBlackWordsGroup.alpha=t;yield return null;}
             endingBlackWordsGroup.alpha=1;endingBlackRevealed=true;
         }
@@ -354,10 +362,35 @@ namespace Seabreeze
             if(!string.IsNullOrWhiteSpace(seventhNight?.decision?.lastLine))body += "\n\n" + seventhNight.decision.lastLine;
             return body;
         }
+        void SetBlackFirstLineLayout()
+        {
+            if(endingBlackViewport==null||endingBlackBody==null)return;
+            endingBlackScroll.enabled=false;endingBlackTitle.gameObject.SetActive(false);
+            endingBlackViewport.GetComponent<Image>().raycastTarget=false;
+            endingBlackViewport.offsetMin=Vector2.zero;endingBlackViewport.offsetMax=Vector2.zero;
+            var rect=endingBlackBody.rectTransform;rect.anchorMin=new Vector2(.08f,.5f);rect.anchorMax=new Vector2(.92f,.5f);rect.pivot=C;rect.anchoredPosition=Vector2.zero;rect.sizeDelta=new Vector2(0,160);
+        }
+        void LayoutBlackOutcomeBody()
+        {
+            endingBlackBody.ForceMeshUpdate();
+            float width=Mathf.Max(1,endingBlackViewport.rect.width);
+            float height=Mathf.Max(endingBlackViewport.rect.height,endingBlackBody.GetPreferredValues(endingBlackBody.text,width,0).y+24);
+            endingBlackBody.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,height);
+            endingBlackScroll.StopMovement();endingBlackScroll.verticalNormalizedPosition=1;
+        }
+        void SetBlackDetailsLayout()
+        {
+            if(endingBlackViewport==null||endingBlackBody==null)return;
+            endingBlackTitle.gameObject.SetActive(true);
+            endingBlackViewport.GetComponent<Image>().raycastTarget=true;
+            endingBlackViewport.offsetMin=new Vector2(100,180);endingBlackViewport.offsetMax=new Vector2(-100,-190);
+            var rect=endingBlackBody.rectTransform;rect.anchorMin=TL;rect.anchorMax=new Vector2(1,1);rect.pivot=TL;rect.anchoredPosition=Vector2.zero;rect.sizeDelta=new Vector2(0,120);
+            endingBlackScroll.enabled=true;LayoutBlackOutcomeBody();
+        }
         void ShowBlackOutcomeDetails()
         {
             if(!endingBlackRevealed||endingBlackDetailsShown)return;
-            endingBlackDetailsShown=true;endingBlackTitle.text=seventhNight?.outcome?.label??"";endingBlackBody.text=FullEndingText();endingBlackWordsGroup.alpha=1;endingBlackNext.gameObject.SetActive(true);
+            endingBlackDetailsShown=true;endingBlackTitle.text=seventhNight?.outcome?.label??"";endingBlackBody.text=FullEndingText();SetBlackDetailsLayout();endingBlackWordsGroup.alpha=1;endingBlackNext.gameObject.SetActive(true);
         }
         void ExitBlackOutcome()
         {
