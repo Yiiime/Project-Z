@@ -64,7 +64,7 @@ export class ConversationEngine extends LiveEngine {
     if(!this.topicEnabled||!this.enabled||!this._started||this._destroyed||this._state.paused||this._mediaPlaying()||!speech||!plan||plan.speechId!==speech.id||plan.result.action!=='speak'||plan.result.continuation==='await_event'||this.topicWork||plan.topicAttemptedVersion===this.topicVersion)return;
     plan.topicAttemptedVersion=this.topicVersion;
     const controller=new AbortController(),version=this.topicVersion,requestId=id(),handled=new Set(plan.result.handledIds);
-    const context={publicEvents:this.facts.slice(-12),sessionEvents:this.session.evidence(),inbox:this.inbox.filter(m=>!handled.has(m.id)).map(m=>({...m})),inProgress:{speechId:String(speech.id),text:speech.text}};
+    const context={publicEvents:this.facts.slice(-12),sessionEvents:this.session.evidence(),inbox:this.inbox.filter(m=>!handled.has(m.id)).map(hostMessage),inProgress:{speechId:String(speech.id),text:speech.text}};
     const work={controller,version};this.topicWork=work;
     this.audience.dialogue.log({stage:'topic.started',requestId,anchorSpeechId:speech.id});
     void this.client.generate({requestId,kind:'topic',eventId:requestId,message:'判断当前这段交流在这句说完后是否自然收束，并提出可选的后续方向。',context},{signal:controller.signal}).then(result=>{

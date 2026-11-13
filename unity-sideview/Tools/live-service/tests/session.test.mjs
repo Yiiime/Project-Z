@@ -231,15 +231,23 @@ test('arrival tools pass the real parser and executor only after presentation an
  s.scene=new LiveScene(s,{mode:'arrival',playerName:'小海',worldId:'a'.repeat(32),day:1});s.engine.liveScene=s.scene;
  const value=()=>({kind:'host',context:{...normalizeAgentInput({requestId:crypto.randomUUID(),eventId:'arrival',kind:'host',context:s.engine._hostContext([])}).context,scene:s.scene.binding()}});
  const parsed=(name,args={})=>parseAgentReply({action:'tool',speech:'模型生成的本轮主持内容',mood:'warm',handledIds:[],wakeAfterMs:2000,memory:'',tool:{name,args}},value());
- assert.throws(()=>parsed('depart_island'));
+ assert.throws(()=>parsed('depart_island'));assert.throws(()=>parsed('draw_guest'));
+ for(let i=0;i<3;i++){
+  s.engine._say('今天海边的风很舒服，你们今天过得怎么样？','warm','nod',{source:'deepseek',transition:'smooth'});await frame();
+  const host=latest(s,'host.present');s.engine._onHostSpeechCommitted(host.payload.speechId,{virtualAudience:[{name:'海风'+i,text:'刚下班，来听你聊聊天'},{name:'月光'+i,text:'今天也有被海风治愈'}]});
+  receipt(s,host,'started',{durationMs:2000,positionMs:0});receipt(s,host,'completed',{positionMs:2000});
+  for(const comment of [...s.commands.values()].filter(c=>c.type==='virtual_audience.present'&&c.status==='sent'))receipt(s,comment,'displayed');
+ }
+ assert.equal(s.scene.warmup.speeches,3);assert.equal(s.scene.warmup.messages,6);assert.throws(()=>parsed('draw_guest'));
+ s.engine._clock+=45000;
  const draw=parsed('draw_guest');assert(s.engine._executeTool(draw.tool));
- let c=latest(s,'story.present');assert.equal(s.scene.phase,'opening');receipt(s,c,'displayed');assert.equal(s.scene.phase,'drawn');
+ let c=latest(s,'story.present');assert.equal(c.expiresAt,null);assert.equal(s.scene.phase,'opening');s.maintenance();assert.equal(c.status,'sent');assert.throws(()=>receipt(s,c,'displayed'),/invalid_draw_evidence/);receipt(s,c,'displayed',{playerActivated:true,playerName:'小海'});assert.equal(s.scene.phase,'drawn');
  assert(s.engine._executeTool(parsed('offer_arrival',{title:'现场邀请',description:'七天的小岛生活'}).tool));
  c=latest(s,'story.present');receipt(s,c,'displayed');assert.equal(s.scene.phase,'offered');
  assert.throws(()=>parsed('depart_island'));
  s.input(envelope(s,{type:'story.accept_arrival',payload:{}}));assert.equal(s.scene.phase,'accepted');
  assert(s.engine._executeTool(parsed('depart_island').tool));receipt(s,latest(s,'story.present'),'displayed');assert.equal(s.scene.phase,'departed');
- assert(!s.snapshot().publicEvents.some(e=>e.type==='npc.message'));
+ assert.equal(s.snapshot().publicEvents.filter(e=>e.type==='npc.message').length,6);
  const restored=new LiveSession({id:s.id,root:s.root,providers:s.providers,artifacts:s.artifacts,songRoot:s.songRoot,saved:s.persistData()});t.after(()=>restored.close());assert.equal(restored.snapshot().story.phase,'departed');
 });
 
@@ -267,4 +275,40 @@ test('virtual viewers wait for reviewed host playback and drop interrupted react
  assert.equal(latest(s,'virtual_audience.present').payload.text,'七天听起来真不错');
  const count=s.commands.size;s.engine._public('speech.completed','重复回执',{speechId:'2',speakerId:'Z'});
  assert.equal(s.commands.size,count);
+});
+
+
+test('visible virtual chat enters the actual host inbox and invalidates stale planning',async t=>{
+ const s=await fixture(t);s.engine.topicProgress={status:'complete',reason:'old',nextDirection:'',anchorSpeechId:'1',evidenceIds:['old-event']};
+ const c=s.command('virtual_audience.present',{messageId:'virtual-message',name:'海盐汽水',text:'今天过得怎么样？'});
+ receipt(s,c,'displayed');
+ assert.equal(s.engine.topicProgress,null);
+ const inbox=JSON.parse(JSON.stringify(s.engine._hostContext(s.engine.inbox)));
+ assert.equal(inbox.host.inbox[0].id,'virtual-message');
+ assert.equal(inbox.host.inbox[0].text,'今天过得怎么样？');
+ assert.doesNotThrow(()=>normalizeAgentInput({requestId:crypto.randomUUID(),eventId:'visible-chat',kind:'host',message:'回应弹幕',context:inbox}));
+ assert.equal(s.engine.session.evidence().filter(e=>e.id==='virtual-message').length,1);
+ receipt(s,c,'displayed');assert.equal(s.engine.inbox.length,1);
+});
+
+
+test('host reply to a virtual viewer remains valid for the next real decision',async t=>{
+ const s=await fixture(t),id=crypto.randomUUID(),speaker='virtual_'+id;
+ const message=s.engine._message('今天怎么样？',{id,name:'晚风',type:'chat'});s.engine._receive(message,false,speaker,{recipientIds:['z']});
+ s.engine._public('speech.completed','晚上好！',{id:'speech-1',speakerRole:'host',speakerId:'Z',speechId:'1',replyTo:[id]});
+ const context=JSON.parse(JSON.stringify(s.engine._hostContext(s.engine.inbox)));
+ assert.deepEqual(context.publicEvents.at(-1).recipientIds,[speaker]);
+ assert.doesNotThrow(()=>normalizeAgentInput({requestId:crypto.randomUUID(),eventId:'reply-virtual',kind:'host',message:'继续',context}));
+ context.publicEvents.at(-1).recipientIds=['virtual_untrusted'];assert.throws(()=>normalizeAgentInput({requestId:crypto.randomUUID(),kind:'host',context}));
+});
+
+test('topic assessment sends public inbox fields without internal delivery state',async t=>{
+ const s=await fixture(t),id=crypto.randomUUID();
+ s.engine._receive(s.engine._message('聊聊海边吧',{id,name:'海风',type:'chat'}),false,'virtual_'+id,{recipientIds:['z']});
+ s.engine.enabled=true;s.engine.topicEnabled=true;s.engine._active={id:12,text:'海风吹过来了。'};
+ s.engine.speechPlan={speechId:12,result:{action:'speak',continuation:'continue',handledIds:[]}};
+ let payload;s.engine.client={cancel(){},generate:async p=>{payload=p;normalizeAgentInput(p);return {status:'expanding',reason:'回应观众',nextDirection:'',evidenceIds:[id],anchorSpeechId:'12'};}};
+ s.engine._maybeAssessTopic();await frame();
+ assert.equal(payload.kind,'topic');assert(!('pendingRecipientIds' in payload.context.inbox[0]));assert.equal(s.engine.topicProgress.status,'expanding');
+ s.engine._active=null;s.engine.speechPlan=null;
 });
