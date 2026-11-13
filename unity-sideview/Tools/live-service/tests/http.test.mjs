@@ -9,8 +9,25 @@ import {createLiveServer} from '../server/http.mjs';
 import {ArtifactStore,Providers} from '../server/providers.mjs';
 import {SingingService} from '../server/singing/service.mjs';
 import {LiveSongLibrary} from '../server/song-library/index.mjs';
+import http from 'node:http';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const plan={intent:'request',title:'晚安',artist:'颜人中',version:'',question:'',segment:{kind:'chorus',ordinal:1,description:'第一段完整副歌',lyricStart:''}};
+test('restored character rooms follow the owning LAN backend after its port changes',async t=>{
+ const f=await fixture(t),directory=fs.mkdtempSync(path.join(os.tmpdir(),'z-restored-lan-'));
+ const memory=http.createServer((_req,res)=>{res.setHeader('Content-Type','application/json');res.end(JSON.stringify({ok:true,restored:true}));});
+ await new Promise(resolve=>memory.listen(0,'127.0.0.1',resolve));
+ const current=`http://127.0.0.1:${memory.address().port}`,saved=f.s.persistData();
+ saved.characterBinding={memoryUrl:'http://127.0.0.1:1',worldId:'world',runId:'run',roomId:'room',roomToken:'token'};
+ fs.mkdirSync(path.join(directory,'sessions'));fs.writeFileSync(path.join(directory,'sessions',saved.id+'.json'),JSON.stringify(saved));
+ const options={root:path.join(directory,'sessions'),providers:new Providers({}),artifacts:new ArtifactStore(path.join(directory,'artifacts')),songRoot:path.join(root,'server/assets/songs'),token:'fixture-token'};
+ let restored;
+ try{
+  await assert.rejects(createLiveServer({...options,characterServiceUrl:'http://example.com'}),/invalid_character_service/);
+  restored=await createLiveServer({...options,characterServiceUrl:current});await new Promise(resolve=>restored.server.listen(0,'127.0.0.1',resolve));
+  const room=restored.sessions.get(saved.id);assert.equal(room.characters.binding.worldId,'world');assert.equal(room.characters.binding.memoryUrl,current);
+  assert.equal((await room.characters.post('projection')).restored,true);
+ }finally{if(restored){restored.server.closeAllConnections();await new Promise(resolve=>restored.server.close(resolve));}memory.closeAllConnections();await new Promise(resolve=>memory.close(resolve));fs.rmSync(directory,{recursive:true,force:true});}
+});
 async function fixture(t,{transcribe,tokens,voice}={}) {
  const directory=fs.mkdtempSync(path.join(os.tmpdir(),'z-native-http-'));
  const singing=await SingingService.open({root,directory:path.join(directory,'singing'),autoStart:false,sources:[],environment:()=>({}),parse:async()=>plan});

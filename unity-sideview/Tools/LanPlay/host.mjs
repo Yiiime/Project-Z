@@ -28,7 +28,8 @@ async function startPlayer(id) {
     Z_TTS_CONFIG: process.env.Z_TTS_CONFIG || path.join(tools, 'MemoryLab/.local/tts.json'),
     Z_LIVE_OFFICE: '0', Z_MEMORY_PORT: String(memoryPort), Z_UNITY_PORT: String(livePort),
     Z_LIVE_CONFIG_DIR: configDirectory, Z_LIVE_RUNTIME_DIR: path.join(root, 'live'),
-    Z_MEMORY_DB: path.join(root, 'memory.sqlite'), Z_LIVE_CONNECTION_FILE: connection};
+    Z_MEMORY_DB: path.join(root, 'memory.sqlite'), Z_LIVE_CONNECTION_FILE: connection,
+    Z_LIVE_CHARACTER_SERVICE_URL: `http://127.0.0.1:${memoryPort}`};
   try {
     for (const [name, folder, entry] of [['memory', 'MemoryLab', 'server.mjs'], ['live', 'live-service', 'server/index.mjs']]) {
       const fd = fs.openSync(path.join(root, name + '.log'), 'a', 0o600);

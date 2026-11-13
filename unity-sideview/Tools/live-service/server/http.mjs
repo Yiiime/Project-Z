@@ -8,13 +8,14 @@ import {hash} from './providers.mjs';
 import {transcribePcm} from './voice/index.mjs';
 import {singingRequest} from './singing/index.mjs';
 const json=(res,status,body)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});res.end(JSON.stringify(body));};
-export async function createLiveServer({root,providers,artifacts,songRoot,token,tokens,tls,library,transcribe=transcribePcm,voice=null}){
+export async function createLiveServer({root,providers,artifacts,songRoot,token,tokens,tls,library,transcribe=transcribePcm,voice=null,characterServiceUrl=null}){
+ if(characterServiceUrl){const target=new URL(characterServiceUrl);if(target.protocol!=='http:'||target.hostname!=='127.0.0.1'||target.username||target.password||target.pathname!=='/'||target.search||target.hash)throw Error('invalid_character_service');characterServiceUrl=target.origin;}
  const identities=tokens||{'local-owner':token};
  if(Object.values(identities).some(value=>typeof value!=='string'||!value.length))throw Error('invalid_access_tokens');
  const pendingCreations=new Map();
  const scoped=new Map();const providerFor=owner=>{if(!scoped.has(owner))scoped.set(owner,providers.forOwner?providers.forOwner(owner):providers);return scoped.get(owner);};
  const sessions=new Map(),creations=new Map(),songOperations=new Map(),voiceRequests=new Map();fs.mkdirSync(root,{recursive:true,mode:0o700});
- for(const file of fs.readdirSync(root).filter(n=>/^[a-f0-9-]+\.json$/.test(n))){const saved=JSON.parse(fs.readFileSync(path.join(root,file),'utf8'));if(saved.phase==='ended'||!identities[saved.owner])continue;const s=new LiveSession({root,providers:providerFor(saved.owner),artifacts,songRoot,saved,id:saved.id,owner:saved.owner,capabilities:saved.capabilities});await s.initialize();sessions.set(s.id,s);}
+ for(const file of fs.readdirSync(root).filter(n=>/^[a-f0-9-]+\.json$/.test(n))){const saved=JSON.parse(fs.readFileSync(path.join(root,file),'utf8'));if(saved.phase==='ended'||!identities[saved.owner])continue;if(characterServiceUrl&&saved.characterBinding)saved.characterBinding={...saved.characterBinding,memoryUrl:characterServiceUrl};const s=new LiveSession({root,providers:providerFor(saved.owner),artifacts,songRoot,saved,id:saved.id,owner:saved.owner,capabilities:saved.capabilities});await s.initialize();sessions.set(s.id,s);}
  const handler=async(req,res)=>{try{
   const auth=Buffer.from(req.headers.authorization||'');const owner=Object.keys(identities).find(id=>{const expected=Buffer.from('Bearer '+identities[id]);return auth.length===expected.length&&timingSafeEqual(auth,expected);});if(!owner)return json(res,401,{error:'unauthorized'});
   const currentProviders=providerFor(owner);

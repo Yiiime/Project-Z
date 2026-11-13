@@ -23,7 +23,7 @@
     "failed": 0
   },
   "liveRegression": {
-    "passed": 16,
+    "passed": 17,
     "failed": 0
   },
   "clientRuntime": "Node 24.13.0 arm64/x64",
