@@ -13,7 +13,7 @@ namespace ZLive
         public string SceneMode = "daily";
         public Action<JObject> SceneCommand;
         string lastScenePhase;
-        bool invitationCollectedInGift;
+        Button arrivalReply;
         string StoryKey => SceneMode + "." + GameSession.Instance?.State?.memory?.worldId + "." + GameSession.Instance?.State?.day;
         JObject StoryBinding()
         {
@@ -32,10 +32,14 @@ namespace ZLive
         {
             var scene = snapshot["story"] as JObject;
             string phase = (string)scene?["phase"];
+            if (SceneMode == "arrival" && phase == "drawn" && (bool?)scene?["reunion"]?["greeted"] == true && (bool?)scene?["reunion"]?["playerReplied"] != true)
+            {
+                if (arrivalReply == null) { arrivalReply = new Button(() => { ReplaceChatDraft("好呀，带我去岛上看看吧！"); Send(); }) { text = "好呀，带我去看看", name = "arrival-reply" }; arrivalReply.style.position = Position.Absolute; arrivalReply.style.bottom = 100; arrivalReply.style.left = Length.Percent(32); arrivalReply.style.height = 42; arrivalReply.style.fontSize = 18; document.rootVisualElement.Add(arrivalReply); }
+            }
+            else if (arrivalReply != null) { arrivalReply.RemoveFromHierarchy(); arrivalReply = null; }
             if (phase == lastScenePhase) return;
             lastScenePhase = phase;
-            if (SceneMode == "arrival" && phase == "offered" && invitationCollectedInGift) AcceptArrival();
-            else if (SceneMode == "arrival" && phase == "offered") SceneCommand?.Invoke(new JObject {
+            if (SceneMode == "arrival" && phase == "offered") SceneCommand?.Invoke(new JObject {
                 ["tool"] = "offer_arrival", ["title"] = scene["invitation"]?["title"], ["description"] = scene["invitation"]?["description"] });
             if (SceneMode == "arrival" && (phase == "accepted" || phase == "departed") && GameSession.Instance?.State?.firstDay != null)
             { GameSession.Instance.State.firstDay.invitationAccepted = true; GameSession.Instance.Save(); }
@@ -60,10 +64,8 @@ namespace ZLive
                         }
                         await NextFrame();
                     }
-                    invitationCollectedInGift=true;
                     await VisibleFrame(view.Root,cancel);
                     await Report(command,new JObject { ["status"]="displayed",["playerActivated"]=true,["playerName"]=(string)payload["playerName"] });
-                    AcceptArrival();
                 }
             }
             else

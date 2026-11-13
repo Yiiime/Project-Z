@@ -261,13 +261,14 @@ namespace Seabreeze
         {
             if (filmRoutine) yield break;
             filmRoutine = busy = true; bool done = false;
+            yield return LoadingPlaceholder("before_fireworks");
             cinema.PlayFireworks(() => done = true);
             while (!done) yield return null;
             session.State.period = (int)TimePeriod.Night; session.Clock.Refresh();
             SetPhase(FirstDayPhase.WelcomeTask); gathering.Reset();
             // Keep the people already here; releasing the gathering restores autonomous decisions.
             // Rebuilding now would teleport everyone back to their default locations.
-            session.Memory.PublishStoryEvent("fireworks_story", "玩家与 Z 度过烟花时刻，夜晚可以自由找朋友聊天。", Cast.Concat(new[] { "player" }).ToArray(), true);
+            session.Memory.PublishStoryEvent("fireworks_story", "玩家与 Z 和朋友们在沙滩看完烟花，随后回到市民广场，夜晚可以自由找朋友聊天。", Cast.Concat(new[] { "player" }).ToArray(), true);
             filmRoutine = busy = false;
         }
         IEnumerator Arrive()
@@ -332,6 +333,7 @@ namespace Seabreeze
                 yield break;
             }
             live = null; host.Close();
+            yield return LoadingPlaceholder("after_evening_live");
             yield return ShutdownTransition();
             busy = false; Time.timeScale = 1; GameUI.Instance.SetTitleVisible(false);
             session.Clock.CompleteLiveSession(id); session.Memory?.Spawner.Reload();
@@ -346,13 +348,14 @@ namespace Seabreeze
             yield return new WaitForSecondsRealtime(.6f); Destroy(screen);
         }
         void ShowOpeningRetry() { invitations.Show("小岛邀请", "可以继续直播，或稍后再试。", "继续观看", () => { if (live == null) OpenLive(true); }); }
-        IEnumerator NotifyLive() { busy = true; yield return GameUI.Instance.ShowLiveNotification(); busy = false; OpenLive(false); }
+        IEnumerator LoadingPlaceholder(string point) { yield break; } // Reserved: no loading UI until its design is supplied.
+        IEnumerator NotifyLive() { busy = true; yield return LoadingPlaceholder("before_evening_live"); yield return GameUI.Instance.ShowLiveNotification(); busy = false; OpenLive(false); }
         public IEnumerable<SevenCharacter> StagedCast(PlaceId place)
         {
             if (!Active) return null;
             if ((Phase == FirstDayPhase.Harbor || Phase == FirstDayPhase.WalkToSquare) && place == PlaceId.Harbor) return SevenCharacterCatalog.Actors.Where(a => a.id == "z");
             if (Phase == FirstDayPhase.WalkToSquare && place == PlaceId.Street) return SevenCharacterCatalog.Actors.Where(a => a.id == "z");
-            if (place == PlaceId.Square && (Phase == FirstDayPhase.WalkToSquare || Phase == FirstDayPhase.MeetIslanders || Phase == FirstDayPhase.Fireworks)) return SevenCharacterCatalog.Actors.Where(a => Cast.Contains(a.id));
+            if (place == PlaceId.Square && (Phase == FirstDayPhase.WalkToSquare || Phase == FirstDayPhase.MeetIslanders || Phase == FirstDayPhase.Fireworks || Phase == FirstDayPhase.WelcomeTask || Phase == FirstDayPhase.EveningReady)) return SevenCharacterCatalog.Actors.Where(a => Cast.Contains(a.id) || a.id == "liyuan" && session.State.memory.positions.Any(p => p.actorId == "liyuan" && p.place == "Square" && p.day == 1));
             return null;
         }
         public float CastPosition(string actor, PlaceId place)

@@ -34,17 +34,14 @@ namespace Seabreeze
         public string[] LastRecalledMemoryIds {get; private set;}=Array.Empty<string>();
         bool WorldReady => session!=null&&session.IsReady&&world?.Stage!=null&&!world.IsTransitioning&&(!session.NonPlayerInputBlocked || session.FirstDay?.PreparingHarbor == true)&&Time.timeScale>0;
         bool Present(NpcPresence a)=>a!=null&&a.IsPresent&&a.isActiveAndEnabled&&a.Movement!=null&&a.Movement.IsReady&&a.gameObject.scene==world.Stage.gameObject.scene;
-        bool Eligible(NpcPresence a)=>Present(a)&&!held.ContainsKey(a)&&!a.Movement.InteractionHeld&&!(memory.Actions?.HasPending(a.npcId)??false);
+        bool Eligible(NpcPresence a)=>Present(a)&&!memory.Spawner.IsAmbientMoving(a.npcId)&&!held.ContainsKey(a)&&!a.Movement.InteractionHeld&&!(memory.Actions?.HasPending(a.npcId)??false);
         static string Pair(string a,string b)=>string.CompareOrdinal(a,b)<0?a+"_"+b:b+"_"+a;
         bool Cooling(NpcPresence a,NpcPresence b)=>cooldown.TryGetValue(Pair(a.npcId,b.npcId),out float until)&&until>Time.unscaledTime;
-        Vector2 Point(NpcPresence a,NpcPresence b)=>new Vector2(b.transform.position.x+(a.transform.position.x<=b.transform.position.x?-1.45f:1.45f),b.transform.position.y);
+        Vector2 Point(NpcPresence a,NpcPresence b)=>new Vector2(b.transform.position.x+(a.transform.position.x<=b.transform.position.x?-1.05f:1.05f),b.transform.position.y);
         public void Initialize(MemoryGameController m,GameSession s,WorldDirector w){memory=m;session=s;world=w;nextDecision=Time.unscaledTime+4;}
         void Update()
         {
             ReportIntroduction();
-            // This scene has authored, silent social groups until the player
-            // finishes the introductions. Autonomous AI must not move them away.
-            if(session?.FirstDay?.GatheringActive==true){foreach(var c in sessions.Values.Where(c=>!c.player).ToArray())Finish(c,false);return;}
             foreach(var c in sessions.Values.ToArray())if(!WorldReady||!Present(c.first)||(!c.player&&c.stage!="选择是否交谈"&&!Present(c.second))||(!c.player&&Time.unscaledTime-c.started>MemoryRuntimeConfig.Settings.conversationTimeout))Finish(c,false);
             if(!WorldReady||!memory.Client.CanGenerate||Time.unscaledTime<nextDecision||sessions.Values.Any(c=>!c.player))return;
             nextDecision=Time.unscaledTime+MemoryRuntimeConfig.Settings.decisionInterval;
@@ -52,7 +49,7 @@ namespace Seabreeze
             for(int n=0;n<actors.Length;n++)
             {
                 var first=actors[(planner++)%actors.Length];
-                var candidates=actors.Where(a=>a!=first&&!Cooling(first,a)&&MemoryGameController.CanHear(first.transform.position,a.transform.position)&&first.Movement.CanReachConversationPoint(Point(first,a))).ToArray();
+                var candidates=actors.Where(a=>a!=first&&(session.FirstDay?.GatheringActive!=true||FirstDayGathering.Related(first.npcId,a.npcId))&&!Cooling(first,a)&&MemoryGameController.CanHear(first.transform.position,a.transform.position)&&first.Movement.CanReachConversationPoint(Point(first,a))).ToArray();
                 if(candidates.Length==0)continue;
                 var c=new Conversation{id="npc_"+Guid.NewGuid().ToString("N"),first=first,stage="选择是否交谈",started=Time.unscaledTime};sessions[c.id]=c;Hold(c,first);StartCoroutine(Autonomous(c,candidates));break;
             }
@@ -95,7 +92,7 @@ namespace Seabreeze
                 string dialogue=line.result?.dialogue??line.text;string expression=line.result?.expression??line.expression;
                 if(string.IsNullOrEmpty(dialogue)){memory.Client.CommitDecision(line,speaker.npcId,request.observers,request.locationId);break;}
                 memory.ShowResult(line);memory.CommitLine(c.id,speaker.npcId,recipient.npcId,dialogue,line.proposalId,"face_to_face",expression);LastRecalledMemoryIds=line.recalledMemoryIds??Array.Empty<string>();CommittedNpcLines++;
-                float visibleUntil=Time.unscaledTime+Mathf.Clamp(1.3f+dialogue.Length*.05f,2.5f,6);
+                float visibleUntil=Time.unscaledTime+NpcSpeechBubble.ReadDuration(dialogue);
                 while(!c.cancelled&&Time.unscaledTime<visibleUntil)yield return null;
                 if(c.cancelled)yield break;
                 if(line.endConversation)break;

@@ -290,6 +290,14 @@ namespace Seabreeze
                 Debug.LogError("NPC motion requires matching canvas sizes, scales and foot pivots: " + root, this);
                 return false;
             }
+            // Keep every authored pose and canvas scale. Slow the temporal cycle by 12%.
+            const float cadence = 1.12f;
+            cycle *= cadence;
+            if (ends != null) for (int i = 0; i < ends.Length; i++) ends[i] *= cadence;
+            if (startEnds != null) for (int i = 0; i < startEnds.Length; i++) startEnds[i] *= cadence;
+            if (stopEnds != null) for (int i = 0; i < stopEnds.Length; i++) stopEnds[i] *= cadence;
+            var player = WorldDirector.Instance?.Player?.GetComponent<PlayerController>();
+            definition.walkSpeed = (player != null ? player.speed : 4.2f) * .95f;
             npcMotion = definition;
             npcCycleSeconds = cycle;
             npcFrameEnds = ends;

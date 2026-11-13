@@ -47,7 +47,18 @@ public sealed partial class LiveFeatureController {
         DisplayCaption(text);
     }
     void DisplayCaption(string text){
-        caption.text=text??"";
+        string visible=text??"";
+        if(SceneMode=="arrival" && caption.resolvedStyle.width>0)
+        {
+            // Progressive captions retain the most recent complete two-line page.
+            // Measure actual font/layout rather than assuming CJK and Latin share widths.
+            float width=caption.resolvedStyle.width, size=caption.resolvedStyle.fontSize;
+            int start=0;
+            while(start<visible.Length && caption.MeasureTextSize(visible.Substring(start),width,VisualElement.MeasureMode.AtMost,0,VisualElement.MeasureMode.Undefined).y>size*2.65f)
+            { start++; if(start<visible.Length&&char.IsLowSurrogate(visible[start]))start++; }
+            visible=visible.Substring(start);
+        }
+        caption.text=visible;
         speech.style.display=string.IsNullOrEmpty(text)?DisplayStyle.None:DisplayStyle.Flex;
         if(!string.IsNullOrEmpty(text))thinkingAfter=0;
     }

@@ -14,6 +14,7 @@ namespace Seabreeze
     public sealed partial class MemoryDialogueView : MonoBehaviour
     {
         MemoryGameController memory; GameSession session;
+        NpcSpeechBubble ambientBubble;
         RectTransform root,speechPanel,playerPanel,portrait,column,content;
         TextMeshProUGUI speechTitle,speechText,playerTitle,locationText,historyText,playerState,emptyPrompt,inputHelp;
         TMP_InputField input; Button send; ScrollRect historyScroll;
@@ -57,7 +58,7 @@ namespace Seabreeze
         internal TMP_InputField DialogueInput => input;
         internal Button DialogueSend => send;
         internal TextMeshProUGUI DialogueHistory => historyText;
-        public string VisibleSpeech => speechText!=null&&speechPanel.gameObject.activeSelf?speechTitle.text+"："+speechText.text:"";
+        public string VisibleSpeech => ambientBubble?.VisibleText ?? "";
         public void Initialize(MemoryGameController m,GameSession s,WorldDirector w)
         {
             memory=m;session=s;UIPrimitives.Font=Resources.Load<TMP_FontAsset>("Fonts/SeabreezeChinese");
@@ -153,6 +154,7 @@ namespace Seabreeze
         IEnumerator ResumeInput(){yield return null;if(PlayerInputReady&&memory.PlayerChatOpen)input.ActivateInputField();}
         public void OpenPlayer(string actorId)
         {
+            ambientBubble?.Clear();
             if(transition!=null)StopCoroutine(transition);ResetPortraitIdle();Closing=false;entering=true;selectedActor=actorId;ClearTaskCards();ClearHistory();typing=false;portraitEmotion=null;expressionEndsAt=0;
             playerTitle.text=SevenCharacterCatalog.Name(actorId);
             RefreshDialoguePalette();
@@ -306,16 +308,19 @@ namespace Seabreeze
         {
             if(playerConversation)
             {
+                ambientBubble?.Clear();
                 EndFollowingSpeech();speechStarted=false;FinishTyping();AddBubble(text,speaker=="player");lastSpeaker=speaker;revealed=0;
                 BeginPortraitLine(speaker,expression);
                 typing=speaker!="player"&&!linePreparationActive;historyText.maxVisibleCharacters=(typing||linePreparationActive)?0:int.MaxValue;RefreshTypingLayout();return;
             }
-            speechTitle.text=SevenCharacterCatalog.Name(speaker);speechText.text=text;speechTitle.color=SevenCharacterCatalog.Find(speaker)?.Accent??Paper;
-            speechUntil=Time.unscaledTime+Mathf.Clamp(1.3f+text.Length*.05f,2.5f,6);speechPanel.gameObject.SetActive(true);
+            if(memory.PlayerChatOpen||playerPanel.gameObject.activeSelf||GameUI.Instance!=null&&(GameUI.Instance.HasOverlay||GameUI.Instance.IsOverlayTransitioning)){ambientBubble?.Clear();return;}
+            if(ambientBubble==null){ambientBubble=gameObject.AddComponent<NpcSpeechBubble>();ambientBubble.Initialize(root,memory,WorldDirector.Instance);}
+            ambientBubble.Show(speaker,text);
         }
         public bool LineFullyVisible => !CinemaHidden && !typing && !linePreparationActive;
         public void ResetView()
         {
+            ambientBubble?.Clear();
             StopAllCoroutines();
             var cancelledStory=ResetStoryState();
             transition=null;Closing=entering=false;ClearHistory();FinishTyping();ResetPortraitIdle();memory.ResetZhouboPortraitSelection();backdrop.Release();playerPanel.gameObject.SetActive(false);playerGroup.alpha=0;character.Hide();speechPanel.gameObject.SetActive(false);ClearTaskCards();
@@ -327,6 +332,8 @@ namespace Seabreeze
             if(memory?.Client==null||root==null)return;
             if(expressionEndsAt>0&&ExpressionClock>=expressionEndsAt){expressionEndsAt=0;portraitEmotion=null;if(character!=null)character.SetState(null,false);}
             bool fullView=playerPanel.gameObject.activeSelf,overlay=GameUI.Instance!=null&&(GameUI.Instance.HasOverlay||GameUI.Instance.IsOverlayTransitioning);
+            ambientBubble?.Tick(fullView||overlay||memory.PlayerChatOpen);
+            if(fullView||memory.PlayerChatOpen)ambientBubble?.Clear();
             if(fullView&&!Mathf.Approximately(previousColumnWidth,column.rect.width))RefreshHistoryLayout();
 
             if(speechPanel.gameObject.activeSelf&&(Time.unscaledTime>speechUntil||fullView||overlay))speechPanel.gameObject.SetActive(false);

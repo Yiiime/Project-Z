@@ -408,7 +408,7 @@
     },
     {
       "path": "unity-sideview/Tools/MemoryLab/server.mjs",
-      "sha256": "9a936c50412c169bcc972a6498a041613525a8b8ffd902f30c57ecca6e5812ae"
+      "sha256": "f61c89d70d07c7b07fa90a429a178ea3a49f439324329adb623df104e5296456"
     },
     {
       "path": "unity-sideview/Tools/MemoryLab/lib/engine.mjs",
@@ -440,7 +440,7 @@
     },
     {
       "path": "unity-sideview/Tools/live-service/server/shared/worker/agent-director.js",
-      "sha256": "9c92e55a10abe5e411b733730429ed314698ff1fe050bd71e169ee0308c76c57"
+      "sha256": "2664fbfe1ca68f7dc4c1f8862b12a49e4a14c447edd8252dcb3d12d2c01837df"
     },
     {
       "path": "unity-sideview/Tools/MemoryLab/content/current/actor-registry.json",

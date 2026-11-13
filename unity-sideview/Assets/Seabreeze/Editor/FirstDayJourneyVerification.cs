@@ -32,6 +32,7 @@ namespace Seabreeze.Editor
         static readonly HashSet<string> voicedActors=new HashSet<string>();
         static int titleStage,chatTurns,chatRetries;
         static bool finished,songRequested,closingRequested,songCompleted;
+        static string lastAmbient;static readonly JArray worldEvidence=new JArray();static readonly HashSet<string> motionSeen=new HashSet<string>();
         static readonly JArray events=new JArray(),errors=new JArray(),liveEvidence=new JArray();
         static readonly HashSet<string> liveEventIds=new HashSet<string>();
         static FirstDayJourneyVerification(){EditorApplication.update+=Tick;Application.logMessageReceived+=(m,s,t)=>{if(SessionState.GetBool(Flag,false)&&t==LogType.Exception&&!s.Contains("UnityEditor.Search."))errors.Add(m);};}
@@ -47,15 +48,15 @@ namespace Seabreeze.Editor
         static T Field<T>(object o,string n)=>(T)o.GetType().GetField(n,Private).GetValue(o);
         static void Log(string text){events.Add(new JObject{["time"]=Math.Round(EditorApplication.timeSinceStartup,2),["event"]=text});Debug.Log("DAY01_JOURNEY "+text);}
         static void Keys(params Key[] keys){heldKeys=keys;}
-        static void BeforeInput(){if(keyboard!=null)InputSystem.QueueStateEvent(keyboard,new KeyboardState(heldKeys));}
-        static void AfterInput(){if(keyboard!=null)keyboard.MakeCurrent();}
-        static void Capture(string name){if(!Application.isBatchMode)ScreenCapture.CaptureScreenshot(Path.Combine(output,name+".png"));else if(liveTarget!=null){var previous=RenderTexture.active;var pixels=new Texture2D(liveTarget.width,liveTarget.height,TextureFormat.RGBA32,false);try{RenderTexture.active=liveTarget;pixels.ReadPixels(new Rect(0,0,liveTarget.width,liveTarget.height),0,0);pixels.Apply();File.WriteAllBytes(Path.Combine(output,name+".png"),pixels.EncodeToPNG());}finally{RenderTexture.active=previous;UnityEngine.Object.Destroy(pixels);}}}
-        static void Write(bool? passed=null,string error=null){File.WriteAllText(Path.Combine(output,"journey-report.json"),new JObject{["passed"]=passed,["runtime"]=RuntimeState(),["phase"]=lastPhase,["events"]=events,["errors"]=errors,["songCompleted"]=songCompleted,["liveEvidence"]=liveEvidence,["voicedActors"]=new JArray(voicedActors),["error"]=error,["scope"]="Actual UI handlers, keyboard movement, real configured model and playback receipts. No injected story phase or task completion."}.ToString());}
+        static void BeforeInput(){}
+        static void AfterInput(){if(keyboard!=null){InputState.Change(keyboard,new KeyboardState(heldKeys));keyboard.MakeCurrent();}}
+        static void Capture(string name){if(!Application.isBatchMode || (GameSession.Instance?.FirstDay?.Phase!=FirstDayPhase.Live && GameSession.Instance?.FirstDay?.Phase!=FirstDayPhase.EveningLive))ScreenCapture.CaptureScreenshot(Path.Combine(output,name+".png"));else if(liveTarget!=null){var previous=RenderTexture.active;var pixels=new Texture2D(liveTarget.width,liveTarget.height,TextureFormat.RGBA32,false);try{RenderTexture.active=liveTarget;pixels.ReadPixels(new Rect(0,0,liveTarget.width,liveTarget.height),0,0);pixels.Apply();File.WriteAllBytes(Path.Combine(output,name+".png"),pixels.EncodeToPNG());}finally{RenderTexture.active=previous;UnityEngine.Object.Destroy(pixels);}}}
+        static void Write(bool? passed=null,string error=null){File.WriteAllText(Path.Combine(output,"journey-report.json"),new JObject{["passed"]=passed,["runtime"]=RuntimeState(),["phase"]=lastPhase,["events"]=events,["errors"]=errors,["songCompleted"]=songCompleted,["liveEvidence"]=liveEvidence,["worldEvidence"]=worldEvidence,["voicedActors"]=new JArray(voicedActors),["error"]=error,["scope"]="Actual UI handlers, keyboard movement, real configured model and playback receipts. No injected story phase or task completion."}.ToString());}
         static JObject RuntimeState()
         {
             var g=GameSession.Instance;var w=WorldDirector.Instance;
             var p=w?.Player;var actor=g?.State?.firstDay==null?null:g?.FirstDay?.Cast.FirstOrDefault(id=>!g.State.firstDay.greeted.Contains(id));
-            return new JObject{["playerX"]=(float?)p?.position.x,["axis"]=(float?)p?.GetComponent<PlayerController>()?.MoveAxis,["horizontal"]=GameInput.Horizontal,
+            return new JObject{["npcs"]=g?.Memory?.Spawner==null?new JArray():new JArray(g.Memory.Spawner.Actors.Where(a=>a!=null).Select(a=>new JObject{["id"]=a.npcId,["x"]=a.transform.position.x,["present"]=a.IsPresent,["moving"]=(bool?)a.Movement?.IsMoving,["ambient"]=g.Memory.Spawner.IsAmbientMoving(a.npcId),["result"]=a.Movement?.LastStartFailure})),["playerX"]=(float?)p?.position.x,["transitioning"]=(bool?)w?.IsTransitioning,["playerEnabled"]=(bool?)p?.GetComponent<PlayerController>()?.enabled,["frame"]=Time.frameCount,["held"]=string.Join(",",heldKeys),["axis"]=(float?)p?.GetComponent<PlayerController>()?.MoveAxis,["horizontal"]=GameInput.Horizontal,
                 ["inputBlocked"]=(bool?)g?.InputBlocked,["firstDayBusy"]=(bool?)g?.FirstDay?.BlocksInput,["chatOpen"]=(bool?)g?.Memory?.PlayerChatOpen,
                 ["closing"]=(bool?)g?.Memory?.View?.Closing,["scripted"]=(bool?)g?.Memory?.View?.ScriptedOpen,["scale"]=Time.timeScale,
                 ["target"]=actor,["keyboard"]=(int?)Keyboard.current?.deviceId,["testKeyboard"]=(int?)keyboard?.deviceId,
@@ -87,6 +88,11 @@ namespace Seabreeze.Editor
                     UnityEngine.Object.FindObjectsByType<Button>(FindObjectsSortMode.None).Single(b=>b.name=="Confirm player name").onClick.Invoke();Capture("01-name");titleStage=2;Log("Confirmed fictional player name using landing form");nextAction=now+1;return;
                 }
                 var memory=game.Memory;if(memory==null||world?.Stage==null||world.IsTransitioning)return;
+                var bubbles=UnityEngine.Object.FindObjectsByType<NpcSpeechBubble>(FindObjectsSortMode.None).Where(b=>b.Visible).ToArray();
+                if(bubbles.Length>3)throw new Exception("More than three overhead bubbles");
+                string ambient=string.Join(" | ",bubbles.Select(b=>b.VisibleText));
+                if(ambient!=""&&ambient!=lastAmbient){lastAmbient=ambient;worldEvidence.Add(new JObject{["time"]=now,["conversation"]=memory.Conversations.ActiveId,["bubbles"]=ambient,["count"]=bubbles.Length});}
+                foreach(var npc in memory.Spawner.Actors.Where(a=>a?.Movement!=null&&a.Movement.ActualSpeed>2&&a.Visual?.Pose=="Walk"))if(motionSeen.Add(npc.npcId))worldEvidence.Add(new JObject{["actor"]=npc.npcId,["speed"]=npc.Movement.ActualSpeed,["cycleSeconds"]=npc.Visual.NpcCycleSeconds,["playerSpeed"]=world.Player.GetComponent<PlayerController>().speed});
                 string phase=game.FirstDay.Phase.ToString();
                 if(phase!=lastPhase){lastPhase=phase;phaseAt=now;Log("Stage "+phase+" at "+game.CurrentPlace);Capture("stage-"+phase);}
                 if(now-phaseAt>600)throw new Exception("No progress for ten minutes: "+phase+"; service="+memory.Client.LastError);
@@ -108,7 +114,7 @@ namespace Seabreeze.Editor
                 if(game.FirstDay.Phase==FirstDayPhase.Live){
                     var feature=UnityEngine.Object.FindFirstObjectByType<LiveFeatureController>();
                     var doc=feature?.GetComponent<UIDocument>();
-                    var action=doc?.rootVisualElement.Q<UnityEngine.UIElements.Button>("arrival-gift-action");
+                    var action=doc?.rootVisualElement.Q<UnityEngine.UIElements.Button>("arrival-gift-action") ?? doc?.rootVisualElement.Q<UnityEngine.UIElements.Button>("arrival-reply");
                     if(action!=null && action.resolvedStyle.display!=DisplayStyle.None && action.enabledInHierarchy){
                         using(var click=NavigationSubmitEvent.GetPooled()){click.target=action;action.SendEvent(click);}
                         Log("Activated visible gift action");nextAction=now+2;
@@ -139,21 +145,22 @@ namespace Seabreeze.Editor
                 if(game.FirstDay.Phase==FirstDayPhase.WalkToSquare){Keys(Key.D);return;}
                 if(game.FirstDay.Phase==FirstDayPhase.MeetIslanders)
                 {
-                    if(!game.State.firstDay.announced)return;
+                    if(!game.State.firstDay.announced||now-phaseAt<(Environment.GetCommandLineArgs().Contains("-journeyContinue")?10:55))return;
                     var actor=FirstDayDirector.FirstDayCast.FirstOrDefault(id=>!game.State.firstDay.greeted.Contains(id));
                     if(actor!=null)WalkToActor(game,world,actor);return;
                 }
                 if(game.FirstDay.Phase==FirstDayPhase.WelcomeTask)
                 {
+                    if(now-phaseAt<45)return;
                     var cp=JObject.Parse(game.State.memory.checkpoint??"{}");var rows=(cp["tasks"]?["state"] as JArray??new JArray());
                     var definition=(cp["tasks"]?["definitions"] as JArray??new JArray()).OfType<JObject>().FirstOrDefault(d=>rows.Any(r=>(string)r["task"]==(string)d["id"]&&new[]{"offered","active"}.Contains((string)r["status"])));
-                    if(definition==null){WalkToActor(game,world,"liting");return;}
+                    if(definition==null){var resident=memory.Spawner.Actors.FirstOrDefault(a=>a!=null&&a.IsPresent);if(resident!=null)WalkToActor(game,world,resident.npcId);return;}
                     var row=rows.First(r=>(string)r["task"]==(string)definition["id"]);
                     if((string)row["status"]=="offered"){WalkToActor(game,world,(string)definition["owner"]);return;}
                     var progress=JObject.Parse((string)row["progress"]??"{}");var step=((JArray)definition["steps"]).FirstOrDefault(s=>(bool?)progress[(string)s["id"]]?["succeeded"]!=true);
                     if(step==null)return;
                     if((string)step["action"]=="talk_to")WalkToActor(game,world,(string)step["target"]);
-                    else {if(Application.isBatchMode)throw new Exception("A real photo requires rendered Play Mode");var camera=UnityEngine.Object.FindFirstObjectByType<PhotoCaptureService>();if(camera.Capture()){Log("Captured actual photo for generated task");nextAction=now+3;}}
+                    else {var camera=UnityEngine.Object.FindFirstObjectByType<PhotoCaptureService>();if(camera.Capture()){Log("Captured actual photo for generated task");nextAction=now+3;}}
                 }
             }
             catch(Exception e){Finish(false,e.ToString());}

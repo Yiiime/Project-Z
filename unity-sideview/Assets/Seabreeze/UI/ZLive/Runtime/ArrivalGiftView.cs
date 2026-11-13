@@ -1,132 +1,164 @@
 using System;
-using Newtonsoft.Json.Linq;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.UIElements;
-using UnityEngine.Video;
 using Seabreeze;
-using Object=UnityEngine.Object;
-using Image=UnityEngine.UIElements.Image;
-using Button=UnityEngine.UIElements.Button;
+using Image = UnityEngine.UIElements.Image;
+using Button = UnityEngine.UIElements.Button;
 
 namespace ZLive
 {
-    public sealed class ArrivalNameRenderer : MonoBehaviour
-    {
-        public Camera Camera; public RenderTexture Target;
-        System.Collections.IEnumerator Start()
-        {
-            yield return null; // CanvasRenderer needs its first layout before an offscreen capture.
-            Canvas.ForceUpdateCanvases();
-            foreach(var text in GetComponentsInChildren<TextMeshProUGUI>())text.ForceMeshUpdate();
-            UnityEngine.Rendering.RenderPipeline.SubmitRenderRequest(Camera,new UnityEngine.Rendering.Universal.UniversalRenderPipeline.SingleCameraRequest{destination=Target});
-            gameObject.SetActive(false);
-        }
-    }
-    // The supplied clickable HTML is a video state machine. Keep its clip and cue times intact.
+    // Native port of the supplied 2026-11-14 invitation. PNG pixels and live text stay sharp.
     public sealed class ArrivalGiftView : IDisposable
     {
         public readonly VisualElement Root;
-        readonly VisualElement stage, giftHit;
+        readonly VisualElement stage, ticket, sheen;
+        readonly Image closed, lid, box;
+        readonly Label recipient, message, heading;
         readonly Button action;
-        readonly VideoPlayer player;
-        readonly GameObject host; GameObject overlayHost;
+        readonly VisualElement[] sparks = new VisualElement[32];
         static ArrivalGiftView warming;
-        readonly RenderTexture video, composite, names;
-        readonly Material material;
-        readonly JArray tracking;
-        string phase="intro", failure;
-        bool prepared, suspended, collectRequested;
-        public bool Ready => phase=="idle";
-        public bool Opened {get;private set;}
-        public bool Revealed => phase=="reward"||phase=="collect"||phase=="done";
-        public bool Collected {get;private set;}
-        public double PlaybackTime => player!=null?player.time:0;
-        public string PlayerName {get;private set;}
-        public bool VideoPrepared => prepared;
+        string phase = "enter";
+        bool suspended, disposed;
+        float elapsed, total, previous;
+        public bool Ready => phase == "idle";
+        public bool Opened { get; private set; }
+        public bool Revealed => phase == "reward" || phase == "collect" || phase == "done";
+        public bool Collected { get; private set; }
+        public double PlaybackTime => total;
+        public string PlayerName { get; private set; }
+        public bool VideoPrepared => !disposed; // Kept for the existing prewarm contract; no decoder required.
+        public string Phase => phase;
         public static void Prewarm(string value)
         {
-            value=PlayerIdentity.Normalize(value);if(string.IsNullOrWhiteSpace(value))return;
-            if(warming==null||warming.host==null)warming=new ArrivalGiftView(new VisualElement(),value,true);
-            else if(warming.PlayerName!=value){warming.PlayerName=value;Object.Destroy(warming.overlayHost);warming.overlayHost=warming.CreateNameLayer(value);}
+            value = PlayerIdentity.Normalize(value);
+            if (string.IsNullOrWhiteSpace(value)) return;
+            if (warming == null || warming.disposed) warming = new ArrivalGiftView(new VisualElement(), value, true);
+            else warming.SetName(value);
         }
-        public static ArrivalGiftView TakePrepared(VisualElement parent,string value)
+        public static ArrivalGiftView TakePrepared(VisualElement parent, string value)
         {
-            Prewarm(value);var view=warming;warming=null;
-            if(view==null)return new ArrivalGiftView(parent,value);
-            parent.Add(view.Root);view.SetPaused(false);return view;
+            Prewarm(value);
+            var view = warming ?? new ArrivalGiftView(new VisualElement(), value, true);
+            warming = null;
+            parent.Add(view.Root); view.SetPaused(false); return view;
         }
-        public ArrivalGiftView(VisualElement parent,string playerName,bool prepareOnly=false)
+        public ArrivalGiftView(VisualElement parent, string playerName, bool prepareOnly = false)
         {
-            PlayerName=playerName;suspended=prepareOnly;
-            Root=new VisualElement{name="arrival-gift-overlay"};
-            Root.style.position=Position.Absolute;Root.style.left=Root.style.right=Root.style.top=Root.style.bottom=0;
-            Root.style.backgroundColor=new Color(.067f,.075f,.118f);Root.style.alignItems=Align.Center;Root.style.justifyContent=Justify.Center;
-            stage=new VisualElement{name="arrival-video-stage"};stage.style.position=Position.Relative;Root.Add(stage);
-            video=Target("Arrival original video");composite=Target("Arrival named video");names=Target("Arrival dynamic text");
-            var screen=new Image{name="arrival-reference-video",image=composite,scaleMode=ScaleMode.StretchToFill};
-            screen.style.position=Position.Absolute;screen.style.left=screen.style.right=screen.style.top=screen.style.bottom=0;screen.pickingMode=PickingMode.Ignore;stage.Add(screen);
-            giftHit=new VisualElement{name="arrival-gift"};giftHit.style.position=Position.Absolute;giftHit.style.left=Length.Percent(25);giftHit.style.top=Length.Percent(26);giftHit.style.width=Length.Percent(30);giftHit.style.height=Length.Percent(48);giftHit.RegisterCallback<ClickEvent>(_=>ActivateGift());stage.Add(giftHit);
-            action=new Button(()=>{if(Ready)ActivateGift();else Collect();}){name="arrival-gift-action",text="点击开启"};
-            action.style.position=Position.Absolute;action.style.left=Length.Percent(32.2f);action.style.top=Length.Percent(83);action.style.width=Length.Percent(15.6f);action.style.height=Length.Percent(8.4f);
-            action.style.color=Color.white;action.style.backgroundColor=new Color(.19f,.16f,.22f);
-            action.style.borderTopLeftRadius=action.style.borderTopRightRadius=action.style.borderBottomLeftRadius=action.style.borderBottomRightRadius=100;
-            action.style.borderTopColor=action.style.borderRightColor=action.style.borderBottomColor=action.style.borderLeftColor=new Color(.94f,.84f,1);
-            action.style.borderTopWidth=action.style.borderRightWidth=action.style.borderBottomWidth=action.style.borderLeftWidth=1.5f;stage.Add(action);
-            Root.RegisterCallback<GeometryChangedEvent>(e=>{float scale=Mathf.Min(e.newRect.width/1280,e.newRect.height/778);stage.style.width=1280*scale;stage.style.height=778*scale;action.style.fontSize=Mathf.Clamp(1280*scale*.018f,12,25);});
-            // The clip already contains the exact glowing button: use a transparent native hit target.
-            action.style.color=Color.clear;action.style.backgroundColor=Color.clear;
-            action.style.borderTopWidth=action.style.borderRightWidth=action.style.borderBottomWidth=action.style.borderLeftWidth=0;
-            parent.Add(Root);ShowAction(false);
-            material=new Material(Resources.Load<Shader>("FirstDay/ArrivalNameComposite"));material.SetTexture("_Overlay",names);
-            tracking=(JArray)JObject.Parse(Resources.Load<TextAsset>("FirstDay/ArrivalTracking").text)["frames"];
-            overlayHost=CreateNameLayer(playerName);host=new GameObject("Original arrival animation");Object.DontDestroyOnLoad(host);
-            player=host.AddComponent<VideoPlayer>();player.playOnAwake=false;player.isLooping=false;player.waitForFirstFrame=true;player.skipOnDrop=false;
-            player.audioOutputMode=VideoAudioOutputMode.None;player.renderMode=VideoRenderMode.RenderTexture;player.targetTexture=video;
-            player.clip=Resources.Load<VideoClip>("FirstDay/ArrivalReference");
-            player.prepareCompleted+=_=>{prepared=true;if(!suspended)player.Play();};player.errorReceived+=(_,error)=>failure=error;
-            player.loopPointReached+=_=>{if(phase=="collect"){phase="done";Collected=true;}};player.Prepare();
+            suspended = prepareOnly; previous = Time.unscaledTime;
+            Root = new VisualElement { name = "arrival-gift-overlay" };
+            Fill(Root); Root.style.backgroundColor = new Color(.086f, .075f, .141f, .60f);
+            Root.style.alignItems = Align.Center; Root.style.justifyContent = Justify.Center; Root.style.overflow = Overflow.Hidden;
+            // Fixed design coordinates; scale once at the panel boundary.
+            stage = new VisualElement { name = "arrival-native-stage" };
+            stage.style.width = 1600; stage.style.height = 972; stage.style.flexShrink = 0;
+            Root.Add(stage);
+            Root.RegisterCallback<GeometryChangedEvent>(e => stage.transform.scale = Vector3.one * Mathf.Min(e.newRect.width / 1600, e.newRect.height / 972));
+            var sprites = Resources.Load<Texture2D>("FirstDay/Invitation20261114/gift-sprites");
+            var paper = Resources.Load<Texture2D>("FirstDay/Invitation20261114/invitation");
+            if (sprites == null || paper == null) throw new InvalidOperationException("Invitation artwork is missing");
+            closed = Sprite(sprites, 0); box = Sprite(sprites, 2); lid = Sprite(sprites, 1);
+            for (int i = 0; i < sparks.Length; i++)
+            {
+                var s = new Label("✦"); s.style.position = Position.Absolute; s.style.fontSize = 12 + i % 5 * 3;
+                s.style.color = new Color(1, .91f, .71f); s.pickingMode = PickingMode.Ignore; stage.Add(s); sparks[i] = s;
+            }
+            ticket = new VisualElement { name = "arrival-invitation" };
+            ticket.style.position = Position.Absolute; ticket.style.left = 104; ticket.style.top = 186;
+            ticket.style.width = 992; ticket.style.height = 567; ticket.style.overflow = Overflow.Hidden; stage.Add(ticket);
+            var art = new Image { image = paper, scaleMode = ScaleMode.StretchToFill, pickingMode = PickingMode.Ignore }; Fill(art); ticket.Add(art);
+            Label Detail(string name, string text, float y) { var label = Text(ticket, name, text, 139, y, 490, 46, 29.7f); label.style.color = new Color(.125f, .20f, .255f); label.style.unityFontStyleAndWeight = FontStyle.Bold; return label; }
+            Detail("arrival-inviter", "邀 请 人：Z", 238);
+            recipient = Detail("arrival-winner-name", "", 286);
+            Detail("arrival-island", "前往岛屿：月亮岛", 334);
+            Detail("arrival-greeter", "接 待 人：Z", 382);
+            message = Text(ticket, "arrival-personal-message", "", 119, 457, 635, 72, 20.8f);
+            message.style.color = new Color(.137f, .227f, .282f); message.style.whiteSpace = WhiteSpace.Normal;
+            sheen = new VisualElement(); sheen.style.position = Position.Absolute; sheen.style.top = 30; sheen.style.width = 24; sheen.style.height = 500;
+            sheen.style.backgroundColor = new Color(1, .97f, .85f, .13f); sheen.transform.rotation = Quaternion.Euler(0, 0, 24); sheen.pickingMode = PickingMode.Ignore; ticket.Add(sheen);
+            heading = Text(stage, "arrival-heading", "一份来自月亮岛的惊喜", 160, 150, 880, 70, 48); heading.style.unityTextAlign = TextAnchor.MiddleCenter;
+            action = new Button(() => { if (Ready) ActivateGift(); else Collect(); }) { name = "arrival-gift-action", text = "点击开启" };
+            action.style.position = Position.Absolute; action.style.left = 465; action.style.top = 807; action.style.width = 270; action.style.height = 76;
+            action.style.fontSize = 29; action.style.color = Color.white; action.style.backgroundColor = new Color(.19f, .16f, .23f);
+            action.style.borderTopLeftRadius = action.style.borderTopRightRadius = action.style.borderBottomLeftRadius = action.style.borderBottomRightRadius = 100;
+            action.style.borderTopColor = action.style.borderRightColor = action.style.borderBottomColor = action.style.borderLeftColor = new Color(.91f, .80f, 1);
+            action.style.borderTopWidth = action.style.borderRightWidth = action.style.borderBottomWidth = action.style.borderLeftWidth = 1.5f;
+            stage.Add(action); closed.RegisterCallback<ClickEvent>(_ => ActivateGift());
+            parent.Add(Root); SetName(playerName); Render();
         }
-        static RenderTexture Target(string name){var texture=new RenderTexture(2560,1556,24,RenderTextureFormat.ARGB32){name=name,filterMode=FilterMode.Bilinear,useMipMap=false};texture.Create();return texture;}
-        GameObject CreateNameLayer(string value)
+        static void Fill(VisualElement e) { e.style.position = Position.Absolute; e.style.left = e.style.right = e.style.top = e.style.bottom = 0; }
+        static Label Text(VisualElement parent, string name, string value, float x, float y, float width, float height, float size)
         {
-            var root=new GameObject("Arrival name surface");root.layer=31;root.transform.position=new Vector3(10000,0,0);Object.DontDestroyOnLoad(root);
-            var camera=new GameObject("Name surface camera").AddComponent<Camera>();camera.transform.SetParent(root.transform);camera.transform.localPosition=new Vector3(0,0,-10);camera.orthographic=true;camera.orthographicSize=389;camera.aspect=1280f/778;camera.nearClipPlane=.1f;camera.farClipPlane=30;camera.cullingMask=1<<31;camera.clearFlags=CameraClearFlags.SolidColor;camera.backgroundColor=Color.clear;camera.targetTexture=names;camera.enabled=false;
-            var canvasObject=new GameObject("Name surface canvas",typeof(RectTransform),typeof(Canvas));canvasObject.layer=31;canvasObject.transform.SetParent(root.transform,false);
-            var canvas=canvasObject.GetComponent<Canvas>();canvas.renderMode=RenderMode.WorldSpace;canvas.worldCamera=camera;((RectTransform)canvas.transform).sizeDelta=new Vector2(1280,778);
-            var paper=Resources.Load<Texture2D>("FirstDay/ArrivalNamePaper");
-            float nameWidth=Mathf.Clamp(value.Length*27+12,130,350);
-            material.SetVector("_NameRect",new Vector4(344,357,nameWidth+16,48));
-            Patch(canvas.transform,paper,new Rect(344,357,nameWidth+16,48));Patch(canvas.transform,paper,new Rect(172,509,512,52));
-            // Reuse a blank patch of the existing paper; replace only the baked greeter value.
-            var greeter=Rect(canvas.transform,"Greeter paper",new Rect(320,443,90,44)).gameObject.AddComponent<RawImage>();
-            greeter.texture=paper;greeter.uvRect=new Rect(320f/1280,1-520f/778,90f/1280,44f/778);greeter.raycastTarget=false;
-            Text(canvas.transform,"arrival-greeter","Z",new Rect(327,445,76,37),26,26);
-            Text(canvas.transform,"arrival-winner-name",value,new Rect(351,363,nameWidth,37),26,21);
-            Text(canvas.transform,"arrival-personal-message","码头的灯会为你亮着。"+value+"，我们岛上见。",new Rect(181,518,495,34),21,14);
-            var renderer=root.AddComponent<ArrivalNameRenderer>();renderer.Camera=camera;renderer.Target=names;return root;
+            var label = new Label(value) { name = name, pickingMode = PickingMode.Ignore, enableRichText = false };
+            label.style.position = Position.Absolute; label.style.left = x; label.style.top = y; label.style.width = width; label.style.height = height; label.style.fontSize = size;
+            label.style.color = Color.white; label.style.unityTextAlign = TextAnchor.MiddleLeft; parent.Add(label); return label;
         }
-        static RectTransform Rect(Transform parent,string name,Rect area){var go=new GameObject(name,typeof(RectTransform));go.layer=31;var r=go.GetComponent<RectTransform>();r.SetParent(parent,false);r.anchorMin=r.anchorMax=r.pivot=new Vector2(0,1);r.anchoredPosition=new Vector2(area.x,-area.y);r.sizeDelta=area.size;return r;}
-        static void Patch(Transform parent,Texture2D paper,Rect area){var raw=Rect(parent,"Repaired original paper",area).gameObject.AddComponent<RawImage>();raw.texture=paper;raw.uvRect=new Rect(area.x/1280,1-(area.y+area.height)/778,area.width/1280,area.height/778);raw.raycastTarget=false;}
-        static void Text(Transform parent,string name,string value,Rect area,float max,float min){var text=Rect(parent,name,area).gameObject.AddComponent<TextMeshProUGUI>();text.font=UIPrimitives.Font!=null?UIPrimitives.Font:Resources.Load<TMP_FontAsset>("Fonts/SeabreezeChinese");text.text=value;text.richText=false;text.fontSize=max;text.enableAutoSizing=true;text.fontSizeMax=max;text.fontSizeMin=min;text.fontStyle=FontStyles.Bold;text.color=new Color(.075f,.14f,.20f);text.alignment=TextAlignmentOptions.MidlineLeft;text.textWrappingMode=TextWrappingModes.NoWrap;text.raycastTarget=false;}
-        void ShowAction(bool show){action.style.display=show?DisplayStyle.Flex:DisplayStyle.None;giftHit.style.display=phase=="idle"?DisplayStyle.Flex:DisplayStyle.None;}
-        public void SetPaused(bool value){if(suspended==value)return;suspended=value;if(!prepared)return;if(value)player.Pause();else if(phase=="intro"||phase=="opening"||phase=="collect")player.Play();}
-        public void ActivateGift(){if(!Ready)return;Opened=true;phase="opening";ShowAction(false);player.time=1.75;if(!suspended)player.Play();}
-        public void Collect(){if(phase!="reward"||collectRequested)return;collectRequested=true;phase="collect";ShowAction(false);player.time=9.60;if(!suspended)player.Play();}
-        public void Tick(float idle,float animation)
+        Image Sprite(Texture2D texture, int index)
         {
-            if(failure!=null)throw new InvalidOperationException("Arrival video: "+failure);
-            if(!prepared)return;
-            // The user removed replay: end before the baked-in replay button appears.
-            if(phase=="collect"&&player.time>=10.20){player.Pause();phase="done";Collected=true;ShowAction(false);}
-            if(phase=="intro"&&player.time>=1.30){player.Pause();phase="idle";action.text="点击开启";ShowAction(true);action.Focus();}
-            if(phase=="opening"&&player.time>=8.80){player.Pause();phase="reward";action.text="收下邀请";ShowAction(true);action.Focus();}
-            JToken best=null;double delta=double.MaxValue;foreach(var frame in tracking){double d=Math.Abs((double)frame["t"]-player.time);if(d<delta){delta=d;best=frame;}}
-            bool visible=best!=null&&(bool)best["valid"];float opacity=player.time>9.70?Mathf.Clamp01((10.20f-(float)player.time)/.50f):Mathf.Clamp01(((float)player.time-4.50f)/.35f);material.SetFloat("_Visible",visible?opacity:0);
-            if(visible){var h=(JArray)best["h"];var matrix=Matrix4x4.identity;matrix.m00=(float)h[0];matrix.m01=(float)h[1];matrix.m03=(float)h[2];matrix.m10=(float)h[3];matrix.m11=(float)h[4];matrix.m13=(float)h[5];matrix.m30=(float)h[6];matrix.m31=(float)h[7];matrix.m33=(float)h[8];var inverse=matrix.inverse;material.SetVector("_H0",new Vector4(inverse.m00,inverse.m01,inverse.m03,0));material.SetVector("_H1",new Vector4(inverse.m10,inverse.m11,inverse.m13,0));material.SetVector("_H2",new Vector4(inverse.m30,inverse.m31,inverse.m33,0));}
-            Graphics.Blit(video,composite,material);
+            var image = new Image { image = texture, uv = new Rect(index / 3f, 0, 1 / 3f, 1), scaleMode = ScaleMode.StretchToFill };
+            image.style.position = Position.Absolute; stage.Add(image); return image;
         }
-        public void Dispose(){Root.RemoveFromHierarchy();if(player!=null)player.Stop();Object.Destroy(host);Object.Destroy(overlayHost);Object.Destroy(material);RenderTexture.active=null;foreach(var t in new[]{video,composite,names}){t.Release();Object.Destroy(t);}}
+        void SetName(string value)
+        {
+            PlayerName = PlayerIdentity.Normalize(value);
+            recipient.text = "被邀请人：" + PlayerName;
+            // Keep the complete name visible even for the longest permitted player name.
+            recipient.style.fontSize = Mathf.Min(29.7f, 480f / Mathf.Max(16, recipient.text.Length));
+            message.text = "码头的灯会为你亮着。" + PlayerName + "，我们岛上见。";
+        }
+        static float Smooth(float t) { t = Mathf.Clamp01(t); return t * t * (3 - 2 * t); }
+        static void Pose(VisualElement e, float x, float y, float size, float degrees = 0, float opacity = 1)
+        {
+            e.style.left = x - size / 2; e.style.top = y - size / 2; e.style.width = e.style.height = size;
+            e.transform.rotation = Quaternion.Euler(0, 0, degrees); e.style.opacity = opacity;
+        }
+        void Change(string value) { phase = value; elapsed = 0; if (Ready || phase == "reward") action.Focus(); }
+        public void SetPaused(bool value) { if(suspended==value)return; suspended = value; previous = Time.unscaledTime; }
+        public void ActivateGift() { if (!Ready) return; Opened = true; Change("charge"); }
+        public void Collect() { if (phase == "reward") Change("collect"); }
+        public void Tick(float idle, float animation)
+        {
+            float now = Time.unscaledTime, dt = Mathf.Clamp(now - previous, 0, .1f); previous = now;
+            if (suspended || disposed) return;
+            elapsed += dt; total += dt;
+            if (phase == "enter" && elapsed >= .65f) Change("idle");
+            else if (phase == "charge" && elapsed >= 2.4f) Change("opening");
+            else if (phase == "opening" && elapsed >= 1.65f) Change("reward");
+            else if (phase == "collect" && elapsed >= .5f) { Change("done"); Collected = true; }
+            Render();
+        }
+        void Render()
+        {
+            bool gift = phase == "enter" || phase == "idle" || phase == "charge";
+            closed.style.display = gift ? DisplayStyle.Flex : DisplayStyle.None;
+            box.style.display = lid.style.display = phase == "opening" ? DisplayStyle.Flex : DisplayStyle.None;
+            ticket.style.display = phase == "opening" || Revealed ? DisplayStyle.Flex : DisplayStyle.None;
+            action.style.display = Ready || phase == "reward" ? DisplayStyle.Flex : DisplayStyle.None;
+            action.text = Ready ? "点击开启" : "收下邀请";
+            heading.style.display = gift ? DisplayStyle.Flex : DisplayStyle.None;
+            float power = phase == "charge" ? Smooth(elapsed / 2.4f) : 0;
+            float wiggle = Mathf.Sin(elapsed * (9 + power * 20)) * power;
+            float scale = phase == "enter" ? Mathf.Max(.001f, 1 + 2.5f * Mathf.Pow(Mathf.Clamp01(elapsed / .65f) - 1, 3) + 1.5f * Mathf.Pow(Mathf.Clamp01(elapsed / .65f) - 1, 2)) : 1;
+            Pose(closed, 600 + wiggle * 4, 490 + Mathf.Sin(elapsed * 2.6f) * 4 + (1 - scale) * 60, 560 * scale, wiggle * 1.43f);
+            float p = Mathf.Clamp01(elapsed / 1.65f), front = Smooth((p - .12f) / .7f), fly = 1 - Mathf.Pow(1 - Mathf.Clamp01(p / .55f), 3), fade = 1 - Smooth((p - .3f) / .42f);
+            if (phase == "opening")
+            {
+                Pose(box, 600, 580 + 100 * p * p, 550, 0, fade);
+                Pose(lid, 600 + fly * 290, 390 - fly * 190 + 120 * p * p, 560, fly * 37.2f, fade);
+                ticket.transform.scale = new Vector3(Mathf.Lerp(.12f, 1, front), Mathf.Lerp(.12f, 1, front) * Mathf.Lerp(.24f, 1, front), 1);
+                ticket.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(-18, 0, front)); ticket.style.opacity = Smooth(p / .14f);
+            }
+            else { float collect = phase == "collect" ? Smooth(elapsed / .5f) : Collected ? 1 : 0; ticket.transform.scale = Vector3.one * Mathf.Lerp(1, .86f, collect); ticket.transform.rotation = Quaternion.identity; ticket.style.opacity = 1 - collect; }
+            sheen.style.opacity = phase == "reward" && elapsed % 5 > 1 && elapsed % 5 < 2.8f ? .3f : 0;
+            sheen.style.left = Mathf.Lerp(-100, 1000, Mathf.Clamp01(((elapsed % 5) - 1) / 1.8f));
+            for (int i = 0; i < sparks.Length; i++)
+            {
+                var s = sparks[i]; bool visible = phase == "charge" || phase == "opening"; s.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+                float a = i * 2.399f + elapsed * .5f, progress = (elapsed * .8f + i * .173f) % 1;
+                float r = phase == "charge" ? 70 + (1 - progress) * 190 : fly * (180 + i * 67 % 230);
+                s.style.left = 600 + Mathf.Cos(a) * r; s.style.top = 535 + Mathf.Sin(a) * r * .65f;
+                s.style.opacity = phase == "charge" ? Mathf.Sin(Mathf.PI * progress) * power : fade;
+            }
+        }
+        public void Dispose() { disposed = true; Root.RemoveFromHierarchy(); }
     }
 }

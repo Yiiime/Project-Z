@@ -9,7 +9,7 @@ import {FirstDayAgent,storyContext,allowedStoryTools,validateWelcomeTask,FIRST_D
 const context=(phase='Live',extra={})=>({phase,version:1,playerName:'小海',greeted:[],...extra});
 const capabilities=[{type:'talk_to',target:'linxu',location:'ancient_tree_square'},{type:'take_photo',target:'Square',location:'ancient_tree_square'}];
 const generated=()=>({title:'这次相遇',description:'现场生成的两步委托',steps:[{type:'talk_to',target:'linxu',label:'和留洋聊聊今天的海'},{type:'take_photo',target:'Square',label:'拍下眼前的榕树'}]});
-const make=t=>{const store=new Store(),catalog=new Catalog(),provider={publicConfig:()=>({configured:false})},engine=new Engine(store,catalog,provider);engine.create('one');engine.create('two');t.after(()=>store.close());return {store,catalog,provider,engine};};
+const make=t=>{const store=new Store(),catalog=new Catalog(),provider={publicConfig:()=>({configured:false})},engine=new Engine(store,catalog,provider);engine.create('one');engine.create('two');for(const world of ['one','two'])engine.updateEnvironment(world,'linxu',{sceneId:'Square',locationId:'ancient_tree_square',x:0,y:0,movementState:'idle'});t.after(()=>store.close());return {store,catalog,provider,engine};};
 test('welcome task native offer, acceptance, dialogue, photo and reload protocol',async t=>{
   let generations=0;
   const app=createServer({dbPath:':memory:',backgroundEnabled:false,
@@ -23,6 +23,7 @@ test('welcome task native offer, acceptance, dialogue, photo and reload protocol
   const say=async(actor,conversation,id)=>post('sync',{eventData:{id,seq:app.engine.world(base.worldId).seq+1,day:1,period:3,kind:'utterance',speakerId:'player',recipientId:actor,conversationId:conversation,text:'今天有什么想一起做的事？',locationId:'ancient_tree_square',channel:'private_player_chat',observers:['player',actor]}});
   const commit=async(actor,conversation,id,p)=>post('sync',{eventData:{id,seq:app.engine.world(base.worldId).seq+1,day:1,period:3,kind:'utterance',speakerId:actor,recipientId:'player',conversationId:conversation,text:p.text,proposalId:p.proposalId,locationId:'ancient_tree_square',channel:'private_player_chat',observers:['player',actor]}});
   await post('open',{syncMode:'reference-v1'});
+  app.engine.updateEnvironment(base.worldId,'linxu',{sceneId:'Square',locationId:'ancient_tree_square',x:0,y:0,movementState:'idle'});
   await post('sync',{eventData:{id:'story_'+base.worldId+'_encounter_chat_z',seq:app.engine.world(base.worldId).seq+1,day:1,period:3,kind:'story_event',conversationId:'chat_z',text:'小海实际走近Z准备交谈',verified:true,locationId:'ancient_tree_square',observers:['player','z']}});
   await post('focus',{actorId:'z'});
   const proposed=await post('utterance',{actorId:'z',recipientId:'player',conversationId:'chat_z',locationId:'ancient_tree_square'});
@@ -141,4 +142,36 @@ test('first day director owns travel, daily conversations retain native escort c
 test('prepare introduction while walking without publishing it',()=>{
  assert(allowedStoryTools(storyContext(context('WalkToSquare'))).includes('announce_player'));
  assert(!allowedStoryTools(storyContext(context('MeetIslanders',{announced:true,greeted:['z','linxu']}))).includes('show_fireworks'));
+});
+
+test('welcome proposals exclude departed residents and allow the newly arrived Liyuan',async t=>{
+ const {engine,catalog}=make(t);const agent=new FirstDayAgent(engine,{},catalog);
+ agent.update('one',context('WelcomeTask',{currentActor:'liyuan',conversation:'evening'}));engine.focus('one','liyuan','player');
+ engine.updateEnvironment('one','linxu',{sceneId:'Square',locationId:'ancient_tree_square',x:0,y:0,movementState:'unavailable'});
+ let choices;agent.generate=async(system,input)=>{choices=input.capabilities;return {title:'留个纪念',description:'拍下眼前的广场',steps:[{type:'take_photo',target:'Square',label:'拍一张照片'}]};};
+ await agent.prepareTask('one','liyuan','evening');assert(!choices.some(c=>c.target==='linxu'));assert(engine.tasks.dynamicDefinitions('one').some(t=>t.owner==='liyuan'));
+});
+
+
+test('a resident leaving during task generation cannot become a required target',async t=>{
+ const {engine,catalog}=make(t);const agent=new FirstDayAgent(engine,{},catalog);
+ agent.update('one',context('WelcomeTask',{currentActor:'z',conversation:'departure-race'}));engine.focus('one','z','player');
+ engine.updateEnvironment('one','linxu',{sceneId:'Square',locationId:'ancient_tree_square',x:0,y:0,movementState:'idle'});
+ agent.generate=async()=>{engine.updateEnvironment('one','linxu',{sceneId:'Square',locationId:'ancient_tree_square',x:0,y:0,movementState:'unavailable'});return generated();};
+ await assert.rejects(agent.prepareTask('one','z','departure-race'),/现场不存在/);assert.equal(engine.tasks.dynamicDefinitions('one').length,0);
+});
+
+
+test('same-run reconnect preserves runtime receipts newer than the client checkpoint',async t=>{
+ const app=createServer({dbPath:':memory:',backgroundEnabled:false});app.server.listen(0,'127.0.0.1');await once(app.server,'listening');
+ t.after(async()=>{app.server.close();await once(app.server,'close');app.store.close();});
+ const base={worldId:'runtime_reconnect',runId:'run1',day:1,period:3,syncMode:'reference-v1'};
+ const post=async(path,body={})=>{const r=await fetch(`http://127.0.0.1:${app.server.address().port}/api/game/${path}`,{method:'POST',headers:{'Content-Type':'application/json','X-Z-Memory':'1'},body:JSON.stringify({...base,...body})});const result=await r.json();assert.equal(r.status,200,result.error);return result;};
+ const opened=await post('open');const epoch=app.engine.world(base.worldId).epoch;
+ const snapshot={sceneId:'Square',locationId:'ancient_tree_square',x:0,y:0,movementState:'idle'};
+ const synced=await post('runtime/sync',{actorId:'z',runtimeEvent:{id:'physical_z_1',actorId:'z',seq:1,day:1,period:3,snapshot}});
+ const reconnect=await post('open',{checkpoint:opened.checkpoint});
+ assert.equal(app.engine.world(base.worldId).epoch,epoch);assert.equal(JSON.parse(reconnect.checkpoint).world.actors.z.runtime_input_seq,1);assert(reconnect.responseRevision>synced.responseRevision);
+ await post('runtime/sync',{actorId:'z',runtimeEvent:{id:'physical_z_2',actorId:'z',seq:2,day:1,period:3,snapshot}});
+ const loaded=await post('open',{runId:'run2',checkpoint:opened.checkpoint});assert.equal(JSON.parse(loaded.checkpoint).world.actors.z.runtime_input_seq,0);assert(app.engine.world(base.worldId).epoch>epoch);
 });

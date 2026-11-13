@@ -515,9 +515,11 @@ async function generate(value,secret,options) {
       envelope.input={...envelope.input,scene:value.context.scene};
     }
     if(character)character.wrap(envelope,prepared,value.kind);
+    if(value.kind==='host'&&value.context.scene?.mode==='arrival')envelope.system+='\n最终输出限制：speech最多42字，1–2个短句。普通暖场continuation=continue。不要超过直播字幕框两行。';
     if(value.kind==='host'&&value.context.scene?.mode==='first_evening'){
       const allowed=refs.value.context.host.inbox.map(m=>m.id);
-      envelope.system+='\n【本轮首夜短聊约束】action.handledIds只可从 '+JSON.stringify(allowed)+' 选择；没有回应其中消息时填[]，不可填其他公开事件、人物记忆或弹幕ID。聊天台词只用两句话：一句转述broadcast.today的一条已发生事实，加一句自己的当下感受或回应眼前弹幕。没有来源的其他NPC动作、玩家表现一律不写。不要把几件事串成未记录的新经过。到唱歌时则只说一句想给大家唱《晚安》祝大家晚安，不再接弹幕。';
+      envelope.system+='\n本轮优先依据：'+JSON.stringify(value.context.scene.recapFocus)+'；为null时不再轮流重讲旧事，只回应眼前弹幕或说自己的此刻感受。已经说过或正在播放：'+JSON.stringify(value.context.scene.recentSpeech||[])+'。不得换词重复这些内容。烟花地点固定是沙滩，之后才回广场；virtualAudience也必须遵守，不能说广场配烟花。';
+      envelope.system+='\n【本轮首夜短聊约束】action.handledIds只可从 '+JSON.stringify(allowed)+' 选择；没有回应其中消息时填[]，不可填其他公开事件、人物记忆或弹幕ID。聊天台词最多42字，1–2个短句；优先转述scene.recapFocus这条事实，只保留一个事实点，可顺带接一句host.inbox里真实出现的弹幕。相邻两轮不要重复同一段回忆；没有合适弹幕就说自己的此刻感受，不编造观众提问。现在已经在自己的直播房间，不在广场吹风；白天与烟花是回忆。拍广场照片不等于给Z拍照，也不证明Z目睹或摆姿势。普通聊天action.continuation=continue，action.virtualAudience必须是2条非NPC网名弹幕，action.handledIds只列本句实际回应的inbox编号。没有来源的其他NPC动作、玩家表现一律不写。不要把几件事串成未记录的新经过。到唱歌时则只说一句想给大家唱《晚安》祝大家晚安，不再接弹幕。';
     }
     const response=await options.fetch(ENDPOINT,{method:'POST',redirect:'manual',signal:controller.signal,headers:{'Content-Type':'application/json',Authorization:`Bearer ${secret}`},body:JSON.stringify({model:AGENT_BUNDLE.policy.host.model,thinking:{type:'disabled'},stream:streaming,max_tokens:release?160:value.kind==='quality'?60:value.kind==='repair'?400:value.kind==='topic'?400:value.kind==='review'?600:value.kind==='audience'?(character?1200:450):value.kind==='host'?2400:1200,temperature:0.55,response_format:{type:'json_object'},messages:[{role:'system',content:envelope.system},{role:'user',content:JSON.stringify(envelope.input)}]})});
     if(response.status===402)throw error(402,'agent_insufficient_balance','DeepSeek 余额不足，请补充额度后重新检查连接。');

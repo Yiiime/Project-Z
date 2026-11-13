@@ -9,6 +9,7 @@ test('arrival progresses only through selected tools, displayed receipts and pla
   assert(!scene.execute({name:'depart_island'}));assert(!scene.accept());
   assert(scene.execute({name:'draw_guest',args:{}}));assert.deepEqual(scene.allowed(),[]);assert.equal(facts.length,0);
   scene.receipt(commands[0],{status:'displayed',playerActivated:true,playerName:input.playerName});assert(facts[0].text.includes('小海'));
+  scene.hostCompleted('congratulations');scene.playerReplied();
   assert(scene.execute({name:'offer_arrival',args:{title:'模型生成标题',description:'模型生成邀请'}}));
   assert(!scene.accept());scene.receipt(commands[1],{status:'displayed'});
   assert(scene.accept());assert(scene.accept());assert.equal(facts.length,2);
@@ -68,11 +69,15 @@ test('first evening requires mixed virtual audience and a timed goodnight song',
  assert(prompt.includes('纯聊天约60秒'));assert(prompt.includes('broadcast.today'));assert(prompt.includes('virtualAudience'));assert(prompt.includes('wanan-yanrenzhong-vivi2-chorus'));
 });
 
-test('collecting the displayed gift can accept immediately without another host turn',()=>{
+test('collecting the gift waits for congratulations, player reply and the explicit invitation',()=>{
  const {scene,commands}=fixture();scene.execute({name:'draw_guest',args:{}});
  assert.equal(scene.accept(),false);
  scene.receipt(commands[0],{status:'displayed',playerActivated:true,playerName:input.playerName});
- assert.equal(scene.accept(),true);assert.equal(scene.phase,'accepted');
+ assert.equal(scene.accept(),false);assert.deepEqual(scene.allowed(),[]);
+ scene.playerReplied();assert.equal(scene.reunion.playerReplied,false);
+ scene.hostCompleted('congratulations');assert.deepEqual(scene.allowed(),[]);
+ scene.playerReplied();assert.deepEqual(scene.allowed(),['offer_arrival']);
+ assert.equal(new LiveScene(scene.session,null,scene.snapshot()).reunion.playerReplied,true);
 });
 
 test('completing the audience exchange invalidates prefetched warmup exactly once',()=>{
@@ -106,4 +111,13 @@ test('first evening song cue does not wait for another virtual audience round',a
  const context={host:{inbox:[]},mediaRuntime:{audioEnabled:true},scene:{...input,mode:'first_evening',songDue:true,phase:'opening',tools:[]}};
  const speech={actorId:'z',delivery:'温柔地说。',expression:'neutral',action:'tool',tool:{name:'start_singing',args:{songId:'wanan-yanrenzhong-vivi2-chorus'}},speech:'给大家唱一首晚安，祝大家晚安。',mood:'warm',handledIds:[],wakeAfterMs:2000,memory:'',agendaUpdates:[],virtualAudience:[]};
  assert.equal(parseAgentReply(speech,{kind:'host',context}).tool.name,'start_singing');
+});
+
+
+test('night prefetch rejects repeated lines but retains a new response on the same topic',async()=>{
+ const {repeatedNightSpeech}=await import('../server/live-scene.mjs');
+ assert(repeatedNightSpeech('小海还给我拍了张广场老榕树的照片，第一张呢。',['小海还给我拍了张广场老榕树的照片！第一张呢。']));
+ assert(repeatedNightSpeech('那张照片我打算好好收着，就当咱们认识第一天的纪念。',['小海拍的那张照片我打算好好收着，当咱们认识第一天的纪念。']));
+ assert(repeatedNightSpeech('广场那张照片是小海拍的，我提的小事他办得挺认真。',['小海真把广场第一张照片拍好了，我提的小事他办得挺认真。']));
+ assert(!repeatedNightSpeech('沙滩那场烟花真好看，下次还想和朋友一起看。',['今天我在码头接到小海，带他认识了广场上的朋友。']));
 });
