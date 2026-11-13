@@ -141,6 +141,21 @@ namespace Seabreeze.EndingDemo
             Call(ui,"ShowEndingPage",firstPage);
             Call(ui,"ToggleEndingOriginal");Require(Field<bool>(ui,"endingOriginalShown"),"Cannot read source");
             Call(ui,"ToggleEndingOriginal");Require(body.text.Contains("\n\n"),"Cannot return to daily recollection");
+            Call(ui,"ShowEndingPage",pages.Length);
+            yield return new WaitForSecondsRealtime(1.6f);
+            Require(Field<bool>(ui,"endingBlackRevealed")&&!Field<bool>(ui,"endingBlackDetailsShown"),"Decision did not remain readable before the automatic transition");
+            ScreenCapture.CaptureScreenshot(Path.Combine(output,"auto-choice.png"));yield return new WaitForEndOfFrame();
+            bool autoFadeOut=false,autoFadeIn=false;deadline=Time.realtimeSinceStartup+12;
+            while((!Field<bool>(ui,"endingBlackDetailsShown")||Field<bool>(ui,"endingBlackTransitioning"))&&Time.realtimeSinceStartup<deadline)
+            {
+                float alpha=Field<CanvasGroup>(ui,"endingBlackContentGroup").alpha;
+                if(alpha>.1f&&alpha<.9f){if(Field<bool>(ui,"endingBlackDetailsShown"))autoFadeIn=true;else autoFadeOut=true;}
+                yield return null;
+            }
+            Require(autoFadeOut&&autoFadeIn&&Field<bool>(ui,"endingBlackDetailsShown")&&!Field<bool>(ui,"endingBlackTransitioning"),"The two black ending pages did not switch smoothly without input");
+            CheckDetailPage(ui,Field<EndingDemoView.EndingRun>(ui,"seventhNight"),false);
+            ScreenCapture.CaptureScreenshot(Path.Combine(output,"auto-details.png"));yield return new WaitForEndOfFrame();
+            Call(ui,"ShowEndingPage",firstPage);
             if(Array.IndexOf(Environment.GetCommandLineArgs(),"-endingUploadQA")>=0){
                 string oldId=result.id;
                 var upload=Find(ui,"Upload ending memories");Require(upload!=null&&upload.interactable,"Native memory upload button is missing");
@@ -262,10 +277,15 @@ namespace Seabreeze.EndingDemo
                 ScreenCapture.CaptureScreenshot(Path.Combine(output,"legacy-choice.png"));yield return new WaitForEndOfFrame();
                 yield return new WaitForSecondsRealtime(.4f);
                 var advance=Find(ui,"Ending black input");Require(advance!=null,"Missing black screen advance");
-                var centreClick=new PointerEventData(EventSystem.current){position=new Vector2(Screen.width/2f,Screen.height/2f),button=PointerEventData.InputButton.Left};
-                var centreHits=new System.Collections.Generic.List<RaycastResult>();EventSystem.current.RaycastAll(centreClick,centreHits);
-                Require(centreHits.Count>0&&ExecuteEvents.GetEventHandler<IPointerClickHandler>(centreHits[0].gameObject)==advance.gameObject,"First sentence intercepted the click to continue");
-                ExecuteEvents.ExecuteHierarchy(centreHits[0].gameObject,centreClick,ExecuteEvents.pointerClickHandler);
+                bool sawFadeOut=false,sawFadeIn=false;deadline=Time.realtimeSinceStartup+10;
+                while((!Field<bool>(ui,"endingBlackDetailsShown")||Field<bool>(ui,"endingBlackTransitioning"))&&Time.realtimeSinceStartup<deadline)
+                {
+                    float alpha=Field<CanvasGroup>(ui,"endingBlackContentGroup").alpha;
+                    if(alpha>.1f&&alpha<.9f){if(Field<bool>(ui,"endingBlackDetailsShown"))sawFadeIn=true;else sawFadeOut=true;}
+                    yield return null;
+                }
+                Require(Field<bool>(ui,"endingBlackDetailsShown")&&!Field<bool>(ui,"endingBlackTransitioning"),"Ending details did not advance automatically");
+                Require(sawFadeOut&&sawFadeIn,"Ending changed without a smooth fade-out and fade-in");
                 yield return new WaitForEndOfFrame();yield return null;
                 var displayed=Field<EndingDemoView.EndingRun>(ui,"seventhNight");
                 CheckDetailPage(ui,displayed,false);
@@ -278,7 +298,9 @@ namespace Seabreeze.EndingDemo
                 longRun.outcome.label="决定留下";longRun.outcome.text=string.Concat(System.Linq.Enumerable.Repeat("我想起今天一起说过的话。\n",40));
                 typeof(GameUI).GetField("seventhNight",Fields).SetValue(ui,longRun);
                 Call(ui,"PrepareDailyPages");Call(ui,"ShowEndingPage",firstPage+pages.Length);
-                yield return new WaitForSecondsRealtime(1.8f);advance.onClick.Invoke();
+                deadline=Time.realtimeSinceStartup+12;
+                while((!Field<bool>(ui,"endingBlackDetailsShown")||Field<bool>(ui,"endingBlackTransitioning"))&&Time.realtimeSinceStartup<deadline)yield return null;
+                Require(Field<bool>(ui,"endingBlackDetailsShown")&&!Field<bool>(ui,"endingBlackTransitioning"),"Long ending did not automatically advance");
                 yield return new WaitForEndOfFrame();yield return null;CheckDetailPage(ui,longRun,true);
                 yield return new WaitForEndOfFrame();
                 ScreenCapture.CaptureScreenshot(Path.Combine(output,"long-ending-bottom.png"));yield return new WaitForEndOfFrame();

@@ -23,6 +23,7 @@ namespace Seabreeze
         RawImage endingSceneImage;
         Image endingBlackScreen;
         CanvasGroup endingBlackGroup;
+        CanvasGroup endingBlackContentGroup;
         CanvasGroup endingBlackWordsGroup;
         TextMeshProUGUI endingBlackTitle,endingBlackBody;
         RectTransform endingBlackViewport;
@@ -130,14 +131,15 @@ namespace Seabreeze
             backdrop.texture=Texture2D.blackTexture;backdrop.color=Color.white;backdrop.raycastTarget=false;
             var inputImage=Stretch("Ending black input",endingBlackScreen.transform,Vector2.zero,Vector2.zero).gameObject.AddComponent<Image>();inputImage.color=Color.clear;inputImage.raycastTarget=true;
             var advance=inputImage.gameObject.AddComponent<Button>();advance.transition=Selectable.Transition.None;advance.targetGraphic=inputImage;advance.navigation=new Navigation{mode=Navigation.Mode.None};advance.onClick.AddListener(NextEndingPage);
-            endingBlackTitle=Label("Ending black title",endingBlackScreen.transform,TC,TC,new Vector2(0,-110),new Vector2(1120,52),"",22,Muted,TextAlignmentOptions.Center);
-            endingBlackViewport=Stretch("Ending black words viewport",endingBlackScreen.transform,Vector2.zero,Vector2.zero);var viewportGraphic=endingBlackViewport.gameObject.AddComponent<Image>();viewportGraphic.color=Color.clear;viewportGraphic.raycastTarget=true;endingBlackViewport.gameObject.AddComponent<RectMask2D>();
+            var content=Stretch("Ending black content",endingBlackScreen.transform,Vector2.zero,Vector2.zero);endingBlackContentGroup=content.gameObject.AddComponent<CanvasGroup>();
+            endingBlackTitle=Label("Ending black title",content,TC,TC,new Vector2(0,-110),new Vector2(1120,52),"",22,Muted,TextAlignmentOptions.Center);
+            endingBlackViewport=Stretch("Ending black words viewport",content,Vector2.zero,Vector2.zero);var viewportGraphic=endingBlackViewport.gameObject.AddComponent<Image>();viewportGraphic.color=Color.clear;viewportGraphic.raycastTarget=true;endingBlackViewport.gameObject.AddComponent<RectMask2D>();
             endingBlackScroll=endingBlackViewport.gameObject.AddComponent<ScrollRect>();endingBlackScroll.horizontal=false;endingBlackScroll.vertical=true;endingBlackScroll.scrollSensitivity=38;endingBlackScroll.movementType=ScrollRect.MovementType.Clamped;endingBlackScroll.viewport=endingBlackViewport;
             var blackBodyRect=Rect("Ending black words",endingBlackViewport,TL,TL,Vector2.zero,new Vector2(0,120));blackBodyRect.anchorMax=new Vector2(1,1);blackBodyRect.pivot=TL;
             endingBlackBody=blackBodyRect.gameObject.AddComponent<TextMeshProUGUI>();endingBlackBody.font=UIPrimitives.Font;endingBlackBody.text="";endingBlackBody.fontSize=34;endingBlackBody.color=Paper;endingBlackBody.richText=false;endingBlackBody.raycastTarget=false;endingBlackBody.textWrappingMode=TextWrappingModes.Normal;endingBlackBody.overflowMode=TextOverflowModes.Overflow;endingBlackBody.alignment=TextAlignmentOptions.Center;
             endingBlackBody.lineSpacing=14;endingBlackScroll.content=blackBodyRect;
             endingBlackWordsGroup=endingBlackBody.gameObject.AddComponent<CanvasGroup>();endingBlackWordsGroup.alpha=0;
-            endingBlackNext=Button("Ending black continue",endingBlackScreen.transform,new Vector2(.5f,0),new Vector2(.5f,0),new Vector2(0,62),new Vector2(300,54),"回到小岛 →",CloseOverlay,true,20);
+            endingBlackNext=Button("Ending black continue",content,new Vector2(.5f,0),new Vector2(.5f,0),new Vector2(0,62),new Vector2(300,54),"回到小岛 →",CloseOverlay,true,20);
             SetBlackFirstLineLayout();
             endingBlackScreen.gameObject.SetActive(false);
         }
@@ -542,7 +544,9 @@ namespace Seabreeze
         }
         IEnumerator RevealBlackOutcome()
         {
+            var owner=session.State;var run=seventhNight;
             endingBlackRevealed=false;endingBlackDetailsShown=false;endingBlackScreen.gameObject.SetActive(true);endingBlackGroup.alpha=1;
+            endingBlackTransitioning=false;endingBlackContentGroup.alpha=1;endingBlackContentGroup.interactable=true;endingBlackContentGroup.blocksRaycasts=true;
             endingColumn.gameObject.SetActive(false);if(endingSceneImage!=null)endingSceneImage.gameObject.SetActive(false);
             SetBlackFirstLineLayout();
             endingBlackTitle.text="";endingBlackBody.text="";endingBlackWordsGroup.alpha=0;endingBlackNext.gameObject.SetActive(false);
@@ -551,9 +555,19 @@ namespace Seabreeze
             endingBlackBody.text=FirstEndingSentence();SetBlackFirstLineLayout();
             for(float t=0;t<1;t+=Time.unscaledDeltaTime/.42f){endingBlackWordsGroup.alpha=t;yield return null;}
             endingBlackWordsGroup.alpha=1;endingBlackRevealed=true;
+            yield return new WaitForSecondsRealtime(Mathf.Clamp(endingBlackBody.text.Length*.10f,3f,6f));
+            if(session.State!=owner||seventhNight!=run||overlayMode!="z-ending")yield break;
+            endingBlackTransitioning=true;endingBlackContentGroup.interactable=false;endingBlackContentGroup.blocksRaycasts=false;
+            const float transitionSeconds=.7f;
+            for(float t=0;t<1;t+=Time.unscaledDeltaTime/transitionSeconds){endingBlackContentGroup.alpha=1-Mathf.SmoothStep(0,1,t);yield return null;}
+            endingBlackContentGroup.alpha=0;
+            ShowBlackOutcomeDetails();
+            for(float t=0;t<1;t+=Time.unscaledDeltaTime/transitionSeconds){endingBlackContentGroup.alpha=Mathf.SmoothStep(0,1,t);yield return null;}
+            endingBlackContentGroup.alpha=1;endingBlackContentGroup.interactable=true;endingBlackContentGroup.blocksRaycasts=true;endingBlackTransitioning=false;endingBlackReveal=null;
         }
         bool endingBlackRevealed;
         bool endingBlackDetailsShown;
+        bool endingBlackTransitioning;
         static string FirstEndingSentence(string value)
         {
             if(string.IsNullOrWhiteSpace(value))return "";
@@ -608,7 +622,7 @@ namespace Seabreeze
         }
         void ExitBlackOutcome()
         {
-            endingBlackRevealed=false;endingBlackDetailsShown=false;
+            endingBlackRevealed=false;endingBlackDetailsShown=false;endingBlackTransitioning=false;
             if(endingBlackReveal!=null){StopCoroutine(endingBlackReveal);endingBlackReveal=null;}
             if(endingBlackScreen!=null)endingBlackScreen.gameObject.SetActive(false);
             if(endingBlackWordsGroup!=null)endingBlackWordsGroup.alpha=0;
@@ -618,7 +632,7 @@ namespace Seabreeze
         void NextEndingPage()
         {
             if(endingGenerating)return;
-            if(endingBlackScreen!=null&&endingBlackScreen.gameObject.activeSelf){if(endingBlackRevealed){if(endingBlackDetailsShown)CloseOverlay();else ShowBlackOutcomeDetails();}return;}
+            if(endingBlackScreen!=null&&endingBlackScreen.gameObject.activeSelf){if(endingBlackRevealed&&endingBlackDetailsShown&&!endingBlackTransitioning)CloseOverlay();return;}
             if(seventhNight==null){GenerateSeventhNight();return;}
             if(endingRevealIndex<endingRevealStops.Length){FinishEndingReveal();endingCharacter?.SetState("serious",false);return;}
             if(endingPage>=endingRecapPages.Length)CloseOverlay();else ShowEndingPage(endingPage+1);
