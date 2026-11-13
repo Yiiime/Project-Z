@@ -434,12 +434,12 @@
       "z": {
         "affinity": 80,
         "trust": 60,
-        "source": "moonlife-actors/references/characters/liyuan.md#初始关系"
+        "source": "moonlife-actors/references/characters/liyuan.md#背景故事"
       },
       "zhou_bobo": {
         "affinity": 15,
         "trust": 10,
-        "source": "moonlife-actors/references/characters/liyuan.md#初始关系"
+        "source": "moonlife-actors/references/characters/liyuan.md#背景故事"
       }
     },
     "liting": {
