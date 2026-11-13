@@ -8,7 +8,7 @@ import { randomBytes, randomUUID } from 'node:crypto';
 import { ModelProvider } from '../../../../Tools/MemoryLab/lib/provider.mjs';
 import { EndingError, validateScenario, revisionOf, decisionMessages, validateDecision, parseModel,
   recollectionMessages, validateRecollections, previewDecision, previewRecollections, resolveOutcome,
-  validateDailyPages, previewDailyPages, approvedDailyPagesFor, requestDailyPage, sourceBlocks, importMessages, annotatedScenario } from './ending.mjs';
+  validateDailyPages, previewDailyPages, approvedDailyPagesFor, requestDailyPage, recapPagesFor, sourceBlocks, importMessages, annotatedScenario } from './ending.mjs';
 
 export const ROOT = dirname(fileURLToPath(import.meta.url));
 const PROJECT = resolve(ROOT, '../../../..');
@@ -105,7 +105,7 @@ export async function createEndingServer({ dataDir = process.env.Z_ENDING_DATA |
         busy = true;
         const snapshot = structuredClone(scenario), revision = revisionOf(snapshot);
         try {
-          let decision, recollections, dailyPages;
+          let decision, recollections, dailyPages, recapPages;
           if (input.mode === 'model') {
             const first = await provider.call(provider.request(decisionMessages(snapshot, persona), { json: true, maxTokens: 2500 }));
             decision = validateDecision(parseModel(first.text), snapshot);
@@ -131,8 +131,9 @@ export async function createEndingServer({ dataDir = process.env.Z_ENDING_DATA |
             decision = previewDecision(snapshot, input.mode === 'preview-leave' ? 'leave' : 'stay');
             recollections = previewRecollections(snapshot); dailyPages = previewDailyPages(snapshot);
           }
+          recapPages = recapPagesFor(snapshot, dailyPages);
           const run = { id: randomUUID(), revision, mode: input.mode, createdAt: new Date().toISOString(),
-            playerName: snapshot.playerName, scenarioTitle: snapshot.title, decision, recollections, dailyPages,
+            playerName: snapshot.playerName, scenarioTitle: snapshot.title, decision, recollections, dailyPages, recapPages,
             outcome: resolveOutcome(snapshot, decision.choice), memoryCount: recollections.length };
           await atomic(join(dataDir, 'runs', `${run.id}.json`), run); runs.set(run.id, run);
           if (runs.size > 50) runs.delete(runs.keys().next().value);

@@ -54,7 +54,7 @@ export class MemoryBank {
         kind = event.kind === "claim" ? "hearsay" : "experience";
       const name =
         event.speaker === "player"
-          ? "玩家"
+          ? "字小节"
           : this.catalog.actors.has(event.speaker)
             ? this.catalog.actor(event.speaker).name
             : "引擎";

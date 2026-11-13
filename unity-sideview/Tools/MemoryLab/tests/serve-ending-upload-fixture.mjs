@@ -7,7 +7,7 @@ if(!output?.startsWith('/private/tmp/'))throw Error('Fixture output must be an i
 const provider={mode:'simulated',config:{topK:6},publicConfig:()=>({configured:true,mode:'simulated',model:'ending-upload-fixture'}),request:m=>m,
   call:async messages=>{
     const input=JSON.parse(messages[1].content);
-    if(input.blocks)return {text:JSON.stringify({title:'上传后的第七晚',playerName:'旅人',context:'第七晚在码头，回望已经共同经历的事。',lastMessage:'',
+    if(input.blocks)return {text:JSON.stringify({title:'上传后的第七晚',playerName:'字小节',context:'第七晚在码头，回望已经共同经历的事。',lastMessage:'',
       world:{departureReady:false,departureDetail:'',stayDetail:'未来尚无保证',leaveOutcome:'pending',leaveAftermath:'',stayOutcome:'uncertain',stayAftermath:''},
       blocks:input.blocks.map((b,i)=>({id:b.id,title:'新记忆'+(i+1),day:i+1,kind:'memory',zKnows:!b.text.includes('作者幕后')}))})};
     if(input.dailyPage)return {text:JSON.stringify({dailyPages:[{day:input.day,title:'第'+input.day+'天',text:'这一天发生了一件具体的事。\n我把当时听到和看到的内容放在一起。\n\n我还在想这件事对我意味着什么。'}]})};

@@ -275,7 +275,7 @@
     const $ = (id) => document.getElementById(id);
     const current = () => state?.actors.find((a) => a.id === $("actor").value);
     const actorName = (id) =>
-      config.actors.find((a) => a.id === id)?.name || id;
+      id === "player" ? "字小节" : config.actors.find((a) => a.id === id)?.name || id;
     const placeName = (id) => config.places?.[id] || id;
     function status(text, error = false) {
       $("status").textContent = text;
@@ -528,7 +528,7 @@
               step.label +
               "（" +
               step.performed_by
-                .map((x) => (x === "player" ? "玩家" : actorName(x)))
+                .map(actorName)
                 .join("/") +
               "负责）";
             row.append(text);
@@ -548,7 +548,7 @@
               let op = document.createElement("option");
               op.value = who;
               op.textContent =
-                "实际完成者：" + (who === "player" ? "玩家" : actorName(who));
+                "实际完成者：" + actorName(who);
               performer.append(op);
             }
             row.append(performer);

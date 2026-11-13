@@ -43,7 +43,7 @@ export class MemoryConsolidator {
     return a;
   }
   name(id) {
-    return id === "player" ? "玩家" : this.actor(id).name;
+    return id === "player" ? "字小节" : this.actor(id).name;
   }
   assertVersion(exp) {
     const current = this.exp(exp.id);

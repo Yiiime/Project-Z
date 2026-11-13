@@ -30,8 +30,11 @@ namespace Seabreeze
         Button endingBlackNext;
         EndingRun seventhNight;
         EndingDemo.EndingDemoView.DailyPage[] endingDailyPages = Array.Empty<EndingDemo.EndingDemoView.DailyPage>();
-        EndingDemo.EndingDemoView.Recollection[][] endingDailyMemories = Array.Empty<EndingDemo.EndingDemoView.Recollection[]>();
+        EndingDemo.EndingDemoView.RecapPage[] endingRecapPages = Array.Empty<EndingDemo.EndingDemoView.RecapPage>();
+        EndingDemo.EndingDemoView.Recollection[][] endingRecapMemories = Array.Empty<EndingDemo.EndingDemoView.Recollection[]>();
         string endingClosingText="";
+        string endingPlayerName=SevenCharacterCatalog.DefaultPlayerName;
+        bool endingUsesOldRainPreset;
         int endingPage,endingDisplayGeneration;
         bool endingGenerating,seventhNightOpening,endingOriginalShown;
         float endingVisible,endingNextRevealAt;
@@ -84,7 +87,7 @@ namespace Seabreeze
             var imageRegion=EndingRegion("Ending scene image",overlayRoot,Vector2.zero,Vector2.one);
             endingSceneImage=imageRegion.gameObject.AddComponent<RawImage>();
             endingSceneImage.texture=Resources.Load<Texture2D>("Art/lighthouse");
-            endingSceneImage.color=new Color(.72f,.76f,.82f,.82f);endingSceneImage.raycastTarget=false;
+            endingSceneImage.color=new Color(.38f,.41f,.49f,.88f);endingSceneImage.raycastTarget=false;
             var imageAspect=imageRegion.gameObject.AddComponent<AspectRatioFitter>();imageAspect.aspectRatio=16f/9f;imageAspect.aspectMode=AspectRatioFitter.AspectMode.EnvelopeParent;
             endingColumn=EndingRegion("Seventh night story",overlayRoot,new Vector2(.065f,.10f),new Vector2(.60f,.90f));
             endingEyebrow=Label("Seventh night chapter",endingColumn,TL,TL,Vector2.zero,new Vector2(840,35),"第七天 · 夜晚 · 月亮岛码头",18,Accent);
@@ -126,9 +129,8 @@ namespace Seabreeze
             endingBlackViewport=Stretch("Ending black words viewport",endingBlackScreen.transform,Vector2.zero,Vector2.zero);var viewportGraphic=endingBlackViewport.gameObject.AddComponent<Image>();viewportGraphic.color=Color.clear;viewportGraphic.raycastTarget=true;endingBlackViewport.gameObject.AddComponent<RectMask2D>();
             endingBlackScroll=endingBlackViewport.gameObject.AddComponent<ScrollRect>();endingBlackScroll.horizontal=false;endingBlackScroll.vertical=true;endingBlackScroll.scrollSensitivity=38;endingBlackScroll.movementType=ScrollRect.MovementType.Clamped;endingBlackScroll.viewport=endingBlackViewport;
             var blackBodyRect=Rect("Ending black words",endingBlackViewport,TL,TL,Vector2.zero,new Vector2(0,120));blackBodyRect.anchorMax=new Vector2(1,1);blackBodyRect.pivot=TL;
-            endingBlackBody=blackBodyRect.gameObject.AddComponent<TextMeshProUGUI>();endingBlackBody.font=UIPrimitives.Font;endingBlackBody.text="";endingBlackBody.fontSize=34;endingBlackBody.color=Paper;endingBlackBody.richText=false;endingBlackBody.textWrappingMode=TextWrappingModes.Normal;endingBlackBody.overflowMode=TextOverflowModes.Overflow;endingBlackBody.alignment=TextAlignmentOptions.Center;
+            endingBlackBody=blackBodyRect.gameObject.AddComponent<TextMeshProUGUI>();endingBlackBody.font=UIPrimitives.Font;endingBlackBody.text="";endingBlackBody.fontSize=34;endingBlackBody.color=Paper;endingBlackBody.richText=false;endingBlackBody.raycastTarget=false;endingBlackBody.textWrappingMode=TextWrappingModes.Normal;endingBlackBody.overflowMode=TextOverflowModes.Overflow;endingBlackBody.alignment=TextAlignmentOptions.Center;
             endingBlackBody.lineSpacing=14;endingBlackScroll.content=blackBodyRect;
-            endingBlackBody.raycastTarget=false;
             endingBlackWordsGroup=endingBlackBody.gameObject.AddComponent<CanvasGroup>();endingBlackWordsGroup.alpha=0;
             endingBlackNext=Button("Ending black continue",endingBlackScreen.transform,new Vector2(.5f,0),new Vector2(.5f,0),new Vector2(0,62),new Vector2(300,54),"回到小岛 →",CloseOverlay,true,20);
             SetBlackFirstLineLayout();
@@ -192,24 +194,58 @@ namespace Seabreeze
         [Serializable] class ApprovedEnding
         {
             public string fingerprint,closingText;
-            public EndingDemo.EndingDemoView.DailyPage[] dailyPages;
+        }
+        public static string RenderEndingPlayerName(string value)
+        {
+            var name=value?.Trim();
+            return string.IsNullOrEmpty(name)||name=="旅人"||name=="玩家"?SevenCharacterCatalog.DefaultPlayerName:name;
+        }
+        public static string RenderEndingDisplay(string value)
+        {
+            return RenderEndingDisplay(value,SevenCharacterCatalog.DefaultPlayerName);
+        }
+        public static string RenderEndingDisplay(string value,string playerName)
+        {
+            if(string.IsNullOrEmpty(value))return value??"";
+            var displayName=RenderEndingPlayerName(playerName);
+            var pattern=System.Text.RegularExpressions.Regex.Escape(displayName)+"|旅人|玩家|字小节";
+            return System.Text.RegularExpressions.Regex.Replace(value,pattern,_=>displayName);
+        }
+        static bool OldRainPreset(EndingRun run)
+        {
+            if(run?.playerName?.Trim()!="听雨"||run.recollections==null)return false;
+            var authored=Array.FindAll(run.recollections,m=>m?.memoryId!=null&&m.memoryId.StartsWith("rain_",StringComparison.Ordinal));
+            return authored.Length==26&&RecollectionFingerprint(authored)=="02ec00798cd87aad71992eedd790079ec070d42cb1175f558ab30d7919dfa43d";
+        }
+        string EndingWordsForPlayer(string raw)
+        {
+            if(endingUsesOldRainPreset&&raw!=null)raw=raw.Replace("听雨",SevenCharacterCatalog.DefaultPlayerName);
+            return RenderEndingDisplay(raw,endingPlayerName);
         }
         void PrepareDailyPages()
         {
             endingClosingText="";
+            endingUsesOldRainPreset=OldRainPreset(seventhNight);
+            endingPlayerName=endingUsesOldRainPreset?SevenCharacterCatalog.DefaultPlayerName:RenderEndingPlayerName(seventhNight?.playerName);
             endingDailyPages=seventhNight?.dailyPages??Array.Empty<EndingDemo.EndingDemoView.DailyPage>();
             if(endingDailyPages.Length==0)endingDailyPages=BuildDailyPagesFromRecollections(seventhNight?.recollections);
-            endingDailyMemories=GroupMemoriesByDay(seventhNight?.recollections,endingDailyPages);
+            endingDailyPages=SortDailyPages(endingDailyPages);
+            endingRecapPages=seventhNight?.recapPages??Array.Empty<EndingDemo.EndingDemoView.RecapPage>();
+            if(endingRecapPages.Length==0)endingRecapPages=BuildRecapPagesFromDaily(endingDailyPages);
+            endingRecapPages=SortRecapPages(endingRecapPages);
+            endingRecapMemories=GroupMemoriesByRecap(seventhNight?.recollections,endingRecapPages);
             var approved=Resources.Load<TextAsset>("Dialogue/Ending/approved");
             if(approved==null||seventhNight?.decision==null||seventhNight.outcome==null)return;
             try
             {
                 var saved=JsonConvert.DeserializeObject<ApprovedEnding>(approved.text);
-                if(saved==null||string.IsNullOrEmpty(saved.fingerprint)||saved.dailyPages==null||saved.dailyPages.Length==0)return;
-                bool fingerprintMatch=string.Equals(saved.fingerprint,RecollectionFingerprint(seventhNight.recollections),StringComparison.Ordinal);
+                if(saved==null||string.IsNullOrEmpty(saved.fingerprint))return;
+                string fingerprint=RecollectionFingerprint(seventhNight.recollections);
+                bool fingerprintMatch=string.Equals(saved.fingerprint,fingerprint,StringComparison.Ordinal);
                 if(fingerprintMatch)
                 {
-                    endingDailyPages=saved.dailyPages;endingDailyMemories=GroupMemoriesByDay(seventhNight.recollections,endingDailyPages);
+                    var approvedRecaps=EndingDemo.EndingRecapText.Approved(fingerprint);
+                    if(approvedRecaps!=null&&approvedRecaps.Length>0){endingRecapPages=SortRecapPages(approvedRecaps);endingRecapMemories=GroupMemoriesByRecap(seventhNight.recollections,endingRecapPages);}
                     if(seventhNight.decision.choice=="leave"&&seventhNight.outcome.status=="pending")endingClosingText=saved.closingText??"";
                 }
             }
@@ -274,13 +310,55 @@ namespace Seabreeze
             foreach(var cue in cues)if(sentence.IndexOf(cue,StringComparison.Ordinal)>=0)return true;
             return false;
         }
-        static EndingDemo.EndingDemoView.Recollection[][] GroupMemoriesByDay(EndingDemo.EndingDemoView.Recollection[] memories,EndingDemo.EndingDemoView.DailyPage[] pages)
+        static EndingDemo.EndingDemoView.RecapPage[] BuildRecapPagesFromDaily(EndingDemo.EndingDemoView.DailyPage[] dailyPages)
+        {
+            if(dailyPages==null||dailyPages.Length==0)return Array.Empty<EndingDemo.EndingDemoView.RecapPage>();
+            var pages=new List<EndingDemo.EndingDemoView.RecapPage>();AddRecapRange(pages,dailyPages,1,3,"重要的几件事");AddRecapRange(pages,dailyPages,4,7,"事情开始转向以后");return pages.ToArray();
+        }
+        static void AddRecapRange(List<EndingDemo.EndingDemoView.RecapPage> pages,EndingDemo.EndingDemoView.DailyPage[] dailyPages,int startDay,int endDay,string title)
+        {
+            var facts=new List<string>();var feelingCandidates=new List<string>();var seenDays=new HashSet<int>();bool found=false;
+            foreach(var daily in dailyPages)
+            {
+                if(daily==null||daily.day<startDay||daily.day>endDay||!seenDays.Add(daily.day))continue;found=true;
+                string value=daily.text??"";int split=value.IndexOf("\n\n",StringComparison.Ordinal);
+                string factText=split<0?value:value.Substring(0,split);string feelingText=split<0?"":value.Substring(split+2);
+                var fact=FirstRecapLine(factText);if(!string.IsNullOrEmpty(fact)&&!facts.Contains(fact))facts.Add(fact);
+                foreach(var feeling in RecapLines(feelingText))if(!feelingCandidates.Contains(feeling))feelingCandidates.Add(feeling);
+            }
+            if(!found)return;
+            var feelings=new List<string>();if(feelingCandidates.Count>0)feelings.Add(feelingCandidates[0]);if(feelingCandidates.Count>1&&feelingCandidates[feelingCandidates.Count-1]!=feelings[0])feelings.Add(feelingCandidates[feelingCandidates.Count-1]);
+            var text=string.Join("\n",facts.ToArray())+"\n\n"+string.Join("\n",feelings.ToArray());
+            pages.Add(new EndingDemo.EndingDemoView.RecapPage{startDay=startDay,endDay=endDay,title=title,text=text});
+        }
+        static string FirstRecapLine(string value)
+        {
+            foreach(var line in RecapLines(value))return line;
+            return "";
+        }
+        static List<string> RecapLines(string value)
+        {
+            var lines=new List<string>();if(string.IsNullOrWhiteSpace(value))return lines;
+            foreach(var line in value.Replace("\r","").Split('\n')){var trimmed=line.Trim();if(!string.IsNullOrEmpty(trimmed)&&!lines.Contains(trimmed))lines.Add(trimmed);}
+            return lines;
+        }
+        static EndingDemo.EndingDemoView.RecapPage[] SortRecapPages(EndingDemo.EndingDemoView.RecapPage[] pages)
+        {
+            if(pages==null||pages.Length<2)return pages??Array.Empty<EndingDemo.EndingDemoView.RecapPage>();
+            var sorted=new List<EndingDemo.EndingDemoView.RecapPage>(pages);sorted.Sort((a,b)=>(a?.startDay??0).CompareTo(b?.startDay??0));return sorted.ToArray();
+        }
+        static EndingDemo.EndingDemoView.DailyPage[] SortDailyPages(EndingDemo.EndingDemoView.DailyPage[] pages)
+        {
+            if(pages==null||pages.Length<2)return pages??Array.Empty<EndingDemo.EndingDemoView.DailyPage>();
+            var sorted=new List<EndingDemo.EndingDemoView.DailyPage>(pages);sorted.Sort((a,b)=>(a?.day??0).CompareTo(b?.day??0));return sorted.ToArray();
+        }
+        static EndingDemo.EndingDemoView.Recollection[][] GroupMemoriesByRecap(EndingDemo.EndingDemoView.Recollection[] memories,EndingDemo.EndingDemoView.RecapPage[] pages)
         {
             var groups=new EndingDemo.EndingDemoView.Recollection[pages?.Length??0][];
             for(int i=0;i<groups.Length;i++)
             {
-                var list=new List<EndingDemo.EndingDemoView.Recollection>();int day=pages[i]?.day??0;
-                if(memories!=null)foreach(var memory in memories)if(memory!=null&&memory.day==day)list.Add(memory);
+                var list=new List<EndingDemo.EndingDemoView.Recollection>();int start=pages[i]?.startDay??0,end=pages[i]?.endDay??start;
+                if(memories!=null)foreach(var memory in memories)if(memory!=null&&memory.day>=start&&memory.day<=end)list.Add(memory);
                 groups[i]=list.ToArray();
             }
             return groups;
@@ -289,7 +367,7 @@ namespace Seabreeze
         {
             if(memories==null)return "";
             var pieces=new string[memories.Length];
-            for(int i=0;i<memories.Length;i++)pieces[i]=(memories[i]?.day??0).ToString()+"\n"+(memories[i]?.original??"");
+            for(int i=0;i<memories.Length;i++)pieces[i]=(memories[i]?.day??0).ToString()+"\n"+(memories[i]?.original??"").Replace(SevenCharacterCatalog.DefaultPlayerName,"旅人");
             using(var sha=SHA256.Create())return BitConverter.ToString(sha.ComputeHash(Encoding.UTF8.GetBytes(string.Join("\n\u001e\n",pieces)))).Replace("-","").ToLowerInvariant();
         }
         void EndingFailure(string error)
@@ -300,27 +378,27 @@ namespace Seabreeze
         void ShowEndingPage(int page)
         {
             if(seventhNight?.decision==null)return;
-            if(endingDailyPages==null||endingDailyPages.Length==0)PrepareDailyPages();
-            int dailyCount=endingDailyPages.Length;
-            endingPage=Mathf.Clamp(page,0,dailyCount);endingOriginalShown=false;
-            int total=dailyCount+1;
-            if(endingPage<dailyCount){
-                ExitBlackOutcome();var daily=endingDailyPages[endingPage];endingTitle.text=daily.title;endingBody.text=daily.text;endingEyebrow.text="第 "+daily.day+" 天";UpdateEndingScene(daily);
+            if(endingRecapPages==null||endingRecapPages.Length==0)PrepareDailyPages();
+            int recapCount=endingRecapPages.Length;
+            endingPage=Mathf.Clamp(page,0,recapCount);endingOriginalShown=false;
+            var recap=endingPage<recapCount?endingRecapPages[endingPage]:null;
+            if(endingPage<recapCount){
+                ExitBlackOutcome();endingTitle.text=EndingWordsForPlayer(recap.title);endingBody.text=EndingWordsForPlayer(recap.text);endingEyebrow.text="第 "+recap.startDay+"–"+recap.endDay+" 天";UpdateEndingScene(recap.title,recap.text);
             }
             else{ShowBlackOutcome();return;}
             SetEndingWords(endingBody.text,true);
             endingCharacter?.SetState("sad",true);
-            endingProgress.text=$"{endingPage+1} / {total}  ·  {seventhNight.memoryCount} 段经历";
-            endingPrevious.interactable=endingPage>0;endingOriginal.interactable=endingDailyMemories.Length>endingPage&&endingDailyMemories[endingPage].Length>0;endingNext.interactable=true;
-            endingNext.GetComponentInChildren<TextMeshProUGUI>().text="继续 →";
+            endingProgress.text=$"{endingPage+1} / {recapCount}  ·  第 {recap.startDay}–{recap.endDay} 天";
+            endingPrevious.interactable=endingPage>0;endingOriginal.interactable=endingRecapMemories.Length>endingPage&&endingRecapMemories[endingPage].Length>0;endingNext.interactable=true;
+            endingNext.GetComponentInChildren<TextMeshProUGUI>().text=endingPage==recapCount-1?"进入结局 →":"下一页 →";
         }
-        void UpdateEndingScene(EndingDemo.EndingDemoView.DailyPage daily)
+        void UpdateEndingScene(string title,string text)
         {
             if(endingSceneImage==null)return;
-            string value=(daily?.title??"")+"\n"+(daily?.text??"");
+            string value=(title??"")+"\n"+(text??"");
             bool radio=value.IndexOf("收音机",StringComparison.Ordinal)>=0||value.IndexOf("李庭",StringComparison.Ordinal)>=0;
             endingSceneImage.texture=Resources.Load<Texture2D>(radio?"Art/ending_radio":"Art/lighthouse")??Resources.Load<Texture2D>("Art/lighthouse");
-            endingSceneImage.color=radio?Color.white:new Color(.72f,.76f,.82f,.82f);
+            endingSceneImage.color=radio?Color.white:new Color(.38f,.41f,.49f,.88f);
         }
         void ShowBlackOutcome()
         {
@@ -353,14 +431,14 @@ namespace Seabreeze
             var source=!string.IsNullOrWhiteSpace(endingClosingText)?endingClosingText:seventhNight?.decision?.decision;
             if(string.IsNullOrWhiteSpace(source))source=seventhNight?.decision?.lastLine;
             if(string.IsNullOrWhiteSpace(source))source=seventhNight?.outcome?.text;
-            return FirstEndingSentence(source);
+            return EndingWordsForPlayer(FirstEndingSentence(source));
         }
         string FullEndingText()
         {
             string body=string.IsNullOrWhiteSpace(endingClosingText)?seventhNight?.outcome?.text:endingClosingText;
             if(string.IsNullOrWhiteSpace(body))body=seventhNight?.decision?.decision??"";
             if(!string.IsNullOrWhiteSpace(seventhNight?.decision?.lastLine))body += "\n\n" + seventhNight.decision.lastLine;
-            return body;
+            return EndingWordsForPlayer(body);
         }
         void SetBlackFirstLineLayout()
         {
@@ -372,6 +450,7 @@ namespace Seabreeze
         }
         void LayoutBlackOutcomeBody()
         {
+            Canvas.ForceUpdateCanvases();
             endingBlackBody.ForceMeshUpdate();
             float width=Mathf.Max(1,endingBlackViewport.rect.width);
             float height=Mathf.Max(endingBlackViewport.rect.height,endingBlackBody.GetPreferredValues(endingBlackBody.text,width,0).y+24);
@@ -390,7 +469,7 @@ namespace Seabreeze
         void ShowBlackOutcomeDetails()
         {
             if(!endingBlackRevealed||endingBlackDetailsShown)return;
-            endingBlackDetailsShown=true;endingBlackTitle.text=seventhNight?.outcome?.label??"";endingBlackBody.text=FullEndingText();SetBlackDetailsLayout();endingBlackWordsGroup.alpha=1;endingBlackNext.gameObject.SetActive(true);
+            endingBlackDetailsShown=true;endingBlackTitle.text=EndingWordsForPlayer(seventhNight?.outcome?.label??"");endingBlackBody.text=FullEndingText();SetBlackDetailsLayout();endingBlackWordsGroup.alpha=1;endingBlackNext.gameObject.SetActive(true);
         }
         void ExitBlackOutcome()
         {
@@ -407,7 +486,7 @@ namespace Seabreeze
             if(endingBlackScreen!=null&&endingBlackScreen.gameObject.activeSelf){if(endingBlackRevealed){if(endingBlackDetailsShown)CloseOverlay();else ShowBlackOutcomeDetails();}return;}
             if(seventhNight==null){GenerateSeventhNight();return;}
             if(endingRevealIndex<endingRevealStops.Length){FinishEndingReveal();endingCharacter?.SetState("serious",false);return;}
-            if(endingPage>=endingDailyPages.Length)CloseOverlay();else ShowEndingPage(endingPage+1);
+            if(endingPage>=endingRecapPages.Length)CloseOverlay();else ShowEndingPage(endingPage+1);
         }
         void SetEndingWords(string value,bool typewriter)
         {
@@ -460,10 +539,10 @@ namespace Seabreeze
         }
         void ToggleEndingOriginal()
         {
-            if(seventhNight==null||endingPage<0||endingPage>=endingDailyPages.Length||endingDailyMemories.Length<=endingPage)return;
-            endingOriginalShown=!endingOriginalShown;var memories=endingDailyMemories[endingPage];
+            if(seventhNight==null||endingPage<0||endingPage>=endingRecapPages.Length||endingRecapMemories.Length<=endingPage)return;
+            endingOriginalShown=!endingOriginalShown;var memories=endingRecapMemories[endingPage];
             var originals=new List<string>();foreach(var memory in memories)if(!string.IsNullOrWhiteSpace(memory.original))originals.Add(memory.original.Trim());
-            SetEndingWords(endingOriginalShown?string.Join("\n\n",originals.ToArray()):endingDailyPages[endingPage].text,false);
+            SetEndingWords(endingOriginalShown?EndingWordsForPlayer(string.Join("\n\n",originals.ToArray())):EndingWordsForPlayer(endingRecapPages[endingPage].text),false);
             endingCharacter?.SetState("serious",false);
         }
         void UpdateSeventhNight()

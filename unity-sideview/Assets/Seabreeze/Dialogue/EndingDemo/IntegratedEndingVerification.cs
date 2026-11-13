@@ -114,16 +114,16 @@ namespace Seabreeze.EndingDemo
             Require(result.worldId==session.State.memory.worldId,"Ending used another save's world");
             deadline=Time.realtimeSinceStartup+10;while(ui.IsOverlayTransitioning&&Time.realtimeSinceStartup<deadline)yield return null;
             Require(ui.HasOverlay&&Mathf.Approximately(Time.timeScale,0),"Main gameplay did not pause under its ending overlay");
-            var pages=Field<EndingDemoView.DailyPage[]>(ui,"endingDailyPages");
-            Require(pages.Length==7,"Expected one page for each day in the seven-day fixture");
+            var pages=Field<EndingDemoView.RecapPage[]>(ui,"endingRecapPages");
+            Require(pages.Length==2&&pages[0].startDay==1&&pages[0].endDay==3&&pages[1].startDay==4&&pages[1].endDay==7,"Seven days should use two recap pages");
             var title=Field<TextMeshProUGUI>(ui,"endingTitle");
             var body=Field<TextMeshProUGUI>(ui,"endingBody");
             int firstPage=Field<int>(ui,"endingPage");
-            Require(title.text==pages[0].title,"Daily reading should open with the first day");
+            Require(firstPage==0&&title.text==GameUI.RenderEndingDisplay(pages[0].title,result.playerName),"Ending should open with the early memories");
             for(int i=0;i<pages.Length;i++)
             {
                 Call(ui,"ShowEndingPage",firstPage+i);
-                Require(title.text==pages[i].title && body.text.Contains("\n\n"),"Missing title or paragraph break");
+                Require(title.text==GameUI.RenderEndingDisplay(pages[i].title,result.playerName) && body.text.Contains("\n\n"),"Missing title or paragraph break");
             }
             Call(ui,"ShowEndingPage",firstPage);
             Call(ui,"ToggleEndingOriginal");Require(Field<bool>(ui,"endingOriginalShown"),"Cannot read source");
@@ -176,8 +176,8 @@ namespace Seabreeze.EndingDemo
                 typeof(GameUI).GetField("endingHistoryShown",Fields).SetValue(ui,true);
                 typeof(GameUI).GetField("nextEndingSourceCheck",Fields).SetValue(ui,Time.unscaledTime+120);
                 while(ui.IsOverlayTransitioning&&Time.realtimeSinceStartup<deadline)yield return null;
-                pages=Field<EndingDemoView.DailyPage[]>(ui,"endingDailyPages");
-                Require(pages.Length==7 && pages[6].title=="李庭叫我自己听","Older save did not load the reviewed seven days");
+                pages=Field<EndingDemoView.RecapPage[]>(ui,"endingRecapPages");
+                Require(pages.Length==2 && pages[0].title=="那个没折齐的纸角" && pages[1].title=="直播断了以后","Older save did not load the reviewed two-page script");
                 var args=Environment.GetCommandLineArgs();
                 int wi=Array.IndexOf(args,"-screen-width"),hi=Array.IndexOf(args,"-screen-height");
                 int width=0,height=0;
@@ -188,9 +188,35 @@ namespace Seabreeze.EndingDemo
                     Require(Screen.width==width&&Screen.height==height,"Game did not reach the requested test resolution");
                     yield return new WaitForEndOfFrame();
                 }
-                Call(ui,"ShowEndingPage",firstPage+6);
+                var next=Find(ui,"Continue ending");
+                title=Field<TextMeshProUGUI>(ui,"endingTitle");
                 body=Field<TextMeshProUGUI>(ui,"endingBody");
-                Require(body.text==pages[6].text && body.text.Split('\n').Length==5,"Day seven should have four sentences separated by a paragraph break");
+                Require(title.text==pages[0].title && next.interactable,"Older save should open on the first recap");
+                var reviewed=Field<EndingDemoView.EndingRun>(ui,"seventhNight");
+                Require(body.text.Contains("字小节")&&!body.text.Contains("旅人")&&SevenCharacterCatalog.Name("player")=="字小节","Old save and island use different player names");
+                for(int i=0;i<pages.Length;i++){
+                    if(i==1)next.onClick.Invoke();
+                    Require(title.text==pages[i].title && body.text==pages[i].text,"Next button did not follow the two-page sequence");
+                    Call(ui,"ToggleEndingOriginal");
+                    foreach(var memory in reviewed.recollections){
+                        bool belongs=memory.day>=pages[i].startDay&&memory.day<=pages[i].endDay;
+                        if(!string.IsNullOrWhiteSpace(memory.original))Require(body.text.Contains(GameUI.RenderEndingDisplay(memory.original.Trim(),reviewed.playerName))==belongs,"Source viewer mixed the two periods");
+                    }
+                    Call(ui,"ToggleEndingOriginal");
+                    Canvas.ForceUpdateCanvases();
+                    var viewport=ScreenRect(body.GetComponentInParent<ScrollRect>().viewport);
+                    var glyphs=VisibleGlyphBounds(body,0);
+                    Require(glyphs.yMin>=viewport.yMin-1&&glyphs.yMax<=viewport.yMax+1,"Reviewed recap needs scrolling in the demo window");
+                    if(i==0){
+                        yield return new WaitForSecondsRealtime(.4f);
+                        yield return new WaitForEndOfFrame();
+                        ScreenCapture.CaptureScreenshot(Path.Combine(output,"recap-early.png"));yield return new WaitForEndOfFrame();
+                        yield return new WaitForSecondsRealtime(.25f);
+                    }
+                }
+                Call(ui,"ShowEndingPage",firstPage+1);
+                body=Field<TextMeshProUGUI>(ui,"endingBody");
+                Require(body.text==pages[1].text && body.text.Split(new[]{"\n\n"},StringSplitOptions.None).Length==2,"Late recap should separate Z's thoughts from the events");
                 yield return new WaitForSecondsRealtime(.22f);
                 var info=body.textInfo;
                 int firstAlpha=-1,firstLineCount=0,hiddenLines=0;
@@ -204,11 +230,11 @@ namespace Seabreeze.EndingDemo
                     }else if(alpha==0)hiddenLines++;
                 }
                 Require(firstLineCount>1 && firstAlpha>0 && firstAlpha<255 && hiddenLines>0,"Did not observe a partial whole-sentence fade");
-                ScreenCapture.CaptureScreenshot(Path.Combine(output,"legacy-day7-reveal.png"));yield return new WaitForEndOfFrame();
+                ScreenCapture.CaptureScreenshot(Path.Combine(output,"recap-late-reveal.png"));yield return new WaitForEndOfFrame();
                 yield return new WaitForSecondsRealtime(7);
-                ScreenCapture.CaptureScreenshot(Path.Combine(output,"legacy-day7.png"));yield return new WaitForEndOfFrame();
+                ScreenCapture.CaptureScreenshot(Path.Combine(output,"recap-late.png"));yield return new WaitForEndOfFrame();
                 yield return new WaitForSecondsRealtime(.2f);
-                Call(ui,"NextEndingPage");
+                next.onClick.Invoke();
                 yield return new WaitForEndOfFrame();
                 var blackWords=Field<TextMeshProUGUI>(ui,"endingBlackBody");
                 Require(Field<Image>(ui,"endingBlackScreen").gameObject.activeInHierarchy && blackWords.text.Length==0,"Ending did not start on an empty black screen");
@@ -227,6 +253,7 @@ namespace Seabreeze.EndingDemo
                 yield return new WaitForEndOfFrame();yield return null;
                 var displayed=Field<EndingDemoView.EndingRun>(ui,"seventhNight");
                 CheckDetailPage(ui,displayed,false);
+                Require(blackWords.text.Contains("字小节")&&!blackWords.text.Contains("旅人"),"Ending uses a different player name");
                 ScreenCapture.CaptureScreenshot(Path.Combine(output,"legacy-complete.png"));yield return new WaitForEndOfFrame();
                 yield return new WaitForSecondsRealtime(.25f);
                 // Exercise an unusually long, unreviewed ending in this isolated world.
@@ -234,7 +261,7 @@ namespace Seabreeze.EndingDemo
                 longRun.decision.choice="stay";longRun.decision.decision="我想留下。";longRun.decision.lastLine="明天我还想再见他们。";
                 longRun.outcome.label="决定留下";longRun.outcome.text=string.Concat(System.Linq.Enumerable.Repeat("我想起今天一起说过的话。\n",40));
                 typeof(GameUI).GetField("seventhNight",Fields).SetValue(ui,longRun);
-                Call(ui,"PrepareDailyPages");Call(ui,"ShowEndingPage",firstPage+7);
+                Call(ui,"PrepareDailyPages");Call(ui,"ShowEndingPage",firstPage+pages.Length);
                 yield return new WaitForSecondsRealtime(1.8f);advance.onClick.Invoke();
                 yield return new WaitForEndOfFrame();yield return null;CheckDetailPage(ui,longRun,true);
                 yield return new WaitForEndOfFrame();

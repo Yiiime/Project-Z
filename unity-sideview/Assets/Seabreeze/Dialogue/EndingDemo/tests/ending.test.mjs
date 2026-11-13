@@ -4,15 +4,17 @@ import { readFile, mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { createEndingServer, ROOT } from '../server.mjs';
-import { validateScenario, revisionOf, knownMemories, decisionMessages, validateDecision, validateRecollections,
+import { validateScenario, normalizePlayerName, renderPlayerName, revisionOf, knownMemories, decisionMessages, validateDecision, validateRecollections,
   previewDecision, resolveOutcome, sourceBlocks, annotatedScenario, dailyPageMessages, validateDailyPages,
-  previewDailyPages, approvedDailyPagesFor, scenarioMemoryFingerprint } from '../ending.mjs';
+  previewDailyPages, approvedDailyPagesFor, scenarioMemoryFingerprint, scenarioMemoryFingerprints, recapRanges, validateRecapPages,
+  approvedRecapPagesFor, previewRecapPages, recapPagesFor } from '../ending.mjs';
 const sample = JSON.parse(await readFile(join(ROOT, 'tests/scenario.fixture.json'), 'utf8'));
 const copy = () => structuredClone(sample);
 test('manual scenario round-trip retains memory, plot and knowledge flags', () => {
   const s = copy(); s.memories.push({ id: 'private', day: 7, kind: 'plot', title: '幕后', text: 'PRIVATE_SECRET', zKnows: false });
-  assert.deepEqual(validateScenario(s), s); assert.equal(knownMemories(s).length, 8);
-  const prompt = JSON.stringify(decisionMessages(s, 'persona'));
+  const validated = validateScenario(s);
+  assert.deepEqual(validated, { ...s, playerName: '字小节' }); assert.equal(knownMemories(validated).length, 8);
+  const prompt = JSON.stringify(decisionMessages(validated, 'persona'));
   assert.ok(!prompt.includes('PRIVATE_SECRET')); assert.ok(!prompt.includes('leaveOutcome')); assert.ok(prompt.includes('m08'));
 });
 test('scenario rejects duplicate IDs, unknown versions, too many memories and invalid day', () => {
@@ -47,6 +49,11 @@ test('daily pages keep dates, facts and feelings separate without fixed labels',
   const prompt = JSON.stringify(dailyPageMessages({ ...s, memories: s.memories.filter(m => m.day === 1) }, previewDecision(s, 'leave'), 1, 'persona'));
   assert.match(prompt, /按材料判断/); assert.match(prompt, /不重复/); assert.match(prompt, /材料少时只写1行/); assert.match(prompt, /不超过450字/);
   assert.equal(typeof scenarioMemoryFingerprint(s), 'string');
+  const legacyName = validateScenario({ ...s, playerName: '旅人', memories: s.memories.map(memory => ({ ...memory, text: memory.text.replaceAll('玩家', '旅人') })) });
+  const modernName = validateScenario({ ...s, playerName: '字小节', memories: legacyName.memories.map(memory => ({ ...memory, text: memory.text.replaceAll('旅人', '字小节') })) });
+  assert.ok(scenarioMemoryFingerprints(modernName).includes(scenarioMemoryFingerprint(legacyName)));
+  const changed = validateScenario({ ...modernName, memories: modernName.memories.map((memory, i) => i === 0 ? { ...memory, text: `${memory.text}正文变化` } : memory) });
+  assert.ok(!scenarioMemoryFingerprints(changed).includes(scenarioMemoryFingerprint(legacyName)));
   assert.equal(approvedDailyPagesFor(s), null, 'approved pages must not apply to another story');
   const labeled = structuredClone(pages); labeled[0].text = '今天的事：\n发生了一件事。\n\n我有点难过。';
   assert.throws(() => validateDailyPages({ dailyPages: labeled }, s), /栏目标签/);
@@ -64,6 +71,41 @@ test('daily pages keep dates, facts and feelings separate without fixed labels',
   assert.throws(() => validateDailyPages({ dailyPages: twoSentences }, s), /每句/);
   const tooLong = structuredClone(pages); tooLong[0].text = `${'事实'.repeat(226)}\n\n感受。`;
   assert.throws(() => validateDailyPages({ dailyPages: tooLong }, s), /不超过450/);
+  assert.equal(normalizePlayerName('旅人'), '字小节'); assert.equal(normalizePlayerName('玩家'), '字小节');
+  assert.equal(normalizePlayerName('听雨'), '听雨');
+  assert.equal(renderPlayerName('旅人和玩家', '$&旅人'), '$&旅人和$&旅人');
+  assert.equal(renderPlayerName('字小节和玩家', '听雨'), '听雨和听雨');
+  assert.equal(renderPlayerName('小旅人到了', '小旅人'), '小旅人到了');
+  const playerPrompt = JSON.stringify(dailyPageMessages({ ...s, playerName: '旅人' }, previewDecision(s, 'leave'), 1, 'persona'));
+  assert.match(playerPrompt, /Z和字小节/); assert.doesNotMatch(playerPrompt, /Z和旅人/);
+  const decisionPrompt = JSON.stringify(decisionMessages({ ...s, playerName: '旅人', context: '旅人在码头等着。' }, 'persona'));
+  assert.match(decisionPrompt, /字小节/); assert.doesNotMatch(decisionPrompt, /旅人/);
+});
+test('recap pages cover only populated periods and keep facts in Z-visible memories', async () => {
+  const s = copy(); s.memories.push({ id: 'hidden_recap', day: 2, kind: 'memory', title: '幕后结局', text: 'PRIVATE_RECAP_SECRET。', zKnows: false });
+  const scenario = validateScenario(s), daily = previewDailyPages(scenario), recaps = previewRecapPages(scenario, daily);
+  assert.deepEqual(recapRanges(scenario), [{ startDay: 1, endDay: 3 }, { startDay: 4, endDay: 7 }]);
+  assert.deepEqual(recaps.map(page => [page.startDay, page.endDay]), [[1, 3], [4, 7]]);
+  assert.deepEqual(validateRecapPages({ recapPages: recaps }, scenario), recaps);
+  assert.ok(recaps.every(page => page.text.includes('\n\n') && page.text.length <= 450));
+  assert.ok(!JSON.stringify(recaps).includes('PRIVATE_RECAP_SECRET'));
+  assert.equal(approvedRecapPagesFor(scenario), null, 'approved recap must not apply to another story');
+  assert.deepEqual(recapPagesFor(scenario, daily), recaps);
+
+  const early = validateScenario({ ...scenario, memories: scenario.memories.filter(memory => memory.zKnows && memory.day <= 3) });
+  assert.deepEqual(previewRecapPages(early, previewDailyPages(early)).map(page => [page.startDay, page.endDay]), [[1, 3]]);
+  const late = validateScenario({ ...scenario, memories: scenario.memories.filter(memory => memory.zKnows && memory.day >= 4) });
+  assert.deepEqual(previewRecapPages(late, previewDailyPages(late)).map(page => [page.startDay, page.endDay]), [[4, 7]]);
+
+  const narrated = daily.map(page => ({ ...page }));
+  narrated.find(page => page.day === 1).text = '字小节告诉我这件事，我只听到了这部分。\n\n我还在辨认这句话。';
+  narrated.find(page => page.day === 4).text = '直播在我追问时突然断了。\n\n我没法把没听完的部分补齐。';
+  narrated.find(page => page.day === 7).text = '收音机终于响了。\n\n听见它响，我还是高兴。';
+  const narratedRecaps = previewRecapPages(scenario, narrated);
+  assert.match(narratedRecaps[0].text, /字小节告诉我这件事/);
+  assert.doesNotMatch(narratedRecaps[0].text, /我看到/);
+  assert.match(narratedRecaps[1].text, /直播在我追问时突然断了/);
+  assert.match(narratedRecaps[1].text, /收音机终于响了/);
 });
 test('Z choice cannot cite hidden or fabricated reasons', () => {
   const s = copy(), decision = previewDecision(s, 'leave'); decision.reasonMemoryIds = ['unknown'];
@@ -114,9 +156,10 @@ test('both offline previews have all known memories and reloadable standalone ru
   }
 });
 test('JSON file upload previews without overwriting active run until confirmed', async t => {
-  const { call, app } = await fixture(t), next = copy(); next.title = '上传的故事';
+  const { call, app } = await fixture(t), next = copy(); next.title = '上传的故事'; next.playerName = '听雨';
   const draft = await call('/api/import', 'POST', { name: 'story.json', text: JSON.stringify(next) });
   assert.equal(draft.status, 200); assert.equal(draft.data.scenario.title, '上传的故事');
+  assert.equal(draft.data.scenario.playerName, '听雨');
   assert.equal((await call('/api/scenario')).data.scenario.title, sample.title);
   const saved = await call('/api/scenario', 'PUT', { scenario: draft.data.scenario, revision: draft.data.revision, useFile: true });
   assert.equal(saved.status, 200); assert.equal(saved.data.scenario.title, '上传的故事');
@@ -147,6 +190,7 @@ test('model decision uses manual content, filters private facts, and locks choic
   assert.equal(r.data.recollections[0].original, 'MANUAL_FACT'); assert.equal(r.data.memoryCount, 8);
   assert.deepEqual(r.data.dailyPages.map(page => page.day), [1, 2, 3, 4, 5, 6, 7]);
   assert.ok(r.data.dailyPages.every(page => page.text.includes('一件具体的事')), '普通模型分支应使用模型返回的每日稿');
+  assert.deepEqual(r.data.recapPages.map(page => [page.startDay, page.endDay]), [[1, 3], [4, 7]]);
 });
 test('partial model recollections fail without publishing fabricated success', async t => {
   let calls = 0; const provider = { publicConfig: () => ({ configured: true }), request: m => m,

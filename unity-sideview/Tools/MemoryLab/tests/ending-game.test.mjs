@@ -30,6 +30,77 @@ async function fixture(t, hook) {
   await post('open', base);
   return { app, requests, post, base };
 }
+
+function legacyCheckpoint(current) {
+  const result = structuredClone(current);
+  result.id = 'legacy-player-alias';
+  result.sourceRevision = 'cc8fbffac2020e4e:file';
+  result.contextRevision = 'legacy-context-revision';
+  result.playerName = '旅人';
+  result.recollections = result.recollections.map(memory => ({
+    ...memory,
+    title: memory.title.replaceAll('字小节', '旅人'),
+    original: memory.original.replaceAll('字小节', '旅人'),
+    text: memory.text.replaceAll('字小节', '旅人'),
+  }));
+  result.dailyPages = result.dailyPages.map(page => ({
+    ...page,
+    title: page.title.replaceAll('字小节', '旅人'),
+    text: page.text.replaceAll('字小节', '旅人'),
+  }));
+  return result;
+}
+
+function storeEnding(app, worldId, requestId, result) {
+  const world = app.engine.world(worldId);
+  world.seventhNightEndings = { [requestId]: { fingerprint: 'legacy-fixture', result } };
+  app.engine.save(world);
+  app.endings.progress.delete(worldId);
+}
+
+test('renamed built-in source reuses only an exact legacy checkpoint', async t => {
+  const { app, post, base } = await fixture(t);
+  await post('sync', { ...base, eventData: {
+    id: 'legacy-visible', seq: 1, day: 1, period: 0, kind: 'utterance',
+    text: 'VISIBLE_MEMORY_FOR_LEGACY_CHECKPOINT', speakerId: 'player', recipientId: 'z',
+    conversationId: 'legacy-visible', channel: 'private_player_chat',
+    observers: ['player', 'z'], discloseTo: ['player', 'z'], locationId: 'dock',
+  } });
+  const generated = await post('ending', { ...base, requestId: 'current', details: { mode: 'model' } });
+  assert.equal(generated.status, 200, generated.data.error);
+  const current = generated.data.ending;
+  assert.equal(current.sourceName, '七日完整模拟-对话与行动.md');
+  assert.equal(current.sourceRevision, 'a526b25f52fc4f44:file');
+  const legacy = legacyCheckpoint(current);
+  storeEnding(app, base.worldId, 'legacy', legacy);
+
+  let state = app.endings.sourceState(app.engine.world(base.worldId));
+  assert.equal(state.ending.id, legacy.id);
+  assert.equal(state.sourceRevision, current.sourceRevision);
+  assert.equal(state.ending.sourceRevision, legacy.sourceRevision);
+  assert.equal(state.contextRevision, legacy.contextRevision);
+  assert.equal(state.ending.decision.choice, current.decision.choice);
+
+  const reject = (mutate, message) => {
+    const changed = legacyCheckpoint(current);
+    mutate(changed);
+    storeEnding(app, base.worldId, 'legacy', changed);
+    state = app.endings.sourceState(app.engine.world(base.worldId));
+    assert.equal(state.ending, undefined, message);
+  };
+
+  reject(result => { result.sourceEventIds = [...result.sourceEventIds, 'new-visible-event']; }, 'event IDs must match exactly');
+  reject(result => { result.sourceName = '七日完整模拟-对话与行动-改名.md'; }, 'source name changes must not reuse');
+  reject(result => { result.recollections[0].original += ' 这是正文变化。'; }, 'memory body changes must not reuse');
+
+  const world = app.engine.world(base.worldId);
+  world.actors.z.info.trust += 1;
+  app.engine.save(world);
+  storeEnding(app, base.worldId, 'legacy', legacyCheckpoint(current));
+  state = app.endings.sourceState(app.engine.world(base.worldId));
+  assert.equal(state.ending, undefined, 'Z state changes must not reuse');
+});
+
 test('game-native ending uses current Z-visible memories and same provider, without exposing private NPC talk', async t => {
   const { app, requests, post, base } = await fixture(t);
   await post('sync', { ...base, eventData: { id: 'ours', seq: 1, day: 1, period: 0, kind: 'utterance', text: 'LIVE_PLAYER_MEMORY', speakerId: 'player', recipientId: 'z', conversationId: 'ours', observers: ['player', 'z'], discloseTo: ['player', 'z'], locationId: 'dock' } });
@@ -43,6 +114,7 @@ test('game-native ending uses current Z-visible memories and same provider, with
   assert.ok(!JSON.stringify(requests).includes('PRIVATE_NPC_SECRET'));
   assert.equal(result.data.ending.memoryCount, result.data.ending.recollections.length);
   assert.equal(result.data.ending.outcome.status, 'pending');
+  assert.deepEqual(result.data.ending.recapPages.map(page => [page.startDay, page.endDay]), [[1, 3], [4, 7]]);
   const after = app.engine.world(base.worldId);
   assert.equal(after.day, before.day); assert.equal(after.seq, before.seq);
   assert.deepEqual(after.actors, before.actors);

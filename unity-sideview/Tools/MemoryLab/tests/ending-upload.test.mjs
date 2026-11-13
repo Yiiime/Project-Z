@@ -9,7 +9,7 @@ async function fixture(t, hook) {
   const provider={publicConfig:()=>({configured:true}),config:{topK:6},request:m=>m,
     call:async messages=>{
       const input=JSON.parse(messages[1].content);requests.push(input);if(hook)await hook(input);
-      if(input.blocks)return {text:JSON.stringify({title:'这份经历',playerName:'旅人',context:'第七晚，在码头回望。',lastMessage:'',
+      if(input.blocks)return {text:JSON.stringify({title:'这份经历',playerName:'字小节',context:'第七晚，在码头回望。',lastMessage:'',
         world:{departureReady:false,departureDetail:'',stayDetail:'未来没有保证',leaveOutcome:'pending',leaveAftermath:'',stayOutcome:'uncertain',stayAftermath:''},
         blocks:input.blocks.map((b,i)=>({id:b.id,title:'经历'+(i+1),day:i+1,kind:'memory',zKnows:!b.text.includes('SECRET')}))})};
       if(input.dailyPage)return {text:JSON.stringify({dailyPages:[{day:input.day,title:'第'+input.day+'天',text:'这一天发生了一件具体的事。\n我把当时看到的细节记在这里。\n\n我还在慢慢想。'}]})};
@@ -44,6 +44,7 @@ test('upload parses intact source, uses this save only, and automatically rebuil
   await f.job().promise;
   const result=await f.upload(token,'status');assert.equal(result.data.source.phase,'complete');
   assert.equal(result.data.source.ending.decision.choice,'stay');
+  assert.deepEqual(result.data.source.ending.recapPages.map(page=>[page.startDay,page.endDay]),[[1,3]]);
   const generated=f.requests.filter(r=>!r.blocks);
   assert.ok(generated.some(r=>JSON.stringify(r).includes('ACTUAL_GAME_MEMORY')));
   assert.ok(generated.every(r=>!JSON.stringify(r).includes('SECRET')));

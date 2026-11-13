@@ -5,10 +5,48 @@ import { createHash, randomUUID } from 'node:crypto';
 import { homedir } from 'node:os';
 import { validateScenario, knownMemories, decisionMessages, validateDecision, recollectionMessages,
   validateRecollections, validateDailyPages, parseModel, previewDecision, previewRecollections,
-  previewDailyPages, approvedDailyPagesFor, requestDailyPage, resolveOutcome, revisionOf } from '../../../Assets/Seabreeze/Dialogue/EndingDemo/ending.mjs';
+  previewDailyPages, approvedDailyPagesFor, requestDailyPage, recapPagesFor, resolveOutcome, revisionOf } from '../../../Assets/Seabreeze/Dialogue/EndingDemo/ending.mjs';
 import { TurnError } from './policy.mjs';
 
 export const authoredFile = resolve(dirname(fileURLToPath(import.meta.url)), '../../../Assets/Seabreeze/Dialogue/EndingDemo/scenario.example.json');
+// Exact authored revisions on either side of the built-in player rename.
+// Custom uploads, including stories with the same title or player name, have different revisions.
+const renamedPresets = [
+  { old: 'cc8fbffac2020e4e', current: 'a526b25f52fc4f44', name: '旅人', file: authoredFile, originals: '2fe591641e7ff153625e1493468e0c87a8f74a858957ab1bccda3e49b38346b8' },
+  { old: '83bdcc7cd93b3fab', current: '12f1f93212e78610', name: '听雨', file: resolve(dirname(authoredFile), '七日随机记忆-雨停以后-20261113.json'), originals: '02ec00798cd87aad71992eedd790079ec070d42cb1175f558ab30d7919dfa43d' },
+];
+function readPreset(raw, maxMemories) {
+  const checked = validateScenario(raw, { maxMemories });
+  const old = renamedPresets.find(p => p.name === raw.playerName && p.old === revisionOf({ ...checked, playerName: raw.playerName }));
+  if (old) {
+    const updated = validateScenario(JSON.parse(readFileSync(old.file, 'utf8')), { maxMemories });
+    if (revisionOf(updated) === old.current) return updated;
+  }
+  return checked;
+}
+function savedRevisionBeforeRename(world, projected, authored, sourceRevision) {
+  const [revision, ...version] = sourceRevision.split(':');
+  const preset = renamedPresets.find(p => p.current === revision);
+  if (!preset) return;
+  const oldRevision = [preset.old, ...version].join(':');
+  const visible = knownMemories(projected.scenario), authoredIds = new Set(authored.memories.map(m => m.id));
+  const normalize = text => String(text ?? '').replaceAll(preset.name, '字小节').replaceAll('玩家', '字小节');
+  const previous = Object.values(world.seventhNightEndings || {}).map(entry => entry.result)
+    .filter(saved => saved?.worldId === world.worldId && saved.sourceRevision === oldRevision && saved.contextRevision &&
+      saved.sourceName === (world.endingMemorySource?.fileName || authored.sourceName))
+    .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+  for (const saved of previous) {
+    if (JSON.stringify(saved.sourceEventIds) !== JSON.stringify(projected.eventIds) ||
+        !saved.zState || ['trust', 'affinity', 'emotion', 'world_suspicion'].some(k => saved.zState[k] !== world.actors.z.info[k])) continue;
+    const memories = saved.recollections;
+    if (!Array.isArray(memories) || memories.length !== visible.length || !memories.every((m, i) =>
+        m.memoryId === visible[i].id && m.day === visible[i].day && normalize(m.title) === normalize(visible[i].title) && typeof m.original === 'string' &&
+        (authoredIds.has(m.memoryId) || normalize(m.original) === normalize(visible[i].text)))) continue;
+    const digest = createHash('sha256').update(memories.filter(m => authoredIds.has(m.memoryId))
+      .map(m => m.day + '\n' + m.original).join('\n\u001e\n')).digest('hex');
+    if (digest === preset.originals) return saved.contextRevision;
+  }
+}
 export function gameEndingScenario(engine, catalog, world, authored) {
   const scenario = structuredClone(authored);
   // The shortcut is an authored seventh-night slice, enriched by this save's real Z-visible events.
@@ -35,9 +73,9 @@ export function gameEndingScenario(engine, catalog, world, authored) {
         text: text.slice(offset, offset + 1700) });
     }
   }
-  scenario.context += '\n补充的回忆是你在岛上与旅人共同听到、见到，或已获得向旅人分享许可的内容；未核实的说法仍然只是当时听到的话。你不知道未听见的私聊。';
+  scenario.context += `\n补充的回忆是你在岛上与${scenario.playerName}共同听到、见到，或已获得向${scenario.playerName}分享许可的内容；未核实的说法仍然只是当时听到的话。你不知道未听见的私聊。`;
   const z = world.actors.z.info;
-  scenario.context += `\n你对旅人和眼前处境的初步看法：${JSON.stringify({affinity:z.affinity,trust:z.trust,emotion:z.emotion,world_suspicion:z.world_suspicion})}。这些仅供理解心情，不是去留门槛；台词不讲分数、字段名、记录ID或后台。`;
+  scenario.context += `\n你对${scenario.playerName}和眼前处境的初步看法：${JSON.stringify({affinity:z.affinity,trust:z.trust,emotion:z.emotion,world_suspicion:z.world_suspicion})}。这些仅供理解心情，不是去留门槛；台词不讲分数、字段名、记录ID或后台。`;
   const parsed = validateScenario(scenario, { maxMemories: 400 });
   return { scenario: parsed, liveMemoryCount: index, eventIds: events.map(e => e.id) };
 }
@@ -49,18 +87,19 @@ export class GameEndingCoordinator {
     this.selectionPath = selectionPath; this.inflight = new Map(); this.progress = new Map();
   }
   authored(world) {
-    if (world?.endingMemorySource?.scenario) return validateScenario(world.endingMemorySource.scenario, { maxMemories: 200 });
+    if (world?.endingMemorySource?.scenario) return readPreset(world.endingMemorySource.scenario, 200);
     let path = this.scenarioPath;
     if (!path && existsSync(this.selectionPath)) path = JSON.parse(readFileSync(this.selectionPath, 'utf8')).scenarioPath;
     path ||= authoredFile;
     if (!existsSync(path)) throw new TurnError('选中的第七晚剧情文件未找到，请重新上传使用');
-    return validateScenario(JSON.parse(readFileSync(path, 'utf8')));
+    return readPreset(JSON.parse(readFileSync(path, 'utf8')), 40);
   }
   context(world) {
     const authored = this.authored(world);
     const projected = gameEndingScenario(this.engine, this.catalog, world, authored);
     const sourceRevision = revisionOf(authored) + ':' + (world.endingMemorySource?.version || 'file');
-    const contextRevision = createHash('sha256').update(revisionOf(projected.scenario) + sourceRevision).digest('hex').slice(0, 16);
+    const contextRevision = savedRevisionBeforeRename(world, projected, authored, sourceRevision) ??
+      createHash('sha256').update(revisionOf(projected.scenario) + sourceRevision).digest('hex').slice(0, 16);
     return { ...projected, contextRevision, sourceRevision,
       sourceName: world.endingMemorySource?.fileName || authored.sourceName || '七日剧情' };
   }
@@ -108,7 +147,7 @@ export class GameEndingCoordinator {
       return current;
     };
     const persona = this.catalog.profile('z');
-    let decision, recollections = [], dailyPages = [];
+    let decision, recollections = [], dailyPages = [], recapPages = [];
     try {
     if (mode === 'model') {
       const response = await this.provider.call(this.provider.request(decisionMessages(scenario, persona), { json: true, maxTokens: 2800 }));
@@ -141,10 +180,11 @@ export class GameEndingCoordinator {
       decision = previewDecision(scenario, mode === 'preview-leave' ? 'leave' : 'stay');
       recollections = previewRecollections(scenario); dailyPages = previewDailyPages(scenario);
     }
+    recapPages = recapPagesFor(scenario, dailyPages);
     const current = checkCurrent();
     if (current.epoch !== epoch) throw new TurnError('结局属于已取消的时间线');
     const result = { id: randomUUID(), mode, revision: revisionOf(scenario), createdAt: new Date().toISOString(),
-      scenarioTitle: scenario.title, playerName: scenario.playerName, decision, recollections, dailyPages, memoryCount: recollections.length,
+      scenarioTitle: scenario.title, playerName: scenario.playerName, decision, recollections, dailyPages, recapPages, memoryCount: recollections.length,
       outcome: resolveOutcome(scenario, decision.choice), worldId: current.worldId, runId: current.runId,
       sourceDay: original.day, sourceSeq: original.seq, liveMemoryCount, sourceEventIds: eventIds,
       zState: structuredClone(original.actors.z.info), sourceName, contextRevision, sourceRevision };
