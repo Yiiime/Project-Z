@@ -1,0 +1,55 @@
+{
+  "date": "2026-11-09",
+  "localOnly": true,
+  "schema": {
+    "version": "review-4",
+    "definitions": 176,
+    "sourceDriftCheck": "passed"
+  },
+  "tests": {
+    "memory": {
+      "tests": 82,
+      "pass": 82,
+      "fail": 0,
+      "skipped": 0
+    },
+    "live": {
+      "tests": 119,
+      "pass": 119,
+      "fail": 0,
+      "skipped": 0
+    }
+  },
+  "unity": {
+    "passed": true,
+    "mode": "actual Editor Play Mode with isolated save and deterministic transport fault",
+    "sameRequestAndProposalOnRetry": true
+  },
+  "static": {
+    "assetFiles": 3255,
+    "guids": 1687,
+    "buildScenes": 3,
+    "csharpFiles": 271,
+    "syntaxErrors": 0
+  },
+  "browser": {
+    "url": "http://127.0.0.1:4341/lab",
+    "provider": "DeepSeek",
+    "model": "deepseek-flash",
+    "actorsTested": [
+      "z",
+      "linxu"
+    ],
+    "task": "dock_sort",
+    "afterRefusal": "stop",
+    "downloadedExportSchema": "passed",
+    "screenshot": "lab.png"
+  },
+  "limits": [
+    "No new physical task executors",
+    "Time and Unity visuals unchanged",
+    "No seven-day full playthrough",
+    "No real audio/video live end-to-end rerun",
+    "No sustained multiplayer load test"
+  ]
+}

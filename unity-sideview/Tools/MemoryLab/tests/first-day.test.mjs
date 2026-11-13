@@ -13,7 +13,7 @@ const make=t=>{const store=new Store(),catalog=new Catalog(),provider={publicCon
 test('welcome task native offer, acceptance, dialogue, photo and reload protocol',async t=>{
   let generations=0;
   const app=createServer({dbPath:':memory:',backgroundEnabled:false,
-    providerFactory:()=>({mode:'simulated-test',config:{topK:6},publicConfig:()=>({configured:true}),request:messages=>({messages}),call:async()=>{generations++;return {text:JSON.stringify(generated())};}}),
+    providerFactory:()=>({mode:'simulated-test',config:{topK:6},publicConfig:()=>({configured:true}),request:messages=>({messages}),call:async()=>{generations++;app.engine.updateEnvironment('welcome_native','axing',{sceneId:'Square',locationId:'ancient_tree_square',x:4,y:0,movementState:'idle'},{id:'during_task_generation',hostSeq:1,day:1,period:3});return {text:JSON.stringify(generated())};}}),
     decide:c=>{const a=c.available_actions.find(a=>a.type==='offer_task')||c.available_actions.find(a=>a.type==='wait');return {dialogue:'测试生成的现场交流',action:{action_id:a.id,type:a.type,target:a.target,parameters:a.parameters,description:'测试模型行动'},info:structuredClone(c.character_state.info)};}});
   app.server.listen(0,'127.0.0.1');await once(app.server,'listening');
   t.after(async()=>{app.server.close();await once(app.server,'close');app.store.close();});
@@ -22,9 +22,13 @@ test('welcome task native offer, acceptance, dialogue, photo and reload protocol
   const post=async(path,body={},ok=true)=>{const r=await fetch(`http://127.0.0.1:${app.server.address().port}/api/game/${path}`,{method:'POST',headers:{'Content-Type':'application/json','X-Z-Memory':'1'},body:JSON.stringify({...base,details:{firstDay:ctx},...body})});const result=await r.json();if(ok)assert.equal(r.status,200,result.error);else assert.notEqual(r.status,200);return result;};
   const say=async(actor,conversation,id)=>post('sync',{eventData:{id,seq:app.engine.world(base.worldId).seq+1,day:1,period:3,kind:'utterance',speakerId:'player',recipientId:actor,conversationId:conversation,text:'今天有什么想一起做的事？',locationId:'ancient_tree_square',channel:'private_player_chat',observers:['player',actor]}});
   const commit=async(actor,conversation,id,p)=>post('sync',{eventData:{id,seq:app.engine.world(base.worldId).seq+1,day:1,period:3,kind:'utterance',speakerId:actor,recipientId:'player',conversationId:conversation,text:p.text,proposalId:p.proposalId,locationId:'ancient_tree_square',channel:'private_player_chat',observers:['player',actor]}});
-  await post('open');await post('focus',{actorId:'z'});await say('z','chat_z','p1');
+  await post('open',{syncMode:'reference-v1'});
+  await post('sync',{eventData:{id:'story_'+base.worldId+'_encounter_chat_z',seq:app.engine.world(base.worldId).seq+1,day:1,period:3,kind:'story_event',conversationId:'chat_z',text:'小海实际走近Z准备交谈',verified:true,locationId:'ancient_tree_square',observers:['player','z']}});
+  await post('focus',{actorId:'z'});
   const proposed=await post('utterance',{actorId:'z',recipientId:'player',conversationId:'chat_z',locationId:'ancient_tree_square'});
-  const definition=JSON.parse(proposed.checkpoint).tasks.definitions[0];assert(definition.dynamic);
+  const projection=JSON.parse(proposed.checkpoint);assert.equal(projection.version,3);
+  const definition=projection.tasks.definitions[0];assert(definition.dynamic);
+  assert.equal(projection.world.actors.axing.runtime_input_seq,1,'Task generation must preserve runtime reports received during its await');
   assert.equal(app.engine.tasks.state(base.worldId,definition.id).status,'available','Generation alone must not publish the task');
   await commit('z','chat_z','offer_said',proposed);
   assert.equal(app.engine.tasks.state(base.worldId,definition.id).status,'offered');
@@ -122,4 +126,14 @@ test('a second generated welcome task cannot be offered while one is accepted',t
  engine.tasks.offer('one','welcome_first','z');engine.tasks.respond('one','welcome_first',true);
  assert(!engine.tasks.options('one','liting','').some(a=>a.parameters.task_id==='welcome_second'));
  assert.throws(()=>engine.tasks.offer('one','welcome_second','liting'),/一项/);
+});
+
+
+test('first day director owns travel, daily conversations retain native escort capability', t=>{
+ const {engine}=make(t),w=engine.world('one'),origin=w.actors.z.scene;
+ w.firstDay=context('Harbor');engine.save(w);
+ const j={mode:'player',event:'test',environment:{companion_routes:[[origin,'ancient_tree_square']],reachable_locations:['ancient_tree_square']}};
+ assert(!engine.available(w,'z',j).some(a=>['escort_player','move'].includes(a.type)));
+ w.firstDay=context('Complete');engine.save(w);
+ assert(engine.available(w,'z',j).some(a=>a.type==='escort_player'));
 });

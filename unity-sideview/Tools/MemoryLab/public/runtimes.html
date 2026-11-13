@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NPC 独立运行记录</title>
+<style>
+  :root{color-scheme:light;font-family:system-ui,sans-serif;background:#f4f5f7;color:#202633}
+  body{max-width:1120px;margin:40px auto;padding:0 24px}h1{font-size:26px;margin-bottom:8px}
+  p{color:#596273;line-height:1.7}nav{display:flex;gap:14px;align-items:end;flex-wrap:wrap;margin:24px 0}
+  label{display:grid;gap:7px;font-size:14px}select,button{font:inherit;padding:10px 12px;border:1px solid #cbd1da;border-radius:8px;background:white}
+  button{cursor:pointer}button:disabled{opacity:.5;cursor:default}a{color:#3453a2}
+  #status{min-height:24px}section,details{background:white;border:1px solid #dce1e8;border-radius:10px;padding:16px;margin:12px 0}
+  h2{font-size:18px;margin:0 0 12px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;line-height:1.65;margin-bottom:0}
+  summary{cursor:pointer;display:flex;gap:16px;align-items:baseline;flex-wrap:wrap}small{color:#677184}#more{margin-top:16px}
+</style>
+<h1>NPC 独立运行记录</h1>
+<p>按角色查看当前位置、待处理事项，以及事件、决策和行动的实际运行过程。每个角色拥有自己的记录序号，记录随世界存档恢复。</p>
+<nav>
+  <label>世界<select id="world" aria-label="选择世界"></select></label>
+  <label>角色<select id="actor" aria-label="选择角色"></select></label>
+  <button id="refresh">刷新记录</button>
+  <a href="/memories">个人记忆</a>
+</nav>
+<p id="status" role="status"></p>
+<section><h2>当前运行状态</h2><pre id="state">请选择世界和角色。</pre><details><summary>详细角色状态</summary><pre id="full-state"></pre></details></section>
+<section><h2>待处理事项</h2><pre id="pending">—</pre></section>
+<h2>运行时间线</h2><div id="entries"></div>
+<button id="more" hidden>加载后续记录</button>
+<script>
+const token='__TOKEN__';
+const world=document.querySelector('#world'),actor=document.querySelector('#actor');
+const status=document.querySelector('#status'),rows=document.querySelector('#entries'),more=document.querySelector('#more');
+let cursor=0,requestVersion=0;
+const labels={'runtime.opened':'运行开始／恢复','state.changed':'当前状态变化','decision.requested':'开始决策','decision.completed':'决策完成','proposal.pending':'生成提案','proposal.committed':'提案已实际提交','job.pending':'任务待处理','job.running':'任务处理中','job.failed':'任务失败','job.cancelled':'任务取消','job.succeeded':'任务完成','action.pending':'行动待执行','action.succeeded':'行动成功','action.failed':'行动失败','event.received':'收到事件','environment.spawned':'确认初始位置','environment.conversation_opened':'打开对话','environment.conversation_closed':'关闭对话','environment.movement_started':'开始移动','environment.movement_arrived':'实际到达','environment.movement_blocked':'移动受阻','environment.scene_unloaded':'离开当前场景'};
+async function get(params={}){
+  const response=await fetch('/api/debug/runtimes?'+new URLSearchParams(params),{headers:{'X-Test-Token':token}});
+  const result=await response.json();if(!response.ok)throw new Error(result.error||'读取失败');return result;
+}
+function options(element,items,value,label){element.replaceChildren();for(const item of items){const option=document.createElement('option');option.value=item[value];option.textContent=item[label];element.append(option);}}
+function entry(record){
+  const details=document.createElement('details'),summary=document.createElement('summary'),title=document.createElement('strong'),time=document.createElement('small'),data=document.createElement('pre');
+  title.textContent='#'+record.runtime_seq+' · '+(labels[record.type]||record.type);
+  time.textContent='第 '+record.day+' 天 · 时段 '+record.period+' · '+new Date(record.at).toLocaleTimeString();
+  data.textContent=JSON.stringify({sourceId:record.source_id,...record.details},null,2);
+  summary.append(title,time);details.append(summary,data);return details;
+}
+async function load(append=false){
+  const version=++requestVersion;
+  if(!world.value||!actor.value){status.textContent='暂无世界记录。进入八人记忆试玩后，在此刷新。';return;}
+  status.textContent='正在读取…';more.disabled=true;
+  try{
+    const result=await get({worldId:world.value,actorId:actor.value,after:append?cursor:0,limit:80});
+    if(version!==requestVersion)return;
+    if(!append)rows.replaceChildren();
+    const current=result.current,environment=current.environment;
+    document.querySelector('#state').textContent=JSON.stringify({actorId:result.actorId,epoch:result.epoch,location:environment?.locationName||environment?.locationId||current.scene,scene:environment?.sceneId||null,position:environment?{x:environment.x,y:environment.y}:null,movement:environment?.movementState||'尚未上报',conversation:environment?.conversationId||null,pendingAction:current.pending_action,acknowledgedInput:current.runtime_input_seq||0},null,2);
+    document.querySelector('#full-state').textContent=JSON.stringify({playerConversationActive:result.player_conversation_active,...current},null,2);
+    document.querySelector('#pending').textContent=JSON.stringify({jobs:result.jobs,actions:result.actions},null,2);
+    for(const record of result.entries)rows.append(entry(record));
+    cursor=result.next_cursor;more.hidden=!result.has_more;
+    status.textContent=rows.childElementCount?'已显示 '+rows.childElementCount+' 条本人运行记录。':'该角色还没有运行记录。';
+  }catch(error){if(version===requestVersion)status.textContent=error.message;}
+  finally{if(version===requestVersion)more.disabled=false;}
+}
+async function refresh(){
+  const oldWorld=world.value,oldActor=actor.value;
+  try{const result=await get();options(world,result.worlds,'worldId','worldId');options(actor,result.actors,'id','name');
+    if(result.worlds.some(w=>w.worldId===oldWorld))world.value=oldWorld;if(result.actors.some(a=>a.id===oldActor))actor.value=oldActor;
+    await load();
+  }catch(error){status.textContent=error.message;}
+}
+world.addEventListener('change',()=>load());actor.addEventListener('change',()=>load());
+document.querySelector('#refresh').addEventListener('click',refresh);more.addEventListener('click',()=>load(true));refresh();
+</script>
+</html>

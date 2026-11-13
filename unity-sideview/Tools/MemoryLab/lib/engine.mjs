@@ -1,6 +1,10 @@
 import { memoryProjection, privateOffer, narrativeChange, rememberNarration } from "./live-memory.mjs";
 import { speechDelivery } from "./speech-delivery.mjs";
 import { uid } from "./store.mjs";
+import { createHash } from "node:crypto";
+import { checkpointValidator } from "./checkpoint.mjs";
+import { deflateRawSync, inflateRawSync } from 'node:zlib';
+import { NpcRunLedger } from "./npc-run-ledger.mjs";
 import { clone } from "./catalog.mjs";
 import { Policy, TurnError, canonical } from "./policy.mjs";
 import { TaskEngine } from "./tasks.mjs";
@@ -18,6 +22,7 @@ export class Engine {
     { decide, graph, perceive, hear, rootBudget = 6 } = {},
   ) {
     this.store = store;
+    this.runs = new NpcRunLedger(store);
     this.catalog = catalog;
     this.provider = provider;
     this.graph = graph || catalog.graph;
@@ -41,7 +46,72 @@ export class Engine {
     return w;
   }
   save(w) {
-    return this.store.saveExperiment(w);
+    return this.store.transaction(() => {
+      const previous = this.store.experiment(w.id);
+      this.store.saveExperiment(w);
+      this.runs.state(w, previous);
+      return w;
+    });
+  }
+  record(kind, record) {
+    return this.store.transaction(() => {
+      const previous = this.store.record(record.id);
+      this.store.put(kind, record);
+      const w = this.store.experiment(record.experimentId);
+      if (w?.actors) this.runs.source(w, kind, record, previous);
+      return record;
+    });
+  }
+  inspectRuntime(world, actor, options = {}) {
+    const w = this.world(world), a = this.actor(w, actor);
+    let history;
+    try { history = this.runs.inspect(w, actor, options); }
+    catch (error) { throw new TurnError(error.message); }
+    return {
+      actorId: actor, epoch: w.epoch, runId: w.runId,
+      current: clone(a), player_conversation_active: w.focus?.actor === actor,
+      jobs: this.records(w, "job").filter(j => j.actor === actor && ["pending", "running", "paused", "proposed"].includes(j.status)),
+      actions: this.records(w, "action").filter(j => j.actor === actor && j.status === "pending"),
+      ...history,
+    };
+  }
+  updateEnvironment(world, actor, input, meta = {}) {
+    const w = this.world(world), a = this.actor(w, actor);
+    if (!input || !/^[A-Za-z][A-Za-z0-9_]{0,63}$/.test(input.sceneId || '') ||
+        !(Object.hasOwn(this.catalog.map.places, input.locationId) || (input.locationId === 'scene:' + input.sceneId && typeof input.locationName === 'string' && input.locationName.length > 0)) ||
+        !(input.locationName == null || (typeof input.locationName === 'string' && input.locationName.length <= 100)) ||
+        !Number.isFinite(input.x) || !Number.isFinite(input.y) ||
+        !["idle", "moving", "held", "arrived", "waiting", "interrupted", "blocked", "unavailable"].includes(input.movementState) ||
+        ![input.actionId, input.targetLocationId, input.conversationId, input.reason].every(v => v == null || (typeof v === "string" && v.length <= 200)))
+      throw new TurnError("NPC运行环境无效");
+    const environment = Object.fromEntries(["sceneId", "locationId", "locationName", "x", "y", "movementState", "actionId", "targetLocationId", "conversationId", "reason"].map(k => [k, input[k] ?? null]));
+    const digest = encode({ actor, environment, hostSeq: meta.hostSeq, day: meta.day, period: meta.period });
+    if (meta.hostSeq !== undefined) {
+      if (!meta.id || !Number.isInteger(meta.hostSeq) || meta.hostSeq < 1) throw new TurnError("NPC运行记录缺少序号");
+      const old = this.store.record(meta.id);
+      if (old) {
+        if (old.experimentId !== w.id || old.epoch !== w.epoch || old.actor !== actor || old.digest !== digest)
+          throw new TurnError("NPC运行记录重复内容冲突");
+        return a.runtime_input_seq || 0;
+      }
+      if (meta.hostSeq !== (a.runtime_input_seq || 0) + 1) throw new TurnError("NPC运行记录序号不连续");
+    }
+    const relevant = e => e && [e.sceneId, e.locationId, e.movementState, e.actionId, e.targetLocationId, e.conversationId];
+    if (encode(relevant(a.environment)) !== encode(relevant(environment))) a.environment_revision = (a.environment_revision || 0) + 1;
+    a.environment = environment;
+    // A committed route advances only through its executor receipts. Physical
+    // whereabouts are still immediately available in the model environment.
+    if (!a.pending_action && environment.movementState !== "unavailable") a.scene = environment.locationId;
+    if (meta.hostSeq !== undefined) a.runtime_input_seq = meta.hostSeq;
+    this.store.transaction(() => {
+      this.save(w);
+      if (meta.id) this.store.put("npc_environment", {
+        id: meta.id, experimentId: w.id, epoch: w.epoch, actor,
+        hour: w.hour, host_seq: meta.hostSeq, digest, environment,
+      });
+      this.runs.append(w, actor, "environment." + (environment.reason || "snapshot"), meta.id, { environment, host_seq: meta.hostSeq });
+    });
+    return a.runtime_input_seq || 0;
   }
   actor(world, id) {
     const w = typeof world === "string" ? this.world(world) : world;
@@ -58,7 +128,70 @@ export class Engine {
       e = this.store.record(id);
     return e?.experimentId === w.id && e.epoch === w.epoch ? e : null;
   }
-  initialActors(initial = {}) {
+  executionEvidence(world, actor) {
+    // A spoken claim, a successful wait or a delivered message is not evidence
+    // that an object was handed over or a physical action was completed.
+    return this.records(world, "action")
+      .filter(r => r.actor === actor && ["succeeded", "failed"].includes(r.status) &&
+        (r.receiptHour ?? r.hour) <= world.hour && r.receiptPayload)
+      .slice(-6)
+      .flatMap(r => {
+        let receipt;
+        try { receipt = JSON.parse(r.receiptPayload); } catch { return []; }
+        if (!receipt || receipt.success !== (r.status === "succeeded") ||
+          !receipt.result || typeof receipt.result !== "object" || Array.isArray(receipt.result)) return [];
+        return [{ action_id: r.id, type: r.type, target: r.target, status: r.status,
+          receipt_id: r.receiptId, result: clone(receipt.result) }];
+      });
+  }
+  supersedePlayerReply(world, actor, conversation, source) {
+    const w = this.world(world);
+    for (const prior of this.records(w, "proposal").filter(p => p.actor === actor && p.conversation === conversation && p.status === "pending" && p.context.interaction.mode === "player" && p.context.interaction.source_event_id !== source.id)) {
+      const oldSource = this.event(world, prior.context.interaction.source_event_id);
+      if (!oldSource || oldSource.seq >= source.seq) throw new TurnError("输入已经被较新的对话替代");
+      prior.status = "cancelled"; prior.cancelReason = "superseded_by_player_input"; this.record("proposal", prior);
+      const oldJob = this.store.record(prior.job);
+      if (oldJob) { oldJob.status = "cancelled"; this.record("job", oldJob); }
+    }
+  }
+  utteranceSource(world, actor, recipient, conversationId, sourceEventId) {
+    const w = this.world(world);
+    if (!conversationId) throw new TurnError("缺少当前会话标识");
+    const eligible = e => e && e.conversationId === conversationId &&
+      e.visible?.includes(actor) && (recipient === "player"
+        ? e.recipient === actor && (e.speaker === "player" || e.speaker === "engine" && e.subject === "player_encounter" && w.focus?.actor === actor)
+        : e.visible.includes(recipient) && (e.speaker === recipient || e.speaker === "engine"));
+    // Old clients can resolve only inside this exact conversation. Never use
+    // unrelated recent experience as the trigger for a new conversation.
+    const source = sourceEventId ? this.event(world, sourceEventId)
+      : this.records(w, "event").filter(eligible).at(-1);
+    if (!eligible(source)) throw new TurnError("输入事件不属于当前会话或角色未实际感知");
+    return source;
+  }
+  route(origin, target, locations) {
+    const allowed = new Set(locations), queue = [[origin]], seen = new Set([origin]);
+    if (!allowed.has(origin) || !allowed.has(target)) return null;
+    for (let i = 0; i < queue.length; i++) {
+      const path = queue[i], node = path.at(-1);
+      if (node === target) return path;
+      for (const next of this.graph[node] || [])
+        if (allowed.has(next) && !seen.has(next)) {
+          seen.add(next); queue.push([...path, next]);
+        }
+    }
+    return null;
+  }
+  acknowledgeReceipt(world, event, hour) {
+    const w = this.world(world);
+    if (event.seq !== w.seq + 1) throw new TurnError("事件序号不连续");
+    // Protocol acknowledgement only: no repeated speech, perception or scoring.
+    const record = { id: event.id, experimentId: w.id, epoch: w.epoch, hour, seq: event.seq,
+      type: "receipt_replay", text: "已确认重复回执，未重复执行。",
+      details: { kind: event.kind, proposalId: event.proposalId || null, actionId: event.actionId || null },
+      at: new Date().toISOString() };
+    this.record("event", record); w.seq = event.seq; this.save(w); return record;
+  }
+  initialActors(initial = {}, seed = null) {
     const actors = {};
     for (const [actor, e] of this.catalog.actors) {
       const names = [...metrics, ...(actor === "z" ? [] : ["persuasion"])],
@@ -68,6 +201,7 @@ export class Engine {
             this.catalog.registry.initial_metric_policy[k].default,
           ]),
         );
+      if(seed)for(const k of names){const p=this.catalog.registry.initial_metric_policy[k];const n=createHash("sha256").update(seed+":"+actor+":"+k).digest().readUInt32BE(0);info[k]=actor==="zhou_bobo"&&k==="persuasion"?0:p.min+n%(p.max-p.min+1);}
       info.emotion = "relaxed";
       info.changes = {};
       info.memory_updates = [];
@@ -205,7 +339,7 @@ export class Engine {
     }
     if (e.seq !== w.seq + 1) throw new TurnError("事件序号不连续");
     this.store.transaction(() => {
-      this.store.put("event", e);
+      this.record("event", e);
       w.seq = e.seq;
       for (const actor of e.visible.filter((a) => a !== "player")) {
         w.actors[actor].version++;
@@ -254,7 +388,7 @@ export class Engine {
       status: "pending",
       environment,
     };
-    this.store.put("job", j);
+    this.record("job", j);
     return j;
   }
   visible(w, a, b) {
@@ -288,14 +422,14 @@ export class Engine {
           ["pending", "running", "proposed"].includes(j.status),
       )) {
         j.status = "cancelled";
-        this.store.put("job", j);
+        this.record("job", j);
       }
       for (const j of this.records(w, "job").filter(
         (j) => j.actor === old && j.status === "paused",
       )) {
         j.status = "pending";
         j.due = w.tick;
-        this.store.put("job", j);
+        this.record("job", j);
       }
       for (const p of this.records(w, "proposal").filter(
         (p) =>
@@ -304,7 +438,7 @@ export class Engine {
           p.context.interaction.mode === "player",
       )) {
         p.status = "cancelled";
-        this.store.put("proposal", p);
+        this.record("proposal", p);
       }
     }
     w.active = true;
@@ -334,7 +468,7 @@ export class Engine {
             backgroundOnly && kind === "job" && r.status === "pending"
               ? "paused"
               : "cancelled";
-          this.store.put(kind, r);
+          this.record(kind, r);
         }
       }
   }
@@ -352,6 +486,7 @@ export class Engine {
       location: w.actors[actor].scene,
       ...eventMeta,
     });
+    this.supersedePlayerReply(world, actor, conversation, e);
     return this.job(world, actor, e.id, {
       mode: "player",
       conversation,
@@ -372,6 +507,7 @@ export class Engine {
       id,
       seq,
       hour,
+      conversationId = "",
     } = {},
   ) {
     const e = this.addEvent(world, {
@@ -386,6 +522,7 @@ export class Engine {
       gist,
       seq,
       hour,
+      conversationId,
     });
     if (wake)
       for (const actor of visible.filter((a) => a !== "player"))
@@ -528,11 +665,12 @@ export class Engine {
     const present =
       env.present_characters ||
       Object.keys(w.actors).filter((id) => this.visible(w, actor, id));
-    if (j.mode !== "player" && w.focus?.actor !== actor)
+    if (j.mode !== "player" && w.focus?.actor !== actor && !a.pending_action)
       for (const peer of present) {
         if (
           peer === actor ||
           peer === "player" ||
+          w.actors[peer]?.pending_action ||
           this.held(w, peer, j.conversation)
         )
           continue;
@@ -552,6 +690,12 @@ export class Engine {
         });
       }
     if (!a.pending_action) {
+      if (Array.isArray(env.walkable_locations)) {
+        for (const target of [...new Set(env.walkable_locations)]) {
+          const route = this.route(a.scene, target, env.walkable_locations);
+          if (route && target !== a.scene) actions.push({id:"move_"+target,type:"move",target,parameters:{origin:a.scene,route}});
+        }
+      } else {
       const reachable = env.reachable_locations || this.graph[a.scene] || [];
       for (const target of reachable)
         actions.push({
@@ -560,7 +704,18 @@ export class Engine {
           target,
           parameters: {},
         });
+      }
+      if(j.mode==="player")for(const route of env.companion_routes||[]) {
+        // Unity supplies executable waypoints. The story's knowledge graph is
+        // not the physical navigation graph of a loaded horizontal scene.
+        if(!Array.isArray(route)||route.length<2||route.length>32||route[0]!==a.scene||new Set(route).size!==route.length||route.some(node=>!Object.hasOwn(this.catalog.map.places,node)))
+          throw new TurnError("同行路线不属于当前地图");
+        actions.push({id:"escort_"+route.at(-1),type:"escort_player",target:route.at(-1),parameters:{companion_id:"player",route:clone(route)}});
+      }
+    } else if(j.mode==="player" && this.store.record(a.pending_action)?.type==="escort_player") {
+      actions.push({id:"cancel_"+a.pending_action,type:"cancel_action",target:a.pending_action,parameters:{}});
     }
+    if(a.pending_action && this.store.record(a.pending_action)?.type==="move")actions.push({id:"cancel_move",type:"cancel_move",target:this.store.record(a.pending_action).target,parameters:{action_id:a.pending_action}});
     if (env.intent_only) {
       return [
         actions[0],
@@ -574,8 +729,12 @@ export class Engine {
           })),
       ];
     }
-    if (env.available_actions) return env.available_actions;
-    return actions;
+    const offered=env.available_actions||actions;
+    // The onboarding director owns travel until the second broadcast ends.
+    // Keep resident conversations and dynamic task offers, without competing routes.
+    if(w.firstDay&&!['Complete','DailyReady'].includes(w.firstDay.phase))
+      return offered.filter(a=>!['move','escort_player','schedule_meeting'].includes(a.type));
+    return offered;
   }
   context(job) {
     const j = typeof job === "string" ? this.store.record(job) : job,
@@ -610,6 +769,13 @@ export class Engine {
       disclose_to: event.disclose_to,
     });
     const facts = this.memory.facts(w, j.actor);
+    const mapContext=this.catalog.mapContext(a.environment?.locationId || a.scene,event.text,this.graph);
+    if(a.environment?.locationId?.startsWith('scene:'))mapContext.current_place={
+      id:a.environment.locationId,name:a.environment.locationName,description:'引擎确认的当前位置；此场景尚未绑定叙事地图导航节点。',
+    };
+    const counterpart=j.mode==="player"?"player":j.environment?.recipient_actor_id||(j.mode==="npc_message"?event.speaker:null);
+    const companionRequest=(!w.firstDay||["Complete","DailyReady"].includes(w.firstDay.phase)) && j.mode==="player" && /一起|陪|跟我|带我|同行/.test(event.text) && mapContext.asked_routes.length>0
+      ? {destination_ids:mapContext.asked_routes.map(r=>r.destination)} : null;
     const disclosure = Object.fromEntries(
       Object.keys(w.actors)
         .filter((id) => id !== j.actor)
@@ -642,18 +808,20 @@ export class Engine {
       session_id: w.worldId,
       turn_id: j.id,
       actor_id: j.actor,
+      player: {actor_id:"player",name:"玩家",is_z:false},
       interaction: {
         mode: j.mode,
         source_actor_id:
-          j.mode === "player"
+          j.mode === "livestream" ? event.speaker : j.mode === "player"
             ? "player"
             : j.mode === "npc_message"
               ? event.speaker
               : "engine",
         source_event_id: event.id,
         input: event.text,
+        counterpart: counterpart ? {actor_id:counterpart,name:counterpart==="player"?"玩家":this.catalog.identity(counterpart).name,role:counterpart==="player"?"player":"npc"} : null,
         conversation_id: j.conversation || null,
-        ...(j.mode === "npc_message"
+        ...(j.channel
           ? { channel: j.channel, conversation_id: j.conversation }
           : {}),
       },
@@ -664,12 +832,17 @@ export class Engine {
           : "按已知与本局经历回应，日期不预定知情、援助或结局",
       },
       environment: {
-        scene: a.scene,
+        scene: a.environment?.locationId || a.scene,
+        runtime: clone(a.environment || null),
+        runtime_revision: a.environment_revision || 0,
+        day:w.day,period:w.period,weather:w.weather||"未提供",simulation_tick:w.tick,
+        location_id:a.environment?.locationId||a.scene,scene_id:j.environment?.sceneId||null,
         present_characters: present,
         reachable_locations:
           j.environment?.reachable_locations || this.graph[a.scene] || [],
         player_conversation_active: w.focus?.actor === j.actor,
-        map_context: this.catalog.mapContext(a.scene, event.text, this.graph),
+        map_context: mapContext,
+        ...(companionRequest?{companion_request:companionRequest}:{}),
         ...j.environment,
       },
       character_state: {
@@ -679,8 +852,12 @@ export class Engine {
         memories,
         received_claims: memories.filter((m) => m.kind === "claim"),
         recent_conversation: this.memory.history(w, j.actor, j.conversation),
+        recent_experiences:this.memory.history(w,j.actor,"",16),
+        execution_evidence:this.executionEvidence(w,j.actor),
         applied_event_ids: clone(a.applied_event_ids),
         public_identity: this.catalog.identity(j.actor),
+        identity_boundary: "玩家player与Z（z）是两个不同的人。当前收话人以interaction.counterpart为准，旧台词误称不能改变身份。",
+        pending_action: a.pending_action ? clone(this.store.record(a.pending_action)) : null,
         peer_relations: clone(a.peer_relations),
         metric_policy: policy,
         peer_relation_policy: { max_abs_delta: 100 },
@@ -743,10 +920,11 @@ export class Engine {
       const key = world + ":" + job.actor;
       this.inflight.set(key, job.id);
       job.status = "running";
-      this.store.put("job", job);
-      const context = this.context(job),
-        w = this.world(world);
+      this.record("job", job);
       try {
+        const context = this.context(job), w = this.world(world);
+        job.context=clone(context);
+        this.runs.append(w, job.actor, "decision.requested", job.id, { context });
         const generated = await this.decide(clone(context));
         const speech = speechDelivery(generated?.delivery);
         const requestedExpression =
@@ -758,7 +936,7 @@ export class Engine {
         // Keep the shared V1.2 output contract at exactly
         // dialogue/action/info. Expression is a presentation-side adapter
         // field and is stored on the proposal separately.
-        const output =
+        let output =
           generated && typeof generated === "object"
             ? { ...generated }
             : generated;
@@ -768,7 +946,7 @@ export class Engine {
           delete output.portraitExpression;
           delete output.portrait_expression;
         }
-        this.policy.validate(context, output);
+        output = this.policy.validate(context, output);
         const expression = portraitExpression(
           job.actor,
           requestedExpression,
@@ -780,6 +958,7 @@ export class Engine {
           current.epoch !== w.epoch ||
           current.actors[job.actor].version !==
             context.character_state.version ||
+          (current.actors[job.actor].environment_revision || 0) !== (context.environment.runtime_revision || 0) ||
           this.store.record(job.id).status === "cancelled"
         ) {
           job.status = "cancelled";
@@ -804,8 +983,9 @@ export class Engine {
             root: job.root,
             hop: job.hop,
           };
-          this.store.put("proposal", proposal);
+          this.record("proposal", proposal);
           job.status = "proposed";
+          job.proposal_id=proposal.id;
           results.push({
             job: job.id,
             actor: job.actor,
@@ -818,6 +998,7 @@ export class Engine {
       } catch (e) {
         job.status = "failed";
         job.error = e instanceof TurnError ? e.message : "角色生成失败";
+        if(e.rejectedOutput)job.rejected_output=clone(e.rejectedOutput);
         results.push({
           job: job.id,
           actor: job.actor,
@@ -826,7 +1007,7 @@ export class Engine {
           validation_error: job.error,
         });
       } finally {
-        this.store.put("job", job);
+        this.record("job", job);
         this.inflight.delete(key);
       }
     }
@@ -853,6 +1034,8 @@ export class Engine {
     const w = this.world(world),
       p = this.store.record(proposalId);
     if (!p || p.world !== world) throw new TurnError("未知提案");
+    if(p.epoch!==w.epoch||(p.status!=="committed"&&p.runId!==w.runId&&!replayDelivered))throw new TurnError("提案不属于当前运行");
+    if(conversationId&&conversationId!==p.conversation)throw new TurnError("呈现会话与提案不一致");
     if (p.status === "committed") return p.output;
     if (
       !(
@@ -860,7 +1043,8 @@ export class Engine {
         (replayDelivered && p.status === "restored_pending")
       ) ||
       p.epoch !== w.epoch ||
-      w.actors[p.actor].version !== p.context.character_state.version
+      w.actors[p.actor].version !== p.context.character_state.version ||
+      (w.actors[p.actor].environment_revision || 0) !== (p.context.environment.runtime_revision || 0)
     )
       throw new TurnError("提案已取消或角色状态已变");
     const mode = p.context.interaction.mode,
@@ -870,7 +1054,7 @@ export class Engine {
       actor = this.actor(w, p.actor);
     if (
       (mode !== "player" && w.focus?.actor === p.actor) ||
-      (action.type === "communicate" && w.focus?.actor === action.target)
+      (action.type === "communicate" && (w.focus?.actor === action.target || actor.pending_action || w.actors[action.target]?.pending_action))
     )
       throw new TurnError("参与者正在和玩家交谈");
     if (
@@ -925,6 +1109,7 @@ export class Engine {
               "communication",
               "peer_relation_changes",
               "day_song_reply",
+              "travel_decision",
               "agenda_update",
               "social_decision",
               "task_participation",
@@ -975,7 +1160,7 @@ export class Engine {
         disclose_to: audience,
         location: location || actor.scene,
         conversationId: conv,
-        channel: action.parameters.channel || "private_player_chat",
+        channel: action.parameters.channel || p.context.interaction.channel || "private_player_chat",
         seq,
         hour,
         selected: p.context.character_state.memories,
@@ -983,7 +1168,7 @@ export class Engine {
     if(event && p.actor==="z" && mode==="player" && output.info.day_song_reply){
       event.daySongReply=output.info.day_song_reply;
       event.daySongSource=p.context.interaction.source_event_id;
-      this.store.put("event",event);
+      this.record("event",event);
     }
     if(event && p.actor==="z" && mode==="player" && p.context.z_story){
       const current=this.world(world);
@@ -1014,7 +1199,7 @@ export class Engine {
         c.lines >= this.rootBudget
       )
         c.status = "complete";
-      this.store.put("conversation", c);
+      this.record("conversation", c);
       if (c.status === "active" && event) {
         this.job(world, action.target, event.id, {
           mode: "npc_message",
@@ -1026,15 +1211,26 @@ export class Engine {
       }
       a.previous_result = {
         status: "succeeded",
+        action_type:"communicate",effect_scope:"message_delivery",
         action_id: p.id,
         event_id: event?.id,
         summary: "发言实际呈现并送达。",
       };
+    } else if(action.type==="cancel_move") {
+      const pending=this.store.record(action.parameters.action_id);
+      if(!pending||pending.id!==a.pending_action||pending.status!=="pending")throw new TurnError("要停止的行程已失效");
+      pending.status="cancelled";this.record("action",pending);a.pending_action=null;
+      a.previous_result={status:"cancelled",action_id:pending.id,action_type:"cancel_move",effect_scope:"action_cancelled",summary:"角色决定停止行程，未确认到达。"};
+    } else if(action.type==="cancel_action") {
+      const pending=this.store.record(action.target);
+      if(!pending||pending.actor!==p.actor||pending.status!=="pending"||a.pending_action!==pending.id)throw new TurnError("同行行动已经结束");
+      pending.status="cancelled";pending.cancelled_by_event=event?.id;this.record("action",pending);
+      a.pending_action=null;a.previous_result={status:"cancelled",action_id:pending.id,event_id:event?.id,summary:"本人已取消与玩家的同行。"};
     } else if (
       !["wait", "offer_task", "give_task_reward"].includes(action.type)
     ) {
       const id = "action_" + p.id;
-      this.store.put("action", {
+      this.record("action", {
         id,
         experimentId: latest.id,
         epoch: latest.epoch,
@@ -1044,16 +1240,19 @@ export class Engine {
         target: action.target,
         parameters: action.parameters,
         status: "pending",
+        ...(action.type==="escort_player"?{progress_index:0,actual_location:action.parameters.route[0]}:{}),
       });
       a.pending_action = id;
       a.previous_result = {
         status: "pending",
+        action_type:action.type,effect_scope:"awaiting_execution",
         action_id: id,
         summary: "等待实际动作回执。",
       };
-    } else
+    } else if(!a.pending_action)
       a.previous_result = {
         status: "succeeded",
+        action_type:action.type,effect_scope:action.type==="wait"?"no_world_change":"task_state",
         action_id: p.id,
         event_id: event?.id,
         summary:
@@ -1062,7 +1261,7 @@ export class Engine {
             : "玩家任务提案或结果实际呈现。",
       };
     if (info.social_decision)
-      this.store.put("social_decision", {
+      this.record("social_decision", {
         id: uid("social"),
         experimentId: latest.id,
         epoch: latest.epoch,
@@ -1075,11 +1274,11 @@ export class Engine {
     this.save(latest);
     p.status = "committed";
     p.eventId = event?.id;
-    this.store.put("proposal", p);
+    this.record("proposal", p);
     const completed = this.store.record(p.job);
     if (completed) {
       completed.status = "succeeded";
-      this.store.put("job", completed);
+      this.record("job", completed);
     }
     return output;
   }
@@ -1096,6 +1295,11 @@ export class Engine {
     if (!action || action.experimentId !== w.id || action.epoch !== w.epoch)
       throw new TurnError("未知动作");
     const payload = encode({ success, result });
+    if(action.status==="cancelled"&&action.type==="move")throw new TurnError("动作已取消");
+    if(action.status==="cancelled") {
+      this.observe(world,"已取消同行的迟到回执，未恢复行动。",[action.actor],{kind:"fact",wake:false,...eventMeta});
+      return;
+    }
     if (action.status !== "pending") {
       if (action.receiptPayload !== payload)
         throw new TurnError("动作回执冲突");
@@ -1104,12 +1308,14 @@ export class Engine {
     const a = w.actors[action.actor];
     if (a.pending_action !== id) throw new TurnError("动作已失效");
     if (success && action.type === "move") {
-      if (
-        result.scene !== action.target ||
-        !(this.graph[a.scene] || []).includes(action.target)
-      )
+      const route=action.parameters?.route;
+      if (result.scene !== action.target || (route ? route[0]!==action.parameters.origin || route.at(-1)!==action.target || route.slice(1).some((node,i)=>!(this.graph[route[i]]||[]).includes(node)) : !(this.graph[a.scene] || []).includes(action.target)))
         throw new TurnError("移动回执不符合实际路线");
       a.scene = action.target;
+    }
+    if(success && action.type==="escort_player") {
+      if(result.scene!==action.target||action.progress_index!==action.parameters.route.length-1)throw new TurnError("同行尚未逐段实际到达目的地");
+      a.scene=action.target;
     }
     a.pending_action = null;
     a.version++;
@@ -1117,7 +1323,8 @@ export class Engine {
     action.status = success ? "succeeded" : "failed";
     action.receiptPayload = payload;
     action.receiptId = receiptId;
-    this.store.put("action", action);
+    action.receiptHour=eventMeta.hour??w.hour;
+    this.record("action", action);
     const e = this.observe(
       world,
       result.summary || (success ? "动作已实际成功。" : "动作实际失败。"),
@@ -1127,12 +1334,34 @@ export class Engine {
     const latest = this.world(world);
     latest.actors[a.id].previous_result = {
       status: success ? "succeeded" : "failed",
+      action_type:action.type,effect_scope:"world_action",
       action_id: id,
       event_id: e.id,
       summary: e.text,
+      ...(result.reason_code?{reason_code:result.reason_code}:{}),
     };
     this.save(latest);
     this.job(world, a.id, e.id);
+  }
+  actionTransition(world,id,position,eventMeta={}) {
+    const w=this.world(world),action=this.store.record(id);
+    if(!action||action.experimentId!==w.id||action.epoch!==w.epoch||action.type!=="escort_player")throw new TurnError("未知同行行动");
+    if(action.status!=="pending"){this.observe(world,"已结束同行的迟到转场回执。",[action.actor],{kind:"fact",wake:false,...eventMeta});return;}
+    if(!Object.hasOwn(this.catalog.map.places,position.scene)||typeof position.place!=="string"||!position.place||!Number.isFinite(position.x)||typeof position.arrival_id!=="string"||!position.arrival_id)throw new TurnError("同行转场缺少实际地图位置");
+    action.physical_position=clone(position);action.actual_location=position.scene;this.record("action",action);
+    w.actors[action.actor].scene=position.scene;w.actors[action.actor].version++;this.save(w);
+    this.observe(world,"已随玩家通过出口进入"+position.place+"，仍在同行途中，不能据此宣称到达最终目的地。",[action.actor],{kind:"fact",wake:false,location:position.scene,...eventMeta});
+  }
+  actionProgress(world,id,index,scene,eventMeta={}) {
+    const w=this.world(world),action=this.store.record(id);
+    if(!action||action.experimentId!==w.id||action.epoch!==w.epoch||action.type!=="escort_player")throw new TurnError("未知同行行动");
+    if(action.status!=="pending") {
+      this.observe(world,"已结束同行的迟到位置回执。",[action.actor],{kind:"fact",wake:false,...eventMeta});return;
+    }
+    if(!Number.isInteger(index)||index!==(action.progress_index||0)+1||action.parameters.route[index]!==scene)throw new TurnError("同行位置回执未匹配下一段路线");
+    action.progress_index=index;action.actual_location=scene;this.record("action",action);
+    w.actors[action.actor].scene=scene;w.actors[action.actor].version++;this.save(w);
+    this.observe(world,"同行途中已实际到达"+this.catalog.place(scene).name+"，最终目的地尚未结算。",[action.actor],{kind:"fact",wake:false,location:scene,...eventMeta});
   }
   taskResponse(
     world,
@@ -1241,7 +1470,7 @@ export class Engine {
     // A substitute collaborator, a failed attempt or an invitation is not a joint outing.
     if (success && task==="map_blank" && ((step==="visit" && who==="player") || (step==="explain" && who==="z"))) {
       event.publicActivity=task+"."+step;
-      this.store.put("event",event);
+      this.record("event",event);
     }
   }
   snapshot(world) {
@@ -1262,7 +1491,7 @@ export class Engine {
         Object.keys(w.actors).map((id) => [
           id,
           this.records(w, "event")
-            .filter((e) => e.visible.includes(id))
+            .filter((e) => e.visible?.includes(id))
             .slice(-80)
             .map((e) => ({
               id: e.id,
@@ -1305,6 +1534,7 @@ export class Engine {
       "social_decision",
       "memory_job",
       "reflection_job",
+      "trace",
     ];
     return {
       version: 2,
@@ -1313,10 +1543,16 @@ export class Engine {
       broadcast: memoryProjection(w,this.records(w,"event")),
       world: clone(w),
       records: Object.fromEntries(kinds.map((k) => [k, this.records(w, k)])),
+      npcRuntimeArchive: {
+        encoding: 'deflate-raw-base64',
+        data: deflateRawSync(Buffer.from(JSON.stringify({
+          npc_run: this.records(w, 'npc_run'), npc_environment: this.records(w, 'npc_environment'),
+        }))).toString('base64'),
+      },
       tasks: this.tasks.snapshot(world),
     };
   }
-  open(world, runId, checkpoint) {
+  open(world, runId, checkpoint, {initialSeed=null}={}) {
     if (!runId || typeof runId !== "string")
       throw new TurnError("需要新的运行标识");
     let cp =
@@ -1330,15 +1566,28 @@ export class Engine {
         cp.contentRevision !== this.catalog.registry.pack_version)
     )
       throw new TurnError("旧身份版本需要明确迁移，不自动覆盖当前人设");
+    if (cp?.npcRuntimeArchive) {
+      if (cp.npcRuntimeArchive.encoding !== 'deflate-raw-base64' || typeof cp.npcRuntimeArchive.data !== 'string')
+        throw new TurnError('NPC运行记录存档格式无效');
+      let restored;
+      try {
+        restored = JSON.parse(inflateRawSync(Buffer.from(cp.npcRuntimeArchive.data, 'base64'), { maxOutputLength: 64 * 1024 * 1024 }).toString());
+      } catch { throw new TurnError('NPC运行记录存档无法恢复或超过大小限制'); }
+      if (Object.keys(restored).sort().join(',') !== 'npc_environment,npc_run' || !Object.values(restored).every(Array.isArray))
+        throw new TurnError('NPC运行记录存档内容无效');
+      cp = { ...cp, records: { ...cp.records, ...restored } };
+    }
+    if(cp){try{(this.validateCheckpoint ||= checkpointValidator(this.catalog,this.policy))(cp);}catch(error){throw new TurnError(error.message);}}
+    const restored=this.store.transaction(()=>{
     let w;
     try {
       w = this.world(world);
     } catch {
       w = this.create(world);
     }
-    this.cancel(world);
     const epoch = w.epoch + 1;
     if (cp) {
+      for(const r of Object.values(cp.records).flat()){const existing=this.store.record(r.id);if(existing&&existing.experimentId!==w.id)throw new TurnError("存档记录ID与其他世界冲突");}
       const saved = cp.world;
       if (
         Object.keys(saved.actors).sort().join("|") !==
@@ -1368,6 +1617,9 @@ export class Engine {
               "social_decision",
               "memory_job",
               "reflection_job",
+              "trace",
+              "npc_run",
+              "npc_environment",
             ].includes(kind)
           )
             throw new TurnError("存档记录类型无效");
@@ -1377,6 +1629,8 @@ export class Engine {
               r.status = "restored_pending";
             if (kind === "job" && ["running", "proposed"].includes(r.status))
               r.status = "cancelled";
+            if(kind==="conversation"&&["active","pending"].includes(r.status))r.status="cancelled";
+            if(kind==="job"&&r.conversation&&["pending","paused"].includes(r.status))r.status="cancelled";
             if (kind === "memory_job" && r.status === "running")
               r.status = "pending";
             this.store.put(kind, r);
@@ -1387,7 +1641,8 @@ export class Engine {
     if (!cp) {
       this.store.clearRecords(w.id);
       this.tasks.restore(world, {});
-      w.actors = this.initialActors(w.initialMetrics || {});
+      if(initialSeed)w.initialSeed=initialSeed;
+      w.actors = this.initialActors(w.initialMetrics || {},w.initialSeed||null);
       delete w.zNarrated;
       for (const key of ["firstDay","storyPlans","welcomeTriggers","welcomeAcceptance"]) delete w[key];
       w.seq=0;w.hour=0;w.day=1;w.period=0;w.tick=0;w.reflected={};w.memoryRevision=0;
@@ -1397,6 +1652,7 @@ export class Engine {
     w.version++;
     w.active = true;
     w.focus = null;
+    w.liveRoom = null;
     w.encounters = {};
     w.wakes = {};
     w.responseRevision = 0;
@@ -1406,9 +1662,15 @@ export class Engine {
     }
     this.save(w);
     return this.checkpoint(world);
+    });
+    this.runtime.cancel(world);
+    return restored;
   }
   async plan(world, actor, candidates, environment = {}) {
     const w = this.world(world);
+    if(w.actors[actor]?.pending_action){if(this.store.record(w.actors[actor].pending_action)?.type==="escort_player")throw new TurnError("角色正在执行已承诺行动");return {actorId:actor,targetId:"",reason:"先完成已决定的行程",topic:""};}
+    candidates=candidates.filter(id=>!w.actors[id]?.pending_action);
+    if(environment.locationId){const a=this.actor(w,actor);a.scene=environment.locationId;this.save(w);}
     if (this.held(w, actor)) throw new TurnError("角色已在会话中");
     if (candidates.some((id) => !this.catalog.actors.has(id) || id === actor))
       throw new TurnError("交谈候选无效");
@@ -1425,7 +1687,7 @@ export class Engine {
       visible: [actor],
       disclose_to: [actor],
     };
-    this.store.put("perception_context", e);
+    this.record("perception_context", e);
     const j = this.job(world, actor, e.id, {
       conversation: environment.conversation_id || "",
       environment: {
@@ -1436,19 +1698,22 @@ export class Engine {
       },
     });
     j.status = "running";
-    this.store.put("job", j);
+    this.record("job", j);
     const c = this.context(j);
+    this.runs.append(w, actor, "decision.requested", j.id, { context: c });
     try {
       const o = await this.decide(c);
       this.policy.validate(c, o);
       if (
         this.world(world).runId !== w.runId ||
         this.world(world).actors[actor].version !== c.character_state.version ||
+        (this.world(world).actors[actor].environment_revision || 0) !== (c.environment.runtime_revision || 0) ||
         this.store.record(j.id).status === "cancelled"
       )
         throw new TurnError("意向请求已取消或过期");
       if (o.dialogue) throw new TurnError("意向阶段尚未交谈，不能发台词");
       j.status = "complete";
+      this.runs.append(this.world(world), actor, "decision.completed", j.id, { output: o });
       return {
         actorId: actor,
         targetId: o.action.type === "schedule_meeting" ? o.action.target : "",
@@ -1460,7 +1725,7 @@ export class Engine {
       j.error = error instanceof TurnError ? error.message : "意向生成失败";
       throw error;
     } finally {
-      this.store.put("job", j);
+      this.record("job", j);
     }
   }
 }

@@ -24,6 +24,16 @@ test('preparing talent snapshot is accepted by the actual agent input contract',
 
 test('host completion requires actual execution; interruption never publishes completed speech',async t=>{const s=await fixture(t);s.engine._say('你好，今天怎么样？','warm','none',{source:'deepseek'});await frame();const c=latest(s,'host.present');assert(c);assert(!s.engine.facts.some(e=>e.type==='speech.completed'));assert.throws(()=>receipt(s,c,'completed',{positionMs:2000}),/invalid_transition/);receipt(s,c,'started',{durationMs:2000,positionMs:0});receipt(s,c,'progress',{positionMs:500,text:'你好'});assert(s.engine.facts.some(e=>e.type==='speech.progress'&&e.text==='你好'));receipt(s,c,'interrupted',{reason:'viewer_stop'});assert(!s.engine.facts.some(e=>e.type==='speech.completed'));assert.equal(s.engine._active,null);});
 
+test('repeating disabled audio capabilities does not interrupt a text-only host line',async t=>{
+ const s=await fixture(t);assert.equal(s.capabilities.audioEnabled,false);
+ s.engine._say('晚上好，欢迎来到小屋。','warm','none',{source:'deepseek'});await frame();
+ const c=latest(s,'host.present');receipt(s,c,'started',{durationMs:2000,positionMs:0});
+ s.input(envelope(s,{type:'client.capabilities_changed',payload:{audioEnabled:false}}));
+ assert.equal(c.status,'started');assert(s.engine._active);
+ receipt(s,c,'progress',{positionMs:2000,text:c.payload.text});receipt(s,c,'completed',{positionMs:2000});
+ assert(s.engine.facts.some(e=>e.type==='speech.completed'&&e.text===c.payload.text));
+});
+
 test('server restart changes epoch and invalidates old execution receipts',async t=>{const s=await fixture(t);s.engine._say('这句还没说完','warm','none',{source:'deepseek'});await frame();const c=latest(s,'host.present');const saved=s.persistData();const restored=new LiveSession({id:s.id,root:s.root,providers:s.providers,artifacts:s.artifacts,songRoot:s.songRoot,saved});t.after(()=>restored.close());assert.equal(restored.epoch,s.epoch+1);assert(!restored.engine.facts.some(e=>e.type==='speech.completed'));assert.equal(restored.commands.get(c.commandId).status,'interrupted');assert.throws(()=>restored.receipt(envelope(s,{executorLeaseId:s.lease})),/stale_epoch/);});
 
 test('song must really finish and be released before another talent can start',async t=>{
@@ -241,4 +251,20 @@ test('onboarding has no timed program and a generated farewell is retained as su
   s.sessionControl.tick();assert(s.sessionControl.normal);assert(!s.sessionControl.snapshot().timing);
  }
  s.sessionControl.data.phase='farewell';s.sessionControl.data.farewellText='这句来自本场模型';s.sessionControl.audioDisabled();await frame();assert.equal(latest(s,'host.present').payload.text,'这句来自本场模型');
+});
+
+
+test('virtual viewers wait for reviewed host playback and drop interrupted reactions',async t=>{
+ const s=await fixture(t);const {LiveScene}=await import('../server/live-scene.mjs');
+ s.scene=new LiveScene(s,{mode:'arrival',playerName:'小海',worldId:'a'.repeat(32),day:1});s.engine.liveScene=s.scene;
+ const reaction={virtualAudience:[{name:'海风',text:'七天听起来真不错'}]};
+ s.engine._onHostSpeechCommitted(1,reaction);
+ assert.equal(latest(s,'virtual_audience.present'),undefined);
+ s.engine._public('speech.interrupted','未播完',{speechId:'1'});
+ assert.equal(latest(s,'virtual_audience.present'),undefined);
+ s.engine._onHostSpeechCommitted(2,reaction);
+ s.engine._public('speech.completed','来岛上住七天',{speechId:'2',speakerId:'Z'});
+ assert.equal(latest(s,'virtual_audience.present').payload.text,'七天听起来真不错');
+ const count=s.commands.size;s.engine._public('speech.completed','重复回执',{speechId:'2',speakerId:'Z'});
+ assert.equal(s.commands.size,count);
 });

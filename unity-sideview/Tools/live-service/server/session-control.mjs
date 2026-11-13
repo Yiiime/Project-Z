@@ -1,3 +1,4 @@
+import {utteranceMetadata} from './shared/utterance.js';
 import {randomUUID} from 'node:crypto';
 
 const FALLBACK='那今天就先聊到这里。谢谢大家陪我，大家晚安。';
@@ -77,9 +78,9 @@ export class SessionControl {
       const e=this.s.engine;
       if(this.data.phase!=='live'||e._state.media||e.inbox.some(m=>m.mine&&!result.handledIds.includes(m.id)))return true;
       // New inputs invalidate the engine epoch before this commit hook.
-      this.begin('host',result.speech);this.pendingHandled=[...result.handledIds];return true;
+      this.begin('host',result.speech,result);this.pendingHandled=[...result.handledIds];return true;
     }
-    if(d.intent==='finish_extension'&&this.data.extensionActive){this.begin('host',result.speech);return true;}
+    if(d.intent==='finish_extension'&&this.data.extensionActive){this.begin('host',result.speech,result);return true;}
     return true;
   }
   freeze(){
@@ -106,11 +107,11 @@ export class SessionControl {
     if(d.phase==='farewell'){d.closeReason='player';d.deadlineAt=Math.min(d.deadlineAt,deadline);this.changed();return;}
     this.begin('player');
   }
-  begin(reason,announcement=''){
+  begin(reason,announcement='',metadata={}){
     const d=this.data,oldDeadline=d.deadlineAt;
     d.phase='closing';d.closeReason=reason;d.version++;d.extensionActive=false;
     d.deadlineAt=Math.min(this.onboarding?Infinity:d.hardAt,oldDeadline||Infinity,this.now()+(reason==='player'?this.limits.playerClosingMs:this.limits.hostClosingMs));
-    this.pendingHandled=[];d.readyAt=null;this.announcement=reason==='host'?announcement:'';this.announcementId=null;this.farewellId=null;
+    this.pendingHandled=[];d.readyAt=null;this.announcement=reason==='host'?announcement:'';this.announcementId=null;this.farewellId=null;this.announcementMetadata=utteranceMetadata('z',metadata,{allowLegacy:true});
     this.generating=false;for(const c of this.requests)c.abort();this.inputQueue=[];
     this.freeze();this.changed();
   }
@@ -125,23 +126,23 @@ export class SessionControl {
     this.s.engine._public('session.extended','已接受本场唯一一次挽留，追加范围：'+scope);
     this.s.engine.nextWake=this.s.engine._clock;this.changed();return true;
   }
-  say(text,kind){
+  say(text,kind,metadata={}){
     const e=this.s.engine,id=String(e._speechId+1);
     if(kind==='farewell')this.farewellId=id;else this.announcementId=id;
-    e._say(text,'warm','none',{source:'session-control'});this.changed();
+    e._say(text,'warm','none',{...utteranceMetadata('z',metadata,{allowLegacy:true}),source:'session-control'});this.changed();
   }
   async farewell(){
     if(this.generating||this.disposed||this.data.phase!=='closing'||!this.barrierReady)return;
-    this.generating=true;const version=this.data.version;let speech=this.s.scene?.context?null:FALLBACK;
+    this.generating=true;const version=this.data.version;let speech=this.s.scene?.context?null:FALLBACK,metadata={};
     try{
       const reply=await this.request('session',this.context('farewell'));
       const evidence=this.s.engine.session.evidence();
-      const review=await this.request('review',{revision:this.s.revision,publicEvents:this.s.engine.facts.slice(-12),sessionEvents:evidence,waiting_messages:[],candidate:{id:randomUUID(),role:'host',speakerId:'Z',text:reply.speech,intent:'speak',replyTo:[],evidenceIds:[]}},4000);
-      if(review.decision==='allow')speech=reply.speech;
+      const review=await this.request('review',{revision:this.s.revision,publicEvents:this.s.engine.facts.slice(-12),sessionEvents:evidence,waiting_messages:[],candidate:{id:randomUUID(),role:'host',speakerId:'Z',...utteranceMetadata('z',reply,{allowLegacy:true}),text:reply.speech,intent:'speak',replyTo:[],evidenceIds:[]}},4000);
+      if(review.decision==='allow'){speech=reply.speech;metadata=utteranceMetadata('z',reply,{allowLegacy:true});}
     }catch{/* A fixed short goodbye is valid even when the provider is unavailable. */}
     if(this.disposed||version!==this.data.version||this.data.phase!=='closing')return;
     this.generating=false;if(!speech){this.end('farewell_unavailable');return;}this.data.farewellText=speech;this.data.phase='farewell';this.data.version++;
-    this.say(speech,'farewell');
+    this.say(speech,'farewell',metadata);
   }
   audioDisabled(){
     if(this.data.phase==='farewell'&&!this.textFallback){this.textFallback=true;this.say(this.data.farewellText||FALLBACK,'farewell');}
@@ -150,7 +151,7 @@ export class SessionControl {
   receipt(c,p){
     if(c.commandId===this.barrier&&p.status==='completed'){
       this.barrierReady=true;
-      if(this.announcement){const text=this.announcement;this.announcement='';this.say(text,'announcement');}
+      if(this.announcement){const text=this.announcement;this.announcement='';this.say(text,'announcement',this.announcementMetadata);}
       else void this.farewell();
     }
     if(c.type==='host.present'){

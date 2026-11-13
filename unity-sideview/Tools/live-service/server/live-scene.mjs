@@ -10,7 +10,7 @@ export function validateLiveScene(input) {
 export function scenePrompt(scene) {
   if(!scene)return '';
   const common='\n当前游戏场景由宿主提供，优先于历史开场示例。人物台词全部由你结合人设自然表达，没有固定台词或节目单。arrival与first_evening不使用日常直播的7/8/10分钟节拍，忽略通用时长提示；按照现场进度自主推进。玩家名字是scene.playerName。只引用实际公开事实，不把计划或待执行工具说成已经完成。';
-  if(scene.mode==='arrival')return common+'\n这是第1000场直播，有一个来月亮岛一起生活旅游7天的名额。你自主介绍、接弹幕、选择开奖和邀请时机，播报与动效约30秒为软目标，玩家等待不算超时。'+
+  if(scene.mode==='arrival')return common+'\n这是第1000场直播，有一个来月亮岛一起生活旅游7天的名额。你自主介绍、接弹幕、选择开奖和邀请时机，播报与动效约30秒为软目标，玩家等待不算超时。每轮speech最多60字，开场只用一两句介绍活动；不铺陈世界观，不追加举手、扣字或观看岛屿介绍等未提供的参与门槛。介绍完名额后即可自主选择开奖，不反复预告。'+
     '这是登岛前直播，岛民不在场，只有虚拟观众。可以输出可选virtualAudience=[{name,text}]，最多两条，用户名不能是任何岛民，每条不超过36字；只能回应已经公开的事。'+
     '额外工具仅限scene.tools：draw_guest args={}执行抽奖；拿到实际开奖结果后用offer_arrival args={title,description}自然邀请玩家登岛；玩家实际确认后，用depart_island args={}衔接岛上见面的告别。'+
     '调用工具时必须action=tool并携带tool={name,args}，例如{"action":"tool","tool":{"name":"draw_guest","args":{}}}，其余必填字段照常提供；action=speak或wait时不得携带tool。speech是工具执行前本轮自然说的话。继续直播时省略sessionDecision（没有keep意图）；登岛转场使用depart_island，不使用收播决定。不要提前公布未收到的结果；等玩家明确确认再告别转场。';

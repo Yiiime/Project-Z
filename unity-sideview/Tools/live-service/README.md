@@ -152,3 +152,5 @@ Z 的才艺只保留唱歌。主 Agent、连麦与模拟弹幕使用同一能力
 正式收播（玩家 P00、主 Agent 自主收播或到期兜底）达到 ended 后，主游戏自动关闭直播并进入次日上午、保存进度。一次挽留期间不跳天；重复回执和重载后的重复处理按会话 ID 去重。返回/Esc 先询问，确认后走正式收播。独立预览未绑定主游戏回调时仍显示返回按钮。
 
 验收：启动 `Z_VERIFY_DAY=1 node scripts/verify-session-ui.mjs`，在 Unity 执行 `Seabreeze.Editor.LiveDayVerification.Run`。使用独立存档、确定性本机供应商，不发送真实玩家内容。
+
+直播台词新增 `actorId / delivery / expression`：接口、角色枚举、TTS/Live2D 接线与本地验收见 [台词表达说明](../../Docs/DeliveryExpression.md)。字幕和弹幕只显示正文。

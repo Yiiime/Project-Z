@@ -71,7 +71,7 @@ export async function createLiveServer({root,providers,artifacts,songRoot,token,
    const creationKey=owner+':'+key;if(creations.has(creationKey)){const c=creations.get(creationKey);if(c.fingerprint!==fingerprint)return json(res,409,{error:'idempotency_conflict'});return json(res,201,(await c.promise).snapshot());}
    if([...sessions.values()].filter(s=>s.owner===owner&&s.phase!=='ended').length+(pendingCreations.get(owner)||0)>=(tokens?2:20))return json(res,429,{error:'session_limit'});
    pendingCreations.set(owner,(pendingCreations.get(owner)||0)+1);
-   const promise=(async()=>{try{const s=new LiveSession({root,providers:currentProviders,owner,artifacts,songRoot,memory:body.memory,story:body.story,capabilities:body.capabilities});await s.initialize();sessions.set(s.id,s);return s;}finally{pendingCreations.set(owner,pendingCreations.get(owner)-1);}})();creations.set(creationKey,{fingerprint,promise});return json(res,201,(await promise).snapshot());
+   const promise=(async()=>{try{const s=new LiveSession({root,providers:currentProviders,owner,artifacts,songRoot,memory:body.memory,characterBinding:body.characterBinding,story:body.story,capabilities:body.capabilities});await s.initialize();sessions.set(s.id,s);return s;}finally{pendingCreations.set(owner,pendingCreations.get(owner)-1);}})();creations.set(creationKey,{fingerprint,promise});return json(res,201,(await promise).snapshot());
   }
   const match=url.pathname.match(/^\/v1\/live\/sessions\/([a-f0-9-]+)(?:\/(events|inputs|receipts|control|heartbeat|artifacts)(?:\/([a-f0-9]{64}))?)?$/);if(!match)return json(res,404,{error:'not_found'});
   const s=sessions.get(match[1]);if(!s||s.owner!==owner)return json(res,404,{error:'not_found'});const route=match[2];
@@ -82,9 +82,9 @@ export async function createLiveServer({root,providers,artifacts,songRoot,token,
    res.writeHead(200,{'Content-Type':'text/event-stream','Cache-Control':'no-store',Connection:'keep-alive','X-Accel-Buffering':'no'});res.write(': connected\n\n');const send=e=>{if(!res.destroyed&&!res.write(`id: ${e.serverSeq}\nevent: live\ndata: ${JSON.stringify(e)}\n\n`)&&res.writableLength>4*1024*1024)res.destroy();};for(const e of s.events)if(e.serverSeq>after)send(e);s.on('event',send);const timer=setInterval(()=>res.write(': heartbeat\n\n'),10000);res.once('close',()=>{clearInterval(timer);s.off('event',send);});return;
   }
   if(!write)return json(res,405,{error:'method_not_allowed'});
-  const dedupe=route+':'+key,old=s.idempotency.get(dedupe);if(old){if(old.fingerprint!==fingerprint)return json(res,409,{error:'idempotency_conflict'});return json(res,old.status,old.result);}
+  const dedupe=route+':'+key,old=s.idempotency.get(dedupe);if(old){if(old.fingerprint!==fingerprint)return json(res,409,{error:'idempotency_conflict'});if(route==="control"&&body.action==="end")await s.characters?.flush();return json(res,old.status,old.result);}
   const methods={inputs:'input',receipts:'receipt',control:'control',heartbeat:'heartbeat'};if(!methods[route])return json(res,404,{error:'not_found'});
-  const result=s[methods[route]](body),status=['inputs','control'].includes(route)?202:200;s.idempotency.set(dedupe,{fingerprint,status,result});if(s.idempotency.size>2000)s.idempotency.delete(s.idempotency.keys().next().value);s.flush();return json(res,status,result);
+  const result=s[methods[route]](body),status=['inputs','control'].includes(route)?202:200;s.idempotency.set(dedupe,{fingerprint,status,result});if(s.idempotency.size>2000)s.idempotency.delete(s.idempotency.keys().next().value);s.flush();if(route==="control"&&body.action==="end")await s.characters?.flush();return json(res,status,result);
  }catch(e){const code=/^[a-z_]{1,80}$/.test(e.message)?e.message:'server_error';if(!res.headersSent)json(res,code==='server_error'?500:409,{error:code});else res.destroy();}};
  const server=tls?https.createServer(tls,handler):http.createServer(handler);
  const maintenance=setInterval(()=>{for(const s of sessions.values())s.maintenance();},1000);maintenance.unref();

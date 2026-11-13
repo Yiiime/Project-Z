@@ -1,0 +1,91 @@
+{
+  "passed": true,
+  "source": "Unity Play Mode, real NPC locomotion and HTTP action receipts; deterministic decision fixture",
+  "checks": [
+    {
+      "name": "open_player_dialogue",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "dialogue_selected_full_destination",
+      "passed": true,
+      "detail": "好，我们一起走，到了再聊。"
+    },
+    {
+      "name": "pending_durable",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "chat_holds_movement",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "world_position_changes",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "reopen_during_escort",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "midway_chat_pauses_without_failing",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "actual_harbor_scene",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "portal_is_not_final_arrival",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "at_dock",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "route_progress_saved",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "saved_companion_stays_in_harbor",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "open_player_dialogue",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "dialogue_selected_full_destination",
+      "passed": true,
+      "detail": "好，我们一起走，到了再聊。"
+    },
+    {
+      "name": "pending_durable",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "failure_has_reason",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "failure_does_not_teleport",
+      "passed": true,
+      "detail": ""
+    }
+  ]
+}

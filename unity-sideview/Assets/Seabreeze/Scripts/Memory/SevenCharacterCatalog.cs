@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 namespace Seabreeze
 {
@@ -22,7 +23,26 @@ namespace Seabreeze
         static NavRoster Navigation => navigation??(navigation=Newtonsoft.Json.JsonConvert.DeserializeObject<NavRoster>(Resources.Load<TextAsset>("Memory/locations").text));
         public static NavAnchor Anchor(string id)=>Navigation.anchors.FirstOrDefault(a=>a.id==id);
         public static string Location(PlaceId place,float x,string actor=null)=>Navigation.anchors.Where(a=>a.place==place.ToString()).OrderBy(a=>Mathf.Abs(a.x-x)).FirstOrDefault()?.id??"main_street";
+        public static string RuntimeLocation(PlaceId place,float x)=>Navigation.anchors.Where(a=>a.place==place.ToString()).OrderBy(a=>Mathf.Abs(a.x-x)).FirstOrDefault()?.id??"scene:"+place;
+        public static string[] Walkable(PlaceId place)=>Navigation.anchors.Where(a=>a.place==place.ToString()).Select(a=>a.id).ToArray();
         public static string[] Reachable(PlaceId place,string id)=>Navigation.edges.Where(e=>e[0]==id||e[1]==id).Select(e=>e[0]==id?e[1]:e[0]).Where(n=>Anchor(n)?.place==place.ToString()).ToArray();
+        // Use the authored scene/door graph, never the narrative knowledge graph.
+        public static IslandMapCatalog Map => Resources.Load<IslandMapCatalog>("Content/IslandMap");
+        public static IslandMapLink[] SceneRoute(PlaceId from,PlaceId to)
+        {
+            if(from==to)return Array.Empty<IslandMapLink>();
+            var queue=new Queue<(PlaceId place,IslandMapLink[] path)>();var seen=new HashSet<PlaceId>{from};queue.Enqueue((from,Array.Empty<IslandMapLink>()));
+            while(queue.Count>0)
+            {
+                var item=queue.Dequeue();
+                foreach(var edge in Map.routes.Where(e=>e.from==item.place))
+                {if(!seen.Add(edge.to))continue;var path=item.path.Concat(new[]{edge}).ToArray();if(edge.to==to)return path;queue.Enqueue((edge.to,path));}
+            }
+            return null;
+        }
+        public static string[][] CompanionRoutes(PlaceId place,string from)=>Navigation.anchors
+            .Where(a=>a.id!=from&&Enum.TryParse(a.place,out PlaceId target)&&SceneRoute(place,target)!=null)
+            .Select(a=>new[]{from,a.id}).ToArray();
         static SevenCharacter[] actors;
         public static SevenCharacter[] Actors
         {

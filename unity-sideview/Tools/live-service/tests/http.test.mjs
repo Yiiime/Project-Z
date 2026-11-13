@@ -53,7 +53,10 @@ test('chat-driven song uses existing media lifecycle and returns to chat without
  const f=await fixture(t),s=f.s;
  const task=f.singing.submit({text:'晚安的副歌',sourceId:'source',sessionId:s.id,owner:'local-owner'});await f.singing.tick();
  assert(await s.engine._executeSinging({name:'play_prepared_song',args:{taskId:task.id}}));
- await new Promise(r=>setTimeout(r,20));const latest=type=>[...s.commands.values()].filter(c=>c.type===type).at(-1);
+ const latest=type=>[...s.commands.values()].filter(c=>c.type===type).at(-1);
+ const deadline=Date.now()+3000;
+ while(!latest('media.prepare')&&Date.now()<deadline)await new Promise(r=>setTimeout(r,10));
+ assert(latest('media.prepare'),'prepared song must dispatch a media command');
  const receipt=(c,status,extra={})=>s.receipt(f.envelope({executorLeaseId:s.lease,commandId:c.commandId,taskId:c.taskId,resourceRevision:c.resourceRevision,payload:{artifactId:c.payload.artifactId,playbackId:c.payload.playbackId,status,...extra}}));
  receipt(latest('media.prepare'),'ready',{durationMs:32284});assert(s.talent.play());
  receipt(latest('media.play'),'started',{positionMs:0,durationMs:32284});
@@ -166,10 +169,10 @@ test('invalid host decisions stop thinking, retain the question and retry only a
  const f=await fixture(t),e=f.s.engine;e.enabled=true;e.nextWake=e._clock;
  f.s.input(f.envelope({type:'viewer.message',payload:{text:'青藏高原能听了吗'}}));
  let calls=0;e.client.generate=async()=>{calls++;throw Object.assign(Error('invalid'),{code:'agent_invalid_reply',validationReason:'unknown_handled_id'});};
- for(let i=0;i<3;i++){e.nextWake=e._clock;await e._think();assert.equal(f.s.snapshot().performance.waiting,false);assert.equal(f.s.snapshot().room.messages.find(m=>m.mine).replyStatus,'failed');}
- e.nextWake=e._clock;await e._think();assert.equal(calls,3);assert.equal(e.inbox.filter(m=>m.mine).length,1);
- f.s.control(f.envelope({action:'retry_reply'}));await e._think();assert.equal(calls,4);
- f.s.input(f.envelope({type:'viewer.message',payload:{text:'那先聊聊'}}));await e._think();assert.equal(calls,5);
+ for(let i=0;i<6;i++){e.nextWake=e._clock;await e._think();assert.equal(f.s.snapshot().performance.waiting,false);assert.equal(f.s.snapshot().room.messages.find(m=>m.mine).replyStatus,'failed');}
+ e.nextWake=e._clock;await e._think();assert.equal(calls,6);assert.equal(e.inbox.filter(m=>m.mine).length,1);
+ f.s.control(f.envelope({action:'retry_reply'}));await e._think();assert.equal(calls,7);
+ f.s.input(f.envelope({type:'viewer.message',payload:{text:'那先聊聊'}}));await e._think();assert.equal(calls,8);
  assert(!lastCommand(f.s,'host.present'));assert.equal(e._state.agent.validationReason,'unknown_handled_id');
 });
 

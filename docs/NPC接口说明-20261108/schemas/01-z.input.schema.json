@@ -1,0 +1,1073 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/input",
+  "$defs": {
+    "info": {
+      "type": "object",
+      "required": [
+        "affinity",
+        "trust",
+        "world_suspicion",
+        "emotion",
+        "changes",
+        "memory_updates",
+        "knowledge_updates"
+      ],
+      "properties": {
+        "affinity": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "trust": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "world_suspicion": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "emotion": {
+          "type": "string",
+          "enum": [
+            "relaxed",
+            "curious",
+            "interested",
+            "tired",
+            "tense",
+            "anxious",
+            "angry",
+            "scared",
+            "shocked",
+            "sad",
+            "moved",
+            "reluctant",
+            "relieved",
+            "serious",
+            "concerned",
+            "annoyed"
+          ]
+        },
+        "changes": {
+          "type": "object",
+          "properties": {
+            "affinity": {
+              "type": "object",
+              "required": [
+                "delta",
+                "reason",
+                "source_event_ids"
+              ],
+              "properties": {
+                "delta": {
+                  "type": "integer",
+                  "minimum": -100,
+                  "maximum": 100,
+                  "not": {
+                    "const": 0
+                  }
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "source_event_ids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "additionalProperties": false
+            },
+            "trust": {
+              "type": "object",
+              "required": [
+                "delta",
+                "reason",
+                "source_event_ids"
+              ],
+              "properties": {
+                "delta": {
+                  "type": "integer",
+                  "minimum": -100,
+                  "maximum": 100,
+                  "not": {
+                    "const": 0
+                  }
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "source_event_ids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "additionalProperties": false
+            },
+            "world_suspicion": {
+              "type": "object",
+              "required": [
+                "delta",
+                "reason",
+                "source_event_ids"
+              ],
+              "properties": {
+                "delta": {
+                  "type": "integer",
+                  "minimum": -100,
+                  "maximum": 100,
+                  "not": {
+                    "const": 0
+                  }
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "source_event_ids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "memory_updates": {
+          "type": "array",
+          "maxItems": 0
+        },
+        "knowledge_updates": {
+          "type": "array",
+          "maxItems": 0
+        },
+        "missing_state": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "affinity",
+              "trust",
+              "world_suspicion"
+            ]
+          }
+        },
+        "decision": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "communication": {
+          "type": "object",
+          "required": [
+            "intent",
+            "shared_claim_ids",
+            "source_event_ids"
+          ],
+          "properties": {
+            "intent": {
+              "enum": [
+                "inquire",
+                "inform",
+                "invite",
+                "accept",
+                "decline",
+                "end"
+              ]
+            },
+            "shared_claim_ids": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "source_event_ids": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "peer_relation_changes": {
+          "type": "array",
+          "maxItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "target_actor_id",
+              "affinity_delta",
+              "trust_delta",
+              "reason",
+              "source_event_ids"
+            ],
+            "properties": {
+              "target_actor_id": {
+                "enum": [
+                  "liyuan",
+                  "liting",
+                  "axing",
+                  "zhengyi",
+                  "xiaoxiaoqing",
+                  "linxu",
+                  "zhou_bobo"
+                ]
+              },
+              "affinity_delta": {
+                "type": "integer",
+                "minimum": -100,
+                "maximum": 100
+              },
+              "trust_delta": {
+                "type": "integer",
+                "minimum": -100,
+                "maximum": 100
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source_event_ids": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "agenda_update": {
+          "type": "object",
+          "required": [
+            "goal_id",
+            "next_action_id",
+            "reason",
+            "source_event_ids"
+          ],
+          "properties": {
+            "goal_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "next_action_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            },
+            "source_event_ids": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "social_decision": {
+          "type": "object",
+          "required": [
+            "choice",
+            "reason",
+            "source_event_ids"
+          ],
+          "properties": {
+            "choice": {
+              "enum": [
+                "engage",
+                "keep_to_self",
+                "postpone"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "source_event_ids": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "task_participation": {
+          "type": "object",
+          "required": [
+            "task_id",
+            "choice",
+            "reason",
+            "source_event_ids",
+            "contribution",
+            "step_ids"
+          ],
+          "properties": {
+            "task_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "choice": {
+              "enum": [
+                "willing",
+                "declined",
+                "postponed"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "source_event_ids": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            },
+            "contribution": {
+              "type": "string",
+              "maxLength": 240
+            },
+            "step_ids": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "task_followup": {
+          "type": "object",
+          "required": [
+            "task_id",
+            "choice",
+            "reason",
+            "source_event_ids"
+          ],
+          "properties": {
+            "task_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "choice": {
+              "enum": [
+                "reoffer",
+                "postpone",
+                "stop"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "source_event_ids": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "affinity": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "affinity"
+            ]
+          },
+          "then": {
+            "required": [
+              "missing_state"
+            ],
+            "properties": {
+              "missing_state": {
+                "contains": {
+                  "const": "affinity"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "trust": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "trust"
+            ]
+          },
+          "then": {
+            "required": [
+              "missing_state"
+            ],
+            "properties": {
+              "missing_state": {
+                "contains": {
+                  "const": "trust"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "world_suspicion": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "world_suspicion"
+            ]
+          },
+          "then": {
+            "required": [
+              "missing_state"
+            ],
+            "properties": {
+              "missing_state": {
+                "contains": {
+                  "const": "world_suspicion"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "required": [
+        "dialogue",
+        "action",
+        "info"
+      ],
+      "properties": {
+        "dialogue": {
+          "type": "string"
+        },
+        "action": {
+          "type": "object",
+          "required": [
+            "type",
+            "target",
+            "description",
+            "action_id",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "minLength": 1
+            },
+            "target": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "description": {
+              "type": "string"
+            },
+            "action_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "parameters": {
+              "type": "object"
+            }
+          },
+          "additionalProperties": false
+        },
+        "info": {
+          "$ref": "#/$defs/info"
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "type": {
+                    "const": "communicate"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "dialogue": {
+                "minLength": 1
+              },
+              "action": {
+                "properties": {
+                  "target": {
+                    "enum": [
+                      "liyuan",
+                      "liting",
+                      "axing",
+                      "zhengyi",
+                      "xiaoxiaoqing",
+                      "linxu",
+                      "zhou_bobo"
+                    ]
+                  },
+                  "action_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "required": [
+                      "channel",
+                      "conversation_id"
+                    ],
+                    "properties": {
+                      "channel": {
+                        "enum": [
+                          "face_to_face",
+                          "whisper",
+                          "note",
+                          "phone",
+                          "radio",
+                          "work_system",
+                          "public_announcement",
+                          "livestream"
+                        ]
+                      },
+                      "conversation_id": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "info": {
+                "required": [
+                  "communication"
+                ]
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "info": {
+                "properties": {
+                  "communication": false
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "offer_task",
+                      "give_task_reward"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "action": {
+                "properties": {
+                  "target": {
+                    "const": "player"
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "required": [
+                      "task_id"
+                    ],
+                    "properties": {
+                      "task_id": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "input": {
+      "type": "object",
+      "required": [
+        "protocol_version",
+        "session_id",
+        "turn_id",
+        "actor_id",
+        "interaction",
+        "environment",
+        "character_state",
+        "available_actions"
+      ],
+      "properties": {
+        "protocol_version": {
+          "const": "1.2.0"
+        },
+        "session_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "turn_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actor_id": {
+          "const": "z"
+        },
+        "interaction": {
+          "type": "object",
+          "required": [
+            "mode",
+            "source_actor_id",
+            "source_event_id",
+            "input"
+          ],
+          "properties": {
+            "mode": {
+              "enum": [
+                "player",
+                "npc_message",
+                "world_event",
+                "agenda",
+                "livestream"
+              ]
+            },
+            "source_actor_id": {
+              "enum": [
+                "z",
+                "liyuan",
+                "liting",
+                "axing",
+                "zhengyi",
+                "xiaoxiaoqing",
+                "linxu",
+                "zhou_bobo",
+                "player",
+                "engine"
+              ]
+            },
+            "source_event_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "input": {
+              "type": "string"
+            },
+            "conversation_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "channel": {
+              "enum": [
+                "face_to_face",
+                "whisper",
+                "note",
+                "phone",
+                "radio",
+                "work_system",
+                "public_announcement",
+                "livestream",
+                "private_player_chat",
+                null
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "mode": {
+                    "const": "npc_message"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "conversation_id",
+                  "channel"
+                ],
+                "properties": {
+                  "source_actor_id": {
+                    "enum": [
+                      "liyuan",
+                      "liting",
+                      "axing",
+                      "zhengyi",
+                      "xiaoxiaoqing",
+                      "linxu",
+                      "zhou_bobo"
+                    ]
+                  },
+                  "conversation_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "channel": {
+                    "enum": [
+                      "face_to_face",
+                      "whisper",
+                      "note",
+                      "phone",
+                      "radio",
+                      "work_system",
+                      "public_announcement",
+                      "livestream"
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "mode": {
+                    "const": "player"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "source_actor_id": {
+                    "const": "player"
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "mode": {
+                    "enum": [
+                      "world_event",
+                      "agenda"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "source_actor_id": {
+                    "const": "engine"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "environment": {
+          "type": "object",
+          "required": [
+            "scene"
+          ],
+          "properties": {
+            "scene": {
+              "type": "string",
+              "minLength": 1
+            },
+            "present_characters": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "map_context": {
+              "type": "object",
+              "required": [
+                "current_place",
+                "exits",
+                "asked_routes"
+              ],
+              "properties": {
+                "current_place": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                },
+                "exits": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "name"
+                    ]
+                  }
+                },
+                "asked_routes": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "destination",
+                      "status",
+                      "path"
+                    ],
+                    "properties": {
+                      "status": {
+                        "enum": [
+                          "known_route",
+                          "host_navigation_required"
+                        ]
+                      },
+                      "path": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        },
+        "character_state": {
+          "type": "object",
+          "required": [
+            "version",
+            "info",
+            "known_facts",
+            "memories",
+            "applied_event_ids"
+          ],
+          "properties": {
+            "version": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "info": {
+              "$ref": "#/$defs/info"
+            },
+            "known_facts": {
+              "type": "array"
+            },
+            "memories": {
+              "type": "array"
+            },
+            "applied_event_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "peer_relations": {
+              "type": "object"
+            },
+            "metric_policy": {
+              "type": "object"
+            },
+            "eligible_share_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "peer_relation_policy": {
+              "type": "object"
+            },
+            "allowed_goals": {
+              "type": "array"
+            },
+            "allowed_next_action_ids": {
+              "type": "array"
+            },
+            "disclosure_by_recipient": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "share_scope_target_id": {
+              "type": "string"
+            },
+            "public_identity": {
+              "type": "object",
+              "required": [
+                "name",
+                "occupation"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "occupation": {
+                  "type": "string"
+                },
+                "workplace": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "home": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "usual_place": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        },
+        "available_actions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "type",
+              "target",
+              "parameters"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "type": {
+                "type": "string",
+                "minLength": 1
+              },
+              "target": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "parameters": {
+                "type": "object"
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "plot_node": {
+          "type": "object"
+        },
+        "tasks": {
+          "type": "array"
+        },
+        "previous_action_result": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "reply_budget": {
+          "type": "object"
+        },
+        "player": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

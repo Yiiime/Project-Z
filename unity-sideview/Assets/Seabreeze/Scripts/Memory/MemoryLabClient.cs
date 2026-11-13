@@ -18,6 +18,8 @@ namespace Seabreeze
         GameSession session;
         HttpClient http;
         readonly Dictionary<string,CancellationTokenSource> requests=new Dictionary<string,CancellationTokenSource>();
+        readonly HashSet<string> runtimeSyncing=new HashSet<string>();
+        readonly Dictionary<string,float> runtimeRetryAt=new Dictionary<string,float>();
         int generation;
         int speechVersion;
         CancellationTokenSource speechCancellation;
@@ -84,7 +86,10 @@ namespace Seabreeze
         public bool Synchronized => opened&&!opening&&!syncing&&session?.State?.memory!=null&&session.State.memory.outbox.Count==0;
         // Accept input during journal sync. PlayerReply waits until that sync completes.
         public bool CanQueuePlayerInput => opened&&!opening&&!focusing&&Reachable&&Configured&&Time.unscaledTime>=retryModelAt;
-        public bool CanGenerate => Synchronized&&CanQueuePlayerInput;
+        public bool CanGenerate => LiveBinding==null&&Synchronized&&CanQueuePlayerInput;
+        public bool RuntimeSynchronized(string actor)=>!runtimeSyncing.Contains(actor)&&!session.State.memory.runtimeOutbox.Any(e=>e.actorId==actor);
+        public bool CanGenerateFor(string actor)=>CanGenerate&&RuntimeSynchronized(actor);
+        bool HasUndeliveredSpeech(string actor)=>session.State.memory.outbox.Any(e=>e.kind=="utterance"&&(e.speakerId==actor||e.recipientId==actor));
         public string Status => !Reachable?"记忆服务未连接":!Configured?"尚未配置模型":!Synchronized?"正在同步记忆":Time.unscaledTime<retryModelAt?"模型暂时不可用，稍后重试":Mode=="simulated"?"模拟模型验收":"模型已连接";
         public void Initialize(GameSession owner)
         {
@@ -95,22 +100,55 @@ namespace Seabreeze
         public void BeginWorld()
         {
             StopSpeech(false);
-            generation++;focusVersion++;focusing=false;foreach(var c in requests.Values)c.Cancel();requests.Clear();
+            generation++;focusVersion++;focusing=false;LiveBinding=null;foreach(var c in requests.Values)c.Cancel();requests.Clear();
+            runtimeSyncing.Clear();runtimeRetryAt.Clear();
             StopAllCoroutines();opened=opening=syncing=checking=false;
             RunId=Guid.NewGuid().ToString("N");nextHealth=nextOpen=retryModelAt=0;LastError="";BackgroundError="";acknowledgedRevision=0;
         }
+        public JObject LiveBinding {get;private set;}
+        public Task<Newtonsoft.Json.Linq.JObject> BeginLive()
+        {
+            var done=new TaskCompletionSource<Newtonsoft.Json.Linq.JObject>();
+            StartCoroutine(BeginLiveRoutine(done));return done.Task;
+        }
+        IEnumerator BeginLiveRoutine(TaskCompletionSource<Newtonsoft.Json.Linq.JObject> done)
+        {
+            float deadline=Time.unscaledTime+30;
+            while((!CanGenerate||session.State.memory.runtimeOutbox.Count>0||runtimeSyncing.Count>0)&&Time.unscaledTime<deadline)yield return null;
+            if(!CanGenerate||session.State.memory.runtimeOutbox.Count>0||runtimeSyncing.Count>0){done.TrySetException(new Exception("角色服务尚未同步，暂时不能进入直播。"));yield break;}
+            var state=session.State.memory;
+            yield return Send("/api/game/live/open",RequestBase(),8,r=>{
+                Accept(r,state);LiveBinding=r.binding;
+                if(LiveBinding==null){done.TrySetException(new Exception("缺少直播角色绑定。"));return;}
+                LiveBinding["memoryUrl"]=MemoryRuntimeConfig.Settings.serviceUrl;done.TrySetResult(LiveBinding);
+            },e=>done.TrySetException(new Exception(e)));
+        }
+        public Task EndLive()
+        {
+            var done=new TaskCompletionSource<bool>();
+            if(LiveBinding==null){done.SetResult(true);return done.Task;}
+            var request=RequestBase();request.roomId=(string)LiveBinding["roomId"];request.roomToken=(string)LiveBinding["roomToken"];
+            StartCoroutine(Send("/api/game/live/close",request,8,r=>{Accept(r,session.State.memory);LiveBinding=null;opened=true;done.TrySetResult(true);},e=>done.TrySetException(new Exception(e))));
+            return done.Task;
+        }
         public MemoryRequest RequestBase()
         {
-            var request = new MemoryRequest { worldId=session.State.memory.worldId,runId=RunId,requestId=Guid.NewGuid().ToString("N"),day=session.State.day,period=session.State.period, details = new JObject() };
+            var request = new MemoryRequest { worldId=session.State.memory.worldId,runId=RunId,requestId=Guid.NewGuid().ToString("N"),day=session.State.day,period=session.State.period,weather=session.State.weather, details = new JObject() };
             if (session.FirstDay != null && (session.State.firstDay != null || session.Clock.LiveReady)) request.details["firstDay"] = session.FirstDay.Context();
             return request;
         }
+        float nextLiveSnapshot;bool liveSnapshotPending;
+        IEnumerator LiveSnapshot(){yield return Send("/api/game/checkpoint",RequestBase(),8,r=>Accept(r,session.State.memory),e=>LastError=e);liveSnapshotPending=false;}
         void Update()
         {
             if(session==null||session.State?.memory==null||http==null)return;
+            if(LiveBinding!=null&&!liveSnapshotPending&&Time.unscaledTime>=nextLiveSnapshot){nextLiveSnapshot=Time.unscaledTime+3;liveSnapshotPending=true;StartCoroutine(LiveSnapshot());}
             if(!checking&&Time.unscaledTime>=nextHealth){checking=true;nextHealth=Time.unscaledTime+3;StartCoroutine(Health());}
-            if(Reachable&&!opened&&!opening&&Time.unscaledTime>=nextOpen){opening=true;nextOpen=Time.unscaledTime+5;StartCoroutine(Open());}
-            if(opened&&!syncing&&session.State.memory.outbox.Count>0){syncing=true;StartCoroutine(Sync());}
+            if(LiveBinding==null&&Reachable&&!opened&&!opening&&Time.unscaledTime>=nextOpen){opening=true;nextOpen=Time.unscaledTime+5;StartCoroutine(Open());}
+            if(LiveBinding==null&&opened&&!syncing&&session.State.memory.outbox.Count>0){syncing=true;StartCoroutine(Sync());}
+            if(opened&&!opening)foreach(var actor in session.State.memory.runtimeOutbox.Select(e=>e.actorId).Distinct().ToArray())
+                if(!runtimeSyncing.Contains(actor)&&!HasUndeliveredSpeech(actor)&&(!runtimeRetryAt.TryGetValue(actor,out float retry)||Time.unscaledTime>=retry))
+                {runtimeSyncing.Add(actor);StartCoroutine(SyncRuntime(actor));}
         }
         IEnumerator Health()
         {
@@ -136,20 +174,45 @@ namespace Seabreeze
             yield return Send("/api/game/sync",request,40,r=>{if(session.State.memory!=state)return;Accept(r,state);LastError=r.warning??"";},e=>{LastError=e;opened=false;nextOpen=Time.unscaledTime+3;});
             syncing=false;
         }
+        IEnumerator SyncRuntime(string actor)
+        {
+            var state=session.State.memory;var request=RequestBase();request.actorId=actor;
+            request.runtimeEvent=state.runtimeOutbox.Where(e=>e.actorId==actor).OrderBy(e=>e.seq).First();
+            yield return Send("/api/game/runtime/sync",request,8,r=>{
+                if(session.State.memory!=state||r.runId!=RunId||r.runtimeActorId!=actor)return;
+                // The cursor and the checkpoint must be persisted together.
+                // A delayed response cannot acknowledge records absent from the accepted snapshot.
+                Accept(r,state);session.Save();runtimeRetryAt.Remove(actor);
+            },e=>{BackgroundError=e;runtimeRetryAt[actor]=Time.unscaledTime+2;});
+            runtimeSyncing.Remove(actor);
+        }
         void Accept(MemoryReply reply,MemorySaveState state)
         {
             if(reply.runId!=RunId||session.State.memory!=state||string.IsNullOrEmpty(reply.checkpoint)||reply.seq<state.acknowledgedSeq||reply.responseRevision<acknowledgedRevision)return;
             acknowledgedRevision=reply.responseRevision;
             state.checkpoint=reply.checkpoint;state.acknowledgedSeq=Math.Max(state.acknowledgedSeq,reply.seq);state.nextSeq=Math.Max(state.nextSeq,reply.seq);
             state.outbox.RemoveAll(e=>e.seq<=state.acknowledgedSeq);
+            var actors=JObject.Parse(reply.checkpoint)["world"]?["actors"] as JObject;
+            if(actors!=null)foreach(var actor in actors.Properties())
+            {
+                int acknowledged=(int?)actor.Value["runtime_input_seq"]??0;var cursor=state.RuntimeCursor(actor.Name);
+                cursor.acknowledgedSeq=Math.Max(cursor.acknowledgedSeq,acknowledged);cursor.nextSeq=Math.Max(cursor.nextSeq,cursor.acknowledgedSeq);
+                state.runtimeOutbox.RemoveAll(e=>e.actorId==actor.Name&&e.seq<=cursor.acknowledgedSeq);
+            }
             session.Save();
         }
         public void Generate(string endpoint,MemoryRequest request,Action<MemoryReply> complete,Action<string> failed)
         {
             bool playerRequest=IsPlayerRequest(request);
             if(playerRequest)LastError="";
-            if(!CanGenerate){if(playerRequest)LastError="模型尚未就绪，请稍候。";failed("模型尚未就绪，请稍候。");return;}
+            if(!CanGenerateFor(request.actorId)){if(playerRequest)LastError="模型尚未就绪，请稍候。";failed("模型尚未就绪，请稍候。");return;}
             var state=session.State.memory;
+            request.walkableLocations=SevenCharacterCatalog.Walkable(session.CurrentPlace);
+            if(!string.IsNullOrEmpty(request.actorId)){
+                var actor=session.Memory.Spawner.Find(request.actorId);
+                request.runtimeSnapshot=session.Memory.Runtimes?.Capture(actor,"decision_request");
+                request.runtimeSeq=state.RuntimeCursor(request.actorId).nextSeq;
+            }
             StartCoroutine(Send(endpoint,request,35,r=>{Accept(r,state);if(playerRequest)LastError="";else BackgroundError="";complete(r);},e=>
             {
                 if(playerRequest)LastError=e;else BackgroundError=e;
@@ -169,7 +232,7 @@ namespace Seabreeze
         static bool IsRecoverableTurnError(string error)
         {
             if(string.IsNullOrEmpty(error))return false;
-            return error.StartsWith("输出格式错误：",StringComparison.Ordinal)||
+            return error.StartsWith("身份边界：",StringComparison.Ordinal)||error.StartsWith("同行决定：",StringComparison.Ordinal)||error.StartsWith("输出格式错误：",StringComparison.Ordinal)||
                 error.StartsWith("输入格式错误：",StringComparison.Ordinal)||
                 error.StartsWith("模型未返回 JSON 对象",StringComparison.Ordinal)||
                 error.StartsWith("模型输出未完成",StringComparison.Ordinal)||
@@ -186,7 +249,7 @@ namespace Seabreeze
         public void Focus(string actor){StopSpeech();int version=++focusVersion;focusing=true;StartCoroutine(FocusAfterDelivered(actor,version));}
         IEnumerator FocusAfterDelivered(string actor,int version)
         {
-            while(version==focusVersion&&(!opened||session.State.memory.outbox.Count>0))yield return null;
+            while(version==focusVersion&&(!opened||session.State.memory.outbox.Count>0||!RuntimeSynchronized(actor)))yield return null;
             if(version!=focusVersion)yield break;var request=RequestBase();request.actorId=actor;
             yield return Send("/api/game/focus",request,5,r=>Accept(r,session.State.memory),e=>LastError=e);
             if(version==focusVersion)focusing=false;

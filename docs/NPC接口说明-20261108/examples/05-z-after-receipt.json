@@ -1,0 +1,203 @@
+{
+  "notice": "文档模拟动作回执；真实物理验收见 unity-sideview/Docs/Verification/Journey-20261108.md。",
+  "action": {
+    "id": "action_proposal_06d6af682fc64d95",
+    "experimentId": "world_schema_example",
+    "epoch": 1,
+    "hour": 0,
+    "actor": "z",
+    "type": "move",
+    "target": "flower_shop",
+    "parameters": {
+      "origin": "z_home",
+      "route": [
+        "z_home",
+        "residential_middle",
+        "public_middle",
+        "flower_shop"
+      ]
+    },
+    "status": "succeeded",
+    "receiptPayload": "{\"result\":{\"scene\":\"flower_shop\",\"summary\":\"已实际走到目的地：flower_shop。\"},\"success\":true}",
+    "receiptId": "action_proposal_06d6af682fc64d95"
+  },
+  "actor": {
+    "id": "z",
+    "name": "Z",
+    "scene": "flower_shop",
+    "version": 5,
+    "info": {
+      "affinity": 52,
+      "trust": 50,
+      "world_suspicion": 0,
+      "emotion": "interested",
+      "changes": {},
+      "memory_updates": [],
+      "knowledge_updates": []
+    },
+    "peer_relations": {
+      "liyuan": {
+        "affinity": 65,
+        "trust": 60,
+        "source": "moonlife-actors/references/characters/z.md#初始关系",
+        "impression_formed": true
+      },
+      "liting": {
+        "affinity": 60,
+        "trust": 35,
+        "source": "moonlife-actors/references/characters/z.md#初始关系",
+        "impression_formed": true
+      },
+      "axing": {
+        "affinity": 65,
+        "trust": 60,
+        "source": "moonlife-actors/references/characters/z.md#初始关系",
+        "impression_formed": true
+      },
+      "zhengyi": {
+        "affinity": 65,
+        "trust": 60,
+        "source": "moonlife-actors/references/characters/z.md#初始关系",
+        "impression_formed": true
+      },
+      "xiaoxiaoqing": {
+        "affinity": 65,
+        "trust": 60,
+        "source": "moonlife-actors/references/characters/z.md#初始关系",
+        "impression_formed": true
+      },
+      "linxu": {
+        "affinity": 65,
+        "trust": 60,
+        "source": "moonlife-actors/references/characters/z.md#初始关系",
+        "impression_formed": true
+      },
+      "zhou_bobo": {
+        "affinity": 65,
+        "trust": 70,
+        "source": "moonlife-actors/references/characters/z.md#初始关系",
+        "impression_formed": true
+      }
+    },
+    "applied_event_ids": [
+      "evt_2943276a8ae54a63"
+    ],
+    "agenda": null,
+    "pending_action": null,
+    "previous_result": {
+      "status": "succeeded",
+      "action_id": "action_proposal_06d6af682fc64d95",
+      "event_id": "evt_977e358ffcb34673",
+      "summary": "已实际走到目的地：flower_shop。"
+    },
+    "last_external_event": "evt_977e358ffcb34673",
+    "next_agenda_tick": 30
+  },
+  "known_facts": [
+    {
+      "id": "evt_977e358ffcb34673",
+      "summary": "已实际走到目的地：flower_shop。",
+      "kind": "verified",
+      "source_event_ids": [
+        "evt_977e358ffcb34673"
+      ],
+      "disclose_to": [
+        "z"
+      ]
+    }
+  ],
+  "memories": [
+    {
+      "id": "mem_evt_2943276a8ae54a63_z",
+      "experimentId": "world_schema_example",
+      "epoch": 1,
+      "actorId": "z",
+      "kind": "hearsay",
+      "content": "玩家说：Z，我们一起去小小晴的花店看看花吧。",
+      "gist": "与玩家有关的一次交谈。",
+      "subject": "玩家",
+      "speakerId": "player",
+      "sourceLabel": "实际交谈原话，内容未核实",
+      "evidence": [
+        {
+          "messageId": "msg_evt_2943276a8ae54a63",
+          "quote": "Z，我们一起去小小晴的花店看看花吧。"
+        }
+      ],
+      "dependencies": [],
+      "createdHour": 0,
+      "originalHour": 0,
+      "importance": 1,
+      "emotion": 0,
+      "keywords": [],
+      "recallCount": 0,
+      "detailRecallCount": 0,
+      "origin": "pending_extraction",
+      "disclose_to": [
+        "z",
+        "player"
+      ]
+    },
+    {
+      "id": "mem_evt_de7f5257be6948fc_z",
+      "experimentId": "world_schema_example",
+      "epoch": 1,
+      "actorId": "z",
+      "kind": "hearsay",
+      "content": "我说过：好啊，我们去小小晴的花店看看。",
+      "gist": "与Z有关的一次交谈。",
+      "subject": "Z",
+      "speakerId": "z",
+      "sourceLabel": "实际交谈原话，内容未核实",
+      "evidence": [
+        {
+          "messageId": "msg_evt_de7f5257be6948fc",
+          "quote": "好啊，我们去小小晴的花店看看。"
+        }
+      ],
+      "dependencies": [],
+      "createdHour": 0,
+      "originalHour": 0,
+      "importance": 1,
+      "emotion": 0,
+      "keywords": [],
+      "recallCount": 0,
+      "detailRecallCount": 0,
+      "origin": "pending_extraction",
+      "disclose_to": [
+        "z",
+        "player"
+      ]
+    },
+    {
+      "id": "mem_evt_977e358ffcb34673_z",
+      "experimentId": "world_schema_example",
+      "epoch": 1,
+      "actorId": "z",
+      "kind": "experience",
+      "content": "已实际走到目的地：flower_shop。",
+      "gist": "经历过一次与花店有关的事情。",
+      "subject": "引擎",
+      "speakerId": "engine",
+      "sourceLabel": "实际观察与回执",
+      "evidence": [
+        {
+          "messageId": "msg_evt_977e358ffcb34673",
+          "quote": "已实际走到目的地：flower_shop。"
+        }
+      ],
+      "dependencies": [],
+      "createdHour": 0,
+      "originalHour": 0,
+      "importance": 2,
+      "emotion": 0,
+      "keywords": [],
+      "recallCount": 0,
+      "detailRecallCount": 0,
+      "origin": "world_observation",
+      "disclose_to": [
+        "z"
+      ]
+    }
+  ]
+}

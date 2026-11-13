@@ -1,0 +1,53 @@
+{
+  "downloadedJsonValid": true,
+  "exportVersion": 1,
+  "backendFields": [
+    "world",
+    "taskCheckpoint"
+  ],
+  "tasks": {
+    "state": 11,
+    "receipts": 0,
+    "followups": 1,
+    "collaboration": 0
+  },
+  "records": {
+    "event": 12,
+    "message": 11,
+    "memory": 17,
+    "job": 6,
+    "proposal": 5,
+    "action": 0,
+    "conversation": 1,
+    "social_decision": 2,
+    "memory_job": 10,
+    "reflection_job": 1
+  },
+  "modelJobs": [
+    {
+      "actor": "z",
+      "status": "succeeded"
+    },
+    {
+      "actor": "z",
+      "status": "succeeded"
+    },
+    {
+      "actor": "linxu",
+      "status": "succeeded"
+    },
+    {
+      "actor": "z",
+      "status": "pending"
+    },
+    {
+      "actor": "linxu",
+      "status": "succeeded"
+    },
+    {
+      "actor": "linxu",
+      "status": "succeeded"
+    }
+  ],
+  "note": "Read-only validation of downloaded diagnostic data; no restore was performed."
+}

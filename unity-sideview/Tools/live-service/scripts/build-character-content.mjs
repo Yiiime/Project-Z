@@ -24,11 +24,11 @@ const turn=current.slice(current.indexOf(marker)).replace(/const recipients=\{[^
 if(!turn.includes('export function speakingTurn'))throw Error('Missing compatible audience turn adapter');
 const publicSource='// Generated PUBLIC roster from MemoryLab; never put private profiles here.\nexport const NPCS = '+JSON.stringify(roster,null,2)+';\n'+turn;
 const world=fs.readFileSync(catalog.path('moonlife-actors/references/world.md'),'utf8');
-const zPersona=[world,profiles.z.profile,publicWorld].join('\n\n');
+const zPersona=catalog.prompt('z');
 const meta={id:'z',pack_version:catalog.registry.pack_version,persona_revision:catalog.registry.persona_revision,source:'MemoryLab/content/current',sha256:createHash('sha256').update(JSON.stringify({profiles,publicWorld})).digest('hex')};
 const outputs={
  [shared+'audience-roster.js']:publicSource,
- [shared+'worker/island-roster.js']:'// Generated SERVER-ONLY material; one actor per model request.\nexport const ISLAND_PERSONAS = '+JSON.stringify(profiles,null,2)+';\nexport const ISLAND_PUBLIC_WORLD = '+JSON.stringify(publicWorld)+';\n',
+ [shared+'worker/island-roster.js']:'// Generated SERVER-ONLY material; one actor per model request.\nimport {NPCS as PUBLIC_NPCS} from \'../audience-roster.js\';\nexport const ISLAND_PERSONAS = '+JSON.stringify(profiles,null,2)+';\nexport const ISLAND_PUBLIC_WORLD = '+JSON.stringify(publicWorld)+';\nexport const NPCS = PUBLIC_NPCS.map(a=>({...a,profile:ISLAND_PERSONAS[a.npc_id].profile}));\n',
  [shared+'worker/z-persona.js']:'// Generated from the current island persona. Run node scripts/build-character-content.mjs.\nexport const Z_PERSONA = '+JSON.stringify(zPersona)+';\nexport const Z_CURRENT_WORLD = Object.freeze({day:"engine_required",time:"engine_required",scene:"live_room"});\nexport const Z_PERSONA_META = Object.freeze('+JSON.stringify(meta)+');\n',
 };
 for(const [path,value] of Object.entries(outputs)){

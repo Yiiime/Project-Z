@@ -1,0 +1,24 @@
+{
+  "baselineChanges": [
+    "unity-sideview/Tools/MemoryLab/lib/engine.mjs",
+    "unity-sideview/Tools/MemoryLab/lib/live-room.mjs",
+    "unity-sideview/Tools/MemoryLab/lib/checkpoint.mjs",
+    "unity-sideview/Assets/Seabreeze/Scripts/Memory/MemoryLabClient.cs",
+    "unity-sideview/Tools/MemoryLab/scripts/export-contract.mjs",
+    "unity-sideview/Tools/MemoryLab/server.mjs",
+    "unity-sideview/Tools/MemoryLab/lib/lab.mjs"
+  ],
+  "unintendedAssetChanges": [],
+  "newRuntimeFiles": [
+    "unity-sideview/Tools/MemoryLab/lib/utterance.mjs",
+    "unity-sideview/Tools/MemoryLab/lib/storage-contract.schema.json",
+    "unity-sideview/Tools/MemoryLab/tests/protocol-recovery.test.mjs"
+  ],
+  "otherUpdatedFiles": [
+    "unity-sideview/Tools/start-character-lab.mjs",
+    "docs/Project-Z-NPC全链路.schema.json",
+    "docs/NPC-Schema与前后端对接说明.md",
+    "docs/NPC全链路复核-20261109.md"
+  ],
+  "note": "Baseline preserves pre-existing dirty changes; documentation and evidence newly created for this repair are also in scope."
+}

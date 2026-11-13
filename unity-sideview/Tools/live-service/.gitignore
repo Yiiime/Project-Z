@@ -1,6 +1,7 @@
 node_modules/
 .runtime/
+.runtime-unified/
 .env*
 !.env.example
 *配置.env
-.runtime-unified/
+.runtime-integrated-play/

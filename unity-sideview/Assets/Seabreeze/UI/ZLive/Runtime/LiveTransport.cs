@@ -56,11 +56,11 @@ public sealed class LiveTransport : IDisposable {
             }
         }
     }
-    public async Task<JObject> Enter(string previous,bool audio,bool character,JObject memory=null,JObject story=null) {
+    public async Task<JObject> Enter(string previous,bool audio,bool character,JObject memory=null,JObject characterBinding=null,JObject story=null) {
         JObject snapshot=null;
         if(!string.IsNullOrEmpty(previous))try{snapshot=await Request("/v1/live/sessions/"+previous);}catch(LiveProtocolException e)when(e.Message=="not_found"){}
         if((string)snapshot?["phase"]=="ended")snapshot=null;
-        if(snapshot==null)snapshot=await Request("/v1/live/sessions",new JObject{{"memory",memory},{"story",story},{"protocolVersion",1},{"mode","private"},{"capabilities",new JObject{{"audioEnabled",audio},{"characterReady",character}}}});
+        if(snapshot==null)snapshot=await Request("/v1/live/sessions",new JObject{{"memory",memory},{"characterBinding",characterBinding},{"story",story},{"protocolVersion",1},{"mode","private"},{"capabilities",new JObject{{"audioEnabled",audio},{"characterReady",character}}}});
         SessionId=(string)snapshot["sessionId"];Lease=(string)snapshot["executorLeaseId"];Epoch=(int)snapshot["epoch"];Cursor=(long)snapshot["lastServerSeq"];return snapshot;
     }
     public JObject Envelope()=>new JObject{{"protocolVersion",1},{"eventId",Guid.NewGuid().ToString()},{"sessionId",SessionId},{"epoch",Epoch}};

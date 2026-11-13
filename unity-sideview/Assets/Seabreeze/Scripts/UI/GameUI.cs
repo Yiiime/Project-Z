@@ -249,6 +249,7 @@ namespace Seabreeze
         {
             if(!initialized||session==null||session.IsAtTitle)return;
             if(session.FirstDay!=null&&session.FirstDay.BlocksInput&&!(session.Memory?.PlayerChatOpen??false)){HideInteraction();return;}
+            if(session.FirstDay?.Active==true)objectiveText.text=session.FirstDay.Objective;
             bool playerChat=session.Memory!=null&&session.Memory.PlayerChatOpen;
             hud.gameObject.SetActive(!hidden&&!playerChat);
             if(playerChat){HideInteraction();return;}
@@ -326,7 +327,7 @@ namespace Seabreeze
             {
                 canvas.enabled=false;
                 var owner=session.State;NativeLiveHost opened=null;
-                opened=NativeLiveHost.Open(transform,CloseOverlay,id=>CompleteLiveSession(opened,owner,id));
+                opened=NativeLiveHost.Open(transform,CloseOverlay,id=>CompleteLiveSession(opened,owner,id),session.Memory);
                 nativeLive=opened;overlayBusy=false;overlayRoutine=null;yield break;
             }
             if(IsPhonePage(mode))
@@ -391,9 +392,16 @@ namespace Seabreeze
         void CloseOverlayThen(Action next)
         {
             if(!initialized||overlayBusy)return;
-            if(nativeLive!=null){FinishCloseOverlay();next?.Invoke();return;}
+            if(nativeLive!=null){overlayBusy=true;overlayRoutine=StartCoroutine(CloseLiveRoutine(next));return;}
             if(!HasOverlay){next?.Invoke();return;}
             overlayBusy=true;overlayRoutine=StartCoroutine(CloseOverlayRoutine(next));
+        }
+        IEnumerator CloseLiveRoutine(Action next)
+        {
+            var ending=nativeLive.SynchronizeExit();
+            while(!ending.IsCompleted)yield return null;
+            if(ending.IsFaulted||ending.IsCanceled){overlayBusy=false;overlayRoutine=null;ShowToast("直播记忆尚未同步，请稍后再次退出。");yield break;}
+            FinishCloseOverlay();next?.Invoke();
         }
         IEnumerator CloseOverlayRoutine(Action next)
         {
