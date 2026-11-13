@@ -1,0 +1,87 @@
+{
+  "date": "2026-11-14",
+  "unity": "6000.3.27f1",
+  "baseMain": "ff82f9ebf0ba0f88eeb2a890c35a83692c2d890b",
+  "validatedCommit": "8d112c326b5d0385eed0934cd18894d2b0ff0d3f",
+  "scope": "Morning + Evening artwork and period restoration",
+  "scenes": 32,
+  "samples": 160,
+  "mapErrors": [],
+  "frameRange": [
+    14030,
+    17599
+  ],
+  "maxMorningFloorDelta": 2.23390643e-07,
+  "maxRepeatDrift": 0.0,
+  "realSaveFilesUnchanged": 4,
+  "preexistingDirtyFilesBytePreserved": 997,
+  "editorCompilationErrors": 0,
+  "gameRuntimeErrorsObserved": 0,
+  "toolErrorsExcluded": [
+    "Initial capture path outside project rejected by Pipeline; captures subsequently written inside ignored Builds directory."
+  ],
+  "screenshots": [
+    {
+      "file": "Boardwalk-evening.png",
+      "sha256": "10dc5f5b7130c350c04f27e682b6066704c6636b127708a18cbc12b956876af8"
+    },
+    {
+      "file": "Boardwalk-morning.png",
+      "sha256": "2f7e7c93805fa446b63259bb0af8e6554f76f4f5acf118d0d7baa1e80009aee4"
+    },
+    {
+      "file": "Cafe-evening.png",
+      "sha256": "baaa109d272e0d3fb8f5dd8dee6bec673fe5baaf00f817242265c70019d5b718"
+    },
+    {
+      "file": "Cafe-morning.png",
+      "sha256": "113973b48ef114fd44ba345dc44888ba9442cd1786a36b21fdfc31586a9ed75f"
+    },
+    {
+      "file": "ForestPath2-evening.png",
+      "sha256": "b1c5c182226da92684e99f39329e5bb28f6c0343d135a26e0a8e1824b7df5a85"
+    },
+    {
+      "file": "ForestPath2-morning.png",
+      "sha256": "97f02e70ee0a5ddf59a96e4d2fee122ddde2d9879b813d4eeb4f5a408eb6ca39"
+    },
+    {
+      "file": "Harbor-evening.png",
+      "sha256": "30b4cc79f8239a14b7d3bcfb1c15259c7000f8ddcac36bf0dd12853eb6a1a866"
+    },
+    {
+      "file": "Harbor-morning.png",
+      "sha256": "7892822fde1f6a065bf9254004d724e5000557ee9c12320bbe8840a829889829"
+    },
+    {
+      "file": "Lighthouse-evening.png",
+      "sha256": "4de2d6aeeb90befba8e0653e261431422ce783f4dd5527e30b69a15ac11bf465"
+    },
+    {
+      "file": "Lighthouse-morning.png",
+      "sha256": "f7db7f6d77ff540722f8b63cce579f538cbfd0c2a1959c94d6b60e0c83529103"
+    },
+    {
+      "file": "ResidentialCenter-evening.png",
+      "sha256": "d227e2b80fa79902a903730c50e785d7c1c56357d5de4172095fd03103653624"
+    },
+    {
+      "file": "ResidentialCenter-morning.png",
+      "sha256": "22e94035bdda5df59d631154f6db3875d40c7ec24ee4bf539f99dae57ace910d"
+    },
+    {
+      "file": "Street-evening.png",
+      "sha256": "41cc5a737399dd734ce91646a245b0e02de91ba1bb800cf681dadbd383e3d883"
+    },
+    {
+      "file": "Street-morning.png",
+      "sha256": "eb66c0344fb96e402d1e826801695c80fd051af6001b2d3d9265a483d7e6bcaf"
+    }
+  ],
+  "limitations": [
+    "Unity run uses existing local project with unrelated uncommitted model and UI assets; none are included in PR.",
+    "Direct map travel and time refresh; no new manual E/boundary route or full story acceptance.",
+    "No standalone App build.",
+    "Local preexisting HUD wrapping and lighthouse decorative grass left unchanged."
+  ]
+}

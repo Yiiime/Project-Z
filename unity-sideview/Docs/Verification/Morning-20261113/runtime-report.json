@@ -1,0 +1,66 @@
+{
+  "date": "2026-11-13",
+  "unity": "6000.3.27f1",
+  "compilation": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "enabledScenes": 32,
+  "sampleCount": 160,
+  "periodOrder": [
+    "Afternoon",
+    "Morning",
+    "Evening",
+    "Night",
+    "Morning"
+  ],
+  "issues": [],
+  "realSaveUnchanged": true,
+  "runtimeAfterFreshPlay": {
+    "errors": 0,
+    "warnings": 77,
+    "warningFamily": "Metal memoryless depth load/store plus existing imported content warnings; see Editor console"
+  },
+  "residentialCalibration": {
+    "initialFeetFromTopPx": 481,
+    "finalFeetFromTopPx": 470,
+    "pngHeight": 724,
+    "physicsMoved": false
+  },
+  "inputChecks": [
+    {
+      "input": "Input System D held",
+      "from": "ResidentialCenter",
+      "fromX": 0,
+      "to": "Forest",
+      "toX": 10.940835,
+      "usedInteract": false
+    },
+    {
+      "input": "Input System A held",
+      "from": "Forest",
+      "to": "ResidentialCenter",
+      "toX": 20.4577866,
+      "usedInteract": false
+    },
+    {
+      "input": "Queued E state on next player loop at door",
+      "from": "ResidentialCenter",
+      "fromX": 11.5,
+      "to": "ZHome",
+      "toX": 5.0060606
+    },
+    {
+      "input": "Queued E state on next player loop at exit",
+      "from": "ZHome",
+      "to": "ResidentialCenter",
+      "toX": 11.5
+    }
+  ],
+  "limits": [
+    "In-editor targeted map traversal, not whole story or standalone build acceptance.",
+    "First Play after import hit MusicDirector null references with missing GameSession. Reopened Street and restarted Play; subsequent complete sweep and input checks produced zero new errors. No music code modified.",
+    "ResidentialCenter morning source is 2172px wide and visibly softer at the existing close camera than higher-resolution source artwork.",
+    "Legacy Lighthouse foreground grass remains over the seawall, independent of the morning PNG."
+  ]
+}

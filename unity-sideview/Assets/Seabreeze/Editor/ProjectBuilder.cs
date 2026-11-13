@@ -180,9 +180,6 @@ namespace Seabreeze.Editor
                 Door(root, "to_lighthouse", "沿海堤去灯塔", 15.0f, PlaceId.Lighthouse);
                 Npc(root, "npc_mio", "澪", -2, 1, p);
                 Npc(root, "npc_chen", "陈伯", 8, 3, p);
-                Marker(root, "postcard", "长椅上的明信片", 13.1f);
-                Marker(root, "noticeboard", "街角告示板", -13.2f);
-                Marker(root, "bicycle", "旧自行车", -4);
                 Marker(root, "sea", "听一会儿海", 3);
                 Marker(root, "bench", "坐一会儿", 14.0f);
                 Collider("Low bench platform", new Vector2(14.5f, .625f), new Vector2(3f, 1.25f), root.transform);

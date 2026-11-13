@@ -9,13 +9,13 @@ namespace Seabreeze
         SpriteRenderer tint, fog;
         Light2D global;
         Sprite dayArtwork, eveningArtwork;
-        EveningMapArtwork eveningVariant;
+        TimeOfDayMapArtwork periodArtwork;
         GameObject effects;
         void Start()
         {
             stage = GetComponent<WorldScene>();
             eveningArtwork = stage.backdrop != null ? stage.backdrop.sprite : null;
-            eveningVariant = new EveningMapArtwork(stage.backdrop, stage.place);
+            periodArtwork = new TimeOfDayMapArtwork(stage.backdrop, stage.place, stage.floorImageFraction);
             dayArtwork = Resources.Load<Sprite>("Art/" + stage.place.ToString().ToLowerInvariant() + "_day");
             effects = new GameObject("Independent foreground and parallax");
             effects.transform.SetParent(transform);
@@ -65,8 +65,8 @@ namespace Seabreeze
         void Refresh()
         {
             int p = (int)GameSession.Instance.Clock.Period;
-            bool hasEvening = eveningVariant.SetEnabled(p == (int)TimePeriod.Evening);
-            if (!hasEvening && stage.backdrop != null)
+            bool hasArtwork = periodArtwork.SetPeriod((TimePeriod)p);
+            if (!hasArtwork && stage.backdrop != null)
             {
                 var selected = p < 2 && dayArtwork != null ? dayArtwork : eveningArtwork;
                 if (selected != null)
@@ -79,7 +79,7 @@ namespace Seabreeze
             }
 
             Color[] colors = {new Color(.54f, .73f, 1, .025f), new Color(.96f, .73f, .38f, .035f), new Color(.28f, .2f, .5f, .12f), new Color(.04f, .09f, .25f, .39f)};
-            tint.color = hasEvening ? Color.clear : stage.place == PlaceId.Cafe ? colors[Mathf.Min(p, 2)] : colors[p];
+            tint.color = hasArtwork ? Color.clear : stage.place == PlaceId.Cafe ? colors[Mathf.Min(p, 2)] : colors[p];
             global.color = p == 3 ? new Color(.55f, .68f, 1) : Color.white;
             if (fog != null)
                 fog.color = stage.place != PlaceId.Cafe && GameSession.Instance.Clock.WeatherLabel.Contains("薄雾") ? new Color(.64f, .75f, .8f, .2f) : Color.clear;
@@ -89,7 +89,7 @@ namespace Seabreeze
         {
             if (GameSession.Instance != null)
                 GameSession.Instance.Clock.Changed -= Refresh;
-            eveningVariant?.Release();
+            periodArtwork?.Release();
         }
     }
 
