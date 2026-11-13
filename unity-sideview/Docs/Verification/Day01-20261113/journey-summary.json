@@ -1,0 +1,284 @@
+{
+  "date": "2026-11-13",
+  "mainRevision": "948b191",
+  "passed": true,
+  "scope": "Actual UI handlers, keyboard movement, real configured model and playback receipts. No injected story phase or task completion.",
+  "interruption": "Screen auto-locked after five residents. Continued the same actual save after unlock and main merge; no phase injection.",
+  "segments": [
+    [
+      {
+        "time": 139.76,
+        "event": "Confirmed fictional player name using landing form"
+      },
+      {
+        "time": 141.26,
+        "event": "Stage Live at Harbor"
+      },
+      {
+        "time": 142.79,
+        "event": "Resumed actual playback after editor focus change"
+      },
+      {
+        "time": 181.59,
+        "event": "Clicked invitation: 确认登岛"
+      },
+      {
+        "time": 190.26,
+        "event": "Stage Harbor at Harbor"
+      },
+      {
+        "time": 190.48,
+        "event": "Opened conversation with z"
+      },
+      {
+        "time": 205.79,
+        "event": "Sent player greeting to z"
+      },
+      {
+        "time": 216.86,
+        "event": "Completed exchange with z"
+      },
+      {
+        "time": 218.13,
+        "event": "Clicked invitation: 确认"
+      },
+      {
+        "time": 219.13,
+        "event": "Stage WalkToSquare at Harbor"
+      },
+      {
+        "time": 239.61,
+        "event": "Stage MeetIslanders at Square"
+      },
+      {
+        "time": 247.64,
+        "event": "Opened conversation with z"
+      },
+      {
+        "time": 260.19,
+        "event": "Sent player greeting to z"
+      },
+      {
+        "time": 272.49,
+        "event": "Completed exchange with z"
+      },
+      {
+        "time": 275.62,
+        "event": "Opened conversation with xiaoxiaoqing"
+      },
+      {
+        "time": 284.35,
+        "event": "Sent player greeting to xiaoxiaoqing"
+      },
+      {
+        "time": 296.15,
+        "event": "Completed exchange with xiaoxiaoqing"
+      },
+      {
+        "time": 298,
+        "event": "Opened conversation with linxu"
+      },
+      {
+        "time": 306.77,
+        "event": "Sent player greeting to linxu"
+      },
+      {
+        "time": 319.75,
+        "event": "Completed exchange with linxu"
+      },
+      {
+        "time": 322.88,
+        "event": "Opened conversation with zhengyi"
+      },
+      {
+        "time": 332.75,
+        "event": "Sent player greeting to zhengyi"
+      },
+      {
+        "time": 346.8,
+        "event": "Completed exchange with zhengyi"
+      },
+      {
+        "time": 350.27,
+        "event": "Opened conversation with liting"
+      },
+      {
+        "time": 359.61,
+        "event": "Sent player greeting to liting"
+      },
+      {
+        "time": 371.62,
+        "event": "Completed exchange with liting"
+      }
+    ],
+    [
+      {
+        "time": 25.92,
+        "event": "Continued actual saved journey"
+      },
+      {
+        "time": 28.7,
+        "event": "Stage MeetIslanders at Square"
+      },
+      {
+        "time": 30.42,
+        "event": "Opened conversation with axing"
+      },
+      {
+        "time": 42.73,
+        "event": "Sent player greeting to axing"
+      },
+      {
+        "time": 57.88,
+        "event": "Completed exchange with axing"
+      },
+      {
+        "time": 60.43,
+        "event": "Opened conversation with zhou_bobo"
+      },
+      {
+        "time": 74.56,
+        "event": "Sent player greeting to zhou_bobo"
+      },
+      {
+        "time": 88.99,
+        "event": "Completed exchange with zhou_bobo"
+      },
+      {
+        "time": 90.59,
+        "event": "Stage Fireworks at Square"
+      },
+      {
+        "time": 91.4,
+        "event": "Stage WelcomeTask at Square"
+      },
+      {
+        "time": 92.57,
+        "event": "Opened conversation with liting"
+      },
+      {
+        "time": 107.14,
+        "event": "Sent player greeting to liting"
+      },
+      {
+        "time": 121.39,
+        "event": "Completed exchange with liting"
+      },
+      {
+        "time": 122.9,
+        "event": "Opened conversation with liting"
+      },
+      {
+        "time": 132.58,
+        "event": "Accepted AI-generated welcome task from visible card"
+      },
+      {
+        "time": 140.73,
+        "event": "Sent player greeting to liting"
+      },
+      {
+        "time": 156.35,
+        "event": "Completed exchange with liting"
+      },
+      {
+        "time": 160.3,
+        "event": "Opened conversation with z"
+      },
+      {
+        "time": 171.39,
+        "event": "Sent player greeting to z"
+      },
+      {
+        "time": 183.59,
+        "event": "Completed exchange with z"
+      },
+      {
+        "time": 184.6,
+        "event": "Captured actual photo for generated task"
+      },
+      {
+        "time": 187.59,
+        "event": "Stage EveningReady at Square"
+      },
+      {
+        "time": 188.16,
+        "event": "Stage EveningLive at Square"
+      },
+      {
+        "time": 204.78,
+        "event": "Sent livestream player message: 今天认识大家很开心，想听你唱《晚安》。"
+      },
+      {
+        "time": 270.08,
+        "event": "Verified complete rendered song playback: 晚安 · 第一段完整副歌"
+      },
+      {
+        "time": 270.08,
+        "event": "Sent livestream player message: 谢谢，今天就到这里，结束直播吧，晚安。"
+      },
+      {
+        "time": 283.5,
+        "event": "Stage Complete at Square"
+      },
+      {
+        "time": 283.5,
+        "event": "Second livestream completed; Day 2 restored with 0 rests"
+      }
+    ]
+  ],
+  "song": {
+    "id": "891797a1-c0bd-47d5-9563-fd786f0a3c60",
+    "kind": "singing",
+    "title": "晚安 · 第一段完整副歌",
+    "phase": "completed",
+    "playbackId": "cab1c35b-f0be-4d05-ac44-3963302e6155",
+    "artifactId": "aacc722219da9e5757647ff2dac23f87d22b600768f18a38119edde0d55f3b0a",
+    "positionMs": 32284,
+    "durationMs": 32284,
+    "reason": "",
+    "lineIndex": 0,
+    "revision": 0
+  },
+  "audience": [
+    "xiaoxiaoqing",
+    "liting",
+    "zhengyi",
+    "axing",
+    "linxu",
+    "zhou_bobo"
+  ],
+  "session": {
+    "id": "634afae8-1cc8-4ece-89a6-7e2e15879857",
+    "phase": "ended",
+    "endReason": "farewell_completed"
+  },
+  "save": {
+    "day": 2,
+    "period": 0,
+    "restActions": 0,
+    "greeted": [
+      "z",
+      "xiaoxiaoqing",
+      "linxu",
+      "zhengyi",
+      "liting",
+      "axing",
+      "zhou_bobo"
+    ]
+  },
+  "runtime": {
+    "inputBlocked": false,
+    "timeScale": 1,
+    "serviceError": ""
+  },
+  "gameExceptions": [],
+  "voices": [
+    "z",
+    "xiaoxiaoqing",
+    "linxu",
+    "zhengyi",
+    "liting",
+    "axing",
+    "zhou_bobo"
+  ]
+}

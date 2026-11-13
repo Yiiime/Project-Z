@@ -29,7 +29,8 @@ namespace Seabreeze.Editor
         static readonly HashSet<string> voicedActors=new HashSet<string>();
         static int titleStage,chatTurns,chatRetries;
         static bool finished,songRequested,closingRequested,songCompleted;
-        static readonly JArray events=new JArray(),errors=new JArray();
+        static readonly JArray events=new JArray(),errors=new JArray(),liveEvidence=new JArray();
+        static readonly HashSet<string> liveEventIds=new HashSet<string>();
         static FirstDayJourneyVerification(){EditorApplication.update+=Tick;Application.logMessageReceived+=(m,s,t)=>{if(SessionState.GetBool(Flag,false)&&t==LogType.Exception&&!s.Contains("UnityEditor.Search."))errors.Add(m);};}
         public static void Run()
         {
@@ -46,7 +47,7 @@ namespace Seabreeze.Editor
         static void BeforeInput(){if(keyboard!=null)InputSystem.QueueStateEvent(keyboard,new KeyboardState(heldKeys));}
         static void AfterInput(){if(keyboard!=null)keyboard.MakeCurrent();}
         static void Capture(string name){if(!Application.isBatchMode)ScreenCapture.CaptureScreenshot(Path.Combine(output,name+".png"));}
-        static void Write(bool? passed=null,string error=null){File.WriteAllText(Path.Combine(output,"journey-report.json"),new JObject{["passed"]=passed,["runtime"]=RuntimeState(),["phase"]=lastPhase,["events"]=events,["errors"]=errors,["songCompleted"]=songCompleted,["voicedActors"]=new JArray(voicedActors),["error"]=error,["scope"]="Actual UI handlers, keyboard movement, real configured model and playback receipts. No injected story phase or task completion."}.ToString());}
+        static void Write(bool? passed=null,string error=null){File.WriteAllText(Path.Combine(output,"journey-report.json"),new JObject{["passed"]=passed,["runtime"]=RuntimeState(),["phase"]=lastPhase,["events"]=events,["errors"]=errors,["songCompleted"]=songCompleted,["liveEvidence"]=liveEvidence,["voicedActors"]=new JArray(voicedActors),["error"]=error,["scope"]="Actual UI handlers, keyboard movement, real configured model and playback receipts. No injected story phase or task completion."}.ToString());}
         static JObject RuntimeState()
         {
             var g=GameSession.Instance;var w=WorldDirector.Instance;
@@ -56,7 +57,7 @@ namespace Seabreeze.Editor
                 ["closing"]=(bool?)g?.Memory?.View?.Closing,["scripted"]=(bool?)g?.Memory?.View?.ScriptedOpen,["scale"]=Time.timeScale,
                 ["target"]=actor,["keyboard"]=(int?)Keyboard.current?.deviceId,["testKeyboard"]=(int?)keyboard?.deviceId,
                 ["obstacles"]=p==null?new JArray():new JArray(Physics2D.RaycastAll(p.position+Vector3.up,Vector2.right,2).Select(h=>h.collider.name+" / "+h.collider.gameObject.layer+" / "+h.distance)),
-                ["serviceError"]=g?.Memory?.Client?.LastError};
+                ["serviceError"]=g?.Memory?.Client?.LastError,["backgroundError"]=g?.Memory?.Client?.BackgroundError,["runtimePending"]=(int?)g?.State?.memory?.runtimeOutbox?.Count,["focused"]=Application.isFocused};
         }
         static void Tick()
         {
@@ -89,6 +90,8 @@ namespace Seabreeze.Editor
                 if(game.State.day>=2&&!game.FirstDay.Active)
                 {
                     if(errors.Count>0)throw new Exception("Game exceptions: "+errors);
+                    if(!songCompleted)throw new Exception("Day 2 reached without a verified complete song playback");
+                    if(game.Clock.RestActions!=0)throw new Exception("Day 2 must start with four unused rest actions");
                     Log("Second livestream completed; Day 2 restored with "+game.Clock.RestActions+" rests");Finish(true,null);return;
                 }
                 var invite=UnityEngine.Object.FindObjectsByType<Button>(FindObjectsSortMode.None).FirstOrDefault(b=>b.name=="Accept invitation"&&b.isActiveAndEnabled&&b.interactable);
@@ -104,10 +107,19 @@ namespace Seabreeze.Editor
                     var feature=UnityEngine.Object.FindFirstObjectByType<LiveFeatureController>();if(feature==null||!Field<bool>(feature,"connected"))return;
                     var state=Field<JObject>(feature,"state");
                     if(state["room"]?["participants"] is JArray participants && participants.Any(p=>(string)p=="liyuan"))throw new Exception("Liyuan entered first evening");
-                    songCompleted|=(state["publicEvents"] as JArray??new JArray()).Any(e=>((string)e["type"]??"").Contains("completed")&&(((string)e["type"]??"").Contains("media")||((string)e["text"]??"").Contains("唱完")));
+                    foreach(var e in state["publicEvents"] as JArray??new JArray())
+                    {
+                        if(liveEventIds.Add((string)e["id"]))liveEvidence.Add(e.DeepClone());
+                        if((string)e["type"]=="talent.completed")
+                        {
+                            var receipt=JObject.Parse((string)e["text"]);
+                            if((string)receipt["kind"]=="singing"&&(int?)receipt["durationMs"]>0&&(int?)receipt["positionMs"]>=(int?)receipt["durationMs"]-250)
+                            {if(!songCompleted){Log("Verified complete rendered song playback: "+(string)receipt["title"]);Capture("song-completed");}songCompleted=true;}
+                        }
+                    }
                     if(!songRequested&&(state["publicEvents"] as JArray??new JArray()).Any(e=>(string)e["type"]=="speech.completed"))
                     {SendLive(feature,"今天认识大家很开心，想听你唱《晚安》。");songRequested=true;nextAction=now+5;return;}
-                    if(songRequested&&!closingRequested&&(songCompleted||now-phaseAt>150))
+                    if(songRequested&&!closingRequested&&songCompleted)
                     {SendLive(feature,"谢谢，今天就到这里，结束直播吧，晚安。");closingRequested=true;nextAction=now+4;return;}
                     return;
                 }
