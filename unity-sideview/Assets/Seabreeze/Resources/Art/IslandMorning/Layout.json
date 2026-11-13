@@ -1,0 +1,21 @@
+{
+  "description": "Morning panoramas preserve their aspect ratio at the authored map width. floorFromBottom is the walking baseline measured upward from the complete PNG bottom, divided by PNG height. Other maps retain the original rectangle fit.",
+  "entries": [
+    {
+      "place": "ResidentialCenter",
+      "floorFromBottom": 0.35082872928176795
+    },
+    {
+      "place": "Street",
+      "floorFromBottom": 0.2762430939
+    },
+    {
+      "place": "Harbor",
+      "floorFromBottom": 0.2002762431
+    },
+    {
+      "place": "Boardwalk",
+      "floorFromBottom": 0.2209944751
+    }
+  ]
+}
