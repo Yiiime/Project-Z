@@ -57,6 +57,10 @@ namespace Seabreeze.Editor
             File.WriteAllText(Path.Combine(folder,"启动七人记忆试玩.command"),"#!/bin/sh\nset -eu\ncd \"$(dirname \"$0\")\"\nif [ -x Runtime/node ]; then export Z_MEMORY_NODE=\"$PWD/Runtime/node\"; export Z_LIVE_NODE=\"$PWD/Runtime/node\"; fi\nexport Z_LIVE_CONNECTION_FILE=\"$PWD/live-service/.runtime/team-connection.json\"\nsh MemoryLab/start.sh --background\nopen ProjectZSevenMemory.app --env \"Z_LIVE_CONNECTION_FILE=$Z_LIVE_CONNECTION_FILE\" --args -memoryService \"http://127.0.0.1:${Z_MEMORY_PORT:-4330}\"\n");
             MakeExecutable(Path.Combine(folder,"启动七人记忆试玩.command"));
             if(File.Exists(Path.Combine(folder,"Runtime/node")))MakeExecutable(Path.Combine(folder,"Runtime/node"));
+            using(var signing=System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo {FileName="/usr/bin/codesign",Arguments="--force --deep --sign - \""+destination.Replace("\"","\\\"")+"\"",UseShellExecute=false,CreateNoWindow=true}))
+            {
+                signing.WaitForExit();if(signing.ExitCode!=0)throw new IOException("Could not sign the complete macOS player.");
+            }
             Debug.Log("Unified eight-role playable built: "+destination);
         }
         static void MakeExecutable(string path)
