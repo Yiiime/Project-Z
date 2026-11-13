@@ -18,7 +18,7 @@ Shader "Hidden/ProjectZ/ArrivalNameComposite"
   float2 uv=float2(original.x/1280,1-original.y/778);
   fixed4 overlay=tex2D(_Overlay,uv);
   float inside=step(0,uv.x)*step(uv.x,1)*step(0,uv.y)*step(uv.y,1);
-  float feather=max(edge(original,_NameRect),edge(original,float4(172,509,512,52)));
+  float feather=max(max(edge(original,_NameRect),edge(original,float4(172,509,512,52))),edge(original,float4(320,443,90,44)));
   return fixed4(lerp(video.rgb,overlay.rgb,overlay.a*_Visible*inside*feather),1);
  }
  ENDCG

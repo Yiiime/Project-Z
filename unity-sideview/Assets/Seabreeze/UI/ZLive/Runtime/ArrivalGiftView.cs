@@ -73,6 +73,10 @@ namespace ZLive
             float nameWidth=Mathf.Clamp(value.Length*27+12,130,350);
             material.SetVector("_NameRect",new Vector4(344,357,nameWidth+16,48));
             Patch(canvas.transform,paper,new Rect(344,357,nameWidth+16,48));Patch(canvas.transform,paper,new Rect(172,509,512,52));
+            // Reuse a blank patch of the existing paper; replace only the baked greeter value.
+            var greeter=Rect(canvas.transform,"Greeter paper",new Rect(320,443,90,44)).gameObject.AddComponent<RawImage>();
+            greeter.texture=paper;greeter.uvRect=new Rect(320f/1280,1-520f/778,90f/1280,44f/778);greeter.raycastTarget=false;
+            Text(canvas.transform,"arrival-greeter","Z",new Rect(327,445,76,37),26,26);
             Text(canvas.transform,"arrival-winner-name",value,new Rect(351,363,nameWidth,37),26,21);
             Text(canvas.transform,"arrival-personal-message","码头的灯会为你亮着。"+value+"，我们岛上见。",new Rect(181,518,495,34),21,14);
             Canvas.ForceUpdateCanvases();foreach(var text in canvas.GetComponentsInChildren<TextMeshProUGUI>())text.ForceMeshUpdate();camera.Render();root.SetActive(false);return root;
