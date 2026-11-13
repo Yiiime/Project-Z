@@ -408,11 +408,11 @@
     },
     {
       "path": "unity-sideview/Tools/MemoryLab/server.mjs",
-      "sha256": "c5ab897e59d6e4b74c5c0e03a389f42e35078df7e4b89277637d941ed652c4fa"
+      "sha256": "7fab1bee1e0c49cce6c89f1a48afad4247db54ddaba80a35ac61d937c98646ea"
     },
     {
       "path": "unity-sideview/Tools/MemoryLab/lib/engine.mjs",
-      "sha256": "8b2a50b506ddbf4bc15b0c273a30c51c127bfed225e4cdac2bd50ee9f57028e8"
+      "sha256": "f9ff4b14266f48b0f91547659586c4101f4397dafaa8b680017a728fb249a82b"
     },
     {
       "path": "unity-sideview/Tools/MemoryLab/lib/policy.mjs",

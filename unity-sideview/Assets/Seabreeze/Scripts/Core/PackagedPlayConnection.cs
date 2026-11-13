@@ -53,12 +53,16 @@ namespace Seabreeze
             try
             {
                 if (!process.HasExited) { process.Kill(); throw new IOException("connection_timeout"); }
+                if (process.ExitCode == 78) { Error = "请先在打开的团队连接窗口完成 GitHub 登录，再返回点击开始或继续。"; }
+                else
+                {
                 if (process.ExitCode != 0) throw new IOException("connection_failed");
                 var connection = JsonUtility.FromJson<Connection>(File.ReadAllText(Path.Combine(runtime, "game-connection.json")));
                 if (!Uri.TryCreate(connection.memoryUrl, UriKind.Absolute, out var uri) || !uri.IsLoopback || uri.Scheme != "http")
                     throw new IOException("invalid_connection");
                 MemoryRuntimeConfig.Settings.serviceUrl = connection.memoryUrl.TrimEnd('/');
                 Environment.SetEnvironmentVariable("Z_LIVE_CONNECTION_FILE", Path.Combine(runtime, "connection.json"));
+                }
             }
             catch { Error = "暂时连接不到小岛主机。请确认主机已启动、两台电脑在同一局域网，然后再次点击开始或继续。你的进度已保留。"; }
             finally { process.Dispose(); }

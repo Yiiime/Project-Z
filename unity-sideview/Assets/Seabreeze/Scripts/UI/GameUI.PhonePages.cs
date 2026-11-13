@@ -57,18 +57,30 @@ namespace Seabreeze
                 y=PhoneEmpty(root,"等待委托记录",phoneData.TaskDataHint,"tasks");
                 PhoneButton(root,"Refresh tasks",54,y,228,44,"重新读取",()=>phoneData.Refresh());EndPhoneList(y+60);return;
             }
-            y=PhoneParagraph(root,y,phoneData.TaskDataHint,12,PhoneMuted)+10;
+            y=PhoneParagraph(root,y,phoneData.TaskDataHint,12,PhoneMuted)+14;
             int shown=0;
             foreach(var task in phoneData.Tasks.Where(t=>t.Status==phoneRoute.Filter).OrderByDescending(t=>t.Id==phoneData.PinnedTaskId))
             {
                 shown++;
-                string id=task.Id;var card=PhoneButton(root,"Task "+id,0,y,336,150,"",()=>PhoneNavigate("task",id));
-                PhoneText(card.transform,14,13,306,22,(task.Id==phoneData.PinnedTaskId?"已关注  ·  ":"")+PersonName(task.OwnerId),13,task.Id==phoneData.PinnedTaskId?PhoneWarm:PhoneMuted);
-                var title=PhoneText(card.transform,14,42,306,30,task.Title,21,PhoneWhite);title.overflowMode=TextOverflowModes.Ellipsis;
+                string id=task.Id;bool pinned=id==phoneData.PinnedTaskId;
+                var card=PhoneButton(root,"Task "+id,2,y,332,180,"",()=>PhoneNavigate("task",id));
+                StyleTaskGlass((RoundedPanel)card.targetGraphic,pinned);
+                UIHoverFeedback.Attach(card,pinned);
+                PhoneAvatar(card.transform,16,16,task.OwnerId,32);
+                var owner=PhoneText(card.transform,60,20,pinned?156:246,24,PersonName(task.OwnerId),13,PhoneMuted);
+                owner.textWrappingMode=TextWrappingModes.NoWrap;owner.overflowMode=TextOverflowModes.Ellipsis;
+                if(pinned)
+                {
+                    var tag=PhoneSurface("Followed task",card.transform,230,19,86,26,new Color(.79f,.73f,.88f,.12f),13);
+                    var tagText=PhoneText(tag.transform,0,0,86,26,"已关注",12,PhoneLilac);tagText.alignment=TextAlignmentOptions.Center;
+                }
+                float bottom=PhoneParagraph(card.transform,62,task.Title,20,PhoneWhite,16,300);
                 string next=task.Status=="offered"?"见面时回应这份邀请":task.Status=="completed"?"这件事，已经一起完成":task.Steps.FirstOrDefault(s=>!s.Complete&&s.Ready)?.Label??"等待前面的事情完成";
-                var hint=PhoneText(card.transform,14,83,306,24,next,14,PhoneMuted);hint.overflowMode=TextOverflowModes.Ellipsis;
-                int done=task.Steps.Count(s=>s.Complete);PhoneText(card.transform,14,118,306,20,done+" / "+task.Steps.Count+" 件事已完成",12,PhoneMuted);
-                y+=162;
+                bottom=PhoneParagraph(card.transform,bottom+8,next,14,PhoneMuted,16,300);
+                bottom=PhoneTaskProgress(card.transform,bottom+16,task.Steps.Count(s=>s.Complete),task.Steps.Count,16,300);
+                var arrow=PhoneText(card.transform,288,bottom-28,28,22,"›",20,PhoneMuted);arrow.alignment=TextAlignmentOptions.Right;
+                float height=bottom+14;
+                ((RectTransform)card.transform).sizeDelta=new Vector2(332,height);y+=height+16;
             }
             if(shown==0){var empty=Rect("Empty tasks",root,TL,TL,new Vector2(0,-y),new Vector2(336,400));y+=PhoneEmpty(empty,phoneRoute.Filter=="offered"?"没有等待回应的邀请":phoneRoute.Filter=="completed"?"故事还在慢慢发生":"暂时没有进行中的事",phoneRoute.Filter=="completed"?"一起完成的事情，会在这里留下记录。":"不用急着找事情做。去见见熟悉的人吧。","tasks");}
             EndPhoneList(y);
@@ -77,18 +89,29 @@ namespace Seabreeze
         {
             var root=PhoneList(110);var task=phoneData.Tasks.FirstOrDefault(t=>t.Id==phoneRoute.Id);
             if(task==null){EndPhoneList(PhoneEmpty(root,"这件事暂时不在记录中",phoneData.TaskDataAvailable?"返回任务页，查看当前的事情。":phoneData.TaskDataHint,"tasks"));return;}
-            float y=PhoneParagraph(root,0,TaskStatus(task.Status),13,PhoneMuted);
-            y=PhoneParagraph(root,y+10,task.Title,25);y=PhoneParagraph(root,y+14,task.Description,17);y+=18;
+            var summary=PhoneSurface("Task summary glass",root,2,0,332,180,Color.clear,22);StyleTaskGlass(summary);
+            FinalKitAssets.Icon("tasks",summary.transform,TL,TL,new Vector2(18,-19),new Vector2(22,22));
+            PhoneText(summary.transform,50,20,260,24,TaskStatus(task.Status),13,PhoneLilac);
+            float bottom=PhoneParagraph(summary.transform,59,task.Title,24,PhoneWhite,18,296);
+            bottom=PhoneParagraph(summary.transform,bottom+12,task.Description,16,PhoneMuted,18,296);
+            bottom=PhoneTaskProgress(summary.transform,bottom+18,task.Steps.Count(s=>s.Complete),task.Steps.Count,18,296);
+            summary.rectTransform.sizeDelta=new Vector2(332,bottom+16);
+            float y=bottom+34;
             y=PhonePersonLink(root,y,task.OwnerId);
             y=PhoneParagraph(root,y+10,"一步一步来",13,PhoneMuted);y+=14;
+            int index=0;
             foreach(var step in task.Steps)
             {
-                string mark=step.Complete?"✓":step.Ready?"·":"—";
-                var dot=PhoneSurface("Step status",root,8,y+1,24,24,new Color(.65f,.65f,.80f,.15f),12);
-                var symbol=PhoneText(dot.transform,0,0,24,24,mark,15,step.Complete?PhoneLilac:PhoneMuted);symbol.alignment=TextAlignmentOptions.Center;
-                float bottom=PhoneParagraph(root,y,step.Label,16,step.Complete?PhoneMuted:PhoneWhite,44,284);
+                index++;
+                bool ready=task.Status=="active"&&step.Ready&&!step.Complete;
+                var row=PhoneSurface("Task step "+index,root,2,y,332,80,ready?new Color(.58f,.69f,.81f,.14f):new Color(.55f,.66f,.81f,.055f),18);
+                row.SetBorder(new Color(.87f,.91f,.98f,ready?.3f:.12f),.7f);
+                var dot=PhoneSurface("Step status",row.transform,14,16,28,28,new Color(.79f,.73f,.88f,ready?.19f:.08f),14);
+                var symbol=PhoneText(dot.transform,0,0,28,28,step.Complete?"✓":index.ToString(),13,step.Complete||ready?PhoneLilac:PhoneMuted);symbol.alignment=TextAlignmentOptions.Center;
+                bottom=PhoneParagraph(row.transform,15,step.Label,16,step.Complete?PhoneMuted:PhoneWhite,54,262);
                 string state=step.Complete?"已完成":task.Status=="offered"?"回应邀请后再开始":step.Ready?"接下来可以做":"完成前置事项后继续";
-                bottom=PhoneParagraph(root,bottom+3,state,12,PhoneMuted,44,284);y=bottom+18;
+                bottom=PhoneParagraph(row.transform,bottom+5,state,12,PhoneMuted,54,262);
+                row.rectTransform.sizeDelta=new Vector2(332,bottom+14);y+=bottom+26;
             }
             if(task.Status=="active"||task.Status=="offered")
             {
@@ -96,6 +119,29 @@ namespace Seabreeze
                 PhoneButton(root,"Pin task",0,y+8,336,48,pinned?"✓ 已关注到首页 · 点击取消":"关注到手机首页",()=>{RememberPhoneScroll();phoneData.TogglePinnedTask(task.Id);},16,pinned);y+=74;
             }
             y=PhoneParagraph(root,y,task.Status=="offered"?"是否接受，见面时再告诉对方。":"阅读与关注不会推进进度。",13,PhoneMuted);EndPhoneList(y);
+        }
+        void StyleTaskGlass(RoundedPanel panel,bool followed=false)
+        {
+            panel.CornerRadius=22;
+            panel.color=followed?new Color(.49f,.49f,.66f,.22f):new Color(.45f,.55f,.70f,.14f);
+            panel.SetBorder(new Color(.89f,.92f,1,followed?.38f:.23f),.8f);
+            var rim=Stretch("Task glass inner edge",panel.transform,new Vector2(3,3),new Vector2(-3,-3)).gameObject.AddComponent<RoundedPanel>();
+            rim.CornerRadius=19;rim.color=Color.clear;rim.raycastTarget=false;rim.SetBorder(new Color(.89f,.92f,1,.06f),.6f);
+        }
+        float PhoneTaskProgress(Transform parent,float y,int done,int total,float x,float width)
+        {
+            // Only server-confirmed step facts supply the meter; no inferred completion.
+            if(total>0)
+            {
+                var track=PhoneSurface("Task progress track",parent,x,y,width,3,new Color(.85f,.90f,1,.10f),1.5f);track.SetBorder(Color.clear,0);
+                float fraction=Mathf.Clamp01(done/(float)total);
+                if(fraction>0)
+                {
+                    var fill=PhoneSurface("Task progress",parent,x,y,width*fraction,3,new Color(.74f,.80f,.94f,.75f),1.5f);fill.SetBorder(Color.clear,0);
+                }
+                y+=11;
+            }
+            return PhoneParagraph(parent,y,total>0?done+" / "+total+" 件事已完成":"暂无分项记录",12,PhoneMuted,x,width-32);
         }
         void BuildPhoneAlbum()
         {

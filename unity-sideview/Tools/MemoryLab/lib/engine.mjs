@@ -886,7 +886,7 @@ export class Engine {
           : [],
       available_actions: actions,
       previous_action_result: a.previous_result,
-      reply_budget: { max_dialogue_chars: 160, deadline_ms: 8000 },
+      reply_budget: { max_dialogue_chars: 160, deadline_ms: this.provider.team ? 30000 : 8000 },
     };
   }
   ready(world) {

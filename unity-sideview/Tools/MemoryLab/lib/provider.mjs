@@ -42,8 +42,9 @@ const credentialScope = (config) =>
   `${config.provider}:${new URL(config.baseUrl).origin}`;
 
 export class ModelProvider {
-  constructor(store, { allowTestEndpoint = false } = {}) {
+  constructor(store, { allowTestEndpoint = false, fetchImpl = fetch } = {}) {
     this.store = store;
+    this.fetch = fetchImpl;
     this.config = migrateConfig(store.settings());
     this.keys = new Map();
     if (process.env.DEEPSEEK_API_KEY) {
@@ -233,7 +234,7 @@ export class ModelProvider {
       : AbortSignal.timeout(120000);
     let response;
     try {
-      response = await fetch(endpoint, {
+      response = await this.fetch(endpoint, {
         method: "POST",
         redirect: "error",
         signal: combined,
