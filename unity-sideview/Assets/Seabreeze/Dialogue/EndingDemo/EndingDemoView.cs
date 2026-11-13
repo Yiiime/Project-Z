@@ -24,7 +24,7 @@ namespace Seabreeze.EndingDemo
         [Serializable] public class DailyPage { public int day; public string title, text; }
         [Serializable] public class RecapPage { public int startDay, endDay; public string title, text; }
         [Serializable] public class Outcome { public string status, label, text; }
-        [Serializable] public class EndingRun { public string id, mode,worldId,runId,sourceName,playerName; public Decision decision; public Recollection[] recollections; public DailyPage[] dailyPages; public RecapPage[] recapPages; public Outcome outcome; public int memoryCount,liveMemoryCount,sourceDay,sourceSeq; }
+        [Serializable] public class EndingRun { public string id, mode,worldId,runId,sourceName,playerName,lastMessage; public Decision decision; public Recollection[] recollections; public DailyPage[] dailyPages; public RecapPage[] recapPages; public Outcome outcome; public int memoryCount,liveMemoryCount,sourceDay,sourceSeq; }
         [Serializable] class ErrorReply { public string error; }
 
         readonly Color paper = new Color(.93f, .91f, .87f), muted = new Color(.65f, .69f, .75f), gold = new Color(.85f, .73f, .54f);

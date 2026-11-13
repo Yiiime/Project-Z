@@ -29,6 +29,13 @@ namespace Seabreeze
                 if(Array.IndexOf(args,"-memoryDisabled")>=0) settings.enabled=false;
                 int index=Array.IndexOf(args,"-memoryService");
                 if(index>=0&&index+1<args.Length) settings.serviceUrl=args[index+1];
+                else
+                {
+                    // Finder launches do not preserve --args. The game launcher
+                    // records its verified loopback service for this demo build.
+                    string endpoint=LastEndingService();
+                    if(!string.IsNullOrEmpty(endpoint))settings.serviceUrl=endpoint;
+                }
                 if(!Uri.TryCreate(settings.serviceUrl,UriKind.Absolute,out var uri)||!uri.IsLoopback||uri.Scheme!="http")
                     throw new InvalidOperationException("Memory service must use a local HTTP address.");
                 settings.serviceUrl=settings.serviceUrl.TrimEnd('/');
@@ -37,6 +44,19 @@ namespace Seabreeze
             }
         }
         public static bool Enabled => Settings.enabled;
+        [Serializable] sealed class EndingService { public string serviceUrl; }
+        static string LastEndingService()
+        {
+            if(Application.identifier!="com.projectz.islandending")return null;
+            string file=System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal),".project-z","ending-demo","game-service.json");
+            try
+            {
+                if(!System.IO.File.Exists(file))return null;
+                string value=JsonUtility.FromJson<EndingService>(System.IO.File.ReadAllText(file))?.serviceUrl;
+                return Uri.TryCreate(value,UriKind.Absolute,out var uri)&&uri.IsLoopback&&uri.Scheme=="http"?value:null;
+            }
+            catch{return null;}
+        }
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)] static void Reset() { settings=null; }
     }
 }

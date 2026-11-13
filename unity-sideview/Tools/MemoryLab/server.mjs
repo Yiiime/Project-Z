@@ -91,6 +91,7 @@ export function createServer({
     endingDailyPages: true,
     endingRecapPages: true,
     endingRecapVersion: 3,
+    endingSourceRefresh: 4,
     configurationRevision,
     mode: provider.mode || "real",
     version: catalog.registry.pack_version,

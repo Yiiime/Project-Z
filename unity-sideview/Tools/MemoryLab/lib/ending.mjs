@@ -106,16 +106,23 @@ export class GameEndingCoordinator {
   sourceState(world) {
     const context = this.context(world);
     const pending = this.progress.get(world.worldId);
-    const current = pending?.runId === world.runId && pending.contextRevision === context.contextRevision ? pending : null;
+    const current = pending?.runId === world.runId && pending.sourceRevision === context.sourceRevision ? pending : null;
+    const outdatedProgress = pending?.runId === world.runId && pending.sourceRevision !== context.sourceRevision;
     const cached = Object.values(world.seventhNightEndings || {}).map(e => e.result)
-      .filter(e => e.contextRevision === context.contextRevision).sort((a,b) => a.createdAt.localeCompare(b.createdAt)).at(-1);
+      // Keep exact pre-rename built-in checkpoints readable while allowing a
+      // completed snapshot to remain visible after new live events change only
+      // its contextRevision.
+      .filter(e => e.sourceRevision === context.sourceRevision || e.contextRevision === context.contextRevision)
+      .sort((a,b) => a.createdAt.localeCompare(b.createdAt)).at(-1);
     const ending = current?.result || (!current && cached);
+    const outdated = outdatedProgress && !ending;
     const previous = Object.values(world.seventhNightEndings || {}).map(e => e.result)
       .filter(e => e.id !== ending?.id).sort((a,b) => a.createdAt.localeCompare(b.createdAt)).at(-1);
     return { sourceName: context.sourceName, sourceRevision: context.sourceRevision, uploaded: !!world.endingMemorySource,
       contextRevision: context.contextRevision, memoryCount: knownMemories(context.scenario).length,
-      liveMemoryCount: context.liveMemoryCount, phase: current?.phase || 'idle',
-      completed: current?.completed || 0, error: current?.error || '',
+      newExperiencesAvailable: !!ending && ending.contextRevision !== context.contextRevision,
+      liveMemoryCount: context.liveMemoryCount, phase: current?.phase || (outdated ? 'outdated' : 'idle'),
+      completed: current?.completed || 0, error: current?.error || (outdated ? '生成期间本局经历已变化，请按最新记忆重新生成。已上传文件仍然保留。' : ''),
       ...(ending ? { ending } : {}), ...(previous ? { previousEnding: previous } : {}) };
   }
   generate(input, assertRun) {
@@ -137,12 +144,16 @@ export class GameEndingCoordinator {
   }
   async run(input, mode, fingerprint, assertRun) {
     const original = assertRun(input), epoch = original.epoch;
+    const sourceDay = original.day, sourceSeq = original.seq, zState = structuredClone(original.actors.z.info);
     const { scenario, liveMemoryCount, eventIds, contextRevision, sourceRevision, sourceName } = this.context(original);
-    const progress = { runId: original.runId, contextRevision, phase: 'deciding', completed: 0 };
+    const progress = { runId: original.runId, contextRevision, sourceRevision, phase: 'deciding', completed: 0 };
     this.progress.set(original.worldId, progress);
     const checkCurrent = () => {
       const current = assertRun(input);
-      if (current.epoch !== epoch || this.context(current).contextRevision !== contextRevision)
+      // Autonomous NPC events continue while an upload is being generated.
+      // Finish this immutable snapshot; only replacing its authored source or
+      // leaving its timeline can invalidate the request.
+      if (current.epoch !== epoch || this.context(current).sourceRevision !== sourceRevision)
         throw new TurnError('经历已更新，旧结局不会写回，请使用最新记忆重新生成');
       return current;
     };
@@ -184,10 +195,11 @@ export class GameEndingCoordinator {
     const current = checkCurrent();
     if (current.epoch !== epoch) throw new TurnError('结局属于已取消的时间线');
     const result = { id: randomUUID(), mode, revision: revisionOf(scenario), createdAt: new Date().toISOString(),
-      scenarioTitle: scenario.title, playerName: scenario.playerName, decision, recollections, dailyPages, recapPages, memoryCount: recollections.length,
+      scenarioTitle: scenario.title, playerName: scenario.playerName, lastMessage: scenario.lastMessage, decision, recollections,
+      dailyPages, recapPages, memoryCount: recollections.length,
       outcome: resolveOutcome(scenario, decision.choice), worldId: current.worldId, runId: current.runId,
-      sourceDay: original.day, sourceSeq: original.seq, liveMemoryCount, sourceEventIds: eventIds,
-      zState: structuredClone(original.actors.z.info), sourceName, contextRevision, sourceRevision };
+      sourceDay, sourceSeq, liveMemoryCount, sourceEventIds: eventIds,
+      zState, sourceName, contextRevision, sourceRevision };
     current.seventhNightEndings ||= {};
     current.seventhNightEndings[input.requestId] = { fingerprint, result };
     const keys = Object.keys(current.seventhNightEndings);

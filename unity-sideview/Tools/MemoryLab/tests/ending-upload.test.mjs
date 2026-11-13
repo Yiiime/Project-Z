@@ -55,6 +55,27 @@ test('upload parses intact source, uses this save only, and automatically rebuil
   assert.equal(f.app.engine.world(other.worldId).endingMemorySource,undefined);
 });
 
+test('new game events during generation do not starve the uploaded snapshot and are available for the next regeneration',async t=>{
+  let entered,release;
+  const ready=new Promise(r=>entered=r),wait=new Promise(r=>release=r);
+  const f=await fixture(t,async input=>{if(input.memories&&!input.choice&&input.memories.some(m=>m.text.includes('PAUSE_CURRENT'))){entered();await wait;}});
+  const token=await f.open();
+  const draft=await f.upload(token,'import',{name:'current.txt',text:'PAUSE_CURRENT：Z与玩家已经共同看过的经历。'});
+  await f.commit(token,draft);const job=f.job();await ready;
+  await f.game('sync',{...f.base,eventData:{id:'later',seq:1,day:1,period:0,kind:'utterance',speakerId:'player',recipientId:'z',conversationId:'ours',channel:'private_player_chat',text:'NEW_EVENT_DURING_GENERATION'}});
+  release();await job.promise;
+  const status=await f.upload(token,'status');
+  assert.equal(status.data.source.phase,'complete');
+  assert.equal(status.data.source.uploaded,true);
+  assert.equal(status.data.source.sourceName,'current.txt');
+  assert.equal(status.data.source.error,'');
+  assert.equal(status.data.source.newExperiencesAvailable,true);
+  assert.equal(status.data.job.status,'complete');
+  assert.ok(!JSON.stringify(status.data.source.ending.recollections).includes('NEW_EVENT_DURING_GENERATION'));
+  const next=await f.game('ending',{...f.base,requestId:'next_snapshot',details:{mode:'model'}});
+  assert.ok(JSON.stringify(next.data.ending.recollections).includes('NEW_EVENT_DURING_GENERATION'));
+});
+
 test('reupload replaces the prior file, retains real experiences and old ending snapshots, and survives a checkpoint reload',async t=>{
   const f=await fixture(t);const token=await f.open();
   let draft=await f.upload(token,'import',{name:'first.txt',text:'OLD_FILE：前一次文件。'});await f.commit(token,draft);await f.job().promise;
@@ -94,7 +115,8 @@ test('new actual experiences change the ending context, and reset-without-checkp
   const f=await fixture(t),token=await f.open();const d=await f.upload(token,'import',{name:'known.txt',text:'NEW_FILE：已知经历。'});await f.commit(token,d);await f.job().promise;
   const before=(await f.game('ending-source')).data.endingSource.contextRevision;
   await f.game('sync',{...f.base,eventData:{id:'later',seq:1,day:1,period:0,kind:'utterance',speakerId:'player',recipientId:'z',conversationId:'later',channel:'private_player_chat',text:'LATER_GAME_MEMORY'}});
-  const changed=(await f.game('ending-source')).data;assert.notEqual(changed.endingSource.contextRevision,before);assert.equal(changed.ending,undefined);
+  const changed=(await f.game('ending-source')).data;assert.notEqual(changed.endingSource.contextRevision,before);
+  assert.equal(changed.endingSource.newExperiencesAvailable,true);assert.ok(changed.ending,'completed snapshot remains replayable until explicit regeneration');
   const regenerated=await f.game('ending',{...f.base,requestId:'later-ending',details:{mode:'model'}});
   assert.ok(JSON.stringify(regenerated.data.ending).includes('LATER_GAME_MEMORY'));
   await f.game('open',{...f.base,runId:'fresh'});

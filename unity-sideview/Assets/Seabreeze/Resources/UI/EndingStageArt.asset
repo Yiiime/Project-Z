@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f63d8dcdfbbe4494bc38eeb844ef3ead, type: 3}
+  m_Name: EndingStageArt
+  m_EditorClassIdentifier: Assembly-CSharp::Seabreeze.EndingStageArt
+  bedroom: {fileID: 2800000, guid: 76a33b0027334aa8aa8ed476739f3074, type: 3}
+  street: {fileID: 2800000, guid: d9e59c09b15814fcdb7d9126220a8e56, type: 3}
+  dock: {fileID: 2800000, guid: 0dc90966aa0ac40118a3caddd501a2e8, type: 3}
+  cafe: {fileID: 2800000, guid: e337968764ace4017a601b0ee7edb659, type: 3}
+  flowers: {fileID: 2800000, guid: 2ad39928bf3904d66b4b6ada9e6ed476, type: 3}
+  photo: {fileID: 2800000, guid: 8201d2504089046ae87580dfce337bad, type: 3}
+  research: {fileID: 2800000, guid: bedb31af9904a43a784b908b5012ce0a, type: 3}
+  forest: {fileID: 2800000, guid: a865194c0b2754ab0a1f127db83f5407, type: 3}
