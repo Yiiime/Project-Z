@@ -5,15 +5,18 @@ import {spawn} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 import {createGateway} from './gateway.mjs';
 import {loadEnvironment} from '../live-service/server/providers.mjs';
+import {loadTeamClient,memberVerifier} from './team-access.mjs';
+import {TeamClient} from '../team-model/client.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url)), tools = path.dirname(here);
 const local = path.resolve(process.env.Z_LAN_HOST_ROOT || path.join(here, '.local'));
 const config = JSON.parse(fs.readFileSync(path.join(local, 'host.json')));
 const configDirectory = process.env.Z_LIVE_CONFIG_DIR || path.join(tools, 'live-service');
 const provider = loadEnvironment(configDirectory);
+const team=loadTeamClient();
 const modelFile = process.env.Z_MEMORY_CONFIG || path.join(tools, 'MemoryLab/.local/model.json');
-if (!provider.DEEPSEEK_API_KEY) {try {provider.DEEPSEEK_API_KEY = JSON.parse(fs.readFileSync(modelFile)).apiKey;} catch {}}
-if (!provider.DEEPSEEK_API_KEY || !provider.VOLC_TTS_API_KEY) throw Error('主机必须先配置模型和火山 TTS，玩家端无需配置。');
+if (!provider.DEEPSEEK_API_KEY && !team) {try {const shared=JSON.parse(fs.readFileSync(modelFile));if(shared.provider==='deepseek'&&/^https:\/\/api\.deepseek\.com(?:\/v1)?\/?$/.test(shared.baseUrl||''))provider.DEEPSEEK_API_KEY=shared.apiKey;} catch {}}
+if (!team&&(!provider.DEEPSEEK_API_KEY || !provider.VOLC_TTS_API_KEY)) throw Error('主机必须先配置模型和火山 TTS，玩家端无需配置。');
 const sessions = new Map(), children = new Set();
 const freePort = () => new Promise((resolve, reject) => {
   const server = http.createServer(); server.on('error', reject);
@@ -29,6 +32,7 @@ async function startPlayer(id) {
     Z_LIVE_OFFICE: '0', Z_MEMORY_PORT: String(memoryPort), Z_UNITY_PORT: String(livePort),
     Z_LIVE_CONFIG_DIR: configDirectory, Z_LIVE_RUNTIME_DIR: path.join(root, 'live'),
     Z_MEMORY_DB: path.join(root, 'memory.sqlite'), Z_LIVE_CONNECTION_FILE: connection,
+    ...(team?{Z_TEAM_SESSION_DIR:path.join(root,'team-session')} : {}),
     Z_LIVE_CHARACTER_SERVICE_URL: `http://127.0.0.1:${memoryPort}`};
   try {
     for (const [name, folder, entry] of [['memory', 'MemoryLab', 'server.mjs'], ['live', 'live-service', 'server/index.mjs']]) {
@@ -44,7 +48,8 @@ async function startPlayer(id) {
         const [m, l] = await Promise.all([
           fetch(`http://127.0.0.1:${memoryPort}/api/health`, {signal: AbortSignal.timeout(1000)}),
           fetch(`http://127.0.0.1:${livePort}/health`, {headers: {Authorization: 'Bearer ' + token}, signal: AbortSignal.timeout(1000)})]);
-        if (m.ok && l.ok && (await m.json()).configured && (await l.json()).ttsConfigured)
+        const memoryStatus=await m.json(),liveStatus=await l.json();
+        if (m.ok && l.ok && memoryStatus.configured && (team||liveStatus.ttsConfigured))
           return {memory: `http://127.0.0.1:${memoryPort}`, live: `http://127.0.0.1:${livePort}`, liveToken: token};
       } catch {}
       await new Promise(resolve => setTimeout(resolve, 200));
@@ -54,7 +59,13 @@ async function startPlayer(id) {
 }
 const {server} = createGateway({key: fs.readFileSync(path.join(local, 'host.key')), cert: fs.readFileSync(path.join(local, 'host.crt')),
   invitation: config.invitation, maxPlayers: config.maxPlayers, registryFile: path.join(local, 'players.json'),
-  backend(id) {if (!sessions.has(id)) sessions.set(id, startPlayer(id).catch(error => {sessions.delete(id); throw error;})); return sessions.get(id);}});
+  verifyMember:memberVerifier(team),
+  backend(id,member) {
+    if(team){
+      const scoped=new TeamClient(team.config,{certificate:team.certificate,sessionDirectory:path.join(local,'players',id,'team-session')});
+      if(scoped.session()?.token!==member.token)scoped.save(member);
+    }
+    if (!sessions.has(id)) sessions.set(id, startPlayer(id).catch(error => {sessions.delete(id); throw error;})); return sessions.get(id);}});
 server.listen(config.port, config.address, () => {
   fs.writeFileSync(path.join(local, 'host-process.json'), JSON.stringify({pid: process.pid, address: config.address, port: config.port}), {mode: 0o600});
   console.log(`小岛主机已启动：https://${config.address}:${config.port}。请保持 Mac 开机、联网且不合盖。`);

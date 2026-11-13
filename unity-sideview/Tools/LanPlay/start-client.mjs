@@ -3,15 +3,25 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {spawn, spawnSync} from 'node:child_process';
 import {digest} from './protocol.mjs';
+import {loadTeamClient} from './team-access.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url)), root = path.resolve(here, '../..');
 const configFile = path.join(root, 'connection-config.json'), config = JSON.parse(fs.readFileSync(configFile));
+const team=loadTeamClient();
+if(team){
+  let connected=false;try{if(team.session()){await team.verify();connected=true;}}catch{}
+  if(!connected){
+    if(process.argv.includes('--check')){spawn('/usr/bin/open',[path.join(root,'连接团队.command')],{stdio:'ignore'}).unref();process.exit(78);}
+    const login=spawnSync(process.execPath,[path.join(here,'../team-model/login.mjs')],{stdio:'inherit'});
+    if(login.status!==0)throw Error('请先用有项目权限的 GitHub 账号登录。');
+  }
+}
 const runtime = path.join(root, '.local/lan-client'); fs.mkdirSync(runtime, {recursive: true, mode: 0o700});
 const stateFile = path.join(runtime, 'relay.json');
 const health = async (url, token) => {try {const res = await fetch(url, {headers: token ? {Authorization: 'Bearer ' + token} : {}, signal: AbortSignal.timeout(3000)}); return res.ok ? await res.json() : null;} catch {return null;}};
 let state;
 try {state = JSON.parse(fs.readFileSync(stateFile));} catch {}
-if (state?.fingerprint !== digest(JSON.stringify(config)) || !(await health(state?.connection?.baseUrl + '/relay-health', state?.connection?.token))?.ok) {
+if (state?.fingerprint !== digest(JSON.stringify(config)) || (state?.teamFingerprint??null)!==(team?digest(team.origin+team.certificate):null) || !(await health(state?.connection?.baseUrl + '/relay-health', state?.connection?.token))?.ok) {
   const log = fs.openSync(path.join(runtime, 'connection.log'), 'a', 0o600);
   const child = spawn(process.execPath, [path.join(here, 'relay.mjs'), configFile, runtime], {detached: true, stdio: ['ignore', log, log]});
   child.unref(); fs.closeSync(log); state = null;
@@ -25,7 +35,7 @@ if (!state) throw Error('连接不到小岛主机。请确认同一 Wi-Fi／局�
 let ready = false;
 for (let i = 0; i < 12; i++) {
   const [memory, live] = await Promise.all([health(state.memoryUrl + '/api/health'), health(state.connection.baseUrl + '/health', state.connection.token)]);
-  if (memory?.configured && memory?.speech?.configured && live?.agentConfigured && live?.ttsConfigured) {ready = true; break;}
+  if (memory?.configured && live?.agentConfigured && (team||(memory?.speech?.configured&&live?.ttsConfigured))) {ready = true; break;}
   await new Promise(resolve => setTimeout(resolve, 500));
 }
 if (!ready) throw Error('主机的模型或语音暂未就绪，请让主机管理员检查服务；玩家无需填写 API。');

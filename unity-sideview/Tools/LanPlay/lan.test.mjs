@@ -10,6 +10,29 @@ import {createGateway} from './gateway.mjs';
 import {createRelay} from './relay.mjs';
 import {allowed} from './protocol.mjs';
 
+test('team LAN invitation also requires current GitHub membership and binds the player identity',async t=>{
+  const root=fs.mkdtempSync(path.join(os.tmpdir(),'z-team-lan-'));
+  fs.writeFileSync(root+'/cert.cnf','[req]\ndistinguished_name=dn\nx509_extensions=ext\nprompt=no\n[dn]\nCN=Team LAN test\n[ext]\nsubjectAltName=IP:127.0.0.1\nbasicConstraints=critical,CA:TRUE\n');
+  execFileSync('openssl',['req','-x509','-newkey','rsa:2048','-nodes','-days','1','-config',root+'/cert.cnf','-keyout',root+'/key','-out',root+'/cert'],{stdio:'ignore'});
+  const cert=fs.readFileSync(root+'/cert');let revoked=false;
+  const backend=http.createServer((req,res)=>{res.setHeader('Content-Type','application/json');res.end(JSON.stringify({ok:true,leakedTeamHeader:req.headers['x-z-team-token']||null}));});
+  await new Promise(r=>backend.listen(0,'127.0.0.1',r));
+  const gateway=createGateway({key:fs.readFileSync(root+'/key'),cert,invitation:'a'.repeat(64),registryFile:root+'/players.json',verifyMember:async token=>!revoked&&['member-a','member-b'].includes(token)?{token,user:{id:token==='member-a'?1:2,login:token},expires:Date.now()+60000}:null,backend:async(id,member)=>{assert.equal(member.user.id,1);return {memory:`http://127.0.0.1:${backend.address().port}`,live:`http://127.0.0.1:${backend.address().port}`,liveToken:'internal'};}});
+  await new Promise(r=>gateway.server.listen(0,'127.0.0.1',r));
+  t.after(()=>{for(const s of [gateway.server,backend]){s.closeAllConnections();s.close();}fs.rmSync(root,{recursive:true,force:true});});
+  const send=(route,authorization,member,data)=>new Promise((resolve,reject)=>{
+    const req=https.request(`https://127.0.0.1:${gateway.server.address().port}`+route,{method:data?'POST':'GET',ca:cert,headers:{Authorization:'Bearer '+authorization,'Content-Type':'application/json',...(member?{'X-Z-Team-Token':member}:{})}},res=>{const chunks=[];res.on('data',b=>chunks.push(b));res.on('end',()=>resolve({status:res.statusCode,body:JSON.parse(Buffer.concat(chunks))}));});req.on('error',reject);req.end(data?JSON.stringify(data):undefined);
+  });
+  const identity={id:'1'.repeat(32),secret:'2'.repeat(64)};
+  assert.equal((await send('/register','a'.repeat(64),null,identity)).status,403);
+  assert.equal((await send('/register','a'.repeat(64),'member-a',identity)).status,200);
+  assert.equal((await send('/register','a'.repeat(64),'member-b',identity)).status,403);
+  assert.equal((await send('/memory/api/health',identity.secret,null)).status,403);
+  const accepted=await send('/memory/api/health',identity.secret,'member-a');assert.equal(accepted.status,200);assert.equal(accepted.body.leakedTeamHeader,null);
+  assert.equal((await send('/memory/api/health',identity.secret,'member-b')).status,403);
+  revoked=true;assert.equal((await send('/memory/api/health',identity.secret,'member-a')).status,403);
+});
+
 test('LAN gateway: TLS, player isolation, streaming, cancellation, route boundaries and binding', async t => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'z-lan-test-'));
   const cnf = path.join(root, 'openssl.cnf');
