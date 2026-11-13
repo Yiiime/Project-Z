@@ -1,0 +1,2187 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-13",
+  "scope": "32 enabled Unity scenes, evening artwork variants only",
+  "assetCount": 32,
+  "indoorCount": 16,
+  "outdoorCount": 16,
+  "styleReference": {
+    "providedBy": "user",
+    "attachmentFilename": "codex-clipboard-b050fd28-e93e-4d02-ade6-ecd197d00e9e.png",
+    "dimensions": [
+      5120,
+      2880
+    ],
+    "bytes": 7152808,
+    "sha256": "4e9c06ccb16a6a16b809b3bc9ab0daf2b9d757176aeebca3f28623212dcb1839",
+    "use": "只参考日系手绘画风、钴蓝/紫色阴影、橙粉晚霞与暖琥珀灯光，不复制参考图构图与船只/建筑。"
+  },
+  "integration": {
+    "period": "TimePeriod.Evening",
+    "resourceRoot": "Assets/Seabreeze/Resources/Art/IslandEvening",
+    "baseAssets": "preserved",
+    "morningAfternoonNight": "retain original artwork and existing atmosphere behavior",
+    "renderBounds": "variant is fitted to original authored local rectangle on both axes; original transform is restored outside Evening",
+    "status": "32 PNG resources and paired .meta files are present in runtime resource folder; Unity compilation and visual acceptance are tracked separately."
+  },
+  "resolutionDisclosure": "Most independent generated images are around 1.6K wide. ResidentialCenter/Street/Boardwalk are generated-tile and seam assemblies delivered at 900px height (4921/3728/2939px width). Intermediate wide canvases are spatial registration artifacts, not native 8K detail. Harbor black border was removed: native 2171x724 -> delivered 2171x700.",
+  "coverage": {
+    "enabledSceneCount": 32,
+    "missingEnabledScenes": [],
+    "legacyEnumValuesWithoutEnabledScene": [
+      "ResidentialWest",
+      "ResidentialEast",
+      "Garden",
+      "Bookshop",
+      "Restaurant"
+    ]
+  },
+  "provenance": {
+    "recordedPromptAssetCount": 32,
+    "rootGenerationStepCount": 16,
+    "pendingPromptPlaceIds": [],
+    "rootGenerationRecord": "root-generation.json"
+  },
+  "assets": [
+    {
+      "placeId": "Street",
+      "displayName": "花店 · 咖啡店 · 照相馆",
+      "category": "outdoor",
+      "scene": "Assets/Seabreeze/Scenes/Street.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/Street.png",
+      "sourceDimensions": [
+        6168,
+        1489
+      ],
+      "sourceSha256": "487acffe708ac8b66dd3b5ba2e60adb8200b8df35fe2a2ac2558ad20527984d6",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/Street.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/Street.png",
+      "resourceKey": "Art/IslandEvening/Street",
+      "outputDimensions": [
+        6168,
+        1489
+      ],
+      "outputBytes": 11821592,
+      "outputSha256": "4e2f167bcc3b37125cd0f75db54580392609edbf3e8afb9812f2500a21c9716c",
+      "productionMethod": "overlapping_generated_tiles_and_seam_assembly",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": null,
+      "promptStatus": "recorded",
+      "prompt": null,
+      "generationArtifact": null,
+      "sourceManifest": "Docs/Art/Evening-20261113/root-generation.json",
+      "review": {
+        "framing": "主要门窗、家具和地面构图已目视核对；生成式编辑不保证逐像素几何一致。",
+        "acceptance": "资产文件检查，不代表 Unity 运行验收。"
+      },
+      "notes": [
+        "最终宽画布由多个生成分块与接缝处理拼合；画布尺寸不代表单次原生高分辨率生成，禁止标为真原生 8K。"
+      ],
+      "tileInputs": [
+        {
+          "path": "ArtSource/Evening-20261113/Inputs/Street-left.png",
+          "dimensions": [
+            3084,
+            1489
+          ],
+          "bytes": 5399319,
+          "sha256": "a8aa2c3f377a54de33518adc1968952e33a3eb39417830efe5c2fd948be7d7e4"
+        },
+        {
+          "path": "ArtSource/Evening-20261113/Inputs/Street-right.png",
+          "dimensions": [
+            3084,
+            1489
+          ],
+          "bytes": 4771984,
+          "sha256": "4671ef5930cadda5e700028ef3bd3d6b38b46f0a07aae9e8b7266f1fb57fb930"
+        },
+        {
+          "path": "ArtSource/Evening-20261113/Inputs/Street-seam-3084.png",
+          "dimensions": [
+            900,
+            1489
+          ],
+          "bytes": 1778460,
+          "sha256": "2f70006aa653f457d7764fdbedbbbaf44d8f84356bf77adba9ef46d7bfcce349"
+        }
+      ],
+      "runtimeDimensions": [
+        3728,
+        900
+      ],
+      "runtimeBytes": 5249691,
+      "runtimeSha256": "75c359997288662fd074ef218d1b1b2094c5fdc2781eb36a749995abba0b5fdd",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "generationSteps": [
+        {
+          "id": "Street-left",
+          "prompt": "Lighting-weather edit. Image 1 is Street-left, a strict existing 2D side-view game map tile. Image 2 is ONLY sunset color/lighting/paint style, NEVER its buildings/boat/geography. Preserve EXACT composition, object shapes, all door/window/shop-sign positions, camera, perspective, continuous foreground pavement height and FULL original aspect ratio. Change only from daylight to vivid painted anime evening: rich cobalt-blue upper sky #245bdf fading toward violet and coral-orange near horizon, indigo cloud masses edged pink, blue-purple ambient shadows on original houses, warm golden existing lamps/windows. Keep readable blue-violet stone paving and detailed plants; warm amber rims. No sun disk visible (sun offscreen left), no new objects, no people or UI, no border/black bars, no crop or zoom. This is a panorama TILE: maintain boundary pixels geometry and neighboring wall/road contours; no compositional redesign. Approx matching pavement #968aa1, shaded stone #414b78, upper sky cobalt. Preserve source lettering faithfully. Sharp detailed hand-painted cinematic style, calm and inviting. Deliver one opaque PNG, full canvas with identical aspect ratio to image 1.",
+          "generationArtifact": "exec-6c839414-77de-4125-9c4d-dd0a65535db3.png",
+          "nativeGenerationDimensions": [
+            1804,
+            872
+          ],
+          "generationSha256": "2f48e2bdf85ef6b7f448292b6eaa7446a6a803b34efc1cba9d07e1419b5d09a0"
+        },
+        {
+          "id": "Street-right",
+          "prompt": "Lighting-weather edit. Image 1 is Street-right, a strict existing 2D side-view game map tile. Image 2 is ONLY sunset color/lighting/paint style, NEVER its buildings/boat/geography. Preserve EXACT composition, object shapes, all door/window/shop-sign positions, camera, perspective, continuous foreground pavement height and FULL original aspect ratio. Change only from daylight to vivid painted anime evening: rich cobalt-blue upper sky #245bdf fading toward violet and coral-orange near horizon, indigo cloud masses edged pink, blue-purple ambient shadows on original houses, warm golden existing lamps/windows. Keep readable blue-violet stone paving and detailed plants; warm amber rims. No sun disk visible (sun offscreen left), no new objects, no people or UI, no border/black bars, no crop or zoom. This is a panorama TILE: maintain boundary pixels geometry and neighboring wall/road contours; no compositional redesign. Approx matching pavement #968aa1, shaded stone #414b78, upper sky cobalt. Preserve source lettering faithfully. Sharp detailed hand-painted cinematic style, calm and inviting. Deliver one opaque PNG, full canvas with identical aspect ratio to image 1.",
+          "generationArtifact": "exec-9a46be67-bb12-44e8-b6e8-777e441e9b06.png",
+          "nativeGenerationDimensions": [
+            1804,
+            872
+          ],
+          "generationSha256": "5d850c8a7eb42507809e3f592b73e269a921712f2ced71a3ef132c50829a17de"
+        },
+        {
+          "id": "Street-seam-3084",
+          "prompt": "Repair ONLY the artificial vertical stitch seam through the center of this game background image. Make the left and right halves blend into ONE continuous hand-painted anime sunset environment. Match continuous cobalt sky gradient and coral-violet clouds across the seam; connect foreground paving and masonry joints smoothly with no vertical brightness split or sudden ground height step. Retain EXACT building positions, full framing, stairs, doors, perspective, plants and original canvas aspect ratio. Especially keep the outer left and right 20% of the image UNCHANGED so this patch can be inserted into a panorama. No new objects, no new sun, no people, no crop, no zoom, no borders. Preserve the charming existing paint style, amber lamps and blue-violet shadows. Deliver full same-aspect opaque PNG.",
+          "generationArtifact": "exec-b291ede7-55a0-4c6c-894d-9ce8bcd1445f.png",
+          "nativeGenerationDimensions": [
+            975,
+            1613
+          ],
+          "generationSha256": "023354699d4c9cf95ae6155a85ca9de2857f8fb96f2339dfb5a9cea914558aff"
+        }
+      ],
+      "promptDescription": "分块与接缝分别生成；完整 prompt 按执行步骤记录于 generationSteps，不合成为伪造的单次整图 prompt。",
+      "postprocess": {
+        "operation": "assemble_generated_tiles_and_seams_then_downsample",
+        "intermediateCanvasDimensions": [
+          6168,
+          1489
+        ],
+        "finalDimensions": [
+          3728,
+          900
+        ],
+        "targetHeight": 900,
+        "note": "中间大画布用于空间配准；交付版统一缩至高 900，不宣称原生 8K，不以中间放大尺寸表示清晰度。"
+      },
+      "runtimeAspectRatioRelativeError": 3.746937599080624e-05
+    },
+    {
+      "placeId": "Cafe",
+      "displayName": "咖啡店",
+      "category": "indoor",
+      "scene": "Assets/Seabreeze/Scenes/Cafe.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/Cafe.png",
+      "sourceDimensions": [
+        2048,
+        1152
+      ],
+      "sourceSha256": "031c70cd14a7d4757ecda45b735998ebcf9bfa92c1f7bef1fd25734a839b9a3d",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/Cafe.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/Cafe.png",
+      "resourceKey": "Art/IslandEvening/Cafe",
+      "outputDimensions": [
+        1672,
+        941
+      ],
+      "outputBytes": 2031900,
+      "outputSha256": "d031cfd28d7b7f268c699b540b7503ca95bc2d1cb0be0c807ff0d48c67304d30",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1672,
+        941
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit image 1 (Cafe) into its early-evening map variant for a Japanese hand-painted 2D side-view narrative game. Image 1 is the strict composition/layout source. Image 2 is only a color, lighting and brushwork reference: luminous cobalt-blue/violet twilight shadows, coral pink/orange sunset near horizon, golden amber indoor lamps. Keep image 1's EXACT room arrangement, camera, perspective, floor line, door/window locations and sizes, furniture, props, coastline and full 16:9 framing. Do not borrow any buildings, boat, props or composition from image 2. Update only time-of-day and painterly lighting: outside existing windows and open doors show the SAME geography at vivid sunset, violet layered clouds with coral edges and deep blue sea; cast low warm evening light into the room, keep blue-violet ambient shadow and readable detailed wood/furniture. Turn existing lamps on with gentle warm amber illumination. No new lights or objects, no people, no UI, no border, no text overlay, no cropping or reframing. Preserve the original side-view walkable foreground and all collision/interaction-aligned shapes. Calm comforting cinematic anime background. Output a single full-canvas high-quality opaque PNG, 2048x1152 or same 16:9 ratio. Preserve all existing sign and menu lettering faithfully; do not invent new typography.",
+      "generationArtifact": "exec-1a82b342-3c7f-452f-9419-383a2ce3d6f8.png",
+      "sourceManifest": "Generated/Manifest/Cafe.json",
+      "review": {
+        "framing": "主要门窗、家具和地面构图已目视核对；生成式编辑不保证逐像素几何一致。",
+        "acceptance": "资产文件检查，不代表 Unity 运行验收。"
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        1672,
+        941
+      ],
+      "runtimeBytes": 2031900,
+      "runtimeSha256": "d031cfd28d7b7f268c699b540b7503ca95bc2d1cb0be0c807ff0d48c67304d30",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1672,
+          941
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.0005313496280551222
+    },
+    {
+      "placeId": "Lighthouse",
+      "displayName": "灯塔",
+      "category": "outdoor",
+      "scene": "Assets/Seabreeze/Scenes/Lighthouse.unity",
+      "sourceAsset": "Assets/Seabreeze/Resources/Art/lighthouse.png",
+      "sourceDimensions": [
+        1672,
+        941
+      ],
+      "sourceSha256": "53f091521d8e44f5f228d42311ded2189365ddd362cd19e73070274af148ce43",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/Lighthouse.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/Lighthouse.png",
+      "resourceKey": "Art/IslandEvening/Lighthouse",
+      "outputDimensions": [
+        1672,
+        941
+      ],
+      "outputBytes": 2124197,
+      "outputSha256": "5059f8a0e0fdfafb35da0525541c9b62790cb9878a069676a2283784fa109eac",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1672,
+        941
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit IMAGE 1 only, a production 2D side-scrolling game background. IMAGE 2 is evening color/light/paint reference only; do NOT transplant its boat, buildings or island objects. Change only time-of-day palette and illumination to luminous evening: saturated but natural cobalt upper sky, lavender/violet gradients, layered coral-pink and orange clouds near warm horizon, deep blue ocean and cool blue-violet shadow shapes with warm golden sunset reflection. Handpainted Japanese animation-film brushwork, crisp detail. Preserve exact IMAGE 1 camera, composition, original aspect ratio, all structural geometry and relative placement: shoreline, horizon, ground baseline, paths, walls, buildings, doors, trees, props. No new objects, lights, characters, UI, text or watermark. Keep all existing signage unchanged. PNG high resolution full canvas, no crop or letterbox. Original1672x941 aspect1.7768:1. This image is already dusk; harmonize it more closely with reference rich cobalt/violet/coral palette. Keep lighthouse exactly at left-center, left bench, mailbox at right of center, all railingposts and exact pedestrian ground baseline. Keep original sun position. Warm lantern/lighthouse glow; don't change building or add props.",
+      "generationArtifact": "exec-7c7b88e1-46d1-45d1-9f93-d593d8cef2b8.png",
+      "sourceManifest": "Manifest/Lighthouse.json",
+      "review": {
+        "framing": "Full canvas preserved; no manual crop, resize or upscale.",
+        "geometry": "Visually compared major buildings, door/path/step landmarks and foreground ground baseline; no camera/layout shift observed. Generative fine-detail reconstruction is not pixel-identical.",
+        "acceptance": "Asset inspection only; Unity runtime alignment remains for integration validation."
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        1672,
+        941
+      ],
+      "runtimeBytes": 2124197,
+      "runtimeSha256": "5059f8a0e0fdfafb35da0525541c9b62790cb9878a069676a2283784fa109eac",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1672,
+          941
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.0
+    },
+    {
+      "placeId": "ResidentialCenter",
+      "displayName": "居民街",
+      "category": "outdoor",
+      "scene": "Assets/Seabreeze/Scenes/ResidentialCenter.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/ResidentialCenter.png",
+      "sourceDimensions": [
+        8300,
+        1518
+      ],
+      "sourceSha256": "c3083027ef7918a9997c48710f597b18498e3620b008739c733b695c6f1dd83b",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/ResidentialCenter.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/ResidentialCenter.png",
+      "resourceKey": "Art/IslandEvening/ResidentialCenter",
+      "outputDimensions": [
+        8300,
+        1518
+      ],
+      "outputBytes": 18022511,
+      "outputSha256": "ca041fd25fab266d814b3cda6bab31cc31da4d7b372fd26e2cd0a66a4a6bd331",
+      "productionMethod": "overlapping_generated_tiles_and_seam_assembly",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": null,
+      "promptStatus": "recorded",
+      "prompt": null,
+      "generationArtifact": null,
+      "sourceManifest": "Docs/Art/Evening-20261113/root-generation.json",
+      "review": {
+        "framing": "主要门窗、家具和地面构图已目视核对；生成式编辑不保证逐像素几何一致。",
+        "acceptance": "资产文件检查，不代表 Unity 运行验收。"
+      },
+      "notes": [
+        "最终宽画布由多个生成分块与接缝处理拼合；画布尺寸不代表单次原生高分辨率生成，禁止标为真原生 8K。"
+      ],
+      "tileInputs": [
+        {
+          "path": "ArtSource/Evening-20261113/Inputs/ResidentialCenter-left.png",
+          "dimensions": [
+            2200,
+            1518
+          ],
+          "bytes": 5157365,
+          "sha256": "f07eab68105ce9290940a17f327568c803d9e8fa7572e1207a35a754dd457e71"
+        },
+        {
+          "path": "ArtSource/Evening-20261113/Inputs/ResidentialCenter-middle.png",
+          "dimensions": [
+            2500,
+            1518
+          ],
+          "bytes": 6045271,
+          "sha256": "54186637527e0a2e11f8ced720a1f2100f0e7568dd12c9e25e81fe654e7fe4e6"
+        },
+        {
+          "path": "ArtSource/Evening-20261113/Inputs/ResidentialCenter-right.png",
+          "dimensions": [
+            3600,
+            1518
+          ],
+          "bytes": 8672397,
+          "sha256": "3f6c7a805ea28058209ffcb45b914291c38acf7f538821958f624082ca48e4a9"
+        },
+        {
+          "path": "ArtSource/Evening-20261113/Inputs/ResidentialCenter-seam-2200.png",
+          "dimensions": [
+            1100,
+            1518
+          ],
+          "bytes": 2253080,
+          "sha256": "53e0be6c606a9b663751d857d48ac54e7a93920f6b8712852236d4a148562ff4"
+        },
+        {
+          "path": "ArtSource/Evening-20261113/Inputs/ResidentialCenter-seam-4700.png",
+          "dimensions": [
+            1100,
+            1518
+          ],
+          "bytes": 2496404,
+          "sha256": "807b5c672fb699977a68f5258b499845d2a05eab6b4195c5a08e9a96054dd204"
+        }
+      ],
+      "runtimeDimensions": [
+        4921,
+        900
+      ],
+      "runtimeBytes": 7595526,
+      "runtimeSha256": "2b8fe6c18b87dd55b7370cb13764fee60f243ed0cbcc6c64c2f39feb1821fa96",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "generationSteps": [
+        {
+          "id": "ResidentialCenter-left",
+          "prompt": "Use case lighting-weather. Image1 is an EXACT cropped left panel of a continuous 2D game residential street; image2 is lighting/color reference ONLY. Relight image1 to luminous anime-painted sunset. Preserve every object/edge, doorway, rooftop, signage, path, leaf silhouette and every pixel's relative position especially at left/right edge, and horizontal ground line at original height. Do not zoom/crop/recompose/widen any building. Output same aspect ratio as image1, whole canvas, no border/letterboxing. Detailed original hand painted anime style. Upper visible sky saturated cobalt blue, near horizon coral orange-pink thin cloud rims with indigo shadows. Blue-purple shadows and warm orange highlights on stone and foliage, warm amber light inside existing windows and existing lanterns, calm readable foreground. Sun is offscreen; NO new sun disk, no extra objects/people. Consistent color at both sides of this panel for joining: sky top #245bdf, lower sky #e98591, cool stone shadow #414b78, pavement #b8a0a9. This is relighting only, must preserve geometry. Prefer high resolution comparable to input.",
+          "generationArtifact": "exec-f99e6bea-a4cd-4b02-a5c0-0ba96369d01a.png",
+          "nativeGenerationDimensions": [
+            1510,
+            1042
+          ],
+          "generationSha256": "29d53f3da3194dcdacc2db2920d257d795092e24f4125a0833def26103448198"
+        },
+        {
+          "id": "ResidentialCenter-middle",
+          "prompt": "Use case lighting-weather. Image1 is an EXACT cropped middle panel of a continuous 2D game residential street; image2 is lighting/color reference ONLY. Relight image1 to luminous anime-painted sunset. Preserve every object/edge, doorway, rooftop, signage, path, leaf silhouette and every pixel's relative position especially at left/right edge, and horizontal ground line at original height. Do not zoom/crop/recompose/widen any building. Output same aspect ratio as image1, whole canvas, no border/letterboxing. Detailed original hand painted anime style. Upper visible sky saturated cobalt blue, near horizon coral orange-pink thin cloud rims with indigo shadows. Blue-purple shadows and warm orange highlights on stone and foliage, warm amber light inside existing windows and existing lanterns, calm readable foreground. Sun is offscreen; NO new sun disk, no extra objects/people. Consistent color at both sides of this panel for joining: sky top #245bdf, lower sky #e98591, cool stone shadow #414b78, pavement #b8a0a9. This is relighting only, must preserve geometry. Prefer high resolution comparable to input.",
+          "generationArtifact": "exec-22b8e9ff-8d30-4562-be37-c1f8de8b253d.png",
+          "nativeGenerationDimensions": [
+            1610,
+            977
+          ],
+          "generationSha256": "7263db3899b8b0c9e323928e0120c7e92884d31e79dd129586c3f400e153cf96"
+        },
+        {
+          "id": "ResidentialCenter-right",
+          "prompt": "Use case lighting-weather. Image1 is an EXACT cropped right panel of a continuous 2D game residential street; image2 is lighting/color reference ONLY. Relight image1 to luminous anime-painted sunset. Preserve every object/edge, doorway, rooftop, signage, path, leaf silhouette and every pixel's relative position especially at left/right edge, and horizontal ground line at original height. Do not zoom/crop/recompose/widen any building. Output same aspect ratio as image1, whole canvas, no border/letterboxing. Detailed original hand painted anime style. Upper visible sky saturated cobalt blue, near horizon coral orange-pink thin cloud rims with indigo shadows. Blue-purple shadows and warm orange highlights on stone and foliage, warm amber light inside existing windows and existing lanterns, calm readable foreground. Sun is offscreen; NO new sun disk, no extra objects/people. Consistent color at both sides of this panel for joining: sky top #245bdf, lower sky #e98591, cool stone shadow #414b78, pavement #b8a0a9. This is relighting only, must preserve geometry. Prefer high resolution comparable to input.",
+          "generationArtifact": "exec-4dd80912-ac4f-4d34-969b-65455efc0800.png",
+          "nativeGenerationDimensions": [
+            1931,
+            814
+          ],
+          "generationSha256": "baa19ba6074eccfd35ee8612254f4a4205faa148be93447ad17a39ee09ed731e"
+        },
+        {
+          "id": "ResidentialCenter-seam-2200",
+          "prompt": "Repair ONLY the artificial vertical stitch seam through the center of this game background image. Make the left and right halves blend into ONE continuous hand-painted anime sunset environment. Match continuous cobalt sky gradient and coral-violet clouds across the seam; connect foreground paving and masonry joints smoothly with no vertical brightness split or sudden ground height step. Retain EXACT building positions, full framing, stairs, doors, perspective, plants and original canvas aspect ratio. Especially keep the outer left and right 20% of the image UNCHANGED so this patch can be inserted into a panorama. No new objects, no new sun, no people, no crop, no zoom, no borders. Preserve the charming existing paint style, amber lamps and blue-violet shadows. Deliver full same-aspect opaque PNG.",
+          "generationArtifact": "exec-3d34c046-0ede-48ac-8a68-b219456c5876.png",
+          "nativeGenerationDimensions": [
+            1068,
+            1473
+          ],
+          "generationSha256": "f50c530523931d677584ec7fd3aec6b5371991e1ecfa99ed8fb3140993dee87c"
+        },
+        {
+          "id": "ResidentialCenter-seam-4700",
+          "prompt": "Repair ONLY the artificial vertical stitch seam through the center of this game background image. Make the left and right halves blend into ONE continuous hand-painted anime sunset environment. Match continuous cobalt sky gradient and coral-violet clouds across the seam; connect foreground paving and masonry joints smoothly with no vertical brightness split or sudden ground height step. Retain EXACT building positions, full framing, stairs, doors, perspective, plants and original canvas aspect ratio. Especially keep the outer left and right 20% of the image UNCHANGED so this patch can be inserted into a panorama. No new objects, no new sun, no people, no crop, no zoom, no borders. Preserve the charming existing paint style, amber lamps and blue-violet shadows. Deliver full same-aspect opaque PNG.",
+          "generationArtifact": "exec-039e7426-7c4c-4b97-a58c-225dc6f60ae9.png",
+          "nativeGenerationDimensions": [
+            1068,
+            1473
+          ],
+          "generationSha256": "e446ed2f39adb065a1c8b03e5f71ce82a43121f2b458ae4043227bd752fc8584"
+        }
+      ],
+      "promptDescription": "分块与接缝分别生成；完整 prompt 按执行步骤记录于 generationSteps，不合成为伪造的单次整图 prompt。",
+      "postprocess": {
+        "operation": "assemble_generated_tiles_and_seams_then_downsample",
+        "intermediateCanvasDimensions": [
+          8300,
+          1518
+        ],
+        "finalDimensions": [
+          4921,
+          900
+        ],
+        "targetHeight": 900,
+        "note": "中间大画布用于空间配准；交付版统一缩至高 900，不宣称原生 8K，不以中间放大尺寸表示清晰度。"
+      },
+      "runtimeAspectRatioRelativeError": 1.0441767068325447e-05
+    },
+    {
+      "placeId": "Forest",
+      "displayName": "居民街 · 森林入口",
+      "category": "outdoor",
+      "scene": "Assets/Seabreeze/Scenes/Forest.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/Forest.png",
+      "sourceDimensions": [
+        2675,
+        1492
+      ],
+      "sourceSha256": "03c8365ff79a713bdb4db543ef05cb4eb6124218499a218965bbd0d57dcb609d",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/Forest.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/Forest.png",
+      "resourceKey": "Art/IslandEvening/Forest",
+      "outputDimensions": [
+        1679,
+        937
+      ],
+      "outputBytes": 3036011,
+      "outputSha256": "357f3bfd86a945b1eedd867f8a0a4a8657b1a5237bafe2d57b77c0fa51e7a7ef",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1679,
+        937
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit image1 Forest as a geometry-preserving dusk variant of this exact side-view game map. Image2 only supplies sunset painted palette, not objects or layout. Keep full input aspect ratio and all exact tree/log/rock silhouettes, paths, stairs, sign text, ground height and framing. No new trees, lamps, people, sea or buildings. Retain the original layered detailed hand-painted anime background. Change time and illumination only: distant sky visible through foliage deep cobalt fading to coral-pink sunset, lavender distant forest atmospheric layers, indigo blue-purple shade on trunks and ground, subtle warm amber rimlight on existing edges, glowing sunset rays only where gaps already exist. Green leaves remain recognizably green, with cool evening shade. Calm readable walkable foreground. Do NOT replace foliage with large sky. No crop/no zoom/no black borders/letterboxing. Fill full PNG edge to edge, high resolution.",
+      "generationArtifact": "exec-2d75dca6-4293-4c13-9761-81e323a83549.png",
+      "sourceManifest": "Docs/Art/Evening-20261113/root-generation.json",
+      "review": {
+        "framing": "主要门窗、家具和地面构图已目视核对；生成式编辑不保证逐像素几何一致。",
+        "acceptance": "资产文件检查，不代表 Unity 运行验收。"
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        1679,
+        937
+      ],
+      "runtimeBytes": 3036011,
+      "runtimeSha256": "357f3bfd86a945b1eedd867f8a0a4a8657b1a5237bafe2d57b77c0fa51e7a7ef",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "generationSteps": [
+        {
+          "id": "Forest",
+          "prompt": "Use case: lighting-weather. Edit image1 Forest as a geometry-preserving dusk variant of this exact side-view game map. Image2 only supplies sunset painted palette, not objects or layout. Keep full input aspect ratio and all exact tree/log/rock silhouettes, paths, stairs, sign text, ground height and framing. No new trees, lamps, people, sea or buildings. Retain the original layered detailed hand-painted anime background. Change time and illumination only: distant sky visible through foliage deep cobalt fading to coral-pink sunset, lavender distant forest atmospheric layers, indigo blue-purple shade on trunks and ground, subtle warm amber rimlight on existing edges, glowing sunset rays only where gaps already exist. Green leaves remain recognizably green, with cool evening shade. Calm readable walkable foreground. Do NOT replace foliage with large sky. No crop/no zoom/no black borders/letterboxing. Fill full PNG edge to edge, high resolution.",
+          "generationArtifact": "exec-2d75dca6-4293-4c13-9761-81e323a83549.png",
+          "nativeGenerationDimensions": [
+            1679,
+            937
+          ],
+          "generationSha256": "357f3bfd86a945b1eedd867f8a0a4a8657b1a5237bafe2d57b77c0fa51e7a7ef"
+        }
+      ],
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1679,
+          937
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.0005613461135658415
+    },
+    {
+      "placeId": "ForestCabin",
+      "displayName": "梨园的木屋",
+      "category": "outdoor",
+      "scene": "Assets/Seabreeze/Scenes/ForestCabin.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/ForestCabin.png",
+      "sourceDimensions": [
+        3078,
+        1493
+      ],
+      "sourceSha256": "3b9522594a291c5c5b886e5225d8c797ce67f8e590590974c2421e9e241d71af",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/ForestCabin.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/ForestCabin.png",
+      "resourceKey": "Art/IslandEvening/ForestCabin",
+      "outputDimensions": [
+        1800,
+        874
+      ],
+      "outputBytes": 2838564,
+      "outputSha256": "ac0d5e47baee037cf8c388eb9e1fff34360b71d7c3d243e65f524c4bf14d970d",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1800,
+        874
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit IMAGE 1 only, a production 2D side-scrolling game background. IMAGE 2 is color, light and painted brushwork reference ONLY, do not copy its harbor objects. Change only time-of-day and illumination to a luminous late evening: rich cobalt blue upper sky transitioning through lavender into coral-pink and warm orange near the horizon, violet-blue cool shadow shapes and golden existing windows and existing lamps. Japanese handpainted animation-film look, crisp illustrative details, no photo texture. Preserve IMAGE 1 exact composition and camera, relative positions and scale of every building, door, stair, road, ground baseline, vegetation silhouette and foreground wall. No new objects, characters, UI, text, watermarks. Preserve all existing signs and lettering. Keep complete canvas and exact original aspect ratio, no crop, no letterbox. PNG high resolution. IMAGE 1 is 3078x1493, aspect 2.0616:1. Preserve both timber houses and their entrances, central staircase, left forest path and right downslope. Warm light only in existing windows/lanterns. Dusk sky visible through existing tree gaps; do not clear canopy to expose sky.",
+      "generationArtifact": "exec-3bfde5c1-d7c2-45c4-bc24-87d583a6486e.png",
+      "sourceManifest": "Manifest/ForestCabin.json",
+      "review": {
+        "framing": "Full canvas preserved; no manual crop, resize or upscale.",
+        "geometry": "Visually compared major buildings, door/path/step landmarks and foreground ground baseline; no camera/layout shift observed. Generative fine-detail reconstruction is not pixel-identical.",
+        "acceptance": "Asset inspection only; Unity runtime alignment remains for integration validation."
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        1800,
+        874
+      ],
+      "runtimeBytes": 2838564,
+      "runtimeSha256": "ac0d5e47baee037cf8c388eb9e1fff34360b71d7c3d243e65f524c4bf14d970d",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1800,
+          874
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.0010304173859516652
+    },
+    {
+      "placeId": "Research",
+      "displayName": "阿里的研究所",
+      "category": "outdoor",
+      "scene": "Assets/Seabreeze/Scenes/Research.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/Research.png",
+      "sourceDimensions": [
+        2628,
+        1478
+      ],
+      "sourceSha256": "48f3f9c2442a283cdbf60f93226a6c941f62091e0c96242afc560d2a5b058ea2",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/Research.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/Research.png",
+      "resourceKey": "Art/IslandEvening/Research",
+      "outputDimensions": [
+        1672,
+        940
+      ],
+      "outputBytes": 2564955,
+      "outputSha256": "490cc2b62f87f516ca17873de8449dbcf4e3252f58d446c64c497cf3dd5c68a2",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1672,
+        940
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit IMAGE 1 only, a production 2D side-scrolling game background. IMAGE 2 is color, light and painted brushwork reference ONLY, do not copy its harbor objects. Change only time-of-day and illumination to a luminous late evening: rich cobalt blue upper sky transitioning through lavender into coral-pink and warm orange near the horizon, violet-blue cool shadow shapes and golden existing windows and existing lamps. Japanese handpainted animation-film look, crisp illustrative details, no photo texture. Preserve IMAGE 1 exact composition and camera, relative positions and scale of every building, door, stair, road, ground baseline, vegetation silhouette and foreground wall. No new objects, characters, UI, text, watermarks. Preserve all existing signs and lettering. Keep complete canvas and exact original aspect ratio, no crop, no letterbox. PNG high resolution. IMAGE 1 is 2628x1478, aspect1.7781:1. Preserve centered weather-research building, satellite dish/antennas, exact central doors, sloping path at left and cabin/downhill path at right. Sunset reflected in existing glass and ocean on left; no new street lamps.",
+      "generationArtifact": "exec-21c9db1c-8931-4084-be2a-dcc289c9119f.png",
+      "sourceManifest": "Manifest/Research.json",
+      "review": {
+        "framing": "Full canvas preserved; no manual crop, resize or upscale.",
+        "geometry": "Visually compared major buildings, door/path/step landmarks and foreground ground baseline; no camera/layout shift observed. Generative fine-detail reconstruction is not pixel-identical.",
+        "acceptance": "Asset inspection only; Unity runtime alignment remains for integration validation."
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        1672,
+        940
+      ],
+      "runtimeBytes": 2564955,
+      "runtimeSha256": "490cc2b62f87f516ca17873de8449dbcf4e3252f58d446c64c497cf3dd5c68a2",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1672,
+          940
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.0003627060461801612
+    },
+    {
+      "placeId": "Summit",
+      "displayName": "山顶观景台",
+      "category": "outdoor",
+      "scene": "Assets/Seabreeze/Scenes/Summit.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/Summit.png",
+      "sourceDimensions": [
+        2800,
+        1575
+      ],
+      "sourceSha256": "54299c2050a7f59808eb4c98e08392c58c9bb7f6d6dd65a76a72589373621a22",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/Summit.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/Summit.png",
+      "resourceKey": "Art/IslandEvening/Summit",
+      "outputDimensions": [
+        1672,
+        941
+      ],
+      "outputBytes": 2685135,
+      "outputSha256": "ee3cdc7bf4b237c969f548ffa480ebaa5e5e02a61af1d9bf0cacfdf6b4ad8893",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1672,
+        941
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit IMAGE 1 only, production 2D side-scrolling game background. IMAGE 2 is color, lighting and painted brushwork reference ONLY, never copy its harbor/boat/buildings. Change only illumination to evening: rich cobalt blue upper sky, violet-to-coral-pink and warm orange evening horizon, layered painted clouds, cool blue-violet shadows and warm golden highlights and light from existing lamps/windows. Preserve exact IMAGE 1 composition, original aspect ratio and camera; geometry and relative position of every path, door, building, tree, bench, sign, ground baseline and foreground wall unchanged. Preserve readable signs. No new props, characters, UI, logos or watermark. Full-canvas uncropped PNG; no letterbox. Keep detailed crisp Japanese handpainted animation-film aesthetic, rich yet calm, not photoreal or neon. Original2800x1575 exact16:9. The open lookout keeps both benches, fence, ocean village horizon, right lamp/map and right uphill path exactly located. Warm existing single lamp; evening glow across sky/water, do not add harbor.",
+      "generationArtifact": "exec-f64cc57c-3a14-4e7b-943f-ef7dccd4ff49.png",
+      "sourceManifest": "Manifest/Summit.json",
+      "review": {
+        "framing": "Full canvas preserved; no manual crop, resize or upscale.",
+        "geometry": "Visually compared major buildings, door/path/step landmarks and foreground ground baseline; no camera/layout shift observed. Generative fine-detail reconstruction is not pixel-identical.",
+        "acceptance": "Asset inspection only; Unity runtime alignment remains for integration validation."
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        1672,
+        941
+      ],
+      "runtimeBytes": 2685135,
+      "runtimeSha256": "ee3cdc7bf4b237c969f548ffa480ebaa5e5e02a61af1d9bf0cacfdf6b4ad8893",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1672,
+          941
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.0005313496280551222
+    },
+    {
+      "placeId": "Harbor",
+      "displayName": "码头 · 游客中心",
+      "category": "outdoor",
+      "scene": "Assets/Seabreeze/Scenes/Harbor.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/Harbor.png",
+      "sourceDimensions": [
+        4651,
+        1492
+      ],
+      "sourceSha256": "5d1fbec7a212c4a97bb9908a19a686942bbbe87a0dc8edced9cd9326a6f3ae44",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/Harbor.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/Harbor.png",
+      "resourceKey": "Art/IslandEvening/Harbor",
+      "outputDimensions": [
+        2171,
+        700
+      ],
+      "outputBytes": 2495932,
+      "outputSha256": "eb553a968ad1ffaac204c215090cb3c81c5274b93124c8f6ce5335aeaadc8fdd",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        2171,
+        724
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit image 1 (Harbor/Visitor Center side-scrolling game background) into sunset, using image 2 only for painted dusk palette and lighting. Preserve EXACT full panorama framing/aspect, every building edge, door, ferry, signs and legible existing Chinese text, walkway height and clear playable ground, benches, rails, tree shapes and wall mural. Do not transfer any objects from reference. No added people/UI. Keep original detailed hand-painted Japanese animation background rendering. Change ONLY time/light/color: vivid cobalt blue upper sky blending violet into coral pink and warm orange near horizon, layered indigo clouds rimmed salmon; cobalt sea with orange-pink reflections; blue-purple shadowed architecture, warm amber windows and existing lanterns. Calm bright luminous evening, readable ground, no global muddy tint, no photographic texture. Original ground line and dimensions must align for seamless day/evening swap. Output one full-width high resolution PNG, no crop, no border. Preserve entire ultra-wide input, do not squeeze into 16:9.",
+      "generationArtifact": "exec-e61344c1-4d38-4d1b-8c14-f58e5e674a58.png",
+      "sourceManifest": "Docs/Art/Evening-20261113/root-generation.json",
+      "review": {
+        "framing": "主要门窗、家具和地面构图已目视核对；生成式编辑不保证逐像素几何一致。",
+        "acceptance": "资产文件检查，不代表 Unity 运行验收。"
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        2171,
+        700
+      ],
+      "runtimeBytes": 2495932,
+      "runtimeSha256": "eb553a968ad1ffaac204c215090cb3c81c5274b93124c8f6ce5335aeaadc8fdd",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "generationSteps": [
+        {
+          "id": "Harbor",
+          "prompt": "Use case: lighting-weather. Edit image 1 (Harbor/Visitor Center side-scrolling game background) into sunset, using image 2 only for painted dusk palette and lighting. Preserve EXACT full panorama framing/aspect, every building edge, door, ferry, signs and legible existing Chinese text, walkway height and clear playable ground, benches, rails, tree shapes and wall mural. Do not transfer any objects from reference. No added people/UI. Keep original detailed hand-painted Japanese animation background rendering. Change ONLY time/light/color: vivid cobalt blue upper sky blending violet into coral pink and warm orange near horizon, layered indigo clouds rimmed salmon; cobalt sea with orange-pink reflections; blue-purple shadowed architecture, warm amber windows and existing lanterns. Calm bright luminous evening, readable ground, no global muddy tint, no photographic texture. Original ground line and dimensions must align for seamless day/evening swap. Output one full-width high resolution PNG, no crop, no border. Preserve entire ultra-wide input, do not squeeze into 16:9.",
+          "generationArtifact": "exec-e61344c1-4d38-4d1b-8c14-f58e5e674a58.png",
+          "nativeGenerationDimensions": [
+            2171,
+            724
+          ],
+          "generationSha256": "c7d1eb166f1846de627b81514c0a0450efe9561e58789e2e41284768dc3f4fd4"
+        }
+      ],
+      "postprocess": {
+        "operation": "remove_generated_black_border",
+        "nativeDimensions": [
+          2171,
+          724
+        ],
+        "finalDimensions": [
+          2171,
+          700
+        ],
+        "note": "只去除生成结果的黑边；最终 2171×700 与原地图长宽比有轻微误差，运行时按原矩形适配。"
+      },
+      "runtimeAspectRatioRelativeError": 0.005088920969376742
+    },
+    {
+      "placeId": "Square",
+      "displayName": "市民广场",
+      "category": "outdoor",
+      "scene": "Assets/Seabreeze/Scenes/Square.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/Square.png",
+      "sourceDimensions": [
+        2378,
+        1493
+      ],
+      "sourceSha256": "0c4080bb0913f68f1d36276d58d7b7f997f2436e4554e30ac43dd315712bb87f",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/Square.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/Square.png",
+      "resourceKey": "Art/IslandEvening/Square",
+      "outputDimensions": [
+        1583,
+        994
+      ],
+      "outputBytes": 2704963,
+      "outputSha256": "e7d3e8ff38c68fe3caaeafd7681034f964cf40c1b1c8a483b4ea811bd7ad7325",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1583,
+        994
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit IMAGE 1 only, production 2D side-scrolling game background. IMAGE 2 is color, lighting and painted brushwork reference ONLY, never copy its harbor/boat/buildings. Change only illumination to evening: rich cobalt blue upper sky, violet-to-coral-pink and warm orange evening horizon, layered painted clouds, cool blue-violet shadows and warm golden highlights and light from existing lamps/windows. Preserve exact IMAGE 1 composition, original aspect ratio and camera; geometry and relative position of every path, door, building, tree, bench, sign, ground baseline and foreground wall unchanged. Preserve readable signs. No new props, characters, UI, logos or watermark. Full-canvas uncropped PNG; no letterbox. Keep detailed crisp Japanese handpainted animation-film aesthetic, rich yet calm, not photoreal or neon. Original2378x1493 aspect1.5928:1. Keep huge tree trunk/canopy at left, two benches below it, community noticeboard and planter to right, walkway across bottom and rear path at far right. Evening blue-violet foliage, warm edges, lit distant existing windows and far-right existing lamp. Do not add lamps to the noticeboard or benches.",
+      "generationArtifact": "exec-4d63b9f6-ef90-438a-ae4b-1c8811821cbe.png",
+      "sourceManifest": "Manifest/Square.json",
+      "review": {
+        "framing": "Full canvas preserved; no manual crop, resize or upscale.",
+        "geometry": "Visually compared major buildings, door/path/step landmarks and foreground ground baseline; no camera/layout shift observed. Generative fine-detail reconstruction is not pixel-identical.",
+        "acceptance": "Asset inspection only; Unity runtime alignment remains for integration validation."
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        1583,
+        994
+      ],
+      "runtimeBytes": 2704963,
+      "runtimeSha256": "e7d3e8ff38c68fe3caaeafd7681034f964cf40c1b1c8a483b4ea811bd7ad7325",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1583,
+          994
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.00013241771909844324
+    },
+    {
+      "placeId": "EastCrossing",
+      "displayName": "公共街 · 广场东口",
+      "category": "outdoor",
+      "scene": "Assets/Seabreeze/Scenes/EastCrossing.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/EastCrossing.png",
+      "sourceDimensions": [
+        2975,
+        1492
+      ],
+      "sourceSha256": "0d469167865fa697a8003ae6b532efc432e5f3dfa52f0c5b182024253592559d",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/EastCrossing.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/EastCrossing.png",
+      "resourceKey": "Art/IslandEvening/EastCrossing",
+      "outputDimensions": [
+        1771,
+        888
+      ],
+      "outputBytes": 2891801,
+      "outputSha256": "947024cf58c7abda64c64f27f5c45f170d82ee608c40558d29cc9b0d42244af0",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1771,
+        888
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit IMAGE 1 only, production 2D side-scrolling game background. IMAGE 2 is color, lighting and painted brushwork reference ONLY, never copy its harbor/boat/buildings. Change only illumination to evening: rich cobalt blue upper sky, violet-to-coral-pink and warm orange evening horizon, layered painted clouds, cool blue-violet shadows and warm golden highlights and light from existing lamps/windows. Preserve exact IMAGE 1 composition, original aspect ratio and camera; geometry and relative position of every path, door, building, tree, bench, sign, ground baseline and foreground wall unchanged. Preserve readable signs. No new props, characters, UI, logos or watermark. Full-canvas uncropped PNG; no letterbox. Keep detailed crisp Japanese handpainted animation-film aesthetic, rich yet calm, not photoreal or neon. Original2975x1492 aspect1.994:1. Preserve left building edge, bridge/stream, central bench and noticeboard, right lamp/signpost, upper-right cabin path and downhill seaside path. Existing lamps glow warmly, no new lamps. Horizon warm dusk and dark blue water, maintain all branches and path openings.",
+      "generationArtifact": "exec-9a9b22a3-336c-4883-b144-68bf93775685.png",
+      "sourceManifest": "Manifest/EastCrossing.json",
+      "review": {
+        "framing": "Full canvas preserved; no manual crop, resize or upscale.",
+        "geometry": "Visually compared major buildings, door/path/step landmarks and foreground ground baseline; no camera/layout shift observed. Generative fine-detail reconstruction is not pixel-identical.",
+        "acceptance": "Asset inspection only; Unity runtime alignment remains for integration validation."
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        1771,
+        888
+      ],
+      "runtimeBytes": 2891801,
+      "runtimeSha256": "947024cf58c7abda64c64f27f5c45f170d82ee608c40558d29cc9b0d42244af0",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1771,
+          888
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.00020137784843665685
+    },
+    {
+      "placeId": "Boardwalk",
+      "displayName": "海滨步道",
+      "category": "outdoor",
+      "scene": "Assets/Seabreeze/Scenes/Boardwalk.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/Boardwalk.png",
+      "sourceDimensions": [
+        4788,
+        1466
+      ],
+      "sourceSha256": "f90de9d6c81877c5158b8d4998e200eb30ecd469e7a7e3533692d431a0074305",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/Boardwalk.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/Boardwalk.png",
+      "resourceKey": "Art/IslandEvening/Boardwalk",
+      "outputDimensions": [
+        4788,
+        1466
+      ],
+      "outputBytes": 9084269,
+      "outputSha256": "5c3c61aacc9658eb454cb911a47b2b3d93c9312f3812b49160e3757a8ec357f3",
+      "productionMethod": "overlapping_generated_tiles_and_seam_assembly",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": null,
+      "promptStatus": "recorded",
+      "prompt": null,
+      "generationArtifact": null,
+      "sourceManifest": "Docs/Art/Evening-20261113/root-generation.json",
+      "review": {
+        "framing": "主要门窗、家具和地面构图已目视核对；生成式编辑不保证逐像素几何一致。",
+        "acceptance": "资产文件检查，不代表 Unity 运行验收。"
+      },
+      "notes": [
+        "最终宽画布由多个生成分块与接缝处理拼合；画布尺寸不代表单次原生高分辨率生成，禁止标为真原生 8K。"
+      ],
+      "tileInputs": [
+        {
+          "path": "ArtSource/Evening-20261113/Inputs/Boardwalk-left.png",
+          "dimensions": [
+            2394,
+            1466
+          ],
+          "bytes": 3050578,
+          "sha256": "8649096c5de8edebbc42b13ec7c0e08d6446b7b7c13e3fb4316fda165a73188f"
+        },
+        {
+          "path": "ArtSource/Evening-20261113/Inputs/Boardwalk-right.png",
+          "dimensions": [
+            2394,
+            1466
+          ],
+          "bytes": 3941667,
+          "sha256": "c775ec877b452ceacd775e4398f532e5fe71446efe252b40cb66b99c960c74c0"
+        },
+        {
+          "path": "ArtSource/Evening-20261113/Inputs/Boardwalk-seam-2394.png",
+          "dimensions": [
+            900,
+            1466
+          ],
+          "bytes": 1760942,
+          "sha256": "94af89efebe20916a9f951e00f7b69ba3d608df0f5b207180e3e3d1e49e21167"
+        }
+      ],
+      "runtimeDimensions": [
+        2939,
+        900
+      ],
+      "runtimeBytes": 4063654,
+      "runtimeSha256": "cbfd2d0eb83c072cf64e8aa7609b73bdc68228764dbab4fcbc14c77935091342",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "generationSteps": [
+        {
+          "id": "Boardwalk-left",
+          "prompt": "Lighting-weather edit. Image 1 is Boardwalk-left, a strict existing 2D side-view game map tile. Image 2 is ONLY sunset color/lighting/paint style, NEVER its buildings/boat/geography. Preserve EXACT composition, object shapes, all door/window/shop-sign positions, camera, perspective, continuous foreground pavement height and FULL original aspect ratio. Change only from daylight to vivid painted anime evening: rich cobalt-blue upper sky #245bdf fading toward violet and coral-orange near horizon, indigo cloud masses edged pink, blue-purple ambient shadows on original houses, warm golden existing lamps/windows. Keep readable blue-violet stone paving and detailed plants; warm amber rims. No sun disk visible (sun offscreen left), no new objects, no people or UI, no border/black bars, no crop or zoom. This is a panorama TILE: maintain boundary pixels geometry and neighboring wall/road contours; no compositional redesign. Approx matching pavement #968aa1, shaded stone #414b78, upper sky cobalt. Preserve source lettering faithfully. Sharp detailed hand-painted cinematic style, calm and inviting. Deliver one opaque PNG, full canvas with identical aspect ratio to image 1.",
+          "generationArtifact": "exec-a3319d8b-c10d-4061-add8-f781421e1b8b.png",
+          "nativeGenerationDimensions": [
+            1602,
+            982
+          ],
+          "generationSha256": "c838179ea3a954298f2d0e56036225537c2d2ef1ac3b1952a774d44391d7c1dc"
+        },
+        {
+          "id": "Boardwalk-right",
+          "prompt": "Lighting-weather edit. Image 1 is Boardwalk-right, a strict existing 2D side-view game map tile. Image 2 is ONLY sunset color/lighting/paint style, NEVER its buildings/boat/geography. Preserve EXACT composition, object shapes, all door/window/shop-sign positions, camera, perspective, continuous foreground pavement height and FULL original aspect ratio. Change only from daylight to vivid painted anime evening: rich cobalt-blue upper sky #245bdf fading toward violet and coral-orange near horizon, indigo cloud masses edged pink, blue-purple ambient shadows on original houses, warm golden existing lamps/windows. Keep readable blue-violet stone paving and detailed plants; warm amber rims. No sun disk visible (sun offscreen left), no new objects, no people or UI, no border/black bars, no crop or zoom. This is a panorama TILE: maintain boundary pixels geometry and neighboring wall/road contours; no compositional redesign. Approx matching pavement #968aa1, shaded stone #414b78, upper sky cobalt. Preserve source lettering faithfully. Sharp detailed hand-painted cinematic style, calm and inviting. Deliver one opaque PNG, full canvas with identical aspect ratio to image 1.",
+          "generationArtifact": "exec-9f0824f8-034e-4830-b22c-a43a9504033d.png",
+          "nativeGenerationDimensions": [
+            1602,
+            982
+          ],
+          "generationSha256": "d148b1c6e1a29c40387c45f18768508dbce0218282500fa1b893cb07b9a79b88"
+        },
+        {
+          "id": "Boardwalk-seam-2394",
+          "prompt": "Repair ONLY the artificial vertical stitch seam through the center of this game background image. Make the left and right halves blend into ONE continuous hand-painted anime sunset environment. Match continuous cobalt sky gradient and coral-violet clouds across the seam; connect foreground paving and masonry joints smoothly with no vertical brightness split or sudden ground height step. Retain EXACT building positions, full framing, stairs, doors, perspective, plants and original canvas aspect ratio. Especially keep the outer left and right 20% of the image UNCHANGED so this patch can be inserted into a panorama. No new objects, no new sun, no people, no crop, no zoom, no borders. Preserve the charming existing paint style, amber lamps and blue-violet shadows. Deliver full same-aspect opaque PNG.",
+          "generationArtifact": "exec-1232bbab-4c3c-4670-929b-3ce0d2ffe876.png",
+          "nativeGenerationDimensions": [
+            983,
+            1601
+          ],
+          "generationSha256": "27e3aba17bee9f36480383ed71258297a8190d6d51148df7143ff525db0a4121"
+        }
+      ],
+      "promptDescription": "分块与接缝分别生成；完整 prompt 按执行步骤记录于 generationSteps，不合成为伪造的单次整图 prompt。",
+      "postprocess": {
+        "operation": "assemble_generated_tiles_and_seams_then_downsample",
+        "intermediateCanvasDimensions": [
+          4788,
+          1466
+        ],
+        "finalDimensions": [
+          2939,
+          900
+        ],
+        "targetHeight": 900,
+        "note": "中间大画布用于空间配准；交付版统一缩至高 900，不宣称原生 8K，不以中间放大尺寸表示清晰度。"
+      },
+      "runtimeAspectRatioRelativeError": 0.00014527058386692993
+    },
+    {
+      "placeId": "Seafront",
+      "displayName": "海滨街 · 酒吧与餐厅",
+      "category": "outdoor",
+      "scene": "Assets/Seabreeze/Scenes/Seafront.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/Seafront.png",
+      "sourceDimensions": [
+        4212,
+        1492
+      ],
+      "sourceSha256": "2eac9459f69e5672e419df2193a61d05b9ec4f13e49c326a6f24c19a3ef5af12",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/Seafront.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/Seafront.png",
+      "resourceKey": "Art/IslandEvening/Seafront",
+      "outputDimensions": [
+        2106,
+        747
+      ],
+      "outputBytes": 2637307,
+      "outputSha256": "36e1ec40069302360597ecdf269c09eba98c4cee3f8bb06e35ad6bf41830e7cb",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        2106,
+        747
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Lighting-weather edit. Image 1 is Seafront, a strict existing 2D side-view game map tile. Image 2 is ONLY sunset color/lighting/paint style, NEVER its buildings/boat/geography. Preserve EXACT composition, object shapes, all door/window/shop-sign positions, camera, perspective, continuous foreground pavement height and FULL original aspect ratio. Change only from daylight to vivid painted anime evening: rich cobalt-blue upper sky #245bdf fading toward violet and coral-orange near horizon, indigo cloud masses edged pink, blue-purple ambient shadows on original houses, warm golden existing lamps/windows. Keep readable blue-violet stone paving and detailed plants; warm amber rims. No sun disk visible (sun offscreen left), no new objects, no people or UI, no border/black bars, no crop or zoom. This is a panorama TILE: maintain boundary pixels geometry and neighboring wall/road contours; no compositional redesign. Approx matching pavement #968aa1, shaded stone #414b78, upper sky cobalt. Preserve source lettering faithfully. Sharp detailed hand-painted cinematic style, calm and inviting. Deliver one opaque PNG, full canvas with identical aspect ratio to image 1.",
+      "generationArtifact": "exec-a4a5664d-880e-43a4-a51f-494c1b38cce4.png",
+      "sourceManifest": "Docs/Art/Evening-20261113/root-generation.json",
+      "review": {
+        "framing": "主要门窗、家具和地面构图已目视核对；生成式编辑不保证逐像素几何一致。",
+        "acceptance": "资产文件检查，不代表 Unity 运行验收。"
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        2106,
+        747
+      ],
+      "runtimeBytes": 2637307,
+      "runtimeSha256": "36e1ec40069302360597ecdf269c09eba98c4cee3f8bb06e35ad6bf41830e7cb",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "generationSteps": [
+        {
+          "id": "Seafront",
+          "prompt": "Lighting-weather edit. Image 1 is Seafront, a strict existing 2D side-view game map tile. Image 2 is ONLY sunset color/lighting/paint style, NEVER its buildings/boat/geography. Preserve EXACT composition, object shapes, all door/window/shop-sign positions, camera, perspective, continuous foreground pavement height and FULL original aspect ratio. Change only from daylight to vivid painted anime evening: rich cobalt-blue upper sky #245bdf fading toward violet and coral-orange near horizon, indigo cloud masses edged pink, blue-purple ambient shadows on original houses, warm golden existing lamps/windows. Keep readable blue-violet stone paving and detailed plants; warm amber rims. No sun disk visible (sun offscreen left), no new objects, no people or UI, no border/black bars, no crop or zoom. This is a panorama TILE: maintain boundary pixels geometry and neighboring wall/road contours; no compositional redesign. Approx matching pavement #968aa1, shaded stone #414b78, upper sky cobalt. Preserve source lettering faithfully. Sharp detailed hand-painted cinematic style, calm and inviting. Deliver one opaque PNG, full canvas with identical aspect ratio to image 1.",
+          "generationArtifact": "exec-a4a5664d-880e-43a4-a51f-494c1b38cce4.png",
+          "nativeGenerationDimensions": [
+            2106,
+            747
+          ],
+          "generationSha256": "36e1ec40069302360597ecdf269c09eba98c4cee3f8bb06e35ad6bf41830e7cb"
+        }
+      ],
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          2106,
+          747
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.0013386880856760541
+    },
+    {
+      "placeId": "Beach",
+      "displayName": "沙滩",
+      "category": "outdoor",
+      "scene": "Assets/Seabreeze/Scenes/Beach.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/Beach.png",
+      "sourceDimensions": [
+        2651,
+        1492
+      ],
+      "sourceSha256": "f91b3df18ba591a9bc5f1fdce2135a3a67b3a8335a47a21114d3cb2d62c97d2f",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/Beach.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/Beach.png",
+      "resourceKey": "Art/IslandEvening/Beach",
+      "outputDimensions": [
+        1672,
+        941
+      ],
+      "outputBytes": 2381285,
+      "outputSha256": "562a1965def0e9a39d9d622870044fae3df201f61987071ed654769bc1a221e0",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1672,
+        941
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit IMAGE 1 only, a production 2D side-scrolling game background. IMAGE 2 is evening color/light/paint reference only; do NOT transplant its boat, buildings or island objects. Change only time-of-day palette and illumination to luminous evening: saturated but natural cobalt upper sky, lavender/violet gradients, layered coral-pink and orange clouds near warm horizon, deep blue ocean and cool blue-violet shadow shapes with warm golden sunset reflection. Handpainted Japanese animation-film brushwork, crisp detail. Preserve exact IMAGE 1 camera, composition, original aspect ratio, all structural geometry and relative placement: shoreline, horizon, ground baseline, paths, walls, buildings, doors, trees, props. No new objects, lights, characters, UI, text or watermark. Keep all existing signage unchanged. PNG high resolution full canvas, no crop or letterbox. Original2651x1492 aspect1.7768:1. This is an undeveloped sandy beach with left coastal hills, reeds/rocks, open sandy foreground, ocean at right and existing offshore fishing boats. Keep all boat silhouettes and positions. No buildings, piers, lamps or added props. Coral sunset on horizon and its reflection across blue water; soft warm sand highlights and violet shadows; do not change beach shoreline.",
+      "generationArtifact": "exec-e15efd5d-b85a-4c84-808a-ea51a8a3e174.png",
+      "sourceManifest": "Manifest/Beach.json",
+      "review": {
+        "framing": "Full canvas preserved; no manual crop, resize or upscale.",
+        "geometry": "Visually compared major buildings, door/path/step landmarks and foreground ground baseline; no camera/layout shift observed. Generative fine-detail reconstruction is not pixel-identical.",
+        "acceptance": "Asset inspection only; Unity runtime alignment remains for integration validation."
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        1672,
+        941
+      ],
+      "runtimeBytes": 2381285,
+      "runtimeSha256": "562a1965def0e9a39d9d622870044fae3df201f61987071ed654769bc1a221e0",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1672,
+          941
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 1.3228621445371402e-05
+    },
+    {
+      "placeId": "ForestPath1",
+      "displayName": "森林 · 林间步道",
+      "category": "outdoor",
+      "scene": "Assets/Seabreeze/Scenes/ForestPath1.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/ForestPath1.png",
+      "sourceDimensions": [
+        3039,
+        1493
+      ],
+      "sourceSha256": "60270c80bc051f9b1aa660f278e2376db6977c2f3228350c0acc5eb65930e254",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/ForestPath1.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/ForestPath1.png",
+      "resourceKey": "Art/IslandEvening/ForestPath1",
+      "outputDimensions": [
+        1789,
+        879
+      ],
+      "outputBytes": 2932770,
+      "outputSha256": "158907e68928768652c2a01f76a61db59d503bfd2a8f6c8bebb60bc79b25f61c",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1789,
+        879
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit image1 ForestPath1 as a geometry-preserving dusk variant of this exact side-view game map. Image2 only supplies sunset painted palette, not objects or layout. Keep full input aspect ratio and all exact tree/log/rock silhouettes, paths, stairs, sign text, ground height and framing. No new trees, lamps, people, sea or buildings. Retain the original layered detailed hand-painted anime background. Change time and illumination only: distant sky visible through foliage deep cobalt fading to coral-pink sunset, lavender distant forest atmospheric layers, indigo blue-purple shade on trunks and ground, subtle warm amber rimlight on existing edges, glowing sunset rays only where gaps already exist. Green leaves remain recognizably green, with cool evening shade. Calm readable walkable foreground. Do NOT replace foliage with large sky. No crop/no zoom/no black borders/letterboxing. Fill full PNG edge to edge, high resolution.",
+      "generationArtifact": "exec-2bb83fe2-ac39-4570-a941-919faebddf96.png",
+      "sourceManifest": "Docs/Art/Evening-20261113/root-generation.json",
+      "review": {
+        "framing": "主要门窗、家具和地面构图已目视核对；生成式编辑不保证逐像素几何一致。",
+        "acceptance": "资产文件检查，不代表 Unity 运行验收。"
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        1789,
+        879
+      ],
+      "runtimeBytes": 2932770,
+      "runtimeSha256": "158907e68928768652c2a01f76a61db59d503bfd2a8f6c8bebb60bc79b25f61c",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "generationSteps": [
+        {
+          "id": "ForestPath1",
+          "prompt": "Use case: lighting-weather. Edit image1 ForestPath1 as a geometry-preserving dusk variant of this exact side-view game map. Image2 only supplies sunset painted palette, not objects or layout. Keep full input aspect ratio and all exact tree/log/rock silhouettes, paths, stairs, sign text, ground height and framing. No new trees, lamps, people, sea or buildings. Retain the original layered detailed hand-painted anime background. Change time and illumination only: distant sky visible through foliage deep cobalt fading to coral-pink sunset, lavender distant forest atmospheric layers, indigo blue-purple shade on trunks and ground, subtle warm amber rimlight on existing edges, glowing sunset rays only where gaps already exist. Green leaves remain recognizably green, with cool evening shade. Calm readable walkable foreground. Do NOT replace foliage with large sky. No crop/no zoom/no black borders/letterboxing. Fill full PNG edge to edge, high resolution.",
+          "generationArtifact": "exec-2bb83fe2-ac39-4570-a941-919faebddf96.png",
+          "nativeGenerationDimensions": [
+            1789,
+            879
+          ],
+          "generationSha256": "158907e68928768652c2a01f76a61db59d503bfd2a8f6c8bebb60bc79b25f61c"
+        }
+      ],
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1789,
+          879
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.00011380307799879752
+    },
+    {
+      "placeId": "ForestPath2",
+      "displayName": "森林 · 林深处",
+      "category": "outdoor",
+      "scene": "Assets/Seabreeze/Scenes/ForestPath2.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/ForestPath2.png",
+      "sourceDimensions": [
+        2957,
+        1479
+      ],
+      "sourceSha256": "53141c5c37abff379c503a2f811e6796518caf090e9bcd730ab75474a04ab42e",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/ForestPath2.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/ForestPath2.png",
+      "resourceKey": "Art/IslandEvening/ForestPath2",
+      "outputDimensions": [
+        1774,
+        887
+      ],
+      "outputBytes": 3026448,
+      "outputSha256": "5a9e9b1c9e69344da6348f6582c63b3ddf40d2a28fea08ff6ec8d5106e877c43",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1774,
+        887
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit image1 ForestPath2 as a geometry-preserving dusk variant of this exact side-view game map. Image2 only supplies sunset painted palette, not objects or layout. Keep full input aspect ratio and all exact tree/log/rock silhouettes, paths, stairs, sign text, ground height and framing. No new trees, lamps, people, sea or buildings. Retain the original layered detailed hand-painted anime background. Change time and illumination only: distant sky visible through foliage deep cobalt fading to coral-pink sunset, lavender distant forest atmospheric layers, indigo blue-purple shade on trunks and ground, subtle warm amber rimlight on existing edges, glowing sunset rays only where gaps already exist. Green leaves remain recognizably green, with cool evening shade. Calm readable walkable foreground. Do NOT replace foliage with large sky. No crop/no zoom/no black borders/letterboxing. Fill full PNG edge to edge, high resolution.",
+      "generationArtifact": "exec-d493792b-3354-4057-8257-1f8bc19461a1.png",
+      "sourceManifest": "Docs/Art/Evening-20261113/root-generation.json",
+      "review": {
+        "framing": "主要门窗、家具和地面构图已目视核对；生成式编辑不保证逐像素几何一致。",
+        "acceptance": "资产文件检查，不代表 Unity 运行验收。"
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        1774,
+        887
+      ],
+      "runtimeBytes": 3026448,
+      "runtimeSha256": "5a9e9b1c9e69344da6348f6582c63b3ddf40d2a28fea08ff6ec8d5106e877c43",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "generationSteps": [
+        {
+          "id": "ForestPath2",
+          "prompt": "Use case: lighting-weather. Edit image1 ForestPath2 as a geometry-preserving dusk variant of this exact side-view game map. Image2 only supplies sunset painted palette, not objects or layout. Keep full input aspect ratio and all exact tree/log/rock silhouettes, paths, stairs, sign text, ground height and framing. No new trees, lamps, people, sea or buildings. Retain the original layered detailed hand-painted anime background. Change time and illumination only: distant sky visible through foliage deep cobalt fading to coral-pink sunset, lavender distant forest atmospheric layers, indigo blue-purple shade on trunks and ground, subtle warm amber rimlight on existing edges, glowing sunset rays only where gaps already exist. Green leaves remain recognizably green, with cool evening shade. Calm readable walkable foreground. Do NOT replace foliage with large sky. No crop/no zoom/no black borders/letterboxing. Fill full PNG edge to edge, high resolution.",
+          "generationArtifact": "exec-d493792b-3354-4057-8257-1f8bc19461a1.png",
+          "nativeGenerationDimensions": [
+            1774,
+            887
+          ],
+          "generationSha256": "5a9e9b1c9e69344da6348f6582c63b3ddf40d2a28fea08ff6ec8d5106e877c43"
+        }
+      ],
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1774,
+          887
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.00033818058843437804
+    },
+    {
+      "placeId": "BeachEntrance",
+      "displayName": "沙滩入口",
+      "category": "outdoor",
+      "scene": "Assets/Seabreeze/Scenes/BeachEntrance.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/BeachEntrance.png",
+      "sourceDimensions": [
+        2793,
+        1492
+      ],
+      "sourceSha256": "41a6e599c14e5009a5bb0ae5a24aeabc85c9a2cf40eec1ecafc424cf0220c2c7",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/BeachEntrance.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/BeachEntrance.png",
+      "resourceKey": "Art/IslandEvening/BeachEntrance",
+      "outputDimensions": [
+        1716,
+        917
+      ],
+      "outputBytes": 2546165,
+      "outputSha256": "4bfa8d4a0f8f1d09b5dc60b31114608d2cfee9cc924473ac8da7d11aa2af42cc",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1716,
+        917
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit IMAGE 1 only, a production 2D side-scrolling game background. IMAGE 2 is evening color/light/paint reference only; do NOT transplant its boat, buildings or island objects. Change only time-of-day palette and illumination to luminous evening: saturated but natural cobalt upper sky, lavender/violet gradients, layered coral-pink and orange clouds near warm horizon, deep blue ocean and cool blue-violet shadow shapes with warm golden sunset reflection. Handpainted Japanese animation-film brushwork, crisp detail. Preserve exact IMAGE 1 camera, composition, original aspect ratio, all structural geometry and relative placement: shoreline, horizon, ground baseline, paths, walls, buildings, doors, trees, props. No new objects, lights, characters, UI, text or watermark. Keep all existing signage unchanged. PNG high resolution full canvas, no crop or letterbox. Original2793x1492 aspect1.872:1. Preserve left building and green awning/tables, central-left staircase down to beach and all its steps, right sand/ocean, exact bottom pavement wall. Existing windows and lamps may glow, don't add harborboats. Warm light on left stone edges and existing lanterns, blue shadow on sand and wall.",
+      "generationArtifact": "exec-feff7fc8-ae68-4a00-bc17-be1149f201e8.png",
+      "sourceManifest": "Manifest/BeachEntrance.json",
+      "review": {
+        "framing": "Full canvas preserved; no manual crop, resize or upscale.",
+        "geometry": "Visually compared major buildings, door/path/step landmarks and foreground ground baseline; no camera/layout shift observed. Generative fine-detail reconstruction is not pixel-identical.",
+        "acceptance": "Asset inspection only; Unity runtime alignment remains for integration validation."
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        1716,
+        917
+      ],
+      "runtimeBytes": 2546165,
+      "runtimeSha256": "4bfa8d4a0f8f1d09b5dc60b31114608d2cfee9cc924473ac8da7d11aa2af42cc",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1716,
+          917
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.0003549143930084986
+    },
+    {
+      "placeId": "CaptainHome",
+      "displayName": "船长的家",
+      "category": "indoor",
+      "scene": "Assets/Seabreeze/Scenes/CaptainHome.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/CaptainHome.png",
+      "sourceDimensions": [
+        2047,
+        1152
+      ],
+      "sourceSha256": "e2d95811fe17f5293eb6cfddba9195765cd1122184767a361976898ef0a3a979",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/CaptainHome.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/CaptainHome.png",
+      "resourceKey": "Art/IslandEvening/CaptainHome",
+      "outputDimensions": [
+        1672,
+        941
+      ],
+      "outputBytes": 1988714,
+      "outputSha256": "ad146127d9b5b5ebd807f22a6947406382d24d1432fd70edd6971cba59beb9d6",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1672,
+        941
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit image 1 (CaptainHome) into its early-evening map variant for a Japanese hand-painted 2D side-view narrative game. Image 1 is the strict composition/layout source. Image 2 is only a color, lighting and brushwork reference: luminous cobalt-blue/violet twilight shadows, coral pink/orange sunset near horizon, golden amber indoor lamps. Keep image 1's EXACT room arrangement, camera, perspective, floor line, door/window locations and sizes, furniture, props, coastline and full 16:9 framing. Do not borrow any buildings, boat, props or composition from image 2. Update only time-of-day and painterly lighting: outside existing windows and open doors show the SAME geography at vivid sunset, violet layered clouds with coral edges and deep blue sea; cast low warm evening light into the room, keep blue-violet ambient shadow and readable detailed wood/furniture. Turn existing lamps on with gentle warm amber illumination. No new lights or objects, no people, no UI, no border, no text overlay, no cropping or reframing. Preserve the original side-view walkable foreground and all collision/interaction-aligned shapes. Calm comforting cinematic anime background. Output a single full-canvas high-quality opaque PNG, 2048x1152 or same 16:9 ratio.",
+      "generationArtifact": "exec-d5022c94-fa7d-4724-b6aa-d8cb1c91deb0.png",
+      "sourceManifest": "Generated/Manifest/CaptainHome.json",
+      "review": {
+        "framing": "主要门窗、家具和地面构图已目视核对；生成式编辑不保证逐像素几何一致。",
+        "acceptance": "资产文件检查，不代表 Unity 运行验收。"
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        1672,
+        941
+      ],
+      "runtimeBytes": 1988714,
+      "runtimeSha256": "ad146127d9b5b5ebd807f22a6947406382d24d1432fd70edd6971cba59beb9d6",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1672,
+          941
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 4.308941781006048e-05
+    },
+    {
+      "placeId": "LiTingHome",
+      "displayName": "李庭的家",
+      "category": "indoor",
+      "scene": "Assets/Seabreeze/Scenes/LiTingHome.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/LiTingHome.png",
+      "sourceDimensions": [
+        2048,
+        1152
+      ],
+      "sourceSha256": "0c1a0011dd93776ec9ffbdcbc378fdb76282606402bd9c18497085b5cb4070c3",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/LiTingHome.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/LiTingHome.png",
+      "resourceKey": "Art/IslandEvening/LiTingHome",
+      "outputDimensions": [
+        1672,
+        941
+      ],
+      "outputBytes": 1820479,
+      "outputSha256": "cbc5e7076225694e707e579b1ee8320e258aa24cc5446fba2efee7eba1da05af",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1672,
+        941
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit image 1 (LiTingHome) into its early-evening map variant for a Japanese hand-painted 2D side-view narrative game. Image 1 is the strict composition/layout source. Image 2 is only a color, lighting and brushwork reference: luminous cobalt-blue/violet twilight shadows, coral pink/orange sunset near horizon, golden amber indoor lamps. Keep image 1's EXACT room arrangement, camera, perspective, floor line, door/window locations and sizes, furniture, props, coastline and full 16:9 framing. Do not borrow any buildings, boat, props or composition from image 2. Update only time-of-day and painterly lighting: outside existing windows and open doors show the SAME geography at vivid sunset, violet layered clouds with coral edges and deep blue sea; cast low warm evening light into the room, keep blue-violet ambient shadow and readable detailed wood/furniture. Turn existing lamps on with gentle warm amber illumination. No new lights or objects, no people, no UI, no border, no text overlay, no cropping or reframing. Preserve the original side-view walkable foreground and all collision/interaction-aligned shapes. Calm comforting cinematic anime background. Output a single full-canvas high-quality opaque PNG, 2048x1152 or same 16:9 ratio.",
+      "generationArtifact": "exec-a1de2ed5-5d1b-4dfb-b07c-e2031ac0aaa6.png",
+      "sourceManifest": "Generated/Manifest/LiTingHome.json",
+      "review": {
+        "framing": "主要门窗、家具和地面构图已目视核对；生成式编辑不保证逐像素几何一致。",
+        "acceptance": "资产文件检查，不代表 Unity 运行验收。"
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        1672,
+        941
+      ],
+      "runtimeBytes": 1820479,
+      "runtimeSha256": "cbc5e7076225694e707e579b1ee8320e258aa24cc5446fba2efee7eba1da05af",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1672,
+          941
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.0005313496280551222
+    },
+    {
+      "placeId": "ZiqingHome",
+      "displayName": "子晴的家",
+      "category": "indoor",
+      "scene": "Assets/Seabreeze/Scenes/ZiqingHome.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/ZiqingHome.png",
+      "sourceDimensions": [
+        2048,
+        1152
+      ],
+      "sourceSha256": "1400d3502a303a40cef49778d1ba13e8a567da990e789c082fa051f7add2dd4e",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/ZiqingHome.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/ZiqingHome.png",
+      "resourceKey": "Art/IslandEvening/ZiqingHome",
+      "outputDimensions": [
+        1672,
+        941
+      ],
+      "outputBytes": 1877720,
+      "outputSha256": "81de5f230b265a07b4de593e0ef614b2331974cf12e019448f20a30e520f9a7d",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1672,
+        941
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit image 1 (ZiqingHome) into its early-evening map variant for a Japanese hand-painted 2D side-view narrative game. Image 1 is the strict composition/layout source. Image 2 is only a color, lighting and brushwork reference: luminous cobalt-blue/violet twilight shadows, coral pink/orange sunset near horizon, golden amber indoor lamps. Keep image 1's EXACT room arrangement, camera, perspective, floor line, door/window locations and sizes, furniture, props, coastline and full 16:9 framing. Do not borrow any buildings, boat, props or composition from image 2. Update only time-of-day and painterly lighting: outside existing windows and open doors show the SAME geography at vivid sunset, violet layered clouds with coral edges and deep blue sea; cast low warm evening light into the room, keep blue-violet ambient shadow and readable detailed wood/furniture. Turn existing lamps on with gentle warm amber illumination. No new lights or objects, no people, no UI, no border, no text overlay, no cropping or reframing. Preserve the original side-view walkable foreground and all collision/interaction-aligned shapes. Calm comforting cinematic anime background. Output a single full-canvas high-quality opaque PNG, 2048x1152 or same 16:9 ratio.",
+      "generationArtifact": "exec-4e6566a5-f820-44db-aec6-66ebc182d0f3.png",
+      "sourceManifest": "Generated/Manifest/ZiqingHome.json",
+      "review": {
+        "framing": "主要门窗、家具和地面构图已目视核对；生成式编辑不保证逐像素几何一致。",
+        "acceptance": "资产文件检查，不代表 Unity 运行验收。"
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        1672,
+        941
+      ],
+      "runtimeBytes": 1877720,
+      "runtimeSha256": "81de5f230b265a07b4de593e0ef614b2331974cf12e019448f20a30e520f9a7d",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1672,
+          941
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.0005313496280551222
+    },
+    {
+      "placeId": "ZHome",
+      "displayName": "Z 家客厅",
+      "category": "indoor",
+      "scene": "Assets/Seabreeze/Scenes/ZHome.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/ZHome.png",
+      "sourceDimensions": [
+        2048,
+        1152
+      ],
+      "sourceSha256": "0c1a0011dd93776ec9ffbdcbc378fdb76282606402bd9c18497085b5cb4070c3",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/ZHome.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/ZHome.png",
+      "resourceKey": "Art/IslandEvening/ZHome",
+      "outputDimensions": [
+        1672,
+        941
+      ],
+      "outputBytes": 1944795,
+      "outputSha256": "398b985275f9fbd17e07c0673c9457344d953af59455f0762e4e943969f68ab3",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1672,
+        941
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit image 1 (ZHome) into its early-evening map variant for a Japanese hand-painted 2D side-view narrative game. Image 1 is the strict composition/layout source. Image 2 is only a color, lighting and brushwork reference: luminous cobalt-blue/violet twilight shadows, coral pink/orange sunset near horizon, golden amber indoor lamps. Keep image 1's EXACT room arrangement, camera, perspective, floor line, door/window locations and sizes, furniture, props, coastline and full 16:9 framing. Do not borrow any buildings, boat, props or composition from image 2. Update only time-of-day and painterly lighting: outside existing windows and open doors show the SAME geography at vivid sunset, violet layered clouds with coral edges and deep blue sea; cast low warm evening light into the room, keep blue-violet ambient shadow and readable detailed wood/furniture. Turn existing lamps on with gentle warm amber illumination. No new lights or objects, no people, no UI, no border, no text overlay, no cropping or reframing. Preserve the original side-view walkable foreground and all collision/interaction-aligned shapes. Calm comforting cinematic anime background. Output a single full-canvas high-quality opaque PNG, 2048x1152 or same 16:9 ratio.",
+      "generationArtifact": "exec-f66e0397-bf29-40d1-8ec2-3287496b3ce6.png",
+      "sourceManifest": "Generated/Manifest/ZHome.json",
+      "review": {
+        "framing": "主要门窗、家具和地面构图已目视核对；生成式编辑不保证逐像素几何一致。",
+        "acceptance": "资产文件检查，不代表 Unity 运行验收。"
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        1672,
+        941
+      ],
+      "runtimeBytes": 1944795,
+      "runtimeSha256": "398b985275f9fbd17e07c0673c9457344d953af59455f0762e4e943969f68ab3",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1672,
+          941
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.0005313496280551222
+    },
+    {
+      "placeId": "ZhouHome",
+      "displayName": "周伯伯的家",
+      "category": "indoor",
+      "scene": "Assets/Seabreeze/Scenes/ZhouHome.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/ZhouHome.png",
+      "sourceDimensions": [
+        2048,
+        1152
+      ],
+      "sourceSha256": "ea121e71d7a11b9aedd7625adf84796440e0d11d440e1a998e24447eaa807049",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/ZhouHome.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/ZhouHome.png",
+      "resourceKey": "Art/IslandEvening/ZhouHome",
+      "outputDimensions": [
+        1672,
+        941
+      ],
+      "outputBytes": 1933788,
+      "outputSha256": "c5c601daf62512d0aecfc6fc9b6a25c1faea018e13b7da3ca20f427840ff98c5",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1672,
+        941
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit image 1 (ZhouHome) into its early-evening map variant for a Japanese hand-painted 2D side-view narrative game. Image 1 is the strict composition/layout source. Image 2 is only a color, lighting and brushwork reference: luminous cobalt-blue/violet twilight shadows, coral pink/orange sunset near horizon, golden amber indoor lamps. Keep image 1's EXACT room arrangement, camera, perspective, floor line, door/window locations and sizes, furniture, props, coastline and full 16:9 framing. Do not borrow any buildings, boat, props or composition from image 2. Update only time-of-day and painterly lighting: outside existing windows and open doors show the SAME geography at vivid sunset, violet layered clouds with coral edges and deep blue sea; cast low warm evening light into the room, keep blue-violet ambient shadow and readable detailed wood/furniture. Turn existing lamps on with gentle warm amber illumination. No new lights or objects, no people, no UI, no border, no text overlay, no cropping or reframing. Preserve the original side-view walkable foreground and all collision/interaction-aligned shapes. Calm comforting cinematic anime background. Output a single full-canvas high-quality opaque PNG, 2048x1152 or same 16:9 ratio.",
+      "generationArtifact": "exec-c8b37ef7-0179-4dfc-bf24-9dacde938183.png",
+      "sourceManifest": "Generated/Manifest/ZhouHome.json",
+      "review": {
+        "framing": "主要门窗、家具和地面构图已目视核对；生成式编辑不保证逐像素几何一致。",
+        "acceptance": "资产文件检查，不代表 Unity 运行验收。"
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        1672,
+        941
+      ],
+      "runtimeBytes": 1933788,
+      "runtimeSha256": "c5c601daf62512d0aecfc6fc9b6a25c1faea018e13b7da3ca20f427840ff98c5",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1672,
+          941
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.0005313496280551222
+    },
+    {
+      "placeId": "VisitorCenter",
+      "displayName": "游客中心",
+      "category": "indoor",
+      "scene": "Assets/Seabreeze/Scenes/VisitorCenter.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/VisitorCenter.png",
+      "sourceDimensions": [
+        2048,
+        1152
+      ],
+      "sourceSha256": "7144d893740d4e61f94ab83233959d44f86ebb0b3e516d6f12659c02804c14ca",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/VisitorCenter.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/VisitorCenter.png",
+      "resourceKey": "Art/IslandEvening/VisitorCenter",
+      "outputDimensions": [
+        1672,
+        941
+      ],
+      "outputBytes": 1944667,
+      "outputSha256": "81dd8a221c263fb0633ec8e6ab52a00b92b463ac0a407d5a92e279122ee215fc",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1672,
+        941
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit image 1 (VisitorCenter) into its early-evening map variant for a Japanese hand-painted 2D side-view narrative game. Image 1 is the strict composition/layout source. Image 2 is only a color, lighting and brushwork reference: luminous cobalt-blue/violet twilight shadows, coral pink/orange sunset near horizon, golden amber indoor lamps. Keep image 1's EXACT room arrangement, camera, perspective, floor line, door/window locations and sizes, furniture, props, coastline and full 16:9 framing. Do not borrow any buildings, boat, props or composition from image 2. Update only time-of-day and painterly lighting: outside existing windows and open doors show the SAME geography at vivid sunset, violet layered clouds with coral edges and deep blue sea; cast low warm evening light into the room, keep blue-violet ambient shadow and readable detailed wood/furniture. Turn existing lamps on with gentle warm amber illumination. No new lights or objects, no people, no UI, no border, no text overlay, no cropping or reframing. Preserve the original side-view walkable foreground and all collision/interaction-aligned shapes. Calm comforting cinematic anime background. Output a single full-canvas high-quality opaque PNG, 2048x1152 or same 16:9 ratio. Preserve all existing sign and menu lettering faithfully; do not invent new typography.",
+      "generationArtifact": "exec-5a9a57ac-1afd-41c0-a429-e0be7ad340c8.png",
+      "sourceManifest": "Generated/Manifest/VisitorCenter.json",
+      "review": {
+        "framing": "主要门窗、家具和地面构图已目视核对；生成式编辑不保证逐像素几何一致。",
+        "acceptance": "资产文件检查，不代表 Unity 运行验收。"
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        1672,
+        941
+      ],
+      "runtimeBytes": 1944667,
+      "runtimeSha256": "81dd8a221c263fb0633ec8e6ab52a00b92b463ac0a407d5a92e279122ee215fc",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1672,
+          941
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.0005313496280551222
+    },
+    {
+      "placeId": "FlowerShop",
+      "displayName": "花店",
+      "category": "indoor",
+      "scene": "Assets/Seabreeze/Scenes/FlowerShop.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/FlowerShop.png",
+      "sourceDimensions": [
+        2048,
+        1152
+      ],
+      "sourceSha256": "95069a7c9bf48c96f8af96a120635f4759fb703a586fcc83db58718b5c00c364",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/FlowerShop.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/FlowerShop.png",
+      "resourceKey": "Art/IslandEvening/FlowerShop",
+      "outputDimensions": [
+        1672,
+        941
+      ],
+      "outputBytes": 2171348,
+      "outputSha256": "15ded9a671de9cad6c84063d820c20ebffb8d262d839c0cf926f7fd6b09e804a",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1672,
+        941
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit image 1 (FlowerShop) into its early-evening map variant for a Japanese hand-painted 2D side-view narrative game. Image 1 is the strict composition/layout source. Image 2 is only a color, lighting and brushwork reference: luminous cobalt-blue/violet twilight shadows, coral pink/orange sunset near horizon, golden amber indoor lamps. Keep image 1's EXACT room arrangement, camera, perspective, floor line, door/window locations and sizes, furniture, props, coastline and full 16:9 framing. Do not borrow any buildings, boat, props or composition from image 2. Update only time-of-day and painterly lighting: outside existing windows and open doors show the SAME geography at vivid sunset, violet layered clouds with coral edges and deep blue sea; cast low warm evening light into the room, keep blue-violet ambient shadow and readable detailed wood/furniture. Turn existing lamps on with gentle warm amber illumination. No new lights or objects, no people, no UI, no border, no text overlay, no cropping or reframing. Preserve the original side-view walkable foreground and all collision/interaction-aligned shapes. Calm comforting cinematic anime background. Output a single full-canvas high-quality opaque PNG, 2048x1152 or same 16:9 ratio. Preserve all existing sign and menu lettering faithfully; do not invent new typography.",
+      "generationArtifact": "exec-d332d685-0525-4184-b044-42358b6bc578.png",
+      "sourceManifest": "Generated/Manifest/FlowerShop.json",
+      "review": {
+        "framing": "主要门窗、家具和地面构图已目视核对；生成式编辑不保证逐像素几何一致。",
+        "acceptance": "资产文件检查，不代表 Unity 运行验收。"
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        1672,
+        941
+      ],
+      "runtimeBytes": 2171348,
+      "runtimeSha256": "15ded9a671de9cad6c84063d820c20ebffb8d262d839c0cf926f7fd6b09e804a",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1672,
+          941
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.0005313496280551222
+    },
+    {
+      "placeId": "PhotoStudio",
+      "displayName": "照相馆",
+      "category": "indoor",
+      "scene": "Assets/Seabreeze/Scenes/PhotoStudio.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/PhotoStudio.png",
+      "sourceDimensions": [
+        2048,
+        1152
+      ],
+      "sourceSha256": "3edbc754a1ceecaf8c5f0322b3c0fe05d4d0b72eca366d2e313325eb52f23b98",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/PhotoStudio.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/PhotoStudio.png",
+      "resourceKey": "Art/IslandEvening/PhotoStudio",
+      "outputDimensions": [
+        1672,
+        941
+      ],
+      "outputBytes": 1929890,
+      "outputSha256": "a71310f3ecfdd8424479d3253fb49e8eb8e56f2bc53cedc5975ddea0a7d909a8",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1672,
+        941
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit image 1 (PhotoStudio) into its early-evening map variant for a Japanese hand-painted 2D side-view narrative game. Image 1 is the strict composition/layout source. Image 2 is only a color, lighting and brushwork reference: luminous cobalt-blue/violet twilight shadows, coral pink/orange sunset near horizon, golden amber indoor lamps. Keep image 1's EXACT room arrangement, camera, perspective, floor line, door/window locations and sizes, furniture, props, coastline and full 16:9 framing. Do not borrow any buildings, boat, props or composition from image 2. Update only time-of-day and painterly lighting: this studio has no exterior-facing large window; do not add any windows or openings. Existing narrow door glass and tiny top exterior sky band may carry violet/coral sunset tones; cast low warm evening light into the room, keep blue-violet ambient shadow and readable detailed wood/furniture. Turn existing lamps on with gentle warm amber illumination. No new lights or objects, no new people; retain the existing people pictured in framed photographs, no UI, no border, no text overlay, no cropping or reframing. Preserve the original side-view walkable foreground and all collision/interaction-aligned shapes. Calm comforting cinematic anime background. Output a single full-canvas high-quality opaque PNG, 2048x1152 or same 16:9 ratio. Preserve existing signs, photographs and equipment, without invented new objects.",
+      "generationArtifact": "exec-8679921d-5fea-4492-90ae-2590a1355a6b.png",
+      "sourceManifest": "Generated/Manifest/PhotoStudio.json",
+      "review": {
+        "framing": "主要门窗、家具和地面构图已目视核对；生成式编辑不保证逐像素几何一致。",
+        "acceptance": "资产文件检查，不代表 Unity 运行验收。"
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        1672,
+        941
+      ],
+      "runtimeBytes": 1929890,
+      "runtimeSha256": "a71310f3ecfdd8424479d3253fb49e8eb8e56f2bc53cedc5975ddea0a7d909a8",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1672,
+          941
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.0005313496280551222
+    },
+    {
+      "placeId": "CabinInterior",
+      "displayName": "梨园的木屋 · 室内",
+      "category": "indoor",
+      "scene": "Assets/Seabreeze/Scenes/CabinInterior.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/CabinInterior.png",
+      "sourceDimensions": [
+        3078,
+        1731
+      ],
+      "sourceSha256": "10598a8aea1da825e55f03bad266c1bb9ae859ba8489e8eea84e1209d8ed6fb5",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/CabinInterior.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/CabinInterior.png",
+      "resourceKey": "Art/IslandEvening/CabinInterior",
+      "outputDimensions": [
+        1672,
+        940
+      ],
+      "outputBytes": 1980575,
+      "outputSha256": "b206b37cef83300bf3ed727bf17f0f73bab182a634159cb49a027d051214c566",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1672,
+        940
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit image 1 (CabinInterior) into its early-evening map variant for a Japanese hand-painted 2D side-view narrative game. Image 1 is the strict composition/layout source. Image 2 is only a color, lighting and brushwork reference: luminous cobalt-blue/violet twilight shadows, coral pink/orange sunset near horizon, golden amber indoor lamps. Keep image 1's EXACT room arrangement, camera, perspective, floor line, door/window locations and sizes, furniture, props, coastline and full 16:9 framing. Do not borrow any buildings, boat, props or composition from image 2. Update only time-of-day and painterly lighting: outside existing windows preserve the SAME DENSE FOREST, tree trunks and foliage, with warm sunset light filtering through leaves and muted violet shadows; absolutely NO sea, lighthouse or coastal landscape outside this forest cabin; cast low warm evening light into the room, keep blue-violet ambient shadow and readable detailed wood/furniture. Turn existing lamps on with gentle warm amber illumination. No new lights or objects, no people, no UI, no border, no text overlay, no cropping or reframing. Preserve the original side-view walkable foreground and all collision/interaction-aligned shapes. Calm comforting cinematic anime background. Output a single full-canvas high-quality opaque PNG, 2048x1152 or same 16:9 ratio. Preserve existing signs, photographs and equipment, without invented new objects.",
+      "generationArtifact": "exec-032fd454-1daa-4093-8dc5-1904a8e4770a.png",
+      "sourceManifest": "Generated/Manifest/CabinInterior.json",
+      "review": {
+        "framing": "主要门窗、家具和地面构图已目视核对；生成式编辑不保证逐像素几何一致。",
+        "acceptance": "资产文件检查，不代表 Unity 运行验收。"
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        1672,
+        940
+      ],
+      "runtimeBytes": 1980575,
+      "runtimeSha256": "b206b37cef83300bf3ed727bf17f0f73bab182a634159cb49a027d051214c566",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1672,
+          940
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.0003152088258471242
+    },
+    {
+      "placeId": "ResearchInterior",
+      "displayName": "研究所 · 室内",
+      "category": "indoor",
+      "scene": "Assets/Seabreeze/Scenes/ResearchInterior.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/ResearchInterior.png",
+      "sourceDimensions": [
+        2628,
+        1478
+      ],
+      "sourceSha256": "0a161a9ba4a82299bef9bf729e95f3ae2d5724da3796eda6b913dbe9d361a181",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/ResearchInterior.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/ResearchInterior.png",
+      "resourceKey": "Art/IslandEvening/ResearchInterior",
+      "outputDimensions": [
+        1672,
+        940
+      ],
+      "outputBytes": 2030345,
+      "outputSha256": "04205d014d88fd9deb9e7cd7615d4a2785fc703870491405d66736907fb3d5b9",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1672,
+        940
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit image 1 (ResearchInterior) into its early-evening map variant for a Japanese hand-painted 2D side-view narrative game. Image 1 is the strict composition/layout source. Image 2 is only a color, lighting and brushwork reference: luminous cobalt-blue/violet twilight shadows, coral pink/orange sunset near horizon, golden amber indoor lamps. Keep image 1's EXACT room arrangement, camera, perspective, floor line, door/window locations and sizes, furniture, props, coastline and full 16:9 framing. Do not borrow any buildings, boat, props or composition from image 2. Update only time-of-day and painterly lighting: outside existing windows and open doors show the SAME geography at vivid sunset, violet layered clouds with coral edges and deep blue sea; cast low warm evening light into the room, keep blue-violet ambient shadow and readable detailed wood/furniture. Turn existing lamps on with gentle warm amber illumination. No new lights or objects, no people, no UI, no border, no text overlay, no cropping or reframing. Preserve the original side-view walkable foreground and all collision/interaction-aligned shapes. Calm comforting cinematic anime background. Output a single full-canvas high-quality opaque PNG, 2048x1152 or same 16:9 ratio. Preserve existing signs, photographs and equipment, without invented new objects.",
+      "generationArtifact": "exec-d24e51c2-c1e4-4c82-ad5c-b4c1138a13dc.png",
+      "sourceManifest": "Generated/Manifest/ResearchInterior.json",
+      "review": {
+        "framing": "主要门窗、家具和地面构图已目视核对；生成式编辑不保证逐像素几何一致。",
+        "acceptance": "资产文件检查，不代表 Unity 运行验收。"
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        1672,
+        940
+      ],
+      "runtimeBytes": 2030345,
+      "runtimeSha256": "04205d014d88fd9deb9e7cd7615d4a2785fc703870491405d66736907fb3d5b9",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1672,
+          940
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.0003627060461801612
+    },
+    {
+      "placeId": "BarInterior",
+      "displayName": "海风酒吧 · 室内",
+      "category": "indoor",
+      "scene": "Assets/Seabreeze/Scenes/BarInterior.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/BarInterior.png",
+      "sourceDimensions": [
+        2042,
+        1149
+      ],
+      "sourceSha256": "bfa1b27e6000f9550fe8736a6cfe062d137f501e9ddea9d24251dfc73fbdee69",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/BarInterior.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/BarInterior.png",
+      "resourceKey": "Art/IslandEvening/BarInterior",
+      "outputDimensions": [
+        1672,
+        941
+      ],
+      "outputBytes": 2322237,
+      "outputSha256": "44bd5cd71b7c07964d5f55a96f2e707e0ae7806629d71c7c80b20e4401cf7c15",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1672,
+        941
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit image 1 (BarInterior) into its early-evening map variant for a Japanese hand-painted 2D side-view narrative game. Image 1 is the strict composition/layout source. Image 2 is only a color, lighting and brushwork reference: luminous cobalt-blue/violet twilight shadows, coral pink/orange sunset near horizon, golden amber indoor lamps. Keep image 1's EXACT room arrangement, camera, perspective, floor line, door/window locations and sizes, furniture, props, coastline and full 16:9 framing. Do not borrow any buildings, boat, props or composition from image 2. Update only time-of-day and painterly lighting: the bar is enclosed: preserve its solid brick wall and timber ceiling. Only the left door panes can reflect blue violet/coral evening sky; do not create any windows, visible sea or large sky area. Preserve warm wooden bar, every barstool and existing pendant placement; add gentle blue violet ambient shadows to floor, ceiling and wall shadows against the amber lamps; cast low warm evening light into the room, keep blue-violet ambient shadow and readable detailed wood/furniture. Turn existing lamps on with gentle warm amber illumination. No new lights or objects, no people, no UI, no border, no text overlay, no cropping or reframing. Preserve the original side-view walkable foreground and all collision/interaction-aligned shapes. Calm comforting cinematic anime background. Output a single full-canvas high-quality opaque PNG, 2048x1152 or same 16:9 ratio. Preserve existing signs, menu lettering, bottles and equipment without new objects. Preserve exact original full-canvas perspective and geometry; retain all edges and floor height.",
+      "generationArtifact": "exec-2ec6e353-8b7c-4514-bdf8-8683f47a76d7.png",
+      "sourceManifest": "Generated/Manifest/BarInterior.json",
+      "review": {
+        "framing": "主要门窗、家具和地面构图已目视核对；生成式编辑不保证逐像素几何一致。",
+        "acceptance": "资产文件检查，不代表 Unity 运行验收。"
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        1672,
+        941
+      ],
+      "runtimeBytes": 2322237,
+      "runtimeSha256": "44bd5cd71b7c07964d5f55a96f2e707e0ae7806629d71c7c80b20e4401cf7c15",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1672,
+          941
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.00020504579182534233
+    },
+    {
+      "placeId": "RestaurantInterior",
+      "displayName": "餐厅 · 室内",
+      "category": "indoor",
+      "scene": "Assets/Seabreeze/Scenes/RestaurantInterior.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/RestaurantInterior.png",
+      "sourceDimensions": [
+        2043,
+        1149
+      ],
+      "sourceSha256": "2759a9e25fc1b85fccda505bbc5884bad5528f8a6c14cd8a7343ff76b98d7b20",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/RestaurantInterior.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/RestaurantInterior.png",
+      "resourceKey": "Art/IslandEvening/RestaurantInterior",
+      "outputDimensions": [
+        1672,
+        940
+      ],
+      "outputBytes": 2357547,
+      "outputSha256": "3b04553a34dd6a259d774c93428fa9561edd4870a35e03f8b8c330340b20a15d",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1672,
+        940
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit image 1 (RestaurantInterior) into its early-evening map variant for a Japanese hand-painted 2D side-view narrative game. Image 1 is the strict composition/layout source. Image 2 is only a color, lighting and brushwork reference: luminous cobalt-blue/violet twilight shadows, coral pink/orange sunset near horizon, golden amber indoor lamps. Keep image 1's EXACT room arrangement, camera, perspective, floor line, door/window locations and sizes, furniture, props, coastline and full 16:9 framing. Do not borrow any buildings, boat, props or composition from image 2. Update only time-of-day and painterly lighting: outside existing windows and open doors show the SAME geography at vivid sunset, violet layered clouds with coral edges and deep blue sea; cast low warm evening light into the room, keep blue-violet ambient shadow and readable detailed wood/furniture. Turn existing lamps on with gentle warm amber illumination. No new lights or objects, no people, no UI, no border, no text overlay, no cropping or reframing. Preserve the original side-view walkable foreground and all collision/interaction-aligned shapes. Calm comforting cinematic anime background. Output a single full-canvas high-quality opaque PNG, 2048x1152 or same 16:9 ratio. Preserve existing signs, menu lettering, bottles and equipment without new objects. Preserve exact original full-canvas perspective and geometry; retain all edges and floor height.",
+      "generationArtifact": "exec-a8b33283-0421-4001-adfb-f9d32c79f075.png",
+      "sourceManifest": "Generated/Manifest/RestaurantInterior.json",
+      "review": {
+        "framing": "主要门窗、家具和地面构图已目视核对；生成式编辑不保证逐像素几何一致。",
+        "acceptance": "资产文件检查，不代表 Unity 运行验收。"
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        1672,
+        940
+      ],
+      "runtimeBytes": 2357547,
+      "runtimeSha256": "3b04553a34dd6a259d774c93428fa9561edd4870a35e03f8b8c330340b20a15d",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1672,
+          940
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.00036866935357893205
+    },
+    {
+      "placeId": "ZBedroom",
+      "displayName": "Z 家卧室",
+      "category": "indoor",
+      "scene": "Assets/Seabreeze/Scenes/ZBedroom.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/ZBedroom.png",
+      "sourceDimensions": [
+        2048,
+        1152
+      ],
+      "sourceSha256": "ea121e71d7a11b9aedd7625adf84796440e0d11d440e1a998e24447eaa807049",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/ZBedroom.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/ZBedroom.png",
+      "resourceKey": "Art/IslandEvening/ZBedroom",
+      "outputDimensions": [
+        1672,
+        941
+      ],
+      "outputBytes": 1908955,
+      "outputSha256": "ed8d896a6ed29afccfc538aafcafc9b866f56f3d1a5fa04303dcf5d16064a64b",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1672,
+        941
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit image 1 (ZBedroom) into its early-evening map variant for a Japanese hand-painted 2D side-view narrative game. Image 1 is the strict composition/layout source. Image 2 is only a color, lighting and brushwork reference: luminous cobalt-blue/violet twilight shadows, coral pink/orange sunset near horizon, golden amber indoor lamps. Keep image 1's EXACT room arrangement, camera, perspective, floor line, door/window locations and sizes, furniture, props, coastline and full 16:9 framing. Do not borrow any buildings, boat, props or composition from image 2. Update only time-of-day and painterly lighting: outside existing windows and open doors show the SAME geography at vivid sunset, violet layered clouds with coral edges and deep blue sea; cast low warm evening light into the room, keep blue-violet ambient shadow and readable detailed wood/furniture. Turn existing lamps on with gentle warm amber illumination. No new lights or objects, no people, no UI, no border, no text overlay, no cropping or reframing. Preserve the original side-view walkable foreground and all collision/interaction-aligned shapes. Calm comforting cinematic anime background. Output a single full-canvas high-quality opaque PNG, 2048x1152 or same 16:9 ratio.",
+      "generationArtifact": "exec-74956586-50fa-4b0e-8a7f-0be9fbc108bf.png",
+      "sourceManifest": "Generated/Manifest/ZBedroom.json",
+      "review": {
+        "framing": "主要门窗、家具和地面构图已目视核对；生成式编辑不保证逐像素几何一致。",
+        "acceptance": "资产文件检查，不代表 Unity 运行验收。"
+      },
+      "notes": [],
+      "runtimeDimensions": [
+        1672,
+        941
+      ],
+      "runtimeBytes": 1908955,
+      "runtimeSha256": "ed8d896a6ed29afccfc538aafcafc9b866f56f3d1a5fa04303dcf5d16064a64b",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1672,
+          941
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.0005313496280551222
+    },
+    {
+      "placeId": "GeneralStore",
+      "displayName": "海岛杂货铺",
+      "category": "indoor",
+      "scene": "Assets/Seabreeze/Scenes/GeneralStore.unity",
+      "sourceAsset": "Assets/Seabreeze/Art/Island/GeneralStore.png",
+      "sourceDimensions": [
+        1672,
+        941
+      ],
+      "sourceSha256": "0921d7bfdff86859367b28bf3121df62f94b5b8f39cb489393099a20516e4253",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/GeneralStore.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/GeneralStore.png",
+      "resourceKey": "Art/IslandEvening/GeneralStore",
+      "outputDimensions": [
+        1672,
+        941
+      ],
+      "outputBytes": 2055788,
+      "outputSha256": "4b1b5234cd1b60d36932a1bf1b45714fb7b1521bf03c2cee7825a6aba3b48cf0",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1672,
+        941
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Create the early-evening variant of image 1. Treat image 1 as a locked layout: identical shop, door and two windows, shelves, groceries, counter, plants, framing, scale, perspective and floor line. Borrow ONLY the blue-violet and coral/amber COLOR PALETTE and hand-painted anime brushwork of image 2, no composition or objects. Outside all three apertures show a single coherent continuous cobalt sea and coral-orange horizon with violet clouds AT THE MOMENT JUST AFTER SUNSET. THE SUN IS ALREADY COMPLETELY BELOW THE HORIZON: NO SOLAR DISK, NO YELLOW CIRCLE, NO YELLOW SEMICIRCLE OR MOON anywhere. Orange pink sky fading up to cobalt blue. Sea remains deep blue with small muted coral wave glints, NO vertical golden reflection column. Existing indoor track lamps emit warm amber light against violet room shadows. Keep all original objects and interaction geometry exact. No people, no UI, no added signage, no new lamps or objects, no cropping. Same full canvas high quality opaque PNG.",
+      "generationArtifact": "exec-3ae3f7e2-8988-4826-998e-4e4001f0d5e1.png",
+      "sourceManifest": "Generated/Manifest/GeneralStore.json",
+      "review": {
+        "framing": "主要门窗、家具和地面构图已目视核对；生成式编辑不保证逐像素几何一致。",
+        "acceptance": "资产文件检查，不代表 Unity 运行验收。"
+      },
+      "notes": [
+        "Original attempt accidentally showed two suns; discarded and regenerated sunset-afterglow without visible sun."
+      ],
+      "runtimeDimensions": [
+        1672,
+        941
+      ],
+      "runtimeBytes": 2055788,
+      "runtimeSha256": "4b1b5234cd1b60d36932a1bf1b45714fb7b1521bf03c2cee7825a6aba3b48cf0",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1672,
+          941
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.0
+    },
+    {
+      "placeId": "PlayerHome",
+      "displayName": "玩家房间",
+      "category": "indoor",
+      "scene": "Assets/Seabreeze/Scenes/PlayerHome.unity",
+      "sourceAsset": "Assets/Seabreeze/Resources/FirstDay/player_room.png",
+      "sourceDimensions": [
+        1672,
+        941
+      ],
+      "sourceSha256": "02c84d5c61125bcdfc900aec4f8db614b17632d15df59d8c7e141b61a2ca1d78",
+      "candidateArtifact": "ArtSource/Evening-20261113/Generated/PlayerHome.png",
+      "runtimeAsset": "Assets/Seabreeze/Resources/Art/IslandEvening/PlayerHome.png",
+      "resourceKey": "Art/IslandEvening/PlayerHome",
+      "outputDimensions": [
+        1672,
+        941
+      ],
+      "outputBytes": 1885522,
+      "outputSha256": "7c155641b330d8af5d9b19628e104a08315a1a341707156214f37c664b540352",
+      "productionMethod": "built_in_imagegen_lighting_weather_edit",
+      "tool": "image_gen.imagegen",
+      "nativeGenerationDimensions": [
+        1672,
+        941
+      ],
+      "promptStatus": "recorded",
+      "prompt": "Use case: lighting-weather. Edit image 1 (PlayerHome) into its early-evening map variant for a Japanese hand-painted 2D side-view narrative game. Image 1 is the strict composition/layout source. Image 2 is only a color, lighting and brushwork reference: luminous cobalt-blue/violet twilight shadows, coral pink/orange sunset near horizon, golden amber indoor lamps. Keep image 1's EXACT room arrangement, camera, perspective, floor line, door/window locations and sizes, furniture, props, coastline and full 16:9 framing. Do not borrow any buildings, boat, props or composition from image 2. Update only time-of-day and painterly lighting: outside existing windows and open doors show the SAME geography at vivid sunset, violet layered clouds with coral edges and deep blue sea; cast low warm evening light into the room, keep blue-violet ambient shadow and readable detailed wood/furniture. Turn existing lamps on with gentle warm amber illumination. No new lights or objects, no people, no UI, no border, no text overlay, no cropping or reframing. Preserve the original side-view walkable foreground and all collision/interaction-aligned shapes. Calm comforting cinematic anime background. Output a single full-canvas high-quality opaque PNG, 2048x1152 or same 16:9 ratio. The source is nighttime. Replace the nighttime moonlit sky visible through the window with EARLY EVENING: remove the moon and starfield, add sunset clouds and only one small setting sun near the horizon. Preserve the distant lighthouse position and all room layout; keep the bed left and desk right. Do not retain a nighttime mood.",
+      "generationArtifact": "exec-b13170d6-38dd-49a6-a928-8a1db3d85c8a.png",
+      "sourceManifest": "Generated/Manifest/PlayerHome.json",
+      "review": {
+        "framing": "主要门窗、家具和地面构图已目视核对；生成式编辑不保证逐像素几何一致。",
+        "acceptance": "资产文件检查，不代表 Unity 运行验收。"
+      },
+      "notes": [
+        "Evening variant made from the existing nighttime player room."
+      ],
+      "runtimeDimensions": [
+        1672,
+        941
+      ],
+      "runtimeBytes": 1885522,
+      "runtimeSha256": "7c155641b330d8af5d9b19628e104a08315a1a341707156214f37c664b540352",
+      "runtimeDimensionEvidence": "Encoded PNG dimensions before Unity platform-specific texture conversion.",
+      "runtimeImportSettings": {
+        "maxTextureSize": 8192,
+        "pixelsPerUnit": 120.0,
+        "mipmaps": false,
+        "npotScale": "None"
+      },
+      "postprocess": {
+        "operation": "none",
+        "finalDimensions": [
+          1672,
+          941
+        ]
+      },
+      "runtimeAspectRatioRelativeError": 0.0
+    }
+  ]
+}
