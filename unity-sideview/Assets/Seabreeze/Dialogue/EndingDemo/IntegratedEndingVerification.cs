@@ -78,6 +78,28 @@ namespace Seabreeze.EndingDemo
             Call(ui,"NextEndingPage");
             ScreenCapture.CaptureScreenshot(Path.Combine(output,"04-z-choice.png"));yield return new WaitForEndOfFrame();yield return new WaitForSecondsRealtime(.5f);
             TextDiagnostic(ui,"choice");
+            if(Array.IndexOf(Environment.GetCommandLineArgs(),"-endingUploadQA")>=0){
+                string oldId=result.id;
+                var upload=Find(ui,"Upload ending memories");Require(upload!=null&&upload.interactable,"Native memory upload button is missing");
+                upload.onClick.Invoke();File.WriteAllText(Path.Combine(output,"awaiting-upload.txt"),"Upload uploaded-memories.md in the browser opened by the actual game button.");
+                deadline=Time.realtimeSinceStartup+240;
+                while(Time.realtimeSinceStartup<deadline){
+                    var newest=JsonUtility.FromJson<EndingDemoView.EndingRun>(session.State.memory.seventhNightEndingJson);
+                    if(newest?.id!=oldId&&!Field<bool>(ui,"endingGenerating")){result=newest;break;}
+                    yield return null;
+                }
+                Require(result.id!=oldId&&result.sourceName=="uploaded-memories.md","Uploaded memory did not automatically produce a native ending");
+                Require(session.State.memory.checkpoint.Contains("NEW_UPLOAD_QA"),"Uploaded source did not persist into this game's checkpoint");
+                Require(result.liveMemoryCount>0,"New ending omitted actual game experiences");
+                Require(Field<EndingDemoView.EndingRun>(ui,"seventhNight")?.id==result.id,"Native display did not follow the uploaded source");
+                Call(ui,"NextEndingPage");yield return null;
+                ScreenCapture.CaptureScreenshot(Path.Combine(output,"05-uploaded-native-ending.png"));yield return new WaitForEndOfFrame();yield return new WaitForSecondsRealtime(.5f);
+                var history=Find(ui,"Previous ending version");Require(history!=null&&history.interactable,"Previous ending is not available");history.onClick.Invoke();yield return null;
+                Require(Field<EndingDemoView.EndingRun>(ui,"seventhNight")?.id==oldId,"Old ending snapshot was lost after upload");
+                history.onClick.Invoke();yield return null;
+                Require(Field<EndingDemoView.EndingRun>(ui,"seventhNight")?.id==result.id,"Could not return to the latest ending");
+                File.WriteAllText(Path.Combine(output,"upload-result.json"),session.State.memory.seventhNightEndingJson);
+            }
             Find(ui,"Return to island").onClick.Invoke();deadline=Time.realtimeSinceStartup+10;while(ui.HasOverlay&&Time.realtimeSinceStartup<deadline)yield return null;
             Require(!ui.HasOverlay&&Mathf.Approximately(Time.timeScale,1)&&!session.InputBlocked,"Return did not restore main gameplay");
             Require(session.State.day==day&&session.State.period==period&&session.State.place==place,"Demo overwrote the running world's time or place");

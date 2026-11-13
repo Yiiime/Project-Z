@@ -18,6 +18,7 @@ import { Catalog, PROJECT } from "./lib/catalog.mjs";
 import { ModelProvider } from "./lib/provider.mjs";
 import { Engine } from "./lib/engine.mjs";
 import { GameEndingCoordinator } from "./lib/ending.mjs";
+import { EndingMemoryUploads } from "./lib/ending-upload.mjs";
 import { TurnError, canonical } from "./lib/policy.mjs";
 export function environmentFromFile(path) {
   if (!path) return;
@@ -86,6 +87,7 @@ export function createServer({
     app: "moonlife-runtime",
     protocol: 2,
     endingIntegration: true,
+    endingMemoryUpload: true,
     configurationRevision,
     mode: provider.mode || "real",
     version: catalog.registry.pack_version,
@@ -160,6 +162,7 @@ export function createServer({
       throw new TurnError("请求属于已取消的时间线");
     return w;
   };
+  const endingUploads = new EndingMemoryUploads(endings, engine, provider, checkRun);
   const server = http.createServer(async (req, res) => {
     try {
       const host = req.headers.host || "";
@@ -168,7 +171,32 @@ export function createServer({
       const url = new URL(req.url, "http://" + host);
       if (req.headers.origin && req.headers.origin !== "http://" + host)
         throw new TurnError("请求来源不匹配");
+      if (url.pathname.startsWith('/api/ending-upload/')) {
+        const uploadToken = req.headers['x-ending-upload'];
+        if (req.method === 'GET' && url.pathname === '/api/ending-upload/status')
+          return respond(res, endingUploads.status(uploadToken));
+        if (req.method === 'GET' && url.pathname === '/api/ending-upload/export')
+          return respond(res, endingUploads.export(uploadToken));
+        if (req.method !== 'POST' || !['/api/ending-upload/import','/api/ending-upload/use'].includes(url.pathname))
+          throw new TurnError('没有这个上传操作');
+        endingUploads.session(uploadToken);
+        let raw = '';
+        for await (const chunk of req) {
+          raw += chunk;
+          if (Buffer.byteLength(raw) > 1_000_000) throw new TurnError('上传请求过大');
+        }
+        let input;
+        try { input = JSON.parse(raw || '{}'); } catch { throw new TurnError('上传内容格式无效'); }
+        return respond(res, url.pathname.endsWith('/import')
+          ? await endingUploads.import(uploadToken, input) : endingUploads.use(uploadToken, input));
+      }
       if (req.method === "GET") {
+        if (['/ending-upload','/ending-upload.js','/ending-upload.css'].includes(url.pathname)) {
+          res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; frame-ancestors 'none'");
+          const file = url.pathname === '/ending-upload' ? 'ending-upload.html' : url.pathname.slice(1);
+          return respond(res, readFileSync(join(APP_ROOT,'public',file),'utf8'),200,
+            file.endsWith('.js') ? 'text/javascript' : file.endsWith('.css') ? 'text/css' : 'text/html');
+        }
         if (url.pathname === "/")
           return respond(
             res,
@@ -605,6 +633,13 @@ export function createServer({
               conversation: p.conversationId,
             });
             result = { ok: true };
+          } else if (url.pathname === "/api/game/ending-upload/open") {
+            result = gameResponse(world, { endingEditorUrl: endingUploads.open(p, 'http://' + host) });
+          } else if (url.pathname === "/api/game/ending-source") {
+            const source = endings.sourceState(w);
+            const ending = source.ending; delete source.ending;
+            const previous = source.previousEnding; delete source.previousEnding;
+            result = gameResponse(world, { endingSource: source, ...(ending ? { ending } : {}), ...(previous ? { endingPrevious: previous } : {}) });
           } else if (url.pathname === "/api/game/ending") {
             const ending = await endings.generate(p, checkRun);
             checkRun(p);
@@ -771,7 +806,7 @@ export function createServer({
     for (const w of store.experiments().filter((w) => w.worldId))
       engine.cancel(w.worldId);
   });
-  return { server, engine, store, catalog, provider, token, status };
+  return { server, engine, store, catalog, provider, token, status, endings, endingUploads };
 }
 if (import.meta.url === pathToFileURL(resolve(process.argv[1] || "")).href) {
   const flag = (name) => {

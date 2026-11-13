@@ -1363,6 +1363,7 @@ export class Engine {
       w.actors = this.initialActors(w.initialMetrics || {});
       delete w.zNarrated;
       delete w.seventhNightEndings;
+      delete w.endingMemorySource;
       w.seq=0;w.hour=0;w.day=1;w.period=0;w.tick=0;w.reflected={};w.memoryRevision=0;
     }
     w.epoch = epoch;

@@ -15,13 +15,17 @@ namespace Seabreeze
         Live2DCharacterView endingCharacter;
         RectTransform endingColumn;
         TextMeshProUGUI endingTitle,endingBody,endingEyebrow,endingProgress,endingSource;
-        Button endingNext,endingPrevious,endingOriginal;
+        Button endingNext,endingPrevious,endingOriginal,endingUpload,endingHistory;
         ScrollRect endingScroll;
         EndingRun seventhNight;
         int endingPage,endingDisplayGeneration;
         bool endingGenerating,seventhNightOpening,endingOriginalShown;
         float endingVisible;
         int endingFullCharacterCount;
+        string endingContextRevision="";
+        bool endingSourceChecking,endingUploadOpening,endingHistoryShown;
+        float nextEndingSourceCheck;
+        EndingRun previousEnding,currentEnding;
 
         public void OpenSeventhNight()
         {
@@ -47,6 +51,7 @@ namespace Seabreeze
         void BuildSeventhNight()
         {
             endingDisplayGeneration++;endingPage=0;endingGenerating=false;endingOriginalShown=false;seventhNight=null;
+            endingSourceChecking=endingUploadOpening=endingHistoryShown=false;endingContextRevision="";previousEnding=currentEnding=null;nextEndingSourceCheck=0;
             var background=Stretch("Moon island ending coast",overlayRoot,Vector2.zero,Vector2.zero).gameObject.AddComponent<RawImage>();
             background.texture=Resources.Load<Texture2D>("Art/lighthouse");background.color=new Color(.26f,.29f,.38f);background.raycastTarget=false;
             var veil=Stretch("Seventh night veil",overlayRoot,Vector2.zero,Vector2.zero).gameObject.AddComponent<Image>();veil.color=new Color(.025f,.04f,.08f,.60f);veil.raycastTarget=true;
@@ -72,8 +77,10 @@ namespace Seabreeze
             endingNext=Button("Continue ending",endingColumn,BL,BL,new Vector2(520,35),new Vector2(290,55),"继续 →",NextEndingPage,true,21);
             Button("Return to island",overlayRoot,new Vector2(1,1),new Vector2(1,1),new Vector2(-45,-30),new Vector2(250,48),"返回小岛 · Esc",CloseOverlay,false,18);
             Button("Reconsider current island memories",overlayRoot,TL,TL,new Vector2(45,-30),new Vector2(345,48),"以本局经历重新演出",()=>{if(!endingGenerating){seventhNight=null;GenerateSeventhNight();}},false,18);
+            endingUpload=Button("Upload ending memories",overlayRoot,TL,TL,new Vector2(410,-30),new Vector2(285,48),"上传 / 更换记忆文件 ↗",OpenEndingMemoryUpload,false,18);
+            endingHistory=Button("Previous ending version",overlayRoot,TL,TL,new Vector2(715,-30),new Vector2(235,48),"看上次结局",ToggleEndingHistory,false,18);endingHistory.interactable=false;
             string saved=session.State.memory?.seventhNightEndingJson;
-            if(!string.IsNullOrEmpty(saved))try{var cached=JsonConvert.DeserializeObject<EndingRun>(saved);if(cached?.worldId==session.State.memory.worldId)seventhNight=cached;}catch{ }
+            if(!string.IsNullOrEmpty(saved))try{var cached=JsonConvert.DeserializeObject<EndingRun>(saved);if(cached?.worldId==session.State.memory.worldId){seventhNight=currentEnding=cached;endingContextRevision=(string)Newtonsoft.Json.Linq.JObject.Parse(saved)["contextRevision"]??"";}}catch{ }
             if(seventhNight!=null)ShowEndingPage(0);else GenerateSeventhNight();
         }
         void GenerateSeventhNight()
@@ -85,8 +92,49 @@ namespace Seabreeze
             session.Memory.Client.Focus("z");
             session.Memory.Client.GenerateEnding("model",reply=>{
                 if(generation!=endingDisplayGeneration||session.State!=owner||overlayMode!="z-ending")return;
-                seventhNight=reply.ending.ToObject<EndingRun>();endingGenerating=false;ShowEndingPage(0);
+                seventhNight=currentEnding=reply.ending.ToObject<EndingRun>();endingContextRevision=(string)reply.ending["contextRevision"]??endingContextRevision;endingGenerating=false;endingHistoryShown=false;ShowEndingPage(0);
             },error=>{if(generation==endingDisplayGeneration&&session.State==owner&&overlayMode=="z-ending")EndingFailure(error);});
+        }
+        void OpenEndingMemoryUpload()
+        {
+            if(endingUploadOpening||session.Memory?.Client==null)return;
+            endingUploadOpening=true;endingUpload.interactable=false;var owner=session.State;int generation=endingDisplayGeneration;
+            session.Memory.Client.OpenEndingUpload(url=>{
+                if(session.State!=owner||overlayMode!="z-ending"||generation!=endingDisplayGeneration)return;
+                endingUploadOpening=false;endingUpload.interactable=true;Application.OpenURL(url);
+                endingSource.text="在上传页确认后，这里会自动使用新记忆重新演出。";
+            },error=>{if(session.State==owner&&overlayMode=="z-ending"&&generation==endingDisplayGeneration){endingUploadOpening=false;endingUpload.interactable=true;ShowToast(error);}});
+        }
+        void RefreshEndingSource()
+        {
+            if(endingSourceChecking||session.Memory?.Client==null)return;
+            endingSourceChecking=true;nextEndingSourceCheck=Time.unscaledTime+2;var owner=session.State;int generation=endingDisplayGeneration;
+            session.Memory.Client.ReadEndingSource(reply=>{
+                if(session.State!=owner||overlayMode!="z-ending"||generation!=endingDisplayGeneration)return;
+                endingSourceChecking=false;
+                var source=reply.endingSource;if(source==null)return;
+                string revision=(string)source["contextRevision"]??"",phase=(string)source["phase"]??"idle";
+                bool changed=!string.IsNullOrEmpty(endingContextRevision)&&revision!=endingContextRevision;
+                if(string.IsNullOrEmpty(endingContextRevision))endingContextRevision=revision;
+                if(changed){endingDisplayGeneration++;endingContextRevision=revision;endingHistoryShown=false;endingUploadOpening=false;endingUpload.interactable=true;previousEnding=currentEnding;currentEnding=seventhNight=null;session.State.memory.seventhNightEndingRequestId="";endingGenerating=true;endingTitle.text="Z 正在回望新的经历";SetEndingWords("已收到新记忆。她会结合你们之后真实发生的经历，再作出自己的选择。",false);endingPrevious.interactable=endingOriginal.interactable=endingNext.interactable=false;}
+                if(reply.endingPrevious!=null)previousEnding=reply.endingPrevious.ToObject<EndingRun>();
+                if(reply.ending!=null&&!endingHistoryShown&&(seventhNight==null||seventhNight.id!=(string)reply.ending["id"])){
+                    seventhNight=currentEnding=reply.ending.ToObject<EndingRun>();endingGenerating=false;ShowEndingPage(0);
+                }else if(changed&&phase=="idle")GenerateSeventhNight();
+                if(endingGenerating){
+                    endingSource.text=phase=="recalling"?$"{(int?)source["completed"]??0} / {(int?)source["memoryCount"]??0} 段经历已整理":phase=="deciding"?"正在结合全部知情经历，形成她自己的答案":"正在同步最新记忆";
+                    if(phase=="failed")EndingFailure((string)source["error"]??"生成未完成，请重试。");
+                }else if(!endingHistoryShown)endingSource.text=$"{(string)source["sourceName"]} · 本局经历会继续补充 · 已保存";
+                endingHistory.interactable=previousEnding!=null&&currentEnding!=null&&!endingGenerating;
+                endingHistory.GetComponentInChildren<TextMeshProUGUI>().text=endingHistoryShown?"返回当前结局":"看上次结局";
+            },_=>{if(session.State==owner&&overlayMode=="z-ending"&&generation==endingDisplayGeneration)endingSourceChecking=false;});
+        }
+        void ToggleEndingHistory()
+        {
+            if(endingGenerating||previousEnding==null||currentEnding==null)return;
+            endingHistoryShown=!endingHistoryShown;seventhNight=endingHistoryShown?previousEnding:currentEnding;ShowEndingPage(0);
+            endingHistory.GetComponentInChildren<TextMeshProUGUI>().text=endingHistoryShown?"返回当前结局":"看上次结局";
+            if(endingHistoryShown)endingSource.text="上次结局的记忆快照 · 当前上传文件和游戏进度不会改变";
         }
         void EndingFailure(string error)
         {
@@ -136,6 +184,7 @@ namespace Seabreeze
         }
         void UpdateSeventhNight()
         {
+            if(Time.unscaledTime>=nextEndingSourceCheck)RefreshEndingSource();
             if(endingBody!=null&&endingBody.maxVisibleCharacters!=int.MaxValue&&!endingGenerating){endingVisible+=Time.unscaledDeltaTime*Style.TypewriterSpeed;endingBody.maxVisibleCharacters=Mathf.FloorToInt(endingVisible);if(endingVisible>=endingFullCharacterCount){endingBody.maxVisibleCharacters=int.MaxValue;endingCharacter?.SetState("serious",false);}endingBody.ForceMeshUpdate();}
             if(GameInput.Pressed(Key.Escape))CloseOverlay();
             else if(GameInput.Pressed(Key.Enter)||GameInput.Pressed(Key.Space)||GameInput.Pressed(Key.E))NextEndingPage();

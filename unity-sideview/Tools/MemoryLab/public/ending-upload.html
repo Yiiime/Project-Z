@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第七晚 · 上传记忆</title><link rel="stylesheet" href="/ending-upload.css"></head>
+<body><main>
+  <header><p class="eyebrow">来自月亮的 Z · 第七晚</p><h1>让她带着这些记忆，<br>再想一想。</h1><p class="lead">上传这段日子的经历。确认整理结果后，Z 会结合本局里后来发生的事，重新作出自己的选择。</p></header>
+  <section class="source" aria-label="当前记忆"><span id="source-name">正在连接当前游戏…</span><button id="export" type="button">下载当前记忆文件</button></section>
+  <label id="drop-zone" class="drop-zone"><span class="upload-label">选择或拖入记忆文件</span><span class="file-hint">TXT、Markdown 或 JSON</span><input id="memory-file" type="file" accept=".txt,.md,.json,text/plain,text/markdown,application/json"></label>
+  <p class="limit">TXT / Markdown 最多 200KB、60,000 字、40 段原文块；JSON 最多 500KB、200 条经历，可从本页下载后修改。原文保留，Z 未曾获知的内容会单独标明。</p>
+  <p id="notice" role="status" aria-live="polite"></p><p id="error" role="alert"></p>
+  <section id="preview" hidden><div class="section-heading"><h2 id="preview-title">这份记忆</h2><p id="preview-count"></p></div><p id="preview-context"></p><div id="preview-memories"></div><button id="use-file" class="primary" type="button">使用这份记忆，更新结局</button><p class="limit">确认后会替换这局游戏的预置记忆，真实游戏经历继续补充。原来的结局仍可回看。</p></section>
+  <section id="result" hidden><p class="eyebrow">她的新答案</p><h2 id="result-title"></h2><p id="result-opening"></p><div id="recollections"></div><p id="result-decision"></p><p id="result-outcome"></p><p id="last-line" class="last-line"></p></section>
+  <footer><a href="/settings" target="_blank" rel="noopener">模型连接设置</a><p>上传确认后，游戏里的结局页会自动更新。可以回到游戏，听她慢慢说。</p></footer>
+</main><script type="module" src="/ending-upload.js"></script></body></html>

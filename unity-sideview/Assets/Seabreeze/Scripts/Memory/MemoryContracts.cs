@@ -23,7 +23,8 @@ namespace Seabreeze
         public bool ok,configured,verified,endConversation;
         public string error,warning,app,mode,model,runId,requestId,actorId,targetId,reason,topic,proposalId,text,expression,checkpoint;
         public int seq,configurationRevision,responseRevision;
-        public ActorTurn result;public JObject state,ending;
+        public ActorTurn result;public JObject state,ending,endingSource,endingPrevious;
+        public string endingEditorUrl;
         public string[] recalledMemoryIds=Array.Empty<string>();
     }
     [Serializable] public sealed class NpcSavedPosition { public string actorId,place,locationId;public float x;public int day,period; }

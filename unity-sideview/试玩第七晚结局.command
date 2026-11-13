@@ -4,13 +4,28 @@ z_ending_root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$z_ending_root"
 z_ending_node="$(command -v node || true)"
 [[ -n "$z_ending_node" ]] || z_ending_node="$HOME/.project-z/bin/node"
-z_ending_port="${Z_MEMORY_PORT:-4338}"
+z_ending_requested_port="${Z_MEMORY_PORT:-}"
+# Reuse a compatible service. If an older preview still owns the default port,
+# choose a free loopback port instead of terminating its process.
+z_ending_port="$(Z_ENDING_REQUESTED_PORT="$z_ending_requested_port" "$z_ending_node" --input-type=module - <<'JS'
+import net from 'node:net';
+const requested=process.env.Z_ENDING_REQUESTED_PORT;
+const start=Number(requested||4338);
+if(!Number.isInteger(start)||start<1024||start>65535)throw Error('记忆服务端口无效');
+for(let port=start;port<=Math.min(start+(requested?0:20),65535);port++){
+  try{const r=await fetch('http://127.0.0.1:'+port+'/api/health',{signal:AbortSignal.timeout(500)});const s=await r.json();if(s.endingIntegration&&s.endingMemoryUpload){console.log(port);process.exit(0);}}catch{}
+  const free=await new Promise(resolve=>{const s=net.createServer();s.once('error',()=>resolve(false));s.listen(port,'127.0.0.1',()=>s.close(()=>resolve(true)));});
+  if(free){console.log(port);process.exit(0);}
+}
+throw Error('指定端口由旧服务或其他程序占用。请不指定 Z_MEMORY_PORT 重新启动，或选择空闲端口。');
+JS
+)"
 export Z_MEMORY_PORT="$z_ending_port"
 if [[ -z "${Z_MEMORY_CONFIG:-}" && -f "$HOME/Project-Z/unity-sideview/Tools/MemoryLab/.local/model.json" ]]; then
   export Z_MEMORY_CONFIG="$HOME/Project-Z/unity-sideview/Tools/MemoryLab/.local/model.json"
 fi
 if [[ ! -d Tools/MemoryLab/node_modules/ajv ]]; then (cd Tools/MemoryLab && npm ci --ignore-scripts --no-audit --no-fund); fi
-if ! curl --silent --fail "http://127.0.0.1:${z_ending_port}/api/health" | "$z_ending_node" -e 'let b="";process.stdin.on("data",d=>b+=d);process.stdin.on("end",()=>{try{process.exit(JSON.parse(b).endingIntegration?0:1)}catch{process.exit(1)}})'; then
+if ! curl --silent --fail "http://127.0.0.1:${z_ending_port}/api/health" | "$z_ending_node" -e 'let b="";process.stdin.on("data",d=>b+=d);process.stdin.on("end",()=>{try{const s=JSON.parse(b);process.exit(s.endingIntegration&&s.endingMemoryUpload?0:1)}catch{process.exit(1)}})'; then
   mkdir -p Tools/MemoryLab/.data
   "$z_ending_node" --input-type=module - <<'JS'
 import {spawn} from 'node:child_process';
@@ -25,13 +40,13 @@ JS
     sleep .2
   done
 fi
-if ! curl --silent --fail "http://127.0.0.1:${z_ending_port}/api/health" | "$z_ending_node" -e 'let b="";process.stdin.on("data",d=>b+=d);process.stdin.on("end",()=>{try{process.exit(JSON.parse(b).endingIntegration?0:1)}catch{process.exit(1)}})'; then
+if ! curl --silent --fail "http://127.0.0.1:${z_ending_port}/api/health" | "$z_ending_node" -e 'let b="";process.stdin.on("data",d=>b+=d);process.stdin.on("end",()=>{try{const s=JSON.parse(b);process.exit(s.endingIntegration&&s.endingMemoryUpload?0:1)}catch{process.exit(1)}})'; then
   printf '游戏记忆服务尚未启动，请查看 Tools/MemoryLab/.data/ending-game-service.log 后重试。\n'
   exit 1
 fi
 if [[ -d Builds/IslandEnding/ProjectZ-IslandEnding.app ]]; then
   open Builds/IslandEnding/ProjectZ-IslandEnding.app --args -memoryService "http://127.0.0.1:${z_ending_port}"
-  printf '完整游戏已打开。点击左下角“第七晚结局”，或在手机和暂停菜单中进入。\n'
+  printf '完整游戏已打开。进入“第七晚结局”，点“上传 / 更换记忆文件”。确认文件后，结局会自动更新。\n'
 else
   printf '记忆服务已启动。请在 Unity 打开 Street 场景并 Play；点击“第七晚结局”。\n'
   printf '独立构建菜单：Seabreeze → Ending Demo → Build full game with ending entry。\n'

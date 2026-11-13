@@ -155,9 +155,34 @@ namespace Seabreeze
             request.requestId=state.seventhNightEndingRequestId;session.Save();
             yield return Send("/api/game/ending",request,600,r=>{
                 if(session.State.memory!=state)return;
+                if(r.responseRevision<acknowledgedRevision){failed("经历同步已更新，请使用当前记忆重试。");return;}
                 Accept(r,state);
                 if(r.ending==null){failed("游戏服务没有返回结局。");return;}
                 state.seventhNightEndingJson=r.ending.ToString(Newtonsoft.Json.Formatting.None);state.seventhNightEndingRequestId="";session.Save();complete(r);
+            },failed);
+        }
+        public void OpenEndingUpload(Action<string> complete,Action<string> failed)
+        {
+            StartCoroutine(ReadEndingState("/api/game/ending-upload/open",r=>{
+                if(string.IsNullOrEmpty(r.endingEditorUrl)){failed("上传入口尚未准备好，请重试。");return;}
+                complete(r.endingEditorUrl);
+            },failed));
+        }
+        public void ReadEndingSource(Action<MemoryReply> complete,Action<string> failed)
+        {StartCoroutine(ReadEndingState("/api/game/ending-source",complete,failed));}
+        IEnumerator ReadEndingState(string path,Action<MemoryReply> complete,Action<string> failed)
+        {
+            var state=session.State.memory;int version=generation;float until=Time.unscaledTime+8;
+            // Upload and status are available even before a model is configured.
+            while(version==generation&&(!opened||!Reachable||syncing||state.outbox.Count>0)&&Time.unscaledTime<until)yield return null;
+            if(version!=generation||session.State.memory!=state)yield break;
+            if(!opened||!Reachable){failed("记忆服务尚未连接，请连接后重试。");yield break;}
+            yield return Send(path,RequestBase(),8,r=>{
+                if(session.State.memory!=state)return;
+                if(r.responseRevision<acknowledgedRevision&&path!="/api/game/ending-upload/open"){failed("正在同步最新经历。");return;}
+                Accept(r,state);
+                if(r.ending!=null){state.seventhNightEndingJson=r.ending.ToString(Newtonsoft.Json.Formatting.None);state.seventhNightEndingRequestId="";session.Save();}
+                complete(r);
             },failed);
         }
         public void ConfirmTaskStep(string task,string step,string performer,Newtonsoft.Json.Linq.JObject evidence)
