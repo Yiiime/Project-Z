@@ -1,0 +1,1711 @@
+{
+  "schemaVersion": 1,
+  "auditDate": "2026-11-14",
+  "auditedAtUtc": "2026-11-13T18:10:34.787629+00:00",
+  "evidenceClass": "static asset and code inspection; no Unity compilation, Play Mode or App build performed by this audit",
+  "repositoryCommit": "8d112c326b5d0385eed0934cd18894d2b0ff0d3f",
+  "integratedMainCommit": "ff82f9ebf0ba0f88eeb2a890c35a83692c2d890b",
+  "branch": "task/seanlee111/morning-map-art-1113",
+  "scope": [
+    "Morning",
+    "Evening"
+  ],
+  "excludedPeriod": "Night",
+  "summary": {
+    "enabledScenes": 32,
+    "morningPngs": 32,
+    "eveningPngs": 32,
+    "fullPngDecodePasses": 64,
+    "pngMetaPairs": 64,
+    "targetGuids": 69,
+    "targetGuidCollisionsInProjectAssets": 0,
+    "runtimeBytes": 147116865,
+    "sourceManifestHashAndDimensionMatches": 64,
+    "zipSuppliedRuntimeMatches": 28,
+    "zipUniqueSuppliedImagesBound": 26,
+    "zipUnboundImages": 1,
+    "generatedMorningMatches": 4,
+    "morningLayoutEntries": 4
+  },
+  "methods": [
+    "Pillow 13.0.0 Image.verify() followed by reopening and Image.load() on every runtime PNG",
+    "SHA-256 over exact on-disk bytes",
+    "Scene coverage compared to enabled entries in EditorBuildSettings.asset",
+    "Importer text checks and target GUID uniqueness against all Assets .meta GUIDs",
+    "Original morning ZIP CRC and exact-byte mapping checks",
+    "Read-only inspection of Layout.json and both Atmosphere integration scripts"
+  ],
+  "enabledScenes": [
+    "BarInterior",
+    "Beach",
+    "BeachEntrance",
+    "Boardwalk",
+    "CabinInterior",
+    "Cafe",
+    "CaptainHome",
+    "EastCrossing",
+    "FlowerShop",
+    "Forest",
+    "ForestCabin",
+    "ForestPath1",
+    "ForestPath2",
+    "GeneralStore",
+    "Harbor",
+    "LiTingHome",
+    "Lighthouse",
+    "PhotoStudio",
+    "PlayerHome",
+    "Research",
+    "ResearchInterior",
+    "ResidentialCenter",
+    "RestaurantInterior",
+    "Seafront",
+    "Square",
+    "Street",
+    "Summit",
+    "VisitorCenter",
+    "ZBedroom",
+    "ZHome",
+    "ZhouHome",
+    "ZiqingHome"
+  ],
+  "importSettings": {
+    "textureType": "Sprite (8)",
+    "spriteMode": "Single (1)",
+    "pixelsPerUnit": 120,
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "spriteMeshType": 0,
+    "mipmaps": false,
+    "sRGB": true,
+    "readWrite": false,
+    "npotScale": 0,
+    "maxTextureSize": 8192,
+    "filterMode": 1,
+    "wrapU": 1,
+    "wrapV": 1,
+    "textureCompression": 1,
+    "compressionQuality": 100,
+    "platformOverrides": false,
+    "all64MetaSettingsIdenticalApartFromGuidAndSpriteId": true,
+    "note": "Serialized importer settings; effective Unity platform conversion and GPU texture formats are outside this static audit."
+  },
+  "guidAudit": {
+    "targetMetaCount": 69,
+    "uniqueTargetGuids": 69,
+    "projectAssetMetaGuidCount": 3399,
+    "targetCollisions": []
+  },
+  "morningArchive": {
+    "filename": "1113地图-早晨.zip",
+    "bytes": 52550506,
+    "sha256": "51d3f8a63a6e4965beb5430dccf6027a7a502200294a8a4c3e9b83b913e833d0",
+    "crcTest": "passed",
+    "imageEntries": 27,
+    "runtimeMapping": [
+      {
+        "place": "Street",
+        "archiveEntry": "2-2 花店照相馆-色调处理版 1.png.png",
+        "sha256": "8af14ab96783674d05790dbff3f210b8ad1ad91bf47dcf04c8f32ce64977e1e6",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "Cafe",
+        "archiveEntry": "室内4-咖啡店 1.png.png",
+        "sha256": "bc8cc931b06b3de7b0b88a38f94f8fa2503571f03de66294754a287b8f0036e4",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "ResidentialCenter",
+        "archiveEntry": "居民街-1110.png.png",
+        "sha256": "fdbcc5df91501757d6a67eddf5e3d79f439395a268d00ebf1abcfafbe295432c",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "Forest",
+        "archiveEntry": "居民街-森林入口、.png.png",
+        "sha256": "9ecdb3cb60b6971fc3cc408de794fc4a4fa2567c5865482e9b5f65bc4b8982cb",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "ForestCabin",
+        "archiveEntry": "林间木屋 1.png.png",
+        "sha256": "1e0e97e1ba62e638718ebd0be152f49ce12cf7e8c6b435b90559f8c871fcbaa4",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "Research",
+        "archiveEntry": "4-2研究所_副本 1.png.png",
+        "sha256": "9e38b371643b7f9e7e3b4456aa111e57ce69f6b876d1519e253c942ab0965f82",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "Summit",
+        "archiveEntry": "山顶观景台-1110.png.png",
+        "sha256": "121480ff2597b4dc6b3be23c7c8c6d6e32d7c5e47832bfd36ea4ec6a0d462995",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "Harbor",
+        "archiveEntry": "2-1码头-游客中心-1110.png.png",
+        "sha256": "e1b108e00c65152f2ab1d91e50c282e2bcdc3d11dd54489ec4f1a43c4000d830",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "Square",
+        "archiveEntry": "2-3市民广场.png.png",
+        "sha256": "674931409188d1a4f7c1fb342e6efb998bd99fbb48a403e9c19dbe44ebbfea0a",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "EastCrossing",
+        "archiveEntry": "2-4广场东口.png.png",
+        "sha256": "2edc51bb8241a5c9cb092e6dbcea4aa14795211468bd5ff4269a149a91c88883",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "Boardwalk",
+        "archiveEntry": "3-1海滨步道-1110.png.png",
+        "sha256": "564b28e1240db4def048a4cede16b2af1b476dc51aa67aeebc26d4855acb147f",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "Seafront",
+        "archiveEntry": "3-2酒吧餐厅.png.png",
+        "sha256": "75f57484f2d74c744c35248ac35c4313cdc44033b59b451bbb4c07f1799b7501",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "Beach",
+        "archiveEntry": "3-4沙滩.png.png",
+        "sha256": "5cf533d944e19424a288d6f124c659f51f1df767d8780f52dc6f5cf7224def82",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "ForestPath1",
+        "archiveEntry": "森林1.png.png",
+        "sha256": "c68826a063d117cc05dd97cb953b109d998a2af3e4dd554b40459471442567db",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "BeachEntrance",
+        "archiveEntry": "3-3沙滩入口.png.png",
+        "sha256": "352a6670c127ffa8d27267cb9df859c3309f7e785f98a9e9014133e1e2c42627",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "CaptainHome",
+        "archiveEntry": "室内-船长家.png.png",
+        "sha256": "e5c57a496b164b4d186fac1af8f48a7b2226211fbd13abb258b67f5b40390be3",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "LiTingHome",
+        "archiveEntry": "室内6-Z家客厅 1.png.png",
+        "sha256": "34a6216b3db9323d3ecc523d4482ee92741e33cb0436f311bd4f7258bfce34ef",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "ZiqingHome",
+        "archiveEntry": "室内10-发小家 1.png.png",
+        "sha256": "acdb3c7dcbcc70bd4ef79ce0e94f019496a7963ed5bd42709331079ecd3fdc5c",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "ZHome",
+        "archiveEntry": "室内6-Z家客厅 1.png.png",
+        "sha256": "34a6216b3db9323d3ecc523d4482ee92741e33cb0436f311bd4f7258bfce34ef",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "ZhouHome",
+        "archiveEntry": "室内7-Z家卧室 1.png.png",
+        "sha256": "54b13779cb113ba8374ee99e293fa1ed0dce827915de41a9a20c4020c0bcae3b",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "VisitorCenter",
+        "archiveEntry": "室内1-游客中心 1.png.png",
+        "sha256": "0b8efee0b2fb3c5e91fd84d881cf79e254f1fe83bf9b311fe0af92a571fb09a1",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "FlowerShop",
+        "archiveEntry": "室内3-花店 1.png.png",
+        "sha256": "1941dd01623cd02dc9f75f405937671db7573aa58b7977d216deb0375afe1192",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "PhotoStudio",
+        "archiveEntry": "室内5-照相管 1.png.png",
+        "sha256": "68196907146a2fd11cb60eb2b5abd25a4b1608f8467c7a0346946241bbf3521f",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "CabinInterior",
+        "archiveEntry": "室内11-木屋 1.png.png",
+        "sha256": "c78ac906a263829613ddca59554931b122b36f382d567fd94ee372702fa39502",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "ResearchInterior",
+        "archiveEntry": "室内12-研究所 1.png.png",
+        "sha256": "38da5601a5eb1673ad24875e11490adccd91dacd760bc4ccc1a8a81e89f29750",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "BarInterior",
+        "archiveEntry": "室内酒吧 1.png.png",
+        "sha256": "cd8097191eab0522342fb5bb8bcff5d72aed7ed49662530885ff66cc1ae82b8f",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "RestaurantInterior",
+        "archiveEntry": "餐厅室内 1.png.png",
+        "sha256": "df25b8859ef29a939ead1b8345f5820a8d4e944a151149c96fc9d2f75f9ff55a",
+        "matchesRuntimeBytes": true
+      },
+      {
+        "place": "ZBedroom",
+        "archiveEntry": "室内7-Z家卧室 1.png.png",
+        "sha256": "54b13779cb113ba8374ee99e293fa1ed0dce827915de41a9a20c4020c0bcae3b",
+        "matchesRuntimeBytes": true
+      }
+    ],
+    "unboundSources": [
+      {
+        "archiveEntry": "室内9-Z父母家 1.png.png",
+        "sha256": "9ce8518e979867096958ada34eb0399982f3a209e63e31aa1a3d24ba4d13122a",
+        "runtimeBound": false,
+        "reason": "No matching enabled PlaceId or current room composition; source is intentionally unbound."
+      }
+    ],
+    "generatedSources": [
+      {
+        "place": "Lighthouse",
+        "recordedSourcePath": "ArtSource/Morning-20261113/Generated/Lighthouse.png",
+        "sha256": "32c38d9e7e30103b957d346f7029413baef1ea3ce8cfb1bf319aac1508b4e8f4",
+        "matchesLocalGeneratedArchive": true
+      },
+      {
+        "place": "ForestPath2",
+        "recordedSourcePath": "ArtSource/Morning-20261113/Generated/ForestPath2.png",
+        "sha256": "a03242d805b6ec87da19647b7a8dff8054132a1aafda0eb29e2ae6ef47201fc5",
+        "matchesLocalGeneratedArchive": true
+      },
+      {
+        "place": "GeneralStore",
+        "recordedSourcePath": "ArtSource/Morning-20261113/Generated/GeneralStore.png",
+        "sha256": "b26fcbf496c4471736afe1e133144407948be926b83d6b85b0e7cd9b357e9454",
+        "matchesLocalGeneratedArchive": true
+      },
+      {
+        "place": "PlayerHome",
+        "recordedSourcePath": "ArtSource/Morning-20261113/Generated/PlayerHome.png",
+        "sha256": "5678dce8871c681b9267af7b480ebd63ddf802ecf06ccc70db967addef472c79",
+        "matchesLocalGeneratedArchive": true
+      }
+    ],
+    "sharedBaseSourceEvidence": [
+      {
+        "places": [
+          "LiTingHome",
+          "ZHome"
+        ],
+        "daytimeSourceSha256": "0c1a0011dd93776ec9ffbdcbc378fdb76282606402bd9c18497085b5cb4070c3",
+        "reverifiedBaseFiles": true
+      },
+      {
+        "places": [
+          "ZhouHome",
+          "ZBedroom"
+        ],
+        "daytimeSourceSha256": "ea121e71d7a11b9aedd7625adf84796440e0d11d440e1a998e24447eaa807049",
+        "reverifiedBaseFiles": true
+      }
+    ]
+  },
+  "morningLayout": {
+    "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/Layout.json",
+    "entries": [
+      {
+        "place": "ResidentialCenter",
+        "width": 2172,
+        "height": 724,
+        "floorFromBottom": 0.35082872928176795,
+        "floorPixelFromTop": 469.99999999999994,
+        "expectedFloorPixelFromTop": 470,
+        "baseWidth": 8300,
+        "baseHeight": 1518,
+        "aspectRatioRelativeDifference": -0.4513253012048193,
+        "displayMode": "preserve authored world width and image aspect ratio; align specified floor to original logical floor"
+      },
+      {
+        "place": "Street",
+        "width": 2171,
+        "height": 724,
+        "floorFromBottom": 0.2762430939,
+        "floorPixelFromTop": 524.0000000164,
+        "expectedFloorPixelFromTop": 524,
+        "baseWidth": 6168,
+        "baseHeight": 1489,
+        "aspectRatioRelativeDifference": -0.2761116455632707,
+        "displayMode": "preserve authored world width and image aspect ratio; align specified floor to original logical floor"
+      },
+      {
+        "place": "Harbor",
+        "width": 2171,
+        "height": 724,
+        "floorFromBottom": 0.2002762431,
+        "floorPixelFromTop": 578.9999999956,
+        "expectedFloorPixelFromTop": 579,
+        "baseWidth": 4651,
+        "baseHeight": 1492,
+        "aspectRatioRelativeDifference": -0.038069398727297976,
+        "displayMode": "preserve authored world width and image aspect ratio; align specified floor to original logical floor"
+      },
+      {
+        "place": "Boardwalk",
+        "width": 2172,
+        "height": 724,
+        "floorFromBottom": 0.2209944751,
+        "floorPixelFromTop": 564.0000000276,
+        "expectedFloorPixelFromTop": 564,
+        "baseWidth": 4788,
+        "baseHeight": 1466,
+        "aspectRatioRelativeDifference": -0.081453634085213,
+        "displayMode": "preserve authored world width and image aspect ratio; align specified floor to original logical floor"
+      }
+    ],
+    "staticIntegration": "Both IslandAtmosphere and SceneAtmosphere call TimeOfDayMapArtwork; Morning loads IslandMorning and reads Layout, Evening loads IslandEvening. Other periods or missing variants restore original artwork before existing atmosphere behavior.",
+    "limits": "Four global floor anchors do not prove local door geometry, actor foot contact, camera edge coverage or runtime transition correctness."
+  },
+  "assets": [
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/BarInterior.png",
+      "bytes": 2032100,
+      "sha256": "cd8097191eab0522342fb5bb8bcff5d72aed7ed49662530885ff66cc1ae82b8f",
+      "place": "BarInterior",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/BarInterior.png.meta",
+        "bytes": 1013,
+        "sha256": "0384b4e2edfe6db7f72e603f7c801374532f79d881f5948a72576ea3a59dc741",
+        "guid": "053aff167311488d86d56835c8f01b3d"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/Beach.png",
+      "bytes": 1967912,
+      "sha256": "5cf533d944e19424a288d6f124c659f51f1df767d8780f52dc6f5cf7224def82",
+      "place": "Beach",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/Beach.png.meta",
+        "bytes": 1013,
+        "sha256": "1f0393db1f8262f8aecc22e641764744dc90fcc76eb6182011c36d7366975bf1",
+        "guid": "0d6ab10fe86c4edabedca6242df54717"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/BeachEntrance.png",
+      "bytes": 2023099,
+      "sha256": "352a6670c127ffa8d27267cb9df859c3309f7e785f98a9e9014133e1e2c42627",
+      "place": "BeachEntrance",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1716,
+      "height": 917,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/BeachEntrance.png.meta",
+        "bytes": 1013,
+        "sha256": "5890c8e381efe564bb85f53a0a47be009e8b923ddfbe44a79f56b06f41d5ada7",
+        "guid": "8f2e5d3c7e864130b8a7b7075b7273ca"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/Boardwalk.png",
+      "bytes": 2044184,
+      "sha256": "564b28e1240db4def048a4cede16b2af1b476dc51aa67aeebc26d4855acb147f",
+      "place": "Boardwalk",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 2172,
+      "height": 724,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/Boardwalk.png.meta",
+        "bytes": 1013,
+        "sha256": "b5a92de506ec09359c0b92754e8b6e4e59a3dea339659655c02ad0c4f35f93c2",
+        "guid": "89dc40ced4e146cdb4e3c053b454bdc9"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/CabinInterior.png",
+      "bytes": 1603373,
+      "sha256": "c78ac906a263829613ddca59554931b122b36f382d567fd94ee372702fa39502",
+      "place": "CabinInterior",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/CabinInterior.png.meta",
+        "bytes": 1013,
+        "sha256": "de44f07293a37d5a7684ead0371d7c6c5522f39c475ad14fb17914f8700a5473",
+        "guid": "fb734f0bb0f9428c9a8066c978922ec3"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/Cafe.png",
+      "bytes": 1492157,
+      "sha256": "bc8cc931b06b3de7b0b88a38f94f8fa2503571f03de66294754a287b8f0036e4",
+      "place": "Cafe",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/Cafe.png.meta",
+        "bytes": 1013,
+        "sha256": "45105f19fadff015490e0ca077025d4b2d8f443ee2651168115f9a2d0d866303",
+        "guid": "c32c4c30c0164fcc9486640d0bc746ba"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/CaptainHome.png",
+      "bytes": 1525056,
+      "sha256": "e5c57a496b164b4d186fac1af8f48a7b2226211fbd13abb258b67f5b40390be3",
+      "place": "CaptainHome",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/CaptainHome.png.meta",
+        "bytes": 1013,
+        "sha256": "a915c1f39d4da3f55ecdd5409267d0f4546f628199c0677af54dae984c0fea17",
+        "guid": "d809ef2131784b61996f3ac21a28ab08"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/EastCrossing.png",
+      "bytes": 2611906,
+      "sha256": "2edc51bb8241a5c9cb092e6dbcea4aa14795211468bd5ff4269a149a91c88883",
+      "place": "EastCrossing",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1772,
+      "height": 887,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/EastCrossing.png.meta",
+        "bytes": 1013,
+        "sha256": "918db79f6784e189d283e47c153e9f40f4563199a0b90c22ed592ae0c8392aec",
+        "guid": "234982818e0144678ae030cbdf695e33"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/FlowerShop.png",
+      "bytes": 1718852,
+      "sha256": "1941dd01623cd02dc9f75f405937671db7573aa58b7977d216deb0375afe1192",
+      "place": "FlowerShop",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/FlowerShop.png.meta",
+        "bytes": 1013,
+        "sha256": "ec8029b7c578ee5f2c0eef2640024067a3d16291a854e44c5cd320cf06e8e049",
+        "guid": "f9060965368642b9bb1da064de6ae27b"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/Forest.png",
+      "bytes": 2611151,
+      "sha256": "9ecdb3cb60b6971fc3cc408de794fc4a4fa2567c5865482e9b5f65bc4b8982cb",
+      "place": "Forest",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1678,
+      "height": 937,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/Forest.png.meta",
+        "bytes": 1013,
+        "sha256": "f66cc440fea19b9689d9de3bc1da95fee6e09524942e198c7c995d976a77923b",
+        "guid": "5534b33f40f246b5b81327b0b0e1a2e6"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/ForestCabin.png",
+      "bytes": 2723427,
+      "sha256": "1e0e97e1ba62e638718ebd0be152f49ce12cf7e8c6b435b90559f8c871fcbaa4",
+      "place": "ForestCabin",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1800,
+      "height": 874,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/ForestCabin.png.meta",
+        "bytes": 1013,
+        "sha256": "c1a77902670ea96c3abb1c0244ea9f72d2400d7b75cd796b3ec4ce4013892095",
+        "guid": "51ffd498abc74e17a6b456dff51a78c4"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/ForestPath1.png",
+      "bytes": 2921812,
+      "sha256": "c68826a063d117cc05dd97cb953b109d998a2af3e4dd554b40459471442567db",
+      "place": "ForestPath1",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1789,
+      "height": 879,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/ForestPath1.png.meta",
+        "bytes": 1013,
+        "sha256": "ea36ab240e480131b50863db169ab446930aa3177baf5179eec0f6faa9122c5c",
+        "guid": "96244aba4768412dad4fa1b364a12ba3"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/ForestPath2.png",
+      "bytes": 2995254,
+      "sha256": "a03242d805b6ec87da19647b7a8dff8054132a1aafda0eb29e2ae6ef47201fc5",
+      "place": "ForestPath2",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1774,
+      "height": 887,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/ForestPath2.png.meta",
+        "bytes": 1013,
+        "sha256": "6a2949c2034d78c9359eb05cb4f4771468a6661721312414899df4908c19df72",
+        "guid": "2a3d859c998546f69804084f6a87b210"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/GeneralStore.png",
+      "bytes": 1893630,
+      "sha256": "b26fcbf496c4471736afe1e133144407948be926b83d6b85b0e7cd9b357e9454",
+      "place": "GeneralStore",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/GeneralStore.png.meta",
+        "bytes": 1013,
+        "sha256": "2dbe9f1f4768f193eaf25ec8ca866d542f1abfd99d2be42d4351b3158e41ecfe",
+        "guid": "2191b96546d64c45ac38297e6a24d20b"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/Harbor.png",
+      "bytes": 2075799,
+      "sha256": "e1b108e00c65152f2ab1d91e50c282e2bcdc3d11dd54489ec4f1a43c4000d830",
+      "place": "Harbor",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 2171,
+      "height": 724,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/Harbor.png.meta",
+        "bytes": 1013,
+        "sha256": "b52f5bdfd8621170d9f0d9de47276ceb18d7c796ff85ea3c4fd61a899bcd57ee",
+        "guid": "3a5ccc944daf447c9a6c07efc64bcd62"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/LiTingHome.png",
+      "bytes": 1402755,
+      "sha256": "34a6216b3db9323d3ecc523d4482ee92741e33cb0436f311bd4f7258bfce34ef",
+      "place": "LiTingHome",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/LiTingHome.png.meta",
+        "bytes": 1013,
+        "sha256": "80036bc7450a330c6b54ec4d8f742cb17e1894e7e96de170d5e0ff42b6a0c8f4",
+        "guid": "af29e78f46ee4384a83d370c4746e4ea"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/Lighthouse.png",
+      "bytes": 2151171,
+      "sha256": "32c38d9e7e30103b957d346f7029413baef1ea3ce8cfb1bf319aac1508b4e8f4",
+      "place": "Lighthouse",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/Lighthouse.png.meta",
+        "bytes": 1013,
+        "sha256": "3b5e461e092e2f188905291953c49837f0659cccedeb143047f3a86662c41523",
+        "guid": "e44215a260af4630ae1a4f2b3fa26e6d"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/PhotoStudio.png",
+      "bytes": 1421147,
+      "sha256": "68196907146a2fd11cb60eb2b5abd25a4b1608f8467c7a0346946241bbf3521f",
+      "place": "PhotoStudio",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/PhotoStudio.png.meta",
+        "bytes": 1013,
+        "sha256": "c2b37a9867ef45c0c58f1b1e1a54cacc1f6496a04052fd8eb2610b0dd3d81bba",
+        "guid": "f12f2edc3e664f2d850aba1c65772453"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/PlayerHome.png",
+      "bytes": 1766631,
+      "sha256": "5678dce8871c681b9267af7b480ebd63ddf802ecf06ccc70db967addef472c79",
+      "place": "PlayerHome",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/PlayerHome.png.meta",
+        "bytes": 1013,
+        "sha256": "5e2fc3d1e645c224ff8e3aa4f17306cf72b09b54c7cfc1725780a74433aec080",
+        "guid": "270ce5bd971649d7a91c8fd9180cd08a"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/Research.png",
+      "bytes": 2210716,
+      "sha256": "9e38b371643b7f9e7e3b4456aa111e57ce69f6b876d1519e253c942ab0965f82",
+      "place": "Research",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/Research.png.meta",
+        "bytes": 1013,
+        "sha256": "3f2ee44a02dfb59128202d47af2f4911a961ddf7015890ad19117864efee5497",
+        "guid": "fa1709a98b864eacaca807a8d181806c"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/ResearchInterior.png",
+      "bytes": 1516978,
+      "sha256": "38da5601a5eb1673ad24875e11490adccd91dacd760bc4ccc1a8a81e89f29750",
+      "place": "ResearchInterior",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/ResearchInterior.png.meta",
+        "bytes": 1013,
+        "sha256": "000d9ae90dca1f53ce4426d33ffda86e9c9ce542d46eb4fdfb33da2bbaf1ca48",
+        "guid": "78ed4bda0a5d4887a13cdeb18e816960"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/ResidentialCenter.png",
+      "bytes": 2152232,
+      "sha256": "fdbcc5df91501757d6a67eddf5e3d79f439395a268d00ebf1abcfafbe295432c",
+      "place": "ResidentialCenter",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 2172,
+      "height": 724,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/ResidentialCenter.png.meta",
+        "bytes": 1013,
+        "sha256": "bdc7c4ead6a775f22734bfa98e616cbf9c363d7598d609c096448b3da891c397",
+        "guid": "ea6b032ff05340c7855e71de4fe93495"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/RestaurantInterior.png",
+      "bytes": 1962634,
+      "sha256": "df25b8859ef29a939ead1b8345f5820a8d4e944a151149c96fc9d2f75f9ff55a",
+      "place": "RestaurantInterior",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 940,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/RestaurantInterior.png.meta",
+        "bytes": 1013,
+        "sha256": "cd13141a766ada1b5ff60d1c4a06a4669f26263d6c59127c96f89c0f24955583",
+        "guid": "ddca9ff79e1846aeacfd0a66974caaa0"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/Seafront.png",
+      "bytes": 2281684,
+      "sha256": "75f57484f2d74c744c35248ac35c4313cdc44033b59b451bbb4c07f1799b7501",
+      "place": "Seafront",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 2106,
+      "height": 747,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/Seafront.png.meta",
+        "bytes": 1013,
+        "sha256": "65513098eda0c46287043768433a408646c7e3d9e446f490c63d1b3c52727824",
+        "guid": "cb2cd36a41124640b1e244d97b7003a3"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/Square.png",
+      "bytes": 2258308,
+      "sha256": "674931409188d1a4f7c1fb342e6efb998bd99fbb48a403e9c19dbe44ebbfea0a",
+      "place": "Square",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1583,
+      "height": 994,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/Square.png.meta",
+        "bytes": 1013,
+        "sha256": "446a61aa496cd429ab428b56b8926672748480e4d7c17e14da6991a9d387c760",
+        "guid": "5fe1baff272b4c78aeb3b70af3909f7b"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/Street.png",
+      "bytes": 2067233,
+      "sha256": "8af14ab96783674d05790dbff3f210b8ad1ad91bf47dcf04c8f32ce64977e1e6",
+      "place": "Street",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 2171,
+      "height": 724,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/Street.png.meta",
+        "bytes": 1013,
+        "sha256": "6de432e5babd02cd57c30b3d500e7460491bfc965ae95526f1efd4ff2cb90c61",
+        "guid": "3031ba00bcb6412c94266e0ff4b1388d"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/Summit.png",
+      "bytes": 2425250,
+      "sha256": "121480ff2597b4dc6b3be23c7c8c6d6e32d7c5e47832bfd36ea4ec6a0d462995",
+      "place": "Summit",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/Summit.png.meta",
+        "bytes": 1013,
+        "sha256": "646631895a5df33c1403703e82e3726b47461e41564d04e350eea92cb9af74bc",
+        "guid": "89aa52ef3b6e49c9b06447e9f346a903"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/VisitorCenter.png",
+      "bytes": 1563194,
+      "sha256": "0b8efee0b2fb3c5e91fd84d881cf79e254f1fe83bf9b311fe0af92a571fb09a1",
+      "place": "VisitorCenter",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/VisitorCenter.png.meta",
+        "bytes": 1013,
+        "sha256": "2f12726ef707965a50ea333700e5c1487b47c3598eee096973aaabf913dfcc79",
+        "guid": "58b6a64b36a2495eae778f92938b7f42"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/ZBedroom.png",
+      "bytes": 1450235,
+      "sha256": "54b13779cb113ba8374ee99e293fa1ed0dce827915de41a9a20c4020c0bcae3b",
+      "place": "ZBedroom",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/ZBedroom.png.meta",
+        "bytes": 1013,
+        "sha256": "7514c1b65190a79586c9dfa3cacf4387422d402e8e7394e6502b557f03480eae",
+        "guid": "3dc6bdaa5bf949259c536b7433d3e72f"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/ZHome.png",
+      "bytes": 1402755,
+      "sha256": "34a6216b3db9323d3ecc523d4482ee92741e33cb0436f311bd4f7258bfce34ef",
+      "place": "ZHome",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/ZHome.png.meta",
+        "bytes": 1013,
+        "sha256": "199a4e54e6a248a9f5481732f127df1d95f965056ac3dd403108b730d4dff1f9",
+        "guid": "b82d471108c6458bb11c59e9bbddbf99"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/ZhouHome.png",
+      "bytes": 1450235,
+      "sha256": "54b13779cb113ba8374ee99e293fa1ed0dce827915de41a9a20c4020c0bcae3b",
+      "place": "ZhouHome",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/ZhouHome.png.meta",
+        "bytes": 1013,
+        "sha256": "6e62b6a373fe9e7dee00a4bb1804cf7822c5a40521a4a9cfbb71b8d93be73b87",
+        "guid": "3b20f46300e44206a7f6f2ab8ea1a777"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/ZiqingHome.png",
+      "bytes": 1435321,
+      "sha256": "acdb3c7dcbcc70bd4ef79ce0e94f019496a7963ed5bd42709331079ecd3fdc5c",
+      "place": "ZiqingHome",
+      "period": "Morning",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/ZiqingHome.png.meta",
+        "bytes": 1013,
+        "sha256": "58f388a4a5174c0d434ccf449a8af05a0f9c5ea75db6ead104d48c368f42b41c",
+        "guid": "efb82a530daa4c2a9c0db3e91f221b31"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/BarInterior.png",
+      "bytes": 2322237,
+      "sha256": "44bd5cd71b7c07964d5f55a96f2e707e0ae7806629d71c7c80b20e4401cf7c15",
+      "place": "BarInterior",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/BarInterior.png.meta",
+        "bytes": 1013,
+        "sha256": "a3d9edd79dc0139887cb4e1f2aafadbd512887bcfe068d2a8669d66e11f55849",
+        "guid": "b2cdc221cc6447fb8f54f8bf3c53b437"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/Beach.png",
+      "bytes": 2381285,
+      "sha256": "562a1965def0e9a39d9d622870044fae3df201f61987071ed654769bc1a221e0",
+      "place": "Beach",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/Beach.png.meta",
+        "bytes": 1013,
+        "sha256": "ed9134b7746349b94e32f96a5cc4d962581605528704d26a97ac683dc0e0bdfc",
+        "guid": "a1a6b6d1172149aaa12dcc847f0c50a7"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/BeachEntrance.png",
+      "bytes": 2546165,
+      "sha256": "4bfa8d4a0f8f1d09b5dc60b31114608d2cfee9cc924473ac8da7d11aa2af42cc",
+      "place": "BeachEntrance",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1716,
+      "height": 917,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/BeachEntrance.png.meta",
+        "bytes": 1013,
+        "sha256": "2c5dafed7aff23d9884d192c61264cdcb9e47867447977edaecb7485993c7272",
+        "guid": "fba876cd21f2478cadf344346dfdb9fa"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/Boardwalk.png",
+      "bytes": 4063654,
+      "sha256": "cbfd2d0eb83c072cf64e8aa7609b73bdc68228764dbab4fcbc14c77935091342",
+      "place": "Boardwalk",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 2939,
+      "height": 900,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/Boardwalk.png.meta",
+        "bytes": 1013,
+        "sha256": "6f249c9cef32d8e58939584bad9dda89631ff69060fbc093f1bc3fcac3364672",
+        "guid": "ed8ffb8914994a09a897da60c520b3c9"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/CabinInterior.png",
+      "bytes": 1980575,
+      "sha256": "b206b37cef83300bf3ed727bf17f0f73bab182a634159cb49a027d051214c566",
+      "place": "CabinInterior",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 940,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/CabinInterior.png.meta",
+        "bytes": 1013,
+        "sha256": "c0b99ab5cd2acafc308864d84bb7bdf1327d41ba9225ee2cdcf73fe800a9127b",
+        "guid": "d5ba390c252f4c8481ba7ccf7f90d67e"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/Cafe.png",
+      "bytes": 2031900,
+      "sha256": "d031cfd28d7b7f268c699b540b7503ca95bc2d1cb0be0c807ff0d48c67304d30",
+      "place": "Cafe",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/Cafe.png.meta",
+        "bytes": 1013,
+        "sha256": "c1e247277b114c3faaa19477422158da9447be4d81efa7a02ddb206a64023032",
+        "guid": "7792eff15da44200b4e6e63a0b55b2a8"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/CaptainHome.png",
+      "bytes": 1988714,
+      "sha256": "ad146127d9b5b5ebd807f22a6947406382d24d1432fd70edd6971cba59beb9d6",
+      "place": "CaptainHome",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/CaptainHome.png.meta",
+        "bytes": 1013,
+        "sha256": "8428637405a0d45da8229e046ec6fdf3da653a8e584cf9fd2684befa9f9e3b0f",
+        "guid": "fe3fcc82e595458f8816a35af027994c"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/EastCrossing.png",
+      "bytes": 2891801,
+      "sha256": "947024cf58c7abda64c64f27f5c45f170d82ee608c40558d29cc9b0d42244af0",
+      "place": "EastCrossing",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1771,
+      "height": 888,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/EastCrossing.png.meta",
+        "bytes": 1013,
+        "sha256": "7fd46c1bca3061e802390ebcc2f6973d111164304c58c41923ae9e591abc13d3",
+        "guid": "aa04cfee2d464acf855f43916b72bab9"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/FlowerShop.png",
+      "bytes": 2171348,
+      "sha256": "15ded9a671de9cad6c84063d820c20ebffb8d262d839c0cf926f7fd6b09e804a",
+      "place": "FlowerShop",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/FlowerShop.png.meta",
+        "bytes": 1013,
+        "sha256": "fde685fab1485fe6aa292683fcebd6113c1218a3c69209304366781150f281cd",
+        "guid": "95bbe06f5fc8419994483f4a522e68a0"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/Forest.png",
+      "bytes": 3036011,
+      "sha256": "357f3bfd86a945b1eedd867f8a0a4a8657b1a5237bafe2d57b77c0fa51e7a7ef",
+      "place": "Forest",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1679,
+      "height": 937,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/Forest.png.meta",
+        "bytes": 1013,
+        "sha256": "7144548a08405e175150d49627b6b92a4a29825827759f27a1cad10a1717d4b4",
+        "guid": "503a9fc48ee847579e328befc190a670"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/ForestCabin.png",
+      "bytes": 2838564,
+      "sha256": "ac0d5e47baee037cf8c388eb9e1fff34360b71d7c3d243e65f524c4bf14d970d",
+      "place": "ForestCabin",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1800,
+      "height": 874,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/ForestCabin.png.meta",
+        "bytes": 1013,
+        "sha256": "8de81ccac4adbcfdb76fcadb75394b5343e8b76d4c783893b8e9a6541e5a09c1",
+        "guid": "f8baee7302404448aa17bc043b47b17b"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/ForestPath1.png",
+      "bytes": 2932770,
+      "sha256": "158907e68928768652c2a01f76a61db59d503bfd2a8f6c8bebb60bc79b25f61c",
+      "place": "ForestPath1",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1789,
+      "height": 879,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/ForestPath1.png.meta",
+        "bytes": 1013,
+        "sha256": "c6b690f1b972da8ed0f3fecf161a496c680ce1292ea304bfc4ccc0cb8269c12c",
+        "guid": "17c518e2c5ac4f059247076bc4ffb495"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/ForestPath2.png",
+      "bytes": 3026448,
+      "sha256": "5a9e9b1c9e69344da6348f6582c63b3ddf40d2a28fea08ff6ec8d5106e877c43",
+      "place": "ForestPath2",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1774,
+      "height": 887,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/ForestPath2.png.meta",
+        "bytes": 1013,
+        "sha256": "9a0e34947582caa86c7ed78dee7b4546c1495171db94a961db9a6a5290e87d59",
+        "guid": "454f7a52a0cf438f86a7307eb4ad17ae"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/GeneralStore.png",
+      "bytes": 2055788,
+      "sha256": "4b1b5234cd1b60d36932a1bf1b45714fb7b1521bf03c2cee7825a6aba3b48cf0",
+      "place": "GeneralStore",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/GeneralStore.png.meta",
+        "bytes": 1013,
+        "sha256": "c49feb9b02fee13d8ad453f876b17cf58ce1183fb1ed7200893dc495053bcc14",
+        "guid": "ad8e27841b634f37aff7a2f627df0dd2"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/Harbor.png",
+      "bytes": 2495932,
+      "sha256": "eb553a968ad1ffaac204c215090cb3c81c5274b93124c8f6ce5335aeaadc8fdd",
+      "place": "Harbor",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 2171,
+      "height": 700,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/Harbor.png.meta",
+        "bytes": 1013,
+        "sha256": "ed08cc471cb5510731ed920ba33deefb8b7efc09b821cfce56567c5736cbb56e",
+        "guid": "616dde88c573489f8fb7615bc90be443"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/LiTingHome.png",
+      "bytes": 1820479,
+      "sha256": "cbc5e7076225694e707e579b1ee8320e258aa24cc5446fba2efee7eba1da05af",
+      "place": "LiTingHome",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/LiTingHome.png.meta",
+        "bytes": 1013,
+        "sha256": "ac22e96bfea3579790d8f001809d6fa4bac34b126f46125f943c87d85c3dadd4",
+        "guid": "78cdd44870f64727ad5cf1cc7a9e4f5c"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/Lighthouse.png",
+      "bytes": 2124197,
+      "sha256": "5059f8a0e0fdfafb35da0525541c9b62790cb9878a069676a2283784fa109eac",
+      "place": "Lighthouse",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/Lighthouse.png.meta",
+        "bytes": 1013,
+        "sha256": "8887ec9f1bbfa5f8daa43725baab714828b5358ccf951fb7d646c2a11fd17859",
+        "guid": "085843a4acfa4fbc9177e6a515274f21"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/PhotoStudio.png",
+      "bytes": 1929890,
+      "sha256": "a71310f3ecfdd8424479d3253fb49e8eb8e56f2bc53cedc5975ddea0a7d909a8",
+      "place": "PhotoStudio",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/PhotoStudio.png.meta",
+        "bytes": 1013,
+        "sha256": "a854aea8bbb35f4dc8c56f1d4b272bec7d7102f481a8c047b811959dffcc5acb",
+        "guid": "8fd2436eae4f4eb58418378faee8a51f"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/PlayerHome.png",
+      "bytes": 1885522,
+      "sha256": "7c155641b330d8af5d9b19628e104a08315a1a341707156214f37c664b540352",
+      "place": "PlayerHome",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/PlayerHome.png.meta",
+        "bytes": 1013,
+        "sha256": "855caa6ae6bf24bfb86adcece7052e5b317e9a5d17fdee3fe070552f653b9eab",
+        "guid": "ff3b687c9a114dbabe2615321ad99f80"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/Research.png",
+      "bytes": 2564955,
+      "sha256": "490cc2b62f87f516ca17873de8449dbcf4e3252f58d446c64c497cf3dd5c68a2",
+      "place": "Research",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 940,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/Research.png.meta",
+        "bytes": 1013,
+        "sha256": "52a1af5e35084ebaa82aebc36c6b47df06587a928ddc48320854ca1559b7e025",
+        "guid": "33d3679b14b34a52a2a12b1fb42b3044"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/ResearchInterior.png",
+      "bytes": 2030345,
+      "sha256": "04205d014d88fd9deb9e7cd7615d4a2785fc703870491405d66736907fb3d5b9",
+      "place": "ResearchInterior",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 940,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/ResearchInterior.png.meta",
+        "bytes": 1013,
+        "sha256": "c2230065940a5b36e61e8f86b951fd3c3f0fa3818d5a9ac1ca1b3b9d9346bd85",
+        "guid": "b01e8f80752e439ba343eb55e5451db4"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/ResidentialCenter.png",
+      "bytes": 7595526,
+      "sha256": "2b8fe6c18b87dd55b7370cb13764fee60f243ed0cbcc6c64c2f39feb1821fa96",
+      "place": "ResidentialCenter",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 4921,
+      "height": 900,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/ResidentialCenter.png.meta",
+        "bytes": 1013,
+        "sha256": "2207326102d9718be8582a707ea6e6f20f9e1560473cf09a663ce5e640e79a88",
+        "guid": "59656e511b524c6f92b22fabccf9f011"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/RestaurantInterior.png",
+      "bytes": 2357547,
+      "sha256": "3b04553a34dd6a259d774c93428fa9561edd4870a35e03f8b8c330340b20a15d",
+      "place": "RestaurantInterior",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 940,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/RestaurantInterior.png.meta",
+        "bytes": 1013,
+        "sha256": "e996b2a91efbf6a31d59e402b993037515c1f0f2897b9dd582a0ac2d372190f8",
+        "guid": "24b0598fe2ff41d8865852aeea82d668"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/Seafront.png",
+      "bytes": 2637307,
+      "sha256": "36e1ec40069302360597ecdf269c09eba98c4cee3f8bb06e35ad6bf41830e7cb",
+      "place": "Seafront",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 2106,
+      "height": 747,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/Seafront.png.meta",
+        "bytes": 1013,
+        "sha256": "060e58ed463f185e7d896f8f5a51c6372e34b2df4de24d8dcd541afd281a3ceb",
+        "guid": "00ba976425a04b3d804a3169b101eb76"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/Square.png",
+      "bytes": 2704963,
+      "sha256": "e7d3e8ff38c68fe3caaeafd7681034f964cf40c1b1c8a483b4ea811bd7ad7325",
+      "place": "Square",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1583,
+      "height": 994,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/Square.png.meta",
+        "bytes": 1013,
+        "sha256": "3296a5eca64a70a20639b877641ec7e0c91f3ddcf31b806ee31b9650897b9647",
+        "guid": "4fda7d82a75c44cc8699a60e1e0ef110"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/Street.png",
+      "bytes": 5249691,
+      "sha256": "75c359997288662fd074ef218d1b1b2094c5fdc2781eb36a749995abba0b5fdd",
+      "place": "Street",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 3728,
+      "height": 900,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/Street.png.meta",
+        "bytes": 1013,
+        "sha256": "243abbb0e309957decd991ce439dc3d53436c267201225f1fff5ca5b232d5ce0",
+        "guid": "37d9dca3385a4a19b66da424d499b7af"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/Summit.png",
+      "bytes": 2685135,
+      "sha256": "ee3cdc7bf4b237c969f548ffa480ebaa5e5e02a61af1d9bf0cacfdf6b4ad8893",
+      "place": "Summit",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/Summit.png.meta",
+        "bytes": 1013,
+        "sha256": "5185d4a8563fde10fc6057952d585b5c92340f93ffe53d438791c12d9d41034c",
+        "guid": "007cf0e4a33d4ae1ae3aa3e1ec118090"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/VisitorCenter.png",
+      "bytes": 1944667,
+      "sha256": "81dd8a221c263fb0633ec8e6ab52a00b92b463ac0a407d5a92e279122ee215fc",
+      "place": "VisitorCenter",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/VisitorCenter.png.meta",
+        "bytes": 1013,
+        "sha256": "6e1bf6aa5266562b33524ff68c6a90caefa78b8428c127fff666c820ab78f635",
+        "guid": "46ad01d857d6483aa395b8174516a0a5"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/ZBedroom.png",
+      "bytes": 1908955,
+      "sha256": "ed8d896a6ed29afccfc538aafcafc9b866f56f3d1a5fa04303dcf5d16064a64b",
+      "place": "ZBedroom",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/ZBedroom.png.meta",
+        "bytes": 1013,
+        "sha256": "a05830cd1586877f041e26d9f3228142d57faf2adeb472d19bfca26e23a0f6a8",
+        "guid": "141fbd383191413a96f612ce0bc6144e"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/ZHome.png",
+      "bytes": 1944795,
+      "sha256": "398b985275f9fbd17e07c0673c9457344d953af59455f0762e4e943969f68ab3",
+      "place": "ZHome",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/ZHome.png.meta",
+        "bytes": 1013,
+        "sha256": "b9cb2c41941949f17dc87f1c68f33aa6d8b6dabf3f07a5f2a5e237c2380f8d54",
+        "guid": "e7da07b60b034a2b963f2e4807f3c95c"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/ZhouHome.png",
+      "bytes": 1933788,
+      "sha256": "c5c601daf62512d0aecfc6fc9b6a25c1faea018e13b7da3ca20f427840ff98c5",
+      "place": "ZhouHome",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/ZhouHome.png.meta",
+        "bytes": 1013,
+        "sha256": "ff86388fccd224ca04d024caca88bdb0a524df872f0ecb8a61bdbe4436c20b75",
+        "guid": "f638a8457c2c4f04af5f4ec219330e48"
+      }
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/ZiqingHome.png",
+      "bytes": 1877720,
+      "sha256": "81de5f230b265a07b4de593e0ef614b2331974cf12e019448f20a30e520f9a7d",
+      "place": "ZiqingHome",
+      "period": "Evening",
+      "format": "PNG",
+      "mode": "RGB",
+      "width": 1672,
+      "height": 941,
+      "decode": "Pillow verify plus full load passed",
+      "matchesExistingProvenanceManifest": true,
+      "meta": {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening/ZiqingHome.png.meta",
+        "bytes": 1013,
+        "sha256": "282798c02804ad48decc0f939cf9c33809a4dca25b627fc15890f733194ff44e",
+        "guid": "0b0fc7ede80441efb638af1f0494a2b0"
+      }
+    }
+  ],
+  "supportFiles": [
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning.meta",
+      "bytes": 169,
+      "sha256": "604e612a83ebf5a730e2b5f9210eb147d4308697448ccc0a3e38b04e9e69aa80"
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandEvening.meta",
+      "bytes": 169,
+      "sha256": "06e4c4eb44ed06cd135725f25a4d7c2e38b027fc0982045b54ae7651663a4747"
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/Layout.json",
+      "bytes": 595,
+      "sha256": "4bb57a068dea77e4f4eda6770726e99a97f3c19667f50a7f57cecfd2669a0e9f"
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning/Layout.json.meta",
+      "bytes": 155,
+      "sha256": "649682dae2162488ee291990101ed41774efbf66f619fc6f0c8099dc10251425"
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Scripts/World/IslandAtmosphere.cs",
+      "bytes": 7644,
+      "sha256": "e6ba9f2d41fb3af95ec706c1a57d3fb73a17da5530f24b4b8157703fea09e08c"
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Scripts/World/IslandAtmosphere.cs.meta",
+      "bytes": 59,
+      "sha256": "5cb59cdcc388e2003460878e9500696a7b3cd1f970d259052ac413b1a59c34ae"
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Scripts/World/SceneAtmosphere.cs",
+      "bytes": 5541,
+      "sha256": "729246ae1f07ac3679ac754e6ae970c8b7ba83c4e14d713bd718b284810f95ae"
+    },
+    {
+      "path": "unity-sideview/Assets/Seabreeze/Scripts/World/SceneAtmosphere.cs.meta",
+      "bytes": 59,
+      "sha256": "52d61f378e59d9e32cffeda3412cc86b9d8321bd1e8ccccf239a618aed424834"
+    },
+    {
+      "path": "unity-sideview/Docs/Art/Morning-20261113/README.md",
+      "bytes": 9012,
+      "sha256": "678e789b51e5d8a170734667e1d05d21ead5b0d7c05dfe1c3b6698b449c96197"
+    },
+    {
+      "path": "unity-sideview/Docs/Art/Morning-20261113/manifest.json",
+      "bytes": 60779,
+      "sha256": "b895672e4d0ccebfa1be674504c7465878611e641909b23a921c91c64cb9433a"
+    },
+    {
+      "path": "unity-sideview/Docs/Art/Evening-20261113/README.md",
+      "bytes": 8564,
+      "sha256": "deb9d9f5304aa7144f0b04fa4b2f3728383423a46c3369eaaa07fac0fe39d198"
+    },
+    {
+      "path": "unity-sideview/Docs/Art/Evening-20261113/manifest.json",
+      "bytes": 133600,
+      "sha256": "bfcc3d22fa02b64dd8af646777828a3f93f23216fb71c4c1e6f19f8a80d0f294"
+    },
+    {
+      "path": "unity-sideview/Docs/Art/Evening-20261113/root-generation.json",
+      "bytes": 18431,
+      "sha256": "ffb68e98f64346d8c6a8abae05b44f99d4f564a96e59469322ebf5041397f869"
+    }
+  ],
+  "package": {
+    "filename": "Z-清晨与傍晚地图-20261114.zip",
+    "type": "Unity resource integration ZIP, not a playable App",
+    "contentRoot": "unity-sideview/",
+    "payloadSourceFiles": 141,
+    "auditFiles": 2,
+    "readmeEntries": 1,
+    "expectedEntries": 144,
+    "runtimePngs": 64,
+    "nightArtworkIncluded": false,
+    "rawArtSourceOrGenerationCacheIncluded": false,
+    "historicalUnityScreenshotsIncluded": false
+  },
+  "formatNormalization": {
+    "appliedAtUtc": "2026-11-13T18:21:43.467025+00:00",
+    "imageBytesChanged": false,
+    "runtimeBehaviorChanged": false,
+    "note": "Working-tree formatting changes after the recorded repository commit; no image, GUID, CSV value or runtime-code changes. The historical period-matrix CSV is not packaged and does not count as this audit runtime evidence.",
+    "files": [
+      {
+        "path": "unity-sideview/Assets/Seabreeze/Resources/Art/IslandMorning.meta",
+        "operation": "Remove trailing spaces from 3 empty metadata fields",
+        "bytesBefore": 172,
+        "bytesAfter": 169,
+        "sha256Before": "8ba88fcd330821989974a92b0db692c38830143a71f58b90b2cd49698b79ed2a",
+        "sha256After": "604e612a83ebf5a730e2b5f9210eb147d4308697448ccc0a3e38b04e9e69aa80",
+        "guidUnchanged": true
+      },
+      {
+        "path": "unity-sideview/Docs/Verification/Morning-20261113/period-matrix.csv",
+        "operation": "Convert 161 CRLF line endings to LF",
+        "bytesBefore": 19318,
+        "bytesAfter": 19157,
+        "sha256Before": "91776545e950d0f1181c6f2116348a90f33e446a9d626a370de7d25072cb36d7",
+        "sha256After": "3d692e91b84fc0be19fd6e58c8aa185bf081f6361f9a8422f90d839685aeb221",
+        "csvRowsIncludingHeader": 161,
+        "parsedCsvValuesUnchanged": true,
+        "includedInResourcePackage": false
+      }
+    ]
+  }
+}

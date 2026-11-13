@@ -1,0 +1,171 @@
+[
+  {
+    "phase": "street",
+    "period": 0,
+    "x": -4.0,
+    "frame": 28405,
+    "ids": [
+      "npc_mio",
+      "npc_chen",
+      "sea",
+      "bench",
+      "ResidentialCenter_Street_back",
+      "Street_FlowerShop_out",
+      "Street_Cafe_out",
+      "Street_PhotoStudio_out",
+      "z",
+      "zhengyi",
+      "xiaoxiaoqing",
+      "linxu",
+      "zhou_bobo"
+    ],
+    "current": "xiaoxiaoqing"
+  },
+  {
+    "phase": "street",
+    "period": 0,
+    "x": -2.61666656,
+    "frame": 28444,
+    "ids": [
+      "npc_mio",
+      "npc_chen",
+      "sea",
+      "bench",
+      "ResidentialCenter_Street_back",
+      "Street_FlowerShop_out",
+      "Street_Cafe_out",
+      "Street_PhotoStudio_out",
+      "z",
+      "zhengyi",
+      "xiaoxiaoqing",
+      "linxu",
+      "zhou_bobo"
+    ],
+    "current": "xiaoxiaoqing"
+  },
+  {
+    "phase": "street",
+    "period": 0,
+    "x": 11.7166662,
+    "frame": 28483,
+    "ids": [
+      "npc_mio",
+      "npc_chen",
+      "sea",
+      "bench",
+      "ResidentialCenter_Street_back",
+      "Street_FlowerShop_out",
+      "Street_Cafe_out",
+      "Street_PhotoStudio_out",
+      "z",
+      "zhengyi",
+      "xiaoxiaoqing",
+      "linxu",
+      "zhou_bobo"
+    ],
+    "current": "bench"
+  },
+  {
+    "phase": "street",
+    "period": 2,
+    "x": -4.0,
+    "frame": 28522,
+    "ids": [
+      "npc_mio",
+      "npc_chen",
+      "sea",
+      "bench",
+      "ResidentialCenter_Street_back",
+      "Street_FlowerShop_out",
+      "Street_Cafe_out",
+      "Street_PhotoStudio_out",
+      "z",
+      "zhengyi",
+      "xiaoxiaoqing",
+      "linxu",
+      "zhou_bobo"
+    ],
+    "current": "xiaoxiaoqing"
+  },
+  {
+    "phase": "street",
+    "period": 2,
+    "x": -2.61666656,
+    "frame": 28561,
+    "ids": [
+      "npc_mio",
+      "npc_chen",
+      "sea",
+      "bench",
+      "ResidentialCenter_Street_back",
+      "Street_FlowerShop_out",
+      "Street_Cafe_out",
+      "Street_PhotoStudio_out",
+      "z",
+      "zhengyi",
+      "xiaoxiaoqing",
+      "linxu",
+      "zhou_bobo"
+    ],
+    "current": "xiaoxiaoqing"
+  },
+  {
+    "phase": "street",
+    "period": 2,
+    "x": 11.7166662,
+    "frame": 28600,
+    "ids": [
+      "npc_mio",
+      "npc_chen",
+      "sea",
+      "bench",
+      "ResidentialCenter_Street_back",
+      "Street_FlowerShop_out",
+      "Street_Cafe_out",
+      "Street_PhotoStudio_out",
+      "z",
+      "zhengyi",
+      "xiaoxiaoqing",
+      "linxu",
+      "zhou_bobo"
+    ],
+    "current": "bench"
+  },
+  {
+    "phase": "roundtrip",
+    "place": "Cafe",
+    "accepted": true,
+    "actual": "Cafe",
+    "frame": 28667,
+    "ids": [
+      "npc_aya",
+      "radio",
+      "guestbook",
+      "coffee",
+      "Street_Cafe_back",
+      "liting"
+    ]
+  },
+  {
+    "phase": "roundtrip",
+    "place": "Street",
+    "accepted": true,
+    "actual": "Street",
+    "frame": 28704,
+    "ids": [
+      "npc_mio",
+      "npc_chen",
+      "sea",
+      "bench",
+      "ResidentialCenter_Street_back",
+      "Street_FlowerShop_out",
+      "Street_Cafe_out",
+      "Street_PhotoStudio_out",
+      "z",
+      "zhengyi",
+      "xiaoxiaoqing",
+      "linxu",
+      "zhou_bobo"
+    ]
+  }
+]

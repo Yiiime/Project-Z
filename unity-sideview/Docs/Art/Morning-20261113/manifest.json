@@ -1,0 +1,1638 @@
+{
+  "version": 1,
+  "date": "2026-11-13",
+  "sourceArchive": "1113地图-早晨.zip",
+  "scope": {
+    "enabledScenes": 32,
+    "outdoorScenes": 16,
+    "indoorScenes": 16,
+    "suppliedPngs": 27,
+    "suppliedPngsBound": 26,
+    "scenesUsingSuppliedArt": 28,
+    "generatedPngs": 4,
+    "unboundSuppliedPngs": 1
+  },
+  "runtimeFolder": "Assets/Seabreeze/Resources/Art/IslandMorning",
+  "layoutFile": "Assets/Seabreeze/Resources/Art/IslandMorning/Layout.json",
+  "sourceLocationsAreProvenanceOnly": true,
+  "assets": [
+    {
+      "place": "Street",
+      "scene": "Assets/Seabreeze/Scenes/Street.unity",
+      "origin": "supplied",
+      "sourceFilename": "2-2 花店照相馆-色调处理版 1.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/Street.png",
+        "width": 6168,
+        "height": 1489,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "487acffe708ac8b66dd3b5ba2e60adb8200b8df35fe2a2ac2558ad20527984d6",
+        "bytes": 10207053
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/2-2 花店照相馆-色调处理版 1.png.png",
+        "width": 2171,
+        "height": 724,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "8af14ab96783674d05790dbff3f210b8ad1ad91bf47dcf04c8f32ce64977e1e6",
+        "bytes": 2067233
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/Street.png",
+        "width": 2171,
+        "height": 724,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "8af14ab96783674d05790dbff3f210b8ad1ad91bf47dcf04c8f32ce64977e1e6",
+        "bytes": 2067233
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "preserve-aspect-and-floor",
+        "pngCropped": false,
+        "floorFromBottom": 0.2762430939,
+        "floorPixelFromTop": 524.0000000164,
+        "layoutResource": "Art/IslandMorning/Layout"
+      }
+    },
+    {
+      "place": "Cafe",
+      "scene": "Assets/Seabreeze/Scenes/Cafe.unity",
+      "origin": "supplied",
+      "sourceFilename": "室内4-咖啡店 1.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/Cafe.png",
+        "width": 2048,
+        "height": 1152,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "031c70cd14a7d4757ecda45b735998ebcf9bfa92c1f7bef1fd25734a839b9a3d",
+        "bytes": 2624781
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/室内4-咖啡店 1.png.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "bc8cc931b06b3de7b0b88a38f94f8fa2503571f03de66294754a287b8f0036e4",
+        "bytes": 1492157
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/Cafe.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "bc8cc931b06b3de7b0b88a38f94f8fa2503571f03de66294754a287b8f0036e4",
+        "bytes": 1492157
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      }
+    },
+    {
+      "place": "Lighthouse",
+      "scene": "Assets/Seabreeze/Scenes/Lighthouse.unity",
+      "origin": "generated",
+      "sourceFilename": "Lighthouse.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/lighthouse.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "53f091521d8e44f5f228d42311ded2189365ddd362cd19e73070274af148ce43",
+        "bytes": 1859361
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Generated/Lighthouse.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "32c38d9e7e30103b957d346f7029413baef1ea3ce8cfb1bf319aac1508b4e8f4",
+        "bytes": 2151171
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/Lighthouse.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "32c38d9e7e30103b957d346f7029413baef1ea3ce8cfb1bf319aac1508b4e8f4",
+        "bytes": 2151171
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      },
+      "generation": {
+        "tool": "image_gen.imagegen",
+        "geometryReference": "Assets/Seabreeze/Resources/Art/lighthouse.png",
+        "styleReference": "ArtSource/Morning-20261113/Supplied/3-4沙滩.png.png",
+        "generatedArtifactFilename": "exec-f7d66a16-08a2-425c-b0da-28926a99454d.png",
+        "prompt": "Edit image 1 into an EARLY MORNING time-of-day variant for the SAME Unity 2D side scrolling location. Image 1 is the strict geometry/composition reference; image 2 is only the approved morning palette, light and hand-painted anime background style. Lighthouse promenade: convert evening sunset into a gentle clear early MORNING. Keep tower left, bench at far left, mailbox right of center, rail, bushes, shore, and full bottom seawall in exactly same positions. Pale powder blue upper sky, cream gold morning haze low horizon, muted blue sea, warm light on cream lighthouse wall. No strong orange-red sunset, no indigo shadows. Original low sunset disc should be removed; subtle morning sunlight can come from offscreen left. Lamps unlit or nearly unlit. CRITICAL: absolutely preserve image 1 camera, framing, aspect ratio, all structural geometry, all doorway positions and the walkable ground baseline. Relight only, do not redesign the scene. Clear detailed hand-painted animation-film environment with gentle pastel/cream golden morning, soft cool shadows. Output one high-quality full-bleed PNG with same aspect ratio as image 1, opaque background, no black bars or border, no text, UI, people, animals, watermarks or extra objects.",
+        "postProcessing": "None; exact generated PNG bytes copied into runtime asset."
+      }
+    },
+    {
+      "place": "ResidentialCenter",
+      "scene": "Assets/Seabreeze/Scenes/ResidentialCenter.unity",
+      "origin": "supplied",
+      "sourceFilename": "居民街-1110.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/ResidentialCenter.png",
+        "width": 8300,
+        "height": 1518,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "c3083027ef7918a9997c48710f597b18498e3620b008739c733b695c6f1dd83b",
+        "bytes": 19922082
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/居民街-1110.png.png",
+        "width": 2172,
+        "height": 724,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "fdbcc5df91501757d6a67eddf5e3d79f439395a268d00ebf1abcfafbe295432c",
+        "bytes": 2152232
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/ResidentialCenter.png",
+        "width": 2172,
+        "height": 724,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "fdbcc5df91501757d6a67eddf5e3d79f439395a268d00ebf1abcfafbe295432c",
+        "bytes": 2152232
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "preserve-aspect-and-floor",
+        "pngCropped": false,
+        "floorFromBottom": 0.35082872928176795,
+        "floorPixelFromTop": 470,
+        "layoutResource": "Art/IslandMorning/Layout"
+      }
+    },
+    {
+      "place": "Forest",
+      "scene": "Assets/Seabreeze/Scenes/Forest.unity",
+      "origin": "supplied",
+      "sourceFilename": "居民街-森林入口、.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/Forest.png",
+        "width": 2675,
+        "height": 1492,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "03c8365ff79a713bdb4db543ef05cb4eb6124218499a218965bbd0d57dcb609d",
+        "bytes": 6290203
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/居民街-森林入口、.png.png",
+        "width": 1678,
+        "height": 937,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "9ecdb3cb60b6971fc3cc408de794fc4a4fa2567c5865482e9b5f65bc4b8982cb",
+        "bytes": 2611151
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/Forest.png",
+        "width": 1678,
+        "height": 937,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "9ecdb3cb60b6971fc3cc408de794fc4a4fa2567c5865482e9b5f65bc4b8982cb",
+        "bytes": 2611151
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      }
+    },
+    {
+      "place": "ForestCabin",
+      "scene": "Assets/Seabreeze/Scenes/ForestCabin.unity",
+      "origin": "supplied",
+      "sourceFilename": "林间木屋 1.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/ForestCabin.png",
+        "width": 3078,
+        "height": 1493,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "3b9522594a291c5c5b886e5225d8c797ce67f8e590590974c2421e9e241d71af",
+        "bytes": 7969458
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/林间木屋 1.png.png",
+        "width": 1800,
+        "height": 874,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "1e0e97e1ba62e638718ebd0be152f49ce12cf7e8c6b435b90559f8c871fcbaa4",
+        "bytes": 2723427
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/ForestCabin.png",
+        "width": 1800,
+        "height": 874,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "1e0e97e1ba62e638718ebd0be152f49ce12cf7e8c6b435b90559f8c871fcbaa4",
+        "bytes": 2723427
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      }
+    },
+    {
+      "place": "Research",
+      "scene": "Assets/Seabreeze/Scenes/Research.unity",
+      "origin": "supplied",
+      "sourceFilename": "4-2研究所_副本 1.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/Research.png",
+        "width": 2628,
+        "height": 1478,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "48f3f9c2442a283cdbf60f93226a6c941f62091e0c96242afc560d2a5b058ea2",
+        "bytes": 5134870
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/4-2研究所_副本 1.png.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "9e38b371643b7f9e7e3b4456aa111e57ce69f6b876d1519e253c942ab0965f82",
+        "bytes": 2210716
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/Research.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "9e38b371643b7f9e7e3b4456aa111e57ce69f6b876d1519e253c942ab0965f82",
+        "bytes": 2210716
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      }
+    },
+    {
+      "place": "Summit",
+      "scene": "Assets/Seabreeze/Scenes/Summit.unity",
+      "origin": "supplied",
+      "sourceFilename": "山顶观景台-1110.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/Summit.png",
+        "width": 2800,
+        "height": 1575,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "54299c2050a7f59808eb4c98e08392c58c9bb7f6d6dd65a76a72589373621a22",
+        "bytes": 6752291
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/山顶观景台-1110.png.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "121480ff2597b4dc6b3be23c7c8c6d6e32d7c5e47832bfd36ea4ec6a0d462995",
+        "bytes": 2425250
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/Summit.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "121480ff2597b4dc6b3be23c7c8c6d6e32d7c5e47832bfd36ea4ec6a0d462995",
+        "bytes": 2425250
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      }
+    },
+    {
+      "place": "Harbor",
+      "scene": "Assets/Seabreeze/Scenes/Harbor.unity",
+      "origin": "supplied",
+      "sourceFilename": "2-1码头-游客中心-1110.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/Harbor.png",
+        "width": 4651,
+        "height": 1492,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "5d1fbec7a212c4a97bb9908a19a686942bbbe87a0dc8edced9cd9326a6f3ae44",
+        "bytes": 9104027
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/2-1码头-游客中心-1110.png.png",
+        "width": 2171,
+        "height": 724,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "e1b108e00c65152f2ab1d91e50c282e2bcdc3d11dd54489ec4f1a43c4000d830",
+        "bytes": 2075799
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/Harbor.png",
+        "width": 2171,
+        "height": 724,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "e1b108e00c65152f2ab1d91e50c282e2bcdc3d11dd54489ec4f1a43c4000d830",
+        "bytes": 2075799
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "preserve-aspect-and-floor",
+        "pngCropped": false,
+        "floorFromBottom": 0.2002762431,
+        "floorPixelFromTop": 578.9999999956,
+        "layoutResource": "Art/IslandMorning/Layout"
+      }
+    },
+    {
+      "place": "Square",
+      "scene": "Assets/Seabreeze/Scenes/Square.unity",
+      "origin": "supplied",
+      "sourceFilename": "2-3市民广场.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/Square.png",
+        "width": 2378,
+        "height": 1493,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "0c4080bb0913f68f1d36276d58d7b7f997f2436e4554e30ac43dd315712bb87f",
+        "bytes": 4861744
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/2-3市民广场.png.png",
+        "width": 1583,
+        "height": 994,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "674931409188d1a4f7c1fb342e6efb998bd99fbb48a403e9c19dbe44ebbfea0a",
+        "bytes": 2258308
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/Square.png",
+        "width": 1583,
+        "height": 994,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "674931409188d1a4f7c1fb342e6efb998bd99fbb48a403e9c19dbe44ebbfea0a",
+        "bytes": 2258308
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      }
+    },
+    {
+      "place": "EastCrossing",
+      "scene": "Assets/Seabreeze/Scenes/EastCrossing.unity",
+      "origin": "supplied",
+      "sourceFilename": "2-4广场东口.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/EastCrossing.png",
+        "width": 2975,
+        "height": 1492,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "0d469167865fa697a8003ae6b532efc432e5f3dfa52f0c5b182024253592559d",
+        "bytes": 6934763
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/2-4广场东口.png.png",
+        "width": 1772,
+        "height": 887,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "2edc51bb8241a5c9cb092e6dbcea4aa14795211468bd5ff4269a149a91c88883",
+        "bytes": 2611906
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/EastCrossing.png",
+        "width": 1772,
+        "height": 887,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "2edc51bb8241a5c9cb092e6dbcea4aa14795211468bd5ff4269a149a91c88883",
+        "bytes": 2611906
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      }
+    },
+    {
+      "place": "Boardwalk",
+      "scene": "Assets/Seabreeze/Scenes/Boardwalk.unity",
+      "origin": "supplied",
+      "sourceFilename": "3-1海滨步道-1110.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/Boardwalk.png",
+        "width": 4788,
+        "height": 1466,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "f90de9d6c81877c5158b8d4998e200eb30ecd469e7a7e3533692d431a0074305",
+        "bytes": 7065144
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/3-1海滨步道-1110.png.png",
+        "width": 2172,
+        "height": 724,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "564b28e1240db4def048a4cede16b2af1b476dc51aa67aeebc26d4855acb147f",
+        "bytes": 2044184
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/Boardwalk.png",
+        "width": 2172,
+        "height": 724,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "564b28e1240db4def048a4cede16b2af1b476dc51aa67aeebc26d4855acb147f",
+        "bytes": 2044184
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "preserve-aspect-and-floor",
+        "pngCropped": false,
+        "floorFromBottom": 0.2209944751,
+        "floorPixelFromTop": 564.0000000276,
+        "layoutResource": "Art/IslandMorning/Layout"
+      }
+    },
+    {
+      "place": "Seafront",
+      "scene": "Assets/Seabreeze/Scenes/Seafront.unity",
+      "origin": "supplied",
+      "sourceFilename": "3-2酒吧餐厅.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/Seafront.png",
+        "width": 4212,
+        "height": 1492,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "2eac9459f69e5672e419df2193a61d05b9ec4f13e49c326a6f24c19a3ef5af12",
+        "bytes": 7758465
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/3-2酒吧餐厅.png.png",
+        "width": 2106,
+        "height": 747,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "75f57484f2d74c744c35248ac35c4313cdc44033b59b451bbb4c07f1799b7501",
+        "bytes": 2281684
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/Seafront.png",
+        "width": 2106,
+        "height": 747,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "75f57484f2d74c744c35248ac35c4313cdc44033b59b451bbb4c07f1799b7501",
+        "bytes": 2281684
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      }
+    },
+    {
+      "place": "Beach",
+      "scene": "Assets/Seabreeze/Scenes/Beach.unity",
+      "origin": "supplied",
+      "sourceFilename": "3-4沙滩.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/Beach.png",
+        "width": 2651,
+        "height": 1492,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "f91b3df18ba591a9bc5f1fdce2135a3a67b3a8335a47a21114d3cb2d62c97d2f",
+        "bytes": 4658734
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/3-4沙滩.png.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "5cf533d944e19424a288d6f124c659f51f1df767d8780f52dc6f5cf7224def82",
+        "bytes": 1967912
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/Beach.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "5cf533d944e19424a288d6f124c659f51f1df767d8780f52dc6f5cf7224def82",
+        "bytes": 1967912
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      }
+    },
+    {
+      "place": "ForestPath1",
+      "scene": "Assets/Seabreeze/Scenes/ForestPath1.unity",
+      "origin": "supplied",
+      "sourceFilename": "森林1.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/ForestPath1.png",
+        "width": 3039,
+        "height": 1493,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "60270c80bc051f9b1aa660f278e2376db6977c2f3228350c0acc5eb65930e254",
+        "bytes": 7433490
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/森林1.png.png",
+        "width": 1789,
+        "height": 879,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "c68826a063d117cc05dd97cb953b109d998a2af3e4dd554b40459471442567db",
+        "bytes": 2921812
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/ForestPath1.png",
+        "width": 1789,
+        "height": 879,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "c68826a063d117cc05dd97cb953b109d998a2af3e4dd554b40459471442567db",
+        "bytes": 2921812
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      }
+    },
+    {
+      "place": "ForestPath2",
+      "scene": "Assets/Seabreeze/Scenes/ForestPath2.unity",
+      "origin": "generated",
+      "sourceFilename": "ForestPath2.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/ForestPath2.png",
+        "width": 2957,
+        "height": 1479,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "53141c5c37abff379c503a2f811e6796518caf090e9bcd730ab75474a04ab42e",
+        "bytes": 8369891
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Generated/ForestPath2.png",
+        "width": 1774,
+        "height": 887,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "a03242d805b6ec87da19647b7a8dff8054132a1aafda0eb29e2ae6ef47201fc5",
+        "bytes": 2995254
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/ForestPath2.png",
+        "width": 1774,
+        "height": 887,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "a03242d805b6ec87da19647b7a8dff8054132a1aafda0eb29e2ae6ef47201fc5",
+        "bytes": 2995254
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      },
+      "generation": {
+        "tool": "image_gen.imagegen",
+        "geometryReference": "Assets/Seabreeze/Art/Island/ForestPath2.png",
+        "styleReference": "ArtSource/Morning-20261113/Supplied/森林1.png.png",
+        "generatedArtifactFilename": "exec-5f6c21ba-fc0e-4023-ad82-410d93ab5e47.png",
+        "prompt": "Edit image 1 into an EARLY MORNING time-of-day variant for the SAME Unity 2D side scrolling location. Image 1 is the strict geometry/composition reference; image 2 is only the approved morning palette, light and hand-painted anime background style. Forest path 2: tall tree trunks, fallen log left, rocks right and the empty horizontal walkable dirt strip. Keep path surface and dirt cross-section exactly at the same normalized height and every tree/log/rock in its original location. Pale cream morning rays among foliage, soft blue grey distant forest, muted olive green leaves. CRITICAL: absolutely preserve image 1 camera, framing, aspect ratio, all structural geometry, all doorway positions and the walkable ground baseline. Relight only, do not redesign the scene. Clear detailed hand-painted animation-film environment with gentle pastel/cream golden morning, soft cool shadows. Output one high-quality full-bleed PNG with same aspect ratio as image 1, opaque background, no black bars or border, no text, UI, people, animals, watermarks or extra objects.",
+        "postProcessing": "None; exact generated PNG bytes copied into runtime asset."
+      }
+    },
+    {
+      "place": "BeachEntrance",
+      "scene": "Assets/Seabreeze/Scenes/BeachEntrance.unity",
+      "origin": "supplied",
+      "sourceFilename": "3-3沙滩入口.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/BeachEntrance.png",
+        "width": 2793,
+        "height": 1492,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "41a6e599c14e5009a5bb0ae5a24aeabc85c9a2cf40eec1ecafc424cf0220c2c7",
+        "bytes": 5405025
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/3-3沙滩入口.png.png",
+        "width": 1716,
+        "height": 917,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "352a6670c127ffa8d27267cb9df859c3309f7e785f98a9e9014133e1e2c42627",
+        "bytes": 2023099
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/BeachEntrance.png",
+        "width": 1716,
+        "height": 917,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "352a6670c127ffa8d27267cb9df859c3309f7e785f98a9e9014133e1e2c42627",
+        "bytes": 2023099
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      }
+    },
+    {
+      "place": "CaptainHome",
+      "scene": "Assets/Seabreeze/Scenes/CaptainHome.unity",
+      "origin": "supplied",
+      "sourceFilename": "室内-船长家.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/CaptainHome.png",
+        "width": 2047,
+        "height": 1152,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "e2d95811fe17f5293eb6cfddba9195765cd1122184767a361976898ef0a3a979",
+        "bytes": 2710502
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/室内-船长家.png.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "e5c57a496b164b4d186fac1af8f48a7b2226211fbd13abb258b67f5b40390be3",
+        "bytes": 1525056
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/CaptainHome.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "e5c57a496b164b4d186fac1af8f48a7b2226211fbd13abb258b67f5b40390be3",
+        "bytes": 1525056
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      }
+    },
+    {
+      "place": "LiTingHome",
+      "scene": "Assets/Seabreeze/Scenes/LiTingHome.unity",
+      "origin": "supplied",
+      "sourceFilename": "室内6-Z家客厅 1.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/LiTingHome.png",
+        "width": 2048,
+        "height": 1152,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "0c1a0011dd93776ec9ffbdcbc378fdb76282606402bd9c18497085b5cb4070c3",
+        "bytes": 2620561
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/室内6-Z家客厅 1.png.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "34a6216b3db9323d3ecc523d4482ee92741e33cb0436f311bd4f7258bfce34ef",
+        "bytes": 1402755
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/LiTingHome.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "34a6216b3db9323d3ecc523d4482ee92741e33cb0436f311bd4f7258bfce34ef",
+        "bytes": 1402755
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      },
+      "mappingNote": "Shares the supplied ZHome morning image because LiTingHome.png and ZHome.png daytime sources are byte-identical."
+    },
+    {
+      "place": "ZiqingHome",
+      "scene": "Assets/Seabreeze/Scenes/ZiqingHome.unity",
+      "origin": "supplied",
+      "sourceFilename": "室内10-发小家 1.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/ZiqingHome.png",
+        "width": 2048,
+        "height": 1152,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "1400d3502a303a40cef49778d1ba13e8a567da990e789c082fa051f7add2dd4e",
+        "bytes": 2716914
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/室内10-发小家 1.png.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "acdb3c7dcbcc70bd4ef79ce0e94f019496a7963ed5bd42709331079ecd3fdc5c",
+        "bytes": 1435321
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/ZiqingHome.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "acdb3c7dcbcc70bd4ef79ce0e94f019496a7963ed5bd42709331079ecd3fdc5c",
+        "bytes": 1435321
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      },
+      "mappingNote": "ZIP filename says childhood friend, but the armchair/desk/wardrobe composition matches current ZiqingHome, not LiTingHome. Mapping follows geometry."
+    },
+    {
+      "place": "ZHome",
+      "scene": "Assets/Seabreeze/Scenes/ZHome.unity",
+      "origin": "supplied",
+      "sourceFilename": "室内6-Z家客厅 1.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/ZHome.png",
+        "width": 2048,
+        "height": 1152,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "0c1a0011dd93776ec9ffbdcbc378fdb76282606402bd9c18497085b5cb4070c3",
+        "bytes": 2620561
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/室内6-Z家客厅 1.png.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "34a6216b3db9323d3ecc523d4482ee92741e33cb0436f311bd4f7258bfce34ef",
+        "bytes": 1402755
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/ZHome.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "34a6216b3db9323d3ecc523d4482ee92741e33cb0436f311bd4f7258bfce34ef",
+        "bytes": 1402755
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      }
+    },
+    {
+      "place": "ZhouHome",
+      "scene": "Assets/Seabreeze/Scenes/ZhouHome.unity",
+      "origin": "supplied",
+      "sourceFilename": "室内7-Z家卧室 1.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/ZhouHome.png",
+        "width": 2048,
+        "height": 1152,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "ea121e71d7a11b9aedd7625adf84796440e0d11d440e1a998e24447eaa807049",
+        "bytes": 2723964
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/室内7-Z家卧室 1.png.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "54b13779cb113ba8374ee99e293fa1ed0dce827915de41a9a20c4020c0bcae3b",
+        "bytes": 1450235
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/ZhouHome.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "54b13779cb113ba8374ee99e293fa1ed0dce827915de41a9a20c4020c0bcae3b",
+        "bytes": 1450235
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      },
+      "mappingNote": "Shares the supplied ZBedroom morning image because ZhouHome.png and ZBedroom.png daytime sources are byte-identical; preserves room layout between morning, daytime and evening."
+    },
+    {
+      "place": "VisitorCenter",
+      "scene": "Assets/Seabreeze/Scenes/VisitorCenter.unity",
+      "origin": "supplied",
+      "sourceFilename": "室内1-游客中心 1.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/VisitorCenter.png",
+        "width": 2048,
+        "height": 1152,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "7144d893740d4e61f94ab83233959d44f86ebb0b3e516d6f12659c02804c14ca",
+        "bytes": 2857590
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/室内1-游客中心 1.png.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "0b8efee0b2fb3c5e91fd84d881cf79e254f1fe83bf9b311fe0af92a571fb09a1",
+        "bytes": 1563194
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/VisitorCenter.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "0b8efee0b2fb3c5e91fd84d881cf79e254f1fe83bf9b311fe0af92a571fb09a1",
+        "bytes": 1563194
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      }
+    },
+    {
+      "place": "FlowerShop",
+      "scene": "Assets/Seabreeze/Scenes/FlowerShop.unity",
+      "origin": "supplied",
+      "sourceFilename": "室内3-花店 1.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/FlowerShop.png",
+        "width": 2048,
+        "height": 1152,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "95069a7c9bf48c96f8af96a120635f4759fb703a586fcc83db58718b5c00c364",
+        "bytes": 3101689
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/室内3-花店 1.png.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "1941dd01623cd02dc9f75f405937671db7573aa58b7977d216deb0375afe1192",
+        "bytes": 1718852
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/FlowerShop.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "1941dd01623cd02dc9f75f405937671db7573aa58b7977d216deb0375afe1192",
+        "bytes": 1718852
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      }
+    },
+    {
+      "place": "PhotoStudio",
+      "scene": "Assets/Seabreeze/Scenes/PhotoStudio.unity",
+      "origin": "supplied",
+      "sourceFilename": "室内5-照相管 1.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/PhotoStudio.png",
+        "width": 2048,
+        "height": 1152,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "3edbc754a1ceecaf8c5f0322b3c0fe05d4d0b72eca366d2e313325eb52f23b98",
+        "bytes": 2555202
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/室内5-照相管 1.png.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "68196907146a2fd11cb60eb2b5abd25a4b1608f8467c7a0346946241bbf3521f",
+        "bytes": 1421147
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/PhotoStudio.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "68196907146a2fd11cb60eb2b5abd25a4b1608f8467c7a0346946241bbf3521f",
+        "bytes": 1421147
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      }
+    },
+    {
+      "place": "CabinInterior",
+      "scene": "Assets/Seabreeze/Scenes/CabinInterior.unity",
+      "origin": "supplied",
+      "sourceFilename": "室内11-木屋 1.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/CabinInterior.png",
+        "width": 3078,
+        "height": 1731,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "10598a8aea1da825e55f03bad266c1bb9ae859ba8489e8eea84e1209d8ed6fb5",
+        "bytes": 6091684
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/室内11-木屋 1.png.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "c78ac906a263829613ddca59554931b122b36f382d567fd94ee372702fa39502",
+        "bytes": 1603373
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/CabinInterior.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "c78ac906a263829613ddca59554931b122b36f382d567fd94ee372702fa39502",
+        "bytes": 1603373
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      }
+    },
+    {
+      "place": "ResearchInterior",
+      "scene": "Assets/Seabreeze/Scenes/ResearchInterior.unity",
+      "origin": "supplied",
+      "sourceFilename": "室内12-研究所 1.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/ResearchInterior.png",
+        "width": 2628,
+        "height": 1478,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "0a161a9ba4a82299bef9bf729e95f3ae2d5724da3796eda6b913dbe9d361a181",
+        "bytes": 4090961
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/室内12-研究所 1.png.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "38da5601a5eb1673ad24875e11490adccd91dacd760bc4ccc1a8a81e89f29750",
+        "bytes": 1516978
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/ResearchInterior.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "38da5601a5eb1673ad24875e11490adccd91dacd760bc4ccc1a8a81e89f29750",
+        "bytes": 1516978
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      }
+    },
+    {
+      "place": "BarInterior",
+      "scene": "Assets/Seabreeze/Scenes/BarInterior.unity",
+      "origin": "supplied",
+      "sourceFilename": "室内酒吧 1.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/BarInterior.png",
+        "width": 2042,
+        "height": 1149,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "bfa1b27e6000f9550fe8736a6cfe062d137f501e9ddea9d24251dfc73fbdee69",
+        "bytes": 3078433
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/室内酒吧 1.png.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "cd8097191eab0522342fb5bb8bcff5d72aed7ed49662530885ff66cc1ae82b8f",
+        "bytes": 2032100
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/BarInterior.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "cd8097191eab0522342fb5bb8bcff5d72aed7ed49662530885ff66cc1ae82b8f",
+        "bytes": 2032100
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      }
+    },
+    {
+      "place": "RestaurantInterior",
+      "scene": "Assets/Seabreeze/Scenes/RestaurantInterior.unity",
+      "origin": "supplied",
+      "sourceFilename": "餐厅室内 1.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/RestaurantInterior.png",
+        "width": 2043,
+        "height": 1149,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "2759a9e25fc1b85fccda505bbc5884bad5528f8a6c14cd8a7343ff76b98d7b20",
+        "bytes": 3037110
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/餐厅室内 1.png.png",
+        "width": 1672,
+        "height": 940,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "df25b8859ef29a939ead1b8345f5820a8d4e944a151149c96fc9d2f75f9ff55a",
+        "bytes": 1962634
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/RestaurantInterior.png",
+        "width": 1672,
+        "height": 940,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "df25b8859ef29a939ead1b8345f5820a8d4e944a151149c96fc9d2f75f9ff55a",
+        "bytes": 1962634
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      }
+    },
+    {
+      "place": "ZBedroom",
+      "scene": "Assets/Seabreeze/Scenes/ZBedroom.unity",
+      "origin": "supplied",
+      "sourceFilename": "室内7-Z家卧室 1.png.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/ZBedroom.png",
+        "width": 2048,
+        "height": 1152,
+        "format": "PNG",
+        "colorType": 6,
+        "sha256": "ea121e71d7a11b9aedd7625adf84796440e0d11d440e1a998e24447eaa807049",
+        "bytes": 2723964
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Supplied/室内7-Z家卧室 1.png.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "54b13779cb113ba8374ee99e293fa1ed0dce827915de41a9a20c4020c0bcae3b",
+        "bytes": 1450235
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/ZBedroom.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "54b13779cb113ba8374ee99e293fa1ed0dce827915de41a9a20c4020c0bcae3b",
+        "bytes": 1450235
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      }
+    },
+    {
+      "place": "GeneralStore",
+      "scene": "Assets/Seabreeze/Scenes/GeneralStore.unity",
+      "origin": "generated",
+      "sourceFilename": "GeneralStore.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Art/Island/GeneralStore.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "0921d7bfdff86859367b28bf3121df62f94b5b8f39cb489393099a20516e4253",
+        "bytes": 1915948
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Generated/GeneralStore.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "b26fcbf496c4471736afe1e133144407948be926b83d6b85b0e7cd9b357e9454",
+        "bytes": 1893630
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/GeneralStore.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "b26fcbf496c4471736afe1e133144407948be926b83d6b85b0e7cd9b357e9454",
+        "bytes": 1893630
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      },
+      "generation": {
+        "tool": "image_gen.imagegen",
+        "geometryReference": "Assets/Seabreeze/Art/Island/GeneralStore.png",
+        "styleReference": "ArtSource/Morning-20261113/Supplied/室内4-咖啡店 1.png.png",
+        "generatedArtifactFilename": "exec-550bbab4-5dd8-47cc-8c19-0be048317212.png",
+        "prompt": "Edit image 1 into an EARLY MORNING time-of-day variant for the SAME Unity 2D side scrolling location. Image 1 is the strict geometry/composition reference; image 2 is only the approved morning palette, light and hand-painted anime background style. General store interior: preserve the blue door right of center, both blue windows, cashier counter left, produce table right, every shelf and front horizontal floor line. Gentle early morning sunshine, pale blue sea outside, a subtle peach haze; existing warm spotlights remain modest. CRITICAL: absolutely preserve image 1 camera, framing, aspect ratio, all structural geometry, all doorway positions and the walkable ground baseline. Relight only, do not redesign the scene. Clear detailed hand-painted animation-film environment with gentle pastel/cream golden morning, soft cool shadows. Output one high-quality full-bleed PNG with same aspect ratio as image 1, opaque background, no black bars or border, no text, UI, people, animals, watermarks or extra objects.",
+        "postProcessing": "None; exact generated PNG bytes copied into runtime asset."
+      }
+    },
+    {
+      "place": "PlayerHome",
+      "scene": "Assets/Seabreeze/Scenes/PlayerHome.unity",
+      "origin": "generated",
+      "sourceFilename": "PlayerHome.png",
+      "baseArtwork": {
+        "path": "Assets/Seabreeze/Resources/FirstDay/player_room.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "02c84d5c61125bcdfc900aec4f8db614b17632d15df59d8c7e141b61a2ca1d78",
+        "bytes": 1776400
+      },
+      "morningSource": {
+        "path": "ArtSource/Morning-20261113/Generated/PlayerHome.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "5678dce8871c681b9267af7b480ebd63ddf802ecf06ccc70db967addef472c79",
+        "bytes": 1766631
+      },
+      "runtimeArtwork": {
+        "path": "Assets/Seabreeze/Resources/Art/IslandMorning/PlayerHome.png",
+        "width": 1672,
+        "height": 941,
+        "format": "PNG",
+        "colorType": 2,
+        "sha256": "5678dce8871c681b9267af7b480ebd63ddf802ecf06ccc70db967addef472c79",
+        "bytes": 1766631
+      },
+      "runtimeBytesUnchangedFromMorningSource": true,
+      "edgeAudit": {
+        "method": "CoreGraphics RGB decode; sampled complete outermost top, bottom, left and right edges; near-black means all channels <= 8/255",
+        "nearBlackPixelFractionByEdge": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "observedBlackBorder": false
+      },
+      "display": {
+        "mode": "fit-original-local-rectangle",
+        "pngCropped": false
+      },
+      "generation": {
+        "tool": "image_gen.imagegen",
+        "geometryReference": "Assets/Seabreeze/Resources/FirstDay/player_room.png",
+        "styleReference": "ArtSource/Morning-20261113/Supplied/室内7-Z家卧室 1.png.png",
+        "generatedArtifactFilename": "exec-5ce4f473-39fa-49fa-b754-8267780c3ce6.png",
+        "prompt": "Edit image 1 into an EARLY MORNING time-of-day variant for the SAME Unity 2D side scrolling location. Image 1 is the strict geometry/composition reference; image 2 is only the approved morning palette, light and hand-painted anime background style. Player bedroom: convert NIGHT to MORNING. Preserve bed left, broad centered window, desk and suitcase right, closed right exit door, exact furniture and front floor baseline. Remove moon/stars outside, pale powder blue morning sky and turquoise soft sea, warm cream dawn light through window, light golden sunlight on blue bedding and floor; NOT vivid sunset orange. Don't introduce a sun disc unless absent by keeping it off frame. CRITICAL: absolutely preserve image 1 camera, framing, aspect ratio, all structural geometry, all doorway positions and the walkable ground baseline. Relight only, do not redesign the scene. Clear detailed hand-painted animation-film environment with gentle pastel/cream golden morning, soft cool shadows. Output one high-quality full-bleed PNG with same aspect ratio as image 1, opaque background, no black bars or border, no text, UI, people, animals, watermarks or extra objects.",
+        "postProcessing": "None; exact generated PNG bytes copied into runtime asset."
+      }
+    }
+  ],
+  "unboundSources": [
+    {
+      "path": "ArtSource/Morning-20261113/Supplied/室内9-Z父母家 1.png.png",
+      "width": 1672,
+      "height": 941,
+      "format": "PNG",
+      "colorType": 2,
+      "sha256": "9ce8518e979867096958ada34eb0399982f3a209e63e31aa1a3d24ba4d13122a",
+      "bytes": 1444844,
+      "reason": "No matching enabled PlaceId or existing room composition. This cream-sofa, photo-cabinet and dining-table room differs from ZhouHome in both daytime and evening. Preserve as source art; do not replace a room only for one time period.",
+      "runtimeBound": false
+    }
+  ],
+  "sharedSourceEvidence": [
+    {
+      "places": [
+        "LiTingHome",
+        "ZHome"
+      ],
+      "daytimeSourceSha256": "0c1a0011dd93776ec9ffbdcbc378fdb76282606402bd9c18497085b5cb4070c3"
+    },
+    {
+      "places": [
+        "ZhouHome",
+        "ZBedroom"
+      ],
+      "daytimeSourceSha256": "ea121e71d7a11b9aedd7625adf84796440e0d11d440e1a998e24447eaa807049"
+    }
+  ],
+  "validation": {
+    "assetCoverage": "32 enabled scene IDs exactly match 32 morning PNGs",
+    "sourceIdentity": "All runtime PNG hashes equal corresponding supplied or generated source hashes; no PNG pixel edits, crop, resizing or resampling in this import.",
+    "outerEdgeAudit": "All 32 RGB images have 0 near-black outer-edge pixels at threshold RGB <= 8/255; no full-width/full-height black border detected. This is asset evidence, not a runtime camera coverage check.",
+    "runtime": "Unity 6000.3.27f1 compile: 0 errors/0 warnings. All 32 enabled maps checked in Play Mode through Afternoon/Morning/Evening/Night/Morning (160 samples); no missing or leaked variants or repeated-switch drift. Final ResidentialCenter foot calibration rechecked. See Docs/Verification/Morning-20261113/runtime-report.json for scope and initial Play restart caveat."
+  }
+}
