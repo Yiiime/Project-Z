@@ -676,6 +676,14 @@ export function createServer({
             );
           } else if (url.pathname === "/api/game/utterance") {
             result=gameResponse(world,await utterance(p));
+            // Prepare sound for the proposed harbor greeting without publishing a
+            // dialogue receipt. Playback still requires the normal committed-line check.
+            if (w.firstDay?.phase === 'Harbor' && p.actorId === 'z' && p.channel === 'private_player_chat') {
+              const proposal=store.record(result.proposalId);
+              if(proposal?.world===world && proposal.runId===p.runId && proposal.output?.dialogue)
+                void speech.synthesize({worldId:world,runId:p.runId,proposalId:proposal.id,
+                  actorId:p.actorId,conversationId:p.conversationId,text:proposal.output.dialogue,delivery:proposal.delivery}).catch(()=>{});
+            }
           } else if (url.pathname === "/api/game/commit") {
             const proposal = store.record(p.proposalId);
             if(proposal?.output.dialogue)throw new TurnError("有台词的提案须使用实际发言回执");

@@ -11,10 +11,11 @@ export function scenePrompt(scene) {
   if(!scene)return '';
   const common='\n当前游戏场景由宿主提供，优先于历史开场示例。人物台词全部由你结合人设自然表达，没有固定台词或节目单。arrival与first_evening不使用日常直播的7/8/10分钟节拍，忽略通用时长提示；按照现场进度自主推进。玩家名字是scene.playerName。只引用实际公开事实，不把计划或待执行工具说成已经完成。';
   if(scene.mode==='arrival')return common+'\n这是登岛前的一场普通晚间闲聊，岛民不在场，只有虚拟观众。先聊今天的小事、心情或直播间刚出现的弹幕，自然接话；开头不要提1000场、抽奖、名额、邀请或活动预告。'+
-    'scene.warmup是已实际播放与显示的进度；ready=false时保持闲聊，每轮speech约35–70字，每轮必须提供3–4条virtualAudience=[{name,text}]，让不同观众聊刚听见的内容，每条不超过36字。用户名不能是岛民，不能提前知道还没公布的活动。'+
+    'scene.warmup是已实际播放与显示的进度；ready=false时只完成一轮弹幕交流，不拖长暖场，第一轮speech约90–140字，主动多聊一些具体内容；第二轮回应刚出现的弹幕，每轮必须提供3–4条virtualAudience=[{name,text}]，让不同观众聊刚听见的内容，每条不超过36字。用户名不能是岛民，不能提前知道还没公布的活动。'+
     '当scene.warmup.ready=true且scene.phase=opening时，才像突然想起来一样自然提起：原来今天已经是第1000场直播，想送一位朋友来月亮岛一起生活旅游7天。说完惊喜缘由后自主调用draw_guest打开礼盒，由玩家亲手点击拆开；不要反复预告，也不要追加举手、扣字等门槛。'+
     'scene.tools仅含当前可用工具。draw_guest args={}只展示待点击礼盒，不代表已经开奖；收到实际结果后才调用offer_arrival args={title,description}，标题简短，描述包含玩家名字且不超过100字。玩家确认后才用depart_island args={}告别。没有工具可用时继续自然闲聊，不虚构开奖或接受事实。'+
-    '调用工具时必须action=tool并携带tool={name,args}，其余必填字段照常提供；action=speak或wait时不得携带tool。speech是执行前本轮自然台词。arrival不使用收播决定，省略sessionDecision。';
+    '开场只使用scene.tools中的剧情工具，不唱歌、不点歌、不开始其他活动；唱歌留到登岛后的首夜直播。调用工具时必须action=tool并携带tool={name,args}，其余必填字段照常提供；action=speak或wait时不得携带tool。speech是执行前本轮自然台词。arrival不使用收播决定，省略sessionDecision。'+(scene.tools?.includes('draw_guest')?'\n当前暖场已完成，本轮必须action=tool，tool={name:"draw_guest",args:{}}。speech由你自然表达刚想起第1000场、邀请一位朋友来岛上住七天的惊喜缘由；不再另开闲聊话题。':'');
+  if(scene.mode==='first_evening')return common+'\n首夜总时长目标150秒，包含歌曲与告别。先主动聊当日经历，同时与岛民和虚拟观众互动；每轮必须提供2–4条virtualAudience=[{name,text}]，非岛民网名、每条不超过36字。scene.elapsedMs从观众真正看到的首段发言起计。约80秒主动说想唱《晚安》祝大家晚安，然后调用start_singing，songId=wanan-yanrenzhong-vivi2-chorus。歌曲实际完成后再简短告别，约150秒结束；不要提前收播，不反复唱歌。只有真实播放完成才能说唱完。首夜六位岛民可以回应，梨园不参加。';
   return common+'\n首夜或日常直播由你自然展开。先接住新朋友和当日可公开经历，不照着清单汇报；想唱歌时自行选合适歌曲并调用已有唱歌工具，歌曲没有固定安排。首夜六位岛民可以回应，梨园不参加。';
 }
 export class LiveScene {
@@ -24,13 +25,20 @@ export class LiveScene {
     this.warmup={speeches:0,messages:0,startedAt:session.engine._clock||0,...saved?.warmup};
     this.completedSpeeches=new Set(saved?.completedSpeeches||[]);
   }
-  warmupStatus(){const elapsed=Math.max(0,(this.session.engine._clock||0)-this.warmup.startedAt);return {...this.warmup,elapsedMs:elapsed,ready:this.warmup.speeches>=3&&this.warmup.messages>=4&&elapsed>=45000};}
-  hostCompleted(id){if(this.context?.mode!=='arrival'||this.phase!=='opening'||!id||this.completedSpeeches.has(String(id)))return;this.completedSpeeches.add(String(id));this.warmup.speeches++;}
-  audienceDisplayed(){if(this.context?.mode==='arrival'&&this.phase==='opening')this.warmup.messages++;}
+  warmupStatus(){const elapsed=Math.max(0,(this.session.engine._clock||0)-this.warmup.startedAt);return {...this.warmup,elapsedMs:elapsed,ready:this.warmup.speeches>=2&&this.warmup.messages>=2};}
+  hostCompleted(id){if(this.context?.mode!=='arrival'||this.phase!=='opening'||!id||this.completedSpeeches.has(String(id)))return;const wasReady=this.warmupStatus().ready;this.completedSpeeches.add(String(id));this.warmup.speeches++;this.warmupChanged(wasReady);}
+  audienceDisplayed(){if(this.context?.mode==='arrival'&&this.phase==='opening'){const wasReady=this.warmupStatus().ready;this.warmup.messages++;this.warmupChanged(wasReady);}}
+  warmupChanged(wasReady){
+    if(wasReady||!this.warmupStatus().ready)return;
+    // The next turn must see the newly available lottery, not a prefetched warmup.
+    const e=this.session.engine;e.epoch=(e.epoch||0)+1;e.pending?.abort();e.pending=null;
+    e._cancelPreparation?.('arrival_warmup_complete');e._cancelTopic?.('arrival_warmup_complete');
+    this.session.speech?.dropWarmSpeech();e.speechPlan=null;e.nextWake=e._clock;
+  }
   allowed() { if(this.context?.mode!=='arrival'||this.pending)return [];
     return this.phase==='opening'?(this.warmupStatus().ready?['draw_guest']:[]):this.phase==='drawn'?['offer_arrival']:this.phase==='accepted'?['depart_island']:[];
   }
-  binding() {return this.context?{...this.context,phase:this.phase,tools:this.allowed(),invitation:this.invitation,warmup:this.warmupStatus()}:null;}
+  binding() {return this.context?{...this.context,elapsedMs:this.session.sessionControl?.eveningElapsed?.()||0,phase:this.phase,tools:this.allowed(),invitation:this.invitation,warmup:this.warmupStatus()}:null;}
   snapshot(){return {context:this.context,phase:this.phase,invitation:this.invitation,warmup:this.warmup,completedSpeeches:[...this.completedSpeeches]};}
   execute(tool) {
     if(!this.allowed().includes(tool.name))return false;
@@ -45,7 +53,7 @@ export class LiveScene {
   }
   accept() {
     if(this.phase==='accepted')return true;
-    if(this.phase!=='offered')return false;
+    if(this.pending || !['drawn','offered'].includes(this.phase))return false;
     this.phase='accepted';this.session.engine._public('story.fact','玩家已明确确认接受七天登岛邀请。',{speakerRole:'system'});
     this.session.engine.nextWake=this.session.engine._clock;return true;
   }

@@ -25,6 +25,7 @@ export class SessionControl {
     this.inputQueue=[];this.requests=new Set();this.disposed=false;
   }
   get onboarding(){return ['arrival','first_evening'].includes(this.s.scene?.context?.mode);}
+  eveningElapsed(){return Math.max(0,(this.s.engine._clock||0)-(this.data.eveningStartClock??this.s.engine._clock??0));}
   get normal(){return ['opening','live'].includes(this.data.phase);}
   timing(){
     const d=this.data,at=d.endedAt??this.now(),elapsed=Math.max(0,at-d.startedAt);
@@ -75,8 +76,9 @@ export class SessionControl {
     const player=context.host.inbox.find(m=>m.mine&&m.id===d.sourceMessageId);
     if(d.intent==='stop'){if(player)this.stop();return true;}
     if(d.intent==='close'){
+      if(this.s.scene?.context?.mode==='first_evening' && (this.eveningElapsed()<135000 || !this.data.eveningSongComplete))return true;
       const e=this.s.engine;
-      if(this.data.phase!=='live'||e._state.media||e.inbox.some(m=>m.mine&&!result.handledIds.includes(m.id)))return true;
+      if(this.data.phase!=='live'||(this.s.scene?.context?.mode==='first_evening'?e._mediaPlaying():e._state.media)||e.inbox.some(m=>m.mine&&!result.handledIds.includes(m.id)))return true;
       // New inputs invalidate the engine epoch before this commit hook.
       this.begin('host',result.speech,result);this.pendingHandled=[...result.handledIds];return true;
     }
@@ -149,6 +151,10 @@ export class SessionControl {
     else if(this.data.phase==='closing'&&this.announcementId){this.announcementId=null;this.data.readyAt=this.now()+this.limits.invitationMs;}
   }
   receipt(c,p){
+    if(this.s.scene?.context?.mode==='first_evening'){
+      if(c.type==='host.present' && p.status==='started')this.data.eveningStartClock??=this.s.engine._clock||0;
+      if(c.type==='media.play' && p.status==='completed' && this.s.talent.current?.title?.includes('晚安'))this.data.eveningSongComplete=true;
+    }
     if(c.commandId===this.barrier&&p.status==='completed'){
       this.barrierReady=true;
       if(this.announcement){const text=this.announcement;this.announcement='';this.say(text,'announcement',this.announcementMetadata);}
@@ -172,6 +178,8 @@ export class SessionControl {
   tick(){
     const d=this.data;if(this.disposed||d.phase==='ended')return;
     if(!this.onboarding&&this.now()>=d.hardAt){this.end('session_hard_limit');return;}
+    if(this.s.scene?.context?.mode==='first_evening' && this.normal && this.eveningElapsed()>=140000 && d.eveningSongComplete && !this.s.engine._active && !this.s.engine._mediaPlaying()){this.begin('host');return;}
+    if(this.s.scene?.context?.mode==='first_evening' && this.normal && this.eveningElapsed()>=180000 && !['starting','playing'].includes(this.s.talent.current?.phase)){this.begin('host');return;}
     if(d.deadlineAt&&this.now()>=d.deadlineAt){this.end('closing_timeout');return;}
     if(d.extensionActive&&this.now()>=d.extensionDeadline){this.begin('host');return;}
     if(!this.onboarding&&this.normal&&!d.extensionActive&&this.now()>=d.targetAt){this.begin('host',this.s.scene?.context?'':'今晚的时间差不多了，我们把话题轻轻收住，准备和大家道个晚安。');return;}

@@ -9,6 +9,7 @@ using UnityEngine.Networking;
 namespace ZLive {
 public sealed partial class LiveAudioPlayer:MonoBehaviour {
     public AudioSource Source{get;private set;}public CharacterPresenter Character;public bool Paused{get;private set;}
+    public bool PresentationHeld;
     public Action<string> Caption;public Func<Task> Frame;public Func<JObject,JObject,Task> Receipt;public LiveTransport Transport;
     readonly Dictionary<string,AudioClip> cache=new Dictionary<string,AudioClip>();readonly Dictionary<string,JArray> manifests=new Dictionary<string,JArray>();
     readonly HashSet<string> titleManifests=new HashSet<string>();
@@ -42,7 +43,7 @@ public sealed partial class LiveAudioPlayer:MonoBehaviour {
             await Receipt(command,new JObject{{"status","progress"},{"positionMs",Mathf.RoundToInt(offset)},{"lineIndex",i}});await PlayClip(command,clip,(string)meta["text"],meta["words"] as JArray,offset,i,cancel,titleManifests.Contains((string)p["artifactId"]));offset+=clipDurationMs;float pause=(int?)meta["pauseAfterMs"]??0,waited=0;while(waited<pause){await Frame();cancel.ThrowIfCancellationRequested();if(!Paused)waited+=Time.unscaledDeltaTime*1000;}offset+=pause;
         }await Receipt(command,new JObject{{"status","completed"},{"positionMs",Mathf.RoundToInt(total)}});
     }finally{Caption?.Invoke("");playingSpeechId=null;Source.Stop();RestoreFade();Character?.EndCue();voiceGate.Release();}}
-    async Task WaitReady(CancellationToken cancel){while(Paused){cancel.ThrowIfCancellationRequested();await Frame();}cancel.ThrowIfCancellationRequested();}
+    async Task WaitReady(CancellationToken cancel){while(Paused || PresentationHeld){cancel.ThrowIfCancellationRequested();await Frame();}cancel.ThrowIfCancellationRequested();}
     async Task PlayClip(JObject command,AudioClip clip,string text,JArray words,float offset,int line,CancellationToken cancel,bool titleOnly=false) {
         float last=-1000,seconds=0,stalled=0,activeTime=0;
         int generation=outputGeneration,stoppedAt=stopGeneration,recoveries=0,previousSample=Source.timeSamples;

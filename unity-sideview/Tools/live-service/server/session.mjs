@@ -15,7 +15,7 @@ const copy=v=>structuredClone(v);
 class NativeConversationEngine extends CallConversationEngine {
  _onHostSpeechCommitted(id,result){
    super._onHostSpeechCommitted(id,result);
-   if(this.liveScene?.context?.mode==='arrival'&&result.virtualAudience?.length){
+   if(['arrival','first_evening'].includes(this.liveScene?.context?.mode)&&result.virtualAudience?.length){
      this.virtualReplies??=new Map();this.virtualReplies.set(String(id),result.virtualAudience);
    }
  }
@@ -25,7 +25,7 @@ class NativeConversationEngine extends CallConversationEngine {
    if(type==='speech.completed'||type==='speech.interrupted'){
      const key=String(metadata.speechId),lines=this.virtualReplies?.get(key)||[];
      this.virtualReplies?.delete(key);
-     if(type==='speech.completed'){this.liveScene?.hostCompleted(key);for(const [index,line] of lines.entries())this.liveScene.session.command('virtual_audience.present',{name:line.name,text:line.text,messageId:uid(),delayMs:index*1600});}
+     if(type==='speech.completed'){this.liveScene?.hostCompleted(key);for(const [index,line] of lines.entries())this.liveScene.session.command('virtual_audience.present',{name:line.name,text:line.text,messageId:uid(),delayMs:index*600});}
    }
    return result;
  }

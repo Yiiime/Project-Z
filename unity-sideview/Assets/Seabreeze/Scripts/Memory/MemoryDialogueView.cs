@@ -34,7 +34,8 @@ namespace Seabreeze
         const float LiyuanBawlPreparationSeconds=2f;
         float charactersPerSecond;
         bool followingSpeech,speechStarted;string portraitSpeechToken;
-        public bool ReadyForSpeech => PlayerInputReady&&!linePreparationActive;
+        public bool CinemaHidden;
+        public bool ReadyForSpeech => !CinemaHidden && PlayerInputReady&&!linePreparationActive;
         public void FollowSpeech()
         {
             followingSpeech=true;speechStarted=false;
@@ -52,7 +53,7 @@ namespace Seabreeze
             portraitSpeechToken=null;followingSpeech=false;
         }
         public bool Closing {get;private set;}
-        public bool PlayerInputReady => !entering&&!Closing&&playerPanel!=null&&playerPanel.gameObject.activeSelf;
+        public bool PlayerInputReady => !CinemaHidden && !entering&&!Closing&&playerPanel!=null&&playerPanel.gameObject.activeSelf;
         internal TMP_InputField DialogueInput => input;
         internal Button DialogueSend => send;
         internal TextMeshProUGUI DialogueHistory => historyText;
@@ -312,7 +313,7 @@ namespace Seabreeze
             speechTitle.text=SevenCharacterCatalog.Name(speaker);speechText.text=text;speechTitle.color=SevenCharacterCatalog.Find(speaker)?.Accent??Paper;
             speechUntil=Time.unscaledTime+Mathf.Clamp(1.3f+text.Length*.05f,2.5f,6);speechPanel.gameObject.SetActive(true);
         }
-        public bool LineFullyVisible => !typing && !linePreparationActive;
+        public bool LineFullyVisible => !CinemaHidden && !typing && !linePreparationActive;
         public void ResetView()
         {
             StopAllCoroutines();

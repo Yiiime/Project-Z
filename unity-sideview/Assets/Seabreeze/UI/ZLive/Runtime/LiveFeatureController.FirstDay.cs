@@ -39,7 +39,7 @@ namespace ZLive
                 ["tool"] = "offer_arrival", ["title"] = scene["invitation"]?["title"], ["description"] = scene["invitation"]?["description"] });
             if (SceneMode == "arrival" && (phase == "accepted" || phase == "departed") && GameSession.Instance?.State?.firstDay != null)
             { GameSession.Instance.State.firstDay.invitationAccepted = true; GameSession.Instance.Save(); }
-            if (SceneMode == "arrival" && phase == "departed") SceneCommand?.Invoke(new JObject { ["tool"] = "depart_island" });
+            if (SceneMode == "arrival" && (phase == "accepted" || phase == "departed")) SceneCommand?.Invoke(new JObject { ["tool"] = "depart_island" });
         }
         async Task PresentScene(JObject command, CancellationToken cancel)
         {
@@ -63,6 +63,7 @@ namespace ZLive
                     invitationCollectedInGift=true;
                     await VisibleFrame(view.Root,cancel);
                     await Report(command,new JObject { ["status"]="displayed",["playerActivated"]=true,["playerName"]=(string)payload["playerName"] });
+                    AcceptArrival();
                 }
             }
             else

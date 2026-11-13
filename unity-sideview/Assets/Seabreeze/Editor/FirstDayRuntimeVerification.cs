@@ -50,8 +50,13 @@ namespace Seabreeze.Editor
                 session.State.firstDay = FirstDayState.NewJourney(); session.State.firstDay.phase = FirstDayPhase.MeetIslanders;
                 session.State.place = nameof(PlaceId.Square);
                 Require(!firstDay.CanTravel(PlaceId.Street), "Incomplete introductions keep the square boundary");
-                session.State.firstDay.greeted.AddRange(FirstDayDirector.FirstDayCast);
-                Require(firstDay.CanTravel(PlaceId.Street), "Seven introductions release the boundary");
+                session.State.firstDay.greeted.Add("z");
+                session.State.firstDay.greeted.Add("z"); session.State.firstDay.Sanitize();
+                Require(!firstDay.CanTravel(PlaceId.Street), "Duplicate greeting cannot advance progress");
+                session.State.firstDay.greeted.Add("linxu");
+                Require(!firstDay.CanTravel(PlaceId.Street), "Two different greetings are insufficient");
+                session.State.firstDay.greeted.Add("liting");
+                Require(firstDay.CanTravel(PlaceId.Street), "Three different introductions release the boundary");
                 Require(PlayerIdentity.Normalize(" <小海>\n") == "小海", "Player name does not inject rich text");
                 File.WriteAllText(Path.Combine(directory, "result.json"), "{\"passed\":true,\"checks\":" + checks + "}");
                 Debug.Log("FIRST_DAY_RUNTIME_VERIFICATION_PASSED checks=" + checks + " evidence=" + directory);

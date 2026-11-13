@@ -58,10 +58,10 @@ test('stale task generation cannot register into a reopened conversation',async 
   const pending=agent.prepareTask('one','z','old');agent.update('one',context('WelcomeTask',{currentActor:'z',conversation:'new'}));
   resolve({text:JSON.stringify(generated())});await assert.rejects(pending,/现场已改变/);assert.equal(engine.tasks.dynamicDefinitions('one').length,0);
 });
-test('onboarding gates require seven distinct present actors and never require Liyuan',()=>{
+test('onboarding gates require three distinct present actors and never require Liyuan',()=>{
   assert.throws(()=>storyContext(context('MeetIslanders',{greeted:['liyuan']})));
   assert(!allowedStoryTools(storyContext(context('MeetIslanders',{announced:true,greeted:Array(7).fill('z')}))).includes('show_fireworks'));
-  assert(allowedStoryTools(storyContext(context('MeetIslanders',{announced:true,greeted:FIRST_DAY_CAST}))).includes('show_fireworks'));
+  assert(allowedStoryTools(storyContext(context('MeetIslanders',{announced:true,greeted:FIRST_DAY_CAST.slice(0,3)}))).includes('show_fireworks'));
   assert(!allowedStoryTools(storyContext(context('Harbor'))).includes('offer_walk'));
   assert(allowedStoryTools(storyContext(context('Harbor',{harborReady:true}))).includes('offer_walk'));
 });
@@ -136,4 +136,9 @@ test('first day director owns travel, daily conversations retain native escort c
  assert(!engine.available(w,'z',j).some(a=>['escort_player','move'].includes(a.type)));
  w.firstDay=context('Complete');engine.save(w);
  assert(engine.available(w,'z',j).some(a=>a.type==='escort_player'));
+});
+
+test('prepare introduction while walking without publishing it',()=>{
+ assert(allowedStoryTools(storyContext(context('WalkToSquare'))).includes('announce_player'));
+ assert(!allowedStoryTools(storyContext(context('MeetIslanders',{announced:true,greeted:['z','linxu']}))).includes('show_fireworks'));
 });

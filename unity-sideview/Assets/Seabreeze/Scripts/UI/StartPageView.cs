@@ -301,6 +301,7 @@ namespace Seabreeze
                 var name = PlayerIdentity.Normalize(field.text);
                 if (string.IsNullOrWhiteSpace(name)) { hint.text = "请先写下你的名字。"; field.ActivateInputField(); return; }
                 PlayerIdentity.PendingName = name;
+                GameSession.Instance?.FirstDay?.BeginTitleFilm();
                 ShowLoading(); enter?.Invoke(true);
             }
             var confirm = UIPrimitives.Button("Confirm player name", card, Vector2.zero, Vector2.zero, new Vector2(248,30), new Vector2(416,58), "带着这个名字出发", AcceptName, true);

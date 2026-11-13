@@ -32,7 +32,7 @@ namespace Seabreeze
         public int CommittedNpcLines {get; private set;}
         public string LastIntentReason {get; private set;}="";
         public string[] LastRecalledMemoryIds {get; private set;}=Array.Empty<string>();
-        bool WorldReady => session!=null&&session.IsReady&&world?.Stage!=null&&!world.IsTransitioning&&!session.NonPlayerInputBlocked&&Time.timeScale>0;
+        bool WorldReady => session!=null&&session.IsReady&&world?.Stage!=null&&!world.IsTransitioning&&(!session.NonPlayerInputBlocked || session.FirstDay?.PreparingHarbor == true)&&Time.timeScale>0;
         bool Present(NpcPresence a)=>a!=null&&a.IsPresent&&a.isActiveAndEnabled&&a.Movement!=null&&a.Movement.IsReady&&a.gameObject.scene==world.Stage.gameObject.scene;
         bool Eligible(NpcPresence a)=>Present(a)&&!held.ContainsKey(a)&&!a.Movement.InteractionHeld&&!(memory.Actions?.HasPending(a.npcId)??false);
         static string Pair(string a,string b)=>string.CompareOrdinal(a,b)<0?a+"_"+b:b+"_"+a;
@@ -128,6 +128,7 @@ namespace Seabreeze
             bool done=false;MemoryReply line=null;string error=null;var request=memory.Client.RequestBase();request.actorId=c.first.npcId;request.recipientId="player";request.conversationId=c.id;request.scene=session.CurrentPlace.ToString();request.locationId=memory.Location(c.first);request.channel="private_player_chat";request.reachableLocations=SevenCharacterCatalog.Reachable(session.CurrentPlace,request.locationId);request.companionRoutes=SevenCharacterCatalog.CompanionRoutes(session.CurrentPlace,request.locationId);
             memory.Client.Generate("/api/game/utterance",request,r=>{line=r;done=true;},e=>{error=e;done=true;});
             while(!done&&!c.cancelled)yield return null;if(c.cancelled)yield break;
+            while (memory.View.CinemaHidden && Valid(c)) yield return null;
             if(error==null&&line!=null&&Valid(c))
             {
                 memory.ShowResult(line);

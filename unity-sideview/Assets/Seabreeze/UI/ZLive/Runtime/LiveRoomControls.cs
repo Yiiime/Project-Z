@@ -34,6 +34,7 @@ public sealed partial class LiveFeatureController {
         document.rootVisualElement.Q<Button>("return-game").SetEnabled(true);
     }
     public bool HandleBack(){
+        if(Preloading)return false;
         if(dialogLayer==null)return true;
         if(dialogLayer.style.display!=DisplayStyle.None)CloseDialog();
         else ShowExitDialog();

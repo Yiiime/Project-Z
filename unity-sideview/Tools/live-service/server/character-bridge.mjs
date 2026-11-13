@@ -38,7 +38,10 @@ export class CharacterBridge {
   }
   async flush() {
     if (this.sending) return this.sending;
-    this.sending = (async () => { while (this.pending.length) { await this.post("observe", this.pending[0]); this.pending.shift(); this.onChanged(); } })();
+    this.sending = (async () => { while (this.pending.length) { const entry=this.pending[0],virtual=entry.event.actorId?.startsWith("virtual_");
+      // A displayed virtual comment is public observation, not a roster member or verified world fact.
+      const delivery=virtual?{event:{...entry.event,actorId:"engine",text:"直播间虚拟观众弹幕："+entry.event.text,verified:false}}:entry;
+      await this.post("observe", delivery); this.pending.shift(); this.onChanged(); } })();
     try { await this.sending; } finally { this.sending = null; }
   }
   async prepare(value) {
@@ -50,7 +53,7 @@ export class CharacterBridge {
   wrap(envelope, prepared, kind) {
     const host = kind === "host";
     envelope.system += "\n【统一人物接口，替代上文最终JSON包装】你就是下面人物资料中的当前角色；不要扮演其他人。只输出dialogue/action/info三键。dialogue是纯台词。" +
-      (host ? "action保存上文主持协议中除speech和memory外的字段（action、mood、gesture、transition、handledIds、wakeAfterMs、continuation、agendaUpdates、tool等）；speech放到dialogue，省略memory。" : "action为{type:send_danmaku或wait,intent:reaction/atmosphere/advance,evidence_ids:[本次公开依据ID]}。发言时 action 同时带 actorId、delivery、expression，遵循上文逐角色表达协议。不发弹幕时dialogue为空、type为wait；你仍在房间里感知消息，不能退出或替其他人发言。") +
+      (host ? "action保存上文主持协议中除speech和memory外的字段（action、actorId、delivery、expression、mood、gesture、transition、handledIds、wakeAfterMs、continuation、agendaUpdates、tool、virtualAudience等）；speech放到dialogue，省略memory。发言时 action.actorId 必须为 z，action.delivery 和 action.expression 都是必填字段，expression 只能取本轮 Schema 给出的枚举值，不得省略。" : "action为{type:send_danmaku或wait,intent:reaction/atmosphere/advance,evidence_ids:[本次公开依据ID]}。发言时 action 同时带 actorId、delivery、expression，遵循上文逐角色表达协议。不发弹幕时dialogue为空、type为wait；你仍在房间里感知消息，不能退出或替其他人发言。") +
       "info遵守下方契约，只给本人状态变化；不重复数值快照，不创建世界事实、任务完成或记忆。所有岛民必须在线，但可以选择暂不说话。输出前考虑实际公开听众，不把私聊秘密直接讲给全场。人物与当前时间地点以character_context为准，旧开场设定不覆盖本局经历。\n人物Info契约：" + JSON.stringify(prepared.infoSchema) +
       "\n可选字段无变化时完全省略，不填false、null占位。不知道今天做过什么时，说平时做什么或现在想做什么；没有执行记录不能把职业日常编成今天已经完成的经历。台词里的称呼不会改变引擎日期和天气。action.evidence_ids只可使用这些公开消息ID："+JSON.stringify(prepared.publicEventIds)+"；不能用character_context中的记忆ID代替。Info的changes来源则必须用character_context.interaction.source_event_id。";
     envelope.system = prepared.prompt + "\n\n" + envelope.system;

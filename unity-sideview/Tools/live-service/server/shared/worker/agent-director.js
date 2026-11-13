@@ -311,7 +311,7 @@ export function parseAgentReply(raw,value,{release=false,requireUtterance=false}
     return {decision:audience&&reply.echo_of!==null?'drop':reply.decision,reason:str(reply.reason,600),evidenceIds,candidateId:c.candidate.id,revision:c.revision,promptVersion:AGENT_BUNDLE.review.version};
   }
   if(value.kind==='host'){
-    keys(reply,['actorId','delivery','expression','action','speech','mood','gesture','transition','handledIds','wakeAfterMs','continuation','memory','agendaUpdates','tool','sessionDecision','audienceMessageIds',...(c.scene?.mode==='arrival'?['virtualAudience']:[]),...(c.broadcast?['z_state_update']:[])]);
+    keys(reply,['actorId','delivery','expression','action','speech','mood','gesture','transition','handledIds','wakeAfterMs','continuation','memory','agendaUpdates','tool','sessionDecision','audienceMessageIds',...(['arrival','first_evening'].includes(c.scene?.mode)?['virtualAudience']:[]),...(c.broadcast?['z_state_update']:[])]);
     if(!['speak','wait','tool'].includes(reply.action))throw Error('invalid_host_action');
     if(!MOODS.includes(reply.mood))throw Error('invalid_host_mood');
     if(!Number.isInteger(reply.wakeAfterMs)||reply.wakeAfterMs<2000||reply.wakeAfterMs>120000)throw Error('invalid_wake_after_ms');
@@ -377,7 +377,12 @@ export function parseAgentReply(raw,value,{release=false,requireUtterance=false}
       else throw Error('invalid_host_tool');
       tool={name:t.name,args:a};
     }else if(reply.tool!==undefined&&reply.tool!==null)throw bad();
-    const virtualAudience=c.scene?.mode==='arrival'?list(reply.virtualAudience,4,item=>{keys(item,['name','text']);const name=str(item.name,24),text=str(item.text,36);if(NPCS.some(n=>n.display_name===name)||name==='Z')throw bad();return {name,text};}):[];
+    if(c.scene?.mode==='arrival'){
+      if(tool&&!isSceneTool(tool.name))throw Error('invalid_arrival_tool');
+      if(c.scene.tools?.includes('draw_guest')&&tool?.name!=='draw_guest')throw Error('arrival_lottery_required');
+    }
+    const virtualAudience=['arrival','first_evening'].includes(c.scene?.mode)?list(reply.virtualAudience,4,item=>{keys(item,['name','text']);const name=str(item.name,24),text=str(item.text,36);if(NPCS.some(n=>n.display_name===name)||name==='Z')throw bad();return {name,text};}):[];
+    if(c.scene?.mode==='first_evening'&&reply.action!=='wait'&&virtualAudience.length<2)throw Error('invalid_evening_virtual_audience');
     const audienceMessageIds=list(reply.audienceMessageIds,1,x=>str(x,100));
     if(audienceMessageIds.some(id=>!c.call?.audienceCandidates?.some(m=>m.id===id&&[...c.publicEvents,...(c.host.session?.evidence||[])].some(e=>e.type==='npc.message'&&e.id===m.id&&e.text===m.text&&e.speakerId===m.npcId)))||audienceMessageIds.length&&reply.action!=='speak')throw bad();
     return {...(virtualAudience.length?{virtualAudience}:{}),...(reply.action!=='wait'?utteranceMetadata('z',reply,{allowLegacy:!requireUtterance}):{}),...(storyUpdate?{z_state_update:storyUpdate}:{}),...(sessionDecision?{sessionDecision}:{}),...(c.call?{audienceMessageIds}:{}),continuation,agendaUpdates,action:reply.action,speech:reply.action!=='wait'?outputText(reply.speech):'',mood:reply.mood,gesture,transition,handledIds,wakeAfterMs:reply.wakeAfterMs,memory:str(reply.memory,800,true),...(tool?{tool}:{})};

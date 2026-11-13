@@ -13,6 +13,8 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.UI;
 using ZLive;
+using UnityEngine.UIElements;
+using Button = UnityEngine.UI.Button;
 namespace Seabreeze.Editor
 {
     // Runs the real scene loop: no phase assignment, synthetic dialogue or completion receipts.
@@ -25,6 +27,7 @@ namespace Seabreeze.Editor
         static double deadline,nextAction,phaseAt,lastReport,nextResume;
         static InputSettings originalInput,testInput;
         static Keyboard keyboard;
+        static RenderTexture liveTarget;
         static Key[] heldKeys=Array.Empty<Key>();
         static readonly HashSet<string> voicedActors=new HashSet<string>();
         static int titleStage,chatTurns,chatRetries;
@@ -46,7 +49,7 @@ namespace Seabreeze.Editor
         static void Keys(params Key[] keys){heldKeys=keys;}
         static void BeforeInput(){if(keyboard!=null)InputSystem.QueueStateEvent(keyboard,new KeyboardState(heldKeys));}
         static void AfterInput(){if(keyboard!=null)keyboard.MakeCurrent();}
-        static void Capture(string name){if(!Application.isBatchMode)ScreenCapture.CaptureScreenshot(Path.Combine(output,name+".png"));}
+        static void Capture(string name){if(!Application.isBatchMode)ScreenCapture.CaptureScreenshot(Path.Combine(output,name+".png"));else if(liveTarget!=null){var previous=RenderTexture.active;var pixels=new Texture2D(liveTarget.width,liveTarget.height,TextureFormat.RGBA32,false);try{RenderTexture.active=liveTarget;pixels.ReadPixels(new Rect(0,0,liveTarget.width,liveTarget.height),0,0);pixels.Apply();File.WriteAllBytes(Path.Combine(output,name+".png"),pixels.EncodeToPNG());}finally{RenderTexture.active=previous;UnityEngine.Object.Destroy(pixels);}}}
         static void Write(bool? passed=null,string error=null){File.WriteAllText(Path.Combine(output,"journey-report.json"),new JObject{["passed"]=passed,["runtime"]=RuntimeState(),["phase"]=lastPhase,["events"]=events,["errors"]=errors,["songCompleted"]=songCompleted,["liveEvidence"]=liveEvidence,["voicedActors"]=new JArray(voicedActors),["error"]=error,["scope"]="Actual UI handlers, keyboard movement, real configured model and playback receipts. No injected story phase or task completion."}.ToString());}
         static JObject RuntimeState()
         {
@@ -98,10 +101,20 @@ namespace Seabreeze.Editor
                 if(invite!=null){Log("Clicked invitation: "+invite.GetComponentInChildren<TMP_Text>().text);invite.onClick.Invoke();nextAction=now+1;return;}
                 if(game.FirstDay.Phase==FirstDayPhase.Live||game.FirstDay.Phase==FirstDayPhase.EveningLive){
                     var room=UnityEngine.Object.FindFirstObjectByType<LiveFeatureController>();
-                    if(room!=null&&Application.isFocused&&now>=nextResume&&Field<bool>(room,"connected")&&Field<bool>(room,"locallyPaused")){
+                    if(room!=null&&Application.isBatchMode){var doc=room.GetComponent<UIDocument>();if(doc?.panelSettings!=null&&doc.panelSettings.targetTexture==null){if(liveTarget==null){liveTarget=new RenderTexture(1920,1080,24,RenderTextureFormat.ARGB32);liveTarget.Create();}doc.panelSettings.targetTexture=liveTarget;}}
+                    if(room!=null&&(Application.isFocused||Application.isBatchMode)&&now>=nextResume&&Field<bool>(room,"connected")&&Field<bool>(room,"locallyPaused")){
                         nextResume=now+3;typeof(LiveFeatureController).GetMethod("ResumeRoom",Private).Invoke(room,null);Log("Resumed actual playback after editor focus change");}
                 }
-                if(game.FirstDay.Phase==FirstDayPhase.Live)return;
+                if(game.FirstDay.Phase==FirstDayPhase.Live){
+                    var feature=UnityEngine.Object.FindFirstObjectByType<LiveFeatureController>();
+                    var doc=feature?.GetComponent<UIDocument>();
+                    var action=doc?.rootVisualElement.Q<UnityEngine.UIElements.Button>("arrival-gift-action");
+                    if(action!=null && action.resolvedStyle.display!=DisplayStyle.None && action.enabledInHierarchy){
+                        using(var click=NavigationSubmitEvent.GetPooled()){click.target=action;action.SendEvent(click);}
+                        Log("Activated visible gift action");nextAction=now+2;
+                    }
+                    return;
+                }
                 if(game.FirstDay.Phase==FirstDayPhase.EveningLive)
                 {
                     var feature=UnityEngine.Object.FindFirstObjectByType<LiveFeatureController>();if(feature==null||!Field<bool>(feature,"connected"))return;
@@ -117,10 +130,7 @@ namespace Seabreeze.Editor
                             {if(!songCompleted){Log("Verified complete rendered song playback: "+(string)receipt["title"]);Capture("song-completed");}songCompleted=true;}
                         }
                     }
-                    if(!songRequested&&(state["publicEvents"] as JArray??new JArray()).Any(e=>(string)e["type"]=="speech.completed"))
-                    {SendLive(feature,"今天认识大家很开心，想听你唱《晚安》。");songRequested=true;nextAction=now+5;return;}
-                    if(songRequested&&!closingRequested&&songCompleted)
-                    {SendLive(feature,"谢谢，今天就到这里，结束直播吧，晚安。");closingRequested=true;nextAction=now+4;return;}
+                    // Verify Z's proactive song and autonomous ending, without player prompting.
                     return;
                 }
                 if(memory.PlayerChatOpen){Chat(game,now);return;}

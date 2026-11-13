@@ -408,7 +408,7 @@
     },
     {
       "path": "unity-sideview/Tools/MemoryLab/server.mjs",
-      "sha256": "7fab1bee1e0c49cce6c89f1a48afad4247db54ddaba80a35ac61d937c98646ea"
+      "sha256": "9a936c50412c169bcc972a6498a041613525a8b8ffd902f30c57ecca6e5812ae"
     },
     {
       "path": "unity-sideview/Tools/MemoryLab/lib/engine.mjs",
@@ -436,11 +436,11 @@
     },
     {
       "path": "unity-sideview/Tools/live-service/server/character-bridge.mjs",
-      "sha256": "0b6d5cda19909998f7f8bea9b65fe5c35bdc11c80b8374fbd00ffda2ddab84b3"
+      "sha256": "30e429500129a1c9febac793155524411b751f2f1c44fc38af9c2e5392e6d1cd"
     },
     {
       "path": "unity-sideview/Tools/live-service/server/shared/worker/agent-director.js",
-      "sha256": "929612cf10a1e50535efdc6101dc8fd683bc78d78a4536099b8c694b2e9b2246"
+      "sha256": "4f206a0e596f009158c1f4e894ee2eca3eba509aa542511a5c0bd9ca8542d17b"
     },
     {
       "path": "unity-sideview/Tools/MemoryLab/content/current/actor-registry.json",
@@ -22245,7 +22245,7 @@
           "items": {
             "$ref": "#/$defs/ActorId"
           },
-          "minItems": 8,
+          "minItems": 7,
           "maxItems": 8,
           "uniqueItems": true
         },
@@ -22754,6 +22754,30 @@
               "type": "null"
             }
           ]
+        },
+        "virtualAudience": {
+          "type": "array",
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "text"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 24
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 36
+              }
+            }
+          }
         }
       },
       "required": [

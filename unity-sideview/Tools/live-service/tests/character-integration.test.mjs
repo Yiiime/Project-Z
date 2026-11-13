@@ -73,3 +73,14 @@ test('reference saves retain old snapshots, avoid transferring private history, 
  assert(app.engine.memory.history(app.engine.world('integrated'),'linxu').some(m=>JSON.stringify(m).includes('弹幕19')));
  await assert.rejects(bridge.post('observe',{event:{id:'stale',actorId:'linxu',text:'不应出现'}}));
 });
+
+test('displayed virtual audience does not block subsequent character preparation',async t=>{
+ const {app,bridge}=await setup(t);
+ bridge.record({id:'virtual_display',type:'npc.message',speakerRole:'audience',speakerId:'virtual_comment1',text:'晚安，明天见'});
+ await bridge.flush();assert.equal(bridge.pending.length,0);
+ const prepared=await bridge.prepare({kind:'host',context:{publicEvents:[]}});assert.equal(prepared.actorId,'z');
+ const events=app.engine.records(app.engine.world('integrated'),'event');
+ const event=events.find(e=>e.text==='直播间虚拟观众弹幕：晚安，明天见');
+ assert.equal(event.speaker,'engine');assert.equal(event.kind,'observation');
+ assert(!Object.hasOwn(app.engine.world('integrated').actors,'virtual_comment1'));
+});

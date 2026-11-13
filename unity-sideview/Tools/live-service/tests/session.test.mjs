@@ -238,7 +238,7 @@ test('arrival tools pass the real parser and executor only after presentation an
   receipt(s,host,'started',{durationMs:2000,positionMs:0});receipt(s,host,'completed',{positionMs:2000});
   for(const comment of [...s.commands.values()].filter(c=>c.type==='virtual_audience.present'&&c.status==='sent'))receipt(s,comment,'displayed');
  }
- assert.equal(s.scene.warmup.speeches,3);assert.equal(s.scene.warmup.messages,6);assert.throws(()=>parsed('draw_guest'));
+ assert.equal(s.scene.warmup.speeches,3);assert.equal(s.scene.warmup.messages,6);assert.doesNotThrow(()=>parsed('draw_guest'));
  s.engine._clock+=45000;
  const draw=parsed('draw_guest');assert(s.engine._executeTool(draw.tool));
  let c=latest(s,'story.present');assert.equal(c.expiresAt,null);assert.equal(s.scene.phase,'opening');s.maintenance();assert.equal(c.status,'sent');assert.throws(()=>receipt(s,c,'displayed'),/invalid_draw_evidence/);receipt(s,c,'displayed',{playerActivated:true,playerName:'小海'});assert.equal(s.scene.phase,'drawn');
@@ -311,4 +311,21 @@ test('topic assessment sends public inbox fields without internal delivery state
  s.engine._maybeAssessTopic();await frame();
  assert.equal(payload.kind,'topic');assert(!('pendingRecipientIds' in payload.context.inbox[0]));assert.equal(s.engine.topicProgress.status,'expanding');
  s.engine._active=null;s.engine.speechPlan=null;
+});
+
+test('first evening virtual audience publishes alongside resident lane, and close waits for song',async t=>{
+ const s=await fixture(t);const {LiveScene}=await import('../server/live-scene.mjs');
+ s.scene=new LiveScene(s,{mode:'first_evening',playerName:'小海',worldId:'a'.repeat(32),day:1});s.engine.liveScene=s.scene;
+ s.engine._onHostSpeechCommitted(1,{virtualAudience:[{name:'海风',text:'今天认识了新朋友呀'}]});
+ s.engine._public('speech.completed','真实播放完成',{speechId:'1'});
+ assert.equal(latest(s,'virtual_audience.present').payload.name,'海风');
+ s.sessionControl.data.eveningStartClock=0;s.engine._clock=140000;
+ s.sessionControl.tick();assert(s.sessionControl.normal,'do not cut off the song before its completion receipt');
+ s.speech.enabled=true;s.speech.volume=1;
+ assert(s.engine._executeTool({name:'start_singing',args:{songId:'wanan-yanrenzhong-vivi2-chorus'}}));await frame();
+ receipt(s,latest(s,'media.prepare'),'ready',{durationMs:32284});assert(s.talent.play());
+ const play=latest(s,'media.play');receipt(s,play,'started',{durationMs:32284,positionMs:0});
+ receipt(s,play,'progress',{positionMs:31000,lineIndex:0});receipt(s,play,'completed',{positionMs:32284});
+ assert(s.sessionControl.data.eveningSongComplete);assert.equal(s.engine._state.media.phase,'completed');s.engine._active=null;
+ s.sessionControl.tick();assert.equal(s.sessionControl.data.phase,'closing');
 });
