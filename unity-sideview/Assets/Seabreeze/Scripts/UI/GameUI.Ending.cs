@@ -180,7 +180,7 @@ namespace Seabreeze
                 bool changed=!string.IsNullOrEmpty(sourceRevision)&&(legacySnapshot||(!string.IsNullOrEmpty(endingSourceRevision)&&sourceRevision!=endingSourceRevision));
                 endingSourceRevision=sourceRevision;
                 if(string.IsNullOrEmpty(endingContextRevision))endingContextRevision=revision;
-                if(changed){endingDisplayGeneration++;endingContextRevision=revision;endingHistoryShown=false;endingUploadOpening=false;endingUpload.interactable=true;previousEnding=currentEnding;currentEnding=seventhNight=null;session.State.memory.seventhNightEndingRequestId="";endingGenerating=true;endingTitle.text="Z 正在回望新的经历";SetEndingWords("已收到新记忆。她会结合你们之后真实发生的经历，再作出自己的选择。",false);endingPrevious.interactable=endingOriginal.interactable=endingNext.interactable=false;}
+                if(changed){ExitBlackOutcome();endingDisplayGeneration++;endingContextRevision=revision;endingHistoryShown=false;endingUploadOpening=false;endingUpload.interactable=true;previousEnding=currentEnding;currentEnding=seventhNight=null;session.State.memory.seventhNightEndingRequestId="";endingGenerating=true;endingTitle.text="Z 正在回望新的经历";SetEndingWords("已收到新记忆。她会结合你们之后真实发生的经历，再作出自己的选择。",false);endingPrevious.interactable=endingOriginal.interactable=endingNext.interactable=false;}
                 if(reply.endingPrevious!=null)previousEnding=reply.endingPrevious.ToObject<EndingRun>();
                 if(reply.ending!=null&&!endingHistoryShown&&(seventhNight==null||seventhNight.id!=(string)reply.ending["id"])){
                     seventhNight=currentEnding=reply.ending.ToObject<EndingRun>();PrepareDailyPages();endingGenerating=false;ShowEndingPage(0);
@@ -634,8 +634,8 @@ namespace Seabreeze
             endingBody.ForceMeshUpdate();
             endingRevealStops=BuildRevealStops(endingBody.text,endingFullCharacterCount);endingRevealIndex=typewriter?0:endingRevealStops.Length;
             endingNextRevealAt=Time.unscaledTime+.08f;endingVisible=typewriter?0:endingFullCharacterCount;
-            endingRevealBaseColors=CaptureEndingBaseColors();
-            ApplyEndingReveal(typewriter?0:1);
+            endingRevealBaseColors=typewriter?CaptureEndingBaseColors():Array.Empty<Color32[]>();
+            if(typewriter)ApplyEndingReveal(0);
         }
         static int[] BuildRevealStops(string value,int characterCount)
         {
@@ -646,8 +646,11 @@ namespace Seabreeze
         }
         Color32[][] CaptureEndingBaseColors()
         {
-            var meshes=endingBody.textInfo.meshInfo;var colors=new Color32[meshes.Length][];
-            for(int i=0;i<meshes.Length;i++){colors[i]=new Color32[meshes[i].colors32.Length];Array.Copy(meshes[i].colors32,colors[i],colors[i].Length);}
+            var meshes=endingBody.textInfo.meshInfo;
+            if(meshes==null)return Array.Empty<Color32[]>();
+            var colors=new Color32[meshes.Length][];
+            for(int i=0;i<meshes.Length;i++)
+                colors[i]=meshes[i].colors32 is Color32[] vertices?(Color32[])vertices.Clone():Array.Empty<Color32>();
             return colors;
         }
         void ApplyEndingReveal(float currentProgress)
@@ -662,8 +665,9 @@ namespace Seabreeze
                 var character=info.characterInfo[i];if(!character.isVisible)continue;
                 float alpha=i<previousStop?1:i>=currentStop?0:progress;
                 int material=character.materialReferenceIndex,vertex=character.vertexIndex;
-                if(material<0||material>=info.meshInfo.Length||vertex<0||vertex+3>=info.meshInfo[material].colors32.Length)continue;
+                if(material<0||material>=info.meshInfo.Length||material>=endingRevealBaseColors.Length)continue;
                 var colors=info.meshInfo[material].colors32;var baseColors=endingRevealBaseColors[material];
+                if(colors==null||vertex<0||vertex+3>=colors.Length||vertex+3>=baseColors.Length)continue;
                 for(int v=0;v<4;v++){var color=baseColors[vertex+v];color.a=(byte)Mathf.RoundToInt(color.a*alpha);colors[vertex+v]=color;}
             }
             endingBody.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
