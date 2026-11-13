@@ -67,14 +67,14 @@ namespace Seabreeze.EndingDemo
             Require(ui.HasOverlay&&Mathf.Approximately(Time.timeScale,0),"Main gameplay did not pause under its ending overlay");
             Call(ui,"NextEndingPage");yield return null;
             ScreenCapture.CaptureScreenshot(Path.Combine(output,"02-z-native-ending.png"));yield return new WaitForEndOfFrame();yield return new WaitForSecondsRealtime(.5f);
-            for(int page=0;page<result.memoryCount+2;page++){
+            for(int page=0;page<result.memoryCount+3;page++){
                 if(Field<TextMeshProUGUI>(ui,"endingBody").maxVisibleCharacters!=int.MaxValue)Call(ui,"NextEndingPage");
                 Call(ui,"NextEndingPage");yield return null;
                 Require(!string.IsNullOrWhiteSpace(Field<TextMeshProUGUI>(ui,"endingBody").text),"An ending page is empty");
                 Require(Field<TextMeshProUGUI>(ui,"endingBody").rectTransform.rect.height>1,"An ending page has collapsed text layout");
                 if(page==0){Call(ui,"NextEndingPage");ScreenCapture.CaptureScreenshot(Path.Combine(output,"03-memory-in-game.png"));yield return new WaitForEndOfFrame();yield return new WaitForSecondsRealtime(.5f);TextDiagnostic(ui,"memory");}
             }
-            Require(Field<int>(ui,"endingPage")==result.memoryCount+2,"Full memory traversal did not reach the last page");
+            Require(Field<int>(ui,"endingPage")==result.memoryCount+3,"Full memory traversal did not reach the last page");
             Call(ui,"NextEndingPage");
             ScreenCapture.CaptureScreenshot(Path.Combine(output,"04-z-choice.png"));yield return new WaitForEndOfFrame();yield return new WaitForSecondsRealtime(.5f);
             TextDiagnostic(ui,"choice");

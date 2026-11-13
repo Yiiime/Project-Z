@@ -126,7 +126,7 @@ export class GameEndingCoordinator {
     const current = checkCurrent();
     if (current.epoch !== epoch) throw new TurnError('结局属于已取消的时间线');
     const result = { id: randomUUID(), mode, revision: revisionOf(scenario), createdAt: new Date().toISOString(),
-      scenarioTitle: scenario.title, playerName: scenario.playerName, decision, recollections, memoryCount: recollections.length,
+      scenarioTitle: scenario.title, playerName: scenario.playerName, lastMessage: scenario.lastMessage, decision, recollections, memoryCount: recollections.length,
       outcome: resolveOutcome(scenario, decision.choice), worldId: current.worldId, runId: current.runId,
       sourceDay: original.day, sourceSeq: original.seq, liveMemoryCount, sourceEventIds: eventIds,
       zState: structuredClone(original.actors.z.info), sourceName, contextRevision, sourceRevision };

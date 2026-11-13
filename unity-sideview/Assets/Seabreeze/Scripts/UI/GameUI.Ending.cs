@@ -52,33 +52,7 @@ namespace Seabreeze
         {
             endingDisplayGeneration++;endingPage=0;endingGenerating=false;endingOriginalShown=false;seventhNight=null;
             endingSourceChecking=endingUploadOpening=endingHistoryShown=false;endingContextRevision="";previousEnding=currentEnding=null;nextEndingSourceCheck=0;
-            var background=Stretch("Moon island ending coast",overlayRoot,Vector2.zero,Vector2.zero).gameObject.AddComponent<RawImage>();
-            background.texture=Resources.Load<Texture2D>("Art/lighthouse");background.color=new Color(.26f,.29f,.38f);background.raycastTarget=false;
-            var veil=Stretch("Seventh night veil",overlayRoot,Vector2.zero,Vector2.zero).gameObject.AddComponent<Image>();veil.color=new Color(.025f,.04f,.08f,.60f);veil.raycastTarget=true;
-            var portrait=EndingRegion("Z ending portrait",overlayRoot,new Vector2(.035f,.06f),new Vector2(.455f,.90f));
-            endingCharacter=portrait.gameObject.AddComponent<Live2DCharacterView>();endingCharacter.Initialize(portrait);
-            var definition=SevenCharacterCatalog.Find("z");
-            var profile=Resources.Load<Live2DModelProfile>(definition?.portrait??"Memory/Portraits/ZFinal-v03");
-            if(profile!=null)endingCharacter.Show(profile);
-            endingColumn=EndingRegion("Seventh night story",overlayRoot,new Vector2(.48f,.09f),new Vector2(.955f,.90f));
-            endingEyebrow=Label("Seventh night chapter",endingColumn,TL,TL,Vector2.zero,new Vector2(840,35),"第七天 · 夜晚 · 月亮岛码头",18,Accent);
-            endingTitle=Label("Z ending title",endingColumn,TL,TL,new Vector2(0,-68),new Vector2(845,110),"这些日子，仍然在这里",43,Paper);endingTitle.richText=false;
-            endingSource=Label("Game memory source",endingColumn,TL,TL,new Vector2(0,-174),new Vector2(850,45),"正在同步本局中 Z 已知的经历",17,Muted);endingSource.richText=false;
-            var viewport=Stretch("Ending scroll",endingColumn,new Vector2(0,180),new Vector2(0,-238));viewport.gameObject.AddComponent<RectMask2D>();
-            var hit=viewport.gameObject.AddComponent<Image>();hit.color=Color.clear;hit.raycastTarget=true;
-            var scroll=viewport.gameObject.AddComponent<ScrollRect>();endingScroll=scroll;scroll.horizontal=false;scroll.scrollSensitivity=38;scroll.movementType=ScrollRect.MovementType.Clamped;scroll.viewport=viewport;
-            var textRect=Rect("Ending words",viewport,TL,TL,Vector2.zero,new Vector2(820,300));textRect.anchorMax=Vector2.one;textRect.sizeDelta=new Vector2(-16,300);
-            endingBody=textRect.gameObject.AddComponent<TextMeshProUGUI>();endingBody.font=UIPrimitives.Font;endingBody.fontSize=27;endingBody.color=Paper;endingBody.richText=false;endingBody.lineSpacing=10;
-            endingBody.textWrappingMode=TextWrappingModes.Normal;
-            scroll.content=textRect;
-            endingProgress=Label("Ending page progress",endingColumn,BL,BL,new Vector2(0,105),new Vector2(830,35),"",18,Muted);
-            endingPrevious=Button("Previous ending memory",endingColumn,BL,BL,new Vector2(0,35),new Vector2(185,55),"← 上一段",()=>ShowEndingPage(endingPage-1),false,20);
-            endingOriginal=Button("Ending memory source",endingColumn,BL,BL,new Vector2(210,35),new Vector2(275,55),"看这一段原文",ToggleEndingOriginal,false,20);
-            endingNext=Button("Continue ending",endingColumn,BL,BL,new Vector2(520,35),new Vector2(290,55),"继续 →",NextEndingPage,true,21);
-            Button("Return to island",overlayRoot,new Vector2(1,1),new Vector2(1,1),new Vector2(-45,-30),new Vector2(250,48),"返回小岛 · Esc",CloseOverlay,false,18);
-            Button("Reconsider current island memories",overlayRoot,TL,TL,new Vector2(45,-30),new Vector2(345,48),"以本局经历重新演出",()=>{if(!endingGenerating){seventhNight=null;GenerateSeventhNight();}},false,18);
-            endingUpload=Button("Upload ending memories",overlayRoot,TL,TL,new Vector2(410,-30),new Vector2(285,48),"上传 / 更换记忆文件 ↗",OpenEndingMemoryUpload,false,18);
-            endingHistory=Button("Previous ending version",overlayRoot,TL,TL,new Vector2(715,-30),new Vector2(235,48),"看上次结局",ToggleEndingHistory,false,18);endingHistory.interactable=false;
+            BuildEndingStage();
             string saved=session.State.memory?.seventhNightEndingJson;
             if(!string.IsNullOrEmpty(saved))try{var cached=JsonConvert.DeserializeObject<EndingRun>(saved);if(cached?.worldId==session.State.memory.worldId){seventhNight=currentEnding=cached;endingContextRevision=(string)Newtonsoft.Json.Linq.JObject.Parse(saved)["contextRevision"]??"";}}catch{ }
             if(seventhNight!=null)ShowEndingPage(0);else GenerateSeventhNight();
@@ -144,25 +118,28 @@ namespace Seabreeze
         void ShowEndingPage(int page)
         {
             if(seventhNight?.decision==null)return;
-            endingPage=Mathf.Clamp(page,0,seventhNight.recollections.Length+2);endingOriginalShown=false;
-            int memories=seventhNight.recollections.Length,total=memories+3;
-            endingSource.text=$"本局 Z 已知经历 {seventhNight.liveMemoryCount} 段 · 七日剧情 {seventhNight.memoryCount-seventhNight.liveMemoryCount} 段 · 已随此存档保存";
-            if(endingPage==0){endingTitle.text=seventhNight.decision.title;endingBody.text=seventhNight.decision.opening;endingEyebrow.text="第七晚 · 她自己的答案";}
-            else if(endingPage<=memories){var m=seventhNight.recollections[endingPage-1];endingTitle.text=m.title;endingBody.text=m.text;endingEyebrow.text="第 "+m.day+" 天 · 仍然记得";}
-            else if(endingPage==memories+1){endingTitle.text="所以，这一次。";endingBody.text=seventhNight.decision.reason+"\n\n"+seventhNight.decision.decision;endingEyebrow.text="这些经历之后 · Z 的选择";}
-            else{endingTitle.text=seventhNight.outcome.label;endingBody.text=seventhNight.outcome.text+"\n\n"+seventhNight.decision.lastLine;endingEyebrow.text="故事继续 · 最后一句话留给她";}
-            SetEndingWords(endingBody.text,true);
-            endingCharacter?.SetState(endingPage==0||endingPage>memories?"serious":"sad",true);
-            endingProgress.text=$"{endingPage+1} / {total}  ·  {seventhNight.memoryCount} 段经历";
+            EnsureEndingStageRun();
+            endingPage=Mathf.Clamp(page,0,seventhNight.recollections.Length+3);endingOriginalShown=false;
+            int memories=seventhNight.recollections.Length;
+            if(endingPage==0){endingTitle.text="留在这些日子里的话";endingBody.text=seventhNight.decision.opening;}
+            else if(endingPage<=memories){var m=seventhNight.recollections[endingPage-1];endingTitle.text=m.title;endingBody.text=m.text;endingVisited.Add(endingPage-1);}
+            else if(endingPage==memories+1){endingTitle.text="这次，听我说完";endingBody.text=seventhNight.decision.reason;}
+            else if(endingPage==memories+2){endingTitle.text=seventhNight.decision.choice=="leave"?"我想去看看":"今夜，我想留下";endingBody.text=seventhNight.decision.decision;}
+            else{endingTitle.text=seventhNight.decision.title;endingBody.text=seventhNight.outcome.text+"\n\n"+seventhNight.decision.lastLine;}
+            SetEndingWords(endingBody.text,true);ShowEndingStage(endingPage);
             endingPrevious.interactable=endingPage>0;endingOriginal.interactable=endingPage>0&&endingPage<=memories;endingNext.interactable=true;
-            endingNext.GetComponentInChildren<TextMeshProUGUI>().text=endingPage==total-1?"回到小岛 →":"继续 →";
+            endingNext.GetComponentInChildren<TextMeshProUGUI>().text=endingPage==memories+3?"回到小岛 →":endingPage==memories+1?"听她的选择 →":"继续 →";
         }
         void NextEndingPage()
         {
             if(endingGenerating)return;
             if(seventhNight==null){GenerateSeventhNight();return;}
             if(endingBody.maxVisibleCharacters!=int.MaxValue){endingBody.maxVisibleCharacters=int.MaxValue;endingBody.ForceMeshUpdate();endingCharacter?.SetState("serious",false);return;}
-            if(endingPage>=seventhNight.recollections.Length+2)CloseOverlay();else ShowEndingPage(endingPage+1);
+            if(endingPage>=seventhNight.recollections.Length+3){CloseOverlay();return;}
+            int next=endingPage+1;
+            if(next>seventhNight.recollections.Length&&endingVisited.Count<seventhNight.recollections.Length)
+                for(int i=0;i<seventhNight.recollections.Length;i++)if(!endingVisited.Contains(i)){next=i+1;break;}
+            ShowEndingPage(next);
         }
         void SetEndingWords(string value,bool typewriter)
         {
@@ -184,6 +161,7 @@ namespace Seabreeze
         }
         void UpdateSeventhNight()
         {
+            TickEndingStage();
             if(Time.unscaledTime>=nextEndingSourceCheck)RefreshEndingSource();
             if(endingBody!=null&&endingBody.maxVisibleCharacters!=int.MaxValue&&!endingGenerating){endingVisible+=Time.unscaledDeltaTime*Style.TypewriterSpeed;endingBody.maxVisibleCharacters=Mathf.FloorToInt(endingVisible);if(endingVisible>=endingFullCharacterCount){endingBody.maxVisibleCharacters=int.MaxValue;endingCharacter?.SetState("serious",false);}endingBody.ForceMeshUpdate();}
             if(GameInput.Pressed(Key.Escape))CloseOverlay();
@@ -192,6 +170,7 @@ namespace Seabreeze
         void ReleaseSeventhNight()
         {
             endingDisplayGeneration++;endingGenerating=false;seventhNightOpening=false;
+            DisposeEndingStage();
             if(endingCharacter!=null){endingCharacter.Hide();endingCharacter=null;}
             if(overlayMode=="z-ending")session?.Memory?.Client?.Focus(null);
         }
