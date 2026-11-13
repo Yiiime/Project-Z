@@ -1,0 +1,31 @@
+{
+  "scope": "Real model/TTS through LAN TLS gateway, with synthetic publication receipts for transport testing. No rendered gameplay claim.",
+  "passed": true,
+  "dialogue": {
+    "generated": true,
+    "characters": 51
+  },
+  "speech": {
+    "audioBytes": 440718,
+    "packets": 45,
+    "firstAudioMs": 469,
+    "completeMs": 2218
+  },
+  "liveEvents": true,
+  "liveHost": {
+    "generated": true,
+    "audioBytes": 75885,
+    "hashVerified": true
+  },
+  "testDate": "2026-11-13",
+  "transportTests": {
+    "passed": 9,
+    "failed": 0
+  },
+  "liveRegression": {
+    "passed": 16,
+    "failed": 0
+  },
+  "clientRuntime": "Node 24.13.0 arm64/x64",
+  "hardwareScope": "Same Mac via its private LAN address; no second physical Mac or Wi-Fi isolation verification."
+}
