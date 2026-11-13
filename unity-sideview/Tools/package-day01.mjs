@@ -14,7 +14,7 @@ const license=path.join(root,'Tools/MemoryLab/licenses/NODE-LICENSE.txt');if(fs.
 const launcher=path.join(destination,'开始试玩.command');fs.writeFileSync(launcher,'#!/bin/bash\nset -euo pipefail\ncd "$(dirname "$0")"\n./Runtime/node Tools/start-day01-playtest.mjs "$@"\n');fs.chmodSync(launcher,0o755);
 // Local-only path reference; no provider secrets are copied into the app or archive.
 fs.writeFileSync(path.join(destination,'local-source.json'),JSON.stringify({configDirectory:path.join(root,'Tools/live-service'),modelFile:path.join(root,'Tools/MemoryLab/.local/model.json')},null,2));
-fs.writeFileSync(path.join(destination,'试玩说明.txt'),'双击「开始试玩.command」。新游戏从姓名开始，继续游戏恢复本包独立存档。\nA/D 或方向键移动；走近按 E 对话；P 拍照；Tab 手机；Esc 返回。任务提示会显示下一步与还未认识的人。\n第二场直播结束进入第2天；之后休息/喝咖啡4次再直播，直播结束切次日。\n需要联网；复用本机已有 DeepSeek/语音配置。包内没有供应商密钥。不要只双击 app 跳过服务启动。\n这是开发草稿，不含世界观视频1；烟花保留占位。\n');
+fs.writeFileSync(path.join(destination,'试玩说明.txt'),'双击「开始试玩.command」。新游戏从姓名开始，继续游戏恢复本包独立存档。\nA/D 或方向键移动；走近按 E 对话；P 拍照；Tab 手机；Esc 返回。任务提示会显示下一步与还未认识的人。\n第二场直播结束进入第2天；之后休息/喝咖啡4次再直播，直播结束切次日。\n需要联网；复用本机已有 DeepSeek/语音配置。包内没有供应商密钥。可以直接双击文件夹内的 app，应用会自动启动连接检查；不要单独移走 app。\n这是开发草稿，不含世界观视频1；烟花保留占位。\n');
 fs.copyFileSync(path.join(root,'Docs/Day01-验收记录-20261113.md'),path.join(destination,'验收记录.md'));
 fs.cpSync(path.join(root,'Docs/Verification/Day01-20261113'),path.join(destination,'Verification/Day01-20261113'),{recursive:true});
 fs.appendFileSync(path.join(destination,'试玩说明.txt'),'本包保持开发草稿：真实首日流程、晚间直播、32.284秒《晚安》完整副歌及进入第2天已补验，包含最新32张傍晚地图，详见验收记录.md。\n');

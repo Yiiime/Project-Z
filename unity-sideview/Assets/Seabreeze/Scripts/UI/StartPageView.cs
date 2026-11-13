@@ -287,7 +287,7 @@ namespace Seabreeze
             var fill = fieldRect.gameObject.AddComponent<Image>(); fill.color = new Color(.95f,.97f,1,.15f);
             var field = fieldRect.gameObject.AddComponent<TMP_InputField>();
             var text = Label("Name text", fieldRect, Vector2.zero, Vector2.zero, new Vector2(16,8), new Vector2(584,56), "", 26, White);
-            text.richText = false; field.textViewport = fieldRect; field.textComponent = text;
+            field.textViewport = fieldRect; field.textComponent = text; field.richText = false;
             field.lineType = TMP_InputField.LineType.SingleLine; field.characterLimit = 48;
             var hint = Label("Name hint", card, Vector2.up, Vector2.up, new Vector2(42,-220), new Vector2(616,40), "1–12 个字。岛上的朋友会这样称呼你。", 18, Quiet);
             void AcceptName()

@@ -33,9 +33,9 @@ namespace Seabreeze
                 {
                     if (!session.State.firstDay.announced) return "稍等 Z 向大家介绍你";
                     string names = string.Join("、", Cast.Where(id => !session.State.firstDay.greeted.Contains(id)).Select(SevenCharacterCatalog.Name));
-                    return names.Length == 0 ? "已经认识大家，等 Z 安排接下来的活动" : "认识朋友 " + GreetedCount + "/7 · 走近按 E\n还没聊过：" + names;
+                    return names.Length == 0 ? "已经认识大家，等 Z 安排接下来的活动" : "认识朋友 " + GreetedCount + "/7 · 走近按 E，读完问候\n还没认识：" + names;
                 }
-                if (Phase == FirstDayPhase.Live) return session.Memory?.Client.CanGenerate == true ? "Z 正在准备直播，请稍候" : "正在连接小岛 · 请通过试玩启动器进入";
+                if (Phase == FirstDayPhase.Live) return session.Memory?.Client.CanGenerate == true ? "Z 正在准备直播，请稍候" : "连接暂未就绪，正在重试 · 请确认小岛主机在线";
                 if (Phase == FirstDayPhase.Harbor) return session.State.firstDay.harborReady ? "等 Z 邀请你去市民广场" : "和 Z 打个招呼 · 输入回应，听完后关闭对话";
                 if (Phase == FirstDayPhase.WalkToSquare) return "跟随 Z 向右前往市民广场 · A / D 或方向键移动";
                 if (Phase == FirstDayPhase.WelcomeTask) return string.IsNullOrEmpty(session.State.firstDay.objective) ? "走近一位朋友按 E，聊聊能一起做的小事" : session.State.firstDay.objective;

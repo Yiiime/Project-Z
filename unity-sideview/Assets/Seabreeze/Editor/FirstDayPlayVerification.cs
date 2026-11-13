@@ -9,9 +9,12 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace Seabreeze.Editor
 {
+    public sealed class VerificationCompositionInput : BaseInput { public override string compositionString => "xiao"; }
+
     [InitializeOnLoad]
     public static class FirstDayPlayVerification
     {
@@ -57,7 +60,16 @@ namespace Seabreeze.Editor
                 if (stage == 1 && elapsed > 1)
                 {
                     var field = UnityEngine.Object.FindFirstObjectByType<TMP_InputField>();
-                    Require(field != null, "Landing opens a real name input"); field.text = "验收小海"; Capture("01-name"); Next(2); return;
+                    Require(field != null, "Landing opens a real name input");
+                    var module = EventSystem.current.currentInputModule;
+                    var original = module.inputOverride;
+                    var ime = module.gameObject.AddComponent<VerificationCompositionInput>();
+                    try {
+                        module.inputOverride = ime; field.ForceLabelUpdate();
+                        Require(field.textComponent.text.Contains("xiao") && !field.textComponent.text.Contains("<u>"), "IME composition renders without literal underline tags");
+                        Require(field.text == "", "Uncommitted IME composition does not become the saved name");
+                    } finally { module.inputOverride = original; UnityEngine.Object.Destroy(ime); }
+                    field.text = "验收小海"; Capture("01-name"); Next(2); return;
                 }
                 if (stage == 2 && elapsed > .5)
                 {
@@ -105,6 +117,7 @@ namespace Seabreeze.Editor
                 }
                 if (stage == 10 && game.State.firstDay.announced)
                 {
+                    VerifyIntroductionRegression(game);
                     foreach (string actor in FirstDayDirector.FirstDayCast) game.FirstDay.ConversationCompleted(actor, "test", "fixture");
                     Require(game.FirstDay.GreetedCount == 7 && game.FirstDay.CanTravel(PlaceId.Street), "Seven completed conversation receipts release the boundary");
                     game.State.firstDay.phase = FirstDayPhase.WelcomeTask;
@@ -141,6 +154,31 @@ namespace Seabreeze.Editor
                 if (stage == 13 && elapsed > 1) { Require(errors.Count == 0, "No runtime exceptions during Play Mode verification: " + errors.ToString()); Finish(true, null); }
             }
             catch (Exception e) { Finish(false, e.ToString()); }
+        }
+        static void VerifyIntroductionRegression(GameSession game)
+        {
+            var coordinator = game.Memory.Conversations;
+            var npc = game.Memory.Spawner.Find("z");
+            coordinator.BeginPlayer(npc); coordinator.StopAllCoroutines();
+            var conversation = typeof(NpcConversationCoordinator).GetField("player", Private).GetValue(coordinator);
+            var type = conversation.GetType();
+            void Set(string key, object value) => type.GetField(key).SetValue(conversation, value);
+            var report = typeof(NpcConversationCoordinator).GetMethod("ReportIntroduction", Private);
+            Set("sending", false);
+            report.Invoke(coordinator, null);
+            Require(game.FirstDay.GreetedCount == 0, "Opening a chat without an NPC line does not count");
+            Set("npcReplies", 1); Set("lastEvidence", "fixture_intro");
+            game.Memory.View.ShowLine("z", "你好，验收小海，欢迎来到小岛。", npc.transform.position, true);
+            report.Invoke(coordinator, null);
+            Require(game.FirstDay.GreetedCount == 0, "Hidden or partly revealed greeting does not count yet");
+            typeof(MemoryDialogueView).GetMethod("CloseConversationView", Private).Invoke(game.Memory.View, null);
+            Require(game.Memory.PlayerChatOpen && game.Memory.View.LineFullyVisible, "First close during typing reveals the greeting and keeps the chat open");
+            report.Invoke(coordinator, null);
+            Require(game.FirstDay.GreetedCount == 1 && coordinator.IntroductionReady, "Reading an introduction counts immediately without mandatory player typing");
+            Set("sending", true); coordinator.Cancel("玩家结束交谈");
+            Require(game.FirstDay.GreetedCount == 1, "Closing during a later reply preserves the completed introduction");
+            game.FirstDay.ConversationCompleted("z", "duplicate", "fixture_intro");
+            Require(game.FirstDay.GreetedCount == 1, "Repeated introductions cannot duplicate task progress");
         }
         static void Finish(bool passed, string error)
         {

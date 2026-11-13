@@ -25,8 +25,9 @@ if(!await health(liveUrl+'/health',{Authorization:'Bearer '+token()}))start('liv
 let ready=false;for(let i=0;i<50;i++){const a=await health(memoryUrl+'/api/health'),b=await health(liveUrl+'/health',{Authorization:'Bearer '+token()});if(a?.configured&&b?.ok){ready=true;break;}await new Promise(r=>setTimeout(r,300));}
 if(!ready)throw Error('连接尚未就绪，请查看 .local/day01 中的日志后重试。');
 fs.writeFileSync(connection,JSON.stringify({baseUrl:liveUrl,token:token()}),{mode:0o600});
+fs.writeFileSync(path.join(runtime, 'game-connection.json'), JSON.stringify({memoryUrl: memoryUrl}), {mode: 0o600});
 console.log('小岛已连接。新游戏输入名字；A/D 移动，E 交谈，P 拍照，Tab 手机，Esc 返回。');
 if(process.argv.includes('--check')){console.log('启动自检通过：角色与直播服务就绪，使用独立试玩存档。');process.exit(0);}
 const app=path.join(root,'ProjectZ-Day01.app');if(!fs.existsSync(app))throw Error('缺少 ProjectZ-Day01.app，请先生成试玩包。');
-const result=spawnSync('/usr/bin/open',[app,'--env','Z_MEMORY_SAVE_ROOT='+path.join(runtime,'saves'),'--env','Z_LIVE_CONNECTION_FILE='+connection,'--args','-memoryService',memoryUrl,'-screen-fullscreen','0','-screen-width','1440','-screen-height','900','-logFile',path.join(runtime,'player.log')],{stdio:'inherit'});
+const result=spawnSync('/usr/bin/open',['-n',app,'--env','Z_MEMORY_SAVE_ROOT='+path.join(runtime,'saves'),'--env','Z_LIVE_CONNECTION_FILE='+connection,'--args','-memoryService',memoryUrl,'-screen-fullscreen','0','-screen-width','1440','-screen-height','900','-logFile',path.join(runtime,'player.log')],{stdio:'inherit'});
 if(result.status!==0)throw Error('游戏启动失败，请查看系统提示。');

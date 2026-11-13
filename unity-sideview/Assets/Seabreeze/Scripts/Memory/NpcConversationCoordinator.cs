@@ -11,7 +11,7 @@ namespace Seabreeze
         {
             public string id,stage;
             public NpcPresence first,second;
-            public bool player,cancelled,sending;
+            public bool player,cancelled,sending,introductionReported;
             public float started;
             public int playerTurns, npcReplies;
             public string lastEvidence;
@@ -41,6 +41,7 @@ namespace Seabreeze
         public void Initialize(MemoryGameController m,GameSession s,WorldDirector w){memory=m;session=s;world=w;nextDecision=Time.unscaledTime+4;}
         void Update()
         {
+            ReportIntroduction();
             // This scene has authored, silent social groups until the player
             // finishes the introductions. Autonomous AI must not move them away.
             if(session?.FirstDay?.GatheringActive==true){foreach(var c in sessions.Values.Where(c=>!c.player).ToArray())Finish(c,false);return;}
@@ -117,6 +118,7 @@ namespace Seabreeze
         public void SendPlayer(string message)
         {
             var c=player;if(c==null||c.sending||!memory.Client.CanQueuePlayerInput||string.IsNullOrWhiteSpace(message))return;
+            ReportIntroduction();
             memory.Client.StopSpeech();
             c.playerTurns++; c.sending=true;c.started=Time.unscaledTime;memory.CommitLine(c.id,"player",c.first.npcId,message.Trim(),"","private_player_chat");StartCoroutine(PlayerReply(c));
         }
@@ -136,7 +138,17 @@ namespace Seabreeze
             }
             c.sending=false;
         }
-        public bool IntroductionReady => player != null && player.playerTurns > 0 && player.npcReplies > 1 && !player.sending && memory.View.LineFullyVisible;
+        // Reading a resident's introduction is enough to meet them. Other
+        // conversation tasks still require a player turn and an NPC response.
+        public bool IntroductionReady => player != null && (player.introductionReported ||
+            !player.sending && memory.View.LineFullyVisible && player.npcReplies > 0 &&
+            (session.FirstDay?.Phase == FirstDayPhase.MeetIslanders || player.playerTurns > 0 && player.npcReplies > 1));
+        void ReportIntroduction()
+        {
+            if (!IntroductionReady || player.introductionReported) return;
+            player.introductionReported = true;
+            session.FirstDay?.ConversationCompleted(player.first.npcId, player.id, player.lastEvidence);
+        }
         public void RequestPlayerReply(){if(player!=null&&!player.sending){memory.Client.StopSpeech();player.sending=true;StartCoroutine(PlayerReply(player));}}
         public void Cancel(string reason="玩家结束交谈"){if(player!=null)Finish(player,false,reason=="玩家结束交谈");else foreach(var c in sessions.Values.ToArray())Finish(c,false);}
         public void CancelAll(string reason="世界状态变化"){foreach(var c in sessions.Values.ToArray())Finish(c,false);}
@@ -144,8 +156,7 @@ namespace Seabreeze
         void Finish(Conversation c,bool completed,bool userClosed=false)
         {
             if(c==null||c.cancelled)return;
-            if (userClosed && c.player && c.playerTurns > 0 && c.npcReplies > 1 && !c.sending && memory.View.LineFullyVisible)
-                session.FirstDay?.ConversationCompleted(c.first.npcId, c.id, c.lastEvidence);
+            if (userClosed && c == player) ReportIntroduction();
             c.cancelled=true;memory.Client?.CancelConversation(c.id);
             if(c.second!=null)cooldown[Pair(c.first.npcId,c.second.npcId)]=Time.unscaledTime+MemoryRuntimeConfig.Settings.pairCooldown;
             foreach(var old in c.previous)if(old.Key!=null&&old.Key.Movement!=null){held.Remove(old.Key);old.Key.ConversationPartner=null;old.Key.Movement.Interrupt("conversation_finished");old.Key.Movement.SetInteractionHold(false);old.Key.Movement.SimulateDecisions=old.Value;memory.Runtimes?.Conversation(old.Key,c.id,false);}

@@ -29,6 +29,7 @@ for (let i = 0; i < 12; i++) {
   await new Promise(resolve => setTimeout(resolve, 500));
 }
 if (!ready) throw Error('主机的模型或语音暂未就绪，请让主机管理员检查服务；玩家无需填写 API。');
+fs.writeFileSync(path.join(runtime, 'game-connection.json'), JSON.stringify({memoryUrl: state.memoryUrl}), {mode: 0o600});
 console.log('小岛已连接：模型、角色语音和直播均由主机提供。');
 if (process.argv.includes('--check')) {console.log('局域网启动自检通过。'); process.exit(0);}
 const app = path.join(root, 'ProjectZ-Day01.app');
