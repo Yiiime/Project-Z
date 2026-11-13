@@ -44,7 +44,7 @@ test('upload parses intact source, uses this save only, and automatically rebuil
   await f.job().promise;
   const result=await f.upload(token,'status');assert.equal(result.data.source.phase,'complete');
   assert.equal(result.data.source.ending.decision.choice,'stay');
-  assert.deepEqual(result.data.source.ending.recapPages.map(page=>[page.startDay,page.endDay]),[[1,3]]);
+  assert.deepEqual(result.data.source.ending.recapPages.map(page=>[page.startDay,page.endDay]),[[1,1]]);
   const generated=f.requests.filter(r=>!r.blocks);
   assert.ok(generated.some(r=>JSON.stringify(r).includes('ACTUAL_GAME_MEMORY')));
   assert.ok(generated.every(r=>!JSON.stringify(r).includes('SECRET')));

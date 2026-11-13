@@ -47,6 +47,10 @@ namespace Seabreeze
         bool endingSourceChecking,endingUploadOpening,endingHistoryShown;
         float nextEndingSourceCheck;
         EndingRun previousEnding,currentEnding;
+        const string OrdinaryPresetFingerprint="63eeebbd998284aaadd8006526689c5da4c50842ec8928d781d038b820d6c07f";
+        const string OrdinaryLegacyPresetFingerprint="2fe591641e7ff153625e1493468e0c87a8f74a858957ab1bccda3e49b38346b8";
+        const string RainPresetFingerprint="576e221a2ca203a74ed2a8d26f3738820d92af9b9e39d4adef1e1304f196a675";
+        const string RainLegacyPresetFingerprint="02ec00798cd87aad71992eedd790079ec070d42cb1175f558ab30d7919dfa43d";
 
         public void OpenSeventhNight()
         {
@@ -215,7 +219,11 @@ namespace Seabreeze
         {
             if(run?.playerName?.Trim()!="听雨"||run.recollections==null)return false;
             var authored=Array.FindAll(run.recollections,m=>m?.memoryId!=null&&m.memoryId.StartsWith("rain_",StringComparison.Ordinal));
-            return authored.Length==26&&RecollectionFingerprint(authored)=="02ec00798cd87aad71992eedd790079ec070d42cb1175f558ab30d7919dfa43d";
+            if(authored.Length!=26)return false;
+            var fingerprints=RecollectionFingerprints(authored,SevenCharacterCatalog.DefaultPlayerName);
+            foreach(var fingerprint in fingerprints)
+                if(fingerprint==RainLegacyPresetFingerprint||fingerprint==RainPresetFingerprint)return true;
+            return false;
         }
         string EndingWordsForPlayer(string raw)
         {
@@ -231,25 +239,116 @@ namespace Seabreeze
             if(endingDailyPages.Length==0)endingDailyPages=BuildDailyPagesFromRecollections(seventhNight?.recollections);
             endingDailyPages=SortDailyPages(endingDailyPages);
             endingRecapPages=seventhNight?.recapPages??Array.Empty<EndingDemo.EndingDemoView.RecapPage>();
-            if(endingRecapPages.Length==0)endingRecapPages=BuildRecapPagesFromDaily(endingDailyPages);
             endingRecapPages=SortRecapPages(endingRecapPages);
+            // A saved run may still carry the old 1–3 / 4–7 snapshot. Rebuild
+            // from its actual daily pages instead of showing a made-up range.
+            if(!IsCurrentRecapShape(endingRecapPages,endingDailyPages))endingRecapPages=BuildRecapPagesFromDaily(endingDailyPages);
             endingRecapMemories=GroupMemoriesByRecap(seventhNight?.recollections,endingRecapPages);
+            string[] fingerprints=RecollectionFingerprints(seventhNight?.recollections,endingPlayerName);
+            var approvedRecaps=EndingDemo.EndingRecapText.Approved(fingerprints);
+            if(IsCurrentRecapShape(approvedRecaps,endingDailyPages))
+            {
+                endingRecapPages=SortRecapPages(approvedRecaps);
+                endingRecapMemories=GroupMemoriesByRecap(seventhNight?.recollections,endingRecapPages);
+            }
+            else
+            {
+                // A cached two-page run may contain a few real game_ memories.
+                // Reuse only the reviewed early ranges after hashing every other
+                // original in order; leave the 4–7 page generated from this run.
+                var approvedEarly=ApprovedEarlyRecapsForLiveRun(seventhNight,endingPlayerName);
+                if(approvedEarly.Length>0)
+                {
+                    endingRecapPages=MergeApprovedEarlyRecaps(endingRecapPages,approvedEarly,endingDailyPages);
+                    endingRecapMemories=GroupMemoriesByRecap(seventhNight?.recollections,endingRecapPages);
+                }
+            }
             var approved=Resources.Load<TextAsset>("Dialogue/Ending/approved");
             if(approved==null||seventhNight?.decision==null||seventhNight.outcome==null)return;
             try
             {
                 var saved=JsonConvert.DeserializeObject<ApprovedEnding>(approved.text);
-                if(saved==null||string.IsNullOrEmpty(saved.fingerprint))return;
-                string fingerprint=RecollectionFingerprint(seventhNight.recollections);
-                bool fingerprintMatch=string.Equals(saved.fingerprint,fingerprint,StringComparison.Ordinal);
-                if(fingerprintMatch)
-                {
-                    var approvedRecaps=EndingDemo.EndingRecapText.Approved(fingerprint);
-                    if(approvedRecaps!=null&&approvedRecaps.Length>0){endingRecapPages=SortRecapPages(approvedRecaps);endingRecapMemories=GroupMemoriesByRecap(seventhNight.recollections,endingRecapPages);}
-                    if(seventhNight.decision.choice=="leave"&&seventhNight.outcome.status=="pending")endingClosingText=saved.closingText??"";
-                }
+                if(saved==null)return;
+                if(seventhNight.decision.choice=="leave"&&seventhNight.outcome.status=="pending"&&Array.IndexOf(fingerprints,saved.fingerprint)>=0)
+                    endingClosingText=saved.closingText??"";
             }
             catch(Exception e){Debug.LogWarning("Approved ending resource could not be read: "+e.Message);}
+        }
+        static string[] RecollectionFingerprints(EndingDemo.EndingDemoView.Recollection[] memories,string playerName)
+        {
+            var fingerprints=new List<string>();
+            AddFingerprint(fingerprints,RawRecollectionFingerprint(memories));
+            if(RenderEndingPlayerName(playerName)==SevenCharacterCatalog.DefaultPlayerName)
+            {
+                // The service accepts both the current display name and the old
+                // traveller token. Keep both hashes without changing the save.
+                AddFingerprint(fingerprints,RecollectionFingerprint(memories));
+                AddFingerprint(fingerprints,RecollectionFingerprint(memories,"旅人",SevenCharacterCatalog.DefaultPlayerName));
+            }
+            return fingerprints.ToArray();
+        }
+        static void AddFingerprint(List<string> fingerprints,string fingerprint)
+        {
+            if(!string.IsNullOrEmpty(fingerprint)&&!fingerprints.Contains(fingerprint))fingerprints.Add(fingerprint);
+        }
+        static bool IsCurrentRecapShape(EndingDemo.EndingDemoView.RecapPage[] pages,EndingDemo.EndingDemoView.DailyPage[] dailyPages)
+        {
+            if(pages==null||pages.Length==0||dailyPages==null||dailyPages.Length==0)return false;
+            int[,] ranges={{1,1},{2,3},{4,7}};int expected=0;
+            for(int i=0;i<ranges.GetLength(0);i++)if(HasDailyInRange(dailyPages,ranges[i,0],ranges[i,1]))expected++;
+            if(pages.Length!=expected)return false;
+            int index=0;
+            for(int i=0;i<ranges.GetLength(0);i++)
+            {
+                if(!HasDailyInRange(dailyPages,ranges[i,0],ranges[i,1]))continue;
+                var page=pages[index++];
+                if(page==null||page.startDay!=ranges[i,0]||page.endDay!=ranges[i,1]||string.IsNullOrWhiteSpace(page.title)||string.IsNullOrWhiteSpace(page.text))return false;
+            }
+            return index==pages.Length;
+        }
+        static bool HasDailyInRange(EndingDemo.EndingDemoView.DailyPage[] dailyPages,int startDay,int endDay)
+        {
+            foreach(var daily in dailyPages)if(daily!=null&&daily.day>=startDay&&daily.day<=endDay)return true;
+            return false;
+        }
+        static EndingDemo.EndingDemoView.RecapPage[] ApprovedEarlyRecapsForLiveRun(EndingRun run,string playerName)
+        {
+            if(run?.recollections==null||run.recollections.Length==0||string.IsNullOrEmpty(run.sourceName))return Array.Empty<EndingDemo.EndingDemoView.RecapPage>();
+            if(run.sourceName!="七日完整模拟-对话与行动.md"&&run.sourceName!="七日随机记忆-雨停以后-20261113.md")return Array.Empty<EndingDemo.EndingDemoView.RecapPage>();
+            var baseMemories=new List<EndingDemo.EndingDemoView.Recollection>();bool hasLive=false;
+            foreach(var memory in run.recollections)
+            {
+                if(IsLiveRecapMemory(memory)){hasLive=true;continue;}
+                if(memory!=null)baseMemories.Add(memory);
+            }
+            if(!hasLive||baseMemories.Count==0)return Array.Empty<EndingDemo.EndingDemoView.RecapPage>();
+            var fingerprints=RecollectionFingerprints(baseMemories.ToArray(),playerName);
+            bool ordinary=run.sourceName=="七日完整模拟-对话与行动.md";
+            bool rain=run.sourceName=="七日随机记忆-雨停以后-20261113.md";
+            bool known=false;
+            foreach(var fingerprint in fingerprints)
+            {
+                if(ordinary&&(fingerprint==OrdinaryLegacyPresetFingerprint||fingerprint==OrdinaryPresetFingerprint))known=true;
+                if(rain&&(fingerprint==RainLegacyPresetFingerprint||fingerprint==RainPresetFingerprint))known=true;
+            }
+            return known?EndingDemo.EndingRecapText.Approved(fingerprints):Array.Empty<EndingDemo.EndingDemoView.RecapPage>();
+        }
+        static bool IsLiveRecapMemory(EndingDemo.EndingDemoView.Recollection memory)
+        {
+            return memory?.memoryId!=null&&memory.memoryId.StartsWith("game_",StringComparison.Ordinal);
+        }
+        static EndingDemo.EndingDemoView.RecapPage[] MergeApprovedEarlyRecaps(EndingDemo.EndingDemoView.RecapPage[] generated,EndingDemo.EndingDemoView.RecapPage[] approved,EndingDemo.EndingDemoView.DailyPage[] dailyPages)
+        {
+            var merged=new List<EndingDemo.EndingDemoView.RecapPage>(generated??Array.Empty<EndingDemo.EndingDemoView.RecapPage>());
+            for(int i=0;i<2;i++)
+            {
+                var reviewed=Array.Find(approved,page=>page!=null&&page.startDay==(i==0?1:2)&&page.endDay==(i==0?1:3));
+                if(reviewed==null||!HasDailyInRange(dailyPages,reviewed.startDay,reviewed.endDay))continue;
+                int index=merged.FindIndex(page=>page!=null&&page.startDay==reviewed.startDay&&page.endDay==reviewed.endDay);
+                if(index>=0)merged[index]=reviewed;else merged.Add(reviewed);
+            }
+            merged.Sort((a,b)=>(a?.startDay??0).CompareTo(b?.startDay??0));
+            return merged.ToArray();
         }
         static EndingDemo.EndingDemoView.DailyPage[] BuildDailyPagesFromRecollections(EndingDemo.EndingDemoView.Recollection[] memories)
         {
@@ -257,7 +356,7 @@ namespace Seabreeze
             var byDay=new Dictionary<int,List<EndingDemo.EndingDemoView.Recollection>>();
             foreach(var memory in memories)
             {
-                if(memory==null)continue;
+                if(memory==null||memory.day<1||memory.day>7)continue;
                 List<EndingDemo.EndingDemoView.Recollection> group;
                 if(!byDay.TryGetValue(memory.day,out group)){group=new List<EndingDemo.EndingDemoView.Recollection>();byDay.Add(memory.day,group);}
                 group.Add(memory);
@@ -313,21 +412,34 @@ namespace Seabreeze
         static EndingDemo.EndingDemoView.RecapPage[] BuildRecapPagesFromDaily(EndingDemo.EndingDemoView.DailyPage[] dailyPages)
         {
             if(dailyPages==null||dailyPages.Length==0)return Array.Empty<EndingDemo.EndingDemoView.RecapPage>();
-            var pages=new List<EndingDemo.EndingDemoView.RecapPage>();AddRecapRange(pages,dailyPages,1,3,"重要的几件事");AddRecapRange(pages,dailyPages,4,7,"事情开始转向以后");return pages.ToArray();
+            var pages=new List<EndingDemo.EndingDemoView.RecapPage>();
+            AddRecapRange(pages,dailyPages,1,1,4);
+            AddRecapRange(pages,dailyPages,2,3,4);
+            AddRecapRange(pages,dailyPages,4,7,4);
+            return pages.ToArray();
         }
-        static void AddRecapRange(List<EndingDemo.EndingDemoView.RecapPage> pages,EndingDemo.EndingDemoView.DailyPage[] dailyPages,int startDay,int endDay,string title)
+        static void AddRecapRange(List<EndingDemo.EndingDemoView.RecapPage> pages,EndingDemo.EndingDemoView.DailyPage[] dailyPages,int startDay,int endDay,int maxFacts)
         {
-            var facts=new List<string>();var feelingCandidates=new List<string>();var seenDays=new HashSet<int>();bool found=false;
+            var facts=new List<string>();var feelingCandidates=new List<string>();var seenDays=new HashSet<int>();bool found=false;string title="";
             foreach(var daily in dailyPages)
             {
                 if(daily==null||daily.day<startDay||daily.day>endDay||!seenDays.Add(daily.day))continue;found=true;
+                if(string.IsNullOrWhiteSpace(title)&&!string.IsNullOrWhiteSpace(daily.title))title=daily.title.Trim();
                 string value=daily.text??"";int split=value.IndexOf("\n\n",StringComparison.Ordinal);
                 string factText=split<0?value:value.Substring(0,split);string feelingText=split<0?"":value.Substring(split+2);
-                var fact=FirstRecapLine(factText);if(!string.IsNullOrEmpty(fact)&&!facts.Contains(fact))facts.Add(fact);
+                foreach(var fact in RecapLines(factText))
+                {
+                    if(!facts.Contains(fact))facts.Add(fact);
+                    if(facts.Count>=maxFacts)break;
+                }
                 foreach(var feeling in RecapLines(feelingText))if(!feelingCandidates.Contains(feeling))feelingCandidates.Add(feeling);
+                if(facts.Count>=maxFacts)break;
             }
             if(!found)return;
+            if(facts.Count==0)facts.Add("这一天没有留下可回看的事实。");
             var feelings=new List<string>();if(feelingCandidates.Count>0)feelings.Add(feelingCandidates[0]);if(feelingCandidates.Count>1&&feelingCandidates[feelingCandidates.Count-1]!=feelings[0])feelings.Add(feelingCandidates[feelingCandidates.Count-1]);
+            if(feelings.Count==0)feelings.Add("当时是什么心情，我现在说不准了。");
+            if(string.IsNullOrEmpty(title))title=startDay==endDay?"第 "+startDay+" 天":"第 "+startDay+"–"+endDay+" 天";
             var text=string.Join("\n",facts.ToArray())+"\n\n"+string.Join("\n",feelings.ToArray());
             pages.Add(new EndingDemo.EndingDemoView.RecapPage{startDay=startDay,endDay=endDay,title=title,text=text});
         }
@@ -365,10 +477,28 @@ namespace Seabreeze
         }
         static string RecollectionFingerprint(EndingDemo.EndingDemoView.Recollection[] memories)
         {
+            return RecollectionFingerprint(memories,"字小节","旅人");
+        }
+        static string RawRecollectionFingerprint(EndingDemo.EndingDemoView.Recollection[] memories)
+        {
+            return RecollectionFingerprint(memories,null,null);
+        }
+        static string RecollectionFingerprint(EndingDemo.EndingDemoView.Recollection[] memories,string from,string to)
+        {
             if(memories==null)return "";
             var pieces=new string[memories.Length];
-            for(int i=0;i<memories.Length;i++)pieces[i]=(memories[i]?.day??0).ToString()+"\n"+(memories[i]?.original??"").Replace(SevenCharacterCatalog.DefaultPlayerName,"旅人");
+            for(int i=0;i<memories.Length;i++)
+            {
+                var original=memories[i]?.original??"";
+                if(!string.IsNullOrEmpty(from))original=original.Replace(from,to??"");
+                pieces[i]=(memories[i]?.day??0).ToString()+"\n"+original;
+            }
             using(var sha=SHA256.Create())return BitConverter.ToString(sha.ComputeHash(Encoding.UTF8.GetBytes(string.Join("\n\u001e\n",pieces)))).Replace("-","").ToLowerInvariant();
+        }
+        static string EndingDayRangeLabel(EndingDemo.EndingDemoView.RecapPage page)
+        {
+            if(page==null)return "";
+            return page.startDay==page.endDay?"第 "+page.startDay+" 天":"第 "+page.startDay+"–"+page.endDay+" 天";
         }
         void EndingFailure(string error)
         {
@@ -383,12 +513,12 @@ namespace Seabreeze
             endingPage=Mathf.Clamp(page,0,recapCount);endingOriginalShown=false;
             var recap=endingPage<recapCount?endingRecapPages[endingPage]:null;
             if(endingPage<recapCount){
-                ExitBlackOutcome();endingTitle.text=EndingWordsForPlayer(recap.title);endingBody.text=EndingWordsForPlayer(recap.text);endingEyebrow.text="第 "+recap.startDay+"–"+recap.endDay+" 天";UpdateEndingScene(recap.title,recap.text);
+                ExitBlackOutcome();endingTitle.text=EndingWordsForPlayer(recap.title);endingBody.text=EndingWordsForPlayer(recap.text);endingEyebrow.text=EndingDayRangeLabel(recap);UpdateEndingScene(recap.title,recap.text);
             }
             else{ShowBlackOutcome();return;}
             SetEndingWords(endingBody.text,true);
             endingCharacter?.SetState("sad",true);
-            endingProgress.text=$"{endingPage+1} / {recapCount}  ·  第 {recap.startDay}–{recap.endDay} 天";
+            endingProgress.text=$"{endingPage+1} / {recapCount}  ·  {EndingDayRangeLabel(recap)}";
             endingPrevious.interactable=endingPage>0;endingOriginal.interactable=endingRecapMemories.Length>endingPage&&endingRecapMemories[endingPage].Length>0;endingNext.interactable=true;
             endingNext.GetComponentInChildren<TextMeshProUGUI>().text=endingPage==recapCount-1?"进入结局 →":"下一页 →";
         }

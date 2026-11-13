@@ -115,7 +115,7 @@ namespace Seabreeze.EndingDemo
             deadline=Time.realtimeSinceStartup+10;while(ui.IsOverlayTransitioning&&Time.realtimeSinceStartup<deadline)yield return null;
             Require(ui.HasOverlay&&Mathf.Approximately(Time.timeScale,0),"Main gameplay did not pause under its ending overlay");
             var pages=Field<EndingDemoView.RecapPage[]>(ui,"endingRecapPages");
-            Require(pages.Length==2&&pages[0].startDay==1&&pages[0].endDay==3&&pages[1].startDay==4&&pages[1].endDay==7,"Seven days should use two recap pages");
+            Require(pages.Length==3 && pages[0].startDay==1 && pages[0].endDay==1 && pages[1].startDay==2 && pages[1].endDay==3 && pages[2].startDay==4 && pages[2].endDay==7,"Seven days should use three chronological recap pages");
             var title=Field<TextMeshProUGUI>(ui,"endingTitle");
             var body=Field<TextMeshProUGUI>(ui,"endingBody");
             int firstPage=Field<int>(ui,"endingPage");
@@ -177,7 +177,7 @@ namespace Seabreeze.EndingDemo
                 typeof(GameUI).GetField("nextEndingSourceCheck",Fields).SetValue(ui,Time.unscaledTime+120);
                 while(ui.IsOverlayTransitioning&&Time.realtimeSinceStartup<deadline)yield return null;
                 pages=Field<EndingDemoView.RecapPage[]>(ui,"endingRecapPages");
-                Require(pages.Length==2 && pages[0].title=="那个没折齐的纸角" && pages[1].title=="直播断了以后","Older save did not load the reviewed two-page script");
+                Require(pages.Length==3 && pages[0].title=="那个没折齐的纸角" && pages[1].title=="咖啡都凉了" && pages[2].title=="直播断了以后","Older save did not load all three reviewed pages");
                 var args=Environment.GetCommandLineArgs();
                 int wi=Array.IndexOf(args,"-screen-width"),hi=Array.IndexOf(args,"-screen-height");
                 int width=0,height=0;
@@ -194,9 +194,12 @@ namespace Seabreeze.EndingDemo
                 Require(title.text==pages[0].title && next.interactable,"Older save should open on the first recap");
                 var reviewed=Field<EndingDemoView.EndingRun>(ui,"seventhNight");
                 Require(body.text.Contains("字小节")&&!body.text.Contains("旅人")&&SevenCharacterCatalog.Name("player")=="字小节","Old save and island use different player names");
+                string earlyPages = pages[0].text + "\n" + pages[1].text;
+                foreach (var islander in SevenCharacterCatalog.Actors)
+                    if (islander.id != "z") Require(earlyPages.Contains(islander.displayName), "Missing early memory of " + islander.displayName);
                 for(int i=0;i<pages.Length;i++){
-                    if(i==1)next.onClick.Invoke();
-                    Require(title.text==pages[i].title && body.text==pages[i].text,"Next button did not follow the two-page sequence");
+                    if(i>0)next.onClick.Invoke();
+                    Require(title.text==pages[i].title && body.text==pages[i].text,"Next button did not follow the three-page sequence");
                     Call(ui,"ToggleEndingOriginal");
                     foreach(var memory in reviewed.recollections){
                         bool belongs=memory.day>=pages[i].startDay&&memory.day<=pages[i].endDay;
@@ -206,17 +209,17 @@ namespace Seabreeze.EndingDemo
                     Canvas.ForceUpdateCanvases();
                     var viewport=ScreenRect(body.GetComponentInParent<ScrollRect>().viewport);
                     var glyphs=VisibleGlyphBounds(body,0);
-                    Require(glyphs.yMin>=viewport.yMin-1&&glyphs.yMax<=viewport.yMax+1,"Reviewed recap needs scrolling in the demo window");
-                    if(i==0){
+                    Require(glyphs.yMin>=viewport.yMin-1 && glyphs.yMax<=viewport.yMax+1 && glyphs.xMin>=viewport.xMin-2 && glyphs.xMax<=viewport.xMax+2,"Reviewed recap clipped in the demo window on page "+(i+1));
+                    if(i<2){
                         yield return new WaitForSecondsRealtime(.4f);
                         yield return new WaitForEndOfFrame();
-                        ScreenCapture.CaptureScreenshot(Path.Combine(output,"recap-early.png"));yield return new WaitForEndOfFrame();
+                        ScreenCapture.CaptureScreenshot(Path.Combine(output,i==0?"recap-early.png":"recap-middle.png"));yield return new WaitForEndOfFrame();
                         yield return new WaitForSecondsRealtime(.25f);
                     }
                 }
-                Call(ui,"ShowEndingPage",firstPage+1);
+                Call(ui,"ShowEndingPage",firstPage+2);
                 body=Field<TextMeshProUGUI>(ui,"endingBody");
-                Require(body.text==pages[1].text && body.text.Split(new[]{"\n\n"},StringSplitOptions.None).Length==2,"Late recap should separate Z's thoughts from the events");
+                Require(body.text==pages[2].text && body.text.Split(new[]{"\n\n"},StringSplitOptions.None).Length==2,"Late recap should separate Z's thoughts from the events");
                 yield return new WaitForSecondsRealtime(.22f);
                 var info=body.textInfo;
                 int firstAlpha=-1,firstLineCount=0,hiddenLines=0;

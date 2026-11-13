@@ -84,8 +84,8 @@ test('daily pages keep dates, facts and feelings separate without fixed labels',
 test('recap pages cover only populated periods and keep facts in Z-visible memories', async () => {
   const s = copy(); s.memories.push({ id: 'hidden_recap', day: 2, kind: 'memory', title: '幕后结局', text: 'PRIVATE_RECAP_SECRET。', zKnows: false });
   const scenario = validateScenario(s), daily = previewDailyPages(scenario), recaps = previewRecapPages(scenario, daily);
-  assert.deepEqual(recapRanges(scenario), [{ startDay: 1, endDay: 3 }, { startDay: 4, endDay: 7 }]);
-  assert.deepEqual(recaps.map(page => [page.startDay, page.endDay]), [[1, 3], [4, 7]]);
+  assert.deepEqual(recapRanges(scenario), [{ startDay: 1, endDay: 1 }, { startDay: 2, endDay: 3 }, { startDay: 4, endDay: 7 }]);
+  assert.deepEqual(recaps.map(page => [page.startDay, page.endDay]), [[1, 1], [2, 3], [4, 7]]);
   assert.deepEqual(validateRecapPages({ recapPages: recaps }, scenario), recaps);
   assert.ok(recaps.every(page => page.text.includes('\n\n') && page.text.length <= 450));
   assert.ok(!JSON.stringify(recaps).includes('PRIVATE_RECAP_SECRET'));
@@ -93,19 +93,56 @@ test('recap pages cover only populated periods and keep facts in Z-visible memor
   assert.deepEqual(recapPagesFor(scenario, daily), recaps);
 
   const early = validateScenario({ ...scenario, memories: scenario.memories.filter(memory => memory.zKnows && memory.day <= 3) });
-  assert.deepEqual(previewRecapPages(early, previewDailyPages(early)).map(page => [page.startDay, page.endDay]), [[1, 3]]);
+  assert.deepEqual(previewRecapPages(early, previewDailyPages(early)).map(page => [page.startDay, page.endDay]), [[1, 1], [2, 3]]);
   const late = validateScenario({ ...scenario, memories: scenario.memories.filter(memory => memory.zKnows && memory.day >= 4) });
   assert.deepEqual(previewRecapPages(late, previewDailyPages(late)).map(page => [page.startDay, page.endDay]), [[4, 7]]);
 
   const narrated = daily.map(page => ({ ...page }));
-  narrated.find(page => page.day === 1).text = '字小节告诉我这件事，我只听到了这部分。\n\n我还在辨认这句话。';
+  narrated.find(page => page.day === 1).text = '字小节在码头接到我，我只听到了这部分。\n\n我还在辨认这句话。';
   narrated.find(page => page.day === 4).text = '直播在我追问时突然断了。\n\n我没法把没听完的部分补齐。';
-  narrated.find(page => page.day === 7).text = '收音机终于响了。\n\n听见它响，我还是高兴。';
+  narrated.find(page => page.day === 7).text = '今晚Z自己决定短暂开播。\n\n听见她自己作决定，我还是高兴。';
   const narratedRecaps = previewRecapPages(scenario, narrated);
-  assert.match(narratedRecaps[0].text, /字小节告诉我这件事/);
+  assert.match(narratedRecaps[0].text, /字小节在码头接到我/);
   assert.doesNotMatch(narratedRecaps[0].text, /我看到/);
-  assert.match(narratedRecaps[1].text, /直播在我追问时突然断了/);
-  assert.match(narratedRecaps[1].text, /收音机终于响了/);
+  assert.match(narratedRecaps[2].text, /直播在我追问时突然断了/);
+  assert.match(narratedRecaps[2].text, /今晚Z自己决定短暂开播/);
+});
+test('approved recap variants match both built-in presets while custom sources stay unapproved', async () => {
+  const normal = validateScenario(JSON.parse(await readFile(join(ROOT, 'scenario.example.json'), 'utf8')), { maxMemories: 200 });
+  const rainy = validateScenario(JSON.parse(await readFile(join(ROOT, '七日随机记忆-雨停以后-20261113.json'), 'utf8')), { maxMemories: 200 });
+  for (const scenario of [normal, rainy]) {
+    const pages = approvedRecapPagesFor(scenario);
+    assert.deepEqual(pages?.map(page => [page.startDay, page.endDay]), [[1, 1], [2, 3], [4, 7]]);
+    assert.ok(pages.every(page => page.text.includes('\n\n')));
+    const changed = validateScenario({ ...scenario, sourceName: '自定义故事.md', memories: scenario.memories.map((memory, i) => i === 0 ? { ...memory, text: memory.text + '正文变化' } : memory) }, { maxMemories: 200 });
+    assert.equal(approvedRecapPagesFor(changed), null);
+  }
+});
+test('recap selects several same-day facts and never promotes unseen memories', () => {
+  const base = copy();
+  const scenario = validateScenario({ ...base, memories: [
+    ...base.memories,
+    { id: 'hidden_npc', day: 1, kind: 'memory', title: '幕后岛民', text: 'PRIVATE_UNSEEN_NPC。', zKnows: false },
+    { id: 'same_day_npc', day: 1, kind: 'memory', title: '晴野的纸袋', text: '晴野当面教玩家把纸袋压平。', zKnows: true },
+    { id: 'same_day_photo', day: 1, kind: 'memory', title: '周伯伯的相机', text: '周伯伯当面给玩家和Z拍了一张照片。', zKnows: true },
+  ] });
+  const daily = previewDailyPages(scenario);
+  daily.find(page => page.day === 1).text = 'Z在码头接到玩家。\n晴野教玩家把纸袋压平。\n周伯伯给两人拍了照片。\n\n我还在认这些人的名字。';
+  const pages = previewRecapPages(scenario, daily);
+  assert.deepEqual(pages.map(page => [page.startDay, page.endDay]), [[1, 1], [2, 3], [4, 7]]);
+  const firstFacts = pages[0].text.split(/\n\n/)[0].split('\n').filter(Boolean);
+  assert.equal(firstFacts.length, 3);
+  assert.match(pages[0].text, /晴野/);
+  assert.match(pages[0].text, /周伯伯/);
+  assert.doesNotMatch(JSON.stringify(pages), /PRIVATE_UNSEEN_NPC/);
+});
+test('preview fallback rewrites source narration into Z first person', () => {
+  const source = copy().memories[4];
+  const scenario = validateScenario({ ...copy(), memories: [source] });
+  const pages = previewRecapPages(scenario);
+  assert.deepEqual(pages.map(page => [page.startDay, page.endDay]), [[4, 7]]);
+  assert.match(pages[0].text, /我起初不相信/);
+  assert.doesNotMatch(pages[0].text, /Z起初不相信/);
 });
 test('Z choice cannot cite hidden or fabricated reasons', () => {
   const s = copy(), decision = previewDecision(s, 'leave'); decision.reasonMemoryIds = ['unknown'];
@@ -190,7 +227,7 @@ test('model decision uses manual content, filters private facts, and locks choic
   assert.equal(r.data.recollections[0].original, 'MANUAL_FACT'); assert.equal(r.data.memoryCount, 8);
   assert.deepEqual(r.data.dailyPages.map(page => page.day), [1, 2, 3, 4, 5, 6, 7]);
   assert.ok(r.data.dailyPages.every(page => page.text.includes('一件具体的事')), '普通模型分支应使用模型返回的每日稿');
-  assert.deepEqual(r.data.recapPages.map(page => [page.startDay, page.endDay]), [[1, 3], [4, 7]]);
+  assert.deepEqual(r.data.recapPages.map(page => [page.startDay, page.endDay]), [[1, 1], [2, 3], [4, 7]]);
 });
 test('partial model recollections fail without publishing fabricated success', async t => {
   let calls = 0; const provider = { publicConfig: () => ({ configured: true }), request: m => m,

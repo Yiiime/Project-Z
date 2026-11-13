@@ -114,7 +114,7 @@ test('game-native ending uses current Z-visible memories and same provider, with
   assert.ok(!JSON.stringify(requests).includes('PRIVATE_NPC_SECRET'));
   assert.equal(result.data.ending.memoryCount, result.data.ending.recollections.length);
   assert.equal(result.data.ending.outcome.status, 'pending');
-  assert.deepEqual(result.data.ending.recapPages.map(page => [page.startDay, page.endDay]), [[1, 3], [4, 7]]);
+  assert.deepEqual(result.data.ending.recapPages.map(page => [page.startDay, page.endDay]), [[1, 1], [2, 3], [4, 7]]);
   const after = app.engine.world(base.worldId);
   assert.equal(after.day, before.day); assert.equal(after.seq, before.seq);
   assert.deepEqual(after.actors, before.actors);

@@ -152,7 +152,14 @@ export function approvedDailyPagesFor(scenario) {
 
 const approvedRecapPath = resolve(dirname(fileURLToPath(import.meta.url)), '../../../StreamingAssets/Ending/approved-recap.json');
 const approvedRecap = existsSync(approvedRecapPath) ? JSON.parse(readFileSync(approvedRecapPath, 'utf8')) : null;
-const recapWindows = [{ startDay: 1, endDay: 3 }, { startDay: 4, endDay: 7 }];
+const recapWindows = [{ startDay: 1, endDay: 1 }, { startDay: 2, endDay: 3 }, { startDay: 4, endDay: 7 }];
+const recapPresetSources = new Map([
+  ['63eeebbd998284aaadd8006526689c5da4c50842ec8928d781d038b820d6c07f', '七日完整模拟-对话与行动.md'],
+  ['576e221a2ca203a74ed2a8d26f3738820d92af9b9e39d4adef1e1304f196a675', '七日随机记忆-雨停以后-20261113.md'],
+]);
+const legacyRecapSource = '七日完整模拟-对话与行动.md';
+const recapNpcNames = ['晴野', '李庭', '留洋', '正义', '阿星', '梨园', '周伯伯'];
+const isLiveRecapMemory = memory => /^game_[a-zA-Z0-9_-]+$/.test(memory?.id || '');
 const recapKeyHints = /确认|核实|亲眼|当面|承认|材料|通知|约定|决定|看见|知道|收到|完成|准备|停播|身份/g;
 const recapConclusion = /我选择(?:离开|留下)|已经(?:离岛|登船)|(?:离岛|登船)成功|结局|最后我/;
 
@@ -178,8 +185,26 @@ export function validateRecapPages(input, scenario) {
 }
 
 export function approvedRecapPagesFor(scenario) {
-  if (!approvedRecap?.fingerprint || !scenarioMemoryFingerprints(scenario).includes(approvedRecap.fingerprint) || !Array.isArray(approvedRecap.recapPages)) return null;
-  return validateRecapPages({ recapPages: approvedRecap.recapPages }, scenario);
+  const fingerprints = scenarioMemoryFingerprints(scenario);
+  if (approvedRecap?.fingerprint && fingerprints.includes(approvedRecap.fingerprint) &&
+      (!legacyRecapSource || !scenario.sourceName || scenario.sourceName === legacyRecapSource) &&
+      Array.isArray(approvedRecap.recapPages))
+    return validateRecapPages({ recapPages: approvedRecap.recapPages }, scenario);
+  const variant = (approvedRecap?.variants || []).find(entry =>
+    Array.isArray(entry?.recapPages) && fingerprints.includes(entry.fingerprint) &&
+    (!recapPresetSources.has(entry.fingerprint) || scenario.sourceName === recapPresetSources.get(entry.fingerprint)));
+  return variant ? validateRecapPages({ recapPages: variant.recapPages }, scenario) : null;
+}
+
+function approvedPresetRecapPagesFor(scenario) {
+  const memories = knownMemories(scenario), live = memories.filter(isLiveRecapMemory);
+  if (!live.length || !scenario.sourceName) return null;
+  const base = { ...scenario, memories: scenario.memories.filter(memory => !isLiveRecapMemory(memory)) };
+  const fingerprints = scenarioMemoryFingerprints(base);
+  const variant = (approvedRecap?.variants || []).find(entry =>
+    Array.isArray(entry?.recapPages) && fingerprints.includes(entry.fingerprint) &&
+    recapPresetSources.get(entry.fingerprint) === scenario.sourceName);
+  return variant ? validateRecapPages({ recapPages: variant.recapPages }, scenario) : null;
 }
 
 function recapParagraphs(page) {
@@ -190,9 +215,41 @@ function recapParagraphs(page) {
   return { facts: sentences(0), feelings: sentences(1) };
 }
 
-function recapLineScore(line, memory) {
-  const source = `${memory?.title || ''}\n${memory?.text || ''}`;
-  return (line.match(recapKeyHints) || []).length * 2 + (source.includes(line.slice(0, 8)) ? 2 : 0);
+function recapLineTerms(value) {
+  return [...new Set(String(value || '').normalize('NFKC').match(/[\p{Script=Han}]{2,}|[A-Za-z][A-Za-z0-9_-]*/gu) || [])];
+}
+
+function recapLineScore(line, memory, playerName = '字小节') {
+  const source = renderPlayerName(`${memory?.title || ''}\n${memory?.text || ''}`, playerName);
+  const normalizedLine = renderPlayerName(line, playerName);
+  const prefix = normalizedLine.slice(0, 8);
+  const terms = recapLineTerms(source);
+  const hits = terms.filter(term => normalizedLine.includes(term)).length;
+  const sourceCompact = source.replace(/[^\p{Script=Han}A-Za-z0-9]/gu, ''), lineCompact = normalizedLine.replace(/[^\p{Script=Han}A-Za-z0-9]/gu, '');
+  const ngrams = [...new Set(lineCompact.match(/[\p{Script=Han}A-Za-z0-9]{2}/gu) || [])];
+  const overlap = ngrams.filter(gram => sourceCompact.includes(gram)).length;
+  return (normalizedLine.match(recapKeyHints) || []).length * 2 + (prefix.length >= 4 && source.includes(prefix) ? 4 : 0) + Math.min(hits, 5) + Math.min(overlap, 5);
+}
+
+function recapParticipants(value) {
+  const text = String(value || '');
+  return recapNpcNames.filter(name => text.includes(name));
+}
+
+function directRecapFact(memory, playerName) {
+  const lines = renderPlayerName(memory?.text || '', playerName).split(/\n/)
+    .map(line => line.trim()).filter(line => line && !line.startsWith('#') && !line.startsWith('模拟已发生') && !line.startsWith('模拟已完成') && !line.startsWith('结果：'));
+  const source = lines.find(line => /^Z[：:]/.test(line)) || lines.find(line => /^行动[：:]/.test(line)) ||
+    lines.find(line => !line.startsWith('在场：') && !line.startsWith('参与：')) || lines[0] || memory?.title || '';
+  if (/作者|后台|幕后|不知情|结局生成器/.test(source)) return '';
+  const firstPerson = source.replace(/^Z[：:]\s*/, '').replace(/^行动[：:]\s*/, '').replace(/\bZ\b/g, '我').replace(/她(?=[的还已仍也想知道接受])/g, '我');
+  return (firstPerson.match(/[^。！？!?]+[。！？!?]?/g) || [firstPerson])[0].trim();
+}
+
+function recapModelFactSafe(line, memories) {
+  if (/PRIVATE|SECRET|幕后|作者|后台|不知情|结局生成器/i.test(line)) return false;
+  const source = memories.map(memory => `${memory.title}\n${memory.text}`).join('\n');
+  return recapParticipants(line).every(name => source.includes(name));
 }
 
 function recapText(facts, feelings) {
@@ -212,27 +269,71 @@ function recapText(facts, feelings) {
 function recapEntries(scenario, dailyPages, range) {
   const memoriesByDay = new Map();
   for (const memory of knownMemories(scenario)) {
-    if (memory.day >= range.startDay && memory.day <= range.endDay && !memoriesByDay.has(memory.day)) memoriesByDay.set(memory.day, memory);
+    if (memory.day >= range.startDay && memory.day <= range.endDay) {
+      if (!memoriesByDay.has(memory.day)) memoriesByDay.set(memory.day, []);
+      memoriesByDay.get(memory.day).push(memory);
+    }
   }
-  return dailyPages.filter(page => page.day >= range.startDay && page.day <= range.endDay && memoriesByDay.has(page.day))
-    .map(page => {
-      const memory = memoriesByDay.get(page.day), paragraphs = recapParagraphs(page);
-      const fact = paragraphs.facts.sort((a, b) => recapLineScore(b, memory) - recapLineScore(a, memory))[0];
-      return { day: page.day, title: page.title, fact, feelings: paragraphs.feelings };
-    }).filter(entry => entry.fact);
+  const entries = [];
+  for (const page of dailyPages.filter(page => page.day >= range.startDay && page.day <= range.endDay && memoriesByDay.has(page.day))) {
+    const memories = memoriesByDay.get(page.day), parsed = recapParagraphs(page), paragraphs = page.__recapFallback ? { facts: [], feelings: parsed.feelings } : parsed, before = entries.length;
+    paragraphs.facts.forEach((fact, factIndex) => {
+      const evidence = memories.map(memory => ({ memory, score: recapLineScore(fact, memory, scenario.playerName) }))
+        .sort((a, b) => b.score - a.score)[0];
+      if (!evidence || (!evidence.score && !recapModelFactSafe(fact, memories))) return;
+      entries.push({ day: page.day, title: page.title, fact, feelings: paragraphs.feelings,
+        score: evidence.score, memoryId: evidence.memory.id,
+        participants: recapParticipants(`${fact}\n${evidence.memory.title}\n${evidence.memory.text}`), order: entries.length + factIndex / 100 });
+    });
+    if (!paragraphs.facts.length || entries.length === before) {
+      for (const memory of memories) entries.push({ day: page.day, title: page.title, fact: directRecapFact(memory, scenario.playerName),
+        feelings: paragraphs.feelings, score: 1, memoryId: memory.id,
+        participants: recapParticipants(`${memory.title}\n${memory.text}`), order: entries.length });
+    }
+  }
+  return entries;
+}
+
+function selectRecapEntries(entries, limit) {
+  const remaining = [...entries], selected = [], participants = new Set(), facts = new Set();
+  const days = [...new Set(remaining.map(entry => entry.day))].sort((a, b) => a - b);
+  for (const day of days) {
+    if (selected.length >= limit) break;
+    const candidates = remaining.filter(entry => entry.day === day && !facts.has(entry.fact));
+    const best = candidates.sort((a, b) => b.score - a.score || a.order - b.order)[0];
+    if (!best) continue;
+    selected.push(best); facts.add(best.fact); best.participants.forEach(name => participants.add(name));
+    remaining.splice(remaining.indexOf(best), 1);
+  }
+  while (remaining.length && selected.length < limit) {
+    let bestIndex = 0, bestScore = -Infinity;
+    remaining.forEach((entry, index) => {
+      if (facts.has(entry.fact)) return;
+      const fresh = entry.participants.filter(name => !participants.has(name)).length;
+      const score = entry.score + fresh * 3 + (entry.fact.match(recapKeyHints) || []).length;
+      if (score > bestScore) { bestIndex = index; bestScore = score; }
+    });
+    const [best] = remaining.splice(bestIndex, 1);
+    if (facts.has(best.fact)) continue;
+    selected.push(best); facts.add(best.fact); best.participants.forEach(name => participants.add(name));
+  }
+  return selected.sort((a, b) => a.order - b.order);
 }
 
 export function previewRecapPages(scenario, dailyPages = []) {
-  const fallbackPages = previewDailyPages(scenario);
+  const fallbackPages = previewDailyPages(scenario).map(page => ({ ...page, __recapFallback: true }));
   const pageByDay = new Map(fallbackPages.map(page => [page.day, page]));
   for (const page of dailyPages || []) {
     const paragraphs = recapParagraphs(page);
     if (page?.day && paragraphs.facts.length && paragraphs.feelings.length) pageByDay.set(page.day, page);
   }
+  const approvedPreset = approvedPresetRecapPagesFor(scenario);
   const pages = recapRanges(scenario).map(range => {
+    const approved = approvedPreset?.find(page => page.startDay === range.startDay && page.endDay === range.endDay);
+    if (approved && range.endDay <= 3) return approved;
     const periodPages = [...pageByDay.values()].filter(page => page.day >= range.startDay && page.day <= range.endDay);
     const entries = recapEntries(scenario, periodPages, range);
-    const selected = [...entries].sort((a, b) => a.day - b.day).slice(0, 4);
+    const selected = selectRecapEntries(entries, range.endDay <= 3 ? 5 : 4);
     const facts = selected.map(entry => entry.fact);
     const feelings = [...new Set(selected.flatMap(entry => entry.feelings))].slice(0, 2);
     const title = selected[0]?.title?.slice(0, 14) || `${range.startDay}-${range.endDay}日回顾`;
