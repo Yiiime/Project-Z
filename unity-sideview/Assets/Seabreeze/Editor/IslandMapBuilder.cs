@@ -160,6 +160,8 @@ namespace Seabreeze.Editor
             foreach(var c in stage.GetComponentsInChildren<Collider2D>(true).Where(c=>names.Contains(c.name)).ToArray())UnityEngine.Object.DestroyImmediate(c.gameObject);
             foreach(var name in new[]{"Island Routes","Location placard","Island legacy arrival"}){var child=stage.transform.Find(name);if(child)UnityEngine.Object.DestroyImmediate(child.gameObject);}
             foreach(var door in stage.GetComponentsInChildren<Interactable>(true).Where(i=>i.isDoor).ToArray())UnityEngine.Object.DestroyImmediate(door.gameObject);
+            // Retired street props must not retain artwork, interaction prompts, or colliders after rebuilding.
+            foreach(var prop in stage.GetComponentsInChildren<Interactable>(true).Where(i=>i.id=="bicycle"||i.id=="noticeboard"||i.id=="postcard").ToArray())UnityEngine.Object.DestroyImmediate(prop.gameObject);
         }
         static void BuildScene(Layout m)
         {
@@ -197,7 +199,7 @@ namespace Seabreeze.Editor
             }
             // Legacy story interactions retain IDs and NPC schedules; only spatial anchors adapt to the new backgrounds.
             if(m.place==PlaceId.Cafe){Relocate(stage,"radio",-2.9f);Relocate(stage,"guestbook",1.6f);Relocate(stage,"coffee",-.7f);}
-            if(m.place==PlaceId.Street){Relocate(stage,"postcard",X(m.place,4490));Relocate(stage,"bench",X(m.place,4530));Relocate(stage,"noticeboard",X(m.place,2770));}
+            if(m.place==PlaceId.Street){Relocate(stage,"bench",X(m.place,4530));}
             EditorSceneManager.SaveScene(SceneManager.GetActiveScene(),Scenes+m.place+".unity");
         }
         static void Relocate(WorldScene stage,string id,float x)
