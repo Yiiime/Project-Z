@@ -248,7 +248,7 @@ namespace Seabreeze
             var vr = veil.rectTransform; vr.anchorMax = Vector2.one; vr.offsetMin = vr.offsetMax = Vector2.zero; modal = veil.gameObject;
             modalBack = CloseModal;
             var card = Panel("Title modal", veil.transform, new Vector2(.5f, .5f), new Vector2(.5f, .5f), Vector2.zero, new Vector2(700, height), new Color(.075f, .14f, .21f, .96f), true);
-            card.rectTransform.localScale = Vector3.one * Mathf.Min(1, Mathf.Min((root.rect.width - 48) / 700, (root.rect.height - 48) / height));
+            card.gameObject.AddComponent<ModalViewportFit>().Fit();
             Label("Heading", card.transform, Vector2.up, Vector2.up, new Vector2(42, -38), new Vector2(616, 48), title, 32, White);
             return card.rectTransform;
         }
@@ -282,14 +282,19 @@ namespace Seabreeze
         }
         void ShowNameEntry()
         {
-            var card = ModalCard("你希望在游戏里的名字", 400);
-            var fieldRect = Rect("Player name", card, Vector2.up, Vector2.up, new Vector2(42,-128), new Vector2(616,72));
-            var fill = fieldRect.gameObject.AddComponent<Image>(); fill.color = new Color(.95f,.97f,1,.15f);
+            var card = ModalCard("海风该怎样称呼你？", 352);
+            card.GetComponent<Image>().color = new Color(.97f,.95f,.92f,1);
+            var heading = card.Find("Heading").GetComponent<TextMeshProUGUI>();
+            heading.color = new Color(.17f,.23f,.31f); heading.fontSize = 30;
+            heading.rectTransform.anchoredPosition = new Vector2(36,-30);
+            heading.rectTransform.sizeDelta = new Vector2(628,48);
+            var fieldRect = Rect("Player name", card, Vector2.up, Vector2.up, new Vector2(36,-104), new Vector2(628,66));
+            var fill = fieldRect.gameObject.AddComponent<Image>(); fill.color = new Color(.86f,.83f,.92f,.65f);
             var field = fieldRect.gameObject.AddComponent<TMP_InputField>();
-            var text = Label("Name text", fieldRect, Vector2.zero, Vector2.zero, new Vector2(16,8), new Vector2(584,56), "", 26, White);
+            var text = Label("Name text", fieldRect, Vector2.zero, Vector2.zero, new Vector2(18,9), new Vector2(592,48), "", 26, new Color(.17f,.23f,.31f));
             field.textViewport = fieldRect; field.textComponent = text; field.richText = false;
             field.lineType = TMP_InputField.LineType.SingleLine; field.characterLimit = 48;
-            var hint = Label("Name hint", card, Vector2.up, Vector2.up, new Vector2(42,-220), new Vector2(616,40), "1–12 个字。岛上的朋友会这样称呼你。", 18, Quiet);
+            var hint = Label("Name hint", card, Vector2.up, Vector2.up, new Vector2(36,-188), new Vector2(628,44), "1–12 个字，岛上的朋友会这样称呼你。", 18, new Color(.43f,.45f,.53f));
             void AcceptName()
             {
                 if (busy || !string.IsNullOrEmpty(EventSystem.current?.currentInputModule?.input?.compositionString)) return;
@@ -298,8 +303,16 @@ namespace Seabreeze
                 PlayerIdentity.PendingName = name;
                 ShowLoading(); enter?.Invoke(true);
             }
-            var confirm = UIPrimitives.Button("Confirm player name", card, Vector2.zero, Vector2.zero, new Vector2(275,34), new Vector2(380,58), "确认，开始旅程", AcceptName, true);
-            UIPrimitives.Button("Cancel player name", card, Vector2.zero, Vector2.zero, new Vector2(42,34), new Vector2(210,58), "返回", CloseModal);
+            var confirm = UIPrimitives.Button("Confirm player name", card, Vector2.zero, Vector2.zero, new Vector2(248,30), new Vector2(416,58), "带着这个名字出发", AcceptName, true);
+            UIPrimitives.Button("Cancel player name", card, Vector2.zero, Vector2.zero, new Vector2(36,30), new Vector2(192,58), "再想想", CloseModal);
+            foreach (var button in card.GetComponentsInChildren<Button>())
+            {
+                bool main = button == confirm;
+                button.GetComponent<Image>().color = main ? new Color(.38f,.30f,.52f,1) : new Color(.88f,.85f,.91f,1);
+                var label = button.GetComponentInChildren<TextMeshProUGUI>();
+                UIHoverFeedback.Attach(button,main);
+                label.color = main ? Color.white : new Color(.29f,.26f,.37f); label.alignment = TextAlignmentOptions.Center;
+            }
             field.onSubmit.AddListener(_ => AcceptName());
             field.text = ""; field.Select(); field.ActivateInputField();
         }

@@ -1,8 +1,9 @@
 import {AUDIENCE_NAMES} from './audience-roster.js';
 const names={z:'Z',player:'玩家',...AUDIENCE_NAMES};
 const canonical=id=>id==='Z'?'z':id;
+const virtualAudienceId=id=>typeof id==='string'&&/^virtual_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
 export function recipientIds(value,speaker='player'){
- if(!Array.isArray(value)||value.length>8||new Set(value).size!==value.length||value.some(id=>!Object.hasOwn(names,id)||id===canonical(speaker)))throw Error('invalid_recipient_ids');
+ if(!Array.isArray(value)||value.length>8||new Set(value).size!==value.length||value.some(id=>(!Object.hasOwn(names,id)&&!virtualAudienceId(id))||id===canonical(speaker)))throw Error('invalid_recipient_ids');
  return [...value];
 }
 // Explicit UI selection/@/vocatives are routing evidence. Merely discussing a

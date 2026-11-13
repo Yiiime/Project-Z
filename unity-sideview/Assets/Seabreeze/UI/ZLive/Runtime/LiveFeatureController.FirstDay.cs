@@ -13,6 +13,7 @@ namespace ZLive
         public string SceneMode = "daily";
         public Action<JObject> SceneCommand;
         string lastScenePhase;
+        bool invitationCollectedInGift;
         string StoryKey => SceneMode + "." + GameSession.Instance?.State?.memory?.worldId + "." + GameSession.Instance?.State?.day;
         JObject StoryBinding()
         {
@@ -33,7 +34,8 @@ namespace ZLive
             string phase = (string)scene?["phase"];
             if (phase == lastScenePhase) return;
             lastScenePhase = phase;
-            if (SceneMode == "arrival" && phase == "offered") SceneCommand?.Invoke(new JObject {
+            if (SceneMode == "arrival" && phase == "offered" && invitationCollectedInGift) AcceptArrival();
+            else if (SceneMode == "arrival" && phase == "offered") SceneCommand?.Invoke(new JObject {
                 ["tool"] = "offer_arrival", ["title"] = scene["invitation"]?["title"], ["description"] = scene["invitation"]?["description"] });
             if (SceneMode == "arrival" && (phase == "accepted" || phase == "departed") && GameSession.Instance?.State?.firstDay != null)
             { GameSession.Instance.State.firstDay.invitationAccepted = true; GameSession.Instance.Save(); }
@@ -44,23 +46,24 @@ namespace ZLive
             var payload = (JObject)command["payload"];
             if ((string)payload["tool"] == "draw_guest")
             {
-                var panel = new VisualElement(); panel.style.position = Position.Absolute;
-                panel.style.left = Length.Percent(22); panel.style.right = Length.Percent(22);
-                panel.style.top = Length.Percent(33); panel.style.height = 180;
-                panel.style.backgroundColor = new Color(.04f,.08f,.15f,.95f);
-                panel.style.justifyContent = Justify.Center; panel.style.alignItems = Align.Center;
-                var label = new Label(); label.style.fontSize = 34; label.style.color = Color.white;
-                panel.Add(label); document.rootVisualElement.Add(panel);
-                try
+                using (var view = new ArrivalGiftView(document.rootVisualElement,(string)payload["playerName"]))
                 {
-                    float start = Time.unscaledTime;
-                    while (Time.unscaledTime - start < 3.5f)
-                    { cancel.ThrowIfCancellationRequested(); label.text = "幸运来客 · " + (1000 + Mathf.FloorToInt((Time.unscaledTime - start) * 31) % 137); await NextFrame(); }
-                    label.text = (string)payload["playerName"]; await VisibleFrame(panel,cancel);
-                    start = Time.unscaledTime; while (Time.unscaledTime - start < 1) { cancel.ThrowIfCancellationRequested(); await NextFrame(); }
-                    await Report(command,new JObject { ["status"] = "displayed" });
+                    float idle=0,animation=0;
+                    while(!view.Collected)
+                    {
+                        cancel.ThrowIfCancellationRequested();
+                        view.SetPaused(locallyPaused||(!Application.isFocused&&!Application.isBatchMode));
+                        if(!locallyPaused&&(Application.isFocused||Application.isBatchMode)) {
+                            idle+=Time.unscaledDeltaTime;
+                            if(view.Opened)animation+=Time.unscaledDeltaTime;
+                            view.Tick(idle,animation);
+                        }
+                        await NextFrame();
+                    }
+                    invitationCollectedInGift=true;
+                    await VisibleFrame(view.Root,cancel);
+                    await Report(command,new JObject { ["status"]="displayed",["playerActivated"]=true,["playerName"]=(string)payload["playerName"] });
                 }
-                finally { panel.RemoveFromHierarchy(); }
             }
             else
             {
