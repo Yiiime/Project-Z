@@ -1,5 +1,6 @@
 import {utteranceMetadata} from './shared/utterance.js';
 import {randomUUID} from 'node:crypto';
+import {pendingFor} from './shared/addressing.js';
 
 const FALLBACK='那今天就先聊到这里。谢谢大家陪我，大家晚安。';
 const terminal=new Set(['completed','displayed','ready','failed','skipped','interrupted','cancelled']);
@@ -26,7 +27,9 @@ export class SessionControl {
   }
   get onboarding(){return ['arrival','first_evening'].includes(this.s.scene?.context?.mode);}
   eveningElapsed(){return Math.max(0,(this.s.engine._clock||0)-(this.data.eveningStartClock??this.s.engine._clock??0));}
-  eveningSongDue(){const e=this.s.engine;return this.s.scene?.context?.mode==='first_evening'&&this.eveningElapsed()>=60000&&!this.data.eveningSongComplete&&!e._mediaPlaying()&&!e.inbox.some(m=>m.mine)&&!e._state.call?.active&&e._clock-(this.data.lastPlayerClock??-Infinity)>=5000;}
+  eveningChatFinished(){return this.s.scene?.context?.mode==='first_evening'&&this.eveningElapsed()>=60000;}
+  eveningPlayerWaiting(){return this.s.engine.inbox.some(m=>m.mine&&pendingFor(m,'z'));}
+  eveningSongDue(){const e=this.s.engine;return this.eveningChatFinished()&&!this.data.eveningSongComplete&&!e._mediaPlaying()&&!e._state.call?.active&&(this.eveningElapsed()>=75000||!this.eveningPlayerWaiting()&&e._clock-(this.data.lastPlayerClock??-Infinity)>=5000);}
   get normal(){return ['opening','live'].includes(this.data.phase);}
   timing(){
     const d=this.data,at=d.endedAt??this.now(),elapsed=Math.max(0,at-d.startedAt);
@@ -180,7 +183,7 @@ export class SessionControl {
   tick(){
     const d=this.data;if(this.disposed||d.phase==='ended')return;
     if(!this.onboarding&&this.now()>=d.hardAt){this.end('session_hard_limit');return;}
-    if(this.normal&&this.eveningSongDue()&&!d.eveningSongRequested){
+    if(this.normal&&this.eveningChatFinished()&&!d.eveningSongRequested){
       d.eveningSongRequested=true;const e=this.s.engine;e.epoch++;e.pending?.abort();e.pending=null;e._cancelPreparation('first_evening_song_due');e._cancelTopic('first_evening_song_due');e.speechPlan=null;e.nextWake=e._clock;this.changed();
     }
     if(this.s.scene?.context?.mode==='first_evening' && this.normal && d.eveningSongComplete && !this.s.engine._active && !this.s.engine._mediaPlaying()){this.begin('host');return;}

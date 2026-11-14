@@ -22,6 +22,14 @@ class NativeConversationEngine extends CallConversationEngine {
  _public(type,text,metadata={}){
    this.broadcast?.record(type,text,metadata,this._state.media);
    const result=super._public(type,text,metadata);
+   // Audience publication can bypass _receive for public room chat. Make it selectable
+   // by the host only after display, without rewriting its original public recipients.
+   if(type==='npc.message'&&this.liveScene?.context?.mode==='first_evening'&&metadata.recipientIds?.length===0&&!this.inbox.some(m=>m.id===metadata.id)){
+     const message=this._state.messages.find(m=>m.id===metadata.id);
+     this.inbox.push({id:metadata.id,name:message?.name||metadata.speakerId,text,mine:false,speakerId:metadata.speakerId,recipientIds:['z'],pendingRecipientIds:['z']});
+     if(this.inbox.length>16)this.inbox.shift();
+     this.inboxVersion++;this.audience.dialogue.setWaiting(this.inbox);this.nextWake=this._clock;
+   }
    if(type==='speech.completed'||type==='speech.interrupted'){
      const key=String(metadata.speechId),lines=this.virtualReplies?.get(key)||[];
      this.virtualReplies?.delete(key);
@@ -35,8 +43,22 @@ class NativeConversationEngine extends CallConversationEngine {
    for(const [index,line] of lines.entries())this.liveScene.session.command('virtual_audience.present',{name:line.name,text:line.text,messageId:uid(),delayMs:index*650});
  }
  _hostContext(inbox,...args){
-   if(this.liveScene?.context?.mode==='first_evening')inbox=[...inbox.filter(m=>m.mine),...inbox.filter(m=>!m.mine).slice(-3)];
-   const context=super._hostContext(inbox,...args);if(this.sessionControl)context.host.sessionControl=this.sessionControl.snapshot();return context;
+   const context=super._hostContext(inbox,...args);
+   if(this.liveScene?.context?.mode==='first_evening'){
+     const events=this.session.events,rows=context.host.inbox,players=rows.filter(m=>m.mine),audience=rows.filter(m=>!m.mine);
+     const heard=new Set(events.filter(e=>e.type==='npc.message').map(e=>e.id));
+     const playerIds=new Set(events.filter(e=>e.type==='player.message').map(e=>e.id));
+     const planned=this._active?{replyTo:this.speechLinks.get(this._active.id)||[]}:null;
+     const turns=[...events.filter(e=>e.type==='speech.completed'),...(planned?[planned]:[])].slice(-2);
+     const audienceTurn=!players.length||turns.length===2&&turns.every(e=>e.replyTo?.some(id=>playerIds.has(id))||!e.replyTo?.some(id=>heard.has(id)));
+     const lastReply=planned?.replyTo.some(id=>heard.has(id))?planned:events.findLast(e=>e.type==='speech.completed'&&e.replyTo?.some(id=>heard.has(id)));
+     const previous=events.find(e=>lastReply?.replyTo?.includes(e.id)&&e.type==='npc.message')?.speakerId;
+     const opposite=previous?audience.filter(m=>String(m.speakerId).startsWith('virtual_')!==String(previous).startsWith('virtual_')):[];
+     const selected=opposite.at(-1)||audience.findLast(m=>m.speakerId!==previous)||audience.at(-1);
+     context.host.inbox=selected&&audienceTurn&&!this.sessionControl?.eveningChatFinished()?[selected]:[...players,...audience.slice(-3)];
+     if(selected&&audienceTurn&&!this.sessionControl?.eveningChatFinished())context.host.validationFeedback='本轮接住待答弹幕中这位观众的实际内容，简短回应并在 handledIds 中填写该消息 id；不要转头继续向玩家复述回忆。';
+   }
+   if(this.sessionControl)context.host.sessionControl=this.sessionControl.snapshot();return context;
  }
  _wakeDelay(result){const delay=super._wakeDelay(result);return this.liveScene?.context?.mode==='first_evening'?Math.min(delay,2000):delay;}
  _recapTurn(){
@@ -47,6 +69,11 @@ class NativeConversationEngine extends CallConversationEngine {
  _think(){
    if(this.liveScene?.pending||this.liveScene?.phase==='drawn'&&this.liveScene.reunion.greeted&&!this.liveScene.reunion.playerReplied)return;
    if(!this.sessionControl?.normal)return;
+   if(this.sessionControl.eveningChatFinished()&&!this._mediaPlaying()&&!this._state.call?.active){
+     // Re-check at consumption time: a queued chat may predate the minute boundary.
+     if(this.prepared||this.preparing)this._cancelPreparation('first_evening_chat_finished');
+     if(!this.sessionControl.eveningSongDue()&&!this.sessionControl.eveningPlayerWaiting())return;
+   }
    if(!this._recapTurn())return super._think();
    if(this._state.paused||!this._started||this._active||this.pending||this._queue.length||this._destroyed)return;
    if((this.recapRetryAt||0)>this._clock)return;
@@ -54,7 +81,7 @@ class NativeConversationEngine extends CallConversationEngine {
    this.broadcast.recapItem=this.broadcast.nextItem();
    this._say(this.broadcast.opening(this.broadcast.recapItem),'warm','wave',{source:'daytime_recap',priority:12,scope:'story'});
  }
- _maybePrepare(){if(this.liveScene?.pending||this.liveScene?.phase==='drawn'&&this.liveScene.reunion.greeted&&!this.liveScene.reunion.playerReplied)return;if(!this._recapTurn()&&(!this.sessionControl||this.sessionControl.normal))return super._maybePrepare();}
+ _maybePrepare(){if(this.sessionControl?.eveningChatFinished()||this.liveScene?.pending||this.liveScene?.phase==='drawn'&&this.liveScene.reunion.greeted&&!this.liveScene.reunion.playerReplied)return;if(!this._recapTurn()&&(!this.sessionControl||this.sessionControl.normal))return super._maybePrepare();}
  _maybeAssessTopic(){if(!this.sessionControl||this.sessionControl.normal)return super._maybeAssessTopic();}
  _canPresentMedia(){return (!this.sessionControl||this.sessionControl.normal)&&super._canPresentMedia();}
  _pumpSpeech(){if(this.sessionControl&&!this.sessionControl.normal){if(!this._mediaPlaying())return ConversationEngine.prototype._pumpSpeech.call(this);}else return super._pumpSpeech();}
@@ -109,6 +136,7 @@ export class LiveSession extends EventEmitter {
     const daytimeTasks=memory?.daySongs.length?this.broadcast.songTasks().filter(t=>
       this.broadcast.visibleSongs(cue).some(s=>s.sourceId===t.sourceId)):[];
     const generationOptions={...o,character:this.characters,daytimeTasks,sceneContext:this.scene.binding(),broadcastContext:memory,songSession:memory?this.engine.session.id:null};
+    if(p.kind==='host'&&this.scene.context?.mode==='first_evening'&&p.context.host.inbox.length&&!p.context.host.inbox.some(m=>m.mine))generationOptions.sceneContext.recapFocus=null;
     let reply=await this.providers.generate(this.id,p,generationOptions);
     if(p.kind==='host'&&this.scene.context?.mode==='first_evening'&&reply.action==='speak'){
       const previous=[...this.engine.session.events.filter(e=>e.type==='speech.completed').slice(-8).map(e=>e.text),this.engine._active?.text].filter(Boolean);

@@ -29,6 +29,7 @@ namespace Seabreeze.Editor
         static Keyboard keyboard;
         static Mouse mouse;static Vector2 pointer;static bool pointerDown;
         static int bedCheck,bedDay;static bool afterSongSent,afterSongAvatar;
+        static int nightChatSent;
         static bool fireworksBubble,fireworksOut,fireworksIn,fireworksPlayed,fireworksEnded;
         static double fireworksBubbleAt,fireworksStartAt;
         static RenderTexture liveTarget;
@@ -180,6 +181,12 @@ namespace Seabreeze.Editor
                 {
                     var feature=UnityEngine.Object.FindFirstObjectByType<LiveFeatureController>();if(feature==null||!Field<bool>(feature,"connected"))return;
                     var state=Field<JObject>(feature,"state");
+                    if(Environment.GetCommandLineArgs().Contains("-journeyChatter")&&!songCompleted)
+                    {
+                        int[] times={12,24,40,57,65,72};string[] messages={"今天认识大家很开心","你也和大家聊聊呀","沙滩的烟花真好看","哈哈，好呀","我还在听呢","大家今晚都很开心"};
+                        if(nightChatSent<times.Length&&(double?)state["story"]?["elapsedMs"]>=times[nightChatSent]*1000&&(state["activeTask"]==null||state["activeTask"].Type==JTokenType.Null))
+                        {SendLive(feature,messages[nightChatSent++]);nextAction=now+.5;return;}
+                    }
                     if(state["room"]?["participants"] is JArray participants && participants.Any(p=>(string)p=="liyuan"))throw new Exception("Liyuan entered first evening");
                     foreach(var e in state["publicEvents"] as JArray??new JArray())
                     {

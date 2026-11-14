@@ -400,3 +400,55 @@ test('first-night cadence preserves the character generation budget and individu
  assert.equal(s.engine.audience.config.singleActorRequests,true);
  assert.equal(s.engine.audience.config.handoff,false);
 });
+
+test('first evening discards queued chat after the minute and actually dispatches singing',async t=>{
+ const s=await fixture(t,null,{mode:'first_evening',playerName:'小海',worldId:'a'.repeat(32),day:1}),e=s.engine;
+ s.sessionControl.data.eveningStartClock=0;e._clock=60000;s.sessionControl.tick();
+ assert.equal(s.sessionControl.data.eveningSongRequested,true);
+ e._clock=90000;s.sessionControl.data.lastPlayerClock=70000;e.inbox=[];e.nextWake=0;e.enabled=true;
+ e.prepared={result:{action:'wait',speech:'',mood:'neutral',gesture:'none',handledIds:[],agendaUpdates:[],wakeAfterMs:2000,memory:''},requestId:crypto.randomUUID(),context:e._hostContext([]),at:89900,anchorSpeechId:null};
+ // Review is a deterministic fixture; exercise real scheduling and execution receipts.
+ e.audience.dialogue.inspect=async()=>({});e.audience.dialogue.commit=(_ticket,run)=>{run();return true;};
+ s.speech.enabled=true;s.speech.volume=1;
+ await e._think();await frame();
+ const intro=latest(s,'host.present');assert(intro?.payload.text.includes('晚安'));assert.equal(e.prepared,null);
+ receipt(s,intro,'started',{durationMs:2000,positionMs:0});receipt(s,intro,'progress',{positionMs:2000,text:intro.payload.text});receipt(s,intro,'completed',{positionMs:2000});await frame();
+ assert(latest(s,'media.prepare'),'the song must be dispatched, not merely marked requested');
+});
+
+test('first evening has a bounded player grace and does not wait for messages to another resident',async t=>{
+ const s=await fixture(t,null,{mode:'first_evening',playerName:'小海',worldId:'a'.repeat(32),day:1}),e=s.engine;
+ s.sessionControl.data.eveningStartClock=0;e._clock=60000;
+ e.inbox=[{id:'to-z',mine:true,recipientIds:['z']}];assert.equal(s.sessionControl.eveningSongDue(),false);
+ s.sessionControl.tick();assert(s.sessionControl.data.eveningSongRequested,'latch deadline even while replying');
+ e.inbox=[{id:'to-npc',mine:true,recipientIds:['axing']}];assert.equal(s.sessionControl.eveningSongDue(),true);
+ e.inbox=[{id:'new-player',mine:true,recipientIds:['z']}];e._clock=75000;s.sessionControl.data.lastPlayerClock=74999;
+ assert(s.sessionControl.eveningSongDue(),'new chat cannot defer the song indefinitely');
+ e._state.call.active=true;assert.equal(s.sessionControl.eveningSongDue(),false,'do not talk over an active voice call');
+});
+
+test('first evening gives another viewer the next turn after two player-focused turns',async t=>{
+ const s=await fixture(t,null,{mode:'first_evening',playerName:'小海',worldId:'a'.repeat(32),day:1}),e=s.engine;
+ e.session.events=[{id:'p',type:'player.message',speakerId:'player'},{id:'a',type:'npc.message',speakerId:'axing'},
+  {id:'h1',type:'speech.completed',replyTo:['p']},{id:'h2',type:'speech.completed',replyTo:[]}];
+ const rows=[{id:'p',mine:true,text:'还有我',recipientIds:['z']},{id:'a',mine:false,speakerId:'axing',text:'灯已经修好了',recipientIds:['z']},{id:'v',mine:false,speakerId:'virtual_'+crypto.randomUUID(),text:'欢迎新朋友',recipientIds:['z']}];
+ const chosen=e._hostContext(rows).host.inbox;assert.equal(chosen.length,1);assert.equal(chosen[0].mine,false);
+ e.session.events.push({id:'h3',type:'speech.completed',replyTo:['a']});
+ assert(e._hostContext(rows).host.inbox.some(m=>m.mine),'player remains eligible on the following turn');
+});
+
+test('first evening host receives public resident chat and alternates resident and virtual replies',async t=>{
+ const s=await fixture(t,null,{mode:'first_evening',playerName:'小海',worldId:'a'.repeat(32),day:1}),e=s.engine;
+ e.audience.config.phases=true;
+ const shown=e.audience.publish({messageId:'resident-chat',npc_id:'axing',text:'灯修好啦',recipientIds:[],intent:'react'});
+ assert(!e.inbox.some(m=>m.id==='resident-chat'),'unshown chat is not eligible');
+ receipt(s,latest(s,'audience.present'),'displayed');await shown;
+ assert.deepEqual(e.session.events.find(e=>e.id==='resident-chat').recipientIds,[],'public routing is unchanged');
+ assert(e._hostContext(e.inbox).host.inbox.some(m=>m.id==='resident-chat'));
+ e._receive(e._message('晴野，花店见',{id:'private-direction',name:'李庭',type:'chat'}),false,'liting',{recipientIds:['xiaoxiaoqing']});
+ assert(!e._hostContext(e.inbox).host.inbox.some(m=>m.id==='private-direction'));
+ const virtual='virtual_'+crypto.randomUUID();
+ e._receive(e._message('海风真好',{id:'viewer-chat',name:'晚风',type:'chat'}),false,virtual,{recipientIds:['z']});
+ e._public('speech.completed','晚风说得对',{id:'speech-test',speakerId:'Z',speakerRole:'host',replyTo:['viewer-chat']});
+ assert.equal(e._hostContext(e.inbox).host.inbox[0].id,'resident-chat','resident chat survives newer virtual chat');
+});
