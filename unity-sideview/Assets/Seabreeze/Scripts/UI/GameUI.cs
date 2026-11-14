@@ -83,6 +83,7 @@ namespace Seabreeze
             hud=Stretch("Exploration HUD",canvasRect,Vector2.zero,Vector2.zero);
             dateText=Label("Day",hud,TL,TL,new Vector2(44,-52),new Vector2(270,36),"",26,Paper);
             timeText=Label("Time period",hud,TL,TL,new Vector2(44,-96),new Vector2(98,60),"",44,Paper);
+            timeText.textWrappingMode=TextWrappingModes.NoWrap;
             FinalKitAssets.Icon("sunset",hud,TL,TL,new Vector2(152,-116),new Vector2(24,24));
             weatherText=Label("Weather",hud,TL,TL,new Vector2(188,-113),new Vector2(150,32),"",18,Paper);
             FinalKitAssets.Icon("pin",hud,TL,TL,new Vector2(44,-169),new Vector2(18,20));
@@ -190,7 +191,7 @@ namespace Seabreeze
             if(!initialized)return;
             dateText.text="第  "+session.Clock.Day+"  天";
             dateText.fontSize=26;
-            timeText.text=PeriodName(session.Clock.Period)+((session.FirstDay?.Active??false)?"":" · 休息 "+session.Clock.RestActions+"/4");
+            timeText.text=PeriodName(session.Clock.Period);
             string clock=session.Clock.TimeLabel;
             int clockStart=clock.IndexOfAny("0123456789".ToCharArray());
             if(clockStart>=0)clock=clock.Substring(clockStart);
@@ -204,7 +205,7 @@ namespace Seabreeze
         static IslandMapCatalog placeCatalog;
         public static string PlaceName(PlaceId id)
         {
-            if(id==PlaceId.PlayerHome)return "海边小屋";
+            if(id==PlaceId.PlayerHome)return "玩家的家";
             if(placeCatalog==null)placeCatalog=Resources.Load<IslandMapCatalog>("Content/IslandMap");
             if(placeCatalog!=null)foreach(var location in placeCatalog.locations)if(location.place==id)return location.displayName;
             return id==PlaceId.Cafe?"潮汐咖啡馆":id==PlaceId.Lighthouse?"灯塔海堤":"海边小街";
@@ -386,7 +387,7 @@ namespace Seabreeze
         {
             // A late callback from a closed room or a replaced save cannot advance a new day.
             if(source==null||source!=nativeLive||overlayMode!="live"||session.State!=owner)return;
-            CloseOverlayThen(()=>session.Clock.CompleteLiveSession(sessionId));
+            CloseOverlayThen(()=>{if(session.Clock.CompleteLiveSession(sessionId))session.FirstDay.ReturnHomeAfterLive();});
         }
         public IEnumerator ShowLiveNotification()
         {

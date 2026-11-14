@@ -35,6 +35,7 @@ namespace Seabreeze
         readonly FirstDayGathering gathering = new FirstDayGathering();
         public bool GatheringActive => session != null && !session.IsAtTitle && Phase == FirstDayPhase.MeetIslanders && session.CurrentPlace == PlaceId.Square;
         bool busy, planning, harborOpening, receiptPending;
+        GameObject nightFade, fireworksFade;
         float nextPlan, nextIntroduction; int generation;
         readonly Dictionary<string, string> completedTalks = new Dictionary<string, string>();
         readonly HashSet<string> pendingSteps = new HashSet<string>();
@@ -47,6 +48,7 @@ namespace Seabreeze
         {
             get
             {
+                if (session.Clock.PendingNightRest) return "走到床边按 E，休息一夜";
                 if (!Active) return "今日休息 " + session.Clock.RestActions + "/4";
                 if (Phase == FirstDayPhase.MeetIslanders)
                 {
@@ -85,6 +87,9 @@ namespace Seabreeze
         }
         public void ResetForStateChange()
         {
+            if (nightFade != null) Destroy(nightFade); nightFade = null;
+            if (fireworksFade != null) Destroy(fireworksFade); fireworksFade = null;
+            if (world?.Follow != null) world.Follow.target = world.Player;
             cinema?.Cancel(); if (session.Memory?.View != null) session.Memory.View.CinemaHidden = false; filmRoutine = false; titleFilmStarted = titleFilmFinished = preparingIntroduction = false;
             gathering.Reset(); generation++; StopAllCoroutines(); invitations.Hide(); bubble?.Clear();
             if (live != null) { live.Close(); live = null; }
@@ -97,6 +102,7 @@ namespace Seabreeze
         public void Resume()
         {
             if (session.IsAtTitle || filmRoutine) return;
+            if (session.Clock.PendingNightRest) { if (session.CurrentPlace != PlaceId.PlayerHome && !busy) ReturnHomeAfterLive(); return; }
             if (Phase == FirstDayPhase.Live && !session.State.firstDay.introSeen) { StartCoroutine(Intro()); return; }
             if (Phase == FirstDayPhase.Arrival || Phase == FirstDayPhase.Harbor && !session.State.firstDay.arrivalFilmSeen) StartCoroutine(Arrive());
             else if (Phase == FirstDayPhase.Fireworks) StartCoroutine(Fireworks());
@@ -261,7 +267,28 @@ namespace Seabreeze
         {
             if (filmRoutine) yield break;
             filmRoutine = busy = true; bool done = false;
-            yield return LoadingPlaceholder("before_fireworks");
+            // Let the third greeting close, then give Z a visible, readable send-off.
+            while (session.Memory.View.Closing || !session.Memory.Spawner.IsStageReady(world.Stage)) yield return null;
+            session.Memory.Conversations.CancelAll("一起去看烟花");
+            var z = session.Memory.Spawner.Find("z");
+            if (z != null)
+            {
+                world.Follow.target = z.transform;
+                yield return new WaitForSecondsRealtime(.7f);
+                if (bubble == null) { bubble = gameObject.AddComponent<NpcSpeechBubble>(); bubble.Initialize(invitations.Surface, session.Memory, world); }
+                const string invitation = "烟花快开始啦，我们快去沙滩吧";
+                bubble.Show("z", invitation);
+                float end = Time.unscaledTime + NpcSpeechBubble.ReadDuration(invitation);
+                while (Time.unscaledTime < end) { bubble.Tick(false); yield return null; }
+                bubble.Clear();
+            }
+            fireworksFade = new GameObject("Fireworks scene fade", typeof(RectTransform), typeof(Canvas), typeof(UnityEngine.UI.Image));
+            var canvas = fireworksFade.GetComponent<Canvas>(); canvas.renderMode = RenderMode.ScreenSpaceOverlay; canvas.sortingOrder = 800;
+            var shade = fireworksFade.GetComponent<UnityEngine.UI.Image>();
+            yield return FadeFireworks(shade, 0, 1, .65f);
+            world.Follow.target = world.Player; world.Follow.Snap();
+            // Keep opaque black below the film so its final frame never reveals the daytime scene.
+            canvas.sortingOrder = 500;
             cinema.PlayFireworks(() => done = true);
             while (!done) yield return null;
             session.State.period = (int)TimePeriod.Night; session.Clock.Refresh();
@@ -269,7 +296,17 @@ namespace Seabreeze
             // Keep the people already here; releasing the gathering restores autonomous decisions.
             // Rebuilding now would teleport everyone back to their default locations.
             session.Memory.PublishStoryEvent("fireworks_story", "玩家与 Z 和朋友们在沙滩看完烟花，随后回到市民广场，夜晚可以自由找朋友聊天。", Cast.Concat(new[] { "player" }).ToArray(), true);
+            canvas.sortingOrder = 800;
+            yield return FadeFireworks(shade, 1, 0, .85f);
+            Destroy(fireworksFade); fireworksFade = null;
             filmRoutine = busy = false;
+        }
+        static IEnumerator FadeFireworks(UnityEngine.UI.Image shade, float from, float to, float duration)
+        {
+            shade.color = new Color(0, 0, 0, from);
+            for (float elapsed = 0; elapsed < duration; elapsed += Time.unscaledDeltaTime)
+            { shade.color = new Color(0, 0, 0, Mathf.Lerp(from, to, Mathf.SmoothStep(0, 1, elapsed / duration))); yield return null; }
+            shade.color = new Color(0, 0, 0, to);
         }
         IEnumerator Arrive()
         {
@@ -334,9 +371,38 @@ namespace Seabreeze
             }
             live = null; host.Close();
             yield return LoadingPlaceholder("after_evening_live");
-            yield return ShutdownTransition();
             busy = false; Time.timeScale = 1; GameUI.Instance.SetTitleVisible(false);
-            session.Clock.CompleteLiveSession(id); session.Memory?.Spawner.Reload();
+            if (session.Clock.CompleteLiveSession(id)) ReturnHomeAfterLive();
+        }
+        public void ReturnHomeAfterLive()
+        {
+            if (!session.Clock.PendingNightRest || busy) return;
+            StartCoroutine(ReturnHome());
+        }
+        IEnumerator ReturnHome()
+        {
+            busy = true; Time.timeScale = 1;
+            var owner = session.State;
+            yield return ShutdownTransition();
+            if (session.State != owner) yield break;
+            session.Travel(PlaceId.PlayerHome);
+            yield return null;
+            while (world.IsTransitioning && session.State == owner) yield return null;
+            if (session.State != owner) yield break;
+            busy = false; session.Save();
+        }
+        IEnumerator RestAtBed()
+        {
+            busy = true; var owner = session.State;
+            nightFade = new GameObject("Rest until morning",typeof(RectTransform),typeof(Canvas),typeof(UnityEngine.UI.Image));
+            var canvas = nightFade.GetComponent<Canvas>();canvas.renderMode=RenderMode.ScreenSpaceOverlay;canvas.sortingOrder=800;
+            var image=nightFade.GetComponent<UnityEngine.UI.Image>();image.color=Color.clear;
+            for(float t=0;t<.45f;t+=Time.unscaledDeltaTime){image.color=new Color(0,0,0,Mathf.Clamp01(t/.45f));yield return null;}
+            image.color=Color.black;
+            if(session.State==owner && session.Clock.CompleteNightRest())session.Memory?.Spawner.Reload();
+            yield return new WaitForSecondsRealtime(.45f);
+            for(float t=0;t<.7f;t+=Time.unscaledDeltaTime){image.color=new Color(0,0,0,1-Mathf.Clamp01(t/.7f));yield return null;}
+            Destroy(nightFade);nightFade=null;busy=false;
         }
         IEnumerator ShutdownTransition()
         {
@@ -366,10 +432,16 @@ namespace Seabreeze
             return -7.4f + Array.IndexOf(Cast, actor) * 2.05f;
         }
         public bool CanTravel(PlaceId target) => !(Phase == FirstDayPhase.MeetIslanders && session.CurrentPlace == PlaceId.Square && GreetedCount < RequiredGreetings && target != PlaceId.Square);
-        public bool IsAvailable(string id) => !Active || !(id == "bench" || id == "lighthouse_bench" || id == "coffee" || id.StartsWith("firstday_"));
-        public string Prompt(string id) => null;
+        public bool IsAvailable(string id) => id == "firstday_bed" ? session.Clock.PendingNightRest && session.CurrentPlace == PlaceId.PlayerHome : !Active || !(id == "bench" || id == "lighthouse_bench" || id == "coffee" || id.StartsWith("firstday_"));
+        public string Prompt(string id) => id == "firstday_bed" ? "休息一夜" : null;
         public bool Interact(string id)
         {
+            if(id=="firstday_bed")
+            {
+                var bed=world.Interactables.FirstOrDefault(i=>i!=null&&i.id==id);
+                if(!busy&&IsAvailable(id)&&bed!=null&&world.Player!=null&&Vector2.Distance(world.Player.position,bed.transform.position)<bed.radius)StartCoroutine(RestAtBed());
+                return true;
+            }
             if (!Active) return false;
             if (Phase == FirstDayPhase.MeetIslanders && !session.State.firstDay.announced)
             { session.Story.Notify("Z 正准备向大家介绍你。 "); return true; }
@@ -377,6 +449,6 @@ namespace Seabreeze
             if (Cast.Contains(id)) { session.Memory.BeginPlayerChat(id); return true; }
             return false;
         }
-        void OnDestroy() { gathering.Reset(); if (live != null) live.Close(); }
+        void OnDestroy() { if(nightFade!=null)Destroy(nightFade); if(fireworksFade!=null)Destroy(fireworksFade); gathering.Reset(); if (live != null) live.Close(); }
     }
 }

@@ -180,7 +180,7 @@ export class LiveSession extends EventEmitter {
   if(body.type==='viewer.message'&&!this.sessionControl.normal){
    if(this.sessionControl.data.phase!=='closing'||this.sessionControl.data.closeReason!=='host')throw Error('session_closing');
    if(typeof p.text!=='string'||!p.text.trim()||p.text.length>120)throw Error('invalid_input');
-   const m=this.engine._message(p.text.trim(),{mine:true,name:'你'});this.engine._public('player.message',m.text,{id:m.id,speakerRole:'player',speakerId:'player'});this.sessionControl.enqueue({id:m.id,text:m.text});this.changed();return {accepted:true};
+   const m=this.engine._message(p.text.trim(),{mine:true,name:'你',type:'chat'});this.engine._public('player.message',m.text,{id:m.id,speakerRole:'player',speakerId:'player'});this.sessionControl.enqueue({id:m.id,text:m.text});this.changed();return {accepted:true};
   }
   if(!this.sessionControl.normal&&body.type!=='client.capabilities_changed')throw Error('session_closing');
   if(this.phase!=='live')throw Error('session_paused');

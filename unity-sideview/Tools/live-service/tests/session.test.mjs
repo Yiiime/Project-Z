@@ -329,6 +329,10 @@ test('first evening virtual audience publishes alongside resident lane, and clos
  receipt(s,play,'progress',{positionMs:31000,lineIndex:0});receipt(s,play,'completed',{positionMs:32284});
  assert(s.sessionControl.data.eveningSongComplete);assert.equal(s.engine._state.media.phase,'completed');s.engine._active=null;
  s.sessionControl.tick();assert.equal(s.sessionControl.data.phase,'closing');
+ s.input(envelope(s,{type:'viewer.message',payload:{text:'晚安，明天见！'}}));
+ const goodbye=s.engine._state.messages.at(-1);
+ assert.equal(goodbye.mine,true);assert.equal(goodbye.type,'chat');assert.equal(goodbye.name,'小海');
+ assert(s.engine.facts.some(e=>e.type==='player.message'&&e.id===goodbye.id));
 });
 
 

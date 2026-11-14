@@ -194,7 +194,7 @@ public sealed partial class LiveFeatureController {
         if(name=="Z")return;
         bool scroll=mine||NearChatBottom();
         var row=Box(mine?"chat-row mine":"chat-row");row.userData=mine?"player":name;
-        if(!system){
+        if(mine||!system){
             var avatar=Box("avatar");
             string actor=Seabreeze.SevenCharacterCatalog.Actors.FirstOrDefault(a=>a.displayName==name)?.id;
             var sheet=Resources.Load<Texture2D>("FirstDay/LiveAvatars");
