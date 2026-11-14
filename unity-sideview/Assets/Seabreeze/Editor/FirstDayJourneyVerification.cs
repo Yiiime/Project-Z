@@ -48,6 +48,7 @@ namespace Seabreeze.Editor
             if(string.IsNullOrEmpty(output)||!output.StartsWith("/private/tmp/"))throw new Exception("Use isolated temporary saves");
             if(!File.Exists(Environment.GetEnvironmentVariable("Z_LIVE_CONNECTION_FILE")))throw new Exception("Use an explicit test live connection");
             Directory.CreateDirectory(output);SessionState.SetString(Flag+"Output",output);SessionState.SetBool(Flag,true);
+            if(Environment.GetCommandLineArgs().Contains("-journeyMapAudit"))MapArtworkVerification.Verify(output);
             EditorSceneManager.OpenScene("Assets/Seabreeze/Scenes/Street.unity");
             var view=EditorWindow.GetWindow(typeof(EditorWindow).Assembly.GetType("UnityEditor.GameView"));view.Show();view.Focus();EditorApplication.EnterPlaymode();
         }
@@ -138,11 +139,18 @@ namespace Seabreeze.Editor
                     }
                     if(movie?.CurrentFilm=="fireworks"&&video!=null&&video.isPlaying&&video.time>1&&!fireworksPlayed){
                         if(!fireworksBubble||!fireworksOut||now-fireworksBubbleAt<3.5)throw new Exception("Fireworks began before invitation and fade");
-                        fireworksPlayed=true;fireworksStartAt=now;Capture("fireworks-playing");Log("Real fireworks video playing after bubble and fade");
+                        fireworksPlayed=true;fireworksStartAt=now;Capture("fireworks-playing");Log("Real fireworks video playing after bubble and fade: "+video.width+"x"+video.height+", "+video.length+" seconds");
+                        if(Environment.GetCommandLineArgs().Contains("-journeyMapAudit")&&(video.width!=1920||video.height!=1080||Math.Abs(video.length-25.06)>.2))throw new Exception("New fireworks clip metadata mismatch");
                     }
                     if(video!=null&&video.length>0&&video.time>=video.length-.5)fireworksEnded=true;
                     if(phase=="WelcomeTask"&&!game.FirstDay.BlocksInput){
                         if(!fireworksPlayed||!fireworksEnded||!fireworksIn||game.FirstDay.GreetedCount<3||game.Clock.Period!=TimePeriod.Night||shade!=null||errors.Count>0)throw new Exception("Fireworks transition verification failed");
+                        if(Environment.GetCommandLineArgs().Contains("-journeyMapAudit")){
+                            if(world.Stage.place!=PlaceId.Square||world.Stage.backdrop.sprite!=Resources.Load<Sprite>("Art/IslandEvening/Square"))throw new Exception("Square night did not use PR66 evening artwork");
+                            var wash=world.Stage.GetComponentsInChildren<SpriteRenderer>().Single(r=>r.name=="Island time wash");
+                            if(Mathf.Abs(wash.color.a-.48f)>.001f)throw new Exception("Square night wash missing");
+                            Log("Square night uses PR66 evening sprite with night atmosphere");
+                        }
                         Capture("fireworks-night-task-ready");Log("Complete fireworks playback; night tasks unlocked after fade-in");Finish(true,null);return;
                     }
                 }
