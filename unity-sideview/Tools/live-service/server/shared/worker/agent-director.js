@@ -298,7 +298,7 @@ export function parseAgentReply(raw,value,{release=false,requireUtterance=false}
     if(decision!=='drop'||!REVIEW_ISSUES.includes(reply.issue))throw bad();
     const span=str(reply.span,360);if(!c.candidate.text.includes(span))throw bad();
     const evidenceIds=list(reply.evidence_ids,6,x=>str(x,100));
-    if(evidenceIds.some(id=>![...c.publicEvents,...(c.sessionEvents||[]),...(c.singing?.tasks||[])].some(e=>e.id===id)))throw bad();
+    if(evidenceIds.some(id=>![...c.publicEvents,...(c.sessionEvents||[]),...(c.singing?.tasks||[]),...(c.candidate.role==='host'?c.broadcast?.entries||[]:[])].some(e=>e.id===id)))throw bad();
     return {decision,issue:reply.issue,span,reason:str(reply.reason,160),evidenceIds,candidateId:c.candidate.id,revision:c.revision,promptVersion:AGENT_BUNDLE.review.version};
   }
   if(value.kind==='review'){
@@ -307,11 +307,11 @@ export function parseAgentReply(raw,value,{release=false,requireUtterance=false}
     if(audience&&reply.echo_of!==null&&!c.publicEvents.some(e=>e.type==='npc.message'&&e.id===reply.echo_of))throw bad();
     if(!['allow','drop'].includes(reply.decision))throw bad();
     const evidenceIds=list(reply.evidence_ids,40,x=>str(x,100));
-    if(evidenceIds.some(id=>![...c.publicEvents,...(c.sessionEvents||[]),...(c.singing?.tasks||[])].some(e=>e.id===id)))throw bad();
+    if(evidenceIds.some(id=>![...c.publicEvents,...(c.sessionEvents||[]),...(c.singing?.tasks||[]),...(c.candidate.role==='host'?c.broadcast?.entries||[]:[])].some(e=>e.id===id)))throw bad();
     return {decision:audience&&reply.echo_of!==null?'drop':reply.decision,reason:str(reply.reason,600),evidenceIds,candidateId:c.candidate.id,revision:c.revision,promptVersion:AGENT_BUNDLE.review.version};
   }
   if(value.kind==='host'){
-    keys(reply,['actorId','delivery','expression','action','speech','mood','gesture','transition','handledIds','wakeAfterMs','continuation','memory','agendaUpdates','tool','sessionDecision','audienceMessageIds',...(c.scene?.mode==='arrival'?['virtualAudience']:[]),...(c.broadcast?['z_state_update']:[])]);
+    keys(reply,['actorId','delivery','expression','action','speech','mood','gesture','transition','handledIds','wakeAfterMs','continuation','memory','agendaUpdates','tool','sessionDecision','audienceMessageIds',...(['arrival','first_evening'].includes(c.scene?.mode)?['virtualAudience']:[]),...(c.broadcast?['z_state_update']:[])]);
     if(!['speak','wait','tool'].includes(reply.action))throw Error('invalid_host_action');
     if(!MOODS.includes(reply.mood))throw Error('invalid_host_mood');
     if(!Number.isInteger(reply.wakeAfterMs)||reply.wakeAfterMs<2000||reply.wakeAfterMs>120000)throw Error('invalid_wake_after_ms');
@@ -377,7 +377,14 @@ export function parseAgentReply(raw,value,{release=false,requireUtterance=false}
       else throw Error('invalid_host_tool');
       tool={name:t.name,args:a};
     }else if(reply.tool!==undefined&&reply.tool!==null)throw bad();
-    const virtualAudience=c.scene?.mode==='arrival'?list(reply.virtualAudience,4,item=>{keys(item,['name','text']);const name=str(item.name,24),text=str(item.text,36);if(NPCS.some(n=>n.display_name===name)||name==='Z')throw bad();return {name,text};}):[];
+    if(c.scene?.mode==='arrival'){
+      if(tool&&!isSceneTool(tool.name))throw Error('invalid_arrival_tool');
+      if(c.scene.tools?.includes('draw_guest')&&tool?.name!=='draw_guest')throw Error('arrival_lottery_required');
+    }
+    if(c.scene?.mode==='first_evening'&&!c.scene.songDue&&tool?.name==='start_singing')throw Error('invalid_evening_song_not_due');
+    if(c.scene?.mode==='first_evening'&&c.scene.songDue&&tool?.name!=='start_singing')throw Error('invalid_evening_song_required');
+    const virtualAudience=['arrival','first_evening'].includes(c.scene?.mode)?list(reply.virtualAudience,4,item=>{keys(item,['name','text']);const name=str(item.name,24),text=str(item.text,36);if(NPCS.some(n=>n.display_name===name)||name==='Z')throw bad();return {name,text};}):[];
+    if(c.scene?.mode==='first_evening'&&reply.action!=='wait'&&tool?.name!=='start_singing'&&virtualAudience.length<2)throw Error('invalid_evening_virtual_audience');
     const audienceMessageIds=list(reply.audienceMessageIds,1,x=>str(x,100));
     if(audienceMessageIds.some(id=>!c.call?.audienceCandidates?.some(m=>m.id===id&&[...c.publicEvents,...(c.host.session?.evidence||[])].some(e=>e.type==='npc.message'&&e.id===m.id&&e.text===m.text&&e.speakerId===m.npcId)))||audienceMessageIds.length&&reply.action!=='speak')throw bad();
     return {...(virtualAudience.length?{virtualAudience}:{}),...(reply.action!=='wait'?utteranceMetadata('z',reply,{allowLegacy:!requireUtterance}):{}),...(storyUpdate?{z_state_update:storyUpdate}:{}),...(sessionDecision?{sessionDecision}:{}),...(c.call?{audienceMessageIds}:{}),continuation,agendaUpdates,action:reply.action,speech:reply.action!=='wait'?outputText(reply.speech):'',mood:reply.mood,gesture,transition,handledIds,wakeAfterMs:reply.wakeAfterMs,memory:str(reply.memory,800,true),...(tool?{tool}:{})};
@@ -508,6 +515,12 @@ async function generate(value,secret,options) {
       envelope.input={...envelope.input,scene:value.context.scene};
     }
     if(character)character.wrap(envelope,prepared,value.kind);
+    if(value.kind==='host'&&value.context.scene?.mode==='arrival')envelope.system+='\n最终输出限制：speech最多42字，1–2个短句。普通暖场continuation=continue。不要超过直播字幕框两行。';
+    if(value.kind==='host'&&value.context.scene?.mode==='first_evening'){
+      const allowed=refs.value.context.host.inbox.map(m=>m.id);
+      envelope.system+='\n本轮优先依据：'+JSON.stringify(value.context.scene.recapFocus)+'；为null时不再轮流重讲旧事，只回应眼前弹幕或说自己的此刻感受。已经说过或正在播放：'+JSON.stringify(value.context.scene.recentSpeech||[])+'。不得换词重复这些内容。烟花地点固定是沙滩，之后才回广场；virtualAudience也必须遵守，不能说广场配烟花。';
+      envelope.system+='\n【本轮首夜短聊约束】action.handledIds只可从 '+JSON.stringify(allowed)+' 选择；没有回应其中消息时填[]，不可填其他公开事件、人物记忆或弹幕ID。聊天台词最多42字，1–2个短句；优先转述scene.recapFocus这条事实，只保留一个事实点，可顺带接一句host.inbox里真实出现的弹幕。相邻两轮不要重复同一段回忆；没有合适弹幕就说自己的此刻感受，不编造观众提问。现在已经在自己的直播房间，不在广场吹风；白天与烟花是回忆。拍广场照片不等于给Z拍照，也不证明Z目睹或摆姿势。普通聊天action.continuation=continue，action.virtualAudience必须是2条非NPC网名弹幕，action.handledIds只列本句实际回应的inbox编号。没有来源的其他NPC动作、玩家表现一律不写。不要把几件事串成未记录的新经过。到唱歌时则只说一句想给大家唱《晚安》祝大家晚安，不再接弹幕。';
+    }
     const response=await options.fetch(ENDPOINT,{method:'POST',redirect:'manual',signal:controller.signal,headers:{'Content-Type':'application/json',Authorization:`Bearer ${secret}`},body:JSON.stringify({model:AGENT_BUNDLE.policy.host.model,thinking:{type:'disabled'},stream:streaming,max_tokens:release?160:value.kind==='quality'?60:value.kind==='repair'?400:value.kind==='topic'?400:value.kind==='review'?600:value.kind==='audience'?(character?1200:450):value.kind==='host'?2400:1200,temperature:0.55,response_format:{type:'json_object'},messages:[{role:'system',content:envelope.system},{role:'user',content:JSON.stringify(envelope.input)}]})});
     if(response.status===402)throw error(402,'agent_insufficient_balance','DeepSeek 余额不足，请补充额度后重新检查连接。');
     if(!response.ok)throw error(response.status===429?429:502,'agent_provider_unavailable');

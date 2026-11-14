@@ -3,7 +3,7 @@ using UnityEngine.Rendering.Universal;
 
 namespace Seabreeze
 {
-    // Use authored morning/evening variants; retain the base map for other periods.
+    // Use authored morning/evening variants; Square also keeps the evening art at night.
     // Never load legacy street_day or procedural sea/grass over the new geography.
     public sealed class IslandAtmosphere : MonoBehaviour
     {
@@ -27,7 +27,8 @@ namespace Seabreeze
             bool hasArtwork=artwork.SetPeriod((TimePeriod)period);
             if(indoor)period=Mathf.Min(period,2);
             Color[] colors={new Color(.55f,.76f,1,.02f),new Color(1,.76f,.48f,.045f),new Color(.32f,.23f,.49f,.13f),new Color(.035f,.07f,.20f,.48f)};
-            wash.color=hasArtwork?Color.clear:colors[period];ambient.intensity=1;
+            // Square has no separate deep-night asset: shade its authored evening map.
+            wash.color=hasArtwork&&period!=3?Color.clear:colors[period];ambient.intensity=1;
             ambient.color=period==3?new Color(.64f,.72f,1):Color.white;
         }
         void OnDestroy()
@@ -91,7 +92,7 @@ namespace Seabreeze
                 }
                 variant=morning;
             }
-            else if(period==TimePeriod.Evening)
+            else if(period==TimePeriod.Evening||(period==TimePeriod.Night&&place==PlaceId.Square))
             {
                 if(!attemptedEvening)
                 {

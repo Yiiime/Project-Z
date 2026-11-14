@@ -2062,7 +2062,7 @@
           "items": {
             "$ref": "#/$defs/ActorId"
           },
-          "minItems": 8,
+          "minItems": 7,
           "maxItems": 8,
           "uniqueItems": true
         },

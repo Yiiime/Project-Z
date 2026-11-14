@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using static Seabreeze.UIPrimitives;
 
 namespace Seabreeze
@@ -10,6 +11,8 @@ namespace Seabreeze
         RectTransform canvasRect, root;
         CanvasGroup group;
         TextMeshProUGUI captionText;
+        GameObject bedTooltip;
+        bool bedPrompt;
         Vector3 worldPosition;
         bool requested, suppressed;
         string currentCaption;
@@ -28,6 +31,10 @@ namespace Seabreeze
             ((RoundedPanel)key).SetBorder(Color.clear,0);
             Label("Key",key.transform,new Vector2(.5f,.5f),new Vector2(.5f,.5f),Vector2.zero,new Vector2(26,28),"E",18,new Color(.07f,.13f,.22f),TextAlignmentOptions.Midline);
             captionText=Label("Action",root,new Vector2(0,.5f),new Vector2(0,.5f),new Vector2(50,0),new Vector2(88,36),"交谈",24,Paper,TextAlignmentOptions.MidlineLeft);
+            var tip=Panel("Bed hover tooltip",root,new Vector2(.5f,1),new Vector2(.5f,0),new Vector2(0,10),new Vector2(154,42),new Color(.188f,.173f,.314f,.94f));
+            ((RoundedPanel)tip).CornerRadius=12;
+            Label("Rest action",tip.transform,new Vector2(.5f,.5f),new Vector2(.5f,.5f),Vector2.zero,new Vector2(144,34),"休息一夜",22,Paper,TextAlignmentOptions.Midline);
+            bedTooltip=tip.gameObject;bedTooltip.SetActive(false);
             FinalKitAssets.Icon("prompt-tail",root,new Vector2(.5f,0),new Vector2(.5f,1),Vector2.zero,new Vector2(16,9));
             group=root.gameObject.AddComponent<CanvasGroup>();
             group.alpha=0;group.blocksRaycasts=false;group.interactable=false;
@@ -40,7 +47,8 @@ namespace Seabreeze
             string value=npc?"交谈":Normalize(caption);
             if(value==currentCaption)return;
             currentCaption=value;captionText.text=value;
-            float width=Mathf.Clamp(captionText.GetPreferredValues(value).x+70,119,520);
+            bedPrompt=value=="休息一夜";captionText.gameObject.SetActive(!bedPrompt);bedTooltip.SetActive(false);
+            float width=bedPrompt?52:Mathf.Clamp(captionText.GetPreferredValues(value).x+70,119,520);
             root.sizeDelta=new Vector2(width,56);
             ((RectTransform)root.GetChild(0)).sizeDelta=root.sizeDelta;
             captionText.rectTransform.sizeDelta=new Vector2(width-58,36);
@@ -55,6 +63,7 @@ namespace Seabreeze
         public void Hide(bool immediate = false)
         {
             requested=false;
+            bedTooltip?.SetActive(false);
             if(immediate && group!=null)group.alpha=0;
         }
         public void SetSuppressed(bool value){suppressed=value;if(value)Hide(true);}
@@ -62,6 +71,7 @@ namespace Seabreeze
         {
             if(root==null||canvasRect==null)return;
             float target=requested&&!suppressed?1:0;
+            if(target==0)bedTooltip.SetActive(false);
             group.alpha=Mathf.MoveTowards(group.alpha,target,Time.unscaledDeltaTime/Mathf.Max(.01f,Style.FadeOutDuration));
             root.localScale=Vector3.one*Mathf.Lerp(.96f,1f,group.alpha);
             if(group.alpha<=0)return;
@@ -77,6 +87,12 @@ namespace Seabreeze
             if(!positioned||Vector2.Distance(point,lastPosition)>240){lastPosition=point;positioned=true;}
             else lastPosition=Vector2.Lerp(lastPosition,point,1-Mathf.Exp(-22*Time.unscaledDeltaTime));
             root.anchoredPosition=lastPosition+Vector2.up*(1-group.alpha)*5;
+            if(bedPrompt&&requested&&!suppressed&&Mouse.current!=null)
+            {
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(root,Mouse.current.position.ReadValue(),null,out Vector2 pointer);
+                var hover=root.rect;hover.xMin-=12;hover.xMax+=12;hover.yMin-=10;hover.yMax+=10;
+                bedTooltip.SetActive(hover.Contains(pointer));
+            }
         }
     }
 }

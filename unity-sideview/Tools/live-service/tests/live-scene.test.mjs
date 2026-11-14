@@ -9,6 +9,7 @@ test('arrival progresses only through selected tools, displayed receipts and pla
   assert(!scene.execute({name:'depart_island'}));assert(!scene.accept());
   assert(scene.execute({name:'draw_guest',args:{}}));assert.deepEqual(scene.allowed(),[]);assert.equal(facts.length,0);
   scene.receipt(commands[0],{status:'displayed',playerActivated:true,playerName:input.playerName});assert(facts[0].text.includes('小海'));
+  scene.hostCompleted('congratulations');scene.playerReplied();
   assert(scene.execute({name:'offer_arrival',args:{title:'模型生成标题',description:'模型生成邀请'}}));
   assert(!scene.accept());scene.receipt(commands[1],{status:'displayed'});
   assert(scene.accept());assert(scene.accept());assert.equal(facts.length,2);
@@ -41,18 +42,18 @@ test('release reviewer receives trusted scene facts without host output instruct
   assert(!system.includes('调用工具时必须action=tool'));
 });
 
-test('arrival needs completed speech, visible chat and active watch time',()=>{
+test('arrival needs one visible audience round and two completed host turns, without a time gate',()=>{
  const {scene,host}=fixture(false);assert.deepEqual(scene.allowed(),[]);assert.equal(scene.execute({name:'draw_guest',args:{}}),false);
- for(let i=0;i<3;i++)scene.hostCompleted('s'+i);scene.hostCompleted('s0');assert.equal(scene.warmup.speeches,3);
- for(let i=0;i<3;i++)scene.audienceDisplayed();host.engine._clock+=60000;
- assert.deepEqual(scene.allowed(),[]);scene.audienceDisplayed();assert.deepEqual(scene.allowed(),['draw_guest']);
- const restored=new LiveScene(host,null,scene.snapshot());assert.deepEqual(restored.allowed(),['draw_guest']);restored.hostCompleted('s0');assert.equal(restored.warmup.speeches,3);
+ scene.hostCompleted('s0');scene.hostCompleted('s0');assert.equal(scene.warmup.speeches,1);
+ scene.audienceDisplayed();scene.audienceDisplayed();assert.deepEqual(scene.allowed(),[]);scene.hostCompleted('s1');
+ assert.deepEqual(scene.allowed(),['draw_guest']);
+ const restored=new LiveScene(host,null,scene.snapshot());assert.deepEqual(restored.allowed(),['draw_guest']);restored.hostCompleted('s0');assert.equal(restored.warmup.speeches,2);
 });
 test('time and chat alone cannot invent host completion',()=>{
  const {scene,host}=fixture(false);host.engine._clock+=60000;
  for(let i=0;i<6;i++)scene.audienceDisplayed();assert.deepEqual(scene.allowed(),[]);
- for(let i=0;i<3;i++)scene.hostCompleted('s'+i);host.engine._clock=44000;assert.deepEqual(scene.allowed(),[]);
- host.engine._clock=45010;assert.deepEqual(scene.allowed(),['draw_guest']);
+ scene.hostCompleted('s0');assert.deepEqual(scene.allowed(),[]);
+ scene.hostCompleted('s1');assert.deepEqual(scene.allowed(),['draw_guest']);
 });
 test('lottery result needs player activation and matching name',()=>{
  const {scene,commands,facts}=fixture();scene.execute({name:'draw_guest',args:{}});
@@ -60,4 +61,63 @@ test('lottery result needs player activation and matching name',()=>{
  assert.throws(()=>scene.receipt(commands[0],{status:'displayed',playerActivated:true,playerName:'other'}),/invalid_draw_evidence/);
  assert.equal(scene.phase,'opening');assert.equal(facts.length,0);assert.equal(scene.pending,commands[0].commandId);
  scene.receipt(commands[0],{status:'displayed',playerActivated:true,playerName:input.playerName});assert.equal(scene.phase,'drawn');
+});
+
+test('first evening requires mixed virtual audience and a timed goodnight song',async()=>{
+ const {scenePrompt}=await import('../server/live-scene.mjs');
+ const prompt=scenePrompt({...input,mode:'first_evening'});
+ assert(prompt.includes('纯聊天约60秒'));assert(prompt.includes('broadcast.today'));assert(prompt.includes('virtualAudience'));assert(prompt.includes('wanan-yanrenzhong-vivi2-chorus'));
+});
+
+test('collecting the gift waits for congratulations, player reply and the explicit invitation',()=>{
+ const {scene,commands}=fixture();scene.execute({name:'draw_guest',args:{}});
+ assert.equal(scene.accept(),false);
+ scene.receipt(commands[0],{status:'displayed',playerActivated:true,playerName:input.playerName});
+ assert.equal(scene.accept(),false);assert.deepEqual(scene.allowed(),[]);
+ scene.playerReplied();assert.equal(scene.reunion.playerReplied,false);
+ scene.hostCompleted('congratulations');assert.deepEqual(scene.allowed(),[]);
+ scene.playerReplied();assert.deepEqual(scene.allowed(),['offer_arrival']);
+ assert.equal(new LiveScene(scene.session,null,scene.snapshot()).reunion.playerReplied,true);
+});
+
+test('completing the audience exchange invalidates prefetched warmup exactly once',()=>{
+ const {scene,host}=fixture(false);let aborted=0,cancelled=0;
+ host.engine.pending={abort(){aborted++;}};host.engine._cancelPreparation=()=>cancelled++;
+ host.engine.speechPlan={oldWarmup:true};scene.hostCompleted('first');scene.audienceDisplayed();scene.audienceDisplayed();
+ assert.equal(cancelled,0);scene.hostCompleted('second');
+ assert.equal(aborted,1);assert.equal(cancelled,1);assert.equal(host.engine.speechPlan,null);
+ scene.hostCompleted('second');scene.audienceDisplayed();assert.equal(cancelled,1);
+ assert.deepEqual(scene.allowed(),['draw_guest']);
+});
+
+test('arrival cannot drift into singing or another warmup after the required exchange',async()=>{
+ const {parseAgentReply}=await import('../server/shared/worker/agent-director.js');
+ const context={host:{inbox:[]},scene:{...input,phase:'opening',tools:['draw_guest']},mediaRuntime:{audioEnabled:true,ttsAvailable:true}};
+ const speech={actorId:'z',delivery:'轻松地说。',expression:'neutral',action:'speak',speech:'我想到一个惊喜。',mood:'warm',handledIds:[],wakeAfterMs:2000,memory:'',agendaUpdates:[],virtualAudience:[]};
+ assert.throws(()=>parseAgentReply(speech,{kind:'host',context}),/arrival_lottery_required/);
+ assert.throws(()=>parseAgentReply({...speech,action:'tool',tool:{name:'start_singing',args:{songId:'wanan-yanrenzhong-vivi2-chorus'}}},{kind:'host',context}),/invalid_arrival_tool/);
+ assert.equal(parseAgentReply({...speech,action:'tool',tool:{name:'draw_guest',args:{}}},{kind:'host',context}).tool.name,'draw_guest');
+});
+test('first evening host must carry virtual chat in addition to the NPC lane',async()=>{
+ const {parseAgentReply}=await import('../server/shared/worker/agent-director.js');
+ const context={host:{inbox:[]},scene:{...input,mode:'first_evening',phase:'opening',tools:[]}};
+ const speech={action:'speak',speech:'今晚一起聊聊。',mood:'warm',handledIds:[],wakeAfterMs:2000,memory:'',agendaUpdates:[]};
+ assert.throws(()=>parseAgentReply(speech,{kind:'host',context}),/invalid_evening_virtual_audience/);
+ assert.equal(parseAgentReply({...speech,virtualAudience:[{name:'海风',text:'晚上好呀'},{name:'月光',text:'来听你聊天'}]},{kind:'host',context}).virtualAudience.length,2);
+});
+
+test('first evening song cue does not wait for another virtual audience round',async()=>{
+ const {parseAgentReply}=await import('../server/shared/worker/agent-director.js');
+ const context={host:{inbox:[]},mediaRuntime:{audioEnabled:true},scene:{...input,mode:'first_evening',songDue:true,phase:'opening',tools:[]}};
+ const speech={actorId:'z',delivery:'温柔地说。',expression:'neutral',action:'tool',tool:{name:'start_singing',args:{songId:'wanan-yanrenzhong-vivi2-chorus'}},speech:'给大家唱一首晚安，祝大家晚安。',mood:'warm',handledIds:[],wakeAfterMs:2000,memory:'',agendaUpdates:[],virtualAudience:[]};
+ assert.equal(parseAgentReply(speech,{kind:'host',context}).tool.name,'start_singing');
+});
+
+
+test('night prefetch rejects repeated lines but retains a new response on the same topic',async()=>{
+ const {repeatedNightSpeech}=await import('../server/live-scene.mjs');
+ assert(repeatedNightSpeech('小海还给我拍了张广场老榕树的照片，第一张呢。',['小海还给我拍了张广场老榕树的照片！第一张呢。']));
+ assert(repeatedNightSpeech('那张照片我打算好好收着，就当咱们认识第一天的纪念。',['小海拍的那张照片我打算好好收着，当咱们认识第一天的纪念。']));
+ assert(repeatedNightSpeech('广场那张照片是小海拍的，我提的小事他办得挺认真。',['小海真把广场第一张照片拍好了，我提的小事他办得挺认真。']));
+ assert(!repeatedNightSpeech('沙滩那场烟花真好看，下次还想和朋友一起看。',['今天我在码头接到小海，带他认识了广场上的朋友。']));
 });

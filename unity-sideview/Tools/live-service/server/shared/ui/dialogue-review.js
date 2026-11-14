@@ -31,7 +31,21 @@ export class DialogueReview {
     }
     const oldIds=new Set(before.publicEvents.map(e=>e.id));
     if(this.events.some(e=>!oldIds.has(e.id)&&e.type!=='npc.message'&&!(role==='audience'&&['speech.progress','speech.completed'].includes(e.type))))return false;
-    if(role==='host')return JSON.stringify(this.waiting)===JSON.stringify(before.waiting_messages);
+    if(role==='host'){
+      if(!this.coalesceHostAudience)return JSON.stringify(this.waiting)===JSON.stringify(before.waiting_messages);
+      // Spectators may arrive while a selected reply is reviewed. Player input and
+      // the exact selected messages remain fences; unrelated chat is next turn's work.
+      const players=list=>list.filter(m=>m.speakerRole==='player');
+      if(JSON.stringify(players(this.waiting))!==JSON.stringify(players(before.waiting_messages)))return false;
+      const selected=new Set(approved.candidate.replyTo||[]);
+      return before.waiting_messages.filter(m=>selected.has(m.id)).every(old=>this.waiting.some(m=>JSON.stringify(m)===JSON.stringify(old)));
+    }
+    if(this.coalesceHostAudience){
+      // New spectator messages do not invalidate an NPC's independently reviewed reaction.
+      // Player input remains a fence; the public evidence above must still match.
+      const players=list=>list.filter(m=>m.speakerRole==='player');
+      return JSON.stringify(players(this.waiting))===JSON.stringify(players(before.waiting_messages));
+    }
     return this.waiting.every(e=>before.waiting_messages.some(old=>JSON.stringify(old)===JSON.stringify(e)));
   }
   reset() {this.session++;this.invalidate();this.events=[];this.waiting=[];this.traces=[];}

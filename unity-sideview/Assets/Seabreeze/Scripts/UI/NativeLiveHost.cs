@@ -15,7 +15,7 @@ namespace Seabreeze
         LiveFeatureController feature;
         bool previousAudioPause, previousBackground, previousUnscaled, closing, restored;
 
-        public static NativeLiveHost Open(Transform parent, Action returnToGame, Action<string> sessionEnded = null, MemoryGameController memory = null, string storyMode = "daily", Action<JObject> sceneCommand = null)
+        public static NativeLiveHost Open(Transform parent, Action returnToGame, Action<string> sessionEnded = null, MemoryGameController memory = null, string storyMode = "daily", Action<JObject> sceneCommand = null, bool preload = false)
         {
             var root = new GameObject("Z Native Live");
             root.transform.SetParent(parent, false);
@@ -35,10 +35,13 @@ namespace Seabreeze
             if(memory!=null){host.feature.BindCharacters=memory.Client.BeginLive;host.feature.ReleaseCharacters=memory.Client.EndLive;}
             host.feature.ExitRequested = returnToGame;
             host.feature.SessionEnded = sessionEnded;
+            host.feature.Preloading = preload;
             host.feature.SceneMode = storyMode;
             host.feature.SceneCommand = sceneCommand;
             return host;
         }
+
+        public void Reveal() => feature?.RevealPrepared();
 
         public Task SynchronizeExit() => feature != null ? feature.Leave() : Task.CompletedTask;
 
