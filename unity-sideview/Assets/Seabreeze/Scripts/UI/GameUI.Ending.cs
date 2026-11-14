@@ -194,9 +194,7 @@ namespace Seabreeze
                     endingProgress.text=endingSource.text;
                     if(phase=="failed")EndingFailure((string)source["error"]??"经历已变化，请按最新记忆重试。");
                 }else if(!endingHistoryShown)endingSource.text=$"{(string)source["sourceName"]} · 已保存"+((bool?)source["newExperiencesAvailable"]==true?" · 本局有新变化，可重新演出":"");
-                bool presentation=(string)source["presentationId"]=="looking-back-three-acts";
-                endingSource.gameObject.SetActive(presentation&&!endingHistoryShown&&seventhNight!=null);
-                if(presentation&&!endingHistoryShown&&seventhNight!=null)endingSource.text="三幕文案已用于回忆页 · 结局沿用已保存的七日经历";
+                endingSource.gameObject.SetActive(false);
                 endingHistory.interactable=previousEnding!=null&&currentEnding!=null&&!endingGenerating;
                 endingHistory.GetComponentInChildren<TextMeshProUGUI>().text=endingHistoryShown?"返回当前结局":"看上次结局";
             },_=>{if(session.State==owner&&overlayMode=="z-ending"&&generation==endingDisplayGeneration)endingSourceChecking=false;});
