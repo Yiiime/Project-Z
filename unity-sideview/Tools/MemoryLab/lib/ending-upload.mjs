@@ -1,6 +1,7 @@
 import { randomBytes, randomUUID } from 'node:crypto';
 import { TurnError } from './policy.mjs';
 import { validateScenario, parseModel, sourceBlocks, importMessages, annotatedScenario } from '../../../Assets/Seabreeze/Dialogue/EndingDemo/ending.mjs';
+import { reviewedPresentationId } from './ending.mjs';
 
 // Uploads are authored source material for one save, not actual world events.
 export class EndingMemoryUploads {
@@ -38,11 +39,15 @@ export class EndingMemoryUploads {
     const limit = /\.json$/i.test(input.name) ? 500_000 : 200_000;
     if (typeof input.text !== 'string' || Buffer.byteLength(input.text, 'utf8') > limit)
       throw new TurnError('文件过大或没有正文，TXT/Markdown 最多200KB，JSON最多500KB');
+    if (reviewedPresentationId(input.text))
+      throw new TurnError('这份三幕文案已内置到“第七晚结局”。直接返回游戏查看即可；此处只上传用于生成结局的七日经历。');
     const version = ++session.generation;
     const expectedRevision = this.endings.sourceState(world).sourceRevision;
     let scenario;
     if (/\.json$/i.test(input.name)) {
       scenario = validateScenario(parseModel(input.text), { maxMemories: 200 });
+      if (reviewedPresentationId(scenario.sourceText))
+        throw new TurnError('这份文件包含已内置的三幕文案，请返回游戏查看；需要更换经历时，请选择七日经历文件。');
     } else {
       const blocks = sourceBlocks(input.text);
       if (!this.provider.publicConfig().configured) throw new TurnError('尚未连接模型，请先在游戏模型设置中连接，再在线解析文本');

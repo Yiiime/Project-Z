@@ -92,6 +92,8 @@ export function createServer({
     endingRecapPages: true,
     endingRecapVersion: 3,
     endingSourceRefresh: 4,
+    endingPresentationVersion: 1,
+    endingStoryVersion: 2,
     configurationRevision,
     mode: provider.mode || "real",
     version: catalog.registry.pack_version,
@@ -296,9 +298,13 @@ export function createServer({
       )
         throw new TurnError("请求标识无效");
       let raw = "";
+      // A checkpoint includes its completed ending sources and may cross the
+      // ordinary command limit after JSON escaping. Only game-open accepts the
+      // larger bound; all other runtime writes keep the existing 8 MB cap.
+      const requestLimit = url.pathname === "/api/game/open" ? 12_000_000 : 8_000_000;
       for await (const chunk of req) {
         raw += chunk;
-        if (Buffer.byteLength(raw) > 8_000_000) throw new TurnError("请求过大");
+        if (Buffer.byteLength(raw) > requestLimit) throw new TurnError("请求过大");
       }
       const p = JSON.parse(raw || "{}"),
         started = performance.now();

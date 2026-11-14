@@ -117,7 +117,7 @@ namespace Seabreeze
             endingHistory=Button("Previous ending version",overlayRoot,TL,TL,new Vector2(715,-30),new Vector2(235,48),"看上次结局",ToggleEndingHistory,false,18);endingHistory.interactable=false;
             BuildBlackOutcome();
             string saved=session.State.memory?.seventhNightEndingJson;
-            if(!string.IsNullOrEmpty(saved))try{var cached=JsonConvert.DeserializeObject<EndingRun>(saved);if(cached?.worldId==session.State.memory.worldId){seventhNight=currentEnding=cached;PrepareDailyPages();var json=Newtonsoft.Json.Linq.JObject.Parse(saved);endingContextRevision=(string)json["contextRevision"]??"";endingSourceRevision=(string)json["sourceRevision"]??"";}}catch{ }
+            if(!string.IsNullOrEmpty(saved))try{var cached=JsonConvert.DeserializeObject<EndingRun>(saved);if(cached?.worldId==session.State.memory.worldId){var json=Newtonsoft.Json.Linq.JObject.Parse(saved);endingContextRevision=(string)json["contextRevision"]??"";endingSourceRevision=(string)json["sourceRevision"]??"";seventhNight=currentEnding=cached;PrepareDailyPages();}}catch{ }
             if(seventhNight!=null)ShowEndingPage(0);else GenerateSeventhNight();
         }
         void BuildBlackOutcome()
@@ -147,14 +147,16 @@ namespace Seabreeze
         {
             if(session.Memory?.Client==null){EndingFailure("当前存档的记忆系统尚未就绪。返回小岛后重试。");return;}
             endingGenerating=true;endingTitle.text="Z 正在回望这些日子";SetEndingWords("你们说过的话、一起做过的事，会和第七晚的剧情一起交给她。\n她会自己作出选择，再逐段想起。",false);
+            endingEyebrow.text="第七晚 · 正在准备回忆";endingProgress.text="结局生成中";
+            endingNext.GetComponentInChildren<TextMeshProUGUI>().text="正在生成…";
             endingPrevious.interactable=endingOriginal.interactable=endingNext.interactable=false;
             int generation=endingDisplayGeneration;var owner=session.State;
             session.Memory.Client.Focus("z");
             session.Memory.Client.GenerateEnding("model",reply=>{
                 if(generation!=endingDisplayGeneration||session.State!=owner||overlayMode!="z-ending")return;
+                endingContextRevision=(string)reply.ending["contextRevision"]??endingContextRevision;endingSourceRevision=(string)reply.ending["sourceRevision"]??endingSourceRevision;
                 seventhNight=currentEnding=reply.ending.ToObject<EndingRun>();
-                PrepareDailyPages();
-                endingContextRevision=(string)reply.ending["contextRevision"]??endingContextRevision;endingSourceRevision=(string)reply.ending["sourceRevision"]??endingSourceRevision;endingGenerating=false;endingHistoryShown=false;ShowEndingPage(0);
+                PrepareDailyPages();endingGenerating=false;endingHistoryShown=false;ShowEndingPage(0);
             },error=>{if(generation==endingDisplayGeneration&&session.State==owner&&overlayMode=="z-ending")EndingFailure(error);});
         }
         void OpenEndingMemoryUpload()
@@ -182,15 +184,19 @@ namespace Seabreeze
                 bool changed=!string.IsNullOrEmpty(sourceRevision)&&(legacySnapshot||(!string.IsNullOrEmpty(endingSourceRevision)&&sourceRevision!=endingSourceRevision));
                 endingSourceRevision=sourceRevision;
                 if(string.IsNullOrEmpty(endingContextRevision))endingContextRevision=revision;
-                if(changed){ExitBlackOutcome();endingDisplayGeneration++;endingContextRevision=revision;endingHistoryShown=false;endingUploadOpening=false;endingUpload.interactable=true;previousEnding=currentEnding;currentEnding=seventhNight=null;session.State.memory.seventhNightEndingRequestId="";endingGenerating=true;endingTitle.text="Z 正在回望新的经历";SetEndingWords("已收到新记忆。她会结合你们之后真实发生的经历，再作出自己的选择。",false);endingPrevious.interactable=endingOriginal.interactable=endingNext.interactable=false;}
+                if(changed){ExitBlackOutcome();endingDisplayGeneration++;endingContextRevision=revision;endingHistoryShown=false;endingUploadOpening=false;endingUpload.interactable=true;previousEnding=currentEnding;currentEnding=seventhNight=null;session.State.memory.seventhNightEndingRequestId="";endingGenerating=true;endingTitle.text="Z 正在回望新的经历";SetEndingWords("已收到新记忆。她会结合你们之后真实发生的经历，再作出自己的选择。",false);endingEyebrow.text="第七晚 · 正在准备回忆";endingProgress.text="结局生成中";endingNext.GetComponentInChildren<TextMeshProUGUI>().text="正在生成…";endingPrevious.interactable=endingOriginal.interactable=endingNext.interactable=false;}
                 if(reply.endingPrevious!=null)previousEnding=reply.endingPrevious.ToObject<EndingRun>();
                 if(reply.ending!=null&&!endingHistoryShown&&(seventhNight==null||seventhNight.id!=(string)reply.ending["id"])){
                     seventhNight=currentEnding=reply.ending.ToObject<EndingRun>();PrepareDailyPages();endingGenerating=false;ShowEndingPage(0);
                 }else if(changed&&(phase=="idle"||phase=="outdated"))GenerateSeventhNight();
                 if(endingGenerating){
                     endingSource.text=phase=="recalling"?$"{(int?)source["completed"]??0} / {(int?)source["memoryCount"]??0} 段经历已整理":phase=="deciding"?"正在结合全部知情经历，形成她自己的答案":"正在同步最新记忆";
+                    endingProgress.text=endingSource.text;
                     if(phase=="failed")EndingFailure((string)source["error"]??"经历已变化，请按最新记忆重试。");
                 }else if(!endingHistoryShown)endingSource.text=$"{(string)source["sourceName"]} · 已保存"+((bool?)source["newExperiencesAvailable"]==true?" · 本局有新变化，可重新演出":"");
+                bool presentation=(string)source["presentationId"]=="looking-back-three-acts";
+                endingSource.gameObject.SetActive(presentation&&!endingHistoryShown&&seventhNight!=null);
+                if(presentation&&!endingHistoryShown&&seventhNight!=null)endingSource.text="三幕文案已用于回忆页 · 结局沿用已保存的七日经历";
                 endingHistory.interactable=previousEnding!=null&&currentEnding!=null&&!endingGenerating;
                 endingHistory.GetComponentInChildren<TextMeshProUGUI>().text=endingHistoryShown?"返回当前结局":"看上次结局";
             },_=>{if(session.State==owner&&overlayMode=="z-ending"&&generation==endingDisplayGeneration)endingSourceChecking=false;});
@@ -205,7 +211,10 @@ namespace Seabreeze
         [Serializable] class ApprovedEnding
         {
             public string fingerprint,closingText;
+            public ApprovedEnding[] variants;
+            public AuthoredEndingVariant[] endingVariants;
         }
+        [Serializable] class AuthoredEndingVariant { public string choice,outcome,closingText; }
         public static string RenderEndingPlayerName(string value)
         {
             var name=value?.Trim();
@@ -270,6 +279,7 @@ namespace Seabreeze
                     endingRecapMemories=GroupMemoriesByRecap(seventhNight?.recollections,endingRecapPages);
                 }
             }
+            ApplyReviewedThreeActCopy(fingerprints);
             var approved=Resources.Load<TextAsset>("Dialogue/Ending/approved");
             if(approved==null||seventhNight?.decision==null||seventhNight.outcome==null)return;
             try
@@ -278,6 +288,13 @@ namespace Seabreeze
                 if(saved==null)return;
                 if(seventhNight.decision.choice=="leave"&&seventhNight.outcome.status=="pending"&&Array.IndexOf(fingerprints,saved.fingerprint)>=0)
                     endingClosingText=saved.closingText??"";
+                foreach(var variant in saved.variants??Array.Empty<ApprovedEnding>())
+                {
+                    if(variant==null||Array.IndexOf(fingerprints,variant.fingerprint)<0)continue;
+                    foreach(var ending in variant.endingVariants??Array.Empty<AuthoredEndingVariant>())
+                        if(ending!=null&&ending.choice==seventhNight.decision.choice&&ending.outcome==seventhNight.outcome.status)
+                            endingClosingText=ending.closingText??"";
+                }
             }
             catch(Exception e){Debug.LogWarning("Approved ending resource could not be read: "+e.Message);}
         }
@@ -510,6 +527,7 @@ namespace Seabreeze
         void EndingFailure(string error)
         {
             endingGenerating=false;endingTitle.text="让这个夜晚，等一等";SetEndingWords(error,false);
+            endingEyebrow.text="第七晚 · 生成中断";endingProgress.text="结局尚未生成";
             endingNext.interactable=true;endingNext.GetComponentInChildren<TextMeshProUGUI>().text="重新连接并重试";endingPrevious.interactable=endingOriginal.interactable=false;
         }
         void ShowEndingPage(int page)
@@ -540,7 +558,7 @@ namespace Seabreeze
         void ShowBlackOutcome()
         {
             if(endingBlackReveal!=null)StopCoroutine(endingBlackReveal);
-            endingBlackReveal=StartCoroutine(RevealBlackOutcome());
+            endingBlackReveal=StartCoroutine(endingUsesReviewedThreeActs&&seventhNight?.decision?.choice=="leave"?RevealSpokenChoice():RevealBlackOutcome());
         }
         IEnumerator RevealBlackOutcome()
         {
@@ -584,8 +602,16 @@ namespace Seabreeze
         }
         string FullEndingText()
         {
-            string body=string.IsNullOrWhiteSpace(endingClosingText)?seventhNight?.outcome?.text:endingClosingText;
-            if(string.IsNullOrWhiteSpace(body))body=seventhNight?.decision?.decision??"";
+            string body=endingClosingText;
+            if(string.IsNullOrWhiteSpace(body))
+            {
+                // Preserve Z's reasoning and her own words in custom/live runs,
+                // alongside the independently confirmed execution result.
+                var paragraphs=new List<string>();
+                foreach(var part in new[]{seventhNight?.decision?.reason,seventhNight?.decision?.decision,seventhNight?.outcome?.text})
+                    if(!string.IsNullOrWhiteSpace(part)&&!paragraphs.Contains(part.Trim()))paragraphs.Add(part.Trim());
+                body=string.Join("\n\n",paragraphs.ToArray());
+            }
             if(!string.IsNullOrWhiteSpace(seventhNight?.decision?.lastLine))body += "\n\n" + seventhNight.decision.lastLine;
             return EndingWordsForPlayer(body);
         }
@@ -622,6 +648,7 @@ namespace Seabreeze
         }
         void ExitBlackOutcome()
         {
+            ReleaseEndingChoiceAudio();
             endingBlackRevealed=false;endingBlackDetailsShown=false;endingBlackTransitioning=false;
             if(endingBlackReveal!=null){StopCoroutine(endingBlackReveal);endingBlackReveal=null;}
             if(endingBlackScreen!=null)endingBlackScreen.gameObject.SetActive(false);
@@ -711,6 +738,7 @@ namespace Seabreeze
         }
         void ReleaseSeventhNight()
         {
+            ReleaseEndingChoiceAudio();
             if(endingBlackReveal!=null){StopCoroutine(endingBlackReveal);endingBlackReveal=null;}
             endingDisplayGeneration++;endingGenerating=false;seventhNightOpening=false;
             if(endingCharacter!=null){endingCharacter.Hide();endingCharacter=null;}

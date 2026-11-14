@@ -181,7 +181,23 @@ namespace Seabreeze
                 if(session.State.memory!=state)return;
                 if(r.responseRevision<acknowledgedRevision&&path!="/api/game/ending-upload/open"){failed("正在同步最新经历。");return;}
                 Accept(r,state);
-                if(r.ending!=null){state.seventhNightEndingJson=r.ending.ToString(Newtonsoft.Json.Formatting.None);state.seventhNightEndingRequestId="";session.Save();}
+                if(r.ending!=null)
+                {
+                    // Ending results are immutable by ID. A source-status poll
+                    // may return the checkpoint copy of the result, whose old
+                    // uploaded text can already contain different replacement
+                    // characters after a Unity save round. Keep the selected
+                    // local object when it is the same result instead of
+                    // rewriting user data for a presentation-only refresh.
+                    string selectedId="";
+                    if(!string.IsNullOrEmpty(state.seventhNightEndingJson))
+                        try{selectedId=(string)Newtonsoft.Json.Linq.JObject.Parse(state.seventhNightEndingJson)["id"]??"";}catch{ }
+                    if(string.IsNullOrEmpty(selectedId)||selectedId!=(string)r.ending["id"])
+                    {
+                        state.seventhNightEndingJson=r.ending.ToString(Newtonsoft.Json.Formatting.None);
+                        state.seventhNightEndingRequestId="";session.Save();
+                    }
+                }
                 complete(r);
             },failed);
         }

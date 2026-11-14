@@ -9,6 +9,37 @@ import { validateScenario, knownMemories, decisionMessages, validateDecision, re
 import { TurnError } from './policy.mjs';
 
 export const authoredFile = resolve(dirname(fileURLToPath(import.meta.url)), '../../../Assets/Seabreeze/Dialogue/EndingDemo/scenario.example.json');
+const reviewedCopyPath = resolve(dirname(authoredFile), '../../Resources/Dialogue/Ending/looking-back-three-acts.json');
+const reviewedCopy = existsSync(reviewedCopyPath) ? JSON.parse(readFileSync(reviewedCopyPath, 'utf8')) : null;
+export function reviewedPresentationId(text) {
+  if (typeof text !== 'string' || !text.trim()) return null;
+  const normalized = text.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n')
+    .split('\n').map(line => line.trimEnd()).join('\n').trim();
+  const hash = createHash('sha256').update(normalized).digest('hex');
+  return reviewedCopy?.presentationSourceHashes?.includes(hash) ? 'looking-back-three-acts' : null;
+}
+function reviewedRecollections(result) {
+  const originals = result?.recollections?.filter(memory => memory && !memory.memoryId?.startsWith('game_'));
+  if (!originals?.length) return false;
+  const digest = replace => createHash('sha256').update(originals.map(memory =>
+    memory.day + '\n' + replace(memory.original || '')).join('\n\u001e\n')).digest('hex');
+  const hashes = [digest(text => text)];
+  if (['字小节', '旅人', '玩家', '', undefined].includes(result.playerName)) {
+    hashes.push(digest(text => text.replaceAll('字小节', '旅人')),
+      digest(text => text.replaceAll('旅人', '字小节')));
+  }
+  if (hashes.some(hash => reviewedCopy?.fingerprints?.includes(hash))) return true;
+  // Some old Unity saves have already replaced malformed legacy UTF-8 bytes
+  // inside the embedded originals. In that case the full-text digest cannot
+  // survive another save round. Accept only a reviewed deterministic content
+  // revision together with the exact ordered memory identities and days; do
+  // not trust the upload UUID, file name, title, or player name.
+  const contentRevision = String(result.sourceRevision || '').split(':')[0];
+  const identities = originals.map(memory => `${memory.day}:${memory.memoryId}`);
+  return reviewedCopy?.sourceRevisions?.includes(contentRevision) &&
+    identities.length === reviewedCopy?.memoryIdentities?.length &&
+    identities.every((identity, index) => identity === reviewedCopy.memoryIdentities[index]);
+}
 // Exact authored revisions on either side of the built-in player rename.
 // Custom uploads, including stories with the same title or player name, have different revisions.
 const renamedPresets = [
@@ -86,6 +117,25 @@ export class GameEndingCoordinator {
     this.engine = engine; this.catalog = catalog; this.provider = provider; this.scenarioPath = scenarioPath;
     this.selectionPath = selectionPath; this.inflight = new Map(); this.progress = new Map();
   }
+  presentationState(world) {
+    const source = world.endingMemorySource;
+    const presentationId = reviewedPresentationId(source?.originalText) || reviewedPresentationId(source?.scenario?.sourceText);
+    if (!presentationId) return null;
+    // A presentation draft is not another set of world events. Recover only a
+    // completed result whose actual originals match the reviewed seven-day story.
+    const saved = Object.values(world.seventhNightEndings || {}).map(entry => entry.result)
+      .filter(result => result?.worldId === world.worldId && result.mode === 'model' &&
+        ['leave', 'stay'].includes(result.decision?.choice) && result.outcome && reviewedRecollections(result))
+      .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+    const ending = saved[0];
+    return { presentationId, sourceName: source.fileName || '回过头的人',
+      sourceRevision: `presentation:${presentationId}:${source.version || 'file'}`, uploaded: true,
+      contextRevision: ending?.contextRevision || '', memoryCount: ending?.memoryCount || 0,
+      liveMemoryCount: ending?.liveMemoryCount || 0, newExperiencesAvailable: false,
+      phase: ending ? 'complete' : 'failed', completed: ending?.memoryCount || 0,
+      error: ending ? '' : '这份文件是三幕结局文案。当前存档没有匹配的七日结局，请上传七日经历文件后生成，再查看三幕回忆。',
+      ...(ending ? { ending } : {}), ...(saved[1] ? { previousEnding: saved[1] } : {}) };
+  }
   authored(world) {
     if (world?.endingMemorySource?.scenario) return readPreset(world.endingMemorySource.scenario, 200);
     let path = this.scenarioPath;
@@ -104,6 +154,8 @@ export class GameEndingCoordinator {
       sourceName: world.endingMemorySource?.fileName || authored.sourceName || '七日剧情' };
   }
   sourceState(world) {
+    const presentation = this.presentationState(world);
+    if (presentation) return presentation;
     const context = this.context(world);
     const pending = this.progress.get(world.worldId);
     const current = pending?.runId === world.runId && pending.sourceRevision === context.sourceRevision ? pending : null;
@@ -130,6 +182,11 @@ export class GameEndingCoordinator {
     if (!/^[a-zA-Z0-9_-]{1,100}$/.test(input.requestId || '')) throw new TurnError('结局请求缺少稳定标识');
     const mode = input.details?.mode || 'model';
     if (!['model', 'preview-leave', 'preview-stay'].includes(mode)) throw new TurnError('结局模式无效');
+    const presentation = this.presentationState(world);
+    if (presentation) {
+      if (!presentation.ending) throw new TurnError(presentation.error);
+      return Promise.resolve(presentation.ending);
+    }
     const fingerprint = createHash('sha256').update(JSON.stringify({ requestId: input.requestId, mode })).digest('hex');
     const cached = world.seventhNightEndings?.[input.requestId];
     if (cached) { if (cached.fingerprint !== fingerprint) throw new TurnError('结局请求标识已用于另一种选择'); return Promise.resolve(cached.result); }

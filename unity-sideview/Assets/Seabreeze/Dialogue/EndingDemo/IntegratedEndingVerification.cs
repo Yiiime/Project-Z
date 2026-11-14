@@ -95,8 +95,93 @@ namespace Seabreeze.EndingDemo
                 bodyBottom=a[0].y,bodyTop=a[1].y,viewBottom=b[0].y,viewTop=b[1].y,nonzero,colored,clipX=clip.x,clipY=clip.y,clipZ=clip.z,clipW=clip.w};
             File.WriteAllText(Path.Combine(output,stage+"-text.json"),Newtonsoft.Json.JsonConvert.SerializeObject(data));
         }
+        IEnumerator RunNativeThreeActQA()
+        {
+            float readyBy=Time.realtimeSinceStartup+90;
+            while((GameUI.Instance==null||!Field<bool>(GameUI.Instance,"initialized")||GameSession.Instance?.Memory?.Client?.CanGenerate!=true||WorldDirector.Instance?.IsTransitioning!=false)&&Time.realtimeSinceStartup<readyBy)yield return null;
+            var ui=GameUI.Instance;var session=GameSession.Instance;
+            Require(ui!=null&&session?.Memory?.Client?.CanGenerate==true,"Native game did not initialize");
+            var args=Environment.GetCommandLineArgs();
+            bool savedPresentation=Array.IndexOf(args,"-endingSavedPresentationQA")>=0;
+            string saved=session.State.memory.seventhNightEndingJson;
+            if(!savedPresentation)
+            {
+                int sourceAt=Array.IndexOf(args,"-endingThreeActsSource");
+                Require(sourceAt>=0&&sourceAt+1<args.Length,"Three-act QA requires a reviewed source fixture");
+                var source=Newtonsoft.Json.Linq.JObject.Parse(File.ReadAllText(args[sourceAt+1]));
+                var memories=new System.Collections.Generic.List<EndingDemoView.Recollection>();
+                foreach(var item in source["memories"])
+                    if((bool)item["zKnows"])memories.Add(new EndingDemoView.Recollection{memoryId=(string)item["id"],day=(int)item["day"],title=(string)item["title"],original=(string)item["text"],text=(string)item["text"]});
+                var daily=new EndingDemoView.DailyPage[7];for(int d=0;d<7;d++)daily[d]=new EndingDemoView.DailyPage{day=d+1,title="QA",text="QA"};
+                var fixture=new EndingDemoView.EndingRun{id="native_three_act_qa",worldId=session.State.memory.worldId,sourceName=(string)source["sourceName"],playerName=(string)source["playerName"],mode="model",memoryCount=memories.Count,recollections=memories.ToArray(),dailyPages=daily,
+                    decision=new EndingDemoView.Decision{choice="leave",decision="我选择离开。",lastLine="QA"},outcome=new EndingDemoView.Outcome{status="pending",label="登船待确认",text="船还在岸边。"}};
+                saved=JsonUtility.ToJson(fixture);session.State.memory.seventhNightEndingJson=saved;
+            }
+            else Require(!string.IsNullOrEmpty(saved),"Recovery QA requires a copied saved ending");
+            int day=session.State.day,period=session.State.period;string place=session.State.place;bool previousAudioPause=AudioListener.pause;
+            Require(Find(ui,"Three act ending shortcut")==null,"Unexpected separate three-act interaction");
+            var shortcut=Find(ui,"Seventh night shortcut");Require(shortcut!=null,"Original ending shortcut is missing");shortcut.onClick.Invoke();
+            float openedBy=Time.realtimeSinceStartup+15;
+            while((!ui.HasOverlay||Field<EndingDemoView.EndingRun>(ui,"seventhNight")==null)&&Time.realtimeSinceStartup<openedBy)yield return null;
+            if(savedPresentation)
+            {
+                float refreshedBy=Time.realtimeSinceStartup+20;
+                while(!Field<TextMeshProUGUI>(ui,"endingSource").gameObject.activeSelf&&Time.realtimeSinceStartup<refreshedBy)yield return null;
+                Require(Field<TextMeshProUGUI>(ui,"endingSource").gameObject.activeSelf,"Uploaded presentation did not recover the saved seven-day ending");
+                Require(!Field<bool>(ui,"endingGenerating"),"Recovery remained on the generation placeholder");
+                Require(Field<EndingDemoView.EndingRun>(ui,"seventhNight").id==(string)Newtonsoft.Json.Linq.JObject.Parse(saved)["id"],"Recovery replaced the completed ending");
+            }
+            else
+            {
+                typeof(GameUI).GetField("nextEndingSourceCheck",Fields).SetValue(ui,float.MaxValue);
+                typeof(GameUI).GetField("endingSourceChecking",Fields).SetValue(ui,true);
+                typeof(GameUI).GetField("endingDisplayGeneration",Fields).SetValue(ui,Field<int>(ui,"endingDisplayGeneration")+1);
+            }
+            while(ui.IsOverlayTransitioning)yield return null;
+            Require(Field<bool>(ui,"endingUsesReviewedThreeActs"),"Reviewed copy did not match the local source");
+            for(int page=0;page<3;page++)
+            {
+                Require(Field<int>(ui,"endingPage")==page,"Original next-page control did not advance");
+                Require(!Field<Image>(ui,"endingBlackScreen").gameObject.activeSelf,"Memory page unexpectedly became black");
+                var image=Field<RawImage>(ui,"endingSceneImage");var title=Field<TextMeshProUGUI>(ui,"endingTitle");
+                Require(image.gameObject.activeInHierarchy&&image.texture!=null&&!string.IsNullOrWhiteSpace(title.text),"Native scene image or title is missing");
+                Require(Field<int[]>(ui,"endingRevealStops").Length>1,"Original paragraph reveal is missing");
+                Call(ui,"FinishEndingReveal");yield return null;
+                var words=Field<TextMeshProUGUI>(ui,"endingBody");
+                if(page==2)
+                {
+                    Require(words.text.EndsWith("于是——我说：",StringComparison.Ordinal),"Last memory did not end with the cue");
+                    Require(!words.text.Contains("我想走"),"Answer appeared before the black cut");
+                    Field<ScrollRect>(ui,"endingScroll").verticalNormalizedPosition=0;
+                }
+                File.WriteAllText(Path.Combine(output,"act-"+(page+1)+".txt"),words.text);
+                ScreenCapture.CaptureScreenshot(Path.Combine(output,"act-"+(page+1)+".png"));yield return new WaitForEndOfFrame();yield return new WaitForSecondsRealtime(.3f);
+                Find(ui,"Continue ending").onClick.Invoke();yield return null;
+            }
+            float heardBy=Time.realtimeSinceStartup+15;
+            while(Field<int>(ui,"endingChoiceVoicePlayCount")<1&&Time.realtimeSinceStartup<heardBy)yield return null;
+            var voice=Field<AudioSource>(ui,"endingChoiceVoice");
+            Require(voice!=null&&voice.isPlaying&&voice.clip?.name=="looking-back-choice","Supplied recording did not play");
+            Require(voice.ignoreListenerPause&&AudioListener.pause,"Voice should play while island ambience is paused");
+            Require(Field<TextMeshProUGUI>(ui,"endingBlackBody").text=="我想走","Black answer is incorrect");
+            Require(!Field<TextMeshProUGUI>(ui,"endingBlackTitle").gameObject.activeSelf,"Black answer should have no title");
+            File.WriteAllText(Path.Combine(output,"voice.json"),"{\"playing\":true,\"length\":"+voice.clip.length.ToString(System.Globalization.CultureInfo.InvariantCulture)+",\"sampleRate\":"+voice.clip.frequency+"}");
+            yield return new WaitForSecondsRealtime(2.1f);
+            Require(Field<int>(ui,"endingChoiceVoicePlayCount")==1,"Choice voice played more than once");
+            ScreenCapture.CaptureScreenshot(Path.Combine(output,"choice.png"));yield return new WaitForEndOfFrame();yield return new WaitForSecondsRealtime(.3f);
+            Field<Button>(ui,"endingBlackNext").onClick.Invoke();yield return new WaitForSecondsRealtime(1);
+            Require(!ui.HasOverlay&&AudioListener.pause==previousAudioPause&&(voice==null||!voice.isPlaying),"Original return control did not restore gameplay and audio");
+            Require(session.State.day==day&&session.State.period==period&&session.State.place==place,"Ending presentation changed world state");
+            Require(Newtonsoft.Json.Linq.JToken.DeepEquals(Newtonsoft.Json.Linq.JToken.Parse(session.State.memory.seventhNightEndingJson),Newtonsoft.Json.Linq.JToken.Parse(saved)),"Ending presentation overwrote the selected result");
+            passed=true;
+        }
         IEnumerator Run()
         {
+            if(Array.IndexOf(Environment.GetCommandLineArgs(),"-endingThreeActsQA")>=0||Array.IndexOf(Environment.GetCommandLineArgs(),"-endingSavedPresentationQA")>=0)
+            {
+                var native=RunNativeThreeActQA();while(native.MoveNext())yield return native.Current;
+                yield break;
+            }
             float deadline=Time.realtimeSinceStartup+90;
             while((GameUI.Instance==null||GameSession.Instance?.Memory?.Client?.CanGenerate!=true||WorldDirector.Instance?.IsTransitioning!=false)&&Time.realtimeSinceStartup<deadline)yield return null;
             var ui=GameUI.Instance;var session=GameSession.Instance;
@@ -188,6 +273,31 @@ namespace Seabreeze.EndingDemo
             ui.CloseOverlay();deadline=Time.realtimeSinceStartup+10;while(ui.HasOverlay&&Time.realtimeSinceStartup<deadline)yield return null;
             Require(session.Save(),"Game save write failed");session.LoadSavedGame();
             Require(JsonUtility.FromJson<EndingDemoView.EndingRun>(session.State.memory.seventhNightEndingJson)?.id==result.id,"Ending disappeared after loading the game's save");
+            if(Array.IndexOf(Environment.GetCommandLineArgs(),"-endingPhilosophyQA")>=0)
+            {
+                ui.OpenSeventhNight();deadline=Time.realtimeSinceStartup+15;
+                while((ui.IsOverlayTransitioning||Field<bool>(ui,"endingSourceChecking"))&&Time.realtimeSinceStartup<deadline)yield return null;
+                typeof(GameUI).GetField("nextEndingSourceCheck",Fields).SetValue(ui,float.MaxValue);
+                typeof(GameUI).GetField("endingSourceChecking",Fields).SetValue(ui,true);
+                var pure=JsonUtility.FromJson<EndingDemoView.EndingRun>(JsonUtility.ToJson(result));
+                pure.recollections=Array.FindAll(pure.recollections,m=>!m.memoryId.StartsWith("game_",StringComparison.Ordinal));pure.memoryCount=pure.recollections.Length;pure.liveMemoryCount=0;
+                foreach(string choice in new[]{"leave","stay"})
+                {
+                    pure.decision.choice=choice;pure.outcome.status=choice=="leave"?"pending":"uncertain";pure.outcome.label=choice=="leave"?"登船待确认":"留下，未来未确定";
+                    typeof(GameUI).GetField("seventhNight",Fields).SetValue(ui,pure);Call(ui,"PrepareDailyPages");
+                    var closing=Field<string>(ui,"endingClosingText");Require(closing.Contains("缸")&&closing.Length>500,"New philosophical ending did not match its exact source and choice");
+                    Require(closing.StartsWith(choice=="leave"?"我选择离开。":"我选择留下。",StringComparison.Ordinal),"Authored closing replaced Z's selected branch");
+                    Call(ui,"ShowEndingPage",3);deadline=Time.realtimeSinceStartup+12;
+                    while((!Field<bool>(ui,"endingBlackDetailsShown")||Field<bool>(ui,"endingBlackTransitioning"))&&Time.realtimeSinceStartup<deadline)yield return null;
+                    Require(Field<bool>(ui,"endingBlackDetailsShown"),"Philosophical closing did not automatically advance");
+                    var reading=Field<ScrollRect>(ui,"endingBlackScroll");Canvas.ForceUpdateCanvases();
+                    CheckDetailPage(ui,pure,reading.content.rect.height>reading.viewport.rect.height+1);
+                    ScreenCapture.CaptureScreenshot(Path.Combine(output,"philosophy-"+choice+".png"));yield return new WaitForEndOfFrame();
+                }
+                pure.outcome.status="succeeded";Call(ui,"PrepareDailyPages");
+                Require(string.IsNullOrEmpty(Field<string>(ui,"endingClosingText")),"An incompatible execution status reused the uncertain closing");
+                ui.CloseOverlay();deadline=Time.realtimeSinceStartup+10;while(ui.HasOverlay&&Time.realtimeSinceStartup<deadline)yield return null;
+            }
             var legacyPath=Path.Combine(output,"legacy.json");
             if(File.Exists(legacyPath))
             {
