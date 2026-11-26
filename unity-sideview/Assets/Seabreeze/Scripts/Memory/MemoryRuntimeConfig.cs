@@ -50,11 +50,13 @@ namespace Seabreeze
                 }
                 if(Array.IndexOf(args,"-memoryDisabled")>=0) resolved.enabled=false;
                 int index=Array.IndexOf(args,"-memoryService");
-                if(index>=0&&index+1<args.Length) resolved.serviceUrl=args[index+1];
+                if (CloudGameSession.Enabled) resolved.serviceUrl = CloudGameSession.MemoryUrl;
+                else if(index>=0&&index+1<args.Length) resolved.serviceUrl=args[index+1];
 #if UNITY_EDITOR
                 else resolved.serviceUrl=EditorServiceUrl(resolved.serviceUrl);
 #endif
-                if(!Uri.TryCreate(resolved.serviceUrl,UriKind.Absolute,out var uri)||!uri.IsLoopback||uri.Scheme!="http")
+                if (!(CloudGameSession.Enabled && resolved.serviceUrl == CloudGameSession.MemoryUrl) &&
+                    (!Uri.TryCreate(resolved.serviceUrl,UriKind.Absolute,out var uri)||!uri.IsLoopback||uri.Scheme!="http"))
                     throw new InvalidOperationException("Memory service must use a local HTTP address.");
                 resolved.serviceUrl=resolved.serviceUrl.TrimEnd('/');
                 resolved.maxLines=Mathf.Clamp(resolved.maxLines,2,10);

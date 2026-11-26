@@ -1,0 +1,142 @@
+#!/usr/bin/python3
+"""Manage CloudGame's local member list and device sessions on the game server."""
+import argparse
+import datetime
+import fcntl
+import hashlib
+import json
+import os
+from pathlib import Path
+import pwd
+import re
+import sqlite3
+import sys
+import tempfile
+
+DIRECTORY = Path("/etc/project-z-cloud")
+MEMBERS = DIRECTORY / "members.json"
+DATABASE = Path("/var/lib/project-z-cloud/cloud.sqlite")
+ACCOUNT = "project-z-cloud"
+
+
+def device_label(session_id):
+    # Display a stable operator label. Never print access tokens, refresh tokens or their hashes.
+    return hashlib.sha256(session_id.encode("ascii")).hexdigest()[:16]
+
+
+def edit_sessions(action, member, label=None):
+    if not DATABASE.exists():
+        print("No session database yet.")
+        return
+    db = sqlite3.connect(f"file:{DATABASE}?mode=rw", uri=True, timeout=5)
+    try:
+        db.execute("PRAGMA foreign_keys=ON")
+        db.execute("BEGIN IMMEDIATE" if action != "devices" else "BEGIN")
+        rows = db.execute("SELECT session_id,refresh_until FROM cloud_sessions WHERE member_id=? ORDER BY refresh_until", (member,)).fetchall()
+        if action == "devices":
+            for session, expires in rows:
+                when = datetime.datetime.fromtimestamp(expires / 1000, datetime.timezone.utc)
+                print(f"{device_label(session)}  expires {when.isoformat()}")
+            print(f"Stored device sessions: {len(rows)}")
+        elif action == "revoke-device":
+            matched = [session for session, _ in rows if device_label(session) == label]
+            if len(matched) != 1:
+                sys.exit("Device label not found or ambiguous.")
+            db.execute("DELETE FROM cloud_sessions WHERE member_id=? AND session_id=?", (member, matched[0]))
+            print("Revoked one device session.")
+        else:
+            db.execute("DELETE FROM cloud_sessions WHERE member_id=?", (member,))
+            print(f"Revoked {len(rows)} device sessions.")
+        # ON DELETE CASCADE also deletes the associated spent refresh-token digests.
+        db.commit()
+    finally:
+        db.close()
+
+
+def write_members(values, gid):
+    with tempfile.NamedTemporaryFile(mode="w", dir=DIRECTORY, delete=False) as out:
+        temporary = Path(out.name)
+        try:
+            json.dump(sorted(values, key=int), out)
+            out.write("\n")
+            out.flush()
+            os.fchown(out.fileno(), 0, gid)
+            os.fchmod(out.fileno(), 0o640)
+            os.fsync(out.fileno())
+            os.replace(temporary, MEMBERS)
+        finally:
+            temporary.unlink(missing_ok=True)
+    directory_fd = os.open(DIRECTORY, os.O_RDONLY | os.O_DIRECTORY)
+    try:
+        os.fsync(directory_fd)
+    finally:
+        os.close(directory_fd)
+
+
+def main():
+    if os.geteuid() != 0:
+        sys.exit("Run with sudo on the game server.")
+    account = pwd.getpwnam(ACCOUNT)
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    commands = parser.add_subparsers(dest="action", required=True)
+    commands.add_parser("list", aliases=["status"])
+    for name in ["add", "remove", "devices", "revoke-sessions", "revoke-device"]:
+        command = commands.add_parser(name)
+        command.add_argument("member", help="GitHub numeric user ID")
+        if name == "revoke-device":
+            command.add_argument("label", help="16-character label from devices")
+    opts = parser.parse_args()
+    member = getattr(opts, "member", None)
+    if member and not re.fullmatch(r"[1-9][0-9]{0,19}", member):
+        sys.exit("Use the stable GitHub numeric user ID.")
+    if opts.action == "revoke-device" and not re.fullmatch(r"[a-f0-9]{16}", opts.label):
+        sys.exit("Invalid device label.")
+
+    def sessions(action):
+        # A root SQLite writer could leave a root-owned WAL or follow files in a service-owned
+        # directory. The subprocess opens and writes the database as the existing service user.
+        sys.stdout.flush()
+        child = os.fork()
+        if child == 0:
+            try:
+                os.setgroups([])
+                os.setgid(account.pw_gid)
+                os.setuid(account.pw_uid)
+                edit_sessions(action, member, getattr(opts, "label", None))
+                sys.stdout.flush()
+            except (OSError, ValueError, sqlite3.Error, SystemExit) as error:
+                print(f"Session operation failed ({error}).", file=sys.stderr, flush=True)
+                os._exit(1)
+            os._exit(0)
+        _, status = os.waitpid(child, 0)
+        if os.waitstatus_to_exitcode(status) != 0:
+            sys.exit("Session changes were not completed.")
+
+    os.umask(0o077)
+    with (DIRECTORY / ".members.lock").open("a") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        listed = json.loads(MEMBERS.read_text())
+        if not isinstance(listed, list) or not all(isinstance(i, str) and re.fullmatch(r"[1-9][0-9]{0,19}", i) for i in listed):
+            sys.exit("Invalid member configuration.")
+        values = set(listed)
+        if opts.action in ["list", "status"]:
+            print("Approved GitHub IDs:", ", ".join(sorted(values, key=int)) or "(none)")
+        elif opts.action == "add":
+            if member not in values:
+                sessions("revoke-sessions")
+                write_members(values | {member}, account.pw_gid)
+            print(f"Allowed {member}.")
+        elif opts.action == "remove":
+            write_members(values - {member}, account.pw_gid)
+            sessions("revoke-sessions")
+            print(f"Removed {member}.")
+        else:
+            sessions(opts.action)
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except (OSError, ValueError, sqlite3.Error) as error:
+        sys.exit(f"Member operation failed ({type(error).__name__}). Check configuration and service state.")

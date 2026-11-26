@@ -17,7 +17,7 @@ export function loadEnvironment(source){
 function request(route,identity,payload,signal){return new Request('https://z-internal.local'+route,{method:payload?'POST':'GET',headers:{Origin:'https://z-internal.local','Content-Type':'application/json','oai-authenticated-user-id':identity},...(payload?{body:JSON.stringify(payload)}:{}),signal});}
 export class Providers {
  constructor(env,options={}){this.env=env;this.options=options;this.singing=options.singing;}
- forOwner(owner){return new Providers(this.env,{...this.options,owner,singingContext:()=>this.singing?.context(owner,{publicRoom:true})});}
+ forOwner(owner){return new Providers(this.env,{...this.options,owner,singingContext:this.singing ? ()=>this.singing.context(owner,{publicRoom:true}) : undefined});}
  async singingFetch(route,options={}){if(!this.singing)return Response.json({error:"singing_unavailable"},{status:503});return singingRequest(this.singing,this.options.owner||"local-owner",route,options.body?JSON.parse(options.body):null);}
  async config(identity){return (await handleAgent(request('/api/agent/config',identity),this.env,this.options)).json();}
  async generate(identity,payload,{signal,onSentence,compactReview,reviewExpanded,broadcastContext,daytimeTasks,songSession,character,sceneContext}={}){const r=await handleAgent(request('/api/agent',identity,payload,signal),this.env,{...this.options,onSentence,compactReview,reviewExpanded,broadcastContext,daytimeTasks,songSession,character,sceneContext}),body=await r.json();if(!r.ok)throw Object.assign(Error(body.error),{code:body.error,validationReason:body.validationReason});return this.options.modelSource&&body.source==='deepseek'?{...body,source:this.options.modelSource,model:this.options.modelName}:body;}

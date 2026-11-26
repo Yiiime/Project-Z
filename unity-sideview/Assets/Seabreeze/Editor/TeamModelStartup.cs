@@ -25,7 +25,7 @@ namespace Seabreeze.Editor
                 SessionState.EraseString(OwnedLiveFile);
                 return;
             }
-            if(state != PlayModeStateChange.EnteredPlayMode || Application.isBatchMode) return;
+            if(state != PlayModeStateChange.EnteredPlayMode || Application.isBatchMode || CloudGameSession.Enabled) return;
             if (Array.IndexOf(Environment.GetCommandLineArgs(), "-memoryService") >= 0 ||
                 !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(LiveFileVariable))) return;
             string root = Path.GetFullPath(Path.Combine(Application.dataPath, ".."));

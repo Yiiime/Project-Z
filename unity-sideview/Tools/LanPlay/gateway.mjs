@@ -2,7 +2,7 @@ import https from 'node:https';
 import fs from 'node:fs';
 import {allowed, body, digest, equal, json, proxy} from './protocol.mjs';
 
-export function createGateway({key, cert, invitation, registryFile, backend, maxPlayers = 6, verifyMember = null}) {
+export function createGateway({key, cert, invitation, registryFile, backend, maxPlayers = 6, verifyMember = null, onActivity = null}) {
   let registry = {};
   if (fs.existsSync(registryFile)) registry = JSON.parse(fs.readFileSync(registryFile, 'utf8'));
   const active = new Map();
@@ -42,6 +42,7 @@ export function createGateway({key, cert, invitation, registryFile, backend, max
       if (Date.now() - load.since > 60000) {load.since = Date.now(); load.requests = 0;}
       if (load.count >= 64 || ++load.requests > 2400) return json(res, 429, {error: 'too_many_requests'});
       load.count++; active.set(player, load);
+      onActivity?.(player,load.count);
       try {
         const services = await backend(player,member);
         if (res.destroyed) return;
@@ -57,7 +58,7 @@ export function createGateway({key, cert, invitation, registryFile, backend, max
         const target = new URL(match[2] + url.search, services[match[1]]);
         if (target.protocol !== 'http:' || target.hostname !== '127.0.0.1') throw Error('invalid_backend');
         await proxy(req, res, target, {bytes: forwarded, headers: match[1] === 'live' ? {Authorization: 'Bearer ' + services.liveToken} : {'X-Z-Memory': '1'}});
-      } finally {load.count--;}
+      } finally {load.count--; onActivity?.(player,load.count);}
     } catch (error) {json(res, error.status || 503, {error: error.status === 413 ? 'body_too_large' : 'host_unavailable', message: '主机正在连接角色服务，请稍后重试。'});}
   });
   server.requestTimeout = 30000; server.headersTimeout = 15000;

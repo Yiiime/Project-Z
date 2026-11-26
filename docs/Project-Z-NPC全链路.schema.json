@@ -408,7 +408,7 @@
     },
     {
       "path": "unity-sideview/Tools/MemoryLab/server.mjs",
-      "sha256": "f61c89d70d07c7b07fa90a429a178ea3a49f439324329adb623df104e5296456"
+      "sha256": "518ab730d25d6f2bf27505d916015bf621e1601bc989fdbdeee407c095e85bee"
     },
     {
       "path": "unity-sideview/Tools/MemoryLab/lib/engine.mjs",

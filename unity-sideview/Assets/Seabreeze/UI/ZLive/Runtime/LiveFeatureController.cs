@@ -14,7 +14,7 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     Label status,caption;ScrollView chat;TextField input;JObject state;
     readonly ConcurrentQueue<JObject> events=new ConcurrentQueue<JObject>();readonly ConcurrentQueue<string> connections=new ConcurrentQueue<string>();
     readonly Dictionary<string,CancellationTokenSource> running=new Dictionary<string,CancellationTokenSource>();readonly Dictionary<string,JObject> outcomes=new Dictionary<string,JObject>();readonly HashSet<string> messageIds=new HashSet<string>();
-    readonly CancellationTokenSource life=new CancellationTokenSource();readonly HashSet<TaskCompletionSource<bool>> frameWaiters=new HashSet<TaskCompletionSource<bool>>();float heartbeatAt;bool connected,locallyPaused=true,disposed,leaving;string pendingBase,pendingToken,pendingPin;string SessionKey {get {using(var sha=System.Security.Cryptography.SHA256.Create())return "ZLive.Session."+BitConverter.ToString(sha.ComputeHash(System.Text.Encoding.UTF8.GetBytes(pendingBase+"|"+pendingToken+"|"+StoryKey+(liveMemory==null?"":"|"+liveMemory.Key)+"|"+(string)characterBinding?["worldId"]+"|"+(string)characterBinding?["runId"]))).Replace("-","");}}
+    readonly CancellationTokenSource life=new CancellationTokenSource();readonly HashSet<TaskCompletionSource<bool>> frameWaiters=new HashSet<TaskCompletionSource<bool>>();float heartbeatAt;bool connected,locallyPaused=true,disposed,leaving;string pendingBase,pendingToken,pendingPin;string SessionKey {get {using(var sha=System.Security.Cryptography.SHA256.Create())return "ZLive.Session."+BitConverter.ToString(sha.ComputeHash(System.Text.Encoding.UTF8.GetBytes(pendingBase+"|"+(pendingBase==Seabreeze.CloudGameSession.LiveUrl?Seabreeze.CloudGameSession.Current?.MemberId:pendingToken)+"|"+StoryKey+(liveMemory==null?"":"|"+liveMemory.Key)+"|"+(string)characterBinding?["worldId"]+"|"+(string)characterBinding?["runId"]))).Replace("-","");}}
     LiveMemoryBridge liveMemory;
     public Func<Task<JObject>> BindCharacters;public Func<Task> ReleaseCharacters;JObject characterBinding;
     public bool Preloading;
@@ -26,6 +26,11 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     async void Start(){try{character=gameObject.AddComponent<CharacterPresenter>();character.Initialize();audioPlayer=gameObject.AddComponent<LiveAudioPlayer>();audioPlayer.Character=character;character.Audio=audioPlayer.Source;audioPlayer.Frame=NextFrame;audioPlayer.Receipt=Report;audioPlayer.Caption=SetHostCaption;gameObject.AddComponent<NativeRtcAudioReference>();BuildUI();BuildCompanionUI();audioPlayer.PresentationHeld=Preloading;if(Preloading)document.rootVisualElement.style.visibility=Visibility.Hidden;
         // Explicit local connections take precedence in editor verification as
         // well as players; never fall back to a user's service during a test.
+        if (string.IsNullOrEmpty(pendingBase) && Seabreeze.CloudGameSession.Enabled)
+        {
+            if (Seabreeze.CloudGameSession.Current?.MemberId == null) throw new InvalidOperationException("请先完成团队登录。");
+            pendingBase = Seabreeze.CloudGameSession.LiveUrl;
+        }
         var connectionFile=Environment.GetEnvironmentVariable("Z_LIVE_CONNECTION_FILE");
         if(string.IsNullOrEmpty(pendingBase)&&!string.IsNullOrWhiteSpace(connectionFile))
         {

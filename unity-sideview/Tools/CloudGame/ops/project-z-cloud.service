@@ -1,0 +1,27 @@
+[Unit]
+Description=Project Z team game authentication and API
+After=network-online.target project-z-cloud-worker.service
+Wants=project-z-cloud-worker.service
+ConditionPathExists=/etc/project-z-cloud/oauth.json
+
+[Service]
+Type=simple
+User=project-z-cloud
+Group=project-z-cloud
+WorkingDirectory=/opt/project-z-cloud/current/unity-sideview
+ExecStart=/opt/project-z-cloud/bin/node Tools/CloudGame/server.mjs
+Restart=on-failure
+RestartSec=4
+StateDirectory=project-z-cloud
+StateDirectoryMode=0700
+UMask=0077
+LoadCredential=oauth.json:/etc/project-z-cloud/oauth.json
+LoadCredential=identity-key:/etc/project-z-cloud/identity-key
+LoadCredential=game-host.json:/var/lib/project-z-game/.local/share/project-z/cloud-host/client-config.json
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+
+[Install]
+WantedBy=multi-user.target

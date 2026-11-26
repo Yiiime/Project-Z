@@ -17,6 +17,7 @@ namespace Seabreeze
         public static void Configure()
         {
             PackageRoot = runtime = script = node = null;
+            if (CloudGameSession.Enabled) return;
 #if UNITY_STANDALONE_OSX && !UNITY_EDITOR
             var root = Path.GetFullPath(Path.Combine(Application.dataPath, "../.."));
             bool lan = File.Exists(Path.Combine(root, "connection-config.json"));
