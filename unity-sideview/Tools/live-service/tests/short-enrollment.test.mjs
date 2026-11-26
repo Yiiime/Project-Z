@@ -51,3 +51,21 @@ test('a five-second registration uses a valid provider name and persists for thi
   assert.equal((await service.config('owner-a')).voiceprintId, 'fixture-profile');
   assert.equal((await service.config('owner-b')).voiceprintId, '');
 });
+
+test('a per-player LAN backend enrolls its local-owner independently of the host', async t => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'z-lan-enrollment-'));
+  t.after(() => fs.rm(root, {recursive:true, force:true}));
+  const load = async () => ({validMode:true, rtcAppId:'fixture', voiceprintId:'host-voice', missing:[]});
+  const player = new NativeVoiceService({
+    profileRoot:path.join(root, 'player-a'), isolatedPlayer:true, load,
+    api:async () => ({status:200, data:{Result:'player-voice'}}),
+  });
+  const owner = 'local-owner';
+  assert.equal((await player.publicConfig(owner)).needsEnrollment, true);
+  await player.enroll(owner, recording(5, 5));
+  assert.equal((await player.config(owner)).voiceprintId, 'player-voice');
+  const other = new NativeVoiceService({profileRoot:path.join(root, 'player-b'), isolatedPlayer:true, load});
+  assert.equal((await other.publicConfig(owner)).needsEnrollment, true);
+  const host = new NativeVoiceService({profileRoot:path.join(root, 'host'), load});
+  assert.equal((await host.config(owner)).voiceprintId, 'host-voice');
+});

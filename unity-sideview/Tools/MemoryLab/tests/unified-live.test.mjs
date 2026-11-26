@@ -72,3 +72,27 @@ test('compact communication schema carries the same conditional requirement as c
  const compact={dialogue:'船况怎样？',action:{option_id:action.id},info:{...info(c),social_decision:{choice:'engage',reason:'关心朋友的船况',source_event_ids:[c.interaction.source_event_id]}}};
  const validate=e.policy.ajv.compile(e.policy.modelContract(c));assert.equal(validate(compact),false);assert(validate.errors.some(e=>e.keyword==='required'&&e.params.missingProperty==='communication'));
 });
+
+test('only the bound arrival host can propose the current story tool and virtual audience', t => {
+ const {live}=setup(t), binding=live.open({worldId:'live_world',runId:'run1'});
+ const prepare=stage=>live.prepare({...binding,actorId:'z',...(stage?{arrivalStage:stage}:{})});
+ const propose=(prepared,tool,extra={})=>live.propose({...binding,contextId:prepared.contextId,turn:{
+   dialogue:'今晚海上的灯真好看。',info:info(prepared.context),action:{action:tool?'tool':'speak',
+     actorId:'z',delivery:'温和地闲聊。',expression:'neutral',handledIds:[],mood:'warm',wakeAfterMs:4000,...(tool?{tool}:{}),...extra}}});
+ const audience={virtualAudience:[{name:'小海螺',text:'我也看见了。'}]};
+ const draw={name:'draw_guest',args:{}},offer={name:'offer_arrival',args:{title:'来坐坐',description:'一起来岛上住七天吧。'}};
+ const depart={name:'depart_island',args:{}};
+ assert.throws(()=>propose(prepare(),null,audience));
+ assert.throws(()=>live.prepare({...binding,actorId:'linxu',arrivalStage:'offer_arrival'}));
+ assert.throws(()=>prepare('unknown'));
+ const warmup=prepare('warmup');
+ const missingVoice={dialogue:'我来了。',action:{action:'speak',handledIds:[],mood:'warm',wakeAfterMs:4000},info:info(warmup.context)};
+ assert.throws(()=>live.propose({...binding,contextId:warmup.contextId,turn:missingVoice}));
+ assert.throws(()=>propose(warmup,draw));assert(propose(warmup,null,audience).proposalId);
+ const drawn=prepare('draw_guest');assert.throws(()=>propose(drawn,offer));assert(propose(drawn,draw).proposalId);
+ const offered=prepare('offer_arrival');
+ assert.throws(()=>propose(offered,{...offer,args:{title:'遗漏说明'}}));
+ assert.throws(()=>propose(offered,depart));assert(propose(offered,offer).proposalId);
+ assert(propose(prepare('depart_island'),depart).proposalId);
+ assert.throws(()=>propose(prepare(),depart));
+});

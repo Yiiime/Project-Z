@@ -31,16 +31,17 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
             if(!File.Exists(connectionFile))throw new Exception("直播连接配置尚未就绪，请检查本机服务启动情况。");
             ReadConnection(connectionFile);
         }
-#if !UNITY_EDITOR
-        if(string.IsNullOrEmpty(pendingBase))ReadConnection(Path.Combine(Application.dataPath,"Resources","zlive-connection.json"));
-#endif
-        if(string.IsNullOrEmpty(pendingBase)) {
-            string file=Path.Combine(Application.persistentDataPath,"ZLive","local-connection.json");
-            if(File.Exists(file)){ReadConnection(file);}
-        }
+        if(string.IsNullOrEmpty(pendingBase))
+        {
 #if UNITY_EDITOR
-        if(string.IsNullOrEmpty(pendingBase)){string file=Path.GetFullPath(Path.Combine(Application.dataPath,"../UserSettings/ZLive/local-connection.json"));if(File.Exists(file)){ReadConnection(file);}}
+            // The project launcher publishes a single paired profile for this checkout.
+            ReadConnection(Path.GetFullPath(Path.Combine(Application.dataPath,"../UserSettings/ZLive/local-connection.json")));
+#else
+            ReadConnection(Path.Combine(Application.dataPath,"Resources","zlive-connection.json"));
 #endif
+        }
+        if(string.IsNullOrEmpty(pendingBase))
+            ReadConnection(Path.Combine(Application.persistentDataPath,"ZLive","local-connection.json"));
         if(string.IsNullOrEmpty(pendingBase)){status.text="尚未连接 · 请先启动直播服务，再重新进入";Toast(status.text);return;}
         status.text="正在连接小屋，记下今天的经历…";await Enter();status.text="";
     }catch(OperationCanceledException)when(life.IsCancellationRequested){}catch(Exception e){Error(e);Toast("暂未进入直播 · Esc 返回后重试，今日进度已保留");}}
