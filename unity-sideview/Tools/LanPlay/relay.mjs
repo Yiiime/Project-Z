@@ -5,7 +5,7 @@ import https from 'node:https';
 import {randomBytes} from 'node:crypto';
 import {pathToFileURL} from 'node:url';
 import {allowed, digest, equal, json, proxy} from './protocol.mjs';
-import {loadTeamClient} from './team-access.mjs';
+import {teamForInvitation} from './team-access.mjs';
 
 export async function createRelay(config, runtime, {team=null} = {}) {
   const origin = new URL(config.serverUrl);
@@ -53,7 +53,8 @@ export async function createRelay(config, runtime, {team=null} = {}) {
 }
 if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
   try {
-    const relay = await createRelay(JSON.parse(fs.readFileSync(process.argv[2])), process.argv[3],{team:loadTeamClient()});
+    const config = JSON.parse(fs.readFileSync(process.argv[2]));
+    const relay = await createRelay(config, process.argv[3], {team:teamForInvitation(config)});
     for (const signal of ['SIGINT', 'SIGTERM']) process.once(signal, relay.close);
     console.log('已连接小岛主机。模型和语音由主机提供。');
   } catch (error) {console.error('连接失败：' + error.message); process.exitCode = 1;}

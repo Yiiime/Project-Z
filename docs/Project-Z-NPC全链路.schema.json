@@ -420,7 +420,7 @@
     },
     {
       "path": "unity-sideview/Tools/MemoryLab/lib/live-room.mjs",
-      "sha256": "bdcd077535d294c8e2677370e7284628d1d073abb971559738a9525a16acff95"
+      "sha256": "887427da0a361d2050efecbae4982d41cb11ba7b615016331dd6226c597cbf6d"
     },
     {
       "path": "unity-sideview/Tools/MemoryLab/lib/memory.mjs",
@@ -436,11 +436,11 @@
     },
     {
       "path": "unity-sideview/Tools/live-service/server/character-bridge.mjs",
-      "sha256": "30e429500129a1c9febac793155524411b751f2f1c44fc38af9c2e5392e6d1cd"
+      "sha256": "8fd6cbe0c24523d49f51e825fcd4b2b0619e2a36af4b4531a97f97c4f22f3acf"
     },
     {
       "path": "unity-sideview/Tools/live-service/server/shared/worker/agent-director.js",
-      "sha256": "2664fbfe1ca68f7dc4c1f8862b12a49e4a14c447edd8252dcb3d12d2c01837df"
+      "sha256": "22ad56989bdc3b8fe5292458cde99f0a896be1e57c60579265e8e517eb7ccbf6"
     },
     {
       "path": "unity-sideview/Tools/MemoryLab/content/current/actor-registry.json",
@@ -22613,6 +22613,77 @@
             "args"
           ],
           "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "const": "draw_guest"
+            },
+            "args": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "name",
+            "args"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "const": "offer_arrival"
+            },
+            "args": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 60
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 240
+                }
+              },
+              "required": [
+                "title",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "name",
+            "args"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "const": "depart_island"
+            },
+            "args": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "name",
+            "args"
+          ],
+          "additionalProperties": false
         }
       ]
     },
@@ -22885,6 +22956,9 @@
           "properties": {
             "actorId": {
               "$ref": "#/$defs/ActorId"
+            },
+            "arrivalStage": {
+              "$ref": "#/$defs/LiveArrivalStage"
             }
           },
           "required": [
@@ -24396,6 +24470,15 @@
         "hour"
       ],
       "additionalProperties": true
+    },
+    "LiveArrivalStage": {
+      "enum": [
+        "warmup",
+        "draw_guest",
+        "offer_arrival",
+        "depart_island"
+      ],
+      "description": "Host-selected arrival action available for this prepared turn. Warmup permits virtual audience but no arrival tool."
     }
   },
   "x-examples": [

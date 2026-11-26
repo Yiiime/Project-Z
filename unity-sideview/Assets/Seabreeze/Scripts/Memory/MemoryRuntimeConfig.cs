@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using UnityEngine;
 namespace Seabreeze
 {
@@ -11,6 +12,27 @@ namespace Seabreeze
     }
     public static class MemoryRuntimeConfig
     {
+#if UNITY_EDITOR
+        [Serializable] sealed class ServiceConnection { public string memoryUrl = ""; }
+
+        public static string EditorConnectionFile =>
+            Path.GetFullPath(Path.Combine(Application.dataPath, "../UserSettings/ZLive/local-connection.json"));
+
+        public static string ReadEditorMemoryUrl(string file)
+        {
+            if (!File.Exists(file)) return null;
+            return JsonUtility.FromJson<ServiceConnection>(File.ReadAllText(file))?.memoryUrl;
+        }
+
+        static string EditorServiceUrl(string fallback)
+        {
+            var file = Environment.GetEnvironmentVariable("Z_LIVE_CONNECTION_FILE");
+            var url = ReadEditorMemoryUrl(string.IsNullOrWhiteSpace(file) ? EditorConnectionFile : file);
+            // Existing live-only connections use the project's configured memory port.
+            return string.IsNullOrWhiteSpace(url) ? fallback : url;
+        }
+#endif
+
         static MemorySettings settings;
         public static MemorySettings Settings
         {
@@ -18,7 +40,7 @@ namespace Seabreeze
             {
                 if(settings != null) return settings;
                 var asset=Resources.Load<TextAsset>("Memory/integration");
-                settings=asset!=null?JsonUtility.FromJson<MemorySettings>(asset.text):new MemorySettings { enabled=false };
+                var resolved=asset!=null?JsonUtility.FromJson<MemorySettings>(asset.text):new MemorySettings { enabled=false };
                 string[] args=Environment.GetCommandLineArgs();
                 if(Array.IndexOf(args,"-memorySmokeOutput")>=0)
                 {
@@ -26,13 +48,17 @@ namespace Seabreeze
                     if(!saveRoot.StartsWith("/tmp/",StringComparison.Ordinal)&&!saveRoot.StartsWith("/private/tmp/",StringComparison.Ordinal)&&!saveRoot.StartsWith(System.IO.Path.GetTempPath(),StringComparison.Ordinal))
                         throw new InvalidOperationException("Standalone smoke requires an isolated temporary save path.");
                 }
-                if(Array.IndexOf(args,"-memoryDisabled")>=0) settings.enabled=false;
+                if(Array.IndexOf(args,"-memoryDisabled")>=0) resolved.enabled=false;
                 int index=Array.IndexOf(args,"-memoryService");
-                if(index>=0&&index+1<args.Length) settings.serviceUrl=args[index+1];
-                if(!Uri.TryCreate(settings.serviceUrl,UriKind.Absolute,out var uri)||!uri.IsLoopback||uri.Scheme!="http")
+                if(index>=0&&index+1<args.Length) resolved.serviceUrl=args[index+1];
+#if UNITY_EDITOR
+                else resolved.serviceUrl=EditorServiceUrl(resolved.serviceUrl);
+#endif
+                if(!Uri.TryCreate(resolved.serviceUrl,UriKind.Absolute,out var uri)||!uri.IsLoopback||uri.Scheme!="http")
                     throw new InvalidOperationException("Memory service must use a local HTTP address.");
-                settings.serviceUrl=settings.serviceUrl.TrimEnd('/');
-                settings.maxLines=Mathf.Clamp(settings.maxLines,2,10);
+                resolved.serviceUrl=resolved.serviceUrl.TrimEnd('/');
+                resolved.maxLines=Mathf.Clamp(resolved.maxLines,2,10);
+                settings=resolved;
                 return settings;
             }
         }

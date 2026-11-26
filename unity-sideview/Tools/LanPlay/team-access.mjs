@@ -1,5 +1,16 @@
 import {loadTeamClient,secureRequest} from '../team-model/client.mjs';
 export {loadTeamClient};
+
+// Older invitations follow the installed client profile. Explicit invite-only hosts
+// never receive a user's separate GitHub-backed team session token.
+export function teamForInvitation(config) {
+  if (config.teamModel === false) return null;
+  if (config.teamModel !== undefined && config.teamModel !== true)
+    throw Error('团队邀请的认证模式无效。');
+  const team = loadTeamClient();
+  if (config.teamModel === true && !team) throw Error('这份邀请需要启用团队模型登录。');
+  return team;
+}
 export function memberVerifier(team){
   if(!team)return null;
   return async token=>{

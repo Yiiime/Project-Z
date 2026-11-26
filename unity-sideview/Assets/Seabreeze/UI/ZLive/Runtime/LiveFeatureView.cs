@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 namespace ZLive {
 public sealed partial class LiveFeatureController {
     VisualElement roomContent, stage, sidebar, controls, speech, composer, dialogLayer, dialogContent;
-    Button sound, sendButton, newMessages, reopen;
+    Button sound, sendButton, newMessages, reopen, retryHost;
     Label toast, liveSessionLabel, transcript;
     bool muted, chatCollapsed;
 
@@ -77,6 +77,9 @@ public sealed partial class LiveFeatureController {
         transcript.style.display=DisplayStyle.None;
         status=Text("","notice");
         sidebar.Add(status);
+        retryHost=Action("重试主播回复", RetryHostReply, "pill");
+        retryHost.style.display=DisplayStyle.None;
+        sidebar.Add(retryHost);
         composer=Box("composer");
         sidebar.Add(composer);
         input=Class(new TextField{maxLength=120},"chat-input");

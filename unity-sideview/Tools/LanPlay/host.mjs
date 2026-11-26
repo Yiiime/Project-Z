@@ -14,6 +14,8 @@ const config = JSON.parse(fs.readFileSync(path.join(local, 'host.json')));
 const configDirectory = process.env.Z_LIVE_CONFIG_DIR || path.join(tools, 'live-service');
 const provider = loadEnvironment(configDirectory);
 const team=loadTeamClient();
+if (typeof config.teamModel === 'boolean' && config.teamModel !== Boolean(team))
+  throw Error('认证模式与签发的客户端邀请不一致，请检查主机服务配置。');
 const modelFile = process.env.Z_MEMORY_CONFIG || path.join(tools, 'MemoryLab/.local/model.json');
 if (!provider.DEEPSEEK_API_KEY && !team) {try {const shared=JSON.parse(fs.readFileSync(modelFile));if(shared.provider==='deepseek'&&/^https:\/\/api\.deepseek\.com(?:\/v1)?\/?$/.test(shared.baseUrl||''))provider.DEEPSEEK_API_KEY=shared.apiKey;} catch {}}
 if (!team&&(!provider.DEEPSEEK_API_KEY || !provider.VOLC_TTS_API_KEY)) throw Error('主机必须先配置模型和火山 TTS，玩家端无需配置。');
@@ -22,12 +24,12 @@ const freePort = () => new Promise((resolve, reject) => {
   const server = http.createServer(); server.on('error', reject);
   server.listen(0, '127.0.0.1', () => {const port = server.address().port; server.close(() => resolve(port));});
 });
-async function startPlayer(id) {
+async function startPlayer(id, forget) {
   const root = path.join(local, 'players', id); fs.mkdirSync(root, {recursive: true, mode: 0o700});
   const memoryPort = await freePort(), livePort = await freePort(), own = [];
   const connection = path.join(root, 'live-connection.json');
   const env = {...process.env, ...Object.fromEntries(Object.entries(provider).filter(([, value]) => value)),
-    GAME_MODEL_API_KEY: provider.DEEPSEEK_API_KEY, Z_MEMORY_CONFIG: modelFile,
+    Z_MEMORY_CONFIG: modelFile, Z_LIVE_PLAYER_ISOLATED: '1',
     Z_TTS_CONFIG: process.env.Z_TTS_CONFIG || path.join(tools, 'MemoryLab/.local/tts.json'),
     Z_LIVE_OFFICE: '0', Z_MEMORY_PORT: String(memoryPort), Z_UNITY_PORT: String(livePort),
     Z_LIVE_CONFIG_DIR: configDirectory, Z_LIVE_RUNTIME_DIR: path.join(root, 'live'),
@@ -37,12 +39,18 @@ async function startPlayer(id) {
   try {
     for (const [name, folder, entry] of [['memory', 'MemoryLab', 'server.mjs'], ['live', 'live-service', 'server/index.mjs']]) {
       const fd = fs.openSync(path.join(root, name + '.log'), 'a', 0o600);
-      const child = spawn(process.execPath, [entry], {cwd: path.join(tools, folder), env, stdio: ['ignore', fd, fd]});
+      const child = spawn(process.execPath, [path.join(tools, 'PortableHost/service-runner.mjs'), path.join(tools, folder, entry)],
+        {cwd: path.join(tools, folder), env, stdio: ['ignore', fd, fd, 'ipc']});
       fs.closeSync(fd); own.push(child); children.add(child);
-      child.once('exit', () => {children.delete(child); sessions.delete(id); for (const peer of own) if (peer !== child && peer.exitCode === null) peer.kill('SIGTERM');});
+      child.once('close', () => {
+        children.delete(child);
+        forget();
+        for (const peer of own) if (peer !== child && peer.exitCode === null && !peer.signalCode) peer.kill('SIGTERM');
+      });
+      child.once('error', () => { child.launchFailed = true; });
     }
     for (let i = 0; i < 100; i++) {
-      if (own.some(child => child.exitCode !== null)) throw Error('backend_start_failed');
+      if (own.some(child => child.launchFailed || child.exitCode !== null || child.signalCode)) throw Error('backend_start_failed');
       try {
         const token = fs.readFileSync(path.join(root, 'live/local-token'), 'utf8').trim();
         const [m, l] = await Promise.all([
@@ -65,10 +73,16 @@ const {server} = createGateway({key: fs.readFileSync(path.join(local, 'host.key'
       const scoped=new TeamClient(team.config,{certificate:team.certificate,sessionDirectory:path.join(local,'players',id,'team-session')});
       if(scoped.session()?.token!==member.token)scoped.save(member);
     }
-    if (!sessions.has(id)) sessions.set(id, startPlayer(id).catch(error => {sessions.delete(id); throw error;})); return sessions.get(id);}});
+    if (!sessions.has(id)) {
+      const forget = () => { if (sessions.get(id) === pending) sessions.delete(id); };
+      const pending = startPlayer(id, forget).catch(error => { forget(); throw error; });
+      sessions.set(id, pending);
+    }
+    return sessions.get(id);
+  }});
 server.listen(config.port, config.address, () => {
   fs.writeFileSync(path.join(local, 'host-process.json'), JSON.stringify({pid: process.pid, address: config.address, port: config.port}), {mode: 0o600});
-  console.log(`小岛主机已启动：https://${config.address}:${config.port}。请保持 Mac 开机、联网且不合盖。`);
+  console.log(`小岛主机已启动：https://${config.address}:${config.port}。游戏后台按玩家分别启动。`);
 });
 server.on('error', error => {console.error('主机启动失败：' + error.code); process.exitCode = 1; for (const child of children) child.kill('SIGTERM');});
 for (const signal of ['SIGINT', 'SIGTERM']) process.once(signal, () => {

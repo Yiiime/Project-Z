@@ -83,7 +83,7 @@ export class AudienceDirector {
       || typeof event.text !== 'string' || !event.text.trim() || event.text.length > 1600
       || !replace&&this.seenEvents.includes(event.id)) return false;
     // Fresh facts update the next request; they do not starve an in-flight response.
-    const entry=this.dialogue.record({id:event.id,type:event.type,text:event.text,speakerRole:event.speakerRole,speakerId:event.speakerId,status:event.status,speechId:event.speechId,replyTo:event.replyTo,...(event.recipientIds?{recipientIds:event.recipientIds}:{})});
+    const entry=this.dialogue.record({id:event.id,type:event.type,text:event.text,speakerRole:event.speakerRole,speakerId:event.speakerId,displayName:event.displayName,status:event.status,speechId:event.speechId,replyTo:event.replyTo,...(event.recipientIds?{recipientIds:event.recipientIds}:{})});
     const existing=this.events.findIndex(e=>e.id===entry.id);
     if(existing>=0)this.events[existing]=entry;else this.events.push(entry);
     this.events = this.events.slice(-12);

@@ -10,7 +10,7 @@ export function validateLiveScene(input) {
 export function scenePrompt(scene) {
   if(!scene)return '';
   const common='\n当前游戏场景由宿主提供，优先于历史开场示例。人物台词全部由你结合人设自然表达，没有固定台词或节目单。arrival与first_evening不使用日常直播的7/8/10分钟节拍，忽略通用时长提示；按照现场进度自主推进。玩家名字是scene.playerName。只引用实际公开事实，不把计划或待执行工具说成已经完成。';
-  if(scene.mode==='arrival')return common+'\n这是登岛前的一场普通晚间闲聊，岛民不在场，只有虚拟观众。先聊今天的小事、心情或直播间刚出现的弹幕，自然接话；开头不要提1000场、抽奖、名额、邀请或活动预告。'+
+  if(scene.mode==='arrival')return common+'\n这是登岛前的一场普通晚间闲聊，岛民不在场，只有虚拟观众。先向实际在场的观众打招呼，问一个轻松的开放问题，或回应 publicEvents 里确实显示过的弹幕。没有记录时只谈眼下的交流、自己的喜好或邀请对方分享，不编造今天做过的事情、当地天气、窗外景色、家具、灯光或未出现的观众发言；开头不要提1000场、抽奖、名额、邀请或活动预告。'+
     'scene.warmup是已实际播放与显示的进度；ready=false时只完成一轮弹幕交流，不拖长暖场，每轮speech只说1–2个短句，22–38字、最多42字，不写长段落；第一轮讲一件小事，第二轮回应刚出现的弹幕，每轮必须提供3–4条virtualAudience=[{name,text}]，让不同观众聊刚听见的内容，每条不超过36字。用户名不能是岛民，不能提前知道还没公布的活动。'+
     '当scene.warmup.ready=true且scene.phase=opening时，才像突然想起来一样自然提起：原来今天已经是第1000场直播，想送一位朋友来月亮岛一起生活旅游7天。说完惊喜缘由后自主调用draw_guest打开礼盒，由玩家亲手点击拆开；不要反复预告，也不要追加举手、扣字等门槛。'+
     'scene.tools仅含当前可用工具。draw_guest args={}只展示待点击礼盒，不代表已经开奖；收到实际结果后先用一轮短话恭喜scene.playerName，并问愿不愿意来岛上；此时scene.phase=drawn且scene.reunion.greeted=false，先action=speak，不调用工具。恭喜这句话播完、玩家回应后，接住玩家的话并调用offer_arrival args={title,description}，标题简短，描述包含玩家名字且不超过100字。玩家确认后才用depart_island args={}告别。没有工具可用时继续自然闲聊，不虚构开奖或接受事实。'+

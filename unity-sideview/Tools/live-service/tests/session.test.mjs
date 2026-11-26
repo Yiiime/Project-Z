@@ -281,14 +281,28 @@ test('virtual viewers wait for reviewed host playback and drop interrupted react
 
 test('visible virtual chat enters the actual host inbox and invalidates stale planning',async t=>{
  const s=await fixture(t);s.engine.topicProgress={status:'complete',reason:'old',nextDirection:'',anchorSpeechId:'1',evidenceIds:['old-event']};
- const c=s.command('virtual_audience.present',{messageId:'virtual-message',name:'海盐汽水',text:'今天过得怎么样？'});
+ const messageId=crypto.randomUUID();
+ const c=s.command('virtual_audience.present',{messageId,name:'海盐汽水',text:'今天过得怎么样？'});
+ assert(!JSON.stringify(s.engine.audience.dialogue.snapshot()).includes('海盐汽水'));
+ receipt(s,c,'received');assert(!JSON.stringify(s.engine.audience.dialogue.snapshot()).includes('海盐汽水'));
  receipt(s,c,'displayed');
+ const published=s.engine.audience.dialogue.snapshot().publicEvents.find(e=>e.id===messageId);
+ assert.equal(published.displayName,'海盐汽水');assert.equal(published.speakerId,'virtual_'+messageId);
+ const {compactReviewInput}=await import('../server/shared/worker/agent-director.js');
+ const review={requestId:crypto.randomUUID(),kind:'review',eventId:'nickname',context:{
+   revision:1,publicEvents:[published],waiting_messages:[],candidate:{id:'host-line',role:'host',
+     speakerId:'Z',text:'海盐汽水，欢迎。',intent:'speak',replyTo:[messageId],evidenceIds:[]}}};
+ const reviewerInput=buildAgentRequest(normalizeAgentInput(review),Date.now()).input;
+ assert.equal(reviewerInput.publicEvents[0].displayName,'海盐汽水');
+ assert.equal(compactReviewInput(reviewerInput).publicEvents[0].displayName,'海盐汽水');
+ review.context.publicEvents=[{...published,type:'player.message',speakerId:'player',speakerRole:'player'}];
+ assert.throws(()=>normalizeAgentInput(review));
  assert.equal(s.engine.topicProgress,null);
  const inbox=JSON.parse(JSON.stringify(s.engine._hostContext(s.engine.inbox)));
- assert.equal(inbox.host.inbox[0].id,'virtual-message');
+ assert.equal(inbox.host.inbox[0].id,messageId);
  assert.equal(inbox.host.inbox[0].text,'今天过得怎么样？');
  assert.doesNotThrow(()=>normalizeAgentInput({requestId:crypto.randomUUID(),eventId:'visible-chat',kind:'host',message:'回应弹幕',context:inbox}));
- assert.equal(s.engine.session.evidence().filter(e=>e.id==='virtual-message').length,1);
+ assert.equal(s.engine.session.evidence().filter(e=>e.id===messageId).length,1);
  receipt(s,c,'displayed');assert.equal(s.engine.inbox.length,1);
 });
 
@@ -451,4 +465,17 @@ test('first evening host receives public resident chat and alternates resident a
  e._receive(e._message('海风真好',{id:'viewer-chat',name:'晚风',type:'chat'}),false,virtual,{recipientIds:['z']});
  e._public('speech.completed','晚风说得对',{id:'speech-test',speakerId:'Z',speakerRole:'host',replyTo:['viewer-chat']});
  assert.equal(e._hostContext(e.inbox).host.inbox[0].id,'resident-chat','resident chat survives newer virtual chat');
+});
+
+test('manual retry is visible only after automatic retries run out and accepts a single click',async t=>{
+ const s=await fixture(t);
+ s.engine.enabled=true;s.engine.failureStreak=5;
+ const retry=()=>s.control(envelope(s,{action:'retry_reply',onlyIfExhausted:true}));
+ assert.equal(s.snapshot().agent.canRetryReply,false);assert.throws(retry,/reply_retry_unavailable/);
+ s.engine.failureStreak=6;assert.equal(s.snapshot().agent.canRetryReply,true);
+ s.control(envelope(s,{action:'pause'}));assert.equal(s.snapshot().agent.canRetryReply,false);
+ s.control(envelope(s,{action:'resume'}));
+ s.scene.pending='waiting_for_gift';assert.equal(s.snapshot().agent.canRetryReply,false);s.scene.pending=null;
+ assert.deepEqual(retry(),{accepted:true});assert.equal(s.snapshot().agent.canRetryReply,false);
+ assert.throws(retry,/reply_retry_unavailable/);
 });

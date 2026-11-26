@@ -1,5 +1,5 @@
 import {scenePrompt,isSceneTool} from '../../live-scene.mjs';
-import {recipientIds,addressMessage} from '../addressing.js';
+import {recipientIds,addressMessage,virtualAudienceId} from '../addressing.js';
 import {utteranceMetadata, utterancePrompt, expressionKeys} from '../utterance.js';
 import {completeHostSentences} from '../ui/sentence-boundaries.js';
 export {completeHostSentences} from '../ui/sentence-boundaries.js';
@@ -31,10 +31,14 @@ function str(v,max,optional=false) {
 }
 function list(v,max,fn) {if(v===undefined)return [];if(!Array.isArray(v)||v.length>max)throw bad();return v.map(fn);}
 function normalizePublicEvent(e) {
-  keys(e,['id','type','text','speakerRole','speakerId','sequence','occurredAt','status','speechId','replyTo','recipientIds']);
+  keys(e,['id','type','text','speakerRole','speakerId','displayName','sequence','occurredAt','status','speechId','replyTo','recipientIds']);
   const result={id:str(e.id,100),type:str(e.type,40),text:str(e.text,600)};
   if(e.speakerRole!==undefined){if(!['host','player','audience','system'].includes(e.speakerRole))throw bad();result.speakerRole=e.speakerRole;}
   if(e.speakerId!==undefined)result.speakerId=str(e.speakerId,100);
+  if(e.displayName!==undefined){
+    if(e.type!=='npc.message'||e.speakerRole!=='audience'||e.status!=='published'||!virtualAudienceId(e.speakerId))throw bad();
+    result.displayName=str(e.displayName,24);
+  }
   for(const key of ['sequence','occurredAt'])if(e[key]!==undefined){if(!Number.isFinite(e[key])||e[key]<0)throw bad();result[key]=e[key];}
   if(e.status!==undefined){if(!['published','speaking','completed'].includes(e.status))throw bad();result.status=e.status;}
   if(e.speechId!==undefined)result.speechId=e.speechId===null?null:str(e.speechId,100);
@@ -480,7 +484,7 @@ export function hostStreamPrefix(source){
 }
 export function compactReviewInput(context){
   const seen=new Set(),pack=events=>(events||[]).flatMap(e=>{
-    const entry={id:e.id,type:e.type,text:e.text,speakerRole:e.speakerRole,speakerId:e.speakerId,status:e.status,...(e.occurredAt!==undefined?{occurredAt:e.occurredAt}:{}),...(e.speechId?{speechId:e.speechId}:{}),...(e.replyTo?.length?{replyTo:e.replyTo}:{})};
+    const entry={id:e.id,type:e.type,text:e.text,speakerRole:e.speakerRole,speakerId:e.speakerId,...(e.displayName?{displayName:e.displayName}:{}),status:e.status,...(e.occurredAt!==undefined?{occurredAt:e.occurredAt}:{}),...(e.speechId?{speechId:e.speechId}:{}),...(e.replyTo?.length?{replyTo:e.replyTo}:{})};
     const key=JSON.stringify(entry);if(seen.has(key))return [];seen.add(key);return [entry];
   });
   return {...context,publicEvents:pack(context.publicEvents),sessionEvents:pack(context.sessionEvents)};

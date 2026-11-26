@@ -160,7 +160,7 @@ export class ConversationEngine extends LiveEngine {
     if(mine&&(this.handoffEnabled||this.audience.config.phases)){this.audience.clearPreparation('player_arrived');this.audiencePreview=null;}
     if(this.audiencePreview?.messageId===m.id&&this.audiencePreview.text===m.text&&this.audiencePreview.npcId===speakerId)this.audiencePreview.status='published';
     if(recipients.length)this.inbox.push({id:m.id,name:m.name,text:m.text,mine,speakerId:speakerId||(mine?'player':m.name),recipientIds:recipients,pendingRecipientIds:[...recipients]});if(this.inbox.length>16){const old=this.inbox.shift();this._setReceipt(old.id,'failed');}
-    this._public(mine?'player.message':'npc.message',m.text,{id:m.id,speakerRole:mine?'player':'audience',speakerId:speakerId||(mine?'player':m.name),recipientIds:recipients,replyTo:routing.replyTo||[]});
+    this._public(mine?'player.message':'npc.message',m.text,{id:m.id,speakerRole:mine?'player':'audience',speakerId:speakerId||(mine?'player':m.name),...(routing.displayName?{displayName:routing.displayName}:{}),recipientIds:recipients,replyTo:routing.replyTo||[]});
     this.audience.dialogue.setWaiting(this.inbox);
     if(mine){this.failureStreak=0;this.speechAudio?.dropWarmSpeech();this.epoch++;this.pending?.abort();this.pending=null;this.nextWake=this._clock;this._setReceipt(m.id,'pending');}
     this.nextWake=this._clock;if(this.handoffEnabled)this._maybePrepare();this._emitState();}
@@ -212,7 +212,7 @@ export class ConversationEngine extends LiveEngine {
     }).catch(()=>{if(!controller.signal.aborted)this.audience.dialogue.log({stage:'host.prepare.unavailable',requestId});})
       .finally(()=>{if(this.preparing===work)this.preparing=null;});
   }
-  async _think(){if(this.failureStreak>=6||this.singingExecuting||!this.enabled||!this._started||this.pending||this._active||this._queue.length||this._state.paused||this._destroyed||this._clock<this.nextWake)return;
+  async _think(){if(this.automaticRetriesExhausted||this.singingExecuting||!this.enabled||!this._started||this.pending||this._active||this._queue.length||this._state.paused||this._destroyed||this._clock<this.nextWake)return;
     if(this._mediaPlaying()&&!this.inbox.some(m=>m.mine))return;
     if(this.audiencePreview?.status==='pending'||this.preparing)return;
     let prepared=this.prepared;this.prepared=null;
@@ -290,8 +290,10 @@ export class ConversationEngine extends LiveEngine {
     for(const m of waiting)this._setReceipt(m.id,status);
     if(waiting.length){this._state.replyTo=waiting.at(-1).id;this._state.replyStatus=status;}
   }
+  get automaticRetriesExhausted(){return this.failureStreak>=6;}
+  get canRetryReply(){return !this._destroyed&&!this._state.paused&&!this.pending&&!this._active&&!this._queue.length;}
   retryReply(){
-    if(this._destroyed||this._state.paused||this.pending||this._active||this._queue.length)return false;
+    if(!this.canRetryReply)return false;
     this.failureStreak=0;this.nextWake=this._clock;this._state.agent.errorCode=null;this._state.agent.validationReason=null;
     this._waitingReceipts('pending');if(this._state.call?.active)this.callNeedsTurn=true;this._emitState();return true;
   }
