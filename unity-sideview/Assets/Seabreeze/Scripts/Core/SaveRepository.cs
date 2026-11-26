@@ -23,13 +23,17 @@ namespace Seabreeze
                     return Path.Combine(VerificationDirectory, MemoryRuntimeConfig.Enabled ? "seven-memory-save.json" : "seabreeze-save.json");
                 }
 #endif
-                string directory = Environment.GetEnvironmentVariable("Z_MEMORY_SAVE_ROOT");
-                if (string.IsNullOrEmpty(directory)) directory = Application.persistentDataPath;
+                string directory = Application.persistentDataPath;
                 if (CloudGameSession.Enabled)
                 {
                     var member = CloudGameSession.Current?.MemberId;
                     if (string.IsNullOrEmpty(member)) throw new InvalidOperationException("请先完成团队登录。");
                     directory = Path.Combine(directory, "Team", member);
+                }
+                else
+                {
+                    var localRoot = Environment.GetEnvironmentVariable("Z_MEMORY_SAVE_ROOT");
+                    if (!string.IsNullOrEmpty(localRoot)) directory = localRoot;
                 }
                 if (!Path.IsPathRooted(directory)) throw new InvalidOperationException("Save directory must be absolute.");
                 return Path.Combine(directory, MemoryRuntimeConfig.Enabled ? "seven-memory-save.json" : "seabreeze-save.json");

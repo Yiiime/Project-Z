@@ -12,7 +12,7 @@ node Tools/team-model/login.mjs
 node Tools/DevServices/local.mjs start
 ```
 
-第一条从两个 npm 锁文件安装依赖，在 `~/.config/project-z/services/` 创建空模板，保留已有私有配置。第二条用于能访问团队内网的成员；供应商直连模式跳过这一步。第三条在前台启动两个后台，保持这个终端打开，然后进入 Unity Play。
+第一条从两个 npm 锁文件安装依赖，在 `~/.config/project-z/services/` 创建空模板，保留已有私有配置。第二条用于能访问团队内网的成员；供应商直连模式跳过这一步。第三条在前台启动两个后台，保持这个终端打开。在 macOS Unity Editor 停止 Play，选择 **Seabreeze → 服务连接 → 本地开发**，再进入 Play。
 
 ```sh
 node Tools/DevServices/local.mjs status

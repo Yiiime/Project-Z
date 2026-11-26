@@ -503,7 +503,12 @@ namespace Seabreeze
 
         void BuildPause()
         {
-            Header("PAUSE  /  TAKE YOUR TIME","让这一刻，停一停","所有选择和相遇，都会被记住。" );
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            string subtitle = CloudGameSession.ConnectionDescription;
+#else
+            const string subtitle = "所有选择和相遇，都会被记住。";
+#endif
+            Header("PAUSE  /  TAKE YOUR TIME","让这一刻，停一停",subtitle);
             Button("Resume",overlayContent,TL,TL,new Vector2(46,-230),new Vector2(668,64),"继续散步",CloseOverlay,true,25);
             Button("Save",overlayContent,TL,TL,new Vector2(46,-308),new Vector2(668,56),"保存此刻",()=>{if(session.Save())ShowToast("已保存。下次会从这里继续。");},false,23);
             Button("Restart",overlayContent,TL,TL,new Vector2(46,-378),new Vector2(668,56),"重新开始这一天",()=>OpenOverlay("restart"),false,23);

@@ -76,7 +76,7 @@ if (editor) {
   writeEditorConnection(root, {memoryUrl:state.memoryUrl, ...state.connection});
 }
 console.log('已连接主机。角色模型与直播模型已配置，语音配置' + (speechConfigured ? '已就绪。' : '尚未就绪。'));
-if (editor) { console.log('请在本工程的 Unity 编辑器中进入 Play。'); process.exit(0); }
+if (editor) { console.log('在 macOS Unity 编辑器中先选择「Seabreeze → 服务连接 → 本地开发」，然后进入 Play。'); process.exit(0); }
 if (process.argv.includes('--check')) {console.log('局域网启动自检通过。'); process.exit(0);}
 const gameApp = app || path.join(root, 'ProjectZ-Day01.app');
 const result = spawnSync('/usr/bin/open', ['-n', gameApp, '--env', 'Z_MEMORY_SAVE_ROOT=' + path.join(runtime, 'saves'),

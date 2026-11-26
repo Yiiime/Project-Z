@@ -28,6 +28,9 @@ namespace Seabreeze
             Application.targetFrameRate = 60;
             Application.runInBackground = true;
             smokeRun = System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-memorySmokeOutput") >= 0;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            Debug.Log("[Seabreeze] " + CloudGameSession.ConnectionDescription);
+#endif
             PackagedPlayConnection.Configure();
             session = gameObject.AddComponent<GameSession>();
             session.Initialize(!smokeRun);

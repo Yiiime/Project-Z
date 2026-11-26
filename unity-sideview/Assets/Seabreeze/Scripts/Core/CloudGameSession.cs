@@ -32,40 +32,94 @@ namespace Seabreeze
         string access, refresh;
         DateTimeOffset expires, renewAfter;
 
-        public static bool Enabled
+        static (bool cloud, string label)? playMode;
+
+        public static bool Enabled => Mode.cloud;
+        public static string ConnectionDescription => "服务模式 · " + Mode.label;
+
+        static (bool cloud, string label) Mode
         {
             get
             {
-#if UNITY_EDITOR_OSX || (UNITY_STANDALONE_OSX && !UNITY_EDITOR)
-                if (Current != null) return true;
-                if (Application.isBatchMode || !Application.isPlaying) return false;
-                var args = Environment.GetCommandLineArgs();
-                foreach (var flag in new[] { "-memoryService", "-memoryDisabled", "-memorySmokeOutput", "-executeMethod", "-runTests" })
-                    if (Array.IndexOf(args, flag) >= 0) return false;
-                if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("Z_LIVE_CONNECTION_FILE")) ||
-                    !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("Z_MEMORY_SAVE_ROOT"))) return false;
-#if UNITY_EDITOR
-                if (!string.IsNullOrEmpty(SaveRepository.VerificationDirectory)) return false;
-#endif
-                var mode = Environment.GetEnvironmentVariable("Z_GAME_SERVICES");
-                if (mode == "cloud") return true;
-                if (mode == "local") return false;
-#if UNITY_EDITOR
-                if (File.Exists(MemoryRuntimeConfig.EditorConnectionFile)) return false;
-#else
-                var root = Path.GetFullPath(Path.Combine(Application.dataPath, "../.."));
-                // Recognize the existing self-contained LAN/Day01 distributions, not a build beside source Tools/.
-                bool localKit = File.Exists(Path.Combine(root, "local-source.json")) &&
-                    File.Exists(Path.Combine(root, "Runtime/node"));
-                bool lanKit = File.Exists(Path.Combine(root, "connection-config.json")) &&
-                    File.Exists(Path.Combine(root, "Tools/LanPlay/start-client.mjs"));
-                if (localKit || lanKit) return false;
-#endif
-                return true;
-#else
-                return false;
-#endif
+                if (!Application.isPlaying) return (false, "编辑中");
+                if (!playMode.HasValue) playMode = ResolveMode();
+                return playMode.Value;
             }
+        }
+
+#if UNITY_EDITOR_OSX
+        // EditorPrefs lives outside version control. Keep each checkout independent.
+        static string EditorModeKey => "Seabreeze.LocalGameServices." + Application.dataPath;
+        public static bool EditorPrefersLocal
+        {
+            get => UnityEditor.EditorPrefs.GetBool(EditorModeKey, false);
+            set
+            {
+                if (value) UnityEditor.EditorPrefs.SetBool(EditorModeKey, true);
+                else UnityEditor.EditorPrefs.DeleteKey(EditorModeKey);
+            }
+        }
+        public static bool CanChooseEditorMode => !LaunchMode().HasValue;
+#endif
+
+#if UNITY_EDITOR_OSX || (UNITY_STANDALONE_OSX && !UNITY_EDITOR)
+        static bool IsIsolatedRunArgument(string arg)
+        {
+            switch (arg)
+            {
+                case "-executeMethod":
+                case "-runTests":
+                case "-memorySmokeOutput":
+                case "-memoryExtendedOutput":
+                case "--verify-live-exit":
+                case "-liuyangMapQA":
+                case "-zhouboMapQA":
+                case "-qingyeMapQA":
+                case "-multiPortraitMapQA":
+                    return true;
+                default:
+                    return arg.StartsWith("--z-call-verify=", StringComparison.Ordinal) ||
+                        arg.StartsWith("--z-live2d-verify=", StringComparison.Ordinal);
+            }
+        }
+
+        static (bool cloud, string label)? LaunchMode()
+        {
+            var args = Environment.GetCommandLineArgs();
+            if (Application.isBatchMode || Array.Exists(args, IsIsolatedRunArgument))
+                return (false, "本地开发（隔离运行）");
+#if UNITY_EDITOR
+            if (!string.IsNullOrEmpty(SaveRepository.VerificationDirectory)) return (false, "本地开发（隔离运行）");
+#endif
+            if (Array.IndexOf(args, "-memoryDisabled") >= 0) return (false, "本地开发（角色记忆已停用）");
+
+            var mode = Environment.GetEnvironmentVariable("Z_GAME_SERVICES")?.Trim();
+            if (string.Equals(mode, "cloud", StringComparison.OrdinalIgnoreCase)) return (true, "团队云端（Z_GAME_SERVICES）");
+            if (string.Equals(mode, "local", StringComparison.OrdinalIgnoreCase)) return (false, "本地开发（Z_GAME_SERVICES）");
+            if (Array.IndexOf(args, "-memoryService") >= 0) return (false, "本地开发（启动参数）");
+            return null;
+        }
+#endif
+
+        static (bool cloud, string label) ResolveMode()
+        {
+#if UNITY_EDITOR_OSX || (UNITY_STANDALONE_OSX && !UNITY_EDITOR)
+            var launch = LaunchMode();
+            if (launch.HasValue) return launch.Value;
+#if UNITY_EDITOR
+            if (EditorPrefersLocal) return (false, "本地开发（编辑器选择）");
+#else
+            var root = Path.GetFullPath(Path.Combine(Application.dataPath, "../.."));
+            bool localKit = File.Exists(Path.Combine(root, "local-source.json")) &&
+                File.Exists(Path.Combine(root, "Runtime/node"));
+            bool lanKit = File.Exists(Path.Combine(root, "connection-config.json")) &&
+                File.Exists(Path.Combine(root, "Tools/LanPlay/start-client.mjs"));
+            if (localKit || lanKit) return (false, "本地开发（专用试玩包）");
+#endif
+            return (true, "团队云端（默认）");
+#else
+            return (false, "本地开发（当前平台）");
+#endif
         }
 
         CloudGameSession()
@@ -79,7 +133,7 @@ namespace Seabreeze
         }
         public static CloudGameSession Open() => Current ?? (Current = new CloudGameSession());
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-        static void Reset() { Current?.Dispose(); Current = null; }
+        static void Reset() { Current?.Dispose(); Current = null; playMode = null; }
 
         static string Base64Url(byte[] bytes) => Convert.ToBase64String(bytes).TrimEnd('=').Replace('+', '-').Replace('/', '_');
         static bool TrustedUri(Uri uri) => uri != null && uri.IsAbsoluteUri && uri.Scheme == "https" &&

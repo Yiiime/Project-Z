@@ -15,6 +15,30 @@ namespace Seabreeze.Editor
 
         static TeamModelStartup() { EditorApplication.playModeStateChanged += Changed; }
 
+#if UNITY_EDITOR_OSX
+        const string CloudMenu = "Seabreeze/服务连接/团队云端（默认）";
+        const string LocalMenu = "Seabreeze/服务连接/本地开发";
+
+        [MenuItem(CloudMenu, false, 100)]
+        static void SelectCloud() => CloudGameSession.EditorPrefersLocal = false;
+
+        [MenuItem(LocalMenu, false, 101)]
+        static void SelectLocal() => CloudGameSession.EditorPrefersLocal = true;
+
+        [MenuItem(CloudMenu, true)]
+        static bool ValidateCloud() => ValidateModeMenu(CloudMenu, false);
+
+        [MenuItem(LocalMenu, true)]
+        static bool ValidateLocal() => ValidateModeMenu(LocalMenu, true);
+
+        static bool ValidateModeMenu(string menuPath, bool local)
+        {
+            bool configurable = CloudGameSession.CanChooseEditorMode;
+            Menu.SetChecked(menuPath, configurable && CloudGameSession.EditorPrefersLocal == local);
+            return configurable && !EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isPlaying;
+        }
+#endif
+
         static void Changed(PlayModeStateChange state)
         {
             if (state == PlayModeStateChange.ExitingPlayMode || state == PlayModeStateChange.EnteredEditMode)

@@ -9,7 +9,7 @@
 ### macOS 团队云端模式
 
 1. 在 Unity Hub 添加本目录，使用 **6000.3.27f1** 打开。首次导入需等待 Packages 解析和中文字体缓存生成。
-2. 打开 `Assets/Seabreeze/Scenes/Street.unity` 并点击 Play。新检出的工程默认连接 `https://api.litingyi.com`。普通独立 macOS App 使用同一登录入口。
+2. 打开 `Assets/Seabreeze/Scenes/Street.unity` 并点击 Play。macOS Editor 默认连接 `https://api.litingyi.com`。普通独立 macOS App 使用同一登录入口。
 3. 首次运行时记下 Unity 窗口的六位配对码，在自动打开的浏览器中输入，然后用已加入服务端白名单的 GitHub 账号登录。如果浏览器没有打开，可以在 Unity 点击「打开登录页」。
 4. 配对成功后回到海岛首页，选择开始或继续。下次启动时游戏从 macOS 钥匙串恢复有效会话。需要换账号时，进入游戏后按 Esc，选择「退出账号并结束游戏」，下次启动即可重新配对。
 
@@ -17,7 +17,11 @@
 
 ### 本地服务与其他平台
 
-已有显式本地连接配置的 Editor 和随附本地后台或局域网连接的旧试玩套件，继续使用各自的启动方式。需要在 macOS 显式选用本地服务时，可在启动 Unity 的环境中设置 `Z_GAME_SERVICES=local`。Windows、Linux、iOS 和 Android 本轮尚未接入上述云端登录流程。本机服务依赖和团队模型启动步骤见[游戏服务接入](Tools/DevServices/README.md)和[团队模型连接](Tools/team-model/README.md)。
+在 macOS Editor 中停止 Play，选择 **Seabreeze → 服务连接 → 本地开发**，然后重新进入 Play。选回 **团队云端（默认）** 即恢复云端。选择仅保存在本机当前工程。进入 Play 后，Console 搜索 `[Seabreeze] 服务模式` 可查看实际模式与选择来源，游戏内 Esc 暂停页也会显示。
+
+普通交互式启动可用 `Z_GAME_SERVICES=cloud` 或 `local` 指定模式，优先于启动器的 `-memoryService`、编辑器偏好和试玩包类型。启动选项强制模式时，编辑器菜单会灰显。批处理、隔离验证和显式停用记忆的启动保持本地。旧直播连接文件、`Z_LIVE_CONNECTION_FILE` 和 `Z_MEMORY_SAVE_ROOT` 仅在本地模式使用。云端存档和照片位于当前设备的 `persistentDataPath/Team/<成员 ID>/`。专用本机后台包与局域网试玩包默认沿用配套启动器。
+
+Windows、Linux、iOS 和 Android 本轮尚未接入上述云端登录流程。本机服务依赖和团队模型启动步骤见[游戏服务接入](Tools/DevServices/README.md)和[团队模型连接](Tools/team-model/README.md)。
 
 本机曾构建 `Builds/macOS/Seabreeze.app`（macOS Universal）；构建产物不随源码提交。从仓库克隆后请在 Unity 中构建。
 
