@@ -1,0 +1,62 @@
+{
+ "Version": 3,
+ "FileReferences": {
+  "Moc": "Model.moc3",
+  "Textures": [
+   "texture_00.png"
+  ],
+  "DisplayInfo": "Model.cdi3.json",
+  "Physics": "Model.physics3.json",
+  "Expressions": [
+   {
+    "Name": "smile",
+    "File": "smile.exp3.json"
+   },
+   {
+    "Name": "surprise",
+    "File": "surprise.exp3.json"
+   },
+   {
+    "Name": "angry",
+    "File": "angry.exp3.json"
+   },
+   {
+    "Name": "troubled",
+    "File": "troubled.exp3.json"
+   },
+   {
+    "Name": "wave",
+    "File": "wave.exp3.json"
+   },
+   {
+    "Name": "explain",
+    "File": "explain.exp3.json"
+   },
+   {
+    "Name": "point",
+    "File": "point.exp3.json"
+   },
+   {
+    "Name": "blush",
+    "File": "blush.exp3.json"
+   }
+  ]
+ },
+ "Groups": [
+  {
+   "Target": "Parameter",
+   "Name": "EyeBlink",
+   "Ids": [
+    "ParamEyeLOpen",
+    "ParamEyeROpen"
+   ]
+  },
+  {
+   "Target": "Parameter",
+   "Name": "LipSync",
+   "Ids": [
+    "ParamMouthOpenY"
+   ]
+  }
+ ]
+}
