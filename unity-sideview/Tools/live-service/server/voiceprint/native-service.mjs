@@ -11,14 +11,14 @@ import {validateEnrollmentWav} from './http.mjs';
 // Authentication and executor-lease checks happen in HTTP before these methods.
 // RTC tokens live only in this ephemeral map, never session events or saves.
 export class NativeVoiceService {
- constructor({configRoot, profileRoot, connect=connectMmpg, api=rtcApi, load=loadVoiceprintConfig, makeToken=issueRtcToken}) {
-  Object.assign(this,{configRoot,profileRoot,connect,api,load,makeToken});this.links=new Map();this.enrolling=new Set();
+ constructor({configRoot, profileRoot, isolatedPlayer=false, connect=connectMmpg, api=rtcApi, load=loadVoiceprintConfig, makeToken=issueRtcToken}) {
+  Object.assign(this,{configRoot,profileRoot,isolatedPlayer,connect,api,load,makeToken});this.links=new Map();this.enrolling=new Set();
  }
  profile(owner){return path.join(this.profileRoot,createHash('sha256').update(owner).digest('hex')+'.json');}
  async config(owner){
   const config=await this.load(this.configRoot);
   // Shared host credentials never imply another player's voice identity.
-  if(owner!=='local-owner')config.voiceprintId='';
+  if(this.isolatedPlayer || owner!=='local-owner')config.voiceprintId='';
   try{const p=JSON.parse(await fs.readFile(this.profile(owner),'utf8'));if(p.version===2&&p.appId===config.rtcAppId)config.voiceprintId=p.id;}catch(e){if(e.code!=='ENOENT'&&!(e instanceof SyntaxError))throw e;}
   config.missing=config.missing.filter(k=>k!=='VOLC_VOICEPRINT_ID');if(!config.voiceprintId)config.missing.push('VOLC_VOICEPRINT_ID');return config;
  }

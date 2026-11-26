@@ -73,3 +73,19 @@ test('reference saves retain old snapshots, avoid transferring private history, 
  assert(app.engine.memory.history(app.engine.world('integrated'),'linxu').some(m=>JSON.stringify(m).includes('弹幕19')));
  await assert.rejects(bridge.post('observe',{event:{id:'stale',actorId:'linxu',text:'不应出现'}}));
 });
+
+test('virtual arrival viewers stay in live chat without blocking subsequent character observations',async t=>{
+ const {bridge}=await setup(t);
+ const virtualId='virtual_'+crypto.randomUUID();
+ bridge.record({id:'chat',type:'npc.message',speakerId:virtualId,speakerRole:'audience',text:'来啦！'});
+ assert.equal(bridge.pending.length,0);
+ const saved=new CharacterBridge(bridge.binding,{pending:[
+  {event:{id:'old',actorId:virtualId,stage:'message',text:'海风真好。'}},
+  {event:{id:'valid',actorId:'player',stage:'message',text:'我在看。'}}
+ ]});
+ await saved.flush();assert.equal(saved.pending.length,0);
+ const turn=await saved.prepare({kind:'host',context:{scene:{mode:'arrival',tools:['offer_arrival']},publicEvents:[]}});
+ assert(Object.hasOwn(turn.turnSchema.$defs.LiveHostAction.properties,'virtualAudience'));
+ const tools=turn.turnSchema.$defs.LiveTool.oneOf.map(s=>s.properties.name.const);
+ assert(tools.includes('offer_arrival'));assert(!tools.includes('depart_island'));
+});

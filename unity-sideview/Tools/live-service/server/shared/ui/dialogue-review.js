@@ -22,7 +22,7 @@ export class DialogueReview {
     // Call reactions are reviewed against an immutable public cut. New player/system facts
     // invalidate it; a growing played prefix or another spectator does not erase its evidence.
     const before=approved.snapshot,byId=new Map(this.events.map(e=>[e.id,e]));
-    const same=(a,b)=>a.type===b.type&&a.text===b.text&&a.speakerRole===b.speakerRole&&a.speakerId===b.speakerId&&a.status===b.status&&JSON.stringify(a.replyTo)===JSON.stringify(b.replyTo);
+    const same=(a,b)=>a.type===b.type&&a.text===b.text&&a.speakerRole===b.speakerRole&&a.speakerId===b.speakerId&&a.displayName===b.displayName&&a.status===b.status&&JSON.stringify(a.replyTo)===JSON.stringify(b.replyTo);
     for(const old of before.publicEvents){
       const next=byId.get(old.id);if(!next)return false;
       if(same(old,next))continue;
@@ -37,7 +37,7 @@ export class DialogueReview {
   reset() {this.session++;this.invalidate();this.events=[];this.waiting=[];this.traces=[];}
   record(event) {
     const role=event.speakerRole||(event.type.startsWith('speech.')?'host':event.type==='player.message'?'player':event.type==='npc.message'?'audience':'system');
-    const entry={id:event.id,type:event.type,text:event.text,speakerRole:role,speakerId:event.speakerId||(role==='host'?'Z':role),
+    const entry={id:event.id,type:event.type,text:event.text,speakerRole:role,speakerId:event.speakerId||(role==='host'?'Z':role),...(event.displayName?{displayName:event.displayName}:{}),
       sequence:++this.revision,occurredAt:this.now(),status:event.status||(event.type==='speech.completed'?'completed':'published'),
       speechId:event.speechId||null,replyTo:[...(event.replyTo||[])],...(event.recipientIds?{recipientIds:[...event.recipientIds]}:{})};
     const index=this.events.findIndex(e=>e.id===entry.id);

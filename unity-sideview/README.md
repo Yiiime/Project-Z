@@ -2,6 +2,8 @@
 
 原创 2D 海滨小镇叙事探索游戏原型。Unity 6.3 LTS / Universal 2D。
 
+本机启动完整后台、打包 App 连接及多人共享主机见[游戏服务接入](Tools/DevServices/README.md)。
+
 ## 打开与运行
 
 1. 在 Unity Hub 添加本目录，使用 **6000.3.27f1** 打开。

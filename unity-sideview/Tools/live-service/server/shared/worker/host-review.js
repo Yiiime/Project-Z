@@ -4,7 +4,7 @@ export const REVIEW_ISSUES=['contradiction','unsupported_fact','private_memory',
 export const QUALITY_ISSUES=['repetitive','over_questioning','overlong','missed_request'];
 import {AUDIENCE_NAMES} from '../audience-roster.js';
 export const SPEAKER_NAMES={Z:'Z',player:'连麦来客',...AUDIENCE_NAMES};
-const key=e=>JSON.stringify([e.id,e.type,e.text,e.speakerRole,e.speakerId,e.status,e.speechId,e.replyTo]);
+const key=e=>JSON.stringify([e.id,e.type,e.text,e.speakerRole,e.speakerId,e.displayName,e.status,e.speechId,e.replyTo]);
 export function releaseInput(c,{expanded=false,persona='',world={}}={}) {
  const seen=new Set(),all=[...(c.sessionEvents||[]),...(c.publicEvents||[])].filter(e=>{const k=key(e);if(seen.has(k))return false;seen.add(k);return true;});
  const cited=new Set([...(c.candidate?.replyTo||[]),...(c.candidate?.evidenceIds||[])]);

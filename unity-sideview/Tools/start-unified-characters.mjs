@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {spawn,spawnSync} from 'node:child_process';
+import {writeEditorConnection} from './editor-connection.mjs';
 import {loadTeamClient} from './team-model/client.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const memory=path.join(root,'Tools/MemoryLab'),live=path.join(root,'Tools/live-service');
@@ -29,8 +30,9 @@ for(let n=0;n<40;n++){
  await new Promise(r=>setTimeout(r,500));
 }
 if(!ready)throw Error('服务尚未就绪，请查看 Tools/MemoryLab/.local/unified-runtime 下的日志。');
-const connection=JSON.stringify({baseUrl:`http://127.0.0.1:${livePort}`,token});
-const editorConnection=path.join(root,'UserSettings/ZLive/local-connection.json');fs.mkdirSync(path.dirname(editorConnection),{recursive:true});fs.writeFileSync(editorConnection,connection,{mode:0o600});
+const endpoints={memoryUrl:`http://127.0.0.1:${memoryPort}`,baseUrl:`http://127.0.0.1:${livePort}`,token};
+const connection=JSON.stringify(endpoints);
+const editorConnection=writeEditorConnection(root,endpoints);
 console.log(`统一角色服务已就绪：岛上 ${memoryPort}，直播 ${livePort}。全员直播，个人记忆跨频道延续。`);
 if(process.argv.includes('--services-only'))process.exit(0);
 if(team){const state=await fetch(`http://127.0.0.1:${memoryPort}/api/health`).then(r=>r.json());if(!state.configured){const child=spawn('/usr/bin/open',[`http://127.0.0.1:${memoryPort}/settings`],{stdio:'ignore'});child.on('error',()=>{});child.unref();}}

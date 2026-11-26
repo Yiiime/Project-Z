@@ -1,3 +1,5 @@
+import {virtualAudienceId} from './shared/addressing.js';
+
 // Server-only adapter. Binding credentials are local game-session capabilities,
 // never model API keys. An attached room cannot fall back to another persona.
 export class CharacterBridge {
@@ -5,7 +7,11 @@ export class CharacterBridge {
     const url = new URL(binding.memoryUrl);
     if (url.protocol !== "http:" || !["127.0.0.1", "localhost"].includes(url.hostname) || url.username || url.password || url.pathname !== "/") throw Error("invalid_character_service");
     for (const k of ["worldId", "runId", "roomId", "roomToken"]) if (typeof binding[k] !== "string" || !/^[a-zA-Z0-9_-]{1,100}$/.test(binding[k])) throw Error("invalid_character_binding");
-    this.binding = { ...binding, memoryUrl: url.origin }; this.fetch = fetchImpl; this.pending = pending; this.onChanged = onChanged; this.publications = new Map(publications); this.sending = null;
+    this.binding = { ...binding, memoryUrl: url.origin }; this.fetch = fetchImpl;
+    // Earlier arrival rooms enqueued virtual viewers as island NPCs. The live
+    // journal already retains those comments; replay only actual character observations.
+    this.pending = pending.filter(item => !virtualAudienceId(item.event?.actorId));
+    this.onChanged = onChanged; this.publications = new Map(publications); this.sending = null;
   }
   bindPublication(eventId, proposalId, actorId, text) {
     if (!proposalId) return;
@@ -27,7 +33,7 @@ export class CharacterBridge {
     }
     if(!["player.message","npc.message","speech.progress","speech.completed","speech.interrupted"].includes(event.type))return;
     const actorId = event.speakerId === "Z" || event.type.startsWith("speech.") ? "z" : event.speakerRole === "player" ? "player" : event.speakerId;
-    if (!actorId) return;
+    if (!actorId || virtualAudienceId(actorId)) return;
     const bound = this.publications.get(event.id);
     const proposal = event.type !== "speech.progress" && bound?.actorId === actorId && bound.text === event.text ? bound : null;
     const id = event.id + ":" + event.type + ":" + event.text.length;
@@ -45,12 +51,17 @@ export class CharacterBridge {
     await this.flush();
     const actorId = value.kind === "host" ? "z" : value.context.audience?.eligibleNpcIds?.[0];
     if (!actorId) throw Error("missing_live_actor");
-    const prepared=await this.post("prepare", { actorId });prepared.publicEventIds=value.context.publicEvents.map(e=>e.id);return prepared;
+    const scene = value.context.scene;
+    const isArrivalHost = value.kind === "host" && scene?.mode === "arrival";
+    // LiveScene derives at most one tool from displayed playback, draw and acceptance receipts.
+    const prepared = await this.post("prepare", {actorId, ...(isArrivalHost ? {arrivalStage: scene.tools[0] || "warmup"} : {})});
+    prepared.publicEventIds = value.context.publicEvents.map(event => event.id);
+    return prepared;
   }
   wrap(envelope, prepared, kind) {
     const host = kind === "host";
     envelope.system += "\n【统一人物接口，替代上文最终JSON包装】你就是下面人物资料中的当前角色；不要扮演其他人。只输出dialogue/action/info三键。dialogue是纯台词。" +
-      (host ? "action保存上文主持协议中除speech和memory外的字段（action、mood、gesture、transition、handledIds、wakeAfterMs、continuation、agendaUpdates、tool等）；speech放到dialogue，省略memory。" : "action为{type:send_danmaku或wait,intent:reaction/atmosphere/advance,evidence_ids:[本次公开依据ID]}。发言时 action 同时带 actorId、delivery、expression，遵循上文逐角色表达协议。不发弹幕时dialogue为空、type为wait；你仍在房间里感知消息，不能退出或替其他人发言。") +
+      (host ? "action保存上文主持协议中除speech和memory外的字段。action.action 为 speak 或 tool 时，必须在 action 中同时写 actorId（固定为小写 z）、delivery 和 expression，并按当前场景填写 mood、gesture、transition、handledIds、wakeAfterMs、continuation、agendaUpdates、tool 等字段；speech放到dialogue，省略memory。" : "action为{type:send_danmaku或wait,intent:reaction/atmosphere/advance,evidence_ids:[本次公开依据ID]}。发言时 action 同时带 actorId、delivery、expression，遵循上文逐角色表达协议。不发弹幕时dialogue为空、type为wait；你仍在房间里感知消息，不能退出或替其他人发言。") +
       "info遵守下方契约，只给本人状态变化；不重复数值快照，不创建世界事实、任务完成或记忆。所有岛民必须在线，但可以选择暂不说话。输出前考虑实际公开听众，不把私聊秘密直接讲给全场。人物与当前时间地点以character_context为准，旧开场设定不覆盖本局经历。\n人物Info契约：" + JSON.stringify(prepared.infoSchema) +
       "\n可选字段无变化时完全省略，不填false、null占位。不知道今天做过什么时，说平时做什么或现在想做什么；没有执行记录不能把职业日常编成今天已经完成的经历。台词里的称呼不会改变引擎日期和天气。action.evidence_ids只可使用这些公开消息ID："+JSON.stringify(prepared.publicEventIds)+"；不能用character_context中的记忆ID代替。Info的changes来源则必须用character_context.interaction.source_event_id。";
     envelope.system = prepared.prompt + "\n\n" + envelope.system;
