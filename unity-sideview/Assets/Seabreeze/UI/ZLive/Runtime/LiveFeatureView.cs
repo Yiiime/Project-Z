@@ -177,22 +177,30 @@ public sealed partial class LiveFeatureController {
     void UpdateView(){if(sendButton!=null)RefreshSessionControls();}
     bool NearChatBottom()=>chat.scrollOffset.y>=chat.verticalScroller.highValue-65;
     void ScrollToLatest(){if(chat.childCount>0)chat.ScrollTo(chat[chat.childCount-1]);newMessages.style.display=DisplayStyle.None;}
+    readonly System.Collections.Generic.Dictionary<string,int> avatarSlots=new System.Collections.Generic.Dictionary<string,int>();
+    int AvatarSlot(string name,string actor,bool mine){
+        if(mine)return 8;
+        string[] actors={"z","liyuan","liting","axing","zhengyi","xiaoxiaoqing","linxu","zhou_bobo"};
+        int known=System.Array.IndexOf(actors,actor);if(known>=0)return known;
+        if(avatarSlots.TryGetValue(name,out int saved))return saved;
+        uint hash=2166136261;foreach(char ch in name)hash=(hash^ch)*16777619;
+        // Prefer a different object, not just another colour of an NPC's object.
+        int glyph=9+(int)(hash%7),slot=-1;
+        for(int i=0;i<7;i++){int candidate=9+(glyph-9+i)%7;if(!avatarSlots.Values.Any(v=>v%16==candidate)){slot=candidate+16*(int)((hash/7)%8);break;}}
+        if(slot<0){slot=9+(int)(hash%119);for(int i=0;i<119&&avatarSlots.ContainsValue(slot);i++)slot=9+(slot-8)%119;}
+        avatarSlots[name]=slot;return slot;
+    }
     void AddChat(string name,string value,bool mine,bool system=false){
         if(name=="Z")return;
         bool scroll=mine||NearChatBottom();
-        var row=Box(mine?"chat-row mine":"chat-row");
-        if(!system){
+        var row=Box(mine?"chat-row mine":"chat-row");row.userData=mine?"player":name;
+        if(mine||!system){
             var avatar=Box("avatar");
-            // Reuse the existing avatar styles; character identity comes from the island roster.
             string actor=Seabreeze.SevenCharacterCatalog.Actors.FirstOrDefault(a=>a.displayName==name)?.id;
-            string badge=mine?null:actor switch {"linxu"=>"buoy","liyuan"=>"tape","axing"=>"bean","zhengyi"=>"rain","zhou_bobo"=>"toast",_=>null};
-            if(badge!=null){
-                avatar.AddToClassList("viewer-"+badge);
-                avatar.Add(Text(name.Substring(0,1),"viewer-initial"));
-            }else{
-                string portrait=mine?"self":actor=="xiaoxiaoqing"?"wind":actor=="liting"?"salt":"guest";
-                avatar.Add(Art(portrait,"portrait"));
-            }
+            var sheet=Resources.Load<Texture2D>("FirstDay/LiveAvatars");
+            int slot=AvatarSlot(mine?"player":name,actor,mine);
+            var icon=new Image { image=sheet, uv=new Rect((slot%16)/16f,(slot/16)/8f,1/16f,1/8f), scaleMode=ScaleMode.StretchToFill, pickingMode=PickingMode.Ignore };
+            icon.style.width=Length.Percent(100);icon.style.height=Length.Percent(100);avatar.Add(icon);
             row.Add(avatar);
         }
         var content=Box("message-content");
@@ -200,7 +208,7 @@ public sealed partial class LiveFeatureController {
         content.Add(Text(mine?Seabreeze.PlayerIdentity.DisplayName:name,"nickname"));
         content.Add(Text(value,"message-text"));
         chat.Add(row);
-        while(chat.childCount>80)chat.RemoveAt(0);
+        while(chat.childCount>80){string removed=chat[0].userData as string;chat.RemoveAt(0);if(removed!=null&&!chat.Children().Any(r=>(r.userData as string)==removed))avatarSlots.Remove(removed);}
         if(scroll&&!chatCollapsed)chat.schedule.Execute(()=>{if(row.parent==chat)chat.ScrollTo(row);});
         else newMessages.style.display=DisplayStyle.Flex;
     }

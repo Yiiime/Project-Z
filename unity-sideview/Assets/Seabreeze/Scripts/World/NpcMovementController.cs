@@ -37,7 +37,7 @@ namespace Seabreeze
         int simulatedIndex;
         bool initialized, available, wasBlocked = true;
         bool interactionHold;
-        bool passOtherActors;
+        bool passOtherActors, stayNearPlayer;
         PlayerController guidePaceSource;
         string unsupportedReason;
         public string LastStartFailure { get; private set; }
@@ -48,6 +48,7 @@ namespace Seabreeze
         public bool IsReady => initialized;
         public bool IsMoving => target != null;
         public float ActualSpeed { get; private set; }
+        public float AmbientPace { get; set; } = 1;
         public int FacingSign { get; private set; } = 1;
         public bool SimulateDecisions { get => simulateDecisions; set => simulateDecisions = value; }
         public NpcMoveResult LastResult { get; private set; }
@@ -67,7 +68,7 @@ namespace Seabreeze
             {
                 var player = passOtherActors && world != null && world.Player != null
                     ? world.Player.GetComponent<PlayerController>() : null;
-                return player != null ? Mathf.Max(EffectiveMaxSpeed, player.speed * 1.1f) : EffectiveMaxSpeed;
+                return (player != null ? Mathf.Max(EffectiveMaxSpeed, player.speed) : EffectiveMaxSpeed) * Mathf.Clamp(AmbientPace,.3f,1);
             }
         }
         public void SetGuidePace(PlayerController player) => guidePaceSource = player;
@@ -97,11 +98,11 @@ namespace Seabreeze
         public bool CanReachConversationPoint(Vector2 point) => InCurrentWorld && Finite(point) && IsSupportedTarget(new NpcDestination("conversation", point));
         public bool MoveForConversation(Vector2 point, int facing)
             => MoveToPoint(point,facing,false);
-        public bool MoveToPoint(Vector2 point,int facing,bool passActors)
+        public bool MoveToPoint(Vector2 point,int facing,bool passActors,bool followPlayer=true)
         {
             LastStartFailure=null;
             if(!CanAct){LastStartFailure="actor_busy";return false;}
-            passOtherActors=passActors;
+            passOtherActors=passActors;stayNearPlayer=followPlayer;
             if (!CanReachConversationPoint(point)){LastStartFailure=unsupportedReason??"unreachable_ground_or_obstacle";passOtherActors=false;return false;}
             resolved["conversation"] = new NpcDestination("conversation", point, facing);
             var request = BeginDecision();
@@ -403,7 +404,7 @@ namespace Seabreeze
                 return;
             }
             float remaining = Mathf.Max(0, Mathf.Abs(distance) - ArrivalDistance * .5f);
-            if(passOtherActors&&world.Player!=null&&Mathf.Abs(world.Player.position.x-target.position.x)>1.5f)
+            if(passOtherActors&&stayNearPlayer&&world.Player!=null&&Mathf.Abs(world.Player.position.x-target.position.x)>1.5f)
                 remaining=Mathf.Min(remaining,Mathf.Max(0,Mathf.Sign(distance)*(world.Player.position.x-body.position.x)-1f));
             // An accepted companion can keep pace with the player without
             // changing ordinary wandering speed or ignoring physical walls.

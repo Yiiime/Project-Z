@@ -17,11 +17,13 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     readonly CancellationTokenSource life=new CancellationTokenSource();readonly HashSet<TaskCompletionSource<bool>> frameWaiters=new HashSet<TaskCompletionSource<bool>>();float heartbeatAt;bool connected,locallyPaused=true,disposed,leaving;string pendingBase,pendingToken,pendingPin;string SessionKey {get {using(var sha=System.Security.Cryptography.SHA256.Create())return "ZLive.Session."+BitConverter.ToString(sha.ComputeHash(System.Text.Encoding.UTF8.GetBytes(pendingBase+"|"+pendingToken+"|"+StoryKey+(liveMemory==null?"":"|"+liveMemory.Key)+"|"+(string)characterBinding?["worldId"]+"|"+(string)characterBinding?["runId"]))).Replace("-","");}}
     LiveMemoryBridge liveMemory;
     public Func<Task<JObject>> BindCharacters;public Func<Task> ReleaseCharacters;JObject characterBinding;
+    public bool Preloading;
+    public void RevealPrepared(){Preloading=false;if(document!=null)document.rootVisualElement.style.visibility=Visibility.Visible;if(audioPlayer!=null)audioPlayer.PresentationHeld=false;}
     public Action ExitRequested;
     public Action<string> SessionEnded;
     bool sessionEndNotified;
     public void Configure(string serviceUrl,string gameSessionToken){pendingBase=serviceUrl;pendingToken=gameSessionToken;}
-    async void Start(){try{character=gameObject.AddComponent<CharacterPresenter>();character.Initialize();audioPlayer=gameObject.AddComponent<LiveAudioPlayer>();audioPlayer.Character=character;character.Audio=audioPlayer.Source;audioPlayer.Frame=NextFrame;audioPlayer.Receipt=Report;audioPlayer.Caption=SetHostCaption;gameObject.AddComponent<NativeRtcAudioReference>();BuildUI();BuildCompanionUI();
+    async void Start(){try{character=gameObject.AddComponent<CharacterPresenter>();character.Initialize();audioPlayer=gameObject.AddComponent<LiveAudioPlayer>();audioPlayer.Character=character;character.Audio=audioPlayer.Source;audioPlayer.Frame=NextFrame;audioPlayer.Receipt=Report;audioPlayer.Caption=SetHostCaption;gameObject.AddComponent<NativeRtcAudioReference>();BuildUI();BuildCompanionUI();audioPlayer.PresentationHeld=Preloading;if(Preloading)document.rootVisualElement.style.visibility=Visibility.Hidden;
         // Explicit local connections take precedence in editor verification as
         // well as players; never fall back to a user's service during a test.
         var connectionFile=Environment.GetEnvironmentVariable("Z_LIVE_CONNECTION_FILE");
@@ -56,7 +58,7 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
         connected=true;_=Observe(transport.Subscribe());locallyPaused=false;audioPlayer.Pause(false);await SyncAudioCapabilities();UpdateCallView();
     }
     async Task Observe(Task task){try{await task;}catch(OperationCanceledException){}catch(ObjectDisposedException){}catch(Exception e){if(!disposed)Error(e);}}
-    void Update(){if(disposed||leaving)return;UpdateView();UpdateCompanion();while(connections.TryDequeue(out var c)){if(c=="disconnected"){connected=false;locallyPaused=true;CancelCompanion();audioPlayer.Pause(true);status.text="连接中断 · 已暂停播放";}else{connected=true;if(locallyPaused&&Application.isFocused)_=ResumeRoom();}}
+    void Update(){if(disposed||leaving)return;if(!Preloading){UpdateView();UpdateCompanion();}while(connections.TryDequeue(out var c)){if(c=="disconnected"){connected=false;locallyPaused=true;CancelCompanion();audioPlayer.Pause(true);status.text="连接中断 · 已暂停播放";}else{connected=true;if(locallyPaused&&Application.isFocused)_=ResumeRoom();}}
         if(transport==null)return;int budget=30;while(budget-->0&&events.TryDequeue(out var e)){if((int)e["epoch"]!=transport.Epoch){CancelAll();status.text="会话版本已更新 · 请重新进入直播";connected=false;continue;}long seq=(long)e["serverSeq"];if(seq<=transport.Cursor)continue;if(seq!=transport.Cursor+1){locallyPaused=true;audioPlayer.Pause(true);status.text="同步缺口 · 请重新进入直播";continue;}Queue(e);transport.Cursor=seq;}
         if(transport!=null&&connected&&Time.unscaledTime>=heartbeatAt){heartbeatAt=Time.unscaledTime+10;_=Observe(transport.Heartbeat(liveMemory?.Ack??0,liveMemory?.Binding()));}
         NotifySessionEnded();
@@ -94,7 +96,7 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     }
     async Task VisibleFrame(VisualElement element,CancellationToken cancel){
         // Backgrounding the window pauses delivery; it is not a failed lottery or invitation.
-        while(!Application.isFocused&&!(Application.isBatchMode&&document.panelSettings.targetTexture!=null)){cancel.ThrowIfCancellationRequested();await NextFrame();}
+        while(Preloading || !Application.isFocused&&!(Application.isBatchMode&&document.panelSettings.targetTexture!=null)){cancel.ThrowIfCancellationRequested();await NextFrame();}
         await NextFrame();await NextFrame();cancel.ThrowIfCancellationRequested();
         if(!element.visible||element.resolvedStyle.display==DisplayStyle.None||element.worldBound.width<=0||element.worldBound.height<=0)throw new Exception("not_visible");
     }

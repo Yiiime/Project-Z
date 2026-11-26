@@ -53,7 +53,8 @@ public sealed partial class LiveAudioPlayer {
                     }
                     if(download.IsFaulted)await download;if(download.IsCanceled)throw new OperationCanceledException();
                     if(!started&&(samples.Count>=2400||finished)) {
-                        await WaitReady(cancel);RestoreFade();Source.clip=clip;Source.Play();Character?.BeginSpeaking();started=true;
+                        // Waiting behind the intro is intentional; queued PCM remains buffered.
+                        await WaitReady(cancel);lastData=Time.unscaledTime;RestoreFade();Source.clip=clip;Source.Play();Character?.BeginSpeaking();started=true;
                         await Receipt(command,new JObject{{"status","started"},{"durationMs",0},{"positionMs",0}});
                     }
                     if(started&&!Paused) {

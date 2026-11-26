@@ -8,7 +8,7 @@ import {ArtifactStore,loadEnvironment,Providers} from '../server/providers.mjs';
 import {LiveSession} from '../server/session.mjs';
 import {normalizeAgentInput,parseAgentReply,buildAgentRequest} from '../server/shared/worker/agent-director.js';
 const frame=()=>new Promise(r=>setImmediate(r));
-async function fixture(t,memory=null){const root=fs.mkdtempSync(path.join(os.tmpdir(),'z-unity-test-'));const providers={env:{},config:async()=>({enabled:false}),generate:async()=>({action:'wait',speech:'',mood:'neutral',handledIds:[],wakeAfterMs:120000,memory:''})};const s=new LiveSession({root:path.join(root,'sessions'),memory,providers,artifacts:new ArtifactStore(path.join(root,'artifacts')),songRoot:fileURLToPath(new URL('../server/assets/songs',import.meta.url))});await s.initialize();clearInterval(s.engine._timer);t.after(()=>{s.close();fs.rmSync(root,{recursive:true,force:true});});s.control(envelope(s,{action:'resume'}));return s;}
+async function fixture(t,memory=null,story=null){const root=fs.mkdtempSync(path.join(os.tmpdir(),'z-unity-test-'));const providers={env:{},config:async()=>({enabled:false}),generate:async()=>({action:'wait',speech:'',mood:'neutral',handledIds:[],wakeAfterMs:120000,memory:''})};const s=new LiveSession({root:path.join(root,'sessions'),memory,story,providers,artifacts:new ArtifactStore(path.join(root,'artifacts')),songRoot:fileURLToPath(new URL('../server/assets/songs',import.meta.url))});if(story)s.engine.audience.setConfig({...s.engine.audience.config,generationDeadlineMs:15000,singleActorRequests:true});await s.initialize();clearInterval(s.engine._timer);t.after(()=>{s.close();fs.rmSync(root,{recursive:true,force:true});});s.control(envelope(s,{action:'resume'}));return s;}
 const envelope=(s,extra={})=>({protocolVersion:1,sessionId:s.id,epoch:s.epoch,...extra});
 const receipt=(s,c,status,extra={})=>s.receipt(envelope(s,{executorLeaseId:s.lease,commandId:c.commandId,taskId:c.taskId,resourceRevision:c.resourceRevision,payload:{...Object.fromEntries(['artifactId','playbackId','speechId','stage','round','view','modality'].filter(k=>c.payload[k]!==undefined).map(k=>[k,c.payload[k]])),status,...extra}}));
 const latest=(s,type)=>[...s.commands.values()].filter(c=>c.type===type).at(-1);
@@ -238,10 +238,11 @@ test('arrival tools pass the real parser and executor only after presentation an
   receipt(s,host,'started',{durationMs:2000,positionMs:0});receipt(s,host,'completed',{positionMs:2000});
   for(const comment of [...s.commands.values()].filter(c=>c.type==='virtual_audience.present'&&c.status==='sent'))receipt(s,comment,'displayed');
  }
- assert.equal(s.scene.warmup.speeches,3);assert.equal(s.scene.warmup.messages,6);assert.throws(()=>parsed('draw_guest'));
+ assert.equal(s.scene.warmup.speeches,3);assert.equal(s.scene.warmup.messages,6);assert.doesNotThrow(()=>parsed('draw_guest'));
  s.engine._clock+=45000;
  const draw=parsed('draw_guest');assert(s.engine._executeTool(draw.tool));
  let c=latest(s,'story.present');assert.equal(c.expiresAt,null);assert.equal(s.scene.phase,'opening');s.maintenance();assert.equal(c.status,'sent');assert.throws(()=>receipt(s,c,'displayed'),/invalid_draw_evidence/);receipt(s,c,'displayed',{playerActivated:true,playerName:'小海'});assert.equal(s.scene.phase,'drawn');
+ s.scene.hostCompleted('congratulations');s.scene.playerReplied();
  assert(s.engine._executeTool(parsed('offer_arrival',{title:'现场邀请',description:'七天的小岛生活'}).tool));
  c=latest(s,'story.present');receipt(s,c,'displayed');assert.equal(s.scene.phase,'offered');
  assert.throws(()=>parsed('depart_island'));
@@ -271,7 +272,7 @@ test('virtual viewers wait for reviewed host playback and drop interrupted react
  s.engine._public('speech.interrupted','未播完',{speechId:'1'});
  assert.equal(latest(s,'virtual_audience.present'),undefined);
  s.engine._onHostSpeechCommitted(2,reaction);
- s.engine._public('speech.completed','来岛上住七天',{speechId:'2',speakerId:'Z'});
+ s.engine.hostPlaybackStarted('2');
  assert.equal(latest(s,'virtual_audience.present').payload.text,'七天听起来真不错');
  const count=s.commands.size;s.engine._public('speech.completed','重复回执',{speechId:'2',speakerId:'Z'});
  assert.equal(s.commands.size,count);
@@ -311,4 +312,143 @@ test('topic assessment sends public inbox fields without internal delivery state
  s.engine._maybeAssessTopic();await frame();
  assert.equal(payload.kind,'topic');assert(!('pendingRecipientIds' in payload.context.inbox[0]));assert.equal(s.engine.topicProgress.status,'expanding');
  s.engine._active=null;s.engine.speechPlan=null;
+});
+
+test('first evening virtual audience publishes alongside resident lane, and close waits for song',async t=>{
+ const s=await fixture(t);const {LiveScene}=await import('../server/live-scene.mjs');
+ s.scene=new LiveScene(s,{mode:'first_evening',playerName:'小海',worldId:'a'.repeat(32),day:1});s.engine.liveScene=s.scene;
+ s.engine._onHostSpeechCommitted(1,{virtualAudience:[{name:'海风',text:'今天认识了新朋友呀'}]});
+ s.engine.hostPlaybackStarted('1');
+ assert.equal(latest(s,'virtual_audience.present').payload.name,'海风');
+ s.sessionControl.data.eveningStartClock=0;s.engine._clock=140000;
+ s.sessionControl.tick();assert(s.sessionControl.normal,'do not cut off the song before its completion receipt');
+ s.speech.enabled=true;s.speech.volume=1;
+ assert(s.engine._executeTool({name:'start_singing',args:{songId:'wanan-yanrenzhong-vivi2-chorus'}}));await frame();
+ receipt(s,latest(s,'media.prepare'),'ready',{durationMs:32284});assert(s.talent.play());
+ const play=latest(s,'media.play');receipt(s,play,'started',{durationMs:32284,positionMs:0});
+ receipt(s,play,'progress',{positionMs:31000,lineIndex:0});receipt(s,play,'completed',{positionMs:32284});
+ assert(s.sessionControl.data.eveningSongComplete);assert.equal(s.engine._state.media.phase,'completed');s.engine._active=null;
+ s.sessionControl.tick();assert.equal(s.sessionControl.data.phase,'closing');
+ s.input(envelope(s,{type:'viewer.message',payload:{text:'晚安，明天见！'}}));
+ const goodbye=s.engine._state.messages.at(-1);
+ assert.equal(goodbye.mine,true);assert.equal(goodbye.type,'chat');assert.equal(goodbye.name,'小海');
+ assert(s.engine.facts.some(e=>e.type==='player.message'&&e.id===goodbye.id));
+});
+
+
+test('showcase limits audience selection and cues the song after a minute unless the player is waiting',async t=>{
+ const s=await fixture(t);const {LiveScene}=await import('../server/live-scene.mjs');
+ s.scene=new LiveScene(s,{mode:'first_evening',playerName:'小海',worldId:'a'.repeat(32),day:1});s.engine.liveScene=s.scene;
+ s.sessionControl.data.eveningStartClock=0;
+ const inbox=Array.from({length:12},(_,i)=>({id:'n'+i,text:'公开弹幕'+i,mine:false,recipientIds:['z']}));
+ inbox.unshift({id:'player1',text:'我还有个问题',mine:true,recipientIds:['z']});
+ assert.deepEqual(s.engine._hostContext(inbox).host.inbox.map(m=>m.id),['player1','n9','n10','n11']);
+ assert(s.engine._wakeDelay({wakeAfterMs:9000,continuation:'leave_space'})<=2000);
+ s.engine._clock=59999;assert.equal(s.scene.binding().songDue,false);
+ s.engine._clock=60000;s.engine.inbox=[inbox[0]];assert.equal(s.scene.binding().songDue,false);
+ s.engine.inbox=[];assert.equal(s.scene.binding().songDue,true);
+ s.sessionControl.data.lastPlayerClock=58000;assert.equal(s.scene.binding().songDue,false);
+ s.engine._clock=63000;assert.equal(s.scene.binding().songDue,true);
+ s.sessionControl.tick();assert.equal(s.sessionControl.data.eveningSongRequested,true);
+});
+test('lottery waits for the complete announcement and then awaits player activation',async t=>{
+ const s=await fixture(t);const {LiveScene}=await import('../server/live-scene.mjs');
+ s.scene=new LiveScene(s,{mode:'arrival',playerName:'小海',worldId:'b'.repeat(32),day:1});s.engine.liveScene=s.scene;
+ s.scene.warmup.speeches=2;s.scene.warmup.messages=2;
+ s.engine._say('我想给大家一个惊喜。','warm','none',{source:'deepseek',onComplete:()=>s.engine._executeTool({name:'draw_guest',args:{}})});await frame();
+ s.engine.speechPlan={result:{action:'tool',tool:{name:'draw_guest',args:{}}}};
+ const host=latest(s,'host.present');assert.equal(latest(s,'story.present'),undefined);
+ receipt(s,host,'started',{durationMs:2000,positionMs:0});assert.equal(latest(s,'story.present'),undefined);
+ receipt(s,host,'progress',{positionMs:1000,text:'我想给大家'});assert.equal(latest(s,'story.present'),undefined);
+ receipt(s,host,'completed',{positionMs:2000});assert.equal(latest(s,'story.present').payload.tool,'draw_guest');
+ assert.equal(s.scene.phase,'opening');assert.equal(s.scene.completedSpeeches.size,1);
+});
+
+test('first evening host and reviewer share already-public daytime memories before retelling',async t=>{
+ const s=await fixture(t,{worldId:'c'.repeat(32),runId:'d'.repeat(32),day:1,entries:[]});const {LiveScene}=await import('../server/live-scene.mjs');
+ s.scene=new LiveScene(s,{mode:'first_evening',playerName:'小海',worldId:'c'.repeat(32),day:1});s.engine.liveScene=s.scene;
+ const fact={id:'arrival',text:'小海抵达码头，与 Z 见面。',speaker:'engine',layer:'daily',day:1};
+ s.broadcast.binding.today=[fact.text];s.broadcast.binding.entries=[fact];s.broadcast.lastTopic={text:'今天风凉',id:'wind'};
+ let binding;s.providers.generate=async(_id,_p,o)=>{binding=o.broadcastContext;return {};};
+ for(const kind of ['host','review']){
+  await s.engine.client.generate({kind,context:kind==='host'?{host:{inbox:[]}}:{candidate:{role:'host'}}},{});
+  assert.deepEqual(binding.today,[fact.text]);assert(binding.entries.some(e=>e.id===fact.id));
+ }
+ assert.equal(s.broadcast.told.size,0,'reading a memory does not mark it as retold');
+});
+
+test('host reviewer accepts a server-bound public memory reference and rejects invented evidence',()=>{
+ const value={kind:'review',context:{candidate:{id:'candidate',role:'host'},revision:1,publicEvents:[],broadcast:{entries:[{id:'public-day-event'}]}}};
+ const answer={decision:'allow',reason:'引用了当天公开事件',evidence_ids:['public-day-event']};
+ assert.deepEqual(parseAgentReply(JSON.stringify(answer),value).evidenceIds,['public-day-event']);
+ assert.throws(()=>parseAgentReply(JSON.stringify({...answer,evidence_ids:['invented-event']}),value));
+ assert.throws(()=>parseAgentReply(JSON.stringify({...answer,echo_of:null}),{...value,context:{...value.context,candidate:{id:'candidate',role:'audience'}}}));
+});
+
+test('quiet first-evening minute uses the requested song introduction without another generation wait',async t=>{
+ const s=await fixture(t);const {LiveScene}=await import('../server/live-scene.mjs');
+ s.scene=new LiveScene(s,{mode:'first_evening',playerName:'小海',worldId:'e'.repeat(32),day:1});s.engine.liveScene=s.scene;s.sessionControl.data.eveningStartClock=0;s.engine._clock=60000;
+ s.providers.generate=()=>{throw Error('Unexpected model generation before requested transition');};
+ const cue=await s.engine.client.generate({kind:'host',context:{host:{inbox:[]}}},{});
+ assert.equal(cue.speech,'给大家唱一首《晚安》，祝大家晚安。');assert.equal(cue.tool.name,'start_singing');assert.deepEqual(cue.handledIds,[]);
+ assert.equal(latest(s,'media.play'),undefined,'the normal review and real introduction playback still precede singing');
+});
+
+test('first-night cadence preserves the character generation budget and individual NPC requests',async t=>{
+ const s=await fixture(t,null,{mode:'first_evening',playerName:'小海',day:1,worldId:'a'.repeat(32)});
+ assert.equal(s.engine.audience.config.generationDeadlineMs,15000);
+ assert.equal(s.engine.audience.config.singleActorRequests,true);
+ assert.equal(s.engine.audience.config.handoff,false);
+});
+
+test('first evening discards queued chat after the minute and actually dispatches singing',async t=>{
+ const s=await fixture(t,null,{mode:'first_evening',playerName:'小海',worldId:'a'.repeat(32),day:1}),e=s.engine;
+ s.sessionControl.data.eveningStartClock=0;e._clock=60000;s.sessionControl.tick();
+ assert.equal(s.sessionControl.data.eveningSongRequested,true);
+ e._clock=90000;s.sessionControl.data.lastPlayerClock=70000;e.inbox=[];e.nextWake=0;e.enabled=true;
+ e.prepared={result:{action:'wait',speech:'',mood:'neutral',gesture:'none',handledIds:[],agendaUpdates:[],wakeAfterMs:2000,memory:''},requestId:crypto.randomUUID(),context:e._hostContext([]),at:89900,anchorSpeechId:null};
+ // Review is a deterministic fixture; exercise real scheduling and execution receipts.
+ e.audience.dialogue.inspect=async()=>({});e.audience.dialogue.commit=(_ticket,run)=>{run();return true;};
+ s.speech.enabled=true;s.speech.volume=1;
+ await e._think();await frame();
+ const intro=latest(s,'host.present');assert(intro?.payload.text.includes('晚安'));assert.equal(e.prepared,null);
+ receipt(s,intro,'started',{durationMs:2000,positionMs:0});receipt(s,intro,'progress',{positionMs:2000,text:intro.payload.text});receipt(s,intro,'completed',{positionMs:2000});await frame();
+ assert(latest(s,'media.prepare'),'the song must be dispatched, not merely marked requested');
+});
+
+test('first evening has a bounded player grace and does not wait for messages to another resident',async t=>{
+ const s=await fixture(t,null,{mode:'first_evening',playerName:'小海',worldId:'a'.repeat(32),day:1}),e=s.engine;
+ s.sessionControl.data.eveningStartClock=0;e._clock=60000;
+ e.inbox=[{id:'to-z',mine:true,recipientIds:['z']}];assert.equal(s.sessionControl.eveningSongDue(),false);
+ s.sessionControl.tick();assert(s.sessionControl.data.eveningSongRequested,'latch deadline even while replying');
+ e.inbox=[{id:'to-npc',mine:true,recipientIds:['axing']}];assert.equal(s.sessionControl.eveningSongDue(),true);
+ e.inbox=[{id:'new-player',mine:true,recipientIds:['z']}];e._clock=75000;s.sessionControl.data.lastPlayerClock=74999;
+ assert(s.sessionControl.eveningSongDue(),'new chat cannot defer the song indefinitely');
+ e._state.call.active=true;assert.equal(s.sessionControl.eveningSongDue(),false,'do not talk over an active voice call');
+});
+
+test('first evening gives another viewer the next turn after two player-focused turns',async t=>{
+ const s=await fixture(t,null,{mode:'first_evening',playerName:'小海',worldId:'a'.repeat(32),day:1}),e=s.engine;
+ e.session.events=[{id:'p',type:'player.message',speakerId:'player'},{id:'a',type:'npc.message',speakerId:'axing'},
+  {id:'h1',type:'speech.completed',replyTo:['p']},{id:'h2',type:'speech.completed',replyTo:[]}];
+ const rows=[{id:'p',mine:true,text:'还有我',recipientIds:['z']},{id:'a',mine:false,speakerId:'axing',text:'灯已经修好了',recipientIds:['z']},{id:'v',mine:false,speakerId:'virtual_'+crypto.randomUUID(),text:'欢迎新朋友',recipientIds:['z']}];
+ const chosen=e._hostContext(rows).host.inbox;assert.equal(chosen.length,1);assert.equal(chosen[0].mine,false);
+ e.session.events.push({id:'h3',type:'speech.completed',replyTo:['a']});
+ assert(e._hostContext(rows).host.inbox.some(m=>m.mine),'player remains eligible on the following turn');
+});
+
+test('first evening host receives public resident chat and alternates resident and virtual replies',async t=>{
+ const s=await fixture(t,null,{mode:'first_evening',playerName:'小海',worldId:'a'.repeat(32),day:1}),e=s.engine;
+ e.audience.config.phases=true;
+ const shown=e.audience.publish({messageId:'resident-chat',npc_id:'axing',text:'灯修好啦',recipientIds:[],intent:'react'});
+ assert(!e.inbox.some(m=>m.id==='resident-chat'),'unshown chat is not eligible');
+ receipt(s,latest(s,'audience.present'),'displayed');await shown;
+ assert.deepEqual(e.session.events.find(e=>e.id==='resident-chat').recipientIds,[],'public routing is unchanged');
+ assert(e._hostContext(e.inbox).host.inbox.some(m=>m.id==='resident-chat'));
+ e._receive(e._message('晴野，花店见',{id:'private-direction',name:'李庭',type:'chat'}),false,'liting',{recipientIds:['xiaoxiaoqing']});
+ assert(!e._hostContext(e.inbox).host.inbox.some(m=>m.id==='private-direction'));
+ const virtual='virtual_'+crypto.randomUUID();
+ e._receive(e._message('海风真好',{id:'viewer-chat',name:'晚风',type:'chat'}),false,virtual,{recipientIds:['z']});
+ e._public('speech.completed','晚风说得对',{id:'speech-test',speakerId:'Z',speakerRole:'host',replyTo:['viewer-chat']});
+ assert.equal(e._hostContext(e.inbox).host.inbox[0].id,'resident-chat','resident chat survives newer virtual chat');
 });

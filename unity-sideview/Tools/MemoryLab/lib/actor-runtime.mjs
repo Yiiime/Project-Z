@@ -72,15 +72,17 @@ export class ActorRuntime {
     const baseSystem =
         this.catalog.prompt(context.actor_id) +
         (context.environment.first_day ? '\n首日情境：这是玩家初次登岛。你依据自己的Skill和现场说话，没有固定台词。'+
-          'Harbor时Z自然欢迎玩家、介绍日常生活，并邀请一起去市民广场。首日移动由主Agent在玩家点击邀请卡后控制；此对话不选择同行/移动动作，不填写travel_decision，不改约其他目的地。MeetIslanders时先主动介绍自己，再接住玩家一轮回应；'+
+          'Harbor时Z自然欢迎玩家、介绍日常生活，并邀请一起去市民广场。首日移动由主Agent在玩家点击邀请卡后控制；此对话不选择同行/移动动作，不填写travel_decision，不改约其他目的地。MeetIslanders时自然打招呼，已被Z介绍过就不再逐个复述职业履历。先接眼前的人或刚才真实聊过的小事，再接住玩家；'+
           '姓名只有在Z已向大家介绍（announced）后才由其他居民使用。WelcomeTask时如有现场生成的可发布任务，结合交流自然提出；'+
           '任务未接受前只是邀请，不要求暗号，不编已完成；已拒绝就尊重。不要谈后期秘密，不念阶段名或内部字段。' : '') +
         "\n\n" +
         rules +
+        "\n表达要求：严格沿用当前角色Skill的语言风格、关系和当下情绪。一次通常1–2句，10–45字即可；有需要才多说。不统一套用‘我是…你可以…有什么需要…’的迎宾模板，也不句句反问、总结、拿职业打比喻。可用停顿、半句和简短回应；不是把同一句话换名字。刚被玩家打断时，只能顺带提本人刚刚真实说过且允许分享的一点，不编造未发生的NPC闲聊。delivery写本轮具体语气、语速、停顿与重音，按本人Skill和当前内容选择，避免所有人同样温柔播报。" +
         (context.actor_id==='z' && context.interaction.mode==='player' ? "\n如果玩家明确点歌且你愿意接下，自然说清你会学或练哪首（用《歌名》）；拒绝或只聊音乐也如实说。仅对点歌请求，在info.day_song_reply填写accept（明确接下学或练，包括开始准备但不保证唱好）、decline（拒绝）或discuss（只是聊歌、没有接下）。这个决定须与本句台词一致，承诺练习并不保证一定唱好。答应后后台才开始准备，没有完成回执不要说已经练好。" : "") + (context.z_story ? "\n如果自然聊到这段回忆，可以使用 z_story.line 中的原话，只展开这一个新细节，给玩家留出追问空间。" : "") +
         portraitRules +
         "\n本轮阶段规则（优先于通用相遇规则）：" +
         phaseRules +
+        "\n最后确认本轮发言者：" + JSON.stringify(this.catalog.identity(context.actor_id)) + "。只为这个人物写第一人称台词；对方的问题需要由你回答，不得接着替对方说，也不得把对方的职业、店铺、经历说成自己的。" +
         "\n输出JSON契约：" +
         JSON.stringify(contract),
       userMessage = { role: "user", content: JSON.stringify(context) },

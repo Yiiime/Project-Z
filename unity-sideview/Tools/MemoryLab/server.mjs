@@ -148,8 +148,8 @@ export function createServer({
       elapsed_ms: Math.round(performance.now() - started),
     };
   };
-  const referenceCheckpoint=world=>{
-    const cp=engine.checkpoint(world),ref=store.freezeCheckpoint(cp);
+  const referenceCheckpoint=(world,cp)=>{
+    const ref=store.freezeCheckpoint(cp);
     return {version:3,ref,worldId:world,contentRevision:cp.contentRevision,
       broadcast:{...cp.broadcast,entries:[]},world:{day:cp.world.day,period:cp.world.period,hour:cp.world.hour,actors:Object.fromEntries(Object.entries(cp.world.actors).map(([id,a])=>[id,{runtime_input_seq:a.runtime_input_seq||0}]))},
       tasks:{state:cp.tasks.state,collaboration:cp.tasks.collaboration,definitions:cp.tasks.definitions},
@@ -167,7 +167,7 @@ export function createServer({
       runId: w.runId,
       seq: w.seq,
       responseRevision: w.responseRevision,
-      checkpoint: JSON.stringify(w.syncMode==="reference-v1"&&!portable?referenceCheckpoint(world):checkpoint),
+      checkpoint: JSON.stringify(w.syncMode==="reference-v1"&&!portable?referenceCheckpoint(world,checkpoint):checkpoint),
       ...(w.syncMode==="reference-v1"&&extra.result?{...extra,result:{dialogue:extra.result.dialogue,expression:extra.result.expression||extra.expression}}:extra),
     };
   };
@@ -355,7 +355,12 @@ export function createServer({
           )
             throw new TurnError("当前游戏不能加载未来记忆");
           speech.cancel(world);
-          engine.open(world, p.runId, inputCheckpoint);
+          // A transport retry in the same Unity run must not rewind acknowledged
+          // runtime receipts to the client's older checkpoint. A real load/new game
+          // creates a new runId and still restores exactly the selected checkpoint.
+          let existing;
+          try { existing = engine.world(world); } catch { }
+          if (!existing?.active || existing.runId !== p.runId) engine.open(world, p.runId, inputCheckpoint);
           const w = engine.world(world);
           const target = logicalHour(p.day, p.period);
           if (w.hour > target + 0.001)
@@ -676,6 +681,14 @@ export function createServer({
             );
           } else if (url.pathname === "/api/game/utterance") {
             result=gameResponse(world,await utterance(p));
+            // Prepare sound for the proposed harbor greeting without publishing a
+            // dialogue receipt. Playback still requires the normal committed-line check.
+            if (w.firstDay?.phase === 'Harbor' && p.actorId === 'z' && p.channel === 'private_player_chat') {
+              const proposal=store.record(result.proposalId);
+              if(proposal?.world===world && proposal.runId===p.runId && proposal.output?.dialogue)
+                void speech.synthesize({worldId:world,runId:p.runId,proposalId:proposal.id,
+                  actorId:p.actorId,conversationId:p.conversationId,text:proposal.output.dialogue,delivery:proposal.delivery}).catch(()=>{});
+            }
           } else if (url.pathname === "/api/game/commit") {
             const proposal = store.record(p.proposalId);
             if(proposal?.output.dialogue)throw new TurnError("有台词的提案须使用实际发言回执");

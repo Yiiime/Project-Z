@@ -14,15 +14,18 @@ namespace Seabreeze
         public FirstDayPhase phase = FirstDayPhase.Live;
         public List<string> greeted = new List<string>();
         public List<string> taskPhotoIds = new List<string>();
+        public bool introSeen, arrivalFilmSeen;
+        public string preparedIntroduction = "";
         public bool invitationAccepted;
         public bool announced, openingStarted, harborOpened, harborReady;
         public string openingSession = "", eveningSession = "", taskId = "", agentRequest = "";
         public string objective = "", invitationTitle = "", invitationDescription = "";
         public string escortPlace = "Harbor";
         public float escortX = -7.8f;
-        public static FirstDayState NewJourney() => new FirstDayState { revision = 2 };
+        public static FirstDayState NewJourney() => new FirstDayState { revision = 3 };
         public void Sanitize()
         {
+            if (revision < 3) { introSeen = true; arrivalFilmSeen = true; }
             if (greeted == null) greeted = new List<string>();
             if (taskPhotoIds == null) taskPhotoIds = new List<string>();
             if (!Enum.IsDefined(typeof(FirstDayPhase), phase)) phase = FirstDayPhase.Live;
@@ -34,6 +37,7 @@ namespace Seabreeze
                 if (phase == FirstDayPhase.Home || phase == FirstDayPhase.Bedtime) phase = FirstDayPhase.WelcomeTask;
                 revision = 2;
             }
+            revision = 3;
         }
     }
 

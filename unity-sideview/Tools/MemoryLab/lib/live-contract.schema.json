@@ -105,6 +105,30 @@
               "type": "null"
             }
           ]
+        },
+        "virtualAudience": {
+          "type": "array",
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "text"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 24
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 36
+              }
+            }
+          }
         }
       },
       "required": [

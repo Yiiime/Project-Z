@@ -1,0 +1,3445 @@
+fileFormatVersion: 2
+guid: 3ab13e8e94cb44b28af1482c057d0651
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2659621999884000869
+    second: LiveAvatars_0
+  - first:
+      213: 429610587606343227
+    second: LiveAvatars_1
+  - first:
+      213: -2659895538518404222
+    second: LiveAvatars_2
+  - first:
+      213: -8452833979893775144
+    second: LiveAvatars_3
+  - first:
+      213: -8779670683973557080
+    second: LiveAvatars_4
+  - first:
+      213: 4331218158115243038
+    second: LiveAvatars_5
+  - first:
+      213: -3531872650381170721
+    second: LiveAvatars_6
+  - first:
+      213: -2213051113812473677
+    second: LiveAvatars_7
+  - first:
+      213: 184491907687778881
+    second: LiveAvatars_8
+  - first:
+      213: -5994559485868009196
+    second: LiveAvatars_9
+  - first:
+      213: 8502295311459853360
+    second: LiveAvatars_10
+  - first:
+      213: -2486828331549081306
+    second: LiveAvatars_11
+  - first:
+      213: 9162862051490117898
+    second: LiveAvatars_12
+  - first:
+      213: -8057334111771752774
+    second: LiveAvatars_13
+  - first:
+      213: 9207577948528531184
+    second: LiveAvatars_14
+  - first:
+      213: 2832517729694490862
+    second: LiveAvatars_15
+  - first:
+      213: 2651401882989256631
+    second: LiveAvatars_16
+  - first:
+      213: 7165125833017226665
+    second: LiveAvatars_17
+  - first:
+      213: 3793558309048869688
+    second: LiveAvatars_18
+  - first:
+      213: 5879362314571794660
+    second: LiveAvatars_19
+  - first:
+      213: -1252692360526650763
+    second: LiveAvatars_20
+  - first:
+      213: 328337388314705368
+    second: LiveAvatars_21
+  - first:
+      213: -5167909145036674240
+    second: LiveAvatars_22
+  - first:
+      213: 959376902408589027
+    second: LiveAvatars_23
+  - first:
+      213: 2009123361672152444
+    second: LiveAvatars_24
+  - first:
+      213: -4552406221710055021
+    second: LiveAvatars_25
+  - first:
+      213: -1999363346877420170
+    second: LiveAvatars_26
+  - first:
+      213: 747166438897638333
+    second: LiveAvatars_27
+  - first:
+      213: 2886779367655726970
+    second: LiveAvatars_28
+  - first:
+      213: -6800962119851296161
+    second: LiveAvatars_29
+  - first:
+      213: -5004817731561245885
+    second: LiveAvatars_30
+  - first:
+      213: -243260442440646734
+    second: LiveAvatars_31
+  - first:
+      213: 2131661615762154880
+    second: LiveAvatars_32
+  - first:
+      213: -8112990100770889167
+    second: LiveAvatars_33
+  - first:
+      213: 6026273149872959407
+    second: LiveAvatars_34
+  - first:
+      213: -1596118688506880481
+    second: LiveAvatars_35
+  - first:
+      213: -8381102777991124227
+    second: LiveAvatars_36
+  - first:
+      213: 7677210546802940887
+    second: LiveAvatars_37
+  - first:
+      213: 5637928964900359869
+    second: LiveAvatars_38
+  - first:
+      213: 5677553304003613173
+    second: LiveAvatars_39
+  - first:
+      213: -7585917681119557810
+    second: LiveAvatars_40
+  - first:
+      213: 4634723563634227497
+    second: LiveAvatars_41
+  - first:
+      213: -5286264297082835986
+    second: LiveAvatars_42
+  - first:
+      213: -5625790789072505400
+    second: LiveAvatars_43
+  - first:
+      213: -741736543476987041
+    second: LiveAvatars_44
+  - first:
+      213: -5067951184603368747
+    second: LiveAvatars_45
+  - first:
+      213: -4227110907639303365
+    second: LiveAvatars_46
+  - first:
+      213: -610145979621396172
+    second: LiveAvatars_47
+  - first:
+      213: -3669873366692884369
+    second: LiveAvatars_48
+  - first:
+      213: -2929766832599396003
+    second: LiveAvatars_49
+  - first:
+      213: 1304711969774448077
+    second: LiveAvatars_50
+  - first:
+      213: -3423480162560547361
+    second: LiveAvatars_51
+  - first:
+      213: -7018011704854111846
+    second: LiveAvatars_52
+  - first:
+      213: 7881060167456869143
+    second: LiveAvatars_53
+  - first:
+      213: -3941311182149659141
+    second: LiveAvatars_54
+  - first:
+      213: -8771062286982770156
+    second: LiveAvatars_55
+  - first:
+      213: 7043137148259821226
+    second: LiveAvatars_56
+  - first:
+      213: -720632969796708808
+    second: LiveAvatars_57
+  - first:
+      213: -3803620217943656125
+    second: LiveAvatars_58
+  - first:
+      213: 2055289622136397671
+    second: LiveAvatars_59
+  - first:
+      213: -3836387979692610727
+    second: LiveAvatars_60
+  - first:
+      213: -1503158667886219096
+    second: LiveAvatars_61
+  - first:
+      213: 8912187433244988887
+    second: LiveAvatars_62
+  - first:
+      213: -8224230292638478318
+    second: LiveAvatars_63
+  - first:
+      213: -1849067979589619126
+    second: LiveAvatars_64
+  - first:
+      213: 6867737948544699477
+    second: LiveAvatars_65
+  - first:
+      213: -6672464087417091489
+    second: LiveAvatars_66
+  - first:
+      213: 3417893733448456327
+    second: LiveAvatars_67
+  - first:
+      213: -7499630214374267399
+    second: LiveAvatars_68
+  - first:
+      213: 2043699342995045263
+    second: LiveAvatars_69
+  - first:
+      213: -6930364772712341216
+    second: LiveAvatars_70
+  - first:
+      213: 6088511834580126223
+    second: LiveAvatars_71
+  - first:
+      213: -8428534957232553532
+    second: LiveAvatars_72
+  - first:
+      213: -7917915655725453441
+    second: LiveAvatars_73
+  - first:
+      213: -5660219163664399528
+    second: LiveAvatars_74
+  - first:
+      213: 5703236860324709495
+    second: LiveAvatars_75
+  - first:
+      213: 8991539283541670559
+    second: LiveAvatars_76
+  - first:
+      213: 7509412470660954954
+    second: LiveAvatars_77
+  - first:
+      213: 1312265472959821608
+    second: LiveAvatars_78
+  - first:
+      213: 644195233407328247
+    second: LiveAvatars_79
+  - first:
+      213: -3115023473530524975
+    second: LiveAvatars_80
+  - first:
+      213: 6393804816188909896
+    second: LiveAvatars_81
+  - first:
+      213: -3643771877476936579
+    second: LiveAvatars_82
+  - first:
+      213: 9069688332795494574
+    second: LiveAvatars_83
+  - first:
+      213: 7130484856442453377
+    second: LiveAvatars_84
+  - first:
+      213: 3552058447105591188
+    second: LiveAvatars_85
+  - first:
+      213: -7929000290578478788
+    second: LiveAvatars_86
+  - first:
+      213: -8054817386768580472
+    second: LiveAvatars_87
+  - first:
+      213: -2235491882686216419
+    second: LiveAvatars_88
+  - first:
+      213: 7538484711690947492
+    second: LiveAvatars_89
+  - first:
+      213: -5330360715770902624
+    second: LiveAvatars_90
+  - first:
+      213: 5517681762227568010
+    second: LiveAvatars_91
+  - first:
+      213: 6445753381765061672
+    second: LiveAvatars_92
+  - first:
+      213: 5903908505728956819
+    second: LiveAvatars_93
+  - first:
+      213: -3047557972978327836
+    second: LiveAvatars_94
+  - first:
+      213: -3053621289542599831
+    second: LiveAvatars_95
+  - first:
+      213: 6853438079350693735
+    second: LiveAvatars_96
+  - first:
+      213: 6130071057204019687
+    second: LiveAvatars_97
+  - first:
+      213: 403443095586154187
+    second: LiveAvatars_98
+  - first:
+      213: -3971622887225883768
+    second: LiveAvatars_99
+  - first:
+      213: 7251009314154485478
+    second: LiveAvatars_100
+  - first:
+      213: -8323641441652921784
+    second: LiveAvatars_101
+  - first:
+      213: 333514567321933621
+    second: LiveAvatars_102
+  - first:
+      213: -7574522342777637202
+    second: LiveAvatars_103
+  - first:
+      213: 6539925275988489537
+    second: LiveAvatars_104
+  - first:
+      213: 1357713197031793548
+    second: LiveAvatars_105
+  - first:
+      213: 820592942907591586
+    second: LiveAvatars_106
+  - first:
+      213: 5372430123184155626
+    second: LiveAvatars_107
+  - first:
+      213: 2645466539916497623
+    second: LiveAvatars_108
+  - first:
+      213: 4422087416089733833
+    second: LiveAvatars_109
+  - first:
+      213: 752959516163258302
+    second: LiveAvatars_110
+  - first:
+      213: 2836242570609011075
+    second: LiveAvatars_111
+  - first:
+      213: 1800178826285288007
+    second: LiveAvatars_112
+  - first:
+      213: 2829017268355928308
+    second: LiveAvatars_113
+  - first:
+      213: -9012826927140827670
+    second: LiveAvatars_114
+  - first:
+      213: -6822963685928528768
+    second: LiveAvatars_115
+  - first:
+      213: -1153284954695645777
+    second: LiveAvatars_116
+  - first:
+      213: 4075625801940097227
+    second: LiveAvatars_117
+  - first:
+      213: 1354079322414020926
+    second: LiveAvatars_118
+  - first:
+      213: -3912118420479559658
+    second: LiveAvatars_119
+  - first:
+      213: -5444950109171861414
+    second: LiveAvatars_120
+  - first:
+      213: -6890814203049267193
+    second: LiveAvatars_121
+  - first:
+      213: 7724436842758343606
+    second: LiveAvatars_122
+  - first:
+      213: -4038327585294754710
+    second: LiveAvatars_123
+  - first:
+      213: 4631492407304859858
+    second: LiveAvatars_124
+  - first:
+      213: -6525836597035066153
+    second: LiveAvatars_125
+  - first:
+      213: -6510118690863748222
+    second: LiveAvatars_126
+  - first:
+      213: -8255080455092396943
+    second: LiveAvatars_127
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: LiveAvatars_0
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 897
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b91a914e1ef171bd0800000000000000
+      internalID: -2659621999884000869
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_1
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 897
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b3ed502ad8846f500800000000000000
+      internalID: 429610587606343227
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_2
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 897
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 283d6f6b917261bd0800000000000000
+      internalID: -2659895538518404222
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_3
+      rect:
+        serializedVersion: 2
+        x: 385
+        y: 897
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d48413c74081ba80800000000000000
+      internalID: -8452833979893775144
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_4
+      rect:
+        serializedVersion: 2
+        x: 513
+        y: 897
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a468d49708582680800000000000000
+      internalID: -8779670683973557080
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_5
+      rect:
+        serializedVersion: 2
+        x: 641
+        y: 897
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e144e2f87f39b1c30800000000000000
+      internalID: 4331218158115243038
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_6
+      rect:
+        serializedVersion: 2
+        x: 769
+        y: 897
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd7ec1289844cfec0800000000000000
+      internalID: -3531872650381170721
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_7
+      rect:
+        serializedVersion: 2
+        x: 897
+        y: 897
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b8cc6bbcb9a941e0800000000000000
+      internalID: -2213051113812473677
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_8
+      rect:
+        serializedVersion: 2
+        x: 1025
+        y: 897
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14a0aad99627f8200800000000000000
+      internalID: 184491907687778881
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_9
+      rect:
+        serializedVersion: 2
+        x: 1153
+        y: 897
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41993eb78eb0fcca0800000000000000
+      internalID: -5994559485868009196
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_10
+      rect:
+        serializedVersion: 2
+        x: 1281
+        y: 897
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 034a807e9883ef570800000000000000
+      internalID: 8502295311459853360
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_11
+      rect:
+        serializedVersion: 2
+        x: 1409
+        y: 897
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 621c3a8eec20d7dd0800000000000000
+      internalID: -2486828331549081306
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_12
+      rect:
+        serializedVersion: 2
+        x: 1537
+        y: 897
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a09b9f82d76092f70800000000000000
+      internalID: 9162862051490117898
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_13
+      rect:
+        serializedVersion: 2
+        x: 1665
+        y: 897
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab6053f90599e2090800000000000000
+      internalID: -8057334111771752774
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_14
+      rect:
+        serializedVersion: 2
+        x: 1793
+        y: 897
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f653cf3c53e7cf70800000000000000
+      internalID: 9207577948528531184
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_15
+      rect:
+        serializedVersion: 2
+        x: 1921
+        y: 897
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee0af6a2edf1f4720800000000000000
+      internalID: 2832517729694490862
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_16
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 769
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7bf506007fbabc420800000000000000
+      internalID: 2651401882989256631
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_17
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 769
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a577ff8bf3af6360800000000000000
+      internalID: 7165125833017226665
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_18
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 769
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 833e695de2d65a430800000000000000
+      internalID: 3793558309048869688
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_19
+      rect:
+        serializedVersion: 2
+        x: 385
+        y: 769
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e8ced9ffd0b79150800000000000000
+      internalID: 5879362314571794660
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_20
+      rect:
+        serializedVersion: 2
+        x: 513
+        y: 769
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 572a6f56fea8d9ee0800000000000000
+      internalID: -1252692360526650763
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_21
+      rect:
+        serializedVersion: 2
+        x: 641
+        y: 769
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8dd3af47d1d7e8400800000000000000
+      internalID: 328337388314705368
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_22
+      rect:
+        serializedVersion: 2
+        x: 769
+        y: 769
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04ba89a6306e748b0800000000000000
+      internalID: -5167909145036674240
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_23
+      rect:
+        serializedVersion: 2
+        x: 897
+        y: 769
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ee47c1b534605d00800000000000000
+      internalID: 959376902408589027
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_24
+      rect:
+        serializedVersion: 2
+        x: 1025
+        y: 769
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c75486a7d07d1eb10800000000000000
+      internalID: 2009123361672152444
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_25
+      rect:
+        serializedVersion: 2
+        x: 1153
+        y: 769
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 399a1b939aa92d0c0800000000000000
+      internalID: -4552406221710055021
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_26
+      rect:
+        serializedVersion: 2
+        x: 1281
+        y: 769
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67d6f6c01a5d044e0800000000000000
+      internalID: -1999363346877420170
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_27
+      rect:
+        serializedVersion: 2
+        x: 1409
+        y: 769
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dbb5692eae77e5a00800000000000000
+      internalID: 747166438897638333
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_28
+      rect:
+        serializedVersion: 2
+        x: 1537
+        y: 769
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a7fdb024a86ef0820800000000000000
+      internalID: 2886779367655726970
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_29
+      rect:
+        serializedVersion: 2
+        x: 1665
+        y: 769
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f5a306b2cf02e91a0800000000000000
+      internalID: -6800962119851296161
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_30
+      rect:
+        serializedVersion: 2
+        x: 1793
+        y: 769
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34337b03ac05b8ab0800000000000000
+      internalID: -5004817731561245885
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_31
+      rect:
+        serializedVersion: 2
+        x: 1921
+        y: 769
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2bfbb6c9ae3cf9cf0800000000000000
+      internalID: -243260442440646734
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_32
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 641
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 085a6dc02fe259d10800000000000000
+      internalID: 2131661615762154880
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_33
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 641
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1326a41ec7ed86f80800000000000000
+      internalID: -8112990100770889167
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_34
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 641
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fafe6a1508f91a350800000000000000
+      internalID: 6026273149872959407
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_35
+      rect:
+        serializedVersion: 2
+        x: 385
+        y: 641
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1e5f28628279d9e0800000000000000
+      internalID: -1596118688506880481
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_36
+      rect:
+        serializedVersion: 2
+        x: 513
+        y: 641
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dfaaccbad6750bb80800000000000000
+      internalID: -8381102777991124227
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_37
+      rect:
+        serializedVersion: 2
+        x: 641
+        y: 641
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7db5214115eea8a60800000000000000
+      internalID: 7677210546802940887
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_38
+      rect:
+        serializedVersion: 2
+        x: 769
+        y: 641
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dbe85c5c582fd3e40800000000000000
+      internalID: 5637928964900359869
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_39
+      rect:
+        serializedVersion: 2
+        x: 897
+        y: 641
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f11b7626a8bace40800000000000000
+      internalID: 5677553304003613173
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_40
+      rect:
+        serializedVersion: 2
+        x: 1025
+        y: 641
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e4783899f0869b690800000000000000
+      internalID: -7585917681119557810
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_41
+      rect:
+        serializedVersion: 2
+        x: 1153
+        y: 641
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 929fc8a7688d15040800000000000000
+      internalID: 4634723563634227497
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_42
+      rect:
+        serializedVersion: 2
+        x: 1281
+        y: 641
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eeb2c8f21aa63a6b0800000000000000
+      internalID: -5286264297082835986
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_43
+      rect:
+        serializedVersion: 2
+        x: 1409
+        y: 641
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c53ba4851d2de1b0800000000000000
+      internalID: -5625790789072505400
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_44
+      rect:
+        serializedVersion: 2
+        x: 1537
+        y: 641
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f5bc0292b82d4b5f0800000000000000
+      internalID: -741736543476987041
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_45
+      rect:
+        serializedVersion: 2
+        x: 1665
+        y: 641
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d232beaf350ba9b0800000000000000
+      internalID: -5067951184603368747
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_46
+      rect:
+        serializedVersion: 2
+        x: 1793
+        y: 641
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b33faf396094655c0800000000000000
+      internalID: -4227110907639303365
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_47
+      rect:
+        serializedVersion: 2
+        x: 1921
+        y: 641
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 431b887d6735887f0800000000000000
+      internalID: -610145979621396172
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_48
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 513
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f609a97ed9df11dc0800000000000000
+      internalID: -3669873366692884369
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_49
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 513
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d51113c96906757d0800000000000000
+      internalID: -2929766832599396003
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_50
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 513
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dcd2b94bf944b1210800000000000000
+      internalID: 1304711969774448077
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_51
+      rect:
+        serializedVersion: 2
+        x: 385
+        y: 513
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd56bf63eea5d70d0800000000000000
+      internalID: -3423480162560547361
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_52
+      rect:
+        serializedVersion: 2
+        x: 513
+        y: 513
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9913a699830b9e90800000000000000
+      internalID: -7018011704854111846
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_53
+      rect:
+        serializedVersion: 2
+        x: 641
+        y: 513
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 71b4fb677762f5d60800000000000000
+      internalID: 7881060167456869143
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_54
+      rect:
+        serializedVersion: 2
+        x: 769
+        y: 513
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf5d1be9c56ad49c0800000000000000
+      internalID: -3941311182149659141
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_55
+      rect:
+        serializedVersion: 2
+        x: 897
+        y: 513
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4121191325de64680800000000000000
+      internalID: -8771062286982770156
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_56
+      rect:
+        serializedVersion: 2
+        x: 1025
+        y: 513
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa662629bef3eb160800000000000000
+      internalID: 7043137148259821226
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_57
+      rect:
+        serializedVersion: 2
+        x: 1153
+        y: 513
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83615ddc12ccff5f0800000000000000
+      internalID: -720632969796708808
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_58
+      rect:
+        serializedVersion: 2
+        x: 1281
+        y: 513
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34979f07093d63bc0800000000000000
+      internalID: -3803620217943656125
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_59
+      rect:
+        serializedVersion: 2
+        x: 1409
+        y: 513
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76f9cfd950bd58c10800000000000000
+      internalID: 2055289622136397671
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_60
+      rect:
+        serializedVersion: 2
+        x: 1537
+        y: 513
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95be7d1657962cac0800000000000000
+      internalID: -3836387979692610727
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_61
+      rect:
+        serializedVersion: 2
+        x: 1665
+        y: 513
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a0b797d725b32be0800000000000000
+      internalID: -1503158667886219096
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_62
+      rect:
+        serializedVersion: 2
+        x: 1793
+        y: 513
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d5944270437eab70800000000000000
+      internalID: 8912187433244988887
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_63
+      rect:
+        serializedVersion: 2
+        x: 1921
+        y: 513
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 210d6486f1aaddd80800000000000000
+      internalID: -8224230292638478318
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_64
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 385
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a42f207287ac656e0800000000000000
+      internalID: -1849067979589619126
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_65
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 385
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55c0a71074b1f4f50800000000000000
+      internalID: 6867737948544699477
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_66
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 385
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f5a04f4c345a663a0800000000000000
+      internalID: -6672464087417091489
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_67
+      rect:
+        serializedVersion: 2
+        x: 385
+        y: 385
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7889a36ed3cce6f20800000000000000
+      internalID: 3417893733448456327
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_68
+      rect:
+        serializedVersion: 2
+        x: 513
+        y: 385
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f56f650e06fbe790800000000000000
+      internalID: -7499630214374267399
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_69
+      rect:
+        serializedVersion: 2
+        x: 641
+        y: 385
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8b3be679bdac5c10800000000000000
+      internalID: 2043699342995045263
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_70
+      rect:
+        serializedVersion: 2
+        x: 769
+        y: 385
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 021a99635f562df90800000000000000
+      internalID: -6930364772712341216
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_71
+      rect:
+        serializedVersion: 2
+        x: 897
+        y: 385
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f0a09e6514dbe7450800000000000000
+      internalID: 6088511834580126223
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_72
+      rect:
+        serializedVersion: 2
+        x: 1025
+        y: 385
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c10139dc14d70b80800000000000000
+      internalID: -8428534957232553532
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_73
+      rect:
+        serializedVersion: 2
+        x: 1153
+        y: 385
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f7feafa79a9ed1290800000000000000
+      internalID: -7917915655725453441
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_74
+      rect:
+        serializedVersion: 2
+        x: 1281
+        y: 385
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 853cce6e8acd271b0800000000000000
+      internalID: -5660219163664399528
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_75
+      rect:
+        serializedVersion: 2
+        x: 1409
+        y: 385
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 774819915b7f52f40800000000000000
+      internalID: 5703236860324709495
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_76
+      rect:
+        serializedVersion: 2
+        x: 1537
+        y: 385
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9ab873d65d58cc70800000000000000
+      internalID: 8991539283541670559
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_77
+      rect:
+        serializedVersion: 2
+        x: 1665
+        y: 385
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4b72a10bdac63860800000000000000
+      internalID: 7509412470660954954
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_78
+      rect:
+        serializedVersion: 2
+        x: 1793
+        y: 385
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 827b7c6be7a163210800000000000000
+      internalID: 1312265472959821608
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_79
+      rect:
+        serializedVersion: 2
+        x: 1921
+        y: 385
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ff5e35d624a0f800800000000000000
+      internalID: 644195233407328247
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_80
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 257
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1daa539a7a635c4d0800000000000000
+      internalID: -3115023473530524975
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_81
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 257
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8492f10ca9b5bb850800000000000000
+      internalID: 6393804816188909896
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_82
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 257
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d74dd6078c8be6dc0800000000000000
+      internalID: -3643771877476936579
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_83
+      rect:
+        serializedVersion: 2
+        x: 385
+        y: 257
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea0c7c34c710edd70800000000000000
+      internalID: 9069688332795494574
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_84
+      rect:
+        serializedVersion: 2
+        x: 513
+        y: 257
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18dfd80b23294f260800000000000000
+      internalID: 7130484856442453377
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_85
+      rect:
+        serializedVersion: 2
+        x: 641
+        y: 257
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 497872986527b4130800000000000000
+      internalID: 3552058447105591188
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_86
+      rect:
+        serializedVersion: 2
+        x: 769
+        y: 257
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c39c910de3886f190800000000000000
+      internalID: -7929000290578478788
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_87
+      rect:
+        serializedVersion: 2
+        x: 897
+        y: 257
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 880c403534a873090800000000000000
+      internalID: -8054817386768580472
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_88
+      rect:
+        serializedVersion: 2
+        x: 1025
+        y: 257
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1708321affe9f0e0800000000000000
+      internalID: -2235491882686216419
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_89
+      rect:
+        serializedVersion: 2
+        x: 1153
+        y: 257
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ab4d0997e31e9860800000000000000
+      internalID: 7538484711690947492
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_90
+      rect:
+        serializedVersion: 2
+        x: 1281
+        y: 257
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a747c3ab21c606b0800000000000000
+      internalID: -5330360715770902624
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_91
+      rect:
+        serializedVersion: 2
+        x: 1409
+        y: 257
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8db93d245eb29c40800000000000000
+      internalID: 5517681762227568010
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_92
+      rect:
+        serializedVersion: 2
+        x: 1537
+        y: 257
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82c11e5bc8ae37950800000000000000
+      internalID: 6445753381765061672
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_93
+      rect:
+        serializedVersion: 2
+        x: 1665
+        y: 257
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 399b1667185eee150800000000000000
+      internalID: 5903908505728956819
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_94
+      rect:
+        serializedVersion: 2
+        x: 1793
+        y: 257
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ee97349b26e4b5d0800000000000000
+      internalID: -3047557972978327836
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_95
+      rect:
+        serializedVersion: 2
+        x: 1921
+        y: 257
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 96b3e3ead9b5f95d0800000000000000
+      internalID: -3053621289542599831
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_96
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 129
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76f55d14f9d4c1f50800000000000000
+      internalID: 6853438079350693735
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_97
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 129
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e18c84e523621550800000000000000
+      internalID: 6130071057204019687
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_98
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 129
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc62f7f9b51599500800000000000000
+      internalID: 403443095586154187
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_99
+      rect:
+        serializedVersion: 2
+        x: 385
+        y: 129
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8830711d606f1e8c0800000000000000
+      internalID: -3971622887225883768
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_100
+      rect:
+        serializedVersion: 2
+        x: 513
+        y: 129
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e61a31cd82c0a460800000000000000
+      internalID: 7251009314154485478
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_101
+      rect:
+        serializedVersion: 2
+        x: 641
+        y: 129
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84aae88953c7c7c80800000000000000
+      internalID: -8323641441652921784
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_102
+      rect:
+        serializedVersion: 2
+        x: 769
+        y: 129
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53754a06bb1e0a400800000000000000
+      internalID: 333514567321933621
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_103
+      rect:
+        serializedVersion: 2
+        x: 897
+        y: 129
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea6ba7f8f04e1e690800000000000000
+      internalID: -7574522342777637202
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_104
+      rect:
+        serializedVersion: 2
+        x: 1025
+        y: 129
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14574e4736b72ca50800000000000000
+      internalID: 6539925275988489537
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_105
+      rect:
+        serializedVersion: 2
+        x: 1153
+        y: 129
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c83a0ff85f097d210800000000000000
+      internalID: 1357713197031793548
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_106
+      rect:
+        serializedVersion: 2
+        x: 1281
+        y: 129
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ab03331fe4536b00800000000000000
+      internalID: 820592942907591586
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_107
+      rect:
+        serializedVersion: 2
+        x: 1409
+        y: 129
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aebeff09bb4be8a40800000000000000
+      internalID: 5372430123184155626
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_108
+      rect:
+        serializedVersion: 2
+        x: 1537
+        y: 129
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d297e04dc596b420800000000000000
+      internalID: 2645466539916497623
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_109
+      rect:
+        serializedVersion: 2
+        x: 1665
+        y: 129
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9cae0c163196e5d30800000000000000
+      internalID: 4422087416089733833
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_110
+      rect:
+        serializedVersion: 2
+        x: 1793
+        y: 129
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eb7392bc0bc037a00800000000000000
+      internalID: 752959516163258302
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_111
+      rect:
+        serializedVersion: 2
+        x: 1921
+        y: 129
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 389adf5479b5c5720800000000000000
+      internalID: 2836242570609011075
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_112
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74a0ae0da158bf810800000000000000
+      internalID: 1800178826285288007
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_113
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 1
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f01dcf7730b24720800000000000000
+      internalID: 2829017268355928308
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_114
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 1
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aed02b969a10ce280800000000000000
+      internalID: -9012826927140827670
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_115
+      rect:
+        serializedVersion: 2
+        x: 385
+        y: 1
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 08417d06da6ff41a0800000000000000
+      internalID: -6822963685928528768
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_116
+      rect:
+        serializedVersion: 2
+        x: 513
+        y: 1
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fa5409ea175beffe0800000000000000
+      internalID: -1153284954695645777
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_117
+      rect:
+        serializedVersion: 2
+        x: 641
+        y: 1
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc85e02c2188f8830800000000000000
+      internalID: 4075625801940097227
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_118
+      rect:
+        serializedVersion: 2
+        x: 769
+        y: 1
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e39703238f7aac210800000000000000
+      internalID: 1354079322414020926
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_119
+      rect:
+        serializedVersion: 2
+        x: 897
+        y: 1
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 618bd0c160d55b9c0800000000000000
+      internalID: -3912118420479559658
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_120
+      rect:
+        serializedVersion: 2
+        x: 1025
+        y: 1
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a58361b69b6af64b0800000000000000
+      internalID: -5444950109171861414
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_121
+      rect:
+        serializedVersion: 2
+        x: 1153
+        y: 1
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 700380ecdf8ee50a0800000000000000
+      internalID: -6890814203049267193
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_122
+      rect:
+        serializedVersion: 2
+        x: 1281
+        y: 1
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6bb0d86f166b23b60800000000000000
+      internalID: 7724436842758343606
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_123
+      rect:
+        serializedVersion: 2
+        x: 1409
+        y: 1
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a6c58d7057af4f7c0800000000000000
+      internalID: -4038327585294754710
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_124
+      rect:
+        serializedVersion: 2
+        x: 1537
+        y: 1
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d033554ecd564040800000000000000
+      internalID: 4631492407304859858
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_125
+      rect:
+        serializedVersion: 2
+        x: 1665
+        y: 1
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7dc1b7bb0329f65a0800000000000000
+      internalID: -6525836597035066153
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_126
+      rect:
+        serializedVersion: 2
+        x: 1793
+        y: 1
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28b6f61fa8967a5a0800000000000000
+      internalID: -6510118690863748222
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LiveAvatars_127
+      rect:
+        serializedVersion: 2
+        x: 1921
+        y: 1
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17c92f93010107d80800000000000000
+      internalID: -8255080455092396943
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    outline: []
+    customData:
+    physicsShape: []
+    bones: []
+    spriteID:
+    internalID: 0
+    vertices: []
+    indices:
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      LiveAvatars_0: -2659621999884000869
+      LiveAvatars_1: 429610587606343227
+      LiveAvatars_10: 8502295311459853360
+      LiveAvatars_100: 7251009314154485478
+      LiveAvatars_101: -8323641441652921784
+      LiveAvatars_102: 333514567321933621
+      LiveAvatars_103: -7574522342777637202
+      LiveAvatars_104: 6539925275988489537
+      LiveAvatars_105: 1357713197031793548
+      LiveAvatars_106: 820592942907591586
+      LiveAvatars_107: 5372430123184155626
+      LiveAvatars_108: 2645466539916497623
+      LiveAvatars_109: 4422087416089733833
+      LiveAvatars_11: -2486828331549081306
+      LiveAvatars_110: 752959516163258302
+      LiveAvatars_111: 2836242570609011075
+      LiveAvatars_112: 1800178826285288007
+      LiveAvatars_113: 2829017268355928308
+      LiveAvatars_114: -9012826927140827670
+      LiveAvatars_115: -6822963685928528768
+      LiveAvatars_116: -1153284954695645777
+      LiveAvatars_117: 4075625801940097227
+      LiveAvatars_118: 1354079322414020926
+      LiveAvatars_119: -3912118420479559658
+      LiveAvatars_12: 9162862051490117898
+      LiveAvatars_120: -5444950109171861414
+      LiveAvatars_121: -6890814203049267193
+      LiveAvatars_122: 7724436842758343606
+      LiveAvatars_123: -4038327585294754710
+      LiveAvatars_124: 4631492407304859858
+      LiveAvatars_125: -6525836597035066153
+      LiveAvatars_126: -6510118690863748222
+      LiveAvatars_127: -8255080455092396943
+      LiveAvatars_13: -8057334111771752774
+      LiveAvatars_14: 9207577948528531184
+      LiveAvatars_15: 2832517729694490862
+      LiveAvatars_16: 2651401882989256631
+      LiveAvatars_17: 7165125833017226665
+      LiveAvatars_18: 3793558309048869688
+      LiveAvatars_19: 5879362314571794660
+      LiveAvatars_2: -2659895538518404222
+      LiveAvatars_20: -1252692360526650763
+      LiveAvatars_21: 328337388314705368
+      LiveAvatars_22: -5167909145036674240
+      LiveAvatars_23: 959376902408589027
+      LiveAvatars_24: 2009123361672152444
+      LiveAvatars_25: -4552406221710055021
+      LiveAvatars_26: -1999363346877420170
+      LiveAvatars_27: 747166438897638333
+      LiveAvatars_28: 2886779367655726970
+      LiveAvatars_29: -6800962119851296161
+      LiveAvatars_3: -8452833979893775144
+      LiveAvatars_30: -5004817731561245885
+      LiveAvatars_31: -243260442440646734
+      LiveAvatars_32: 2131661615762154880
+      LiveAvatars_33: -8112990100770889167
+      LiveAvatars_34: 6026273149872959407
+      LiveAvatars_35: -1596118688506880481
+      LiveAvatars_36: -8381102777991124227
+      LiveAvatars_37: 7677210546802940887
+      LiveAvatars_38: 5637928964900359869
+      LiveAvatars_39: 5677553304003613173
+      LiveAvatars_4: -8779670683973557080
+      LiveAvatars_40: -7585917681119557810
+      LiveAvatars_41: 4634723563634227497
+      LiveAvatars_42: -5286264297082835986
+      LiveAvatars_43: -5625790789072505400
+      LiveAvatars_44: -741736543476987041
+      LiveAvatars_45: -5067951184603368747
+      LiveAvatars_46: -4227110907639303365
+      LiveAvatars_47: -610145979621396172
+      LiveAvatars_48: -3669873366692884369
+      LiveAvatars_49: -2929766832599396003
+      LiveAvatars_5: 4331218158115243038
+      LiveAvatars_50: 1304711969774448077
+      LiveAvatars_51: -3423480162560547361
+      LiveAvatars_52: -7018011704854111846
+      LiveAvatars_53: 7881060167456869143
+      LiveAvatars_54: -3941311182149659141
+      LiveAvatars_55: -8771062286982770156
+      LiveAvatars_56: 7043137148259821226
+      LiveAvatars_57: -720632969796708808
+      LiveAvatars_58: -3803620217943656125
+      LiveAvatars_59: 2055289622136397671
+      LiveAvatars_6: -3531872650381170721
+      LiveAvatars_60: -3836387979692610727
+      LiveAvatars_61: -1503158667886219096
+      LiveAvatars_62: 8912187433244988887
+      LiveAvatars_63: -8224230292638478318
+      LiveAvatars_64: -1849067979589619126
+      LiveAvatars_65: 6867737948544699477
+      LiveAvatars_66: -6672464087417091489
+      LiveAvatars_67: 3417893733448456327
+      LiveAvatars_68: -7499630214374267399
+      LiveAvatars_69: 2043699342995045263
+      LiveAvatars_7: -2213051113812473677
+      LiveAvatars_70: -6930364772712341216
+      LiveAvatars_71: 6088511834580126223
+      LiveAvatars_72: -8428534957232553532
+      LiveAvatars_73: -7917915655725453441
+      LiveAvatars_74: -5660219163664399528
+      LiveAvatars_75: 5703236860324709495
+      LiveAvatars_76: 8991539283541670559
+      LiveAvatars_77: 7509412470660954954
+      LiveAvatars_78: 1312265472959821608
+      LiveAvatars_79: 644195233407328247
+      LiveAvatars_8: 184491907687778881
+      LiveAvatars_80: -3115023473530524975
+      LiveAvatars_81: 6393804816188909896
+      LiveAvatars_82: -3643771877476936579
+      LiveAvatars_83: 9069688332795494574
+      LiveAvatars_84: 7130484856442453377
+      LiveAvatars_85: 3552058447105591188
+      LiveAvatars_86: -7929000290578478788
+      LiveAvatars_87: -8054817386768580472
+      LiveAvatars_88: -2235491882686216419
+      LiveAvatars_89: 7538484711690947492
+      LiveAvatars_9: -5994559485868009196
+      LiveAvatars_90: -5330360715770902624
+      LiveAvatars_91: 5517681762227568010
+      LiveAvatars_92: 6445753381765061672
+      LiveAvatars_93: 5903908505728956819
+      LiveAvatars_94: -3047557972978327836
+      LiveAvatars_95: -3053621289542599831
+      LiveAvatars_96: 6853438079350693735
+      LiveAvatars_97: 6130071057204019687
+      LiveAvatars_98: 403443095586154187
+      LiveAvatars_99: -3971622887225883768
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

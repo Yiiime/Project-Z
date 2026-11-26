@@ -72,3 +72,20 @@ test('compact communication schema carries the same conditional requirement as c
  const compact={dialogue:'船况怎样？',action:{option_id:action.id},info:{...info(c),social_decision:{choice:'engage',reason:'关心朋友的船况',source_event_ids:[c.interaction.source_event_id]}}};
  const validate=e.policy.ajv.compile(e.policy.modelContract(c));assert.equal(validate(compact),false);assert(validate.errors.some(e=>e.keyword==='required'&&e.params.missingProperty==='communication'));
 });
+test('unified host contract preserves bounded virtual audience without publishing imagined speech',t=>{
+ const {e,live}=setup(t),b=live.open({worldId:'live_world',runId:'run1'}),c=live.prepare({...b,actorId:'z'});
+ const turn={dialogue:'晚上好。',action:{action:'speak',mood:'warm',handledIds:[],wakeAfterMs:2000,virtualAudience:[{name:'海风',text:'晚上好呀'},{name:'月光',text:'来听你聊天'}]},info:info(c.context)};
+ assert(live.propose({...b,contextId:c.contextId,turn}).proposalId);
+ assert(!e.records(e.world('live_world'),'event').some(ev=>ev.text===turn.dialogue));
+ const next=live.prepare({...b,actorId:'z'});turn.action.virtualAudience[0].text='长'.repeat(37);
+ assert.throws(()=>live.propose({...b,contextId:next.contextId,turn}));
+});
+
+test('first evening seven-member proposals survive checkpoint reload',t=>{
+ const {e,live}=setup(t);const w=e.world('live_world');w.firstDay={...w.firstDay,phase:'EveningLive'};e.save(w);
+ const b=live.open({worldId:'live_world',runId:'run1'});assert.equal(b.actors.length,7);assert(!b.actors.includes('liyuan'));
+ const c=live.prepare({...b,actorId:'z'});
+ live.propose({...b,contextId:c.contextId,turn:{dialogue:'今晚唱首晚安。',action:{action:'speak',mood:'warm',handledIds:[],wakeAfterMs:2000},info:info(c.context)}});
+ live.close(b);const cp=e.checkpoint('live_world');e.open('live_world','run2',cp);
+ assert.equal(e.world('live_world').firstDay.phase,'EveningLive');
+});

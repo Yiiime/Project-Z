@@ -13,6 +13,8 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.UI;
 using ZLive;
+using UnityEngine.UIElements;
+using Button = UnityEngine.UI.Button;
 namespace Seabreeze.Editor
 {
     // Runs the real scene loop: no phase assignment, synthetic dialogue or completion receipts.
@@ -25,34 +27,66 @@ namespace Seabreeze.Editor
         static double deadline,nextAction,phaseAt,lastReport,nextResume;
         static InputSettings originalInput,testInput;
         static Keyboard keyboard;
+        static Mouse mouse;static Vector2 pointer;static bool pointerDown;
+        static int bedCheck,bedDay;static bool afterSongSent,afterSongAvatar;
+        static int nightChatSent;
+        static bool fireworksBubble,fireworksOut,fireworksIn,fireworksPlayed,fireworksEnded;
+        static double fireworksBubbleAt,fireworksStartAt;
+        static RenderTexture liveTarget;
         static Key[] heldKeys=Array.Empty<Key>();
         static readonly HashSet<string> voicedActors=new HashSet<string>();
         static int titleStage,chatTurns,chatRetries;
         static bool finished,songRequested,closingRequested,songCompleted;
+        static string lastAmbient;static readonly JArray worldEvidence=new JArray();static readonly HashSet<string> motionSeen=new HashSet<string>();
         static readonly JArray events=new JArray(),errors=new JArray(),liveEvidence=new JArray();
         static readonly HashSet<string> liveEventIds=new HashSet<string>();
         static FirstDayJourneyVerification(){EditorApplication.update+=Tick;Application.logMessageReceived+=(m,s,t)=>{if(SessionState.GetBool(Flag,false)&&t==LogType.Exception&&!s.Contains("UnityEditor.Search."))errors.Add(m);};}
         public static void Run()
         {
+            CheckClockContract();
             output=Environment.GetEnvironmentVariable("Z_MEMORY_SAVE_ROOT");
             if(string.IsNullOrEmpty(output)||!output.StartsWith("/private/tmp/"))throw new Exception("Use isolated temporary saves");
             if(!File.Exists(Environment.GetEnvironmentVariable("Z_LIVE_CONNECTION_FILE")))throw new Exception("Use an explicit test live connection");
             Directory.CreateDirectory(output);SessionState.SetString(Flag+"Output",output);SessionState.SetBool(Flag,true);
+            if(Environment.GetCommandLineArgs().Contains("-journeyMapAudit"))MapArtworkVerification.Verify(output);
             EditorSceneManager.OpenScene("Assets/Seabreeze/Scenes/Street.unity");
             var view=EditorWindow.GetWindow(typeof(EditorWindow).Assembly.GetType("UnityEditor.GameView"));view.Show();view.Focus();EditorApplication.EnterPlaymode();
+        }
+        public static void CheckClockContract()
+        {
+            // Isolated state-machine fixture, separate from the real playback journey below.
+            var fixture=new GameObject("Night rest contract fixture");var game=fixture.AddComponent<GameSession>();
+            try {
+                game.Initialize(true);game.State=new SaveData{day=3,restActionDay=3,place="Square",firstDay=new FirstDayState{phase=FirstDayPhase.Complete}};
+                for(int cycle=0;cycle<2;cycle++){
+                    int day=game.State.day;for(int i=0;i<4;i++)game.Clock.Advance();
+                    if(!game.Clock.LiveReady)throw new Exception("Daily live did not unlock after four rests");
+                    string receipt=Guid.NewGuid().ToString();
+                    if(!game.Clock.CompleteLiveSession(receipt)||game.State.day!=day||!game.Clock.PendingNightRest||game.Clock.LiveReady)throw new Exception("Live must unlock sleep without advancing day");
+                    if(game.Clock.CompleteLiveSession(receipt))throw new Exception("Duplicate live completion accepted");
+                    game.Clock.Advance();if(game.State.day!=day)throw new Exception("Daytime rest skipped bedtime");
+                    game.State.place="Square";if(game.Clock.CompleteNightRest())throw new Exception("Sleep accepted away from home");
+                    game.State=JsonUtility.FromJson<SaveData>(JsonUtility.ToJson(game.State));
+                    if(!game.Clock.PendingNightRest)throw new Exception("Pending sleep lost during save serialization");
+                    game.State.place="PlayerHome";
+                    if(!game.Clock.CompleteNightRest()||game.State.day!=day+1||game.Clock.Period!=TimePeriod.Morning||game.Clock.RestActions!=0)throw new Exception("Sleep did not commit exactly one morning");
+                    if(game.Clock.CompleteNightRest()||game.Clock.CompleteLiveSession(receipt))throw new Exception("Replayed completion changed the morning");
+                }
+                File.WriteAllText("/private/tmp/z-bed-clock-check.json",new JObject{["passed"]=true,["dailyCycles"]=2,["scope"]="Isolated state-machine fixture with synthetic live receipt identifiers; real song/UI verified separately."}.ToString());
+            }finally{UnityEngine.Object.DestroyImmediate(fixture);}
         }
         static T Field<T>(object o,string n)=>(T)o.GetType().GetField(n,Private).GetValue(o);
         static void Log(string text){events.Add(new JObject{["time"]=Math.Round(EditorApplication.timeSinceStartup,2),["event"]=text});Debug.Log("DAY01_JOURNEY "+text);}
         static void Keys(params Key[] keys){heldKeys=keys;}
-        static void BeforeInput(){if(keyboard!=null)InputSystem.QueueStateEvent(keyboard,new KeyboardState(heldKeys));}
-        static void AfterInput(){if(keyboard!=null)keyboard.MakeCurrent();}
-        static void Capture(string name){if(!Application.isBatchMode)ScreenCapture.CaptureScreenshot(Path.Combine(output,name+".png"));}
-        static void Write(bool? passed=null,string error=null){File.WriteAllText(Path.Combine(output,"journey-report.json"),new JObject{["passed"]=passed,["runtime"]=RuntimeState(),["phase"]=lastPhase,["events"]=events,["errors"]=errors,["songCompleted"]=songCompleted,["liveEvidence"]=liveEvidence,["voicedActors"]=new JArray(voicedActors),["error"]=error,["scope"]="Actual UI handlers, keyboard movement, real configured model and playback receipts. No injected story phase or task completion."}.ToString());}
+        static void BeforeInput(){}
+        static void AfterInput(){if(keyboard!=null){InputState.Change(keyboard,new KeyboardState(heldKeys));keyboard.MakeCurrent();}if(mouse!=null){var state=new MouseState{position=pointer};if(pointerDown)state=state.WithButton(UnityEngine.InputSystem.LowLevel.MouseButton.Left);InputState.Change(mouse,state);mouse.MakeCurrent();}}
+        static void Capture(string name){if(!Application.isBatchMode || (GameSession.Instance?.FirstDay?.Phase!=FirstDayPhase.Live && GameSession.Instance?.FirstDay?.Phase!=FirstDayPhase.EveningLive))ScreenCapture.CaptureScreenshot(Path.Combine(output,name+".png"));else if(liveTarget!=null){var previous=RenderTexture.active;var pixels=new Texture2D(liveTarget.width,liveTarget.height,TextureFormat.RGBA32,false);try{RenderTexture.active=liveTarget;pixels.ReadPixels(new Rect(0,0,liveTarget.width,liveTarget.height),0,0);pixels.Apply();File.WriteAllBytes(Path.Combine(output,name+".png"),pixels.EncodeToPNG());}finally{RenderTexture.active=previous;UnityEngine.Object.Destroy(pixels);}}}
+        static void Write(bool? passed=null,string error=null){File.WriteAllText(Path.Combine(output,"journey-report.json"),new JObject{["passed"]=passed,["runtime"]=RuntimeState(),["phase"]=lastPhase,["events"]=events,["errors"]=errors,["songCompleted"]=songCompleted,["liveEvidence"]=liveEvidence,["worldEvidence"]=worldEvidence,["voicedActors"]=new JArray(voicedActors),["error"]=error,["scope"]="Actual UI handlers, keyboard movement, real configured model and playback receipts. No injected story phase or task completion."}.ToString());}
         static JObject RuntimeState()
         {
             var g=GameSession.Instance;var w=WorldDirector.Instance;
             var p=w?.Player;var actor=g?.State?.firstDay==null?null:g?.FirstDay?.Cast.FirstOrDefault(id=>!g.State.firstDay.greeted.Contains(id));
-            return new JObject{["playerX"]=(float?)p?.position.x,["axis"]=(float?)p?.GetComponent<PlayerController>()?.MoveAxis,["horizontal"]=GameInput.Horizontal,
+            return new JObject{["npcs"]=g?.Memory?.Spawner==null?new JArray():new JArray(g.Memory.Spawner.Actors.Where(a=>a!=null).Select(a=>new JObject{["id"]=a.npcId,["x"]=a.transform.position.x,["present"]=a.IsPresent,["moving"]=(bool?)a.Movement?.IsMoving,["ambient"]=g.Memory.Spawner.IsAmbientMoving(a.npcId),["result"]=a.Movement?.LastStartFailure})),["playerX"]=(float?)p?.position.x,["transitioning"]=(bool?)w?.IsTransitioning,["playerEnabled"]=(bool?)p?.GetComponent<PlayerController>()?.enabled,["frame"]=Time.frameCount,["held"]=string.Join(",",heldKeys),["axis"]=(float?)p?.GetComponent<PlayerController>()?.MoveAxis,["horizontal"]=GameInput.Horizontal,
                 ["inputBlocked"]=(bool?)g?.InputBlocked,["firstDayBusy"]=(bool?)g?.FirstDay?.BlocksInput,["chatOpen"]=(bool?)g?.Memory?.PlayerChatOpen,
                 ["closing"]=(bool?)g?.Memory?.View?.Closing,["scripted"]=(bool?)g?.Memory?.View?.ScriptedOpen,["scale"]=Time.timeScale,
                 ["target"]=actor,["keyboard"]=(int?)Keyboard.current?.deviceId,["testKeyboard"]=(int?)keyboard?.deviceId,
@@ -68,7 +102,7 @@ namespace Seabreeze.Editor
                 if(deadline==0){deadline=now+1800;Application.runInBackground=true;
                     originalInput=InputSystem.settings;testInput=UnityEngine.Object.Instantiate(originalInput);
                     testInput.hideFlags=HideFlags.DontSave;testInput.editorInputBehaviorInPlayMode=InputSettings.EditorInputBehaviorInPlayMode.AllDeviceInputAlwaysGoesToGameView;
-                    InputSystem.settings=testInput;keyboard=InputSystem.AddDevice<Keyboard>();InputSystem.onBeforeUpdate+=BeforeInput;InputSystem.onAfterUpdate+=AfterInput;}
+                    InputSystem.settings=testInput;keyboard=InputSystem.AddDevice<Keyboard>();mouse=InputSystem.AddDevice<Mouse>();InputSystem.onBeforeUpdate+=BeforeInput;InputSystem.onAfterUpdate+=AfterInput;}
                 if(File.Exists(Path.Combine(output,"stop-verification")))throw new Exception("Verification stopped for repair");
                 if(now>deadline)throw new Exception("Journey timeout in "+lastPhase);
                 if(now-lastReport>5){lastReport=now;Write();Capture("current");}
@@ -84,28 +118,83 @@ namespace Seabreeze.Editor
                     UnityEngine.Object.FindObjectsByType<Button>(FindObjectsSortMode.None).Single(b=>b.name=="Confirm player name").onClick.Invoke();Capture("01-name");titleStage=2;Log("Confirmed fictional player name using landing form");nextAction=now+1;return;
                 }
                 var memory=game.Memory;if(memory==null||world?.Stage==null||world.IsTransitioning)return;
+                var bubbles=UnityEngine.Object.FindObjectsByType<NpcSpeechBubble>(FindObjectsSortMode.None).Where(b=>b.Visible).ToArray();
+                if(bubbles.Length>3)throw new Exception("More than three overhead bubbles");
+                string ambient=string.Join(" | ",bubbles.Select(b=>b.VisibleText));
+                if(ambient!=""&&ambient!=lastAmbient){lastAmbient=ambient;worldEvidence.Add(new JObject{["time"]=now,["conversation"]=memory.Conversations.ActiveId,["bubbles"]=ambient,["count"]=bubbles.Length});}
+                foreach(var npc in memory.Spawner.Actors.Where(a=>a?.Movement!=null&&a.Movement.ActualSpeed>2&&a.Visual?.Pose=="Walk"))if(motionSeen.Add(npc.npcId))worldEvidence.Add(new JObject{["actor"]=npc.npcId,["speed"]=npc.Movement.ActualSpeed,["cycleSeconds"]=npc.Visual.NpcCycleSeconds,["playerSpeed"]=world.Player.GetComponent<PlayerController>().speed});
                 string phase=game.FirstDay.Phase.ToString();
                 if(phase!=lastPhase){lastPhase=phase;phaseAt=now;Log("Stage "+phase+" at "+game.CurrentPlace);Capture("stage-"+phase);}
                 if(now-phaseAt>600)throw new Exception("No progress for ten minutes: "+phase+"; service="+memory.Client.LastError);
+                if(Environment.GetCommandLineArgs().Contains("-journeyFireworksOnly"))
+                {
+                    var invitation=bubbles.FirstOrDefault(b=>b.SpeakerId=="z"&&b.VisibleText.Contains("烟花快开始啦，我们快去沙滩吧"));
+                    if(invitation!=null&&!fireworksBubble){fireworksBubble=true;fireworksBubbleAt=now;Capture("fireworks-z-invitation");Log("Z invitation visible above her head after three greetings");}
+                    var shade=Field<GameObject>(game.FirstDay,"fireworksFade")?.GetComponent<UnityEngine.UI.Image>();
+                    var movie=game.GetComponent<FirstDayCinema>();
+                    var video=game.GetComponent<UnityEngine.Video.VideoPlayer>();
+                    if(shade!=null&&shade.color.a>.2f&&shade.color.a<.8f&&!movie.IsPlaying){
+                        if(phase=="Fireworks"&&!fireworksOut){fireworksOut=true;Capture("fireworks-fade-out");Log("Scene fading out after readable invitation");}
+                        if(phase=="WelcomeTask"&&!fireworksIn){fireworksIn=true;Capture("fireworks-fade-in");Log("Night scene fading in after film");}
+                    }
+                    if(movie?.CurrentFilm=="fireworks"&&video!=null&&video.isPlaying&&video.time>1&&!fireworksPlayed){
+                        if(!fireworksBubble||!fireworksOut||now-fireworksBubbleAt<3.5)throw new Exception("Fireworks began before invitation and fade");
+                        fireworksPlayed=true;fireworksStartAt=now;Capture("fireworks-playing");Log("Real fireworks video playing after bubble and fade: "+video.width+"x"+video.height+", "+video.length+" seconds");
+                        if(Environment.GetCommandLineArgs().Contains("-journeyMapAudit")&&(video.width!=1920||video.height!=1080||Math.Abs(video.length-25.06)>.2))throw new Exception("New fireworks clip metadata mismatch");
+                    }
+                    if(video!=null&&video.length>0&&video.time>=video.length-.5)fireworksEnded=true;
+                    if(phase=="WelcomeTask"&&!game.FirstDay.BlocksInput){
+                        if(!fireworksPlayed||!fireworksEnded||!fireworksIn||game.FirstDay.GreetedCount<3||game.Clock.Period!=TimePeriod.Night||shade!=null||errors.Count>0)throw new Exception("Fireworks transition verification failed");
+                        if(Environment.GetCommandLineArgs().Contains("-journeyMapAudit")){
+                            if(world.Stage.place!=PlaceId.Square||world.Stage.backdrop.sprite!=Resources.Load<Sprite>("Art/IslandEvening/Square"))throw new Exception("Square night did not use PR66 evening artwork");
+                            var wash=world.Stage.GetComponentsInChildren<SpriteRenderer>().Single(r=>r.name=="Island time wash");
+                            if(Mathf.Abs(wash.color.a-.48f)>.001f)throw new Exception("Square night wash missing");
+                            Log("Square night uses PR66 evening sprite with night atmosphere");
+                        }
+                        Capture("fireworks-night-task-ready");Log("Complete fireworks playback; night tasks unlocked after fade-in");Finish(true,null);return;
+                    }
+                }
                 if(game.State.day>=2&&!game.FirstDay.Active)
                 {
+                    if(game.FirstDay.BlocksInput)return;
                     if(errors.Count>0)throw new Exception("Game exceptions: "+errors);
                     if(!songCompleted)throw new Exception("Day 2 reached without a verified complete song playback");
                     if(game.Clock.RestActions!=0)throw new Exception("Day 2 must start with four unused rest actions");
+                    if(bedCheck!=4||game.State.day!=bedDay+1||game.Clock.PendingNightRest||game.CurrentPlace!=PlaceId.PlayerHome)throw new Exception("Morning did not follow exactly one bed interaction at home");
+                    if(!afterSongAvatar)throw new Exception("After-song player avatar was not verified");
+                    var period=Field<TextMeshProUGUI>(GameUI.Instance,"timeText");period.ForceMeshUpdate();
+                    if(period.text!="上午"||period.textInfo.lineCount!=1)throw new Exception("Day 2 HUD wrapping regression");
+                    Capture("day2-home-hud");Log("Bed E advanced exactly one day; morning HUD is one line at home");
                     Log("Second livestream completed; Day 2 restored with "+game.Clock.RestActions+" rests");Finish(true,null);return;
                 }
                 var invite=UnityEngine.Object.FindObjectsByType<Button>(FindObjectsSortMode.None).FirstOrDefault(b=>b.name=="Accept invitation"&&b.isActiveAndEnabled&&b.interactable);
                 if(invite!=null){Log("Clicked invitation: "+invite.GetComponentInChildren<TMP_Text>().text);invite.onClick.Invoke();nextAction=now+1;return;}
                 if(game.FirstDay.Phase==FirstDayPhase.Live||game.FirstDay.Phase==FirstDayPhase.EveningLive){
                     var room=UnityEngine.Object.FindFirstObjectByType<LiveFeatureController>();
-                    if(room!=null&&Application.isFocused&&now>=nextResume&&Field<bool>(room,"connected")&&Field<bool>(room,"locallyPaused")){
+                    if(room!=null&&Application.isBatchMode){var doc=room.GetComponent<UIDocument>();if(doc?.panelSettings!=null&&doc.panelSettings.targetTexture==null){if(liveTarget==null){liveTarget=new RenderTexture(1920,1080,24,RenderTextureFormat.ARGB32);liveTarget.Create();}doc.panelSettings.targetTexture=liveTarget;}}
+                    if(room!=null&&(Application.isFocused||Application.isBatchMode)&&now>=nextResume&&Field<bool>(room,"connected")&&Field<bool>(room,"locallyPaused")){
                         nextResume=now+3;typeof(LiveFeatureController).GetMethod("ResumeRoom",Private).Invoke(room,null);Log("Resumed actual playback after editor focus change");}
                 }
-                if(game.FirstDay.Phase==FirstDayPhase.Live)return;
+                if(game.FirstDay.Phase==FirstDayPhase.Live){
+                    var feature=UnityEngine.Object.FindFirstObjectByType<LiveFeatureController>();
+                    var doc=feature?.GetComponent<UIDocument>();
+                    var action=doc?.rootVisualElement.Q<UnityEngine.UIElements.Button>("arrival-gift-action") ?? doc?.rootVisualElement.Q<UnityEngine.UIElements.Button>("arrival-reply");
+                    if(action!=null && action.resolvedStyle.display!=DisplayStyle.None && action.enabledInHierarchy){
+                        using(var click=NavigationSubmitEvent.GetPooled()){click.target=action;action.SendEvent(click);}
+                        Log("Activated visible gift action");nextAction=now+2;
+                    }
+                    return;
+                }
                 if(game.FirstDay.Phase==FirstDayPhase.EveningLive)
                 {
                     var feature=UnityEngine.Object.FindFirstObjectByType<LiveFeatureController>();if(feature==null||!Field<bool>(feature,"connected"))return;
                     var state=Field<JObject>(feature,"state");
+                    if(Environment.GetCommandLineArgs().Contains("-journeyChatter")&&!songCompleted)
+                    {
+                        int[] times={12,24,40,57,65,72};string[] messages={"今天认识大家很开心","你也和大家聊聊呀","沙滩的烟花真好看","哈哈，好呀","我还在听呢","大家今晚都很开心"};
+                        if(nightChatSent<times.Length&&(double?)state["story"]?["elapsedMs"]>=times[nightChatSent]*1000&&(state["activeTask"]==null||state["activeTask"].Type==JTokenType.Null))
+                        {SendLive(feature,messages[nightChatSent++]);nextAction=now+.5;return;}
+                    }
                     if(state["room"]?["participants"] is JArray participants && participants.Any(p=>(string)p=="liyuan"))throw new Exception("Liyuan entered first evening");
                     foreach(var e in state["publicEvents"] as JArray??new JArray())
                     {
@@ -117,10 +206,35 @@ namespace Seabreeze.Editor
                             {if(!songCompleted){Log("Verified complete rendered song playback: "+(string)receipt["title"]);Capture("song-completed");}songCompleted=true;}
                         }
                     }
-                    if(!songRequested&&(state["publicEvents"] as JArray??new JArray()).Any(e=>(string)e["type"]=="speech.completed"))
-                    {SendLive(feature,"今天认识大家很开心，想听你唱《晚安》。");songRequested=true;nextAction=now+5;return;}
-                    if(songRequested&&!closingRequested&&songCompleted)
-                    {SendLive(feature,"谢谢，今天就到这里，结束直播吧，晚安。");closingRequested=true;nextAction=now+4;return;}
+                    if(songCompleted&&!afterSongSent&&(string)state["sessionControl"]?["phase"]=="closing")
+                    {afterSongSent=true;SendLive(feature,"晚安，明天见！");nextAction=now+.5;return;}
+                    if(afterSongSent&&!afterSongAvatar)
+                    {
+                        var chat=Field<ScrollView>(feature,"chat");var row=chat.Children().LastOrDefault(v=>v.ClassListContains("mine"));
+                        if(row!=null&&row.Q<Label>(className:"message-text")?.text=="晚安，明天见！")
+                        {
+                            if(row.Q<UnityEngine.UIElements.Image>()?.image==null)throw new Exception("Player avatar missing after song");
+                            typeof(LiveFeatureController).GetMethod("AddChat",Private).Invoke(feature,new object[]{"小海","旧记录头像验证",true,true});
+                            if(chat.Children().Last().Q<UnityEngine.UIElements.Image>()?.image==null)throw new Exception("Legacy system-typed player avatar missing");
+                            afterSongAvatar=true;Capture("after-song-player-avatar");Log("Real closing message and legacy player row both retain avatars");
+                        }
+                    }
+                    // Verify Z's proactive song and autonomous ending, without player prompting.
+                    return;
+                }
+                if(game.Clock.PendingNightRest)
+                {
+                    if(game.FirstDay.BlocksInput)return;
+                    if(game.CurrentPlace!=PlaceId.PlayerHome)throw new Exception("Live ended without returning home");
+                    if(game.Clock.Period!=TimePeriod.Night)throw new Exception("Live end advanced morning before E");
+                    if(bedCheck==0){bedDay=game.State.day;game.Save();File.Copy(Path.Combine(output,"seven-memory-save.json"),Path.Combine(output,"bedtime-checkpoint.json"),true);Capture("home-before-sleep");game.LoadSavedGame();bedCheck=1;nextAction=now+3;Log("Saved and reloaded the actual pending night at home");return;}
+                    if(game.State.day!=bedDay)throw new Exception("Reload advanced the day");
+                    var bed=world.Interactables.FirstOrDefault(i=>i!=null&&i.id=="firstday_bed");if(bed==null)throw new Exception("Missing home bed");
+                    float distance=bed.transform.position.x-world.Player.position.x;
+                    if(Mathf.Abs(distance)>.7f){Keys(distance>0?Key.D:Key.A);return;}
+                    if(bedCheck==1){var prompt=Field<RectTransform>(game.GetComponent<InteractionPromptUI>(),"root");pointer=RectTransformUtility.WorldToScreenPoint(null,prompt.position);bedCheck=2;nextAction=now+.5;return;}
+                    if(bedCheck==2){var tip=Field<GameObject>(game.GetComponent<InteractionPromptUI>(),"bedTooltip");if(!tip.activeSelf)throw new Exception("Bed E hover tooltip missing");Capture("bed-hover-rest");pointerDown=true;Keys(Key.Space,Key.Enter);bedCheck=3;nextAction=now+.6;Log("Hover tooltip visible; testing mouse, Space and Enter do not sleep");return;}
+                    if(bedCheck==3){pointerDown=false;if(game.State.day!=bedDay)throw new Exception("Non-E action advanced day");Keys(Key.E);bedCheck=4;nextAction=now+3;Log("Pressed and held only E at bed to rest");return;}
                     return;
                 }
                 if(memory.PlayerChatOpen){Chat(game,now);return;}
@@ -129,21 +243,22 @@ namespace Seabreeze.Editor
                 if(game.FirstDay.Phase==FirstDayPhase.WalkToSquare){Keys(Key.D);return;}
                 if(game.FirstDay.Phase==FirstDayPhase.MeetIslanders)
                 {
-                    if(!game.State.firstDay.announced)return;
+                    if(!game.State.firstDay.announced||now-phaseAt<(Environment.GetCommandLineArgs().Contains("-journeyContinue")?10:55))return;
                     var actor=FirstDayDirector.FirstDayCast.FirstOrDefault(id=>!game.State.firstDay.greeted.Contains(id));
                     if(actor!=null)WalkToActor(game,world,actor);return;
                 }
                 if(game.FirstDay.Phase==FirstDayPhase.WelcomeTask)
                 {
+                    if(now-phaseAt<45)return;
                     var cp=JObject.Parse(game.State.memory.checkpoint??"{}");var rows=(cp["tasks"]?["state"] as JArray??new JArray());
                     var definition=(cp["tasks"]?["definitions"] as JArray??new JArray()).OfType<JObject>().FirstOrDefault(d=>rows.Any(r=>(string)r["task"]==(string)d["id"]&&new[]{"offered","active"}.Contains((string)r["status"])));
-                    if(definition==null){WalkToActor(game,world,"liting");return;}
+                    if(definition==null){var resident=memory.Spawner.Actors.FirstOrDefault(a=>a!=null&&a.IsPresent);if(resident!=null)WalkToActor(game,world,resident.npcId);return;}
                     var row=rows.First(r=>(string)r["task"]==(string)definition["id"]);
                     if((string)row["status"]=="offered"){WalkToActor(game,world,(string)definition["owner"]);return;}
                     var progress=JObject.Parse((string)row["progress"]??"{}");var step=((JArray)definition["steps"]).FirstOrDefault(s=>(bool?)progress[(string)s["id"]]?["succeeded"]!=true);
                     if(step==null)return;
                     if((string)step["action"]=="talk_to")WalkToActor(game,world,(string)step["target"]);
-                    else {if(Application.isBatchMode)throw new Exception("A real photo requires rendered Play Mode");var camera=UnityEngine.Object.FindFirstObjectByType<PhotoCaptureService>();if(camera.Capture()){Log("Captured actual photo for generated task");nextAction=now+3;}}
+                    else {var camera=UnityEngine.Object.FindFirstObjectByType<PhotoCaptureService>();if(camera.Capture()){Log("Captured actual photo for generated task");nextAction=now+3;}}
                 }
             }
             catch(Exception e){Finish(false,e.ToString());}
@@ -193,7 +308,7 @@ namespace Seabreeze.Editor
         }
         static void SendLive(LiveFeatureController feature,string text)
         {Field<UnityEngine.UIElements.TextField>(feature,"input").value=text;typeof(LiveFeatureController).GetMethod("Send",Private).Invoke(feature,null);Log("Sent livestream player message: "+text);}
-        static void Finish(bool passed,string error){finished=true;Keys();InputSystem.onBeforeUpdate-=BeforeInput;InputSystem.onAfterUpdate-=AfterInput;if(keyboard!=null)InputSystem.RemoveDevice(keyboard);if(originalInput!=null)InputSystem.settings=originalInput;if(testInput!=null)UnityEngine.Object.Destroy(testInput);Write(passed,error);Log(passed?"PASSED":"FAILED: "+error);SessionState.SetBool(Flag,false);EditorApplication.Exit(passed?0:1);}
+        static void Finish(bool passed,string error){finished=true;Keys();InputSystem.onBeforeUpdate-=BeforeInput;InputSystem.onAfterUpdate-=AfterInput;if(keyboard!=null)InputSystem.RemoveDevice(keyboard);if(mouse!=null)InputSystem.RemoveDevice(mouse);if(originalInput!=null)InputSystem.settings=originalInput;if(testInput!=null)UnityEngine.Object.Destroy(testInput);Write(passed,error);Log(passed?"PASSED":"FAILED: "+error);SessionState.SetBool(Flag,false);double exitAt=EditorApplication.timeSinceStartup+.5;EditorApplication.CallbackFunction exit=null;exit=()=>{if(EditorApplication.timeSinceStartup<exitAt)return;EditorApplication.update-=exit;EditorApplication.Exit(passed?0:1);};EditorApplication.update+=exit;}
     }
 }
 #endif

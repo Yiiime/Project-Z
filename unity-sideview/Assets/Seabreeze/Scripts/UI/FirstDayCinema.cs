@@ -29,12 +29,13 @@ namespace Seabreeze
         float previousScale, creditsTime, lastProgressAt;
         double lastVideoTime;
         bool completed, inCredits, failed, confirming, playbackStarted;
-        string path;
+        readonly System.Collections.Generic.Dictionary<AudioSource,bool> mutedWorld = new System.Collections.Generic.Dictionary<AudioSource,bool>();
         Coroutine playback;
         readonly Color paper = new Color(.94f, .94f, .90f);
         readonly Color muted = new Color(.64f, .73f, .79f);
 
         public void Initialize(GameSession game) { session = game; }
+        public void PlayIntro(Action after) => PlayFilm("intro", "来自月亮的 Z", after);
         public void PlayArrival(Action after) => PlayFilm("arrival", "第一章 · 海风送来一封邀请", after);
         public void PlayFireworks(Action after) => PlayFilm("fireworks", "第一夜 · 和你一起看烟花", after);
         public void PlayCredits(Action after)
@@ -63,17 +64,20 @@ namespace Seabreeze
             player.playOnAwake = false; player.isLooping = false; player.waitForFirstFrame = true;
             player.skipOnDrop = true; player.timeUpdateMode = VideoTimeUpdateMode.UnscaledGameTime;
             player.renderMode = VideoRenderMode.RenderTexture; player.audioOutputMode = VideoAudioOutputMode.AudioSource;
-            filmAudio = gameObject.AddComponent<AudioSource>(); filmAudio.playOnAwake = false; filmAudio.spatialBlend = 0; filmAudio.volume = .64f;
+            filmAudio = gameObject.AddComponent<AudioSource>(); filmAudio.playOnAwake = false; filmAudio.ignoreListenerPause = true; filmAudio.spatialBlend = 0; filmAudio.volume = .64f;
             player.controlledAudioTrackCount = 1; player.EnableAudioTrack(0,true); player.SetTargetAudioSource(0,filmAudio);
             target = new RenderTexture(1920,1080,0,RenderTextureFormat.ARGB32) { name="First-day film", hideFlags=HideFlags.DontSave };
             target.Create(); player.targetTexture = target; picture.texture = target;
             player.loopPointReached += EndOfFilm; player.errorReceived += FilmError;
-            path = Path.Combine(Application.streamingAssetsPath,"FirstDay",id+".mp4");
+            player.source = VideoSource.VideoClip;
+            player.clip = Resources.Load<VideoClip>("FirstDay/Video/"+id);
             playback = StartCoroutine(PrepareFilm());
         }
 
         void Begin(string id, Action after)
         {
+            foreach(var audio in UnityEngine.Object.FindObjectsByType<AudioSource>(FindObjectsSortMode.None))
+                if(!audio.ignoreListenerPause) { mutedWorld[audio] = audio.mute; audio.mute = true; }
             IsPlaying = true; CurrentFilm = id; completed = failed = confirming = inCredits = playbackStarted = false;
             finished = after; previousScale = Time.timeScale; Time.timeScale = 0; creditsTime = 0;
             var go = new GameObject("First-day cinema",typeof(RectTransform),typeof(Canvas),typeof(CanvasScaler),typeof(GraphicRaycaster),typeof(CanvasGroup));
@@ -89,7 +93,7 @@ namespace Seabreeze
         {
             failed = false; confirming = false; playbackStarted = false; CloseModal();
             if (status != null) status.gameObject.SetActive(true);
-            player.Stop(); player.url = path; player.Prepare();
+            player.Stop(); if (player.clip == null) { ShowFailure("影片资源暂时不可用。"); yield break; } player.Prepare();
             float deadline = Time.realtimeSinceStartup + 15f;
             while (!player.isPrepared && !failed && Time.realtimeSinceStartup < deadline) yield return null;
             if (failed) yield break;
@@ -175,6 +179,7 @@ namespace Seabreeze
             if (filmAudio != null) { Destroy(filmAudio); filmAudio=null; }
             if (target != null) { target.Release(); Destroy(target); target=null; }
             if (root != null) { root.gameObject.SetActive(false); Destroy(root.gameObject); root=null; }
+            foreach(var entry in mutedWorld) if(entry.Key != null) entry.Key.mute = entry.Value; mutedWorld.Clear();
             if (IsPlaying) Time.timeScale=previousScale;
             IsPlaying=false; playbackStarted=false; CurrentFilm=null; ending=null; modal=null; picture=null; status=null; hint=null;
         }
