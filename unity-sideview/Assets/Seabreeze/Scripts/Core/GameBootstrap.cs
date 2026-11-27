@@ -28,11 +28,13 @@ namespace Seabreeze
             Application.targetFrameRate = 60;
             Application.runInBackground = true;
             smokeRun = System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-memorySmokeOutput") >= 0;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            Debug.Log("[Seabreeze] " + CloudGameSession.ConnectionDescription);
+#endif
             PackagedPlayConnection.Configure();
             session = gameObject.AddComponent<GameSession>();
             session.Initialize(!smokeRun);
             resumePlace = session.State.place;
-            string saveError = SaveRepository.LastError;
             var preview = JsonUtility.FromJson<SaveData>(JsonUtility.ToJson(session.State));
             if (!smokeRun) Time.timeScale = 0;
             world = gameObject.AddComponent<WorldDirector>();
@@ -49,11 +51,21 @@ namespace Seabreeze
             else
             {
                 ui.SetTitleVisible(true);
-                startPage = gameObject.AddComponent<StartPageView>();
-                startPage.Initialize(session.HasResumeSave, preview, EnterGame);
-                if (!session.HasResumeSave && !string.IsNullOrEmpty(saveError))
-                    startPage.ShowSaveNotice("暂时无法读取上次的进度。你可以重新开始一段小岛生活；确认前，旧存档会原样保留。");
+                if (CloudGameSession.Enabled)
+                {
+                    var cloud = CloudGameSession.Open();
+                    gameObject.AddComponent<CloudLoginView>().Initialize(cloud, () => ShowTitle(session.ReadMemberTitlePreview()));
+                }
+                else ShowTitle(preview);
             }
+        }
+
+        void ShowTitle(SaveData preview)
+        {
+            startPage = gameObject.AddComponent<StartPageView>();
+            startPage.Initialize(preview.started, preview, EnterGame);
+            if (!preview.started && !string.IsNullOrEmpty(SaveRepository.LastError))
+                startPage.ShowSaveNotice("暂时无法读取上次的进度。你可以重新开始一段小岛生活；确认前，旧存档会原样保留。");
         }
 
         IEnumerator Start()
@@ -136,6 +148,7 @@ namespace Seabreeze
             if (instance == this)
             {
                 instance = null;
+                CloudGameSession.Current?.Dispose();
                 Time.timeScale = 1;
             }
         }

@@ -14,3 +14,8 @@ Builds/
 Assets/Seabreeze/UI/ZLive/Art/Z/*.asset*
 Assets/Seabreeze/UI/ZLive/Art/Z/Model.prefab*
 Assets/Seabreeze/UI/ZLive/Resources/ZLiveModel.prefab*
+
+# Private game-host invitations and the legacy relay identity.
+/connection-config.json
+/client-config.json
+/.local/lan-client/

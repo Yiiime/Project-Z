@@ -94,7 +94,7 @@ namespace Seabreeze
         public void Initialize(GameSession owner)
         {
             session=owner;
-            http=new HttpClient(new HttpClientHandler { UseProxy=false,AllowAutoRedirect=false }) { Timeout=Timeout.InfiniteTimeSpan };
+            http=new HttpClient(CloudGameSession.BusinessHandler(MemoryRuntimeConfig.Settings.serviceUrl, new HttpClientHandler { UseProxy=false,AllowAutoRedirect=false })) { Timeout=Timeout.InfiniteTimeSpan };
             BeginWorld();
         }
         public void BeginWorld()
@@ -380,10 +380,10 @@ namespace Seabreeze
         {
             try
             {
-                // Each localhost audio response owns its connection. Unity/Mono may leave a
+                // Each audio response owns its connection. Unity/Mono may leave a
                 // cancelled streaming connection unusable; never reuse it for another turn.
                 // The Node-to-provider HTTPS pool remains reusable across turns.
-                using(var speechHttp=new HttpClient(new HttpClientHandler { UseProxy=false,AllowAutoRedirect=false }) { Timeout=Timeout.InfiniteTimeSpan })
+                using(var speechHttp=new HttpClient(CloudGameSession.BusinessHandler(MemoryRuntimeConfig.Settings.serviceUrl, new HttpClientHandler { UseProxy=false,AllowAutoRedirect=false })) { Timeout=Timeout.InfiniteTimeSpan })
                 using(var request=new HttpRequestMessage(HttpMethod.Post,MemoryRuntimeConfig.Settings.serviceUrl+"/api/game/speech/stream"))
                 {
                     request.Headers.Add("X-Z-Memory","1");request.Content=new StringContent(JsonConvert.SerializeObject(input),Encoding.UTF8,"application/json");
@@ -445,7 +445,7 @@ namespace Seabreeze
                 if(input!=null)request.Content=new StringContent(JsonConvert.SerializeObject(input),Encoding.UTF8,"application/json");
                 Task<HttpResponseMessage> task=null;
                 try{task=http.SendAsync(request,cts.Token);}catch{ }
-                if(task==null){requests.Remove(key);cts.Dispose();if(version==generation)failed("无法连接本机记忆服务。");yield break;}
+                if(task==null){requests.Remove(key);cts.Dispose();if(version==generation)failed("无法连接记忆服务。");yield break;}
                 while(!task.IsCompleted&&version==generation)yield return null;
                 if(version!=generation){cts.Cancel();requests.Remove(key);cts.Dispose();yield break;}
                 if(task.IsCanceled||task.IsFaulted){requests.Remove(key);cts.Dispose();failed("连接中断或等待超时，请稍后再试。");yield break;}

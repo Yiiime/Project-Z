@@ -13,8 +13,22 @@ export class LiveRoom {
     this.engine = engine; this.store = engine.store;
     this.validEvent = engine.policy.ajv.compile({ ...clone(liveContract), $ref: "#/$defs/LivePublishedEvent" });
   }
-  turnSchema(actor, infoSchema) {
+  turnSchema(actor, infoSchema, arrivalStage) {
     const contract=clone(liveContract);
+    const arrivalStages = contract.$defs.LiveArrivalStage.enum;
+    const host = contract.$defs.LiveHostAction;
+    if (arrivalStage) {
+      host.allOf.push({
+        if: {properties: {action: {enum: ["speak", "tool"]}}},
+        then: {required: ["actorId", "delivery", "expression"]},
+      });
+    } else {
+      delete host.properties.virtualAudience;
+    }
+    contract.$defs.LiveTool.oneOf = contract.$defs.LiveTool.oneOf.filter(shape => {
+      const name = shape.properties.name.const;
+      return !arrivalStages.includes(name) || name === arrivalStage;
+    });
     for(const name of ["LiveHostAction","LiveAudienceAction"]){for(const shape of contract.$defs[name].oneOf||[contract.$defs[name]])Object.assign(shape.properties,{actorId:{const:actor},delivery:{type:"string",minLength:1,maxLength:160},expression:{enum:portraitExpressionKeys(actor)}});}
     return { ...contract, type: "object", additionalProperties: false,
       required: ["dialogue", "action", "info"], properties: {
@@ -56,6 +70,9 @@ export class LiveRoom {
   }
   prepare(p) {
     const { w, room } = this.check(p), actor = p.actorId;
+    const arrivalStage = p.arrivalStage;
+    if (arrivalStage !== undefined && (actor !== "z" || !liveContract.$defs.LiveArrivalStage.enum.includes(arrivalStage)))
+      throw new TurnError("登岛直播阶段无效");
     if (!room.actors.includes(actor)) throw new TurnError("当前角色不在直播间");
     const latest = this.engine.records(w, "event").filter(e => e.conversationId === room.id && e.visible.includes(actor)).at(-1);
     const job = this.engine.job(p.worldId, actor, latest.id, { mode: "livestream", conversation: room.id, channel: "livestream", environment: {
@@ -70,15 +87,16 @@ export class LiveRoom {
     context.reply_budget.max_dialogue_chars = actor === "z" ? 360 : 36;
     const schema = this.engine.policy.modelContract(context);
     for (const k of ["communication", "social_decision", "agenda_update", "task_participation", "task_followup"]) delete schema.$defs.info.properties[k];
+    if (arrivalStage) job.arrivalStage = arrivalStage;
     job.status = "live_prepared"; job.context = context; job.infoSchema = schema.$defs.info; this.engine.record("job", job);
     this.engine.runs.append(w, actor, "decision.requested", job.id, { context });
-    return { contextId: job.id, actorId: actor, prompt: this.engine.catalog.prompt(actor), context, infoSchema: schema.$defs.info, turnSchema: this.turnSchema(actor, schema.$defs.info), contentVersion: this.engine.catalog.registry.pack_version };
+    return { contextId: job.id, actorId: actor, prompt: this.engine.catalog.prompt(actor), context, infoSchema: schema.$defs.info, turnSchema: this.turnSchema(actor, schema.$defs.info, arrivalStage), contentVersion: this.engine.catalog.registry.pack_version };
   }
   propose(p) {
     const { w, room } = this.check(p), job = this.store.record(p.contextId);
     if (!job || job.experimentId !== w.id || job.epoch !== w.epoch || job.conversation !== room.id || job.status !== "live_prepared") throw new TurnError("直播角色回合失效");
     const context = job.context, raw = p.turn;
-    if (!this.engine.policy.ajv.compile(this.turnSchema(job.actor, job.infoSchema))(raw))
+    if (!this.engine.policy.ajv.compile(this.turnSchema(job.actor, job.infoSchema, job.arrivalStage))(raw))
       throw new TurnError("直播三部分输出或动作字段不完整");
     if (!raw || Object.keys(raw).sort().join() !== "action,dialogue,info" || typeof raw.dialogue !== "string") throw new TurnError("直播只接收三部分角色输出");
     const validInfo = this.engine.policy.ajv.compile(job.infoSchema);

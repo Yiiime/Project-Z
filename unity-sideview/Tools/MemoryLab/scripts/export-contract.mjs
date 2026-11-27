@@ -29,6 +29,7 @@ for(const actor of ids){
 // The live backend loads this same source, including its nested action variants.
 Object.assign(D,JSON.parse(fs.readFileSync(new URL('../lib/live-contract.schema.json',import.meta.url))).$defs);
 D.HostBinding=clone(D.LiveBinding);D.HostBinding.properties.memoryUrl={type:'string',description:'Unity adds the local backend origin; not a field returned by live/open.'};D.HostBinding.required.push('memoryUrl');
+D.LivePrepareRequest.allOf.find(x=>x.properties).properties.arrivalStage=ref('LiveArrivalStage');
 D.LivePrepareResponse.properties.turnSchema={type:'object',description:'Backend-generated complete live turn contract; the proposal endpoint validates the same shape.'};D.LivePrepareResponse.required=[...new Set([...D.LivePrepareResponse.required,'turnSchema'])];
 D.PreparedLiveContext=clone(D.LivePrepareResponse);D.PreparedLiveContext.properties.publicEventIds=arr(s);D.PreparedLiveContext.required.push('publicEventIds');
 D.UnityRequest.properties.sourceEventId=ns;

@@ -1,0 +1,30 @@
+#!/usr/bin/python3
+"""Install the Project-Z GitHub OAuth application credential from a local terminal."""
+import getpass
+import json
+import os
+import sys
+import tempfile
+
+directory = "/etc/project-z-cloud"
+if os.geteuid() != 0 or not sys.stdin.isatty():
+    sys.exit("Run with sudo in an interactive server terminal.")
+client_id = input("Project-Z GitHub Client ID: ").strip()
+client_secret = getpass.getpass("Project-Z GitHub Client Secret (hidden): ").strip()
+if not client_id or not all(33 <= ord(c) <= 126 for c in client_id + client_secret):
+    sys.exit("Invalid GitHub OAuth application credentials; existing file preserved.")
+if len(client_secret) < 30:
+    sys.exit("Client secret appears incomplete; existing file preserved.")
+os.umask(0o077)
+with tempfile.NamedTemporaryFile(mode="w", dir=directory, delete=False) as handle:
+    temporary = handle.name
+    try:
+        json.dump({"clientId": client_id, "clientSecret": client_secret}, handle)
+        handle.write("\n")
+        handle.flush()
+        os.fsync(handle.fileno())
+    except BaseException:
+        os.unlink(temporary)
+        raise
+os.replace(temporary, directory + "/oauth.json")
+print("Saved /etc/project-z-cloud/oauth.json (root:root, 0600).")

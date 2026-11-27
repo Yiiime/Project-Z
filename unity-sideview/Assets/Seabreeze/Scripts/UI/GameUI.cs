@@ -482,13 +482,39 @@ namespace Seabreeze
             return y+height+14;
         }
         void SetContentHeight(RectTransform content,float height)=>content.sizeDelta=new Vector2(content.sizeDelta.x,Mathf.Max(height,455));
+        bool signingOut;
+        async void SignOutTeam()
+        {
+            if (signingOut || CloudGameSession.Current == null) return;
+            signingOut = true;
+            try
+            {
+                if (!session.IsAtTitle && !session.Save()) { ShowToast("存档失败，请重试后再退出。"); return; }
+                await CloudGameSession.Current.LogoutAsync();
+#if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+#else
+                Application.Quit();
+#endif
+            }
+            catch (Exception) { if (this) ShowToast("无法完成退出，请确认网络连接后重试。"); }
+            finally { signingOut = false; }
+        }
+
         void BuildPause()
         {
-            Header("PAUSE  /  TAKE YOUR TIME","让这一刻，停一停","所有选择和相遇，都会被记住。" );
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            string subtitle = CloudGameSession.ConnectionDescription;
+#else
+            const string subtitle = "所有选择和相遇，都会被记住。";
+#endif
+            Header("PAUSE  /  TAKE YOUR TIME","让这一刻，停一停",subtitle);
             Button("Resume",overlayContent,TL,TL,new Vector2(46,-230),new Vector2(668,64),"继续散步",CloseOverlay,true,25);
             Button("Save",overlayContent,TL,TL,new Vector2(46,-308),new Vector2(668,56),"保存此刻",()=>{if(session.Save())ShowToast("已保存。下次会从这里继续。");},false,23);
             Button("Restart",overlayContent,TL,TL,new Vector2(46,-378),new Vector2(668,56),"重新开始这一天",()=>OpenOverlay("restart"),false,23);
-            Button("Model settings",overlayContent,TL,TL,new Vector2(46,-444),new Vector2(310,32),"对话服务设置",()=>Application.OpenURL(MemoryRuntimeConfig.Settings.serviceUrl+"/settings"),false,18);
+            if (CloudGameSession.Enabled)
+                Button("Sign out",overlayContent,TL,TL,new Vector2(46,-444),new Vector2(310,32),"退出账号并结束游戏",SignOutTeam,false,18);
+            else Button("Model settings",overlayContent,TL,TL,new Vector2(46,-444),new Vector2(310,32),"对话服务设置",()=>Application.OpenURL(MemoryRuntimeConfig.Settings.serviceUrl+"/settings"),false,18);
             Button("Load save",overlayContent,TL,TL,new Vector2(380,-444),new Vector2(330,32),"读取上次存档",()=>CloseOverlayThen(()=>session.LoadSavedGame()),false,18);
             Label("Volume",overlayContent,TL,TL,new Vector2(46,-477),new Vector2(260,35),"环境声音",22,Muted);
             var volumeLabel=Label("Volume value",overlayContent,TL,TL,new Vector2(610,-477),new Vector2(100,35),Mathf.RoundToInt(AudioListener.volume*100)+"%",22,Paper,TextAlignmentOptions.TopRight);

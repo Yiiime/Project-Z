@@ -1,0 +1,27 @@
+# Include only in the HTTPS api.litingyi.com server. /status stays independent.
+# Avoid recording callback codes, state, session IDs, and browser cookies.
+location ~ ^/(?:auth/(?:start|claim|refresh|logout|github/(?:start|callback))$|(?:memory|live)/) {
+    access_log off;
+    # Upstream connection failure logs can include the full callback query.
+    error_log /dev/null;
+    client_max_body_size 8m;
+    proxy_http_version 1.1;
+    proxy_set_header Host api.litingyi.com;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $remote_addr;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header Connection "";
+    proxy_buffering off;
+    proxy_cache off;
+    proxy_read_timeout 185s;
+    proxy_send_timeout 185s;
+    proxy_pass http://127.0.0.1:49510;
+    proxy_intercept_errors on;
+    error_page 502 504 = @project_z_cloud_unavailable;
+}
+location @project_z_cloud_unavailable {
+    access_log off;
+    default_type application/json;
+    add_header Cache-Control no-store always;
+    return 503 '{"error":"game_service_unavailable"}';
+}

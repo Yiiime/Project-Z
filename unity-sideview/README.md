@@ -2,13 +2,26 @@
 
 原创 2D 海滨小镇叙事探索游戏原型。Unity 6.3 LTS / Universal 2D。
 
+本机启动完整后台、打包 App 连接及多人共享主机见[游戏服务接入](Tools/DevServices/README.md)。
+
 ## 打开与运行
 
-1. 在 Unity Hub 添加本目录，使用 **6000.3.27f1** 打开。
-2. 打开 `Assets/Seabreeze/Scenes/Street.unity`，点击 Play。
-3. 安装 Node 24+ 与 npm。团队模式会随 Play 自动启动 NPC 和直播本机服务；首次在弹出的连接页用有仓库权限的 GitHub 账号登录，之后无需填写模型 Key。需连接可访问 Devbox 的内网。说明见 [团队模型连接](Tools/team-model/README.md)。第一次 Unity 导入还需要解析 Packages 并生成中文字体缓存。
+### macOS 团队云端模式
 
-点击 Play 后先进入动态海岛首页。可继续有效存档，或确认后重新开始；首页停留不会推进游戏或自动覆盖存档。新入口、白天对话配色及本轮编辑器验收见 [开始页与对话说明](Docs/StartPageAndDayDialogue.md)。NPC 与 Z 直播文字对话使用团队统一提供的方舟模型；语音、识别及点歌仍需要各自的服务配置。
+1. 在 Unity Hub 添加本目录，使用 **6000.3.27f1** 打开。首次导入需等待 Packages 解析和中文字体缓存生成。
+2. 打开 `Assets/Seabreeze/Scenes/Street.unity` 并点击 Play。macOS Editor 默认连接 `https://api.litingyi.com`。普通独立 macOS App 使用同一登录入口。
+3. 首次运行时记下 Unity 窗口的六位配对码，在自动打开的浏览器中输入，然后用已加入服务端白名单的 GitHub 账号登录。如果浏览器没有打开，可以在 Unity 点击「打开登录页」。
+4. 配对成功后回到海岛首页，选择开始或继续。下次启动时游戏从 macOS 钥匙串恢复有效会话。需要换账号时，进入游戏后按 Esc，选择「退出账号并结束游戏」，下次启动即可重新配对。
+
+团队云端模式直接连接游戏网关，成员无需安装本机 Node 服务、建立 SSH 隧道或配置模型密钥。首次配对需要维护者已在云端启用 GitHub OAuth 并将成员加入白名单。存档和照片按成员保存在本机，旧本地试玩存档另存。开始页与对话界面说明见[开始页与对话说明](Docs/StartPageAndDayDialogue.md)。
+
+### 本地服务与其他平台
+
+在 macOS Editor 中停止 Play，选择 **Seabreeze → 服务连接 → 本地开发**，然后重新进入 Play。选回 **团队云端（默认）** 即恢复云端。选择仅保存在本机当前工程。进入 Play 后，Console 搜索 `[Seabreeze] 服务模式` 可查看实际模式与选择来源，游戏内 Esc 暂停页也会显示。
+
+普通交互式启动可用 `Z_GAME_SERVICES=cloud` 或 `local` 指定模式，优先于启动器的 `-memoryService`、编辑器偏好和试玩包类型。启动选项强制模式时，编辑器菜单会灰显。批处理、隔离验证和显式停用记忆的启动保持本地。旧直播连接文件、`Z_LIVE_CONNECTION_FILE` 和 `Z_MEMORY_SAVE_ROOT` 仅在本地模式使用。云端存档和照片位于当前设备的 `persistentDataPath/Team/<成员 ID>/`。专用本机后台包与局域网试玩包默认沿用配套启动器。
+
+Windows、Linux、iOS 和 Android 本轮尚未接入上述云端登录流程。本机服务依赖和团队模型启动步骤见[游戏服务接入](Tools/DevServices/README.md)和[团队模型连接](Tools/team-model/README.md)。
 
 本机曾构建 `Builds/macOS/Seabreeze.app`（macOS Universal）；构建产物不随源码提交。从仓库克隆后请在 Unity 中构建。
 

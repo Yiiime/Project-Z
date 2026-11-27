@@ -4,7 +4,26 @@ using UnityEngine.UIElements;
 
 namespace ZLive {
 public sealed partial class LiveFeatureController {
-    bool stopRequested;
+    bool stopRequested, retryingHost;
+    bool CanRetryHost => !disposed && !leaving && connected && !locallyPaused && !SessionInputBlocked &&
+        (bool?)state?["agent"]?["canRetryReply"] == true;
+
+    async void RetryHostReply(){
+        if(retryingHost || !CanRetryHost)return;
+        retryingHost=true;
+        retryHost.SetEnabled(false);
+        try{
+            await transport.Control("retry_reply", onlyIfExhausted:true);
+            var updated=await transport.Request(transport.Route());
+            if(!disposed && !leaving)ApplyState(updated);
+        }catch(Exception e){
+            if(!disposed && !leaving)Error(e);
+        }finally{
+            retryingHost=false;
+            if(!disposed && !leaving)RefreshSessionControls();
+        }
+    }
+
     string SessionPhase => (string)state?["sessionControl"]?["phase"] ?? ((string)state?["phase"]=="ended"?"ended":"live");
     bool SessionClosing => SessionPhase=="closing"||SessionPhase=="farewell";
     bool SessionInputBlocked => stopRequested||SessionPhase=="farewell"||SessionPhase=="ended"||
@@ -33,6 +52,8 @@ public sealed partial class LiveFeatureController {
             audioPlayer.Pause(false);
         }
         bool blocked=!connected||SessionInputBlocked;
+        retryHost.style.display=CanRetryHost?DisplayStyle.Flex:DisplayStyle.None;
+        retryHost.SetEnabled(!retryingHost && CanRetryHost);
         input.SetEnabled(!blocked);
         sendButton.SetEnabled(!blocked&&!sendingInput&&!string.IsNullOrWhiteSpace(input.value));
         liveSessionLabel.text=SessionPhase=="ended"?"已结束":!connected?"连接中":SessionClosing||stopRequested?"收尾中":"• LIVE";

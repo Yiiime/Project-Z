@@ -55,7 +55,8 @@ export function createServer({
   root = PROJECT,
   providerFactory,
   teamClient,
-  speech = new SpeechService(),
+  fetchImpl = globalThis.fetch,
+  speech = new SpeechService({fetch: fetchImpl}),
   songSubmit,
   decide,
   backgroundEnabled = true,
@@ -67,7 +68,7 @@ export function createServer({
     store = new Store(dbPath),
     provider = providerFactory
       ? providerFactory(store)
-      : team ? new TeamModelProvider(store, team) : new ModelProvider(store);
+      : team ? new TeamModelProvider(store, team) : new ModelProvider(store, {fetchImpl});
   if (!providerFactory && !team && process.env.GAME_MODEL_API_KEY)
     provider.set({
       provider: "deepseek",
@@ -880,8 +881,13 @@ if (import.meta.url === pathToFileURL(resolve(process.argv[1] || "")).href) {
   };
   environmentFromFile(flag("--env-file"));
   const port = Number(flag("--port") || process.env.Z_MEMORY_PORT || 4330);
+  const cloudWorker = process.env.Z_CLOUD_WORKER === '1';
+  const cloudOptions = cloudWorker
+    ? {teamClient:null, fetchImpl:(await import('../CloudGame/provider-budget.mjs')).createCloudProviderFetch()}
+    : {};
   const app = createServer({
-    songSubmit:localSongSubmit(process.env.Z_LIVE_CONNECTION_FILE || resolve(APP_ROOT,"../../UserSettings/ZLive/local-connection.json")),
+    ...cloudOptions,
+    songSubmit:cloudWorker ? null : localSongSubmit(process.env.Z_LIVE_CONNECTION_FILE || resolve(APP_ROOT,"../../UserSettings/ZLive/local-connection.json")),
     dbPath:
       flag("--db") ||
       process.env.Z_MEMORY_DB ||

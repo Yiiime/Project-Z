@@ -1,0 +1,29 @@
+[Unit]
+Description=Project Z private per-player cloud game host
+After=network.target
+
+[Service]
+Type=simple
+User=project-z-game
+Group=project-z-game
+Environment=HOME=/var/lib/project-z-game
+Environment=PATH=/opt/project-z-cloud/bin:/usr/local/bin:/usr/bin:/bin
+Environment=Z_CLOUD_WORKER=1
+Environment=Z_LAN_PORT=49461
+Environment=Z_LAN_HOST_ROOT=/var/lib/project-z-game/.local/share/project-z/cloud-host
+Environment=Z_DEV_CONFIG_DIR=/var/lib/project-z-game/.config/project-z/services
+Environment=Z_DEV_PROVIDER=direct
+WorkingDirectory=/opt/project-z-cloud/current/unity-sideview
+ExecStartPre=/opt/project-z-cloud/bin/node Tools/LanPlay/team-host.mjs setup 127.0.0.1
+ExecStart=/opt/project-z-cloud/bin/node Tools/LanPlay/team-host.mjs start
+Restart=on-failure
+RestartSec=4
+UMask=0077
+NoNewPrivileges=true
+ProtectHome=true
+ProtectSystem=strict
+PrivateTmp=true
+ReadWritePaths=/var/lib/project-z-game/.local/share/project-z/cloud-host
+
+[Install]
+WantedBy=multi-user.target

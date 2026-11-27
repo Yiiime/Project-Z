@@ -14,7 +14,7 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     Label status,caption;ScrollView chat;TextField input;JObject state;
     readonly ConcurrentQueue<JObject> events=new ConcurrentQueue<JObject>();readonly ConcurrentQueue<string> connections=new ConcurrentQueue<string>();
     readonly Dictionary<string,CancellationTokenSource> running=new Dictionary<string,CancellationTokenSource>();readonly Dictionary<string,JObject> outcomes=new Dictionary<string,JObject>();readonly HashSet<string> messageIds=new HashSet<string>();
-    readonly CancellationTokenSource life=new CancellationTokenSource();readonly HashSet<TaskCompletionSource<bool>> frameWaiters=new HashSet<TaskCompletionSource<bool>>();float heartbeatAt;bool connected,locallyPaused=true,disposed,leaving;string pendingBase,pendingToken,pendingPin;string SessionKey {get {using(var sha=System.Security.Cryptography.SHA256.Create())return "ZLive.Session."+BitConverter.ToString(sha.ComputeHash(System.Text.Encoding.UTF8.GetBytes(pendingBase+"|"+pendingToken+"|"+StoryKey+(liveMemory==null?"":"|"+liveMemory.Key)+"|"+(string)characterBinding?["worldId"]+"|"+(string)characterBinding?["runId"]))).Replace("-","");}}
+    readonly CancellationTokenSource life=new CancellationTokenSource();readonly HashSet<TaskCompletionSource<bool>> frameWaiters=new HashSet<TaskCompletionSource<bool>>();float heartbeatAt;bool connected,locallyPaused=true,disposed,leaving;string pendingBase,pendingToken,pendingPin;string SessionKey {get {using(var sha=System.Security.Cryptography.SHA256.Create())return "ZLive.Session."+BitConverter.ToString(sha.ComputeHash(System.Text.Encoding.UTF8.GetBytes(pendingBase+"|"+(pendingBase==Seabreeze.CloudGameSession.LiveUrl?Seabreeze.CloudGameSession.Current?.MemberId:pendingToken)+"|"+StoryKey+(liveMemory==null?"":"|"+liveMemory.Key)+"|"+(string)characterBinding?["worldId"]+"|"+(string)characterBinding?["runId"]))).Replace("-","");}}
     LiveMemoryBridge liveMemory;
     public Func<Task<JObject>> BindCharacters;public Func<Task> ReleaseCharacters;JObject characterBinding;
     public bool Preloading;
@@ -24,28 +24,39 @@ public sealed partial class LiveFeatureController:MonoBehaviour {
     bool sessionEndNotified;
     public void Configure(string serviceUrl,string gameSessionToken){pendingBase=serviceUrl;pendingToken=gameSessionToken;}
     async void Start(){try{character=gameObject.AddComponent<CharacterPresenter>();character.Initialize();audioPlayer=gameObject.AddComponent<LiveAudioPlayer>();audioPlayer.Character=character;character.Audio=audioPlayer.Source;audioPlayer.Frame=NextFrame;audioPlayer.Receipt=Report;audioPlayer.Caption=SetHostCaption;gameObject.AddComponent<NativeRtcAudioReference>();BuildUI();BuildCompanionUI();audioPlayer.PresentationHeld=Preloading;if(Preloading)document.rootVisualElement.style.visibility=Visibility.Hidden;
-        // Explicit local connections take precedence in editor verification as
-        // well as players; never fall back to a user's service during a test.
+        if (Seabreeze.CloudGameSession.Enabled)
+        {
+            if (Seabreeze.CloudGameSession.Current?.MemberId == null) throw new InvalidOperationException("请先完成团队登录。");
+            pendingBase = Seabreeze.CloudGameSession.LiveUrl;
+            pendingPin = pendingToken = null;
+        }
+        else if (string.IsNullOrEmpty(pendingBase))
+        {
+            await ReadLocalConnection();
+        }
+        if(string.IsNullOrEmpty(pendingBase)){status.text="尚未连接 · 请先启动直播服务，再重新进入";Toast(status.text);return;}
+        status.text="正在连接小屋，记下今天的经历…";await Enter();status.text="";
+    }catch(OperationCanceledException)when(life.IsCancellationRequested){}catch(Exception e){Error(e);Toast("暂未进入直播 · Esc 返回后重试，今日进度已保留");}}
+    async Task ReadLocalConnection()
+    {
         var connectionFile=Environment.GetEnvironmentVariable("Z_LIVE_CONNECTION_FILE");
-        if(string.IsNullOrEmpty(pendingBase)&&!string.IsNullOrWhiteSpace(connectionFile))
+        if(!string.IsNullOrWhiteSpace(connectionFile))
         {
             for(int attempt=0;attempt<80&&!File.Exists(connectionFile);attempt++)await Task.Delay(250,life.Token);
             if(!File.Exists(connectionFile))throw new Exception("直播连接配置尚未就绪，请检查本机服务启动情况。");
             ReadConnection(connectionFile);
         }
-#if !UNITY_EDITOR
-        if(string.IsNullOrEmpty(pendingBase))ReadConnection(Path.Combine(Application.dataPath,"Resources","zlive-connection.json"));
-#endif
-        if(string.IsNullOrEmpty(pendingBase)) {
-            string file=Path.Combine(Application.persistentDataPath,"ZLive","local-connection.json");
-            if(File.Exists(file)){ReadConnection(file);}
-        }
+        if(string.IsNullOrEmpty(pendingBase))
+        {
 #if UNITY_EDITOR
-        if(string.IsNullOrEmpty(pendingBase)){string file=Path.GetFullPath(Path.Combine(Application.dataPath,"../UserSettings/ZLive/local-connection.json"));if(File.Exists(file)){ReadConnection(file);}}
+            ReadConnection(Seabreeze.MemoryRuntimeConfig.EditorConnectionFile);
+#else
+            ReadConnection(Path.Combine(Application.dataPath,"Resources","zlive-connection.json"));
 #endif
-        if(string.IsNullOrEmpty(pendingBase)){status.text="尚未连接 · 请先启动直播服务，再重新进入";Toast(status.text);return;}
-        status.text="正在连接小屋，记下今天的经历…";await Enter();status.text="";
-    }catch(OperationCanceledException)when(life.IsCancellationRequested){}catch(Exception e){Error(e);Toast("暂未进入直播 · Esc 返回后重试，今日进度已保留");}}
+        }
+        if(string.IsNullOrEmpty(pendingBase))
+            ReadConnection(Path.Combine(Application.persistentDataPath,"ZLive","local-connection.json"));
+    }
     void ReadConnection(string file){if(!File.Exists(file))return;var c=JObject.Parse(File.ReadAllText(file));pendingBase=(string)c["baseUrl"];pendingToken=(string)c["token"];pendingPin=(string)c["certificateSha256"];}
     public async Task Enter(){transport=new LiveTransport(pendingBase,pendingToken,pendingPin);transport.Event+=e=>events.Enqueue(e);transport.Connection+=s=>connections.Enqueue(s);audioPlayer.Transport=transport;
         liveMemory=SceneMode=="arrival"?null:LiveMemoryBridge.Open();

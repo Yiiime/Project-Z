@@ -26,15 +26,18 @@ public sealed class LiveTransport : IDisposable {
         var uri=new Uri(baseUrl);
         if(uri.Scheme!="https" && !(uri.Scheme=="http" && uri.IsLoopback))throw new Exception("HTTPS is required outside loopback.");
         var handler=new HttpClientHandler{AllowAutoRedirect=false,UseProxy=false};
-        if(!string.IsNullOrEmpty(certificateSha256)) {
+        // Cloud session credentials rely on the system TLS trust chain, including hostname verification.
+        if(!string.IsNullOrEmpty(certificateSha256) && baseUrl.TrimEnd('/') != Seabreeze.CloudGameSession.LiveUrl) {
             if(uri.Scheme!="https"||!System.Text.RegularExpressions.Regex.IsMatch(certificateSha256,"^[a-f0-9]{64}$"))throw new Exception("invalid_certificate_pin");
             handler.ServerCertificateCustomValidationCallback=(request,certificate,chain,errors)=>{
                 if(certificate==null||request.RequestUri.Host!=uri.Host)return false;
                 using(var sha=System.Security.Cryptography.SHA256.Create())return BitConverter.ToString(sha.ComputeHash(certificate.RawData)).Replace("-","").ToLowerInvariant()==certificateSha256;
             };
         }
-        http=new HttpClient(handler){Timeout=Timeout.InfiniteTimeSpan};
-        BaseUrl=baseUrl.TrimEnd('/');Token=token;http.DefaultRequestHeaders.Authorization=new AuthenticationHeaderValue("Bearer",token);
+        BaseUrl=baseUrl.TrimEnd('/');Token=token;
+        http=new HttpClient(Seabreeze.CloudGameSession.BusinessHandler(BaseUrl, handler)){Timeout=Timeout.InfiniteTimeSpan};
+        if (BaseUrl != Seabreeze.CloudGameSession.LiveUrl)
+            http.DefaultRequestHeaders.Authorization=new AuthenticationHeaderValue("Bearer",token);
     }
     public string Route(string suffix="")=>"/v1/live/sessions/"+SessionId+suffix;
     public async Task<JObject> Request(string route,JObject body=null,string key=null) {
@@ -65,7 +68,7 @@ public sealed class LiveTransport : IDisposable {
     }
     public JObject Envelope()=>new JObject{{"protocolVersion",1},{"eventId",Guid.NewGuid().ToString()},{"sessionId",SessionId},{"epoch",Epoch}};
     public Task<JObject> Input(string type,JObject payload){var b=Envelope();b["type"]=type;b["payload"]=payload;return Request(Route("/inputs"),b);}
-    public Task<JObject> Control(string action,string task=null,int revision=0){var b=Envelope();b["action"]=action;if(task!=null){b["taskId"]=task;b["resourceRevision"]=revision;}return Request(Route("/control"),b);}
+    public Task<JObject> Control(string action,string task=null,int revision=0,bool onlyIfExhausted=false){var b=Envelope();b["action"]=action;if(onlyIfExhausted)b["onlyIfExhausted"]=true;if(task!=null){b["taskId"]=task;b["resourceRevision"]=revision;}return Request(Route("/control"),b);}
     public Task<JObject> Receipt(JObject command,JObject payload){var b=Envelope();b["type"]="execution.receipt";b["executorLeaseId"]=Lease;b["commandId"]=command["commandId"]?.DeepClone();b["taskId"]=command["taskId"]?.DeepClone()??JValue.CreateNull();b["resourceRevision"]=command["resourceRevision"]?.DeepClone()??JValue.CreateNull();b["payload"]=payload;return Request(Route("/receipts"),b);}
     public async Task<byte[]> Artifact(string id,CancellationToken cancel){if(id==null||!System.Text.RegularExpressions.Regex.IsMatch(id,"^[a-f0-9]{64}$"))throw new Exception("invalid_artifact");using(var r=await http.GetAsync(BaseUrl+Route("/artifacts/"+id),cancel)){r.EnsureSuccessStatusCode();if(r.Content.Headers.ContentLength>12*1024*1024)throw new Exception("artifact_too_large");var bytes=await r.Content.ReadAsByteArrayAsync();if(bytes.Length>12*1024*1024)throw new Exception("artifact_too_large");using(var sha=System.Security.Cryptography.SHA256.Create()){var actual=BitConverter.ToString(sha.ComputeHash(bytes)).Replace("-","").ToLowerInvariant();if(actual!=id)throw new Exception("artifact_hash_mismatch");}return bytes;}}
     public async Task<JObject> Transcribe(byte[] pcm,int version,CancellationToken cancel,bool dictation=false) {

@@ -35,7 +35,8 @@ namespace Seabreeze
             Instance = this;
             IsAtTitle = atTitle;
             Database = Resources.Load<StoryDatabase>("Content/StoryDatabase");
-            State = SaveRepository.Load();
+            // Scene behaviours need a clock immediately. Load a member's save only after sign-in.
+            State = atTitle && CloudGameSession.Enabled ? new SaveData() : SaveRepository.Load();
             HasResumeSave = State.started;
             if (MemoryRuntimeConfig.Enabled && State.memory == null) State.memory = new MemorySaveState();
             Clock = GetComponent<GameClock>() ?? gameObject.AddComponent<GameClock>();
@@ -48,6 +49,13 @@ namespace Seabreeze
             if (!Database) Debug.LogError("Seabreeze story database missing. Run Seabreeze/Rebuild Game Content in the Editor.");
             if (!IsAtTitle) BeginStory();
             NotifyChanged();
+        }
+
+        internal SaveData ReadMemberTitlePreview()
+        {
+            var preview = SaveRepository.Load();
+            HasResumeSave = preview.started;
+            return preview;
         }
 
         void BeginStory()

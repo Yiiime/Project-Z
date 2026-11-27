@@ -1,0 +1,9 @@
+[Unit]
+Description=Activate Project Z game login when the administrator installs its credentials
+
+[Path]
+PathExists=/etc/project-z-cloud/oauth.json
+Unit=project-z-cloud.service
+
+[Install]
+WantedBy=multi-user.target

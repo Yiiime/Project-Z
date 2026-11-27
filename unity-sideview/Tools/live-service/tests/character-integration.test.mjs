@@ -84,3 +84,19 @@ test('displayed virtual audience does not block subsequent character preparation
  assert.equal(event.speaker,'engine');assert.equal(event.kind,'observation');
  assert(!Object.hasOwn(app.engine.world('integrated').actors,'virtual_comment1'));
 });
+
+test('virtual arrival viewers stay in live chat without blocking subsequent character observations',async t=>{
+ const {bridge}=await setup(t);
+ const virtualId='virtual_'+crypto.randomUUID();
+ bridge.record({id:'chat',type:'npc.message',speakerId:virtualId,speakerRole:'audience',text:'来啦！'});
+ await bridge.flush();assert.equal(bridge.pending.length,0);
+ const saved=new CharacterBridge(bridge.binding,{pending:[
+  {event:{id:'old',actorId:virtualId,stage:'message',text:'海风真好。'}},
+  {event:{id:'valid',actorId:'player',stage:'message',text:'我在看。'}}
+ ]});
+ await saved.flush();assert.equal(saved.pending.length,0);
+ const turn=await saved.prepare({kind:'host',context:{scene:{mode:'arrival',tools:['offer_arrival']},publicEvents:[]}});
+ assert(Object.hasOwn(turn.turnSchema.$defs.LiveHostAction.properties,'virtualAudience'));
+ const tools=turn.turnSchema.$defs.LiveTool.oneOf.map(s=>s.properties.name.const);
+ assert(tools.includes('offer_arrival'));assert(!tools.includes('depart_island'));
+});
