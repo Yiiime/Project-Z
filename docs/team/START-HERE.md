@@ -17,6 +17,8 @@ flowchart LR
 
 团队主工程位于 `unity-sideview/`，Unity 6000.3.27f1。拉取后用 Unity Hub 添加该目录，打开 `Assets/Seabreeze/Scenes/Street.unity`。旧 `unity/` 保留参考，现有旧工程任务不会自动迁移。
 
+首次在 macOS 试玩时，请维护者把你的 GitHub 账号加入游戏服务白名单。然后直接进入 Play，用自己的账号配对即可。仓库邀请与游戏白名单分开管理。[团队游戏服务接入与撤权](../../unity-sideview/Tools/CloudGame/README.md)
+
 ## 1. 首次接入
 
 最简单的方式：从 [Releases](https://github.com/Yiiime/Project-Z/releases/latest) 下载 `Project-Z-member-kit-*.zip`，解压后按里面的 `README.md` 操作。安装器会下载 Node.js、GitHub CLI、.NET 8 和项目，带你登录 GitHub，并在桌面生成 `打开 Z 协作面板.command`。
